@@ -1,0 +1,36 @@
+.course-prereq-matrix {
+  font-size: small;
+  color: #404040;
+  
+  border-collapse: collapse;
+  border-spacing: 0px;
+}
+
+
+.course-prereq-matrix td {
+  border: 1px solid #e0e0e0;
+  padding: 2px 2px;
+  text-align: center;
+}
+
+
+.course-prereq-matrix tr.spacer {
+  border-left: none;
+  border-right: none;
+  height: 1em;
+}
+
+.course-prereq-matrix tr.prereq-course-name {
+  background: #e0e0ff;
+}
+
+.course-prereq-matrix td.prereq-course-name {
+  
+  color: black;
+  text-align: left;
+}
+
+.course-prereq-matrix td.prereq-skill-description {
+  padding-left: 1em;
+  text-align: left;
+}

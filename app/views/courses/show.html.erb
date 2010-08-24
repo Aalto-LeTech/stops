@@ -1,0 +1,70 @@
+<h1><%=h @course.code %> <%=h @course.name(I18n.locale) %></h1>
+
+
+<h2><%=t :course_provides %></h2>
+<ul>
+  <% @course.skills.each do |skill| %>
+    <li><%=h skill.description(I18n.locale) %></li>
+  <% end %>
+</ul>
+
+
+
+<h2><%=t :course_prereqs %></h2>
+
+<% if @course.prereqs.empty? %>
+  <p><%=t :course_no_prereqs %></p>
+<% else %>
+  <table class="course-prereq-matrix">
+    <thead>
+      <td></td>
+      <!-- Skills provided -->
+      <% @course.skills.each do |skill| %>
+        <td><%=h skill.description(I18n.locale) %></td>
+      <% end %>
+    </thead>
+    <tbody>
+      <!-- Prereq courses -->
+      <% @course.prereqs.each do |prereq_course| %>
+        <tr class="spacer">
+          <td></td>
+          <% @course.skills.each do |skill| %>
+            <td></td>
+          <% end %>
+        </tr>
+      
+        <tr class="prereq-course-name">
+          <!-- Course name -->
+          <td class="prereq-course-name"><%= link_to h(prereq_course.code) + ' ' + h(prereq_course.name(I18n.locale)), prereq_course %></td>
+          <td colspan='<%= @course.skills.size %>'></td>
+        </tr>
+        
+        <% prereq_course.skills.each do |prereq_skill| %>
+          <tr>
+            <!-- Skill -->
+            <td class="prereq-skill-description"><%=h prereq_skill.description(I18n.locale) %></td>
+            
+            <!-- Relations -->
+            <% @course.skills.each do |skill| %>
+              <td>
+                <%= skill_prereq(skill.id, prereq_skill.id) %>
+              </td>
+            <% end %>
+          </tr>
+        <% end %>
+        
+      <% end %>
+
+    </tbody>
+  </table>
+<% end %>
+
+<!-- Prerequisite to -->
+<% unless @course.prereq_to.empty? %>
+  <h2><%=h @course.code %> <%=h @course.name(I18n.locale) %> <%=t :course_strict_prereq_of %></h2>
+  <ul>
+    <% @course.prereq_to.each do |course| %>
+      <li><%= link_to h(course.code) + ' ' + h(course.name(I18n.locale)), course %></li>
+    <% end %>
+  </ul>
+<% end %>

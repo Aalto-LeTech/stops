@@ -1,0 +1,11 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  skill: 
+  locale: MyString
+  description: MyText
+
+two:
+  skill: 
+  locale: MyString
+  description: MyText

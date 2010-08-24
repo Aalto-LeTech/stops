@@ -1,0 +1,8 @@
+en:
+  course_provides: "Provides conpetences"
+  course_prereqs: "Prerequisites"
+  course_no_prereqs: "No prerequisites"
+  course_strict_prereq_of: "is prerequisite of"
+  
+  strict_prereq_char: 'X'
+  supporting_prereq_char: 'x'

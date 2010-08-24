@@ -1,0 +1,19 @@
+fi: 
+  curriculums_heading: "Opinto-oppaat"
+  curriculum_new: "Lisää opinto-opas"
+  new_curriculum_heading: "Lisää opinto-opas"
+  
+  curriculum_year: "Vuosi"
+  curriculum_prereqs_csv: "Esitietomatriisi"
+  curriculum_profiles_csv: "Profiilimatriisi"
+  
+  curriculum_year_hint: "esim. 2010"
+
+  activerecord:
+    errors:
+      models:
+        curriculum:
+          attributes:
+            year:
+              blank: "puuttuu"
+              taken: "vuosi on jo käytössä"

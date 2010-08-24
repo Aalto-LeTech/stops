@@ -1,0 +1,30 @@
+# Sample localization file for English. Add more files in this directory for other locales.
+# See http://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
+
+en:
+  navi_curriculums: "Curriculums"
+  navi_profiles: "Profiilit"
+  navi_courses: "Courses"
+  
+  Upload: "Upload"
+  Save: "Save"
+  Cancel: "Cancel"
+  Back: "Takaisin"
+  
+  
+  ##############
+  # Time & Date
+  ##############
+  
+  date:
+    formats:
+      # Use the strftime parameters for formats.
+      default: "%Y-%m-%d"
+      short: "%d %b"
+      long: "%Y-%m-%d"
+
+  time:
+    formats:
+      default: "%a %d %b %H:%M"
+      short: "%d %b %H:%M"
+      long: "%a %Y-%m-%d %H:%M:%S"

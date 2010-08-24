@@ -1,0 +1,29 @@
+<h1><%=h @profile.name(I18n.locale) %></h1>
+
+
+<h2><%=t :profile_prereqs %></h2>
+
+<table class="profile-prereq-matrix">
+  <thead>
+    <td></td>
+    <!-- Skills provided -->
+    <% @areas.each do |area| %>
+      <td><%=h area.description(I18n.locale) %></td>
+    <% end %>
+  </thead>
+  <tbody>
+    <!-- Prereq courses -->
+    <% @profile.courses.each do |course| %>
+      <tr class="spacer">
+        <td colspan="<%= @areas.size + 1 %>"></td>
+      </tr>
+    
+      <tr class="prereq-course-name">
+        <!-- Course name -->
+        <td class="prereq-course-name"><%= link_to h(course.code) + ' ' + h(course.name(I18n.locale)), course %></td>
+        <td colspan='<%= @areas.size %>'></td>
+      </tr>
+    <% end %>
+
+  </tbody>
+</table>

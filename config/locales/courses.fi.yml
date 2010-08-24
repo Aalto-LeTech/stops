@@ -1,0 +1,9 @@
+fi: 
+  course_provides: "Tarjoaa valmiudet"
+  course_prereqs: "Esitiedot"
+  course_no_prereqs: "Ei esitietoja"
+  course_strict_prereq_of: "on välttämätön esitieto kursseille"
+  
+  strict_prereq_char: 'X'
+  supporting_prereq_char: 'x'
+  

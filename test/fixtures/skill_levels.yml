@@ -1,0 +1,15 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  level: 1
+  name: MyString
+  definition: MyText
+  keywords: MyText
+  example: MyText
+
+two:
+  level: 1
+  name: MyString
+  definition: MyText
+  keywords: MyText
+  example: MyText

@@ -1,0 +1,6 @@
+FORCE_SSL = false
+
+ERRORS_EMAIL = nil
+
+# Regexp for detecting course codes
+COURSE_CODE_FORMAT = /^\w+-\d+\.\d+$/

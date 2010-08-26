@@ -3,17 +3,22 @@ fi:
   curriculum_new: "Lisää opinto-opas"
   new_curriculum_heading: "Lisää opinto-opas"
   
-  curriculum_year: "Vuosi"
+  curriculum_start_year: "Voimassaolo alkaa"
+  curriculum_end_year: "Voimassaolo päättyy"
   curriculum_prereqs_csv: "Esitietomatriisi"
   curriculum_profiles_csv: "Profiilimatriisi"
   
-  curriculum_year_hint: "esim. 2010"
+  curriculum_start_year_hint: "esim. 2010"
+  curriculum_end_year_hint: "esim. 2011"
 
   activerecord:
     errors:
       models:
         curriculum:
           attributes:
-            year:
+            start_year:
+              blank: "puuttuu"
+              taken: "vuosi on jo käytössä"
+            end_year:
               blank: "puuttuu"
               taken: "vuosi on jo käytössä"

@@ -1,0 +1,7 @@
+<h1><%=h @course.code %> <%=h @course.name(I18n.locale) %></h1>
+
+<%= render :partial => 'courses/skills' %>
+
+<%= render :partial => 'courses/prereqs_short' %>
+
+<%= render :partial => 'courses/prereq_to' %>

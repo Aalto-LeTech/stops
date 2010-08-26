@@ -1,0 +1,11 @@
+<h1><%=t :plan_heading %></h1>
+
+<% if @user.courses.empty? %>
+  <%= t :plan_empty_instructions %>
+<% else %>
+  <ul>
+    <% @user.courses.each do |course| %>
+      <li><%= course.code %> <%= course.name(I18n.locale) %></li>
+    <% end %>
+  </ul>
+<% end %>

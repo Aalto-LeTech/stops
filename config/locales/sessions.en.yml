@@ -1,0 +1,7 @@
+en:
+  login_heading: "Log in"
+  login_button: "Log in"
+  login_username: "Username"
+  login_password: "Password"
+  remember_me: "Remember me"
+  logout_message: "You have been logged out."

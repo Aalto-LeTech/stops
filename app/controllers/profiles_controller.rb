@@ -1,4 +1,11 @@
 class ProfilesController < ApplicationController
+  
+  layout 'profile'
+  
+  before_filter :load_curriculum
+  
+  
+  
   # GET /profiles
   # GET /profiles.xml
   def index

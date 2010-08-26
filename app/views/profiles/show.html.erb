@@ -20,7 +20,7 @@
     
       <tr class="prereq-course-name">
         <!-- Course name -->
-        <td class="prereq-course-name"><%= link_to h(course.code) + ' ' + h(course.name(I18n.locale)), course %></td>
+        <td class="prereq-course-name"><%= link_to h(course.code) + ' ' + h(course.name(I18n.locale)), profile_course_url(:profile_id => @profile, :id => course) %></td>
         <td colspan='<%= @areas.size %>'></td>
       </tr>
     <% end %>

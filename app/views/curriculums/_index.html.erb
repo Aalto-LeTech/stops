@@ -1,0 +1,7 @@
+<table>
+  <% @curriculums.each do |curriculum| %>
+    <tr>
+      <td><%= link_to curriculum.name, curriculum_url(:id => curriculum) %></td>
+    </tr>
+  <% end %>
+</table> 

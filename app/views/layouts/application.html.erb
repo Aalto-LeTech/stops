@@ -10,38 +10,7 @@
 </head>
 <body>
 
-<div id="header" class="header">
-  <!-- Login -->
-  <div class="login">
-    <%
-    user = current_user
-    if user
-    %>
-      <%= link_to "#{h(user.firstname)} #{h(user.lastname)} (#{h(user.studentnumber)})", edit_user_path(user.id) %>
-      <% #= link_to 'Logout', logout_url
-      %>
-    <% end %>
-  </div>
-
-  <div class="navibar">
-    <ul>
-      <% 
-      # Language
-      # Only show the language button for GET requests. If the current page is the result of a POST request, doing a GET request to the same URL could lead to a different view or a 404.
-      if request.get? %>
-        <li><%= link_to 'FI', url_for(:overwrite_params => {:locale => 'fi'}) %></li>
-        <li><%= link_to 'EN', url_for(:overwrite_params => {:locale => 'en'}) %></li>
-      <% end %>
-
-      <% if logged_in? %>
-        <li><%= link_to 'My preferences', edit_user_path(current_user.id) %></li>
-        <li><%= link_to 'Logout', logout_url %></li>
-      <% else %>
-        <li><%= link_to 'Login', login_url %></li>
-      <% end %>
-    </ul>
-  </div>
-</div>
+<%= render :partial => 'layouts/header' %>
 
 
 <div class="clear"></div>
@@ -52,25 +21,21 @@
   </div-->
   <div class="leftNavi">
     <ul>
+      <li><%= link_to t(:navi_plan), plan_path %></li>
       <li><%= link_to t(:navi_curriculums), curriculums_path %></li>
-      <li><%= link_to t(:navi_profiles), profiles_path %></li>
-      <li><%= link_to t(:navi_courses), courses_path %></li>
     </ul>
+    
+    <% if @curriculum %>
+      <h2><%= @curriculum.name %></h2>
+      <ul>
+        <li><%= link_to t(:navi_profiles), profiles_path %></li>
+        <li><%= link_to t(:navi_courses), courses_path %></li>
+      </ul>
+    <% end %>
   </div>
 
   <div class="content">
-    <!-- Flash messages -->
-    <% if flash[:warning] %>
-      <p class="flash flashWarning"><%= h flash[:warning] %></p>
-    <% end %>
-
-    <% if flash[:success] %>
-      <p class="flash flashSuccess"><%= h flash[:success] %></p>
-    <% end %>
-
-    <% if flash[:error] %>
-      <p class="flash flashError"><%= h flash[:error] %></p>
-    <% end %>
+    <%= render :partial => 'layouts/messages' %>
 
     <%= yield %>
   </div>

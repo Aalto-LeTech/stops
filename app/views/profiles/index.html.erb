@@ -2,6 +2,6 @@
 
 <ul>
   <% @profiles.each do |profile| %>
-    <li><%= link_to h(profile.name(I18n.locale)), profile %></li>
+    <li><%= link_to h(profile.name(I18n.locale)), profile_url(:id => profile.id) %></li>
   <% end %>
 </ul>

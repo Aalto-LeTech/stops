@@ -18,6 +18,25 @@ body {
   font-style: italic;
 }
 
+ul {
+  margin: 0em 0em 0em 1em;
+  padding: 0px;
+}
+
+li {
+  margin: 0em 0em 0em 0em;
+  padding: 0px;
+}
+
+.selected {
+  font-weight: bold;
+}
+
+.selected a {
+  text-decoration: underline !important;
+  color: blue !important;
+}
+
 /*************************
   Header
  *************************/
@@ -56,13 +75,36 @@ body {
   text-decoration: none;
 }
 
+.header .login {
+  float: right;
+  font-size: small;
+  margin: .5em;
+}
+
 /*************************
   Left navi
  *************************/
 
 .leftNavi {
-  width: 200px;
+  /* float: left; */
+  width: 20em;
   position: absolute;
+  overflow: hidden;
+  font-size: small;
+  padding: 1em 0em 1em 1em;
+}
+
+.leftNavi a {
+  color: #404040;
+  text-decoration: none;
+}
+
+.leftNavi a:hover {
+  text-decoration: underline;
+}
+
+.leftNavi h2 {
+  font-size: 100%;
 }
 
 /*************************
@@ -74,8 +116,7 @@ body {
 }
 
 .content {
-  /* float: left; */
-  margin: 0em 1em 0em 200px;
+  margin: 0em 1em 1em 20em;
   padding: 1em;
   border-left: 1px solid #e0e0e0;
 }

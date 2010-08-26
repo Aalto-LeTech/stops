@@ -1,12 +1,8 @@
 <h1><%=t :curriculums_heading %></h1>
 
-<table>
-  <% @curriculums.each do |curriculum| %>
-    <tr>
-      <td><%= link_to h(curriculum.year), curriculum %></td>
-      <!--td><%= link_to 'Destroy', curriculum, :confirm => 'Are you sure?', :method => :delete %></td-->
-    </tr>
-  <% end %>
-</table>
+<%= render :partial => 'index' %>
 
-<p><%= link_to t(:curriculum_new), new_curriculum_path %></p>
+
+<% if is_admin?(current_user) %>
+  <p><%= link_to t(:curriculum_new), new_curriculum_path %></p>
+<% end %>

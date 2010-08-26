@@ -7,7 +7,7 @@ module ApplicationHelper
     # form_for(@user) do |f|
     #   <%= f.hint :name %>
     def hint(method, options = {})
-      if @object.errors.on(method)
+      if @object && @object.errors.on(method)
         return '<span class="error">' + @object.errors.on(method) + '</span>'
       else
         return '<span class="hint">' + @template.t("#{@object_name}_#{method}_hint") + '</span>'

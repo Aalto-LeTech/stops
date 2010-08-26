@@ -35,7 +35,7 @@
       
         <tr class="prereq-course-name">
           <!-- Course name -->
-          <td class="prereq-course-name"><%= link_to h(prereq_course.code) + ' ' + h(prereq_course.name(I18n.locale)), prereq_course %></td>
+          <td class="prereq-course-name"><%= link_to h(prereq_course.code) + ' ' + h(prereq_course.name(I18n.locale)), course_url(:id => prereq_course) %></td>
           <td colspan='<%= @course.skills.size %>'></td>
         </tr>
         
@@ -64,7 +64,7 @@
   <h2><%=h @course.code %> <%=h @course.name(I18n.locale) %> <%=t :course_strict_prereq_of %></h2>
   <ul>
     <% @course.prereq_to.each do |course| %>
-      <li><%= link_to h(course.code) + ' ' + h(course.name(I18n.locale)), course %></li>
+      <li><%= link_to h(course.code) + ' ' + h(course.name(I18n.locale)), course_url(:id => course) %></li>
     <% end %>
   </ul>
 <% end %>

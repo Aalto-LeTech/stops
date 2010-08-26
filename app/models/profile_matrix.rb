@@ -1,4 +1,5 @@
-require 'csv'
+#require 'csv'
+require 'fastercsv/lib/faster_csv'
 
  
 class ProfileMatrix
@@ -7,7 +8,7 @@ class ProfileMatrix
   
   
   def initialize(csv, curriculum, locale)
-    @matrix = CSV.read(csv.path, :quote_char => '"')
+    @matrix = FasterCSV.read(csv.path, :quote_char => '"')
     @row_count = @matrix.size
     @col_count = @row_count > 0 ? @matrix[0].size : 0
     @locale = locale.to_s
@@ -37,7 +38,7 @@ class ProfileMatrix
         credits = (@matrix[row][2] || '').strip
         
         # Insert or update course
-        course = Course.find_by_code(code)
+        course = Course.find(:first, :conditions => {:code => code, :curriculum_id => @curriculum.id})
         if course
           # Update existing course
           course.credits = credits
@@ -66,10 +67,10 @@ class ProfileMatrix
           skill_credits = @matrix[row][5] || '0'
           
           # Insert or update skill
-          skill = Skill.find(:first, :conditions => {:course_code => code, :position => skill_position})
+          skill = Skill.find(:first, :conditions => {:course_id => course.id, :position => skill_position})
           
           unless skill
-            skill = Skill.create(:course_code => code, :credits => skill_credits.gsub(',','.').to_f, :position => skill_position)
+            skill = Skill.create(:course_id => course.id, :credits => skill_credits.gsub(',','.').to_f, :position => skill_position)
             SkillDescription.create(:skill_id => skill.id, :locale => @locale, :description => skill_description)
           end
           
@@ -158,17 +159,17 @@ class ProfileMatrix
             ProfileSkill.create(:profile_id => @profiles[col].id, :skill_id => @prereq_skills[row].id, :area_id => areas[area_counter].id, :requirement => relation_type)
             
             # Add course prereq if this profile-course pair has not been added
-            course_prereq = course_relations["#{@profiles[col].id}#{@prereq_skills[row].course_code}"]
+            course_prereq = course_relations["#{@profiles[col].id}#{@prereq_skills[row].course_id}"]
             if course_prereq.nil? || (course_prereq == SUPPORTING_PREREQ && relation_type == STRICT_PREREQ)
               # Insert if it does not exist
-              p = ProfileCourse.find(:first, :conditions => {:profile_id => @profiles[col].id, :course_id => @prereq_skills[row].course.id})
+              p = ProfileCourse.find(:first, :conditions => {:profile_id => @profiles[col].id, :course_id => @prereq_skills[row].course_id})
               if p.nil? || p.requirement == SUPPORTING_PREREQ && relation_type == STRICT_PREREQ
-                ProfileCourse.delete_all(["profile_id = ? AND course_id = ?", @profiles[col].id, @prereq_skills[row].course.id])
-                ProfileCourse.create(:profile_id => @profiles[col].id, :course_id => @prereq_skills[row].course.id, :requirement => relation_type)
+                ProfileCourse.delete_all(["profile_id = ? AND course_id = ?", @profiles[col].id, @prereq_skills[row].course_id])
+                ProfileCourse.create(:profile_id => @profiles[col].id, :course_id => @prereq_skills[row].course_id, :requirement => relation_type)
               end
               
               # Make a note that this relation has been added
-              course_relations["#{@profiles[col].id}#{@prereq_skills[row].course_code}"] = relation_type
+              course_relations["#{@profiles[col].id}#{@prereq_skills[row].course_id}"] = relation_type
             end
             
             area_counter += 1

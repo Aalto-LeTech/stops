@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100622131549) do
+ActiveRecord::Schema.define(:version => 20100826130740) do
 
   create_table "area_descriptions", :force => true do |t|
     t.integer "area_id"
@@ -41,7 +41,8 @@ ActiveRecord::Schema.define(:version => 20100622131549) do
   end
 
   create_table "curriculums", :force => true do |t|
-    t.integer "year"
+    t.integer "start_year"
+    t.integer "end_year"
     t.string  "name"
   end
 
@@ -91,22 +92,37 @@ ActiveRecord::Schema.define(:version => 20100622131549) do
   end
 
   create_table "skills", :force => true do |t|
-    t.string  "course_code"
+    t.integer "course_id"
     t.integer "position"
     t.integer "level"
     t.float   "credits"
   end
 
+  create_table "user_courses", :id => false, :force => true do |t|
+    t.integer "user_id"
+    t.integer "course_id"
+  end
+
+  create_table "user_grades", :force => true do |t|
+    t.integer "user_id"
+    t.integer "course_id"
+    t.integer "grade"
+  end
+
   create_table "users", :force => true do |t|
-    t.string   "login",                     :limit => 40
-    t.string   "name",                      :limit => 100, :default => ""
+    t.string   "login",                                                       :null => false
+    t.string   "studentnumber"
+    t.string   "name"
     t.string   "email",                     :limit => 320
     t.string   "crypted_password",          :limit => 40
     t.string   "salt",                      :limit => 40
     t.string   "remember_token",            :limit => 40
+    t.boolean  "admin",                                    :default => false
+    t.string   "locale",                    :limit => 5,   :default => "fi"
     t.datetime "remember_token_expires_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "curriculum_id"
   end
 
   add_index "users", ["login"], :name => "index_users_on_login", :unique => true

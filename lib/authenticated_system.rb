@@ -18,6 +18,20 @@ module AuthenticatedSystem
       @current_user = new_user || false
     end
 
+    def is_admin?(user)
+      user && user.admin
+    end
+    
+    def authorize_admin
+      is_admin?(current_user) || access_denied
+    end
+    
+    # Checks that user is authenticated. If not, redirects to login page, then back.
+    # Returns true if user is authenticated.
+    def authorize_authenticated
+      logged_in? || access_denied
+    end
+    
     # Check if the user is authorized
     #
     # Override this method in your controllers if you want to restrict access
@@ -52,7 +66,7 @@ module AuthenticatedSystem
     def login_required
       authorized? || access_denied
     end
-
+    
     # Redirect as appropriate when an access request fails.
     #
     # The default action is to redirect to the login screen.
@@ -62,19 +76,25 @@ module AuthenticatedSystem
     # to access the requested action.  For example, a popup window might
     # simply close itself.
     def access_denied
-      respond_to do |format|
-        format.html do
-          store_location
-          redirect_to new_session_path
-        end
-        # format.any doesn't work in rails version < http://dev.rubyonrails.org/changeset/8987
-        # Add any other API formats here.  (Some browsers, notably IE6, send Accept: */* and trigger 
-        # the 'format.any' block incorrectly. See http://bit.ly/ie6_borken or http://bit.ly/ie6_borken2
-        # for a workaround.)
-        format.any(:json, :xml) do
-          request_http_basic_authentication 'Web Password'
+      if request.xhr?
+        head :forbidden
+      elsif logged_in?
+        # If already logged in, show 'forbidden'
+        render :template => "shared/forbidden", :status => 403
+      else
+        # If not logged in, redirect to login
+        respond_to do |format|
+          format.html do
+            store_location
+            redirect_to new_session_path
+          end
+          format.any do
+            request_http_basic_authentication 'Web Password'
+          end
         end
       end
+      
+      return false
     end
 
     # Store the URI of the current request in the session.
@@ -96,7 +116,7 @@ module AuthenticatedSystem
     # Inclusion hook to make #current_user and #logged_in?
     # available as ActionView helper methods.
     def self.included(base)
-      base.send :helper_method, :current_user, :logged_in?, :authorized? if base.respond_to? :helper_method
+      base.send :helper_method, :current_user, :logged_in?, :authorized?, :is_admin? if base.respond_to? :helper_method
     end
 
     #
@@ -161,18 +181,19 @@ module AuthenticatedSystem
 
     def valid_remember_cookie?
       return nil unless @current_user
-      (@current_user.remember_token?) && 
-        (cookies[:auth_token] == @current_user.remember_token)
+      (@current_user.remember_token?) && (cookies[:auth_token] == @current_user.remember_token)
     end
     
     # Refresh the cookie auth token if it exists, create it otherwise
     def handle_remember_cookie!(new_cookie_flag)
       return unless @current_user
+      
       case
       when valid_remember_cookie? then @current_user.refresh_token # keeping same expiry date
       when new_cookie_flag        then @current_user.remember_me 
       else                             @current_user.forget_me
       end
+      
       send_remember_cookie!
     end
   

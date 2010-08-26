@@ -15,11 +15,24 @@ class ApplicationController < ActionController::Base
   before_filter :load_css
   before_filter :require_login?
   
+  protected
+  
   # Redirects from http to https if FORCE_SSL is set.
   def redirect_to_ssl
     redirect_to :protocol => "https://" if FORCE_SSL && !request.ssl?
   end
   
+  def default_url_options(options={})
+    logger.debug "default_url_options is passed options: #{options.inspect}\n"
+    hash = { :locale => I18n.locale }
+    
+    if @curriculum # params[:curriculum_id]
+      hash[:curriculum_id] = @curriculum #params[:curriculum_id]
+    end
+    
+    hash
+  end 
+    
   # Sets the locale based on params and user preferences.
   def set_locale
     if params[:locale]  # Locale is given as a URL parameter
@@ -57,9 +70,6 @@ class ApplicationController < ActionController::Base
       redirect_to new_session_path
     end
   end
-
-
-  protected
   
   # Sends email to admin if an exception occurrs. Recipient is defined by the ERRORS_EMAIL constant.
   def log_error(exception)
@@ -74,4 +84,13 @@ class ApplicationController < ActionController::Base
       logger.error(e)
     end
   end
+
+  def load_curriculum
+    @curriculum = Curriculum.find(params[:curriculum_id])
+  end
+  
+  def load_profile
+    @profile = Profile.find(params[:profile_id])
+  end
+  
 end

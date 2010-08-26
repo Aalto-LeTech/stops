@@ -1,9 +1,10 @@
 ActionController::Routing::Routes.draw do |map|
-  map.resources :courses
-  map.resources :profiles
+  map.resources :courses, :path_prefix => '/:locale/:curriculum_id'
   
-  map.resources :users
+  map.resources :users, :path_prefix => '/:locale'
+  
   map.resource :session
+  map.resource :plan, :path_prefix => '/:locale'
 
   map.logout '/logout', :controller => 'sessions', :action => 'destroy'
   map.login '/login', :controller => 'sessions', :action => 'new'
@@ -33,9 +34,13 @@ ActionController::Routing::Routes.draw do |map|
   #     products.resources :sales, :collection => { :recent => :get }
   #   end
   
-  map.resources :curriculums, :collection => {:prereqs => [:get, :post]} do |curriculum|
+  map.resources :curriculums, :path_prefix => '/:locale', :collection => {:prereqs => [:get, :post]} do |curriculum|
     curriculum.resources :courses
     curriculum.resources :profiles
+  end
+  
+  map.resources :profiles, :path_prefix => '/:locale/:curriculum_id' do |profile|
+    profile.resources :courses, :controller => 'profiles/courses'
   end
 
   # Sample resource route within a namespace:
@@ -45,7 +50,8 @@ ActionController::Routing::Routes.draw do |map|
   #   end
 
   # You can have the root of your site routed with map.root -- just remember to delete public/index.html.
-  map.root :controller => 'courses'
+  map.root :controller => 'frontpage'
+  map.frontpage '/:locale', :controller => 'frontpage'
 
   # See how all your routes lay out with "rake routes"
 

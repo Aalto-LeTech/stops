@@ -1,0 +1,7 @@
+fi: 
+  login_heading: "Kirjaudu sisään"
+  login_button: "Kirjaudu"
+  login_username: "Käyttäjätunnus"
+  login_password: "Salasana"
+  remember_me: "Muista minut"
+  logout_message: "Olet kirjautunut ulos."

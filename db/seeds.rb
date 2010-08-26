@@ -32,3 +32,24 @@ SkillLevel.create(:level => 2, :locale => 'en', :name => 'Understading')
 SkillLevel.create(:level => 3, :locale => 'en', :name => 'Applying')
 SkillLevel.create(:level => 4, :locale => 'en', :name => 'Analysing/evaluating')
 SkillLevel.create(:level => 5, :locale => 'en', :name => 'Creating/synthesising')
+
+
+
+# Users
+user = User.new(:password => 'admin', :password_confirmation => 'admin', :name => 'Admin', :email => 'admin@example.com')
+user.studentnumber = '12345'
+user.login = 'admin'
+user.admin = true
+user.save
+
+# Create students
+for i in 1..10 do
+  r = User.new
+  r.studentnumber = i.to_s.rjust(5, '0')
+  r.login = r.studentnumber
+  r.password = "student#{i}"
+  r.password_confirmation = "student#{i}"
+  r.name = "Student #{i}"
+  r.email = "student#{i}@example.com"
+  r.save
+end

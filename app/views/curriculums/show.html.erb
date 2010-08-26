@@ -1,5 +1,5 @@
-<h1><%=h @curriculum.year %></h1>
+<h1><%= @curriculum.name %></h1>
 
-
-<%= link_to 'Edit', edit_curriculum_path(@curriculum) %> |
-<%= link_to 'Back', curriculums_path %>
+<% if is_admin?(current_user) %>
+  <%= link_to 'Edit', edit_curriculum_path(:id => @curriculum) %>
+<% end %>

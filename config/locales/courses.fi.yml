@@ -1,6 +1,9 @@
 fi: 
+  courses_heading: "Kurssit"
+  
   course_provides: "Tarjoaa valmiudet"
   course_prereqs: "Esitiedot"
+  course_strict_prereqs: "Välttämättömät esitiedot"
   course_no_prereqs: "Ei esitietoja"
   course_strict_prereq_of: "on välttämätön esitieto kursseille"
   

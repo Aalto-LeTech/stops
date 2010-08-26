@@ -1,8 +1,13 @@
 class CoursesController < ApplicationController
+  
+  layout 'course'
+  
+  before_filter :load_curriculum
+  
   # GET /courses
   # GET /courses.xml
   def index
-    @courses = Course.all
+    @courses = @curriculum.courses # Course.all
 
     respond_to do |format|
       format.html # index.html.erb

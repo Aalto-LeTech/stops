@@ -1,8 +1,10 @@
 class CurriculumsController < ApplicationController
+  before_filter :authorize_admin, :except => [:index, :show]
+  
   # GET /curriculums
   # GET /curriculums.xml
   def index
-    @curriculums = Curriculum.all(:order => 'year DESC')
+    @curriculums = Curriculum.all(:order => 'start_year DESC')
 
     respond_to do |format|
       format.html # index.html.erb

@@ -1,0 +1,32 @@
+<div id="header" class="header">
+  <!-- Login -->
+  <div class="login">
+    <%
+    user = current_user
+    if user
+    %>
+      <%= link_to "#{h(user.name)} (#{h(user.studentnumber)})", edit_user_path(:id => user.id) %>
+    <% end %>
+  </div>
+
+  <div class="navibar">
+    <ul>
+      <% 
+      # Language
+      # Only show the language button for GET requests. If the current page is the result of a POST request, doing a GET request to the same URL could lead to a different view or a 404.
+      if request.get? %>
+        <li><%= link_to 'FI', url_for(:overwrite_params => {:locale => 'fi'}) %></li>
+        <li><%= link_to 'EN', url_for(:overwrite_params => {:locale => 'en'}) %></li>
+      <% end %>
+
+      <% if logged_in? %>
+        <li><%= link_to 'My preferences', edit_user_path(:id => current_user.id) %></li>
+        <li><%= link_to 'Logout', logout_url %></li>
+      <% else %>
+        <li><%= link_to 'Login', login_url %></li>
+      <% end %>
+    </ul>
+  </div>
+</div>
+
+<div class="clear"></div>

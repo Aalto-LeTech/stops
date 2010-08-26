@@ -1,0 +1,12 @@
+<!-- Flash messages -->
+<% if flash[:warning] %>
+  <p class="flash flashWarning"><%= h flash[:warning] %></p>
+<% end %>
+
+<% if flash[:success] %>
+  <p class="flash flashSuccess"><%= h flash[:success] %></p>
+<% end %>
+
+<% if flash[:error] %>
+  <p class="flash flashError"><%= h flash[:error] %></p>
+<% end %>

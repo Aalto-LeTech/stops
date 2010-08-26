@@ -1,12 +1,17 @@
 <h1><%=t :new_curriculum_heading %></h1>
 
-<% form_for(@curriculum) do |f| %>
+<% form_for :curriculum, @curriculum, :url => curriculums_url do |f| %>
   
   <table>
     <tr>
-      <td><%= f.label :year, t(:curriculum_year) %></td>
-      <td><%= f.text_field :year %></td>
-      <td><%= f.hint :year %></td>
+      <td><%= f.label :start_year, t(:curriculum_start_year) %></td>
+      <td><%= f.text_field :start_year %></td>
+      <td><%= f.hint :start_year %></td>
+    </tr>
+    <tr>
+      <td><%= f.label :end_year, t(:curriculum_end_year) %></td>
+      <td><%= f.text_field :end_year %></td>
+      <td><%= f.hint :end_year %></td>
     </tr>
   </table>
   

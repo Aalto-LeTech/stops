@@ -3,17 +3,22 @@ en:
   curriculum_new: "Add curriculum"
   new_curriculum_heading: "Create new curriculum"
   
-  curriculum_year: "Year"
+  curriculum_start_year: "First year"
+  curriculum_end_year: "Last year"
   curriculum_prereqs_csv: "Prerequirement matrix"
   curriculum_profiles_csv: "Profiles matrix"
   
-  curriculum_year_hint: "e.g. 2010"
+  curriculum_start_year_hint: "e.g. 2010"
+  curriculum_end_year_hint: "e.g. 2011"
 
   activerecord:
     errors:
       models:
         curriculum:
           attributes:
-            year:
+            start_year:
+              blank: "year missing"
+              taken: "year is already in use"
+            end_year:
               blank: "year missing"
               taken: "year is already in use"

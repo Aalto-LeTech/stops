@@ -1,0 +1,16 @@
+<!-- Frontpage -->
+<div class="floatbox">
+  <h1><%=t :curriculums_heading %></h1>
+
+  <%= render :partial => 'curriculums/index' %>
+  
+</div>
+
+
+<% unless logged_in? %>
+  <div class="floatbox">
+    <h1><%=t :login_heading %></h1>
+    
+    <%= render :partial => 'sessions/login' %>
+  </div>
+<% end %>

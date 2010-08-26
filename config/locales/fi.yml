@@ -2,6 +2,7 @@
 # See http://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 fi:
+  navi_plan: "Oma opintosuunnitelma"
   navi_curriculums: "Opinto-oppaat"
   navi_profiles: "Profiilit"
   navi_courses: "Kurssit"

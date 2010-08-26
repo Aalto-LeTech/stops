@@ -1,7 +1,8 @@
 class CreateTables < ActiveRecord::Migration
   def self.up
     create_table :curriculums do |t|
-      t.integer :year
+      t.integer :start_year
+      t.integer :end_year
       t.string :name
     end
     
@@ -50,7 +51,7 @@ class CreateTables < ActiveRecord::Migration
     end
     
     create_table :skills do |t|
-      t.string :course_code
+      t.references :course
       t.integer :position
       t.integer :level
       t.float :credits

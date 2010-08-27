@@ -2,4 +2,6 @@ fi:
   profiles_heading: "Osaamisprofiilit"
 
   profile_prereqs: "Esitiedot"
+  profile_strict_prereqs: "Välttämättömät esitiedot"
+  profile_supporting_prereqs: "Tukevat esitiedot"
   

@@ -25,6 +25,11 @@ class CoursesController < ApplicationController
       format.xml  { render :xml => @course }
     end
   end
+  
+  # GET /courses/1/graph
+  def graph
+    @course = Course.find(params[:id])
+  end
 
   # GET /courses/new
   # GET /courses/new.xml

@@ -1,5 +1,5 @@
 ActionController::Routing::Routes.draw do |map|
-  map.resources :courses, :path_prefix => '/:locale/:curriculum_id'
+  map.resources :courses, :path_prefix => '/:locale/:curriculum_id', :member => ['graph']
   
   map.resources :users, :path_prefix => '/:locale'
   

@@ -1,6 +1,7 @@
 ActionController::Routing::Routes.draw do |map|
-  map.resources :courses, :path_prefix => '/:locale/:curriculum_id', :member => ['graph']
   
+  map.resources :skills, :member => ['details']
+  map.resources :courses, :path_prefix => '/:locale/:curriculum_id', :member => ['graph']
   map.resources :users, :path_prefix => '/:locale'
   
   map.resource :session
@@ -34,10 +35,7 @@ ActionController::Routing::Routes.draw do |map|
   #     products.resources :sales, :collection => { :recent => :get }
   #   end
   
-  map.resources :curriculums, :path_prefix => '/:locale', :collection => {:prereqs => [:get, :post]} do |curriculum|
-    curriculum.resources :courses
-    curriculum.resources :profiles
-  end
+  map.resources :curriculums, :path_prefix => '/:locale', :collection => {:prereqs => [:get, :post]}
   
   map.resources :profiles, :path_prefix => '/:locale/:curriculum_id' do |profile|
     profile.resources :courses, :controller => 'profiles/courses'

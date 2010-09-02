@@ -1,0 +1,4 @@
+<% @skill.prereqs.each do |skill| %>
+  <%= skill.course.code %> <%= skill.course.name(I18n.locale) %>:
+  <%= skill.description(I18n.locale) %><br />
+<% end %>

@@ -1,6 +1,7 @@
 en:
   profiles_heading: "Competence profiles"
   
+  profile_skills: "Provides"
   profile_prereqs: "Prerequisites"
   profile_strict_prereqs: "Mandatory prerequisites"
   profile_supporting_prereqs: "Supporting prerequisites"

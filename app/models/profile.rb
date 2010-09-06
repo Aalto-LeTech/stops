@@ -1,8 +1,10 @@
 # Competence profile
 class Profile < ActiveRecord::Base
 
+  has_many :profile_descriptions, :dependent => :destroy
+  
   # Prerequisite courses
-  has_many :profile_courses
+  has_many :profile_courses, :dependent => :destroy
   has_many :courses, :through => :profile_courses, :source => :course, :order => 'code'
   
   has_many :strict_prereqs, :through => :profile_courses, :source => :course, :order => 'code', :conditions => "requirement = #{STRICT_PREREQ}"

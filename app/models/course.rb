@@ -1,9 +1,11 @@
 class Course < ActiveRecord::Base
 
+  has_many :course_descriptions, :dependent => :destroy
+  
   has_many :skills, :order => 'position' #, :foreign_key => 'course_code', :primary_key => 'code'
   
   # Prerequisite courses of this course
-  has_many :course_prereqs
+  has_many :course_prereqs, :dependent => :destroy
   
   # Prerequisite skills of this course
   has_many :prereqs, :through => :course_prereqs, :source => :prereq, :order => 'requirement DESC, code'
@@ -17,7 +19,7 @@ class Course < ActiveRecord::Base
   
   
   def name(locale)
-    description = CourseDescription.find(:first,  :conditions => { :course_code => self.code, :locale => locale.to_s })
+    description = CourseDescription.find(:first,  :conditions => { :course_id => self.id, :locale => locale.to_s })
     description ? description.name : ''
   end
 

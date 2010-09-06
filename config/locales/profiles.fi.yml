@@ -1,6 +1,7 @@
 fi: 
   profiles_heading: "Osaamisprofiilit"
 
+  profile_skills: "Tarjoaa valmiudet"
   profile_prereqs: "Esitiedot"
   profile_strict_prereqs: "Välttämättömät esitiedot"
   profile_supporting_prereqs: "Tukevat esitiedot"

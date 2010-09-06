@@ -12,14 +12,14 @@
 ActiveRecord::Schema.define(:version => 20100826130740) do
 
   create_table "course_descriptions", :force => true do |t|
-    t.string "course_code", :null => false
-    t.string "locale"
-    t.string "name",        :null => false
+    t.integer "course_id", :null => false
+    t.string  "locale"
+    t.string  "name",      :null => false
   end
 
   create_table "course_prereqs", :force => true do |t|
-    t.integer "course_id"
-    t.integer "prereq_id"
+    t.integer "course_id",   :null => false
+    t.integer "prereq_id",   :null => false
     t.integer "requirement"
   end
 
@@ -30,8 +30,8 @@ ActiveRecord::Schema.define(:version => 20100826130740) do
   end
 
   create_table "courses_skills", :id => false, :force => true do |t|
-    t.integer "course_id"
-    t.integer "skill_id"
+    t.integer "course_id", :null => false
+    t.integer "skill_id",  :null => false
   end
 
   create_table "curriculums", :force => true do |t|
@@ -41,13 +41,13 @@ ActiveRecord::Schema.define(:version => 20100826130740) do
   end
 
   create_table "profile_courses", :force => true do |t|
-    t.integer "profile_id"
-    t.integer "course_id"
+    t.integer "profile_id",  :null => false
+    t.integer "course_id",   :null => false
     t.integer "requirement"
   end
 
   create_table "profile_descriptions", :force => true do |t|
-    t.integer "profile_id"
+    t.integer "profile_id", :null => false
     t.string  "locale"
     t.string  "name",       :null => false
   end
@@ -58,12 +58,12 @@ ActiveRecord::Schema.define(:version => 20100826130740) do
   end
 
   create_table "profiles_skills", :id => false, :force => true do |t|
-    t.integer "profile_id"
-    t.integer "skill_id"
+    t.integer "profile_id", :null => false
+    t.integer "skill_id",   :null => false
   end
 
   create_table "skill_descriptions", :force => true do |t|
-    t.integer "skill_id"
+    t.integer "skill_id",    :null => false
     t.string  "locale"
     t.text    "description"
   end
@@ -78,8 +78,8 @@ ActiveRecord::Schema.define(:version => 20100826130740) do
   end
 
   create_table "skill_prereqs", :force => true do |t|
-    t.integer "skill_id"
-    t.integer "prereq_id"
+    t.integer "skill_id",    :null => false
+    t.integer "prereq_id",   :null => false
     t.integer "requirement"
   end
 

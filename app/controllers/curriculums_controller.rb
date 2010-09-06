@@ -63,11 +63,13 @@ class CurriculumsController < ApplicationController
     if params[:prereqs_csv]
       matrix = PrereqMatrix.new(params[:prereqs_csv], @curriculum, I18n.locale)
       matrix.process
+      flash[:success] = "#{params[:prereqs_csv].original_filename} uploaded"
     end
     
     if params[:profiles_csv]
       matrix = ProfileMatrix.new(params[:profiles_csv], @curriculum, I18n.locale)
       matrix.process
+      flash[:success] = "#{params[:prereqs_csv].original_filename} uploaded"
     end
     
     render :action => "edit"

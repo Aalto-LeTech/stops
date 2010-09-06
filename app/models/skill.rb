@@ -1,7 +1,9 @@
 class Skill < ActiveRecord::Base
   belongs_to :course #, :foreign_key => 'course_code', :primary_key => 'code'
 
-  has_many :skill_prereqs
+  has_many :skill_descriptions, :dependent => :destroy
+  
+  has_many :skill_prereqs, :dependent => :destroy
   has_many :prereqs, :through => :skill_prereqs, :source => :prereq, :order => 'position'
   
   # Skills for which this is a prerequisite

@@ -19,7 +19,7 @@ class ProfileMatrix
   def process
     process_prereqs
     process_header
-    # process_relations
+    process_relations
   end
   
   # Reads course codes and skills in the left. If a course or skill does not exist in the database, create it. Populates the @prereq_skills array.
@@ -74,7 +74,7 @@ class ProfileMatrix
           
           unless skill
             skill = Skill.create(:course_id => course.id, :credits => skill_credits.gsub(',','.').to_f, :position => skill_position)
-            SkillDescription.create(:skill_id => skill.id, :locale => @locale, :description => skill_description.strip)
+            SkillDescription.create(:skill_id => skill.id, :locale => @locale, :description => skill_description.strip)  # FIXME: language versions
           end
           
           # Save for later use
@@ -90,9 +90,7 @@ class ProfileMatrix
   
   # Reads profiles
   def process_header
-    Profile.delete_all
-    ProfileDescription.delete_all
-    # TODO: clear skills
+    @curriculum.profiles.clear
     
     @profiles = Array.new  # Holds copies so that profiles don't have to be re-loaded on the next iteration
     @skills = Array.new
@@ -132,8 +130,12 @@ class ProfileMatrix
 
           # Create skill
           skill = Skill.create(:position => skill_position)
-          SkillDescription.create(:skill_id => skill, :locale => @locale, :description => skill_description.strip)
+          SkillDescription.create(:skill_id => skill.id, :locale => @locale, :description => skill_description.strip)
           profile.skills << skill
+          
+          unless skill
+            puts "Failed to create skill for profile. col=#{col}"
+          end
           
           # Save for later use
           @skills[col] = skill

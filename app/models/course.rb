@@ -23,5 +23,18 @@ class Course < ActiveRecord::Base
     description ? description.name : ''
   end
 
+
+  # Overridden comparison operator for sorting.
+  # Returns -1 if the is a prereq of other, +1 if this is a prereq to other, otherwise 0.
+  def <=>(other)
+    if strict_prereqs.exists?(other)
+      return -1
+    elsif prereq_to.exists?(other)      
+      return 1
+    else
+      return 0
+    end
+  end
+
   
 end

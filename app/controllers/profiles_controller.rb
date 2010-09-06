@@ -22,7 +22,6 @@ class ProfilesController < ApplicationController
   # GET /profiles/1.xml
   def show
     @profile = Profile.find(params[:id])
-    @areas = Area.find(:all, :order => 'position')
     
     respond_to do |format|
       format.html # show.html.erb

@@ -49,13 +49,16 @@
   font-weight: bold;
 }
 
-.course-graph a {
+.course-graph p {
   display: block;
   border: 1px solid #d0d0d0;
   background: #e0e0ff;
   margin: .5em 0em;
   padding: .2em .5em;
+  font-size: small;
+}
+
+.course-graph a {
   text-decoration: none;
   color: black;
-  font-size: 90%;
 }

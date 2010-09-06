@@ -1,6 +1,6 @@
-<% @skill.prereqs.each do |skill| %>
+<% @skill.prereq_to.each do |skill| %>
   <p>
     <%= link_to h(skill.course.code) + ' ' + h(skill.course.name(I18n.locale)), course_url(:id => skill.course) %>:
-    <%= skill.description(I18n.locale) %><br />
+    <%= skill.description(I18n.locale) %>
   </p>
 <% end %>

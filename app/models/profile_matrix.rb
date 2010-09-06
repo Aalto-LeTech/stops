@@ -19,10 +19,10 @@ class ProfileMatrix
   def process
     process_prereqs
     process_header
-    process_relations
+    # process_relations
   end
   
-  # Reads course codes and skills in the left. If a course or skill does not exist in the database, creates it. Populates the @prereq_skills array.
+  # Reads course codes and skills in the left. If a course or skill does not exist in the database, create it. Populates the @prereq_skills array.
   def process_prereqs
     @prereq_skills = Array.new(@row_count)  # Array will contain skill objects. Indexing matches the rows of the original matrix.
   
@@ -46,6 +46,8 @@ class ProfileMatrix
         else
           # Create new course
           course = Course.create(:code => code, :curriculum_id => @curriculum.id, :credits => credits.gsub(',','.').to_f)
+          
+          
           description = CourseDescription.new(:locale => @locale, :name => name)
           description.course = course
           description.save
@@ -66,14 +68,16 @@ class ProfileMatrix
           # Parse attributes
           skill_credits = @matrix[row][5] || '0'
           
+          
           # Insert or update skill
           skill = Skill.find(:first, :conditions => {:course_id => course.id, :position => skill_position})
           
           unless skill
             skill = Skill.create(:course_id => course.id, :credits => skill_credits.gsub(',','.').to_f, :position => skill_position)
-            SkillDescription.create(:skill_id => skill.id, :locale => @locale, :description => skill_description)
+            SkillDescription.create(:skill_id => skill.id, :locale => @locale, :description => skill_description.strip)
           end
           
+          # Save for later use
           @prereq_skills[row] = skill
           
           skill_position += 1
@@ -87,93 +91,117 @@ class ProfileMatrix
   # Reads profiles
   def process_header
     Profile.delete_all
+    ProfileDescription.delete_all
+    # TODO: clear skills
     
-    @profiles = Array.new
+    @profiles = Array.new  # Holds copies so that profiles don't have to be re-loaded on the next iteration
+    @skills = Array.new
     
     profile_counter = 1
     profile = nil
     Profile.transaction do
-      for col in 7...@col_count
-        profile_name = (@matrix[1][col] || '').strip
+      col = 7
+      while col < @col_count
+        profile_name = @matrix[1][col]
         
         # Skip blank columns
         if profile_name.blank?
-          @profiles[col] = profile
+          col += 1
           next
         end
         
         # Create new profile
         profile = Profile.create(:curriculum_id => @curriculum.id, :position => profile_counter)
-        ProfileDescription.create(:profile_id => profile.id, :locale => @locale, :name => profile_name)
+        ProfileDescription.create(:profile_id => profile.id, :locale => @locale, :name => profile_name.strip)
         
         @profiles[col] = profile
         
         profile_counter += 1
+        
+        
+        # Read skills until we encounter the next profile
+        skill_position = 0
+        begin
+          skill_description = @matrix[2][col]
+          
+          # Skip blank rows
+          if skill_description.blank?
+            col += 1
+            next
+          end
+
+          # Create skill
+          skill = Skill.create(:position => skill_position)
+          SkillDescription.create(:skill_id => skill, :locale => @locale, :description => skill_description.strip)
+          profile.skills << skill
+          
+          # Save for later use
+          @skills[col] = skill
+          @profiles[col] = profile
+          
+          skill_position += 1
+          col += 1
+        end while col < @col_count and @matrix[1][col].blank?
       end 
     end # transaction
+    
+#     @profiles.each do |c|
+#       puts c
+#     end
   end
   
   
   def process_relations
-    return unless @prereq_skills && @profiles
+    return unless @profiles && @skills && @prereq_skills
     
-    areas = Area.find(:all, :order => 'position')
-    areas.each do |area|
-      puts "area_id=#{area.id}  area_position=#{area.position}"
-    end
-    
-    course_relations = Hash.new
-    
-    ProfileSkill.delete_all
+    course_relations = Hash.new  # holds the information about which prereqs have already been added to avoid unnecessary database actions
     
     Profile.transaction do
-      
       for row in 16...@row_count
         for col in 7...@col_count
           
           unless @matrix[1][col].blank?
-            # Reset are counter when encountering the next profile
-            area_counter = 1
+            # Reset counter when encountering the next profile
+            skill_counter = 1
           end
-            
-          relation_type = @@relation_types[(@matrix[row][col] || '').strip.upcase]
           
-          if relation_type
-            if @profiles[col].nil?
-              puts "Unknown profile in column #{col}"
-              next
-            end
+          # Is this strict or supporting prereq
+          relation_type = @@relation_types[(@matrix[row][col] || '').strip.upcase]
+          next unless relation_type
             
-            if @prereq_skills[row].nil?
-              puts "Unknown skill in row #{row}"
-              next
-            end
-            
-            if areas[area_counter].nil?
-              puts "Unknown area: row #{row}, area #{area_counter}"
-              next
-            end
-            
-            
-            # Add skill prereq
-            ProfileSkill.create(:profile_id => @profiles[col].id, :skill_id => @prereq_skills[row].id, :area_id => areas[area_counter].id, :requirement => relation_type)
-            
-            # Add course prereq if this profile-course pair has not been added
-            course_prereq = course_relations["#{@profiles[col].id}#{@prereq_skills[row].course_id}"]
-            if course_prereq.nil? || (course_prereq == SUPPORTING_PREREQ && relation_type == STRICT_PREREQ)
-              # Insert if it does not exist
-              p = ProfileCourse.find(:first, :conditions => {:profile_id => @profiles[col].id, :course_id => @prereq_skills[row].course_id})
-              if p.nil? || p.requirement == SUPPORTING_PREREQ && relation_type == STRICT_PREREQ
-                ProfileCourse.delete_all(["profile_id = ? AND course_id = ?", @profiles[col].id, @prereq_skills[row].course_id])
-                ProfileCourse.create(:profile_id => @profiles[col].id, :course_id => @prereq_skills[row].course_id, :requirement => relation_type)
-              end
-              
-              # Make a note that this relation has been added
-              course_relations["#{@profiles[col].id}#{@prereq_skills[row].course_id}"] = relation_type
-            end
-            
-            area_counter += 1
+          if @profiles[col].nil?
+            puts "Unknown profile in column #{col}"
+            next
           end
+          
+          if @skills[col].nil?
+            puts "Unknown skill in column #{col}"
+            next
+          end
+          
+          if @prereq_skills[row].nil?
+            puts "Unknown skill in row #{row}"
+            next
+          end
+          
+          # Add skill prereq
+          SkillPrereq.create(:skill_id => @skills[col].id, :prereq_id => @prereq_skills[row].id, :requirement => relation_type)
+          
+          # Add course prereq if this profile-course pair has not been added
+          course_prereq = course_relations["#{@profiles[col].id}#{@prereq_skills[row].course_id}"]
+          if course_prereq.nil? || (course_prereq == SUPPORTING_PREREQ && relation_type == STRICT_PREREQ)
+            # Insert if it does not exist
+            p = ProfileCourse.find(:first, :conditions => {:profile_id => @profiles[col].id, :course_id => @prereq_skills[row].course_id})
+            if p.nil? || p.requirement == SUPPORTING_PREREQ && relation_type == STRICT_PREREQ
+              ProfileCourse.delete_all(["profile_id = ? AND course_id = ?", @profiles[col].id, @prereq_skills[row].course_id])
+              ProfileCourse.create(:profile_id => @profiles[col].id, :course_id => @prereq_skills[row].course_id, :requirement => relation_type)
+            end
+            
+            # Make a note that this relation has been added
+            course_relations["#{@profiles[col].id}#{@prereq_skills[row].course_id}"] = relation_type
+          end
+          
+          skill_counter += 1
         end
       end
     

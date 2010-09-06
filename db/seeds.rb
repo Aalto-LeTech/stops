@@ -6,21 +6,21 @@
 #   cities = City.create([{ :name => 'Chicago' }, { :name => 'Copenhagen' }])
 #   Major.create(:name => 'Daley', :city => cities.first)
 
-areas = Array.new
-for i in 1..10
-  areas[i] = Area.create(:position => i)
-end
+# areas = Array.new
+# for i in 1..10
+#   areas[i] = Area.create(:position => i)
+# end
 
-AreaDescription.create(:area_id => areas[1].id, :locale => 'fi', :name => 'Teoriatiet&auml;mys', :description => '')
-AreaDescription.create(:area_id => areas[2].id, :locale => 'fi', :name => 'Suunnittelutekninen osaaminen', :description => '')
-AreaDescription.create(:area_id => areas[3].id, :locale => 'fi', :name => 'Materiaalitekninen osaaminen', :description => '')
-AreaDescription.create(:area_id => areas[4].id, :locale => 'fi', :name => 'Valmistus- ja tuotantotekninen osaaminen', :description => '')
-AreaDescription.create(:area_id => areas[5].id, :locale => 'fi', :name => 'Projektiosaaminen', :description => '')
-AreaDescription.create(:area_id => areas[6].id, :locale => 'fi', :name => 'Liiketoimintaosaaminen', :description => '')
-AreaDescription.create(:area_id => areas[7].id, :locale => 'fi', :name => 'Tietotekniikan sovellusten hallinta', :description => '')
-AreaDescription.create(:area_id => areas[8].id, :locale => 'fi', :name => 'Ekologinen tiet&auml;mys', :description => '')
-AreaDescription.create(:area_id => areas[9].id, :locale => 'fi', :name => 'Lains&auml;&auml;d&auml;nn&ouml;llinen tiet&auml;mys', :description => '')
-AreaDescription.create(:area_id => areas[10].id,  :locale => 'fi', :name => 'Tutkimus- ja kehitysosaaminen (T&K)', :description => '')
+# AreaDescription.create(:area_id => areas[1].id, :locale => 'fi', :name => 'Teoriatiet&auml;mys', :description => '')
+# AreaDescription.create(:area_id => areas[2].id, :locale => 'fi', :name => 'Suunnittelutekninen osaaminen', :description => '')
+# AreaDescription.create(:area_id => areas[3].id, :locale => 'fi', :name => 'Materiaalitekninen osaaminen', :description => '')
+# AreaDescription.create(:area_id => areas[4].id, :locale => 'fi', :name => 'Valmistus- ja tuotantotekninen osaaminen', :description => '')
+# AreaDescription.create(:area_id => areas[5].id, :locale => 'fi', :name => 'Projektiosaaminen', :description => '')
+# AreaDescription.create(:area_id => areas[6].id, :locale => 'fi', :name => 'Liiketoimintaosaaminen', :description => '')
+# AreaDescription.create(:area_id => areas[7].id, :locale => 'fi', :name => 'Tietotekniikan sovellusten hallinta', :description => '')
+# AreaDescription.create(:area_id => areas[8].id, :locale => 'fi', :name => 'Ekologinen tiet&auml;mys', :description => '')
+# AreaDescription.create(:area_id => areas[9].id, :locale => 'fi', :name => 'Lains&auml;&auml;d&auml;nn&ouml;llinen tiet&auml;mys', :description => '')
+# AreaDescription.create(:area_id => areas[10].id,  :locale => 'fi', :name => 'Tutkimus- ja kehitysosaaminen (T&K)', :description => '')
 
 SkillLevel.create(:level => 1, :locale => 'fi', :name => 'Tunnistaminen', :definition => 'Opiskelija osaa tunnistaa, luetella ja m&auml;&auml;ritell&auml; asioita, k&auml;sitteit&auml;, periaatteita niiden opetetussa muodossa ilman ymm&auml;rt&auml;mist&auml;.')
 SkillLevel.create(:level => 2, :locale => 'fi', :name => 'Ymm&auml;rt&auml;minen', :definition => 'Opiskelija ymm&auml;rt&auml;&auml; ja k&auml;sitt&auml;&auml; aiemmin oppimiaan asioita, k&auml;sitteit&auml; ja periaatteita ilman syv&auml;llist&auml; ymm&auml;rt&auml;mist&auml;.')
@@ -36,7 +36,7 @@ SkillLevel.create(:level => 5, :locale => 'en', :name => 'Creating/synthesising'
 
 
 # Users
-user = User.new(:password => 'admin', :password_confirmation => 'admin', :name => 'Admin', :email => 'admin@example.com')
+user = User.new(:password => 'admin11', :password_confirmation => 'admin11', :name => 'Admin', :email => 'admin@example.com')
 user.studentnumber = '12345'
 user.login = 'admin'
 user.admin = true

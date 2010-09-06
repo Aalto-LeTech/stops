@@ -25,7 +25,7 @@
       <li><%= link_to t(:navi_curriculums), curriculums_path %></li>
     </ul>
     
-    <% if @curriculum %>
+    <% if @curriculum && !@curriculum.new_record? %>
       <h2><%= @curriculum.name %></h2>
       <ul>
         <li><%= link_to t(:navi_profiles), profiles_path %></li>

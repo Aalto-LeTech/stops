@@ -11,17 +11,6 @@
 
 ActiveRecord::Schema.define(:version => 20100826130740) do
 
-  create_table "area_descriptions", :force => true do |t|
-    t.integer "area_id"
-    t.string  "locale"
-    t.string  "name"
-    t.text    "description"
-  end
-
-  create_table "areas", :force => true do |t|
-    t.integer "position", :null => false
-  end
-
   create_table "course_descriptions", :force => true do |t|
     t.string "course_code", :null => false
     t.string "locale"
@@ -38,6 +27,11 @@ ActiveRecord::Schema.define(:version => 20100826130740) do
     t.string  "code"
     t.float   "credits"
     t.integer "curriculum_id", :null => false
+  end
+
+  create_table "courses_skills", :id => false, :force => true do |t|
+    t.integer "course_id"
+    t.integer "skill_id"
   end
 
   create_table "curriculums", :force => true do |t|
@@ -58,16 +52,14 @@ ActiveRecord::Schema.define(:version => 20100826130740) do
     t.string  "name",       :null => false
   end
 
-  create_table "profile_skills", :force => true do |t|
-    t.integer "profile_id"
-    t.integer "skill_id"
-    t.integer "area_id"
-    t.integer "requirement"
-  end
-
   create_table "profiles", :force => true do |t|
     t.integer "curriculum_id",                :null => false
     t.integer "position",      :default => 1
+  end
+
+  create_table "profiles_skills", :id => false, :force => true do |t|
+    t.integer "profile_id"
+    t.integer "skill_id"
   end
 
   create_table "skill_descriptions", :force => true do |t|
@@ -107,6 +99,11 @@ ActiveRecord::Schema.define(:version => 20100826130740) do
     t.integer "user_id"
     t.integer "course_id"
     t.integer "grade"
+  end
+
+  create_table "user_profiles", :id => false, :force => true do |t|
+    t.integer "user_id"
+    t.integer "profile_id"
   end
 
   create_table "users", :force => true do |t|

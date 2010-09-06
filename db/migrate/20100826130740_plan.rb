@@ -7,6 +7,12 @@ class Plan < ActiveRecord::Migration
       t.references :course
     end
     
+    create_table :user_profiles, :id => false do |t|
+      t.references :user
+      t.references :profile
+    end
+    
+    # Courses that users have passed
     create_table :user_grades do |t|
       t.references :user
       t.references :course
@@ -17,6 +23,7 @@ class Plan < ActiveRecord::Migration
 
   def self.down
     drop_table :user_grades
+    drop_table :user_profiles
     drop_table :user_courses
     remove_column :users, :curriculum_id
   end

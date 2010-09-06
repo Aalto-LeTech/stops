@@ -10,6 +10,8 @@ class Curriculum < ActiveRecord::Base
 
   # Returns a human-readable representation, e.g. "2010" or "2010-2011"
   def name
+    return '' if self.new_record?
+    
     if self.end_year > self.start_year
       return "#{self.start_year} &mdash; #{self.end_year}"
     else

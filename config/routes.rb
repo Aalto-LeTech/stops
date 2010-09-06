@@ -1,6 +1,6 @@
 ActionController::Routing::Routes.draw do |map|
   
-  map.resources :skills, :member => ['details']
+  map.resources :skills, :member => ['prereqs', 'future']
   map.resources :courses, :path_prefix => '/:locale/:curriculum_id', :member => ['graph']
   map.resources :users, :path_prefix => '/:locale'
   

@@ -46,7 +46,7 @@ class CurriculumsController < ApplicationController
 
     respond_to do |format|
       if @curriculum.save
-        format.html { redirect_to(@curriculum, :notice => 'Curriculum was successfully created.') }
+        format.html { redirect_to(curriculum_url(:id => @curriculum), :notice => 'Curriculum was successfully created.') }
         format.xml  { render :xml => @curriculum, :status => :created, :location => @curriculum }
       else
         format.html { render :action => "new" }

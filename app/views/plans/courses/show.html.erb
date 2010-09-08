@@ -1,0 +1,33 @@
+<h1><%=h @course.code %> <%=h @course.name(I18n.locale) %></h1>
+
+
+<table class="course-graph">
+  <thead>
+    <td>Requirements</td>
+    <td>Provides</td>
+    <td>Needed by</td>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td id="skill-prereqs"></td>
+      <td>
+        <% @course.skills.each do |skill| %>
+          <p>
+            <%= link_to_remote 'x', :update => 'skill-prereqs', :url => prereqs_skill_url(:id => skill) %>
+            
+            <%= skill.description(I18n.locale) %>
+            
+            <%= link_to_remote 'x', :update => 'skill-future', :url => future_skill_url(:id => skill) %>
+          </p>
+        <% end %>
+      </td>
+      <td id="skill-future"></td>
+    </tr>
+  </tbody>
+</table>
+
+
+<%= render :partial => 'prereqs_detailed' %>
+
+<%= render :partial => 'prereq_to' %>

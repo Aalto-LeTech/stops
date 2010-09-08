@@ -110,6 +110,9 @@ class PrereqMatrix
         end
         
         course = Course.find(:first, :conditions => {:code => code.strip, :curriculum_id => @curriculum.id})
+        
+        # Reset course prereqs
+        course.course_prereqs.clear
           
         # Read skills until we encounter the next course
         skill_position = 0
@@ -167,7 +170,7 @@ class PrereqMatrix
             if course_prereq.nil? || (course_prereq == SUPPORTING_PREREQ && relation_type == STRICT_PREREQ)
               # Insert if it does not exist
               p = CoursePrereq.find(:first, :conditions => {:course_id => @skills[col].course_id, :prereq_id => @prereq_skills[row].course_id})
-              if p.nil? || p.requirement == SUPPORTING_PREREQ && relation_type == STRICT_PREREQ
+              if p.nil? || p.requirement == SUPPORTING_PREREQ && relation_type == STRICT_PREREQ  # FIXME: is this correct if we upload a changed matrix with reduced requirements
                 CoursePrereq.delete_all(["course_id = ? AND prereq_id = ?", @skills[col].course_id, @prereq_skills[row].course_id])
                 CoursePrereq.create(:course_id => @skills[col].course_id, :prereq_id => @prereq_skills[row].course_id, :requirement => relation_type)
               end

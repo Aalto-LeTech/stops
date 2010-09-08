@@ -1,5 +1,22 @@
 <h1><%=h @profile.name(I18n.locale) %></h1>
 
+
+<p>
+  <%= link_to_remote 'Add to my plan', {:url => plan_profiles_path(:profile_id => @profile.id)}, {:method => :post} %>
+</p>
+
+<% @semesters.each_with_index do |semester,index| %>
+  <ul>
+    <% semester.each do |course| %>
+      <% next unless course %>
+      <li><%= link_to h(course.code) + ' ' + h(course.name(I18n.locale)), course_path(:id => course) %></li>
+    <% end %>
+  </ul>
+  <hr />
+<% end %>
+
+
+
 <h2><%=t :profile_skills %></h2>
 
 <table class="course-graph">

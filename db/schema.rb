@@ -90,12 +90,7 @@ ActiveRecord::Schema.define(:version => 20100826130740) do
     t.float   "credits"
   end
 
-  create_table "user_courses", :id => false, :force => true do |t|
-    t.integer "user_id"
-    t.integer "course_id"
-  end
-
-  create_table "user_grades", :force => true do |t|
+  create_table "user_courses", :force => true do |t|
     t.integer "user_id"
     t.integer "course_id"
     t.integer "grade"

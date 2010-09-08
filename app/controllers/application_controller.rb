@@ -23,14 +23,14 @@ class ApplicationController < ActionController::Base
   end
   
   def default_url_options(options={})
-    logger.debug "default_url_options is passed options: #{options.inspect}\n"
+    #logger.debug "default_url_options is passed options: #{options.inspect}\n"
     hash = { :locale => I18n.locale }
     
     if @curriculum # params[:curriculum_id]
       hash[:curriculum_id] = @curriculum #params[:curriculum_id]
     end
     
-    hash
+    return hash
   end 
     
   # Sets the locale based on params and user preferences.
@@ -92,5 +92,7 @@ class ApplicationController < ActionController::Base
   def load_profile
     @profile = Profile.find(params[:profile_id])
   end
+  
+  
   
 end

@@ -5,7 +5,6 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :users, :path_prefix => '/:locale'
   
   map.resource :session
-  map.resource :plan, :path_prefix => '/:locale'
 
   map.logout '/logout', :controller => 'sessions', :action => 'destroy'
   map.login '/login', :controller => 'sessions', :action => 'new'
@@ -35,7 +34,12 @@ ActionController::Routing::Routes.draw do |map|
   #     products.resources :sales, :collection => { :recent => :get }
   #   end
   
-  map.resources :curriculums, :path_prefix => '/:locale', :collection => {:prereqs => [:get, :post]}
+  map.resources :curriculums, :path_prefix => '/:locale', :member => { :cycles => :get }
+  
+  map.resource :plan, :path_prefix => '/:locale' do |plan|
+    plan.resources :profiles, :controller => 'plans/profiles'
+    plan.resources :courses, :controller => 'plans/courses'
+  end
   
   map.resources :profiles, :path_prefix => '/:locale/:curriculum_id' do |profile|
     profile.resources :courses, :controller => 'profiles/courses'

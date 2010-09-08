@@ -25,8 +25,11 @@ class User < ActiveRecord::Base
 
   
   # Plan
-  has_and_belongs_to_many :courses, :join_table => 'user_courses'
-  has_many :finished_courses, :through => :user_grades, :class_name => 'Course'
+  has_and_belongs_to_many :profiles, :join_table => 'user_profiles', :uniq => true
+  
+  has_many :user_courses
+  has_many :courses, :through => :user_courses
+  
   
   
 

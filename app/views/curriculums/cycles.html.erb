@@ -1,0 +1,11 @@
+<h1>Cycles</h1>
+
+<ul>
+  <% @cycles.each do |cycle| %>
+    <li>
+      <% cycle.each do |course| %>
+        <%= course.code %>
+      <% end %>
+    </li>
+  <% end %>
+</ul>

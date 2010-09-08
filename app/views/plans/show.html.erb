@@ -1,11 +1,21 @@
 <h1><%=t :plan_heading %></h1>
 
-<% if @user.courses.empty? %>
+<% if @user.courses.empty? && @user.profiles.empty? %>
   <%= t :plan_empty_instructions %>
-<% else %>
-  <ul>
-    <% @user.courses.each do |course| %>
-      <li><%= course.code %> <%= course.name(I18n.locale) %></li>
-    <% end %>
-  </ul>
 <% end %>
+
+
+<h2>Profiles</h2>
+<ul>
+  <% @user.profiles.each do |profile| %>
+    <li><%= profile.name(I18n.locale) %></li>
+  <% end %>
+</ul>
+
+
+<h2>Courses</h2>
+<ul>
+  <% @user.courses.each do |course| %>
+    <li><%= course.code %> <%= course.name(I18n.locale) %></li>
+  <% end %>
+</ul>

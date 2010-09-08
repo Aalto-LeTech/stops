@@ -1,16 +1,14 @@
-class ProfilesController < ApplicationController
+class Plans::CoursesController < PlansController
   
-  layout 'profile'
+  before_filter :login_required
   
   before_filter :load_curriculum
   
   
-  
-  # GET /profiles
-  # GET /profiles.xml
+  # GET /courses
+  # GET /courses.xml
   def index
-    #@profiles = Profile.all_by_curriculum_id(params[:curriculum_id])
-    @profiles = Profile.all()
+    @courses = current_user.courses
 
     respond_to do |format|
       format.html # index.html.erb
@@ -18,18 +16,20 @@ class ProfilesController < ApplicationController
     end
   end
 
-  # GET /profiles/1
-  # GET /profiles/1.xml
+  # GET /courses/1
+  # GET /courses/1.xml
   def show
-    @profile = Profile.find(params[:id])
-    
-    #@courses = @profile.ordered_courses
-    @semesters = @profile.semesters
-    
+    @course = Course.find(params[:id])
+
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @course }
     end
+  end
+  
+  # GET /courses/1/graph
+  def graph
+    @course = Course.find(params[:id])
   end
 
   # GET /courses/new
@@ -48,6 +48,7 @@ class ProfilesController < ApplicationController
     @course = Course.find(params[:id])
   end
 
+  # Add course to study plan
   # POST /courses
   # POST /courses.xml
   def create

@@ -96,4 +96,9 @@ class CurriculumsController < ApplicationController
       format.xml  { head :ok }
     end
   end
+  
+  def cycles
+    @curriculum = Curriculum.find(params[:id])
+    @cycles = @curriculum.detect_cycles
+  end
 end

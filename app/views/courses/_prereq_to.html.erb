@@ -2,7 +2,10 @@
   <h2><%=h @course.code %> <%=h @course.name(I18n.locale) %> <%=t :course_strict_prereq_of %></h2>
   <ul>
     <% @course.prereq_to.each do |course| %>
-      <li><%= link_to h(course.code) + ' ' + h(course.name(I18n.locale)), {:id => course.id} %></li>
+      <li>
+        <%= link_to h(course.code) + ' ' + h(course.name(I18n.locale)), {:id => course.id} %>
+        <%= @course.<=>(course) %>
+      </li>
     <% end %>
   </ul>
 <% end %>

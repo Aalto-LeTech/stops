@@ -1,16 +1,17 @@
-class ProfilesController < ApplicationController
+class Plans::ProfilesController < PlansController
   
-  layout 'profile'
+  before_filter :login_required
+  before_filter :load_plan
   
-  before_filter :load_curriculum
   
-  
+  def load_plan
+    @user = current_user
+  end
   
   # GET /profiles
   # GET /profiles.xml
   def index
-    #@profiles = Profile.all_by_curriculum_id(params[:curriculum_id])
-    @profiles = Profile.all()
+    @profiles = @user-profiles
 
     respond_to do |format|
       format.html # index.html.erb
@@ -22,9 +23,6 @@ class ProfilesController < ApplicationController
   # GET /profiles/1.xml
   def show
     @profile = Profile.find(params[:id])
-    
-    #@courses = @profile.ordered_courses
-    @semesters = @profile.semesters
     
     respond_to do |format|
       format.html # show.html.erb
@@ -51,17 +49,12 @@ class ProfilesController < ApplicationController
   # POST /courses
   # POST /courses.xml
   def create
-    @course = Course.new(params[:course])
-
-    respond_to do |format|
-      if @course.save
-        format.html { redirect_to(@course, :notice => 'Course was successfully created.') }
-        format.xml  { render :xml => @course, :status => :created, :location => @course }
-      else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @course.errors, :status => :unprocessable_entity }
-      end
-    end
+    profile = Profile.find(params[:profile_id])
+    # TODO: if not found
+    
+    @user.profiles << profile
+    
+    render :text => 'success'
   end
 
   # PUT /courses/1

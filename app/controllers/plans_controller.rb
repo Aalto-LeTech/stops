@@ -3,8 +3,16 @@ class PlansController < ApplicationController
 
   before_filter :login_required
   
-  def show
+  before_filter :load_plan
+  
+  
+  def load_plan
     @user = current_user
+  end
+  
+  def show
+    
+    
   end
   
   def edit

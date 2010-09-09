@@ -5,4 +5,4 @@ fi:
   profile_prereqs: "Esitiedot"
   profile_strict_prereqs: "Välttämättömät esitiedot"
   profile_supporting_prereqs: "Tukevat esitiedot"
-  
+  profe_add_to_plan: "Lisää opintosuunnitelmaan"

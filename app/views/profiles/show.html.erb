@@ -1,22 +1,40 @@
 <h1><%=h @profile.name(I18n.locale) %></h1>
 
+<!-- Add to my plan -->
+<% if logged_in? %>
+  <p><%= link_to t(:profe_add_to_plan), plan_profiles_path(:profile_id => @profile.id), :method => :post %></p>
+<% end %>
 
-<p>
-  <%= link_to_remote 'Add to my plan', {:url => plan_profiles_path(:profile_id => @profile.id)}, {:method => :post} %>
-</p>
 
+<!-- Schedule -->
+<% courses_count = 0 %>
+<% credits_count = 0 %>
 <% @semesters.each_with_index do |semester,index| %>
   <ul>
     <% semester.each do |course| %>
       <% next unless course %>
       <li><%= link_to h(course.code) + ' ' + h(course.name(I18n.locale)), course_path(:id => course) %></li>
+      <% credits_count += course.credits %>
+      <% courses_count += 1 %>
     <% end %>
   </ul>
   <hr />
 <% end %>
 
+<table>
+  <tr>
+    <td>Levels:</td><td><%= @semesters.size %></td>
+  </tr>
+  <tr>
+    <td>Courses:</td><td><%= courses_count %></td>
+  </tr>
+  <tr>
+    <td>Credits:</td><td><%= credits_count %></td>
+  </tr>
+</table>
 
 
+<!-- Skills provided -->
 <h2><%=t :profile_skills %></h2>
 
 <table class="course-graph">
@@ -40,8 +58,7 @@
 </table>
 
 
-
-
+<!-- Courses required -->
 <h2><%=t :profile_strict_prereqs %></h2>
 
 <table class="profile-prereq-matrix">
@@ -58,6 +75,7 @@
 </table>
 
 
+<!-- Supporting courses -->
 <h2><%=t :profile_supporting_prereqs %></h2>
 
 <table class="profile-prereq-matrix">

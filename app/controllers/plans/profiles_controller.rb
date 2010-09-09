@@ -8,10 +8,10 @@ class Plans::ProfilesController < PlansController
     @user = current_user
   end
   
-  # GET /profiles
-  # GET /profiles.xml
+  # GET /plans/1/profiles
+  # GET /plans/1//profiles.xml
   def index
-    @profiles = @user-profiles
+    @profiles = @user.profiles
 
     respond_to do |format|
       format.html # index.html.erb
@@ -19,8 +19,8 @@ class Plans::ProfilesController < PlansController
     end
   end
 
-  # GET /profiles/1
-  # GET /profiles/1.xml
+  # GET /plans/1//profiles/1
+  # GET /plans/1//profiles/1.xml
   def show
     @profile = Profile.find(params[:id])
     
@@ -30,51 +30,28 @@ class Plans::ProfilesController < PlansController
     end
   end
 
-  # GET /courses/new
-  # GET /courses/new.xml
-  def new
-    @course = Course.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.xml  { render :xml => @course }
-    end
-  end
-
-  # GET /courses/1/edit
-  def edit
-    @course = Course.find(params[:id])
-  end
-
-  # POST /courses
-  # POST /courses.xml
+  # Adds a profile to the study plan
+  # POST /plans/1/profiles
+  # POST /plans/1/profiles.xml
   def create
+    # Dont't do anything if user has already selected this profile
+    #return if @user.profiles.exists?(params[:profile_id])
+    
     profile = Profile.find(params[:profile_id])
     # TODO: if not found
     
-    @user.profiles << profile
+    # Add profile to study plan
+    @user.add_profile(profile)
     
-    render :text => 'success'
+    # Add courses to study plan
+    #@user.courses << profile.courses_recursive
+    
+    redirect_to plan_path
   end
 
-  # PUT /courses/1
-  # PUT /courses/1.xml
-  def update
-    @course = Course.find(params[:id])
-
-    respond_to do |format|
-      if @course.update_attributes(params[:course])
-        format.html { redirect_to(@course, :notice => 'Course was successfully updated.') }
-        format.xml  { head :ok }
-      else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @course.errors, :status => :unprocessable_entity }
-      end
-    end
-  end
-
-  # DELETE /courses/1
-  # DELETE /courses/1.xml
+  # Removes a profile from the study plan
+  # DELETE /plans/1/profiles/1
+  # DELETE /plans/1/profiles/1.xml
   def destroy
     @course = Course.find(params[:id])
     @course.destroy

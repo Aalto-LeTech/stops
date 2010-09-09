@@ -11,7 +11,9 @@ class PlansController < ApplicationController
   end
   
   def show
+    @semesters = Course.semesters(@user.courses)
     
+    @credits = UserCourse.sum('credits', :include => :course, :conditions => ['user_id=?', @user.id])
     
   end
   

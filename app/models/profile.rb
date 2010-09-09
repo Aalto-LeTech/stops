@@ -25,7 +25,7 @@ class Profile < ActiveRecord::Base
   def semesters
     # put all courses and their recursive prereqs in the Level
     levels = Array.new
-    level = self.ordered_courses
+    level = self.courses_recursive
     
     begin
       # Create a list of courses that depend on some course on this level
@@ -36,8 +36,6 @@ class Profile < ActiveRecord::Base
         end
       end
       
-      puts "Level has #{level.size} courses which depend on #{future_courses.size} courses"
-      
       # Move future courses to the next level
       next_level = Array.new
       level.each_with_index do |course, index|
@@ -46,9 +44,6 @@ class Profile < ActiveRecord::Base
           next_level << course   # Add to the next level
         end
       end
-      
-      puts "Moved #{next_level.size} courses to the next level"
-      puts
       
       levels << level
       level = next_level
@@ -59,8 +54,8 @@ class Profile < ActiveRecord::Base
   
   
   
-  # Returns all courses and their prereqs that form this profile
-  def ordered_courses
+  # Returns all courses and their prereqs, recursively
+  def courses_recursive
     courses = Hash.new
     
     self.strict_prereqs.each do |prereq|

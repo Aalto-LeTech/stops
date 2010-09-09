@@ -14,8 +14,26 @@
 
 
 <h2>Courses</h2>
-<ul>
-  <% @user.courses.each do |course| %>
-    <li><%= course.code %> <%= course.name(I18n.locale) %></li>
-  <% end %>
-</ul>
+
+<% @semesters.each_with_index do |semester,index| %>
+  <ul>
+    <% semester.each do |course| %>
+      <% next unless course %>
+      <li><%= h(course.code) + ' ' + h(course.name(I18n.locale)) %></li>
+    <% end %>
+  </ul>
+  <hr />
+<% end %>
+
+
+<table>
+  <tr>
+    <td>Levels:</td><td><%= @semesters.size %></td>
+  </tr>
+  <tr>
+    <td>Courses:</td><td><%= @user.courses.size %></td>
+  </tr>
+  <tr>
+    <td>Credits:</td><td><%= @credits %></td>
+  </tr>
+</table>

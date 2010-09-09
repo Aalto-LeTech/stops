@@ -37,6 +37,14 @@ li {
   color: blue !important;
 }
 
+hr {
+  height: 1px;
+  border-top: 1px solid #c0c0c0;
+  border-bottom: none;
+  border-left: none;
+  border-right: none;
+}
+
 /******************
  * Flash messages
  ******************/

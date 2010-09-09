@@ -24,7 +24,6 @@ class Course < ActiveRecord::Base
   end
 
 
-  # Overridden comparison operator for sorting.
   # Returns -1 if the is a prereq of other, +1 if this is a prereq to other, otherwise 0.
   def <=>(other)
     if strict_prereqs.exists?(other)
@@ -36,29 +35,36 @@ class Course < ActiveRecord::Base
     end
   end
 
-  
-  # Sorts an array of courses so that prereqs come first
-  def self.sort(array)
-    puts "Array before"
-    array.each do |c|
-      puts c.code + ' ' + c.name('fi')
-    end
+
+  # returns an array of arrays of courses
+  def self.semesters(courses)
+    # put all courses and their recursive prereqs in the Level
+    levels = Array.new
+    level = courses
     
-    
-    for i in 0...array.size
-      for j in i...array.size
-        # If the other course belongs before this course, swap
-        if array[i].strict_prereqs.exists?(array[j])
-          puts "#{array[j].code} belongs before #{array[i].code}. Swapping #{j + 1} <-> #{i + 1}"
-          array[i], array[j] = array[j], array[i]
+    begin
+      # Create a list of courses that depend on some course on this level
+      future_courses = Hash.new
+      level.each do |course|
+        course.prereq_to.each do |future_course|
+          future_courses[future_course.id] = future_course
         end
-      
-      
       end
-    end
+      
+      # Move future courses to the next level
+      next_level = Array.new
+      level.each_with_index do |course, index|
+        if future_courses.has_key?(course.id)
+          level[index] = nil    # Remove from this level  FIXME: don't leave nils
+          next_level << course   # Add to the next level
+        end
+      end
+      
+      levels << level
+      level = next_level
+    end while level.size > 0
     
-    return array
+    return levels
   end
-  
   
 end

@@ -37,7 +37,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :curriculums, :path_prefix => '/:locale', :member => { :cycles => :get }
   
   map.resource :plan, :path_prefix => '/:locale' do |plan|
-    plan.resources :profiles, :controller => 'plans/profiles'
+    plan.resources :profiles, :controller => 'plans/profiles', :except => [:new, :edit, :update]
     plan.resources :courses, :controller => 'plans/courses'
   end
   

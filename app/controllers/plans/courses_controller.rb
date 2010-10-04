@@ -1,7 +1,6 @@
 class Plans::CoursesController < PlansController
   
-  before_filter :login_required
-  
+  #before_filter :login_required
   before_filter :load_curriculum
   
   

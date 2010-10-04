@@ -1,7 +1,7 @@
 <h1><%=h @profile.name(I18n.locale) %></h1>
 
 <!-- Add to my plan -->
-<% if logged_in? %>
+<% if false && logged_in? %>
   <p><%= link_to t(:profe_add_to_plan), plan_profiles_path(:profile_id => @profile.id), :method => :post %></p>
 <% end %>
 

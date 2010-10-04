@@ -2,8 +2,6 @@
 # Likewise, all the methods added will be available for all controllers.
 
 class ApplicationController < ActionController::Base
-  include AuthenticatedSystem
-  
   helper :all # include all helpers, all the time
   protect_from_forgery # See ActionController::RequestForgeryProtection for details
 
@@ -42,12 +40,12 @@ class ApplicationController < ActionController::Base
       session[:locale] = params[:locale]
 
       # Save the locale in user's preferences
-      if logged_in?
-        current_user.locale = params[:locale]
-        current_user.save
-      end
-    elsif logged_in? && !current_user.locale.blank?  # Get locale from user's preferences
-      I18n.locale = current_user.locale
+      #if logged_in?
+      #  current_user.locale = params[:locale]
+      #  current_user.save
+      #end
+    #elsif logged_in? && !current_user.locale.blank?  # Get locale from user's preferences
+    #  I18n.locale = current_user.locale
     elsif !session[:locale].blank?  # Get locale from session
       I18n.locale = session[:locale]
     end
@@ -65,10 +63,10 @@ class ApplicationController < ActionController::Base
   
   # If require_login parameter is set, this filter will store location and redirect to login. After successful login, the user is redirected back to the original location.
   def require_login?
-    if params[:require_login] && !logged_in?
-      store_location
-      redirect_to new_session_path
-    end
+    #if params[:require_login] && !logged_in?
+    #  store_location
+    #  redirect_to new_session_path
+    #end
   end
   
   # Sends email to admin if an exception occurrs. Recipient is defined by the ERRORS_EMAIL constant.

@@ -1,4 +1,8 @@
+.bundle
+db/*.sqlite3
+tmp/**/*
 log/
-tmp/
+public/images/
 config/database.yml
 config/initializers/settings.rb
+Gemfile.lock

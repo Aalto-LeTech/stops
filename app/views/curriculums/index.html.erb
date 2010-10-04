@@ -3,6 +3,6 @@
 <%= render :partial => 'index' %>
 
 
-<% if is_admin?(current_user) %>
+<% if false && is_admin?(current_user) %>
   <p><%= link_to t(:curriculum_new), new_curriculum_path %></p>
 <% end %>

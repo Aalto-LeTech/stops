@@ -1,6 +1,6 @@
 class Plans::ProfilesController < PlansController
   
-  before_filter :login_required
+  #before_filter :login_required
   before_filter :load_plan
   
   

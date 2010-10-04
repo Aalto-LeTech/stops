@@ -16,13 +16,24 @@
 <h2>Courses</h2>
 
 <% @semesters.each_with_index do |semester,index| %>
-  <ul>
+  <div class="semester" id="semester-<%= index %>">
+    <h2><%= index %></h2>
     <% semester.each do |course| %>
       <% next unless course %>
-      <li><%= h(course.code) + ' ' + h(course.name(I18n.locale)) %></li>
+      <div class="course" id="course-<%= course.id %>"><%= h(course.code) + ' ' + h(course.name(I18n.locale)) %></div>
+      <%= draggable_element "course-#{course.id}" %> 
     <% end %>
-  </ul>
-  <hr />
+  </div>
+  <script>
+    Droppables.add('semester-<%= index %>',{
+      onDrop: function(dragged, dropped, event) {
+        alert('Dragged: ' + dragged.id);
+        alert('Dropped onto: ' + dropped.id);
+      }
+    });
+
+  </script>
+
 <% end %>
 
 

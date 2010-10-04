@@ -2,8 +2,8 @@
   <!-- Login -->
   <div class="login">
     <%
-    user = current_user
-    if user
+    #user = current_user
+    if false && user
     %>
       <%= link_to "#{h(user.name)} (#{h(user.studentnumber)})", edit_user_path(:id => user.id) %>
     <% end %>
@@ -19,7 +19,7 @@
         <li><%= link_to 'EN', url_for(:overwrite_params => {:locale => 'en'}) %></li>
       <% end %>
 
-      <% if logged_in? %>
+      <% if false && logged_in? %>
         <li><%= link_to 'My preferences', edit_user_path(:id => current_user.id) %></li>
         <li><%= link_to 'Logout', logout_url %></li>
       <% else %>

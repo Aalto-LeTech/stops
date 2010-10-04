@@ -6,8 +6,11 @@ ActionController::Routing::Routes.draw do |map|
   
   map.resource :session
 
-  map.logout '/logout', :controller => 'sessions', :action => 'destroy'
-  map.login '/login', :controller => 'sessions', :action => 'new'
+  #map.logout '/logout', :controller => 'sessions', :action => 'destroy'
+  #map.login '/login', :controller => 'sessions', :action => 'new'
+  match 'login' => 'sessions#new', :as => :login
+  match 'logout' => 'sessions#destroy', :as => :logout
+
 
   # The priority is based upon order of creation: first created -> highest priority.
 

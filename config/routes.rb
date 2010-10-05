@@ -1,15 +1,13 @@
 ActionController::Routing::Routes.draw do |map|
-  
+  devise_for :users
+
   map.resources :skills, :member => ['prereqs', 'future']
   map.resources :courses, :path_prefix => '/:locale/:curriculum_id', :member => ['graph']
   map.resources :users, :path_prefix => '/:locale'
   
-  map.resource :session
-
-  #map.logout '/logout', :controller => 'sessions', :action => 'destroy'
-  #map.login '/login', :controller => 'sessions', :action => 'new'
-  match 'login' => 'sessions#new', :as => :login
-  match 'logout' => 'sessions#destroy', :as => :logout
+  #map.resource :session
+  #match 'login' => 'sessions#new', :as => :login
+  #match 'logout' => 'sessions#destroy', :as => :logout
 
 
   # The priority is based upon order of creation: first created -> highest priority.
@@ -55,7 +53,8 @@ ActionController::Routing::Routes.draw do |map|
   #   end
 
   # You can have the root of your site routed with map.root -- just remember to delete public/index.html.
-  map.root :controller => 'frontpage'
+  #map.root :controller => 'frontpage'
+  root :to => "frontpage#index"
   map.frontpage '/:locale', :controller => 'frontpage'
 
   # See how all your routes lay out with "rake routes"

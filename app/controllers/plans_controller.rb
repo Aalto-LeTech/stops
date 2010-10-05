@@ -1,7 +1,8 @@
 # Study plan controller
 class PlansController < ApplicationController
 
-  #before_filter :login_required
+  before_filter :authenticate_user!
+
   before_filter :load_plan
   
   

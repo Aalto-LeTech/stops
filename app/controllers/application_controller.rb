@@ -91,6 +91,18 @@ class ApplicationController < ActionController::Base
     @profile = Profile.find(params[:profile_id])
   end
   
-  
+  rescue_from CanCan::AccessDenied do |exception|
+    #flash[:error] = exception.message
+    
+    # TODO:
+    # if !logged in
+    #   redirect to login
+    # else
+    #   forbidden
+    # end
+    
+    redirect_to root_url
+  end
+
   
 end

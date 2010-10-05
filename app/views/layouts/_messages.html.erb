@@ -1,12 +1,12 @@
 <!-- Flash messages -->
-<% if flash[:warning] %>
-  <p class="flash flashWarning"><%= h flash[:warning] %></p>
+<% if flash[:notice] or flash[:warning] %>
+  <p class="flash flashWarning"><%= flash[:notice]  %><%= flash[:warning] %></p>
 <% end %>
 
 <% if flash[:success] %>
-  <p class="flash flashSuccess"><%= h flash[:success] %></p>
+  <p class="flash flashSuccess"><%= flash[:success] %></p>
 <% end %>
 
-<% if flash[:error] %>
-  <p class="flash flashError"><%= h flash[:error] %></p>
+<% if flash[:alert] or flash[:error] or flash[:failure] %>
+  <p class="flash flashError"><%= flash[:alert] %><%= flash[:error] %><%= flash[:failure] %></p>
 <% end %>

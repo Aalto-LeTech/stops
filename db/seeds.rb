@@ -36,8 +36,8 @@ SkillLevel.create(:level => 5, :locale => 'en', :name => 'Creating/synthesising'
 
 
 # Users
-user = User.new(:password => 'admin11', :password_confirmation => 'admin11', :name => 'Admin', :email => 'admin@example.com')
-user.studentnumber = '12345'
+user = User.new(:password => 'admin', :password_confirmation => 'admin', :name => 'Admin', :email => 'admin@example.com')
+#user.studentnumber = '12345'
 user.login = 'admin'
 user.admin = true
 user.save
@@ -45,8 +45,8 @@ user.save
 # Create students
 for i in 1..10 do
   r = User.new
-  r.studentnumber = i.to_s.rjust(5, '0')
-  r.login = r.studentnumber
+  #r.studentnumber = i.to_s.rjust(5, '0')
+  r.login = i.to_s.rjust(5, '0')
   r.password = "student#{i}"
   r.password_confirmation = "student#{i}"
   r.name = "Student #{i}"

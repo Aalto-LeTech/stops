@@ -1,9 +1,41 @@
 ActionController::Routing::Routes.draw do |map|
   devise_for :users
 
-  map.resources :skills, :member => ['prereqs', 'future']
-  map.resources :courses, :path_prefix => '/:locale/:curriculum_id', :member => ['graph']
-  map.resources :users, :path_prefix => '/:locale'
+  scope ":locale" do
+    resources :users
+    
+    resources :skills do
+      member do 
+        get 'prereqs'
+        get 'future'
+      end
+    end
+    
+    resources :curriculums do
+      member do
+        get 'cycles'
+      end
+    end
+    
+    resource :plan do
+      resources :profiles, :controller => 'plans/profiles', :except => [:new, :edit, :update]
+      resources :courses, :controller => 'plans/courses'
+    end
+    
+    scope "/:curriculum_id" do
+      resources :courses do
+        member do
+          get 'graph'
+        end
+      end
+      
+      resources :profiles do
+        resources :courses, :controller => 'profiles/courses'
+      end
+    end
+    
+  end
+  
   
   #map.resource :session
   #match 'login' => 'sessions#new', :as => :login
@@ -35,16 +67,7 @@ ActionController::Routing::Routes.draw do |map|
   #     products.resources :sales, :collection => { :recent => :get }
   #   end
   
-  map.resources :curriculums, :path_prefix => '/:locale', :member => { :cycles => :get }
   
-  map.resource :plan, :path_prefix => '/:locale' do |plan|
-    plan.resources :profiles, :controller => 'plans/profiles', :except => [:new, :edit, :update]
-    plan.resources :courses, :controller => 'plans/courses'
-  end
-  
-  map.resources :profiles, :path_prefix => '/:locale/:curriculum_id' do |profile|
-    profile.resources :courses, :controller => 'profiles/courses'
-  end
 
   # Sample resource route within a namespace:
   #   map.namespace :admin do |admin|
@@ -53,7 +76,6 @@ ActionController::Routing::Routes.draw do |map|
   #   end
 
   # You can have the root of your site routed with map.root -- just remember to delete public/index.html.
-  #map.root :controller => 'frontpage'
   root :to => "frontpage#index"
   map.frontpage '/:locale', :controller => 'frontpage'
 
@@ -62,6 +84,6 @@ ActionController::Routing::Routes.draw do |map|
   # Install the default routes as the lowest priority.
   # Note: These default routes make all actions in every controller accessible via GET requests. You should
   # consider removing or commenting them out if you're using named routes and resources.
-  map.connect ':controller/:action/:id'
-  map.connect ':controller/:action/:id.:format'
+  #map.connect ':controller/:action/:id'
+  #map.connect ':controller/:action/:id.:format'
 end

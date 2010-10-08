@@ -1,7 +1,7 @@
 <h1><%=h @profile.name(I18n.locale) %></h1>
 
 <!-- Add to my plan -->
-<% if false && logged_in? %>
+<% if user_signed_in? %>
   <p><%= link_to t(:profe_add_to_plan), plan_profiles_path(:profile_id => @profile.id), :method => :post %></p>
 <% end %>
 
@@ -49,7 +49,7 @@
       <td>
         <% @profile.skills.each do |skill| %>
           <p>
-            <%= link_to_remote h(skill.description(I18n.locale)), :update => 'skill-prereqs', :url => prereqs_skill_url(:id => skill) %>
+            <%= link_to h(skill.description(I18n.locale)), prereqs_skill_url(:id => skill), :remote => true %>
           </p>
         <% end %>
       </td>

@@ -14,11 +14,11 @@
       <td>
         <% @course.skills.each do |skill| %>
           <p>
-            <%= link_to_remote 'x', :update => 'skill-prereqs', :url => prereqs_skill_url(:id => skill) %>
+            <%= link_to 'x', prereqs_skill_url(:id => skill), :remote => true %>
             
             <%= skill.description(I18n.locale) %>
             
-            <%= link_to_remote 'x', :update => 'skill-future', :url => future_skill_url(:id => skill) %>
+            <%= link_to 'x', future_skill_url(:id => skill), :remote => true %>
           </p>
         <% end %>
       </td>

@@ -45,6 +45,10 @@ hr {
   border-right: none;
 }
 
+.clear {
+  clear: vboth;
+}
+
 /******************
  * Flash messages
  ******************/
@@ -199,28 +203,4 @@ hr {
   color: black;
 }
 
-
-
-div.semester {
-  border: 1px solid gray;
-  background: #f0f0f0;
-  padding: .5em;
-  margin: .5em;
-}
-
-div.semester h2 {
-  margin: 0em;
-  font-size: 100%;
-  color: gray;
-}
-
-div.course {
-  
-  clear: both;
-  background: #e0e0ff;
-  border: 1px solid #8080ff;
-  font-size: small;
-  padding: .1em;
-  margin: .5em .1em;
-}
 

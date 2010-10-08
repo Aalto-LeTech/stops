@@ -1,3 +1,3 @@
 class CourseDescription < ActiveRecord::Base
-  belongs_to :course
+  belongs_to :abstract_course
 end

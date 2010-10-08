@@ -15,36 +15,40 @@
 
 <h2>Courses</h2>
 
-<% @semesters.each_with_index do |semester,index| %>
-  <div class="semester" id="semester-<%= index %>">
-    <h2><%= index %></h2>
-    <% semester.each do |course| %>
-      <% next unless course %>
-      <div class="course" id="course-<%= course.id %>"><%= h(course.code) + ' ' + h(course.name(I18n.locale)) %></div>
-      <%= draggable_element "course-#{course.id}" %> 
-    <% end %>
-  </div>
-  <script>
-    Droppables.add('semester-<%= index %>',{
-      onDrop: function(dragged, dropped, event) {
-        alert('Dragged: ' + dragged.id);
-        alert('Dropped onto: ' + dropped.id);
-      }
-    });
-
-  </script>
-
-<% end %>
-
+<div class="plan">
+  <% @periods.each_with_index do |period,index| %>
+    <div class="period" id="period-<%= index %>">
+      <h2><%= period.name(I18n.locale) %></h2>
+      
+      <%= i = 0 %>
+      <% @courses.each do |course| %>
+        <% next unless course %>
+        
+        <div class="course" style="left: <%= i * 100 %>px" id="course-<%= course.id %>"><%= h(course.code) + ' ' + h(course.name(I18n.locale)) %></div>
+        <%= draggable_element "course-#{course.id}" %> 
+        
+        <%= i += 1 %>
+      <% end %>
+      
+      <div class="clear"></div>
+    </div>
+    
+    <script>
+      Droppables.add('period-<%= index %>',{
+        onDrop: function(dragged, dropped, event) {
+          alert('Dragged: ' + dragged.id);
+          alert('Dropped onto: ' + dropped.id);
+        }
+      });
+    </script>
+  <% end %>
+</div>
 
 <table>
   <tr>
-    <td>Levels:</td><td><%= @semesters.size %></td>
+    <td>Levels:</td><td><%=  %></td>
   </tr>
   <tr>
     <td>Courses:</td><td><%= @user.courses.size %></td>
-  </tr>
-  <tr>
-    <td>Credits:</td><td><%= @credits %></td>
   </tr>
 </table>

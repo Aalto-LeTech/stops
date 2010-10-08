@@ -1,6 +1,6 @@
 <h1><%= @curriculum.name %></h1>
 
-<% if false && is_admin?(current_user) %>
+<% if can? :update, @curriculum %>
   <%= link_to 'Edit', edit_curriculum_path(:id => @curriculum) %>
   <%= link_to 'Cycles', cycles_curriculum_path(:id => @curriculum) %>
 <% end %>

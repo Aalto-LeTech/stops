@@ -1,0 +1,38 @@
+
+.plan div.period {
+  position: relative;
+  border: 1px solid gray;
+  background: #f0f0f0;
+  padding: 5px 5px 5px 100px;
+  margin: 10px;
+  height: 100px;
+}
+
+.plan div.period h2 {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  font-size: 100%;
+  color: gray;
+  margin: 0px;
+  padding: 0px;
+  z-index: 1;
+}
+
+.plan div.course {
+  
+  position: absolute;
+  top: 5px;
+  
+  background: #e0e0ff;
+  border: 1px solid #8080ff;
+  font-size: small;
+  padding: .1em;
+  margin: .5em .1em;
+  
+  height: 200px;
+  width: 90px;
+  overflow: hidden;
+  z-index: 2;
+}
+

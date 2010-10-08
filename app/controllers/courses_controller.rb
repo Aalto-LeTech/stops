@@ -18,7 +18,7 @@ class CoursesController < ApplicationController
   # GET /courses/1
   # GET /courses/1.xml
   def show
-    @course = Course.find(params[:id])
+    @course = ScopedCourse.find(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
@@ -28,7 +28,7 @@ class CoursesController < ApplicationController
   
   # GET /courses/1/graph
   def graph
-    @course = Course.find(params[:id])
+    @course = ScopedCourse.find(params[:id])
   end
 
   # GET /courses/new

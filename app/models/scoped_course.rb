@@ -1,8 +1,8 @@
-class Course < ActiveRecord::Base
+class ScopedCourse < ActiveRecord::Base
 
-  has_many :course_descriptions, :dependent => :destroy
+  belongs_to :abstract_course
   
-  has_many :skills, :order => 'position' #, :foreign_key => 'course_code', :primary_key => 'code'
+  has_many :skills, :order => 'position', :dependent => :destroy #, :foreign_key => 'course_code', :primary_key => 'code'
   
   # Prerequisite courses of this course
   has_many :course_prereqs, :dependent => :destroy
@@ -13,13 +13,12 @@ class Course < ActiveRecord::Base
   has_many :supporting_prereqs, :through => :course_prereqs, :source => :prereq, :order => 'requirement DESC, code', :conditions => "requirement = #{SUPPORTING_PREREQ}"
   
   # Courses for which this is a prerequisite
-  has_many :course_prereq_to, :class_name => 'CoursePrereq', :foreign_key => :prereq_id
+  has_many :course_prereq_to, :class_name => 'CoursePrereq', :foreign_key => :scoped_prereq_id
   has_many :prereq_to, :through => :course_prereq_to, :source => :course, :order => 'code', :conditions => "requirement = #{STRICT_PREREQ}"
   
   
-  
   def name(locale)
-    description = CourseDescription.find(:first,  :conditions => { :course_id => self.id, :locale => locale.to_s })
+    description = CourseDescription.where(:abstract_course_id => self.abstract_course_id, :locale => locale.to_s).first
     description ? description.name : ''
   end
 
@@ -65,6 +64,11 @@ class Course < ActiveRecord::Base
     end while level.size > 0
     
     return levels
+  end
+  
+  # Returns periods on which this course is arranged
+  def periods
+    raise NotImplementedError, "Course::periods not implemented"
   end
   
 end

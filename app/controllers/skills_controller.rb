@@ -5,13 +5,19 @@ class SkillsController < ApplicationController
   def prereqs
     @skill = Skill.find(params[:id])
     
-    render :partial => 'details'
+    render(:update) do |page|
+      page.replace_html 'skill-prereqs', :partial => 'details'
+    end 
+
+    #render :partial => 'details'
   end
   
   def future
     @skill = Skill.find(params[:id])
     
-    render :partial => 'future'
+    render(:update) do |page|
+      page.replace_html 'skill-future', :partial => 'future'
+    end 
   end
   
 end

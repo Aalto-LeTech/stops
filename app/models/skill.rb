@@ -1,5 +1,5 @@
 class Skill < ActiveRecord::Base
-  belongs_to :course #, :foreign_key => 'course_code', :primary_key => 'code'
+  belongs_to :scoped_course #, :foreign_key => 'course_code', :primary_key => 'code'
 
   has_many :skill_descriptions, :dependent => :destroy
   
@@ -11,7 +11,7 @@ class Skill < ActiveRecord::Base
   has_many :prereq_to, :through => :skill_prereq_to, :source => :skill, :order => 'position', :conditions => "requirement = #{STRICT_PREREQ}"
   
   def description(locale)
-    description = SkillDescription.find(:first,  :conditions => { :skill_id => self.id, :locale => locale.to_s })
+    description = SkillDescription.where(:skill_id => self.id, :locale => locale.to_s).first
     description ? description.description : ''
   end
   

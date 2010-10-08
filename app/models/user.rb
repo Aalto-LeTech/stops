@@ -5,26 +5,30 @@ class User < ActiveRecord::Base
   
   # prevents a user from submitting a crafted form that bypasses activation
   # anything else you want your user to change should be added here.
-  attr_accessible :login, :email, :name, :password, :password_confirmation, :remember_me
+  attr_accessible :login, :email, :name, :locale, :password, :password_confirmation, :remember_me
 
   
   # Plan
   has_and_belongs_to_many :profiles, :join_table => 'user_profiles', :uniq => true
   
-  has_many :user_courses
-  has_many :courses, :through => :user_courses, :uniq => true
+  has_many :user_courses, :dependent => :destroy
+  has_many :courses, :through => :user_courses, :source => :abstract_course, :uniq => true
   
   
   def add_profile(profile)
+    # Dont't do anything if user already has this profile
     return if profiles.exists?(profile.id)
-      
+    
     profiles << profile
     
     # Calculate union of existing and new courses, without duplicates
-    courses_array = self.courses | profile.courses_recursive
-    self.courses = courses_array
+    courses_array = self.courses
     
-    #courses << profile.courses_recursive
+    profile.courses_recursive.each do |course|
+      courses_array << course.abstract_course unless courses_array.include? course.abstract_course
+    end
+    
+    self.courses = courses_array
   end
   
   

@@ -11,22 +11,22 @@
 #   areas[i] = Area.create(:position => i)
 # end
 
-# AreaDescription.create(:area_id => areas[1].id, :locale => 'fi', :name => 'Teoriatiet&auml;mys', :description => '')
+# AreaDescription.create(:area_id => areas[1].id, :locale => 'fi', :name => 'Teoriatietämys', :description => '')
 # AreaDescription.create(:area_id => areas[2].id, :locale => 'fi', :name => 'Suunnittelutekninen osaaminen', :description => '')
 # AreaDescription.create(:area_id => areas[3].id, :locale => 'fi', :name => 'Materiaalitekninen osaaminen', :description => '')
 # AreaDescription.create(:area_id => areas[4].id, :locale => 'fi', :name => 'Valmistus- ja tuotantotekninen osaaminen', :description => '')
 # AreaDescription.create(:area_id => areas[5].id, :locale => 'fi', :name => 'Projektiosaaminen', :description => '')
 # AreaDescription.create(:area_id => areas[6].id, :locale => 'fi', :name => 'Liiketoimintaosaaminen', :description => '')
 # AreaDescription.create(:area_id => areas[7].id, :locale => 'fi', :name => 'Tietotekniikan sovellusten hallinta', :description => '')
-# AreaDescription.create(:area_id => areas[8].id, :locale => 'fi', :name => 'Ekologinen tiet&auml;mys', :description => '')
-# AreaDescription.create(:area_id => areas[9].id, :locale => 'fi', :name => 'Lains&auml;&auml;d&auml;nn&ouml;llinen tiet&auml;mys', :description => '')
+# AreaDescription.create(:area_id => areas[8].id, :locale => 'fi', :name => 'Ekologinen tietämys', :description => '')
+# AreaDescription.create(:area_id => areas[9].id, :locale => 'fi', :name => 'Lainsäädännöllinen tietämys', :description => '')
 # AreaDescription.create(:area_id => areas[10].id,  :locale => 'fi', :name => 'Tutkimus- ja kehitysosaaminen (T&K)', :description => '')
 
-SkillLevel.create(:level => 1, :locale => 'fi', :name => 'Tunnistaminen', :definition => 'Opiskelija osaa tunnistaa, luetella ja m&auml;&auml;ritell&auml; asioita, k&auml;sitteit&auml;, periaatteita niiden opetetussa muodossa ilman ymm&auml;rt&auml;mist&auml;.')
-SkillLevel.create(:level => 2, :locale => 'fi', :name => 'Ymm&auml;rt&auml;minen', :definition => 'Opiskelija ymm&auml;rt&auml;&auml; ja k&auml;sitt&auml;&auml; aiemmin oppimiaan asioita, k&auml;sitteit&auml; ja periaatteita ilman syv&auml;llist&auml; ymm&auml;rt&auml;mist&auml;.')
-SkillLevel.create(:level => 3, :locale => 'fi', :name => 'Soveltaminen', :definition => 'Opiskelija osaa soveltaa oppimiaan asioita, k&auml;sitteit&auml; ja periaatteita ongelmien ratkaisemiseen annetuilla tiedoilla kyeten valitsemaan sopivan mentelm&auml;n tai tavan.')
-SkillLevel.create(:level => 4, :locale => 'fi', :name => 'Analysointi/arviointi', :definition => ' Opiskelija osaa analysoida, tarkastella ja j&auml;sennell&auml; ongelman ratkaisemisen eri vaiheet ja kykenee arvioimaan, tulkitsemaan ja veratailemaan kriittisesti eri mentelmien antamia tuloksia kesken&auml;&auml;n. Edellytt&auml;&auml; syv&auml;llist&auml; ymm&auml;rt&auml;mist&auml;.')
-SkillLevel.create(:level => 5, :locale => 'fi', :name => 'Luominen/kehitt&auml;minen', :definition => 'Opiskelija osaa luoda, kehitt&auml;&auml;, suunnitella ja rakentaa uusia teorioita, malleja, menetelmi&auml; tai tuotteita tai yhdistell&auml; olemassa olevia periaatteita, k&auml;sitteit&auml; ja tietoja uudella tavalla.')
+SkillLevel.create(:level => 1, :locale => 'fi', :name => 'Tunnistaminen', :definition => 'Opiskelija osaa tunnistaa, luetella ja määritellä asioita, käsitteitä, periaatteita niiden opetetussa muodossa ilman ymmärtämistä.')
+SkillLevel.create(:level => 2, :locale => 'fi', :name => 'Ymmärtäminen', :definition => 'Opiskelija ymmärtää ja käsittää aiemmin oppimiaan asioita, käsitteitä ja periaatteita ilman syvällistä ymmärtämistä.')
+SkillLevel.create(:level => 3, :locale => 'fi', :name => 'Soveltaminen', :definition => 'Opiskelija osaa soveltaa oppimiaan asioita, käsitteitä ja periaatteita ongelmien ratkaisemiseen annetuilla tiedoilla kyeten valitsemaan sopivan mentelmän tai tavan.')
+SkillLevel.create(:level => 4, :locale => 'fi', :name => 'Analysointi/arviointi', :definition => ' Opiskelija osaa analysoida, tarkastella ja jäsennellä ongelman ratkaisemisen eri vaiheet ja kykenee arvioimaan, tulkitsemaan ja veratailemaan kriittisesti eri mentelmien antamia tuloksia keskenään. Edellyttää syvällistä ymmärtämistä.')
+SkillLevel.create(:level => 5, :locale => 'fi', :name => 'Luominen/kehittäminen', :definition => 'Opiskelija osaa luoda, kehittää, suunnitella ja rakentaa uusia teorioita, malleja, menetelmiä tai tuotteita tai yhdistellä olemassa olevia periaatteita, käsitteitä ja tietoja uudella tavalla.')
 SkillLevel.create(:level => 1, :locale => 'en', :name => 'Recognising')
 SkillLevel.create(:level => 2, :locale => 'en', :name => 'Understading')
 SkillLevel.create(:level => 3, :locale => 'en', :name => 'Applying')
@@ -45,11 +45,31 @@ user.save
 # Create students
 for i in 1..10 do
   r = User.new
-  #r.studentnumber = i.to_s.rjust(5, '0')
+  r.studentnumber = i.to_s.rjust(5, '0')
   r.login = i.to_s.rjust(5, '0')
   r.password = "student#{i}"
   r.password_confirmation = "student#{i}"
   r.name = "Student #{i}"
   r.email = "student#{i}@example.com"
   r.save
+end
+
+
+# Periods
+period_names_fi = ["III kevät","IV kevät"," kesä","I syksy","II syksy"]
+period_names_en = ["III spring","IV spring"," summer","I fall","II fall"]
+period_begins = ["01-01","01-03","01-06","01-09","01-11"]
+period_ends = ["28-02","31-05","31-08","31-10","31-12"]
+
+for year in 2005..2020 do
+  for period in 0..4
+    p = Period.new
+    p.number = period
+    p.begins_at = "#{period_begins[period]}-#{year}"
+    p.ends_at = "#{period_ends[period]}-#{year}"
+    p.save
+    
+    PeriodDescription.create(:period_id => p.id, :locale => 'fi', :name => "#{year} #{period_names_fi[period]}")
+    PeriodDescription.create(:period_id => p.id, :locale => 'en', :name => "#{year} #{period_names_en[period]}")
+  end
 end

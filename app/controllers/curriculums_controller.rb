@@ -1,10 +1,10 @@
 class CurriculumsController < ApplicationController
-  #before_filter :authorize_admin, :except => [:index, :show]
   
   # GET /curriculums
   # GET /curriculums.xml
   def index
     @curriculums = Curriculum.all(:order => 'start_year DESC')
+    authorize! :read, Curriculum
 
     respond_to do |format|
       format.html # index.html.erb
@@ -16,6 +16,7 @@ class CurriculumsController < ApplicationController
   # GET /curriculums/1.xml
   def show
     @curriculum = Curriculum.find(params[:id])
+    authorize! :read, @curriculum
 
     respond_to do |format|
       format.html # show.html.erb
@@ -27,6 +28,7 @@ class CurriculumsController < ApplicationController
   # GET /curriculums/new.xml
   def new
     @curriculum = Curriculum.new
+    authorize! :create, @curriculum
 
     respond_to do |format|
       format.html # new.html.erb
@@ -37,12 +39,14 @@ class CurriculumsController < ApplicationController
   # GET /curriculums/1/edit
   def edit
     @curriculum = Curriculum.find(params[:id])
+    authorize! :update, @curriculum
   end
 
   # POST /curriculums
   # POST /curriculums.xml
   def create
     @curriculum = Curriculum.new(params[:curriculum])
+    authorize! :create, @curriculum
 
     respond_to do |format|
       if @curriculum.save
@@ -59,6 +63,7 @@ class CurriculumsController < ApplicationController
   # PUT /curriculums/1.xml
   def update
     @curriculum = Curriculum.find(params[:id])
+    authorize! :update, @curriculum
 
     if params[:prereqs_csv]
       matrix = PrereqMatrix.new(params[:prereqs_csv], @curriculum, I18n.locale)
@@ -69,7 +74,7 @@ class CurriculumsController < ApplicationController
     if params[:profiles_csv]
       matrix = ProfileMatrix.new(params[:profiles_csv], @curriculum, I18n.locale)
       matrix.process
-      flash[:success] = "#{params[:prereqs_csv].original_filename} uploaded"
+      flash[:success] = "#{params[:profiles_csv].original_filename} uploaded"
     end
     
     render :action => "edit"
@@ -89,6 +94,8 @@ class CurriculumsController < ApplicationController
   # DELETE /curriculums/1.xml
   def destroy
     @curriculum = Curriculum.find(params[:id])
+    authorize! :destroy, @curriculum
+    
     @curriculum.destroy
 
     respond_to do |format|
@@ -99,6 +106,7 @@ class CurriculumsController < ApplicationController
   
   def cycles
     @curriculum = Curriculum.find(params[:id])
+    
     @cycles = @curriculum.detect_cycles
   end
 end

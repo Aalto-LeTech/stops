@@ -2,6 +2,6 @@
 class ProfileCourse < ActiveRecord::Base
 
   belongs_to :profile
-  belongs_to :course
+  belongs_to :scoped_course
   
 end

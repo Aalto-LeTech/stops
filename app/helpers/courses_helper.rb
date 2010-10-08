@@ -7,9 +7,9 @@ module CoursesHelper
     
     case p.requirement
     when STRICT_PREREQ
-      return '<span style="font-size: 125%;">&diams;</span>'
+      return '<span style="font-size: 125%;">&diams;</span>'.html_safe
     when SUPPORTING_PREREQ
-      return '<span style="font-size: 125%; color: gray;">&bull;</span>'
+      return '<span style="font-size: 125%; color: gray;">&bull;</span>'.html_safe
     else
       return ''
     end

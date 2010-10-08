@@ -40,7 +40,7 @@ class ApplicationController < ActionController::Base
       session[:locale] = params[:locale]
 
       # Save the locale in user's preferences
-      #if logged_in?
+      #if user_signed_in?
       #  current_user.locale = params[:locale]
       #  current_user.save
       #end
@@ -61,12 +61,12 @@ class ApplicationController < ActionController::Base
     end
   end
   
-  # If require_login parameter is set, this filter will store location and redirect to login. After successful login, the user is redirected back to the original location.
-  def require_login?
-    #if params[:require_login] && !logged_in?
-    #  store_location
-    #  redirect_to new_session_path
-    #end
+  def load_curriculum
+    @curriculum = Curriculum.find(params[:curriculum_id])
+  end
+  
+  def load_profile
+    @profile = Profile.find(params[:profile_id])
   end
   
   # Sends email to admin if an exception occurrs. Recipient is defined by the ERRORS_EMAIL constant.
@@ -83,25 +83,20 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def load_curriculum
-    @curriculum = Curriculum.find(params[:curriculum_id])
+  # If require_login GET-parameter is set, this filter redirect to login. After successful login, the user is redirected back to the original location.
+  def require_login?
+    authenticate_user! if params[:require_login] && !user_signed_in?
   end
   
-  def load_profile
-    @profile = Profile.find(params[:profile_id])
-  end
-  
+  # Handle authorization failure
   rescue_from CanCan::AccessDenied do |exception|
-    #flash[:error] = exception.message
-    
-    # TODO:
-    # if !logged in
-    #   redirect to login
-    # else
-    #   forbidden
-    # end
-    
-    redirect_to root_url
+    unless user_signed_in?
+      # If user is not authenticated, redirect to login
+      authenticate_user!
+    else
+      # If user is authenticated, show "Forbidden"
+      render :template => "shared/forbidden", :status => 403
+    end
   end
 
   

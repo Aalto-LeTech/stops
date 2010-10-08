@@ -9,7 +9,7 @@ class Profiles::CoursesController < ProfilesController
   # GET /profiles/1/courses
   # GET /profiles/1/courses.xml
   def index
-    @courses = Course.all
+    @courses = @profile.courses
 
     respond_to do |format|
       format.html # index.html.erb
@@ -20,7 +20,7 @@ class Profiles::CoursesController < ProfilesController
   # GET /profiles/1/courses/1
   # GET /profiles/1/courses/1.xml
   def show
-    @course = Course.find(params[:id])
+    @course = ScopedCourse.find(params[:id])
 
 #     respond_to do |format|
 #       format.html # show.html.erb

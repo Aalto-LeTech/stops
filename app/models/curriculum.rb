@@ -6,7 +6,7 @@ class Curriculum < ActiveRecord::Base
   validates_uniqueness_of :end_year
   
   has_many :profiles, :dependent => :destroy
-  has_many :courses, :dependent => :destroy
+  has_many :courses, :class_name => 'ScopedCourse', :dependent => :destroy
 
   # Returns a human-readable representation, e.g. "2010" or "2010-2011"
   def name
@@ -25,8 +25,6 @@ class Curriculum < ActiveRecord::Base
     cycles = Array.new
     
     self.courses.each do |course|
-      puts "Top level #{course.code}"
-      #course = self.courses
       courses = Hash.new
       stack = Array.new
       add_course(course, course, courses, cycles, stack) unless courses.has_key?(course.id)

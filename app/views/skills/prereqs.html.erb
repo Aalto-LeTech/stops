@@ -1,0 +1,8 @@
+<h1><%= @skill.scoped_course.name(I18n.locale) %> - <% @skill.description(I18n.locale) %><br /> is depends on the following courses</h1>
+
+<% @skill.prereqs.each do |skill| %>
+  <p>
+    <%= link_to h(skill.scoped_course.code) + ' ' + h(skill.scoped_course.name(I18n.locale)), course_url(:id => skill.scoped_course) %>:
+    <%= skill.description(I18n.locale) %><br />
+  </p>
+<% end %>

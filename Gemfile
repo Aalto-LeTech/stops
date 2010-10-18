@@ -10,6 +10,7 @@ gem 'pg'
 
 # Use unicorn as the web server
 # gem 'unicorn'
+gem 'mongrel'
 
 # Deploy with Capistrano
 # gem 'capistrano'
@@ -24,6 +25,8 @@ gem 'pg'
 # gem 'aws-s3', :require => 'aws/s3'
 gem 'devise'
 gem 'cancan'
+gem 'jquery-rails'
+
 
 # Bundle gems for the local environment. Make sure to
 # put test-only gems in this group so their generators
@@ -31,5 +34,3 @@ gem 'cancan'
 # group :development, :test do
 #   gem 'webrat'
 # end
-
-gem 'mongrel'

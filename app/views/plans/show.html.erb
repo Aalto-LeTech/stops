@@ -1,3 +1,5 @@
+<% content_for :javascript do %><%= javascript_include_tag 'plan' %><% end %>
+
 <h1><%=t :plan_heading %></h1>
 
 <% if @user.courses.empty? && @user.profiles.empty? %>
@@ -15,32 +17,22 @@
 
 <h2>Courses</h2>
 
-<div class="plan">
-  <% @periods.each_with_index do |period,index| %>
-    <div class="period" id="period-<%= index %>">
-      <h2><%= period.name(I18n.locale) %></h2>
-      
-      <%= i = 0 %>
-      <% @courses.each do |course| %>
-        <% next unless course %>
-        
-        <div class="course" style="left: <%= i * 100 %>px" id="course-<%= course.id %>"><%= h(course.code) + ' ' + h(course.name(I18n.locale)) %></div>
-        <%= draggable_element "course-#{course.id}" %> 
-        
-        <%= i += 1 %>
-      <% end %>
-      
-      <div class="clear"></div>
+<button id="autoplan">Auto</button>
+
+<p id="status"></p>
+
+<div class="plan" id="plan" data-curriculum-id="<%= @curriculum.id %>" data-locale="<%= I18n.locale %>">
+  <% @periods.each do |period| %>
+    <div class="period period-<%= period.number %>" id="period-<%= period.id %>">
+      <%= period.name(I18n.locale) %>
     </div>
+  <% end %>
+  
+  
+  <% @courses.each do |course| %>
+    <% next unless course %>
     
-    <script>
-      Droppables.add('period-<%= index %>',{
-        onDrop: function(dragged, dropped, event) {
-          alert('Dragged: ' + dragged.id);
-          alert('Dropped onto: ' + dropped.id);
-        }
-      });
-    </script>
+    <div class="course" id="course-<%= course.code %>" data-code="<%= course.code %>"><%= h(course.code) + ' ' + h(course.name(I18n.locale)) %></div>
   <% end %>
 </div>
 

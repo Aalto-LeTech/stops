@@ -1,0 +1,8 @@
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+    <title><%= content_for?(:title) ? yield(:title) : 'Ops' %></title>
+    <%= csrf_meta_tag %>
+    <%= stylesheet_link_tag @stylesheets %>
+    <%= javascript_include_tag  :defaults %>
+    <%= yield(:javascript) %>
+</head> 

@@ -1,5 +1,10 @@
 class CurriculumsController < ApplicationController
   
+  respond_to :html
+  respond_to :json, :only => 'prereqs'
+  
+  caches_page :prereqs
+  
   # GET /curriculums
   # GET /curriculums.xml
   def index
@@ -108,5 +113,20 @@ class CurriculumsController < ApplicationController
     @curriculum = Curriculum.find(params[:id])
     
     @cycles = @curriculum.detect_cycles
+  end
+  
+
+  # Get all strict prereqs of all courses
+  def prereqs
+    @curriculum = Curriculum.find(params[:id])
+    
+    #prereqs_array = @curriculum.prereqs_array
+    prereqs = CoursePrereq.where(:requirement => STRICT_PREREQ).joins('INNER JOIN scoped_courses AS course ON course.id = course_prereqs.scoped_course_id INNER JOIN scoped_courses AS prereq ON prereq.id = course_prereqs.scoped_prereq_id').select('course.code AS course_code, prereq.code AS prereq_code')
+    
+    respond_to do |format|
+      format.html { render :text => prereqs.to_json }
+      format.xml { render :xml => prereqs }
+      format.json { render :json => prereqs }
+    end
   end
 end

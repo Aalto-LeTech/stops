@@ -11,6 +11,7 @@ class ApplicationController < ActionController::Base
   before_filter :redirect_to_ssl
   before_filter :set_locale
   before_filter :load_css
+  #before_filter :load_javascripts
   before_filter :require_login?
   
   protected
@@ -55,9 +56,17 @@ class ApplicationController < ActionController::Base
   def load_css
     @stylesheets = ['default']
     
-    # If directory exists
     if File.exists?(File.join(RAILS_ROOT, 'public', 'stylesheets', controller_name + '.css'))
       @stylesheets << controller_name
+    end
+  end
+  
+  # Loads extra javascripts
+  def load_javascripts
+    @javascripts = []
+    
+    if File.exists?(File.join(RAILS_ROOT, 'public', 'javascripts', controller_name + '.js'))
+      @javascripts << controller_name
     end
   end
   

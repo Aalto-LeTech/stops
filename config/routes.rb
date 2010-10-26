@@ -14,8 +14,11 @@ ActionController::Routing::Routes.draw do |map|
     resources :curriculums do
       member do
         get 'cycles'
+        get 'prereqs'
       end
     end
+
+    resources :course_instances
     
     resource :plan do
       resources :profiles, :controller => 'plans/profiles', :except => [:new, :edit, :update]
@@ -23,7 +26,7 @@ ActionController::Routing::Routes.draw do |map|
     end
     
     scope "/:curriculum_id" do
-      resources :courses do
+      resources :courses do  # scoped courses
         member do
           get 'graph'
         end
@@ -36,12 +39,9 @@ ActionController::Routing::Routes.draw do |map|
     
   end
   
+  root :to => "frontpage#index"
+  map.frontpage '/:locale', :controller => 'frontpage'
   
-  #map.resource :session
-  #match 'login' => 'sessions#new', :as => :login
-  #match 'logout' => 'sessions#destroy', :as => :logout
-
-
   # The priority is based upon order of creation: first created -> highest priority.
 
   # Sample of regular route:
@@ -76,8 +76,7 @@ ActionController::Routing::Routes.draw do |map|
   #   end
 
   # You can have the root of your site routed with map.root -- just remember to delete public/index.html.
-  root :to => "frontpage#index"
-  map.frontpage '/:locale', :controller => 'frontpage'
+  
 
   # See how all your routes lay out with "rake routes"
 

@@ -32,6 +32,10 @@ class User < ActiveRecord::Base
   end
   
   
-
-
+  # Returns the periods between the beginning of the user's studies and the expected graduation
+  def relevant_periods
+    logger.warn "User::relevant_periods not implemented"
+    Period.all
+  end
+  
 end

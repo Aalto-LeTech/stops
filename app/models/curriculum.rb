@@ -60,4 +60,17 @@ class Curriculum < ActiveRecord::Base
     #puts "Returning from #{course.code}"
     
   end
+  
+  # Returns all strict prereqs of all courses
+  # returns a hash where keys are scoped_course_ids and values are arrays of scoped_course_ids
+  def prereqs_array
+    courses = ScopedCourse.where(:curriculum_id => self.id)
+    
+    result = {}
+    courses.each do |course|
+      result[course.code] = course.strict_prereq_ids
+    end
+    
+    return result
+  end
 end

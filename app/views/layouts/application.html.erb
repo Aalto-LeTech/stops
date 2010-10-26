@@ -1,21 +1,14 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
-    <title>Ops</title>
-    <%= csrf_meta_tag %>
-    <%= stylesheet_link_tag @stylesheets %>
-    <%= javascript_include_tag  :defaults %>
-</head>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<%= I18n.locale %>" lang="<%= I18n.locale %>">
+<%= render :partial => 'layouts/head' %>
+
 <body>
 
 <%= render :partial => 'layouts/header' %>
 
-
 <div class="clear"></div>
-
   
 <div class="page">
   <!--div id="contextHelp">

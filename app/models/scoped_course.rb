@@ -71,4 +71,6 @@ class ScopedCourse < ActiveRecord::Base
     raise NotImplementedError, "Course::periods not implemented"
   end
   
+  
+  
 end

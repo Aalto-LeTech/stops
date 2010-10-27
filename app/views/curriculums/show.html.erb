@@ -1,6 +1,12 @@
 <h1><%= @curriculum.name %></h1>
 
 <% if can? :update, @curriculum %>
-  <%= link_to 'Edit', edit_curriculum_path(:id => @curriculum) %>
-  <%= link_to 'Cycles', cycles_curriculum_path(:id => @curriculum) %>
+
+  <div>TODO: profiles list</div>
+  <div>TODO: courses list</div>
+
+  <div class="admin-tools">
+    <%= link_to 'Edit', edit_curriculum_path(:id => @curriculum) %>
+    <%= link_to 'Cycles', cycles_curriculum_path(:id => @curriculum) %>
+  </div>
 <% end %>

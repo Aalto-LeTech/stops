@@ -6,33 +6,46 @@
 <% end %>
 
 
-<!-- Schedule -->
-<% courses_count = 0 %>
-<% credits_count = 0 %>
-<% @semesters.each_with_index do |semester,index| %>
-  <ul>
-    <% semester.each do |course| %>
-      <% next unless course %>
-      <li><%= link_to h(course.code) + ' ' + h(course.name(I18n.locale)), course_path(:id => course) %></li>
-      <% credits_count += course.credits %>
-      <% courses_count += 1 %>
-    <% end %>
-  </ul>
-  <hr />
-<% end %>
+<!-- Courses required -->
+<h2><%=t :profile_strict_prereqs %></h2>
 
-<table>
-  <tr>
-    <td>Levels:</td><td><%= @semesters.size %></td>
-  </tr>
-  <tr>
-    <td>Courses:</td><td><%= courses_count %></td>
-  </tr>
-  <tr>
-    <td>Credits:</td><td><%= credits_count %></td>
-  </tr>
+<table class="profile-prereq-matrix">
+  <tbody>
+    <!-- Prereq courses -->
+    <% @profile.strict_prereqs.each do |course| %>
+      <tr class="prereq-course-name">
+        <!-- Course name -->
+        <td class="prereq-course-name"><%= link_to h(course.code) + ' ' + h(course.name(I18n.locale)), profile_course_url(:profile_id => @profile, :id => course) %></td>
+      </tr>
+    <% end %>
+
+  </tbody>
 </table>
 
+<p>
+TODO: opintopisteet (yht.)<br />
+olet jo suorittanut n opintopistettä
+</p>
+
+
+<!-- Supporting courses -->
+<h2><%=t :profile_supporting_prereqs %></h2>
+
+<table class="profile-prereq-matrix">
+  <tbody>
+    <!-- Prereq courses -->
+    <% @profile.supporting_prereqs.each do |course| %>
+      <tr class="prereq-course-name">
+        <!-- Course name -->
+        <td class="prereq-course-name"><%= link_to h(course.code) + ' ' + h(course.name(I18n.locale)), profile_course_url(:profile_id => @profile, :id => course) %></td>
+      </tr>
+    <% end %>
+
+  </tbody>
+</table>
+
+<!-- -->
+<p>TODO: mallilukujärjestys</p>
 
 <!-- Skills provided -->
 <h2><%=t :profile_skills %></h2>
@@ -58,35 +71,3 @@
 </table>
 
 
-<!-- Courses required -->
-<h2><%=t :profile_strict_prereqs %></h2>
-
-<table class="profile-prereq-matrix">
-  <tbody>
-    <!-- Prereq courses -->
-    <% @profile.strict_prereqs.each do |course| %>
-      <tr class="prereq-course-name">
-        <!-- Course name -->
-        <td class="prereq-course-name"><%= link_to h(course.code) + ' ' + h(course.name(I18n.locale)), profile_course_url(:profile_id => @profile, :id => course) %></td>
-      </tr>
-    <% end %>
-
-  </tbody>
-</table>
-
-
-<!-- Supporting courses -->
-<h2><%=t :profile_supporting_prereqs %></h2>
-
-<table class="profile-prereq-matrix">
-  <tbody>
-    <!-- Prereq courses -->
-    <% @profile.supporting_prereqs.each do |course| %>
-      <tr class="prereq-course-name">
-        <!-- Course name -->
-        <td class="prereq-course-name"><%= link_to h(course.code) + ' ' + h(course.name(I18n.locale)), profile_course_url(:profile_id => @profile, :id => course) %></td>
-      </tr>
-    <% end %>
-
-  </tbody>
-</table>

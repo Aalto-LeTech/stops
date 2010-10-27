@@ -2,6 +2,6 @@
 class UserCourse < ActiveRecord::Base
 
   belongs_to :user
-  belongs_to :abstract_course
+  belongs_to :scoped_course
  
 end

@@ -152,11 +152,9 @@ function loadCourseInstances(data) {
 function autoplan() {
 
   // Add all courses to the first period
-  console.log("Adding courses to the first period");
   $('.course').each(function(i,element){
     var course = $(element);
     var course_id = course.data('code');
-    console.log("Adding " + course_id);
     firstPeriod.data('courses')[course_id] = course;
     
     course.data('period', firstPeriod);
@@ -179,7 +177,6 @@ function autoplan() {
       
       // If the course is not arranged on this period, move forward.
       if (!period.data('course-instances')[course_id]) {
-        console.log(course_id + " not arranged on this period.");
         moveForward[course_id] = course;
       }
       
@@ -203,7 +200,6 @@ function autoplan() {
     }
     
     if (forward_counter < 1) {
-      console.log("No more courses to move. Finished.");
       break;
     }
     
@@ -214,8 +210,16 @@ function autoplan() {
 }
 
 function moveCourse(course, period) {
+  // De-occupy current slot
+  var currentPeriod = course.data('period');
+  var currentSlot = course.data('slot');
+  
+  if (currentSlot) {
+    //currentPeriod.data('slots')[]
+  }
+  
   // Remove course from previous period
-  delete course.data('period').data('courses')[course.data('code')];
+  delete currentPeriod.data('courses')[course.data('code')];
   
   course.data('period', period);
   period.data('courses')[course.data('code')] = course;
@@ -262,6 +266,7 @@ $(document).ready(function(){
       $(element).data('periods', {});     // Periods on which this course is arranged
       $(element).data('prereqs', {});     // Prerequisite courses
       $(element).data('prereq-to', {});   // Courses for which this course is a prereq
+      $(element).data('slot', false);
     });
 
   // Prepare periods
@@ -275,6 +280,7 @@ $(document).ready(function(){
       var period = $(element);
       period.data('courses', {});                        // Courses that have been put to that period
       period.data('course-instances', {});               // Courses that are available on that period
+      period.data('slots', []);
       period.data('previous-period', previousPeriod);
       if (previousPeriod) {
         previousPeriod.data('next-period', period);
@@ -302,9 +308,7 @@ $(document).ready(function(){
   $("#autoplan").click(autoplan);
   
   // Get course prereqs
-  console.log("Loading course prerequisites");
   $.getJSON('/' + locale + '/curriculums/' + curriculum_id + '/prereqs', loadPrereqs);
-  console.log("Loading course instances");
   $.getJSON('/' + locale + '/course_instances', loadCourseInstances);
   
 

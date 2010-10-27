@@ -71,3 +71,7 @@
 .plan .prereq-to {
   background: green !important;
 }
+
+.plan .in-progress {
+  background: white !important;
+}

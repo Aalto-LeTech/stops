@@ -39,7 +39,7 @@ class ProfileMatrix < CsvMatrix
         
         # Insert or update course
         abstract_course = insert_or_update_abstract_course(code, name, @locale, nil)
-        scoped_course = insert_or_update_scoped_course(abstract_course, @curriculum, credits, nil)
+        scoped_course = insert_or_update_scoped_course(abstract_course, @curriculum, credits)
         
         # Read skills until we encounter the next course
         skill_position = 0

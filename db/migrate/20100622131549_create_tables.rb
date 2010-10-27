@@ -36,7 +36,6 @@ class CreateTables < ActiveRecord::Migration
       t.references :curriculum, :null => false
       t.string :code
       t.float :credits
-      t.integer :length
     end
     add_index(:scoped_courses, [:abstract_course_id, :curriculum_id], :unique => true)
     add_index(:scoped_courses, :curriculum_id)
@@ -44,6 +43,7 @@ class CreateTables < ActiveRecord::Migration
     create_table :course_instances do |t|
       t.references :abstract_course, :null => false
       t.references :period, :null => false
+      t.integer :length
     end
     add_index(:course_instances, [:abstract_course_id, :period_id], :unique => true)
     

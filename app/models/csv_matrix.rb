@@ -17,7 +17,7 @@ class CsvMatrix
   
   # Searches for a ScopedCourse associated with the given AbstractCourse and Curriculum. Creates a new one if none is found.
   # Returns a ScopedCourse
-  def insert_or_update_scoped_course(abstract_course, curriculum, credits, period)
+  def insert_or_update_scoped_course(abstract_course, curriculum, credits)
     # Insert or update course
     course = ScopedCourse.where(:abstract_course_id => abstract_course.id, :curriculum_id => curriculum.id).first
     if course
@@ -26,7 +26,7 @@ class CsvMatrix
       course.save
     else
       # Create new course
-      course = ScopedCourse.create(:abstract_course_id => abstract_course.id, :curriculum_id => curriculum.id, :code => abstract_course.code, :credits => credits.gsub(',','.').to_f, :length => parse_length(period))
+      course = ScopedCourse.create(:abstract_course_id => abstract_course.id, :curriculum_id => curriculum.id, :code => abstract_course.code, :credits => credits.gsub(',','.').to_f)
     end
     
     return course
@@ -60,7 +60,7 @@ class CsvMatrix
     periods.each do |period|
       # If course is arranged on this period, create instance
       if arranged_on.include? period.number
-        course_instance = CourseInstance.create(:abstract_course_id => abstract_course.id, :period_id => period.id)
+        course_instance = CourseInstance.create(:abstract_course_id => abstract_course.id, :period_id => period.id, :length => length)
       end
     end
   end

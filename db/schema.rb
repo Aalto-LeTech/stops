@@ -29,6 +29,7 @@ ActiveRecord::Schema.define(:version => 20100826130740) do
   create_table "course_instances", :force => true do |t|
     t.integer "abstract_course_id", :null => false
     t.integer "period_id",          :null => false
+    t.integer "length"
   end
 
   add_index "course_instances", ["abstract_course_id", "period_id"], :name => "index_course_instances_on_abstract_course_id_and_period_id", :unique => true
@@ -107,7 +108,6 @@ ActiveRecord::Schema.define(:version => 20100826130740) do
     t.integer "curriculum_id",      :null => false
     t.string  "code"
     t.float   "credits"
-    t.integer "length"
   end
 
   add_index "scoped_courses", ["abstract_course_id", "curriculum_id"], :name => "index_scoped_courses_on_abstract_course_id_and_curriculum_id", :unique => true
@@ -151,9 +151,10 @@ ActiveRecord::Schema.define(:version => 20100826130740) do
   add_index "skills", ["scoped_course_id"], :name => "index_skills_on_scoped_course_id"
 
   create_table "user_courses", :force => true do |t|
-    t.integer "user_id",            :null => false
-    t.integer "abstract_course_id", :null => false
+    t.integer "user_id",                               :null => false
+    t.integer "scoped_course_id",                      :null => false
     t.integer "course_instance_id"
+    t.boolean "manually_added",     :default => false
     t.integer "grade"
   end
 

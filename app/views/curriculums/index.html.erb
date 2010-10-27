@@ -1,8 +1,1 @@
-<h1><%=t :curriculums_heading %></h1>
-
 <%= render :partial => 'index' %>
-
-
-<% if can? :create, Curriculum %>
-  <p><%= link_to t(:curriculum_new), new_curriculum_path %></p>
-<% end %>

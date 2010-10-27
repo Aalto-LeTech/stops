@@ -204,3 +204,9 @@ hr {
 }
 
 
+
+div.admin-tools {
+  border: 1px solid #e0e0e0;
+  padding: 1em;
+  background: #f0f0f0;
+}

@@ -22,6 +22,7 @@
 # AreaDescription.create(:area_id => areas[9].id, :locale => 'fi', :name => 'Lainsäädännöllinen tietämys', :description => '')
 # AreaDescription.create(:area_id => areas[10].id,  :locale => 'fi', :name => 'Tutkimus- ja kehitysosaaminen (T&K)', :description => '')
 
+puts('Creating skill levels')
 SkillLevel.create(:level => 1, :locale => 'fi', :name => 'Tunnistaminen', :definition => 'Opiskelija osaa tunnistaa, luetella ja määritellä asioita, käsitteitä, periaatteita niiden opetetussa muodossa ilman ymmärtämistä.')
 SkillLevel.create(:level => 2, :locale => 'fi', :name => 'Ymmärtäminen', :definition => 'Opiskelija ymmärtää ja käsittää aiemmin oppimiaan asioita, käsitteitä ja periaatteita ilman syvällistä ymmärtämistä.')
 SkillLevel.create(:level => 3, :locale => 'fi', :name => 'Soveltaminen', :definition => 'Opiskelija osaa soveltaa oppimiaan asioita, käsitteitä ja periaatteita ongelmien ratkaisemiseen annetuilla tiedoilla kyeten valitsemaan sopivan mentelmän tai tavan.')
@@ -36,6 +37,8 @@ SkillLevel.create(:level => 5, :locale => 'en', :name => 'Creating/synthesising'
 
 
 # Users
+puts('Creating users')
+
 user = User.new(:password => 'admin', :password_confirmation => 'admin', :name => 'Admin', :email => 'admin@example.com')
 #user.studentnumber = '12345'
 user.login = 'admin'
@@ -56,6 +59,7 @@ end
 
 
 # Periods
+puts('Creating periods')
 period_names_fi = ["III kevät","IV kevät"," kesä","I syksy","II syksy"]
 period_names_en = ["III spring","IV spring"," summer","I fall","II fall"]
 period_begins = ["01-01","01-03","01-06","01-09","01-11"]

@@ -120,7 +120,6 @@ class CurriculumsController < ApplicationController
   def prereqs
     @curriculum = Curriculum.find(params[:id])
     
-    #prereqs_array = @curriculum.prereqs_array
     prereqs = CoursePrereq.where(:requirement => STRICT_PREREQ).joins('INNER JOIN scoped_courses AS course ON course.id = course_prereqs.scoped_course_id INNER JOIN scoped_courses AS prereq ON prereq.id = course_prereqs.scoped_prereq_id').select('course.code AS course_code, prereq.code AS prereq_code')
     
     respond_to do |format|

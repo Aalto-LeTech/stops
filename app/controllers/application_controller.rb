@@ -23,13 +23,13 @@ class ApplicationController < ActionController::Base
   
   def default_url_options(options={})
     #logger.debug "default_url_options is passed options: #{options.inspect}\n"
-    hash = { :locale => I18n.locale }
+    #hash = { :locale => I18n.locale }
     
-    if @curriculum # params[:curriculum_id]
-      hash[:curriculum_id] = @curriculum #params[:curriculum_id]
-    end
+    #if @curriculum # params[:curriculum_id]
+    #  hash[:curriculum_id] = @curriculum #params[:curriculum_id]
+    #end
     
-    return hash
+    return { :locale => I18n.locale }
   end 
     
   # Sets the locale based on params and user preferences.
@@ -56,6 +56,8 @@ class ApplicationController < ActionController::Base
   def load_css
     @stylesheets = ['default']
     
+    logger.info "CONTROLLER: #{controller_name}"
+    
     if File.exists?(File.join(RAILS_ROOT, 'public', 'stylesheets', controller_name + '.css'))
       @stylesheets << controller_name
     end
@@ -68,10 +70,6 @@ class ApplicationController < ActionController::Base
     if File.exists?(File.join(RAILS_ROOT, 'public', 'javascripts', controller_name + '.js'))
       @javascripts << controller_name
     end
-  end
-  
-  def load_curriculum
-    @curriculum = Curriculum.find(params[:curriculum_id])
   end
   
   def load_profile

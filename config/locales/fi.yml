@@ -7,8 +7,18 @@ fi:
   navi_profiles: "Profiilit"
   navi_courses: "Kurssit"
   
+  navi_my_plan: "Oma opintosuunnitelma"
+  navi_browse_curriculums: "Selaa opinto-oppaita"
+  
+  myPlanTabCurriculum: "Opinto-opas"
+  myPlanTabProfiles: "Profiilit"
+  myPlanTabCourses: "Kurssit"
+  myPlanTabSchedule: "Aikataulu"
+  myPlanTabRecord: "Suoritukset"
+  
   Upload: "Tallenna"
   Save: "Tallenna"
+  Select: "Valitse"
   Cancel: "Peruuta"
   Back: "Takaisin"
   

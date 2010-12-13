@@ -1,13 +1,3 @@
-<!-- Frontpage -->
-<div class="floatbox">
-  <%= render :partial => 'curriculums/index' %>
-</div>
+<%= link_to t(:navi_my_plan), studyplan_url, :class => 'bigNavibutton' %>
 
-
-<% if false && !logged_in? %>
-  <div class="floatbox">
-    <h1><%=t :login_heading %></h1>
-    
-    <%= render :partial => 'sessions/login' %>
-  </div>
-<% end %>
+<%= link_to t(:navi_browse_curriculums), curriculums_url, :class => 'bigNavibutton' %>

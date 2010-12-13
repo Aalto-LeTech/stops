@@ -1,8 +1,14 @@
 ActionController::Routing::Routes.draw do |map|
-  devise_for :users
-
+  
   scope ":locale" do
+    devise_for :users
+
+    match '/preferences' => 'users#edit'
     resources :users
+    
+    #resources :courses  # AbstreactCourses
+    
+    resources :course_instances
     
     resources :skills do
       member do 
@@ -11,78 +17,50 @@ ActionController::Routing::Routes.draw do |map|
       end
     end
     
-    resources :curriculums do
+    # View study guides of other years
+    resources :curriculums, :constraints => { :id => /\w+/ } do
       member do
         get 'cycles'
         get 'prereqs'
       end
+      
+      resources :profiles, :controller => 'curriculums/profiles'
+      resources :courses, :controller => 'curriculums/courses'  # ScopedCourses
     end
 
-    resources :course_instances
-    
-    resource :plan do
+    # My Plan
+    resource :studyplan, :controller => 'plans' do
       resources :profiles, :controller => 'plans/profiles', :except => [:new, :edit, :update]
       resources :courses, :controller => 'plans/courses'
+      resource :schedule, :controller => 'plans/schedule'
+      resource :record, :controller => 'plans/record'
+      
+      resource :curriculum, :controller => 'plans/curriculums'
     end
     
-    scope "/:curriculum_id" do
-      resources :courses do  # scoped courses
-        member do
-          get 'graph'
-        end
-      end
-      
-      resources :profiles do
-        resources :courses, :controller => 'profiles/courses'
-      end
+    # Any plan (specify student ID)
+    resources :plans, :constraints => { :id => /\w+/ } do
+      resources :profiles, :controller => 'plans/profiles', :except => [:new, :edit, :update]
+      resources :courses, :controller => 'plans/courses'
+      resource :schedule, :controller => 'plans/schedule'
+      resource :record, :controller => 'plans/record'
     end
+    
+#     scope "/:curriculum_id" do
+#       resources :courses do  # scoped courses
+#         member do
+#           get 'graph'
+#         end
+#       end
+#       
+#       resources :profiles do
+#         resources :courses, :controller => 'profiles/courses'
+#       end
+#     end
     
   end
   
+  match '/:locale' => "frontpage#index"
   root :to => "frontpage#index"
-  map.frontpage '/:locale', :controller => 'frontpage'
   
-  # The priority is based upon order of creation: first created -> highest priority.
-
-  # Sample of regular route:
-  #   map.connect 'products/:id', :controller => 'catalog', :action => 'view'
-  # Keep in mind you can assign values other than :controller and :action
-
-  # Sample of named route:
-  #   map.purchase 'products/:id/purchase', :controller => 'catalog', :action => 'purchase'
-  # This route can be invoked with purchase_url(:id => product.id)
-
-  # Sample resource route (maps HTTP verbs to controller actions automatically):
-  #   map.resources :products
-
-  # Sample resource route with options:
-  #   map.resources :products, :member => { :short => :get, :toggle => :post }, :collection => { :sold => :get }
-
-  # Sample resource route with sub-resources:
-  #   map.resources :products, :has_many => [ :comments, :sales ], :has_one => :seller
-  
-  # Sample resource route with more complex sub-resources
-  #   map.resources :products do |products|
-  #     products.resources :comments
-  #     products.resources :sales, :collection => { :recent => :get }
-  #   end
-  
-  
-
-  # Sample resource route within a namespace:
-  #   map.namespace :admin do |admin|
-  #     # Directs /admin/products/* to Admin::ProductsController (app/controllers/admin/products_controller.rb)
-  #     admin.resources :products
-  #   end
-
-  # You can have the root of your site routed with map.root -- just remember to delete public/index.html.
-  
-
-  # See how all your routes lay out with "rake routes"
-
-  # Install the default routes as the lowest priority.
-  # Note: These default routes make all actions in every controller accessible via GET requests. You should
-  # consider removing or commenting them out if you're using named routes and resources.
-  #map.connect ':controller/:action/:id'
-  #map.connect ':controller/:action/:id.:format'
 end

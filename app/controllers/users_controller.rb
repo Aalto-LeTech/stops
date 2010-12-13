@@ -4,6 +4,14 @@ class UsersController < ApplicationController
   def new
     @user = User.new
   end
+  
+  def edit
+    if params[:user_id]
+      @user = User.find(params[:user_id])
+    else
+      @user = current_user
+    end
+  end
  
   def create
     #logout_keeping_session!

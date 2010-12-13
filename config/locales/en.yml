@@ -7,8 +7,18 @@ en:
   navi_profiles: "Profiilit"
   navi_courses: "Courses"
   
+  navi_my_plan: "My Study Plan"
+  navi_browse_curriculums: "Browse study guides"
+  
+  myPlanTabCurriculum: "Curriculum"
+  myPlanTabProfiles: "Profiles"
+  myPlanTabCourses: "Courses"
+  myPlanTabSchedule: "Schedule"
+  myPlanTabRecord: "Record"
+  
   Upload: "Upload"
   Save: "Save"
+  Select: "Select"
   Cancel: "Cancel"
   Back: "Takaisin"
   

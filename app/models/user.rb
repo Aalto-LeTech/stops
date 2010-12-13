@@ -7,12 +7,13 @@ class User < ActiveRecord::Base
   # anything else you want your user to change should be added here.
   attr_accessible :login, :email, :name, :locale, :password, :password_confirmation, :remember_me
 
-  
   # Plan
   has_and_belongs_to_many :profiles, :join_table => 'user_profiles', :uniq => true
   
   has_many :user_courses, :dependent => :destroy
   has_many :courses, :through => :user_courses, :source => :scoped_course, :uniq => true
+  
+  belongs_to :curriculum
   
   
   def add_profile(profile)

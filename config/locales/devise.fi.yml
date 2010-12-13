@@ -6,27 +6,31 @@ fi:
       not_locked: "was not locked"
 
   devise:
+    forgot_password_link: "Unohtuiko salasana?"
+    remember_me: "Muista minut"
+    login: "Käyttäjätunnus"
+    password: "Salasana"
     failure:
-      unauthenticated: 'You need to sign in or sign up before continuing.'
+      unauthenticated: 'Ole hyvä ja kirjaudu'
       unconfirmed: 'You have to confirm your account before continuing.'
-      locked: 'Your account is locked.'
-      invalid: 'Invalid email or password.'
+      locked: 'Käyttäjätunnuksesi on lukittu.'
+      invalid: 'Väärä käyttäjätunnus tai salasana.'
       invalid_token: 'Invalid authentication token.'
-      timeout: 'Your session expired, please sign in again to continue.'
-      inactive: 'Your account was not activated yet.'
+      timeout: 'Istunto on umpeutunut. Ole hyvä ja kirjaudu uudelleen.'
+      inactive: 'Käyttäjätunnustasi ei ole aktivoitu vielä.'
     sessions:
-      signed_in: 'Signed in successfully.'
-      signed_out: 'Signed out successfully.'
+      signed_in: 'Olet kirjautunut sisään.'
+      signed_out: 'Olet kirjautunut ulos.'
     passwords:
-      send_instructions: 'You will receive an email with instructions about how to reset your password in a few minutes.'
-      updated: 'Your password was changed successfully. You are now signed in.'
+      send_instructions: 'Saat sähköpostitse ohjeet salasanan vaihtamiseksi.'
+      updated: 'Salasana vaihdettu. Olet kirjautunut sisään.'
     confirmations:
-      send_instructions: 'You will receive an email with instructions about how to confirm your account in a few minutes.'
-      confirmed: 'Your account was successfully confirmed. You are now signed in.'
+      send_instructions: 'Saat sähköpostitse ohjeet käyttäjätunnuksen aktivoimiseksi.'
+      confirmed: 'Käyttäjätunnuksesi on aktivoitu. Olet kirjautunut sisään.'
     registrations:
       signed_up: 'You have signed up successfully. If enabled, a confirmation was sent to your e-mail.'
-      updated: 'You updated your account successfully.'
-      destroyed: 'Bye! Your account was successfully cancelled. We hope to see you again soon.'
+      updated: 'Käyttäjätunnus päivitetty.'
+      destroyed: 'Käyttäjätunnuksesi on suljettu.'
     unlocks:
       send_instructions: 'You will receive an email with instructions about how to unlock your account in a few minutes.'
       unlocked: 'Your account was successfully unlocked. You are now signed in.'

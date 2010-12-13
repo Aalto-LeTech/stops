@@ -5,25 +5,33 @@ class PlansController < ApplicationController
 
   before_filter :load_plan
   
+  layout 'plan'
   
   def load_plan
-    @user = current_user
+    if params[:plan_id]
+      @user = User.find_by_studentnumber(params[:plan_id])
+    else
+      @user = current_user
+    end
   end
   
+  def load_curriculum
+    #@curriculum = Curriculum.find(params[:curriculum_id])
+    
+    # If curriculum is not chosen, redirect
+    unless @user.curriculum
+      redirect_to edit_studyplan_curriculum_path
+      return false
+    end
+    
+    @curriculum = @user.curriculum
+  end
+  
+  # Overview
   def show
-    @periods = @user.relevant_periods
-    @curriculum = Curriculum.first # FIXME: @user.curriculum
     
+  end
 
-    @courses = @user.courses # returns alist of AbstractCourses
-    #@courses = Course.semesters(@user.courses) 
-    
-    #@credits = UserCourse.sum('credits', :include => :abstract_course, :conditions => ['user_id=?', @user.id])
-    
-  end
-  
-  def edit
-  end
 
   
 end

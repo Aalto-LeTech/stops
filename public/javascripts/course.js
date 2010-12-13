@@ -195,8 +195,11 @@ Course.prototype.click = function() {
   var course = $(this).data('object');
   
   // Reset hilights
-  $('.course').removeClass('prereq-of').removeClass('prereq-to');
+  $('.course').removeClass('prereq-of').removeClass('prereq-to').removeClass('selected');
   $('.period').removeClass('receiver');
+  
+  // Hilight selected course
+  $(this).addClass('selected');
   
   // Hilight prereqs
   for (var array_index in course.prereqs) {

@@ -1,0 +1,14 @@
+<h1><%=t :choose_curriculum_heading %></h1>
+
+<% if @user.curriculum %>
+  <p class="warning"><%=t :change_curriculum_warning %></p>
+<% end %>
+
+<% form_tag studyplan_curriculum_path, :method => :put do -%>
+  <% @curriculums.each do |curriculum| %>
+    <%= radio_button('user', 'curriculum', curriculum.id) %>
+    <%= curriculum.name %><br />
+  <% end %>
+  
+  <p><%= submit_tag t(:Select) %></p>
+<% end -%>

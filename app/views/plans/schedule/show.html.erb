@@ -1,0 +1,51 @@
+<% content_for :javascript do %>
+  <%= javascript_include_tag 'period' %>
+  <%= javascript_include_tag 'course' %>
+  <%= javascript_include_tag 'courseinstance' %>
+  <%= javascript_include_tag 'plan' %>
+<% end %>
+
+<h1><%=t :plan_heading %></h1>
+
+<% if @user.courses.empty? && @user.profiles.empty? %>
+  <%= t :plan_empty_instructions %>
+<% end %>
+
+
+<h2>Profiles</h2>
+<ul>
+  <% @user.profiles.each do |profile| %>
+    <li><%= profile.name(I18n.locale) %></li>
+  <% end %>
+</ul>
+
+
+<h2>Courses</h2>
+
+<button id="autoplan">Auto</button>
+
+<p id="status"></p>
+
+<div class="plan" id="plan" data-curriculum-id="<%= @curriculum.id %>" data-locale="<%= I18n.locale %>">
+  <% @periods.each do |period| %>
+    <div class="period period-<%= period.number %>" data-id="<%= period.id %>" id="period-<%= period.id %>">
+      <%= period.name(I18n.locale) %>
+    </div>
+  <% end %>
+  
+  
+  <% @courses.each do |course| %>
+    <% next unless course %>
+    
+    <div class="course" id="course-<%= course.code %>" data-code="<%= course.code %>"><%= h(course.code) + ' ' + h(course.name(I18n.locale)) %></div>
+  <% end %>
+</div>
+
+<table>
+  <tr>
+    <td>Levels:</td><td><%=  %></td>
+  </tr>
+  <tr>
+    <td>Courses:</td><td><%= @user.courses.size %></td>
+  </tr>
+</table>

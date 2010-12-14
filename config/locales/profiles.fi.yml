@@ -1,8 +1,18 @@
 fi: 
+  # plan/profiles index
   profiles_heading: "Osaamisprofiilit"
+  selected_profiles_heading: "Valitut osaamisprofiilit"
+  available_profiles_heading: "Tarjolla olevat osaamisprofiilit"
 
   profile_skills: "Tarjoaa valmiudet"
   profile_prereqs: "Esitiedot"
   profile_strict_prereqs: "Välttämättömät esitiedot"
   profile_supporting_prereqs: "Tukevat esitiedot"
   profe_add_to_plan: "Lisää opintosuunnitelmaan"
+  profe_remove_from_plan: "Poista opintosuunnitelmasta"
+  profile_already_selected: "%{name} on jo opintosuunnitelmassa."
+  
+  profile_instructions: "Valitse opintosuunnitelmaasi osaamisprofiileja, niin että X opintopistettä täyttyy."
+  
+  # Add profile to plan
+  profile_add_heading: "Lisää %{name} opintosuunnitelmaan"

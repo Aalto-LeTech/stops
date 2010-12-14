@@ -1,0 +1,79 @@
+<h1>
+  <%=h @profile.name(I18n.locale) %>
+  
+  <!-- Add / Remove -->
+  <% if user_signed_in? %>
+    <% if @user.profiles.exists?(@profile) %>
+      <%= link_to image_tag('remove.png', :alt => t(:profe_remove_from_plan)), delete_studyplan_profile_path(:id => @profile.id), :title => t(:profe_remove_from_plan) %>
+    <% else %>
+      <%= link_to image_tag('add.png', :alt => t(:profe_add_to_plan)), new_studyplan_profile_path(:id => @profile.id), :title => t(:profe_add_to_plan) %>
+    <% end %>
+  <% end %>
+</h1>
+
+
+<!-- Courses required -->
+<h2><%=t :profile_strict_prereqs %></h2>
+
+<table class="profile-prereq-matrix">
+  <tbody>
+    <!-- Prereq courses -->
+    <% @profile.strict_prereqs.each do |course| %>
+      <tr class="prereq-course-name">
+        <!-- Course name -->
+        <td class="prereq-course-name"><%= link_to h(course.code) + ' ' + h(course.name(I18n.locale)), studyplan_course_path(:id => course) %></td>
+      </tr>
+    <% end %>
+
+  </tbody>
+</table>
+
+<p>
+TODO: opintopisteet (yht.)<br />
+olet jo suorittanut n opintopistettä
+</p>
+
+
+<!-- Supporting courses -->
+<h2><%=t :profile_supporting_prereqs %></h2>
+
+<table class="profile-prereq-matrix">
+  <tbody>
+    <!-- Prereq courses -->
+    <% @profile.supporting_prereqs.each do |course| %>
+      <tr class="prereq-course-name">
+        <!-- Course name -->
+        <td class="prereq-course-name"><%= link_to h(course.code) + ' ' + h(course.name(I18n.locale)), studyplan_course_path(:id => course) %></td>
+      </tr>
+    <% end %>
+
+  </tbody>
+</table>
+
+<!-- -->
+<p>TODO: mallilukujärjestys</p>
+
+<!-- Skills provided -->
+<h2><%=t :profile_skills %></h2>
+
+<table class="course-graph">
+  <thead>
+    <td>Requirements</td>
+    <td>Provides</td>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td id="skill-prereqs"></td>
+      <td>
+        <% @profile.skills.each do |skill| %>
+          <p>
+            <%= link_to h(skill.description(I18n.locale)), prereqs_skill_url(:id => skill), :remote => true %>
+          </p>
+        <% end %>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+

@@ -16,6 +16,7 @@ fi:
   myPlanTabSchedule: "Aikataulu"
   myPlanTabRecord: "Suoritukset"
   
+  Ok: "OK"
   Upload: "Tallenna"
   Save: "Tallenna"
   Select: "Valitse"

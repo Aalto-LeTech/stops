@@ -1,8 +1,18 @@
 en:
   profiles_heading: "Competence profiles"
+  selected_profiles_heading: "Selected competences"
+  available_profiles_heading: "Available competences"
   
   profile_skills: "Provides"
   profile_prereqs: "Prerequisites"
   profile_strict_prereqs: "Mandatory prerequisites"
   profile_supporting_prereqs: "Supporting prerequisites"
   profe_add_to_plan: "Add to study plan"
+  profe_remove_from_plan: "Remove from studyplan"
+  profile_already_selected: "%{name} is already included in your studyplan."
+  
+  profile_instructions: "Select competence profiles below"
+  
+  # Add profile to plan
+  profile_add_heading: "Add %{name} to study plan"
+  

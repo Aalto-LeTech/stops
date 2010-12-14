@@ -24,21 +24,6 @@
     </ul>
   </div>
   <div class="clear"></div>
-  
-  <div class="leftNavi">
-    <ul>
-      <li><%= link_to t(:navi_plan), studyplan_path %></li>
-      <li><%= link_to t(:navi_curriculums), curriculums_path %></li>
-    </ul>
-    
-    <% if false && @curriculum && !@curriculum.new_record? %>
-      <h2><%= @curriculum.name %></h2>
-      <ul>
-        <li><%= link_to t(:navi_profiles), profiles_path %></li>
-        <li><%= link_to t(:navi_courses), courses_path %></li>
-      </ul>
-    <% end %>
-  </div>
 
   <div class="content">
     <%= render :partial => 'layouts/messages' %>

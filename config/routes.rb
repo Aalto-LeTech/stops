@@ -30,8 +30,12 @@ ActionController::Routing::Routes.draw do |map|
 
     # My Plan
     resource :studyplan, :controller => 'plans' do
-      resources :profiles, :controller => 'plans/profiles', :except => [:new, :edit, :update]
-      resources :courses, :controller => 'plans/courses'
+      resources :profiles, :controller => 'plans/profiles', :except => [:edit, :update] do
+        member do
+          get :delete
+        end
+      end
+      resources :courses, :controller => 'plans/courses', :except => [:edit, :update]
       resource :schedule, :controller => 'plans/schedule'
       resource :record, :controller => 'plans/record'
       
@@ -40,8 +44,8 @@ ActionController::Routing::Routes.draw do |map|
     
     # Any plan (specify student ID)
     resources :plans, :constraints => { :id => /\w+/ } do
-      resources :profiles, :controller => 'plans/profiles', :except => [:new, :edit, :update]
-      resources :courses, :controller => 'plans/courses'
+      resources :profiles, :controller => 'plans/profiles', :except => [:edit, :update]
+      resources :courses, :controller => 'plans/courses', :except => [:edit, :update]
       resource :schedule, :controller => 'plans/schedule'
       resource :record, :controller => 'plans/record'
     end

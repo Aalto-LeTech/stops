@@ -1,0 +1,26 @@
+<h1><%=t :profile_add_heading, :name => @profile.name(I18n.locale) %></h1>
+
+<p>Seuraavat kurssit lisätään opintosuunnitelmaasi:</p>
+
+<ul>
+  <% @new_courses.each do |course| %>
+    <li><%= course.code %> <%= course.name(I18n.locale) %></li>
+  <% end %>
+</ul>
+
+<p>Seuraavat profiiliin kuuluvat kurssit olivat jo ennestään opintosuunnitelmassasi:</p>
+
+<ul>
+  <% @existing_courses.each do |course| %>
+    <li><%= course.code %> <%= course.name(I18n.locale) %></li>
+  <% end %>
+</ul>
+
+
+<%= form_tag studyplan_profiles_path do %>
+  <%= hidden_field_tag :profile_id, @profile.id %>
+
+  <p><%= submit_tag t(:Ok) %></p>
+  
+  <p><%= link_to t(:Cancel), studyplan_profiles_path %></p>
+<% end %>

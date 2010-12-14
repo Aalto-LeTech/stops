@@ -33,11 +33,43 @@ class User < ActiveRecord::Base
     self.courses = courses_array
   end
   
+  # Removes the given profile and courses that are needed by it. Courses that are still needed by the remaining profiles, are not removed. Also, manually added courses are not reomved.
+  def remove_profile(profile)
+    # Remove profile
+    profiles.delete(profile)
+    
+    # Make a list of courses that are needed by remaining profiles
+    needed_courses = Set.new
+    profiles.each do |profile|
+      needed_courses.merge(profile.courses_recursive)
+      
+      puts "needed_courses.size: #{needed_courses.size}"
+    end
+    
+    # TODO: add manually added courses to the list
+    #needed_courses.merge(manual_courses)
+    
+    self.courses = needed_courses
+  end
+  
+  # Returns a list of courses than can be deleted if the given profile is dropped from the study plan
+  def deletable_courses(profile)
+    # TODO
+    # Make an array of profiles that user has after deleting the given profile
+    #remaining_profiles = profiles.clone
+    #remaining_profiles.delete(profile)
+    
+    # Make a list of courses that are needed by the remaining profiles
+    
+    []
+  end
   
   # Returns the periods between the beginning of the user's studies and the expected graduation
   def relevant_periods
     logger.warn "User::relevant_periods not implemented"
     Period.all
   end
+  
+  
   
 end

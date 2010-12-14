@@ -1,13 +1,14 @@
 class Plans::CoursesController < PlansController
   
   #before_filter :login_required
+  before_filter :load_plan
   before_filter :load_curriculum
   
   
   # GET /courses
   # GET /courses.xml
   def index
-    @courses = current_user.courses
+    @courses = @user.courses
 
     respond_to do |format|
       format.html # index.html.erb
@@ -18,7 +19,9 @@ class Plans::CoursesController < PlansController
   # GET /courses/1
   # GET /courses/1.xml
   def show
-    @course = Course.find(params[:id])
+    @course = ScopedCourse.find(params[:id])
+    
+    @profile = Profile.find(params[:profile_id]) if params[:profile_id]
 
     respond_to do |format|
       format.html # show.html.erb

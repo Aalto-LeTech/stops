@@ -34,7 +34,10 @@ ActionController::Routing::Routes.draw do |map|
         member do
           get :delete
         end
+        
+        resources :courses, :controller => 'plans/courses', :only => [:show]
       end
+      
       resources :courses, :controller => 'plans/courses', :except => [:edit, :update]
       resource :schedule, :controller => 'plans/schedule'
       resource :record, :controller => 'plans/record'

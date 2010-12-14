@@ -14,11 +14,11 @@
       <td>
         <% @course.skills.each do |skill| %>
           <p>
-            <%= link_to_remote 'x', :update => 'skill-prereqs', :url => prereqs_skill_url(:id => skill) %>
+            <%= link_to 'x', :url => prereqs_skill_url(:id => skill) %>
             
             <%= skill.description(I18n.locale) %>
             
-            <%= link_to_remote 'x', :update => 'skill-future', :url => future_skill_url(:id => skill) %>
+            <%= link_to 'x', :url => future_skill_url(:id => skill) %>
           </p>
         <% end %>
       </td>
@@ -28,6 +28,4 @@
 </table>
 
 
-<%= render :partial => 'prereqs_detailed' %>
-
-<%= render :partial => 'prereq_to' %>
+<%= render :partial => '/courses/prereq_to' %>

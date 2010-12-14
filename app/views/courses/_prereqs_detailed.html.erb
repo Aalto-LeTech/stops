@@ -24,7 +24,7 @@
         <tr class="prereq-course-name">
           <!-- Course name -->
           <td class="prereq-course-name">
-            <%= link_to h(prereq_course.code) + ' ' + h(prereq_course.name(I18n.locale)), course_url(:id => prereq_course) %>
+            <%= link_to h(prereq_course.code) + ' ' + h(prereq_course.name(I18n.locale)), root_url %>
           </td>
           <td colspan='<%= @course.skills.size %>'></td>
         </tr>

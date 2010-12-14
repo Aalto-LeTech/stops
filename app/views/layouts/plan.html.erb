@@ -25,6 +25,28 @@
   </div>
   <div class="clear"></div>
 
+  <div class="leftNavi">
+
+    <% if @profile %>
+      <h1><%= link_to t(:myPlanTabProfiles), studyplan_profiles_path %></h1>
+      <ul>
+        <% @curriculum.profiles.each do |profile| %>
+          <li class="<%= profile == @profile ? 'selected' : '' %>"><%= link_to h(profile.name(I18n.locale)), studyplan_profile_path(:id => profile.id) %></li>
+          <!-- Courses belonging to the profile -->
+          
+          <% if profile == @profile %>
+            <ul>
+              <% profile.courses.each do |course| %>
+                <li class="<%= course == @course ? 'selected' : '' %>"><%= link_to h(course.name(I18n.locale)), studyplan_profile_course_path(:profile_id => profile.id, :id => course.id) %>
+              <% end %>
+            </ul>
+          <% end %>
+        <% end %>
+      </ul>
+    <% end %>
+
+  </div>
+
   <div class="content">
     <%= render :partial => 'layouts/messages' %>
 

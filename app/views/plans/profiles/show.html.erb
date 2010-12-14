@@ -21,7 +21,7 @@
     <% @profile.strict_prereqs.each do |course| %>
       <tr class="prereq-course-name">
         <!-- Course name -->
-        <td class="prereq-course-name"><%= link_to h(course.code) + ' ' + h(course.name(I18n.locale)), studyplan_course_path(:id => course) %></td>
+        <td class="prereq-course-name"><%= link_to h(course.code) + ' ' + h(course.name(I18n.locale)), studyplan_profile_course_path(:profile_id => @profile, :id => course) %></td>
       </tr>
     <% end %>
 
@@ -43,7 +43,7 @@ olet jo suorittanut n opintopistettä
     <% @profile.supporting_prereqs.each do |course| %>
       <tr class="prereq-course-name">
         <!-- Course name -->
-        <td class="prereq-course-name"><%= link_to h(course.code) + ' ' + h(course.name(I18n.locale)), studyplan_course_path(:id => course) %></td>
+        <td class="prereq-course-name"><%= link_to h(course.code) + ' ' + h(course.name(I18n.locale)), studyplan_profile_course_path(:profile_id => @profile, :id => course) %></td>
       </tr>
     <% end %>
 

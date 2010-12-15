@@ -36,3 +36,30 @@
 }
 
 
+
+.course-profile-graph td {
+  vertical-align: middle;
+}
+
+.course-profile-graph td.course-skills-column, .course-profile-graph td.target-skill-column {
+  width: 200px;
+}
+
+.course-profile-graph .path td {
+  background: url('../images/future-arrow.png') no-repeat right;
+  padding-right: 5px;
+}
+
+.course-profile-graph .skill {
+  display: block;
+  border: 1px solid #d0d0d0;
+  background: #e0e0ff;
+  padding: .2em .5em;
+  margin: .5em;
+  font-size: small;
+}
+
+.course-profile-graph a {
+  text-decoration: none;
+  color: black;
+}

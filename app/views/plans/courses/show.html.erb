@@ -1,25 +1,23 @@
+<% content_for :javascript do %>
+  <% #= javascript_include_tag 'profileCourseView' 
+  %>
+<% end %>
+
 <h1><%=h @course.code %> <%=h @course.name(I18n.locale) %></h1>
 
-
-<table class="course-graph">
+<table class="course-profile-graph">
   <thead>
-    <td>Requirements</td>
     <td>Provides</td>
     <td>Needed by</td>
   </thead>
 
   <tbody>
     <tr>
-      <td id="skill-prereqs"></td>
-      <td>
+      <td class="course-skills-column">
         <% @course.skills.each do |skill| %>
-          <p>
-            <%= link_to 'x', :url => prereqs_skill_url(:id => skill) %>
-            
-            <%= skill.description(I18n.locale) %>
-            
-            <%= link_to 'x', :url => future_skill_url(:id => skill) %>
-          </p>
+          <div class="skill">
+            <%= link_to skill.description(I18n.locale), profilepath_skill_path(:id => skill, :profile_id => @profile), :remote => true, :id => "skill-#{skill.id}" %>
+          </div>
         <% end %>
       </td>
       <td id="skill-future"></td>

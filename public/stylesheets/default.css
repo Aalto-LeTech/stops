@@ -75,6 +75,13 @@ a.bigNavibutton:hover {
   text-decoration: underline;
 }
 
+div.admin-tools {
+  border: 1px solid #e0e0e0;
+  padding: 1em;
+  background: #f0f0f0;
+}
+
+
 /******************
  * Headings
  ******************/
@@ -252,7 +259,7 @@ h1:first-child, h2:first-child, h3:first-child {
   vertical-align: middle;
   padding: .5em;
   font-family: sans-serif;
-  width: 33%;
+  /*width: 33%;*/
 }
 
 .course-graph .graph-current a {
@@ -274,15 +281,6 @@ h1:first-child, h2:first-child, h3:first-child {
   text-decoration: none;
   color: black;
 }
-
-
-
-div.admin-tools {
-  border: 1px solid #e0e0e0;
-  padding: 1em;
-  background: #f0f0f0;
-}
-
 
 
 

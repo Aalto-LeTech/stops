@@ -14,6 +14,7 @@ ActionController::Routing::Routes.draw do |map|
       member do 
         get 'prereqs'
         get 'future'
+        get 'profilepath'
       end
     end
     
@@ -35,10 +36,10 @@ ActionController::Routing::Routes.draw do |map|
           get :delete
         end
         
-        resources :courses, :controller => 'plans/courses', :only => [:show]
+        resources :courses, :controller => 'plans/courses', :only => [:show]  # ScopedCourses, courses that belong to the profile
       end
       
-      resources :courses, :controller => 'plans/courses', :except => [:edit, :update]
+      resources :courses, :controller => 'plans/courses', :except => [:edit, :update]  # ScopedCourses, courses that i have selected
       resource :schedule, :controller => 'plans/schedule'
       resource :record, :controller => 'plans/record'
       

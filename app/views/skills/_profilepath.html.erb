@@ -1,0 +1,27 @@
+<table>
+  <% @paths.each do |profile_skill, path| %>
+    <tr>
+      <td class="path-column">
+        <table class="path">
+          <tr>
+            <% path.each do |skill| %>
+              <% if skill.scoped_course %>
+                <td>
+                  <div class="skill">
+                    <%= skill.scoped_course.code + ' ' + skill.scoped_course.name(I18n.locale) %>:
+                    <%= skill.description(I18n.locale) %>
+                  </div>
+                </td>
+              <% end %>
+            <% end %>
+          </tr>
+        </table>
+      </td>
+      <td class="target-skill-column">
+        <div class="skill">
+          <%= profile_skill.description(I18n.locale) %>
+        </div>
+      </td>
+    </tr>
+  <% end %>
+</table>

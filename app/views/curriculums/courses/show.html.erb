@@ -1,0 +1,63 @@
+<% content_for :javascript do %>
+  <% #= javascript_include_tag 'profileCourseView' 
+  %>
+<% end %>
+
+<h1><%=h @course.code %> <%=h @course.name(I18n.locale) %></h1>
+
+<% if @profile %>
+  <table class="course-profile-graph">
+    <thead>
+      <td>Provides</td>
+      <td>Needed by</td>
+    </thead>
+
+    <tbody>
+      <tr>
+        <td class="course-skills-column">
+          <% @course.skills.each do |skill| %>
+            <div class="skill">
+              <%= link_to skill.description(I18n.locale), profilepath_skill_path(:id => skill, :profile_id => @profile), :remote => true, :id => "skill-#{skill.id}" %>
+            </div>
+          <% end %>
+        </td>
+        <td id="skill-future"></td>
+      </tr>
+    </tbody>
+  </table>
+<% else %>
+  <h2><%=t :course_provides %></h2>
+  <ul>
+    <% @course.skills.each do |skill| %>
+      <li><%= skill.description(I18n.locale) %></li>
+    <% end %>
+  </ul>
+<% end %>
+
+
+
+<h2><%=t :course_path_heading %></h2>
+
+<table class="course-path">
+  <thead>
+    <tr>
+      <th><%=t :course_strict_prereqs %></th>
+      <th></th>
+      <th><%=h @course.name(I18n.locale) %> <%=t :course_strict_prereq_of %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="prereqs">
+        <%= render :partial => '/courses/prereqs' %>
+      </td>
+      <td class="current">
+        <%=h @course.code %><br />
+        <%=h @course.name(I18n.locale) %>
+      </td>
+      <td class="future">
+        <%= render :partial => '/courses/prereq_to' %>
+      </td>
+    <tr>
+  </tbody>
+</table>

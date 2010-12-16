@@ -1,0 +1,20 @@
+<h1><%=t :courses_heading %></h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Course</th>
+      <th>Credits</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @courses.each do |course| %>
+      <tr>
+        <td><%= link_to h(course.code) + ' ' + course.name(I18n.locale), studyplan_course_url(:id => course.id) %></td>
+        <td><%= course.credits %></td>
+        <td>Planned</td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

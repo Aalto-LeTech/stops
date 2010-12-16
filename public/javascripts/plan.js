@@ -90,6 +90,24 @@ $(document).ready(function(){
   
   
   // Get course prereqs
-  $.getJSON('/' + locale + '/curriculums/' + curriculum_id + '/prereqs', planView.loadPrereqs);
-  $.getJSON('/' + locale + '/course_instances', planView.loadCourseInstances);
+  //$.getJSON('/' + locale + '/curriculums/' + curriculum_id + '/prereqs', planView.loadPrereqs);
+  //$.getJSON('/' + locale + '/course_instances', planView.loadCourseInstances);
+  
+  $.ajax({
+    url: '/' + locale + '/curriculums/' + curriculum_id + '/prereqs',
+    dataType: 'json',
+    success: planView.loadPrereqs,
+    async: false
+  });
+  
+  $.ajax({
+    url: '/' + locale + '/course_instances',
+    dataType: 'json',
+    success: planView.loadCourseInstances,
+    async: false
+  });
+
+
+  planView.autoplan();
+      
 });

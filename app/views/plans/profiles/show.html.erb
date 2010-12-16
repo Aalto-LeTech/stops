@@ -1,3 +1,7 @@
+<% content_for :javascript do %>
+  <%= javascript_include_tag 'profileCourseView' %>
+<% end %>
+
 <h1>
   <%=h @profile.name(I18n.locale) %>
   
@@ -50,28 +54,28 @@ olet jo suorittanut n opintopistettä
   </tbody>
 </table>
 
-<!-- -->
+<!-- 
 <h2><%=t :example_schedule %></h2>
 <p>TODO</p>
+-->
 
 <!-- Skills provided -->
 <h2><%=t :profile_skills %></h2>
 
-<table class="course-graph">
-  <!--
+<table class="course-skill-dependencies">
   <thead>
-    <td>Requirements</td>
+    <td>Prerequisites</td>
     <td>Provides</td>
   </thead>
-  -->
+
   <tbody>
     <tr>
       <td id="skill-prereqs"></td>
-      <td>
+      <td id="course-skills-column">
         <% @profile.skills.each do |skill| %>
-          <p>
-            <%= link_to h(skill.description(I18n.locale)), prereqs_skill_url(:id => skill), :remote => true %>
-          </p>
+          <div class="skill" data-skill-id="<%= skill.id %>">
+            <%= skill.description(I18n.locale) %>
+          </div>
         <% end %>
       </td>
     </tr>

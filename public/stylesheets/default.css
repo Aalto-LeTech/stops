@@ -188,17 +188,29 @@ h1:first-child, h2:first-child, h3:first-child {
   margin: .5em;
 }
 
-.header .logo {
+.header .logo, .header .program-name {
   font: sans-serif;
   font-weight: bold;
-  font-size: 3em;
   color: white;
+}
+
+.header .logo {
   margin: 0px;
   padding: 5px 10px;
 }
 
+.header .logo .a {
+  font-size: 3em;
+  float: left;
+}
+
 .header .logo .ex {
+  font-size: 3em;
   color: #FF7900;
+}
+
+.header .logo .program-name {
+  font-size: 1em;
 }
 
 /*************************

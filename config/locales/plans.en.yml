@@ -1,6 +1,7 @@
 en:
   plan_heading: "My study plan"
   plan_empty_instructions: "Please explore the study guide and choose profiles that you find interesting"
+  plan_my_courses: "My courses"
   
   current_curriculum_heading: "Current curriculum"
   current_curriculum: "You are currently using the %{name} study guide"

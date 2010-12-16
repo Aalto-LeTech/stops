@@ -1,6 +1,5 @@
 <% content_for :javascript do %>
-  <%= javascript_include_tag 'profileCourseView' 
-  %>
+  <%= javascript_include_tag 'profileCourseView' %>
 <% end %>
 
 <h1><%=h @course.code %> <%=h @course.name(I18n.locale) %></h1>
@@ -79,9 +78,11 @@
         <% else %>
           <ul>
             <% @course.prereq_to.each do |course| %>
-              <li>
-                <%= link_to h(course.code) + ' ' + h(course.name(I18n.locale)), {:id => course.id} %>
-              </li>
+              <% if !@profile || @profile.courses.include?(course) %>
+                <li>
+                  <%= link_to h(course.code) + ' ' + h(course.name(I18n.locale)), {:id => course.id} %>
+                </li>
+              <% end %>
             <% end %>
           </ul>
         <% end %>

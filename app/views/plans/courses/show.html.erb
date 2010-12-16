@@ -4,34 +4,95 @@
 
 <h1><%=h @course.code %> <%=h @course.name(I18n.locale) %></h1>
 
-<table id="course-profile-graph" class="course-profile-graph" data-profile-id="<%= @profile.id %>">
-  <thead>
-    <td>Provides</td>
-    <td>Needed by</td>
-  </thead>
+<% if @profile %>
+  <!-- Study paths from course skills to profile skills -->
+  <table id="course-profile-graph" class="course-profile-graph" data-profile-id="<%= @profile.id %>">
+    <thead>
+      <td>Provides</td>
+      <td>Needed by</td>
+    </thead>
 
+    <tbody>
+      <tr>
+        <td class="course-skills-column">
+          <% @course.skills.each do |skill| %>
+            <div class="skill" data-skill-id="<%= skill.id %>">
+              <%= skill.description(I18n.locale) %>
+            </div>
+          <% end %>
+        </td>
+        <td id="skill-future"></td>
+      </tr>
+    </tbody>
+  </table>
+<% else %>
+  <h2><%=t :course_provides %></h2>
+  <table class="course-skill-dependencies">
+    <thead>
+      <td>Prerequisites</td>
+      <td>Provides</td>
+      <td>Needed by</td>
+    </thead>
+
+    <tbody>
+      <tr>
+        <td id="skill-prereqs"></td>
+        <td id="course-skills-column">
+          <% @course.skills.each do |skill| %>
+            <div class="skill" data-skill-id="<%= skill.id %>">
+              <%= skill.description(I18n.locale) %>
+            </div>
+          <% end %>
+        </td>
+        <td id="skill-future"></td>
+      </tr>
+    </tbody>
+  </table>
+<% end %>
+
+
+
+<h2><%=t :course_path_heading %></h2>
+
+<table class="course-path">
+  <thead>
+    <tr>
+      <th><%=t :course_strict_prereqs %></th>
+      <th></th>
+      <th><%=h @course.name(I18n.locale) %> <%=t :course_strict_prereq_of %></th>
+    </tr>
+  </thead>
   <tbody>
     <tr>
-      <td class="course-skills-column">
-        <% @course.skills.each do |skill| %>
-          <div class="skill" data-skill-id="<%= skill.id %>" data-url="<%= profilepath_skill_path(:id => skill, :profile_id => @profile) %>">
-            <%= link_to skill.description(I18n.locale), profilepath_skill_path(:id => skill, :profile_id => @profile), :remote => true, :id => "skill-#{skill.id}" %>
-          </div>
-        <% end %>
+      <td class="prereqs">
+        <%= render :partial => '/courses/prereqs' %>
       </td>
-      <td id="skill-future"></td>
-    </tr>
+      <td class="current">
+        <%=h @course.code %><br />
+        <%=h @course.name(I18n.locale) %>
+      </td>
+      <td class="future">
+        <!-- List of courses which depend on this course -->
+        <% if @course.prereq_to.empty? %>
+          <%=t :course_no_future %>
+        <% else %>
+          <ul>
+            <% @course.prereq_to.each do |course| %>
+              <% if !@profile || @profile.courses.include?(course) %>
+                <li>
+                  <%= link_to h(course.code) + ' ' + h(course.name(I18n.locale)), {:id => course.id} %>
+                </li>
+              <% end %>
+            <% end %>
+          </ul>
+        <% end %>
+
+      </td>
+    <tr>
   </tbody>
 </table>
 
 
-<h2><%=t :course_prereq_to %></h2>
+<h2><%=t :course_prereqs_reqursive %></h2>
 
-<%= render :partial => '/courses/prereq_to' %>
-
-
-<h2><%=t :course_prereqs %></h2>
-
-<%= render :partial => '/courses/prereqs' %>
-
-
+<%= render :partial => '/courses/prereqs_reqursive' %>

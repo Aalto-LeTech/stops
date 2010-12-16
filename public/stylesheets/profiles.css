@@ -7,3 +7,21 @@
   font-size: small;
 }
 
+.course-skill-dependencies .skill {
+  display: block;
+  border: 1px solid #d0d0d0;
+  background: #e0e0ff;
+  padding: .2em .5em;
+  margin: .5em;
+  font-size: small;
+}
+
+.course-skill-dependencies .supporting {
+  color: gray;
+}
+
+.course-skill-dependencies .dim {
+  border: none !important;
+  background: #f0f0f0 !important;
+  color: gray !important;
+}

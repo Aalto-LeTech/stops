@@ -35,9 +35,14 @@ class Skill < ActiveRecord::Base
     paths
   end
   
+  # paths: collects shortest paths
+  # path: array that keeps track of the route that lead to this node
+  # path_lengths: keeps track of path_lengths
+  # target_skill_ids: when a skill that is included in the target_skill_ids is encountered, current path is added to paths
+  # course_ids: DFS does not proceed to courses that are not included in the course_ids hash
   def dfs(paths, path, path_lengths, target_skill_ids, course_ids)
     # If this skill belongs to a course that does not belong to the profile, kill this branch
-    if  self.scoped_course_id && !course_ids.has_key?(self.scoped_course_id)
+    if self.scoped_course_id && !course_ids.has_key?(self.scoped_course_id)
       puts "#{self.scoped_course_id} not included"
       return
     end

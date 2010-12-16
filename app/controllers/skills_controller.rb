@@ -2,16 +2,18 @@ class SkillsController < ApplicationController
   
   #before_filter :load_curriculum
   
+  layout nil
+  
   def prereqs
     @skill = Skill.find(params[:id])
     
-    render 'prereqs', :layout => nil
+    render 'prereqs'
   end
   
   def future
     @skill = Skill.find(params[:id])
     
-    render 'future', :layout => nil
+    render 'future'
   end
 
   

@@ -1,0 +1,10 @@
+<% if @course.strict_prereqs.empty? %>
+  <p><%=t :course_no_prereqs %></p>
+<% else %>
+  <ul>
+    <!-- Prereq courses -->
+    <% @course.prereqs_recursive.each do |prereq_course| %>
+      <li><%= link_to h(prereq_course.code) + ' ' + h(prereq_course.name(I18n.locale)), {:id => prereq_course} %></li>
+    <% end %>
+  </ul>
+<% end %>

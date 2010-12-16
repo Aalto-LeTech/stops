@@ -21,14 +21,26 @@ class Skill < ActiveRecord::Base
   def path_to_profile(profile)
     target_skill_ids = profile.skill_ids
     
+    course_ids = {}
+    #course_ids = profile.courses.each
+    profile.courses.each do |scoped_course|
+      course_ids[scoped_course.id] = true
+      puts scoped_course.id
+    end
+    
     paths = {}
     prereq_to.each do |skill|
-      skill.dfs(paths, [], {}, target_skill_ids)
+      skill.dfs(paths, [], {}, target_skill_ids, course_ids)
     end
     paths
   end
   
-  def dfs(paths, path, path_lengths, target_skill_ids)
+  def dfs(paths, path, path_lengths, target_skill_ids, course_ids)
+    # If this skill belongs to a course that does not belong to the profile, kill this branch
+    if  self.scoped_course_id && !course_ids.has_key?(self.scoped_course_id)
+      puts "#{self.scoped_course_id} not included"
+      return
+    end
     
     # Visit node
     if target_skill_ids.include?(self.id) && (!path_lengths[self.id] || path.size < path_lengths[self.id])
@@ -42,7 +54,7 @@ class Skill < ActiveRecord::Base
     # Visit each neighbor
     prereq_to.each do |skill|
       path.push(self)
-      skill.dfs(paths, path, path_lengths, target_skill_ids)
+      skill.dfs(paths, path, path_lengths, target_skill_ids, course_ids)
       path.pop
     end
     

@@ -3,6 +3,7 @@ fi:
   
   course_provides: "Tarjoaa valmiudet"
   course_prereqs: "Esitiedot"
+  course_prereqs_reqursive: "Kaikki esitiedot ja esitietojen esitiedot"
   course_prereq_to: "on esitietona kursseille"
   course_strict_prereqs: "Välttämättömät esitiedot"
   course_no_prereqs: "Ei esitietoja"

@@ -70,7 +70,7 @@
   color: gray;
 }
 
-.course-skill-dependencies .dim {
+.course-profile-graph .dim, .course-skill-dependencies .dim {
   border: none !important;
   background: #f0f0f0 !important;
   color: gray !important;

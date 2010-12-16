@@ -72,5 +72,29 @@ class ScopedCourse < ActiveRecord::Base
   end
   
   
+  # Returns all courses and their prereqs, recursively
+  def prereqs_recursive
+    courses = Hash.new
+    
+    self.strict_prereqs.each do |prereq|
+      prereq.collect_prereqs(courses)
+    end
+
+    courses.values
+  end
+  
+  # Adds a course and its prereqs recursively to the given courses collection. If a course belongs to a prereq cycle, it is added to the cycles collection.
+  def collect_prereqs(courses)
+    # Do not follow branches that have already been handled
+    return if courses.has_key?(self.id)
+    
+    # Add this course to the list
+    courses[self.id] = self
+    
+    # Add pereqs of this course to the list
+    strict_prereqs.each do |prereq|
+      prereq.collect_prereqs(courses)
+    end
+  end
   
 end

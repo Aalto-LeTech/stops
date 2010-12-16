@@ -7,7 +7,7 @@
 
 <% if @profile %>
   <!-- Study paths from course skills to profile skills -->
-  <table class="course-profile-graph">
+  <table id="course-profile-graph" class="course-profile-graph" data-profile-id="<%= @profile.id %>">
     <thead>
       <td>Provides</td>
       <td>Needed by</td>
@@ -17,8 +17,8 @@
       <tr>
         <td class="course-skills-column">
           <% @course.skills.each do |skill| %>
-            <div class="skill">
-              <%= link_to skill.description(I18n.locale), profilepath_skill_path(:id => skill, :profile_id => @profile), :remote => true, :id => "skill-#{skill.id}" %>
+            <div class="skill" data-skill-id="<%= skill.id %>">
+              <%= skill.description(I18n.locale) %>
             </div>
           <% end %>
         </td>
@@ -81,7 +81,6 @@
             <% @course.prereq_to.each do |course| %>
               <li>
                 <%= link_to h(course.code) + ' ' + h(course.name(I18n.locale)), {:id => course.id} %>
-                <%= link_to '?', root_path , :class => '' %>
               </li>
             <% end %>
           </ul>
@@ -91,3 +90,8 @@
     <tr>
   </tbody>
 </table>
+
+
+<h2><%=t :course_prereqs_reqursive %></h2>
+
+<%= render :partial => '/courses/prereqs_reqursive' %>

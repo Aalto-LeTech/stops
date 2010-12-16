@@ -33,3 +33,23 @@
 </div>
 
 <div class="clear"></div>
+
+<div class="topNaviTabs">
+  <ul>
+    <li><%= link_to t(:frontpageTab), root_path %></li>
+  </ul>
+  
+  <ul>
+    <li><%= link_to t(:curriculumsTab), curriculums_path %></li>
+  </ul>
+
+  <ul>
+    <li><%= link_to t(:myPlanTabCurriculum), studyplan_curriculum_path %></li>
+    <li><%= link_to t(:myPlanTabProfiles), studyplan_profiles_path %></li>
+    <li><%= link_to t(:myPlanTabCourses), studyplan_courses_path %></li>
+    <li><%= link_to t(:myPlanTabSchedule), studyplan_schedule_path %></li>
+    <li><%= link_to t(:myPlanTabRecord), studyplan_record_path %></li>
+  </ul>
+</div>
+
+<div class="clear"></div>

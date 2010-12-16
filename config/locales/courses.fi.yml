@@ -5,7 +5,9 @@ fi:
   course_prereqs: "Esitiedot"
   course_strict_prereqs: "Välttämättömät esitiedot"
   course_no_prereqs: "Ei esitietoja"
+  course_no_future: "Ei jatkokursseja"
   course_strict_prereq_of: "on välttämätön esitieto kursseille"
+  course_path_heading: "Yhteys muihin kursseihin"
   
   strict_prereq_char: 'X'
   supporting_prereq_char: 'x'

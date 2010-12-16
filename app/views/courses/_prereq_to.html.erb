@@ -1,5 +1,6 @@
-<% unless @course.prereq_to.empty? %>
-  <h2><%=h @course.code %> <%=h @course.name(I18n.locale) %> <%=t :course_strict_prereq_of %></h2>
+<% if @course.prereq_to.empty? %>
+  <%=t :course_no_future %>
+<% else %>
   <ul>
     <% @course.prereq_to.each do |course| %>
       <li>

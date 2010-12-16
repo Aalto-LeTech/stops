@@ -10,11 +10,13 @@ en:
   navi_my_plan: "My Study Plan"
   navi_browse_curriculums: "Browse study guides"
   
+  frontpageTab: "Frontpage"
   myPlanTabCurriculum: "Curriculum"
   myPlanTabProfiles: "Profiles"
   myPlanTabCourses: "Courses"
   myPlanTabSchedule: "Schedule"
   myPlanTabRecord: "Record"
+  curriculumsTab: "Study guides"
   
   Ok: "OK"
   Upload: "Upload"

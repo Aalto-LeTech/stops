@@ -50,7 +50,7 @@ hr {
 }
 
 .clear {
-  clear: vboth;
+  clear: both;
 }
 
 a.bigNavibutton {
@@ -285,47 +285,79 @@ h1:first-child, h2:first-child, h3:first-child {
 
 
 /*****************
-  Prereq graph
+  Top navi
  *****************/
 
-.myPlanTabs {
+.topNaviTabs {
   clear: both;
-  margin: 1em auto;
+  margin: 0em auto;
 }
 
-.myPlanTabs ul {
+.topNaviTabs ul {
+  display: block;
+  float: left;
+
   text-align: center;
   text-align: center;
-  margin: 0px;
-  padding: 0px;
+  margin: 1em 1em;
+  padding: 0px 10px;
   
-  border-right: 1px solid gray;
-  border-bottom: 1px solid gray;
+  -moz-border-radius: 15px;
+  border: 1px solid gray;
+  background: #928B81;
+  color: white;
+  /*border-right: 1px solid gray;
+  border-bottom: 1px solid gray;*/
 }
 
-.myPlanTabs li {
+.topNaviTabs li {
   display: inline;
   
   /*border: 1px solid red;*/
   border-left: 1px solid gray;
+  border-right: 1px solid gray;
   margin: 0px;
   padding: 0px;
 }
 
-.myPlanTabs li.selected {
+.topNaviTabs li.selected {
   background: blue;
 }
 
-.myPlanTabs li:hover {
+.topNaviTabs li:hover {
+  text-decoration: underline;
 }
 
-.myPlanTabs a {
+.topNaviTabs a {
   font: sans-serif;
   font-size: 120%;
-  color: black;
+  color: white;
   line-height: 150%;
   padding: 1em;
   margin: 0px;
   text-decoration: none;
 }
 
+/*****************
+  Course path
+ *****************/
+
+table.course-path {
+  margin: 1em 0em;
+}
+
+table.course-path td.prereqs, table.course-path td.current {
+  vertical-align: middle;
+  background: url('../images/future-arrow.png') no-repeat right;
+  
+  padding-right: 30px;
+}
+
+table.course-path td.current, table.course-path td.future {
+  padding-left: 20px;
+}
+
+table.course-path td.current {
+  font-size: larger;
+  font-weight: bold;
+}

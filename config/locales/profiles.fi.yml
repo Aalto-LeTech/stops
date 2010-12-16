@@ -16,3 +16,8 @@ fi:
   
   # Add profile to plan
   profile_add_heading: "Lisää %{name} opintosuunnitelmaan"
+  
+  # Remove profile from study plan
+  profile_delete_heading: "Profiili %{name} poistetaan opintosuunnitelmasta"
+  profile_delete_autodelete_courses: "Seuraavat kurssit poistetaan:"
+  

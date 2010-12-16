@@ -25,7 +25,10 @@ ActionController::Routing::Routes.draw do |map|
         get 'prereqs'
       end
       
-      resources :profiles, :controller => 'curriculums/profiles'
+      resources :profiles, :controller => 'curriculums/profiles', :only => [:show] do
+        resources :courses, :controller => 'curriculums/courses', :only => [:show]  # ScopedCourses, courses that belong to the profile
+      end
+      
       resources :courses, :controller => 'curriculums/courses'  # ScopedCourses
     end
 

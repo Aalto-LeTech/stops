@@ -5,7 +5,9 @@ en:
   course_prereqs: "Prerequisites"
   course_strict_prereqs: "Strict prerequisites"
   course_no_prereqs: "No prerequisites"
+  course_no_future: "None"
   course_strict_prereq_of: "is prerequisite of"
+  course_path_heading: "Relation to other courses"
   
   strict_prereq_char: 'X'
   supporting_prereq_char: 'x'

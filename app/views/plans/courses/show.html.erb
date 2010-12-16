@@ -1,11 +1,10 @@
 <% content_for :javascript do %>
-  <% #= javascript_include_tag 'profileCourseView' 
-  %>
+  <%= javascript_include_tag 'profileCourseView' %>
 <% end %>
 
 <h1><%=h @course.code %> <%=h @course.name(I18n.locale) %></h1>
 
-<table class="course-profile-graph">
+<table id="course-profile-graph" class="course-profile-graph" data-profile-id="<%= @profile.id %>">
   <thead>
     <td>Provides</td>
     <td>Needed by</td>
@@ -15,7 +14,7 @@
     <tr>
       <td class="course-skills-column">
         <% @course.skills.each do |skill| %>
-          <div class="skill">
+          <div class="skill" data-skill-id="<%= skill.id %>" data-url="<%= profilepath_skill_path(:id => skill, :profile_id => @profile) %>">
             <%= link_to skill.description(I18n.locale), profilepath_skill_path(:id => skill, :profile_id => @profile), :remote => true, :id => "skill-#{skill.id}" %>
           </div>
         <% end %>
@@ -25,5 +24,7 @@
   </tbody>
 </table>
 
+
+<h2><%=t :course_prereqs %></h2>
 
 <%= render :partial => '/courses/prereq_to' %>

@@ -10,11 +10,13 @@ fi:
   navi_my_plan: "Oma opintosuunnitelma"
   navi_browse_curriculums: "Selaa opinto-oppaita"
   
+  frontpageTab: "Etusivu"
   myPlanTabCurriculum: "Opinto-opas"
   myPlanTabProfiles: "Profiilit"
   myPlanTabCourses: "Kurssit"
   myPlanTabSchedule: "Aikataulu"
   myPlanTabRecord: "Suoritukset"
+  curriculumsTab: "Opinto-oppaat"
   
   Ok: "OK"
   Upload: "Tallenna"

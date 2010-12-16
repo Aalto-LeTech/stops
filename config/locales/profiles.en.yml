@@ -16,3 +16,7 @@ en:
   # Add profile to plan
   profile_add_heading: "Add %{name} to study plan"
   
+  # Remove profile from plan
+  profile_delete_heading: "Profile %{name} will be removed from your study plan"
+  profile_delete_autodelete_courses: "The following courses will be removed:"
+  

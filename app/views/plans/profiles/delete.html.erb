@@ -1,6 +1,6 @@
 <h1><%=t :profile_delete_heading, :name => @profile.name(I18n.locale) %></h1>
 
-<p>Seuraavat kurssit poistetaan opintosuunnitelmastasi:</p>
+<!--p><%=t :profile_delete_autodelete_courses %></p-->
 
 <ul>
   <% @courses.each do |course| %>

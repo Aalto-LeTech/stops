@@ -39,6 +39,7 @@
 
 .course-profile-graph td {
   vertical-align: middle;
+  background: none center no-repeat;
 }
 
 .course-profile-graph td.course-skills-column, .course-profile-graph td.target-skill-column {

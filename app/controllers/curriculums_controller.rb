@@ -3,7 +3,13 @@ class CurriculumsController < ApplicationController
   respond_to :html
   respond_to :json, :only => 'prereqs'
   
+  layout 'curriculum'
+  
   caches_page :prereqs
+  
+  def load_curriculum
+    @curriculum = Curriculum.find(params[:curriculum_id])
+  end
   
   # GET /curriculums
   # GET /curriculums.xml
@@ -21,6 +27,7 @@ class CurriculumsController < ApplicationController
   # GET /curriculums/1.xml
   def show
     @curriculum = Curriculum.find(params[:id])
+    
     authorize! :read, @curriculum
 
     respond_to do |format|
@@ -120,7 +127,7 @@ class CurriculumsController < ApplicationController
   def prereqs
     @curriculum = Curriculum.find(params[:id])
     
-    prereqs = CoursePrereq.where(:requirement => STRICT_PREREQ).joins('INNER JOIN scoped_courses AS course ON course.id = course_prereqs.scoped_course_id INNER JOIN scoped_courses AS prereq ON prereq.id = course_prereqs.scoped_prereq_id').select('course.code AS course_code, prereq.code AS prereq_code')
+    prereqs = CoursePrereq.where(:requirement => STRICT_PREREQ).joins('INNER JOIN scoped_courses AS course ON course.id = course_prereqs.scoped_course_id INNER JOIN scoped_courses AS prereq ON prereq.id = course_prereqs.scoped_prereq_id').where("course.curriculum_id = ?", @curriculum).select('course.code AS course_code, prereq.code AS prereq_code')
     
     respond_to do |format|
       format.html { render :text => prereqs.to_json }

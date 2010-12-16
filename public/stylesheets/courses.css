@@ -51,7 +51,7 @@
   padding-right: 5px;
 }
 
-.course-profile-graph .skill {
+.course-profile-graph .skill, .course-skill-dependencies .skill {
   display: block;
   border: 1px solid #d0d0d0;
   background: #e0e0ff;
@@ -63,4 +63,15 @@
 .course-profile-graph a {
   text-decoration: none;
   color: black;
+}
+
+
+.course-skill-dependencies .supporting {
+  color: gray;
+}
+
+.course-skill-dependencies .dim {
+  border: none !important;
+  background: #f0f0f0 !important;
+  color: gray !important;
 }

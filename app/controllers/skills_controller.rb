@@ -5,14 +5,13 @@ class SkillsController < ApplicationController
   def prereqs
     @skill = Skill.find(params[:id])
     
-    render 'prereqs', :skill => @skill
-
+    render 'prereqs', :layout => nil
   end
   
   def future
     @skill = Skill.find(params[:id])
     
-    render 'future', :skill => @skill
+    render 'future', :layout => nil
   end
 
   

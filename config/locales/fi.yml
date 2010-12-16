@@ -18,6 +18,8 @@ fi:
   myPlanTabRecord: "Suoritukset"
   curriculumsTab: "Opinto-oppaat"
   
+  example_schedule: "Mallilukujärjestys"
+  
   Ok: "OK"
   Upload: "Tallenna"
   Save: "Tallenna"

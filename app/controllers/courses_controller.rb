@@ -91,4 +91,9 @@ class CoursesController < ApplicationController
     end
   end
   
+  
+  def skill_dependencies
+    
+  end
+  
 end

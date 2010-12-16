@@ -3,6 +3,7 @@ en:
 
   course_provides: "Provides conpetences"
   course_prereqs: "Prerequisites"
+  course_prereq_to: "is a prerequisite to"
   course_strict_prereqs: "Strict prerequisites"
   course_no_prereqs: "No prerequisites"
   course_no_future: "None"

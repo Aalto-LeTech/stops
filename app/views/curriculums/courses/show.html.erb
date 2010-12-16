@@ -1,11 +1,12 @@
 <% content_for :javascript do %>
-  <% #= javascript_include_tag 'profileCourseView' 
+  <%= javascript_include_tag 'profileCourseView' 
   %>
 <% end %>
 
 <h1><%=h @course.code %> <%=h @course.name(I18n.locale) %></h1>
 
 <% if @profile %>
+  <!-- Study paths from course skills to profile skills -->
   <table class="course-profile-graph">
     <thead>
       <td>Provides</td>
@@ -27,11 +28,27 @@
   </table>
 <% else %>
   <h2><%=t :course_provides %></h2>
-  <ul>
-    <% @course.skills.each do |skill| %>
-      <li><%= skill.description(I18n.locale) %></li>
-    <% end %>
-  </ul>
+  <table class="course-skill-dependencies">
+    <thead>
+      <td>Prerequisites</td>
+      <td>Provides</td>
+      <td>Needed by</td>
+    </thead>
+
+    <tbody>
+      <tr>
+        <td id="skill-prereqs"></td>
+        <td id="course-skills-column">
+          <% @course.skills.each do |skill| %>
+            <div class="skill" data-skill-id="<%= skill.id %>">
+              <%= skill.description(I18n.locale) %>
+            </div>
+          <% end %>
+        </td>
+        <td id="skill-future"></td>
+      </tr>
+    </tbody>
+  </table>
 <% end %>
 
 
@@ -56,7 +73,20 @@
         <%=h @course.name(I18n.locale) %>
       </td>
       <td class="future">
-        <%= render :partial => '/courses/prereq_to' %>
+        <!-- List of courses which depend on this course -->
+        <% if @course.prereq_to.empty? %>
+          <%=t :course_no_future %>
+        <% else %>
+          <ul>
+            <% @course.prereq_to.each do |course| %>
+              <li>
+                <%= link_to h(course.code) + ' ' + h(course.name(I18n.locale)), {:id => course.id} %>
+                <%= link_to '?', root_path , :class => '' %>
+              </li>
+            <% end %>
+          </ul>
+        <% end %>
+
       </td>
     <tr>
   </tbody>

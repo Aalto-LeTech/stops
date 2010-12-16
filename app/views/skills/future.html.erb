@@ -1,15 +1,8 @@
-<h1><%= @skill.scoped_course.name(I18n.locale) %> - <% @skill.description(I18n.locale) %><br /> is a prerequisite to the following courses</h1>
-
-<% @skill.prereq_to.each do |skill| %>
-  <% if skill.scoped_course %>
-  
-    <p class="course">
-      <%= link_to h(skill.scoped_course.code) + ' ' + h(skill.scoped_course.name(I18n.locale)), course_url(:id => skill.scoped_course) %>:
-      <%= skill.description(I18n.locale) %>
-    </p>
-  <% else %>
-    <p class="profile">
-      <%= skill.description(I18n.locale) %>
-    </p>
+<% @skill.skill_prereq_to.each do |skill_prereq| %>
+  <% if skill_prereq.skill.scoped_course %>
+    <div class="skill <%= skill_prereq.requirement == STRICT_PREREQ ? 'strict' : 'supporting' %>">
+      <%= skill_prereq.skill.scoped_course.code + ' ' + skill_prereq.skill.scoped_course.name(I18n.locale) %>:
+      <%= skill_prereq.skill.description(I18n.locale) %><br />
+    </div>
   <% end %>
 <% end %>

@@ -1,0 +1,19 @@
+
+<table class="course-skill-dependencies">
+  <thead>
+    <tr>
+      <td>Esitietokurssi</td>
+      <td>Jatkokurssi</td>
+    </tr>
+  </thead>
+  <tbody>
+    <% @prereq_skills.each do |prereq_skill| %>
+      <tr>
+        <td><%= prereq_skill.description(I18n.locale) %></td>
+        <td>
+        
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

@@ -54,17 +54,18 @@ class Plans::CoursesController < PlansController
   # POST /courses
   # POST /courses.xml
   def create
-    @course = Course.new(params[:course])
+    course = ScopedCourse.find(params[:course_id])
 
-    respond_to do |format|
-      if @course.save
-        format.html { redirect_to(@course, :notice => 'Course was successfully created.') }
-        format.xml  { render :xml => @course, :status => :created, :location => @course }
-      else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @course.errors, :status => :unprocessable_entity }
-      end
+    # Dont't do anything if user has already selected this profile
+    if @user.courses.exists?(course)
+      redirect_to studyplan_profiles_path, :flash => {:error => 'Kurssi on jo opintosuunnitelmassa'}
+      return
     end
+    
+    # Add course to study plan
+    @user.courses << course
+    
+    redirect_to studyplan_profiles_path, :flash => {:success => 'Kurssi lisätty opintosuunnitelmaan'}
   end
 
   # PUT /courses/1

@@ -10,6 +10,7 @@ en:
   course_no_future: "None"
   course_strict_prereq_of: "is prerequisite of"
   course_path_heading: "Relation to other courses"
+  course_add_to_plan: "Add to study plan"
   
   strict_prereq_char: 'X'
   supporting_prereq_char: 'x'

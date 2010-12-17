@@ -52,6 +52,7 @@ class User < ActiveRecord::Base
     self.courses = needed_courses
   end
   
+
   # Returns a list of courses than can be deleted if the given profile is dropped from the study plan
   def deletable_courses(profile)
     # TODO

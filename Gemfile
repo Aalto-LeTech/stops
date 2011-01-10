@@ -26,6 +26,7 @@ gem 'mongrel'
 gem 'devise'
 gem 'cancan'
 gem 'jquery-rails'
+gem 'fastercsv'
 
 
 # Bundle gems for the local environment. Make sure to

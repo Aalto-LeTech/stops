@@ -2,27 +2,28 @@ var profileCourseView = {
   
   showSkillDependencies: function() {
     var element = $(this);
-    //var url = element.data('url');
     var skillId = element.data('skill-id');
+    var path = element.attr('href');
     
     // Dim other skills
-    $('#course-skills-column div').addClass('dim');
+    $('#course-skills-column a').addClass('dim');
     element.removeClass('dim');
     
     // Activate progress bar
-    $('#skill-prereqs').html('<img src="/images/progress.gif" />')
-    $('#skill-future').html('<img src="/images/progress.gif" />')
+    $('#skill-prereqs').html('<div class="progress"></div>');
+    $('#skill-future').html('<div class="progress"></div>');
     
     // Get prereqs
-    // FIXME: hardcoded locale
-    $.get('/fi/skills/' + skillId + '/prereqs', function(data) {
+    $.get(path + '/prereqs', function(data) {
       $('#skill-prereqs').html(data);
     });
     
     // Get postreqs
-    $.get('/fi/skills/' + skillId + '/future', function(data) {
+    $.get(path + '/future', function(data) {
       $('#skill-future').html(data);
     });
+    
+    return false;
   },
 
 
@@ -31,20 +32,22 @@ var profileCourseView = {
     var element = $(this);
     var skillId = element.data('skill-id');
     var profileId = $('#course-profile-graph').data('profile-id');
+    var path = element.attr('href');
     
     // Dim other skills
-    $('.course-skills-column div').addClass('dim');
+    $('.course-skills-column a').addClass('dim');
     element.removeClass('dim');
     
     // Activate progress bar
-    $('#skill-future').html('<img src="/images/progress.gif" />')
+    $('#skill-future').html('<div class="progress"></div>');
     
     // Get prereqs
-    // FIXME: hardcoded locale
-    $.get('/fi/skills/' + skillId + '/profilepath?profile_id=' + profileId, function(data) {
+    $.get(path, function(data) {
       $('#skill-future').html(data);
     });
     
+  
+    return false;
   }
   
 };
@@ -55,7 +58,4 @@ $(document).ready(function(){
   $('.course-skill-dependencies .skill').click(profileCourseView.showSkillDependencies);
   $('.course-profile-graph .skill').click(profileCourseView.showPath);
   
-  
 });
-
-

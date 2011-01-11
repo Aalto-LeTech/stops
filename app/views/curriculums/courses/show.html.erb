@@ -16,9 +16,7 @@
       <tr>
         <td class="course-skills-column">
           <% @course.skills.each do |skill| %>
-            <div class="skill" data-skill-id="<%= skill.id %>">
-              <%= skill.description(I18n.locale) %>
-            </div>
+            <%= link_to skill.description(I18n.locale), profilepath_skill_path(:id => skill.id, :profile_id => @profile), { :class => 'skill', 'data-skill-id' => skill.id } %>
           <% end %>
         </td>
         <td id="skill-future"></td>
@@ -39,9 +37,7 @@
         <td id="skill-prereqs"></td>
         <td id="course-skills-column">
           <% @course.skills.each do |skill| %>
-            <div class="skill" data-skill-id="<%= skill.id %>">
-              <%= skill.description(I18n.locale) %>
-            </div>
+            <%= link_to skill.description(I18n.locale), skill, { :class => 'skill', 'data-skill-id' => skill.id } %>
           <% end %>
         </td>
         <td id="skill-future"></td>

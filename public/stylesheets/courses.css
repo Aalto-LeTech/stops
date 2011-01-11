@@ -60,6 +60,11 @@
   font-size: small;
 }
 
+.course-skill-dependencies a.skill {
+  text-decoration: none;
+  color: black;
+}
+
 .course-profile-graph a {
   text-decoration: none;
   color: black;

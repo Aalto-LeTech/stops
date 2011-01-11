@@ -81,6 +81,14 @@ div.admin-tools {
   background: #f0f0f0;
 }
 
+div.progress {
+  margin: 0px auto;
+  padding: 0px;
+  width: 24px;
+  height: 24px;
+  background: url('../images/progress.gif');
+}
+
 
 /******************
  * Headings

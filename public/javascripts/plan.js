@@ -61,8 +61,9 @@ var planView = {
 
 $(document).ready(function(){
   //status_div = $('#status');
-  var curriculum_id = $('#plan').data('curriculum-id');
-  var locale = $('#plan').data('locale');
+  
+  //var curriculum_id = $plan.data('curriculum-id');
+  //var locale = $plan.data('locale');
   
   // Prepare courses
   $('.course').each(function(i, element){
@@ -92,16 +93,19 @@ $(document).ready(function(){
   // Get course prereqs
   //$.getJSON('/' + locale + '/curriculums/' + curriculum_id + '/prereqs', planView.loadPrereqs);
   //$.getJSON('/' + locale + '/course_instances', planView.loadCourseInstances);
+  var $plan = $('#plan');
+  var prereqsPath = $plan.data('prereqs-path');     // '/' + locale + '/curriculums/' + curriculum_id + '/prereqs'
+  var instancesPath = $plan.data('instances-path'); // '/' + locale + '/course_instances'
   
   $.ajax({
-    url: '/' + locale + '/curriculums/' + curriculum_id + '/prereqs',
+    url: prereqsPath,
     dataType: 'json',
     success: planView.loadPrereqs,
     async: false
   });
   
   $.ajax({
-    url: '/' + locale + '/course_instances',
+    url: instancesPath,
     dataType: 'json',
     success: planView.loadCourseInstances,
     async: false

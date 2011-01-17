@@ -56,9 +56,7 @@
       <td id="skill-prereqs"></td>
       <td id="course-skills-column">
         <% @profile.skills.each do |skill| %>
-          <div class="skill" data-skill-id="<%= skill.id %>">
-            <%= skill.description(I18n.locale) %>
-          </div>
+          <%= link_to skill.description(I18n.locale), skill, { :class => 'skill', 'data-skill-id' => skill.id } %>
         <% end %>
       </td>
     </tr>

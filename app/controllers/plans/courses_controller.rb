@@ -58,14 +58,14 @@ class Plans::CoursesController < PlansController
 
     # Dont't do anything if user has already selected this profile
     if @user.courses.exists?(course)
-      redirect_to studyplan_profiles_path, :flash => {:error => 'Kurssi on jo opintosuunnitelmassa'}
+      redirect_to studyplan_profiles_path, :flash => {:error => 'Course was already in the study plan'}
       return
     end
     
     # Add course to study plan
     @user.courses << course
     
-    redirect_to studyplan_profiles_path, :flash => {:success => 'Kurssi lisätty opintosuunnitelmaan'}
+    redirect_to studyplan_profiles_path, :flash => {:success => 'Course added to study plan'}
   end
 
   # PUT /courses/1

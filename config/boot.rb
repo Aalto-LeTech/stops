@@ -1,5 +1,9 @@
 require 'rubygems'
 
+# Temporary hack to fix ActionView::Template::Error (couldn't parse YAML at line...
+require 'yaml'
+YAML::ENGINE.yamler= 'syck'
+
 # Set up gems listed in the Gemfile.
 gemfile = File.expand_path('../../Gemfile', __FILE__)
 begin

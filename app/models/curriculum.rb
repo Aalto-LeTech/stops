@@ -13,7 +13,7 @@ class Curriculum < ActiveRecord::Base
     return '' if self.new_record?
     
     if self.end_year > self.start_year
-      return "#{self.start_year} — #{self.end_year}"
+      return "#{self.start_year} - #{self.end_year}"
     else
       return self.start_year
     end

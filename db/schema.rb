@@ -37,12 +37,12 @@ ActiveRecord::Schema.define(:version => 20100826130740) do
   add_index "competence_descriptions", ["competence_id", "locale"], :name => "index_competence_descriptions_on_competence_id_and_locale", :unique => true
 
   create_table "competences", :force => true do |t|
-    t.integer "curriculum_id",                  :null => false
-    t.integer "level",         :default => 1
-    t.float   "credits",       :default => 0.0, :null => false
+    t.integer "profile_id",                  :null => false
+    t.integer "level",      :default => 1
+    t.float   "credits",    :default => 0.0, :null => false
   end
 
-  add_index "competences", ["curriculum_id"], :name => "index_competences_on_curriculum_id"
+  add_index "competences", ["profile_id"], :name => "index_competences_on_profile_id"
 
   create_table "course_descriptions", :force => true do |t|
     t.integer "abstract_course_id", :null => false

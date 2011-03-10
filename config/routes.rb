@@ -8,14 +8,18 @@ ActionController::Routing::Routes.draw do |map|
     
     #resources :courses  # AbstreactCourses
     
-    resources :course_instances
+    resources :course_instances, :only => [:index]
     
-    resources :skills do
+    resources :skills, :only => [] do
       member do 
         get 'prereqs'
         get 'future'
         get 'profilepath'
       end
+    end
+    
+    resources :profiles, :only => [] do
+      resources :competences
     end
     
     # View study guides of other years
@@ -30,11 +34,11 @@ ActionController::Routing::Routes.draw do |map|
         resources :courses, :controller => 'curriculums/courses', :only => [:show]  # ScopedCourses, courses that belong to the profile
       end
       
-      resources :courses, :controller => 'curriculums/courses'  # ScopedCourses
+      resources :courses, :controller => 'curriculums/courses', :only => [:index, :show]  # ScopedCourses
     end
 
     # My Plan
-    resource :studyplan, :controller => 'plans' do
+    resource :studyplan, :controller => 'plans', :only => [:show] do
       resources :profiles, :controller => 'plans/profiles', :except => [:edit, :update] do
         member do
           get :delete
@@ -44,18 +48,18 @@ ActionController::Routing::Routes.draw do |map|
       end
       
       resources :courses, :controller => 'plans/courses', :except => [:edit, :update]  # ScopedCourses, courses that i have selected
-      resource :schedule, :controller => 'plans/schedule'
-      resource :record, :controller => 'plans/record'
+      resource :schedule, :controller => 'plans/schedule', :only => [:show, :edit]
+      resource :record, :controller => 'plans/record', :only => [:show]
       
-      resource :curriculum, :controller => 'plans/curriculums'
+      resource :curriculum, :controller => 'plans/curriculums', :only => [:show, :edit, :update]
     end
     
     # Any plan (specify student ID)
-    resources :plans, :constraints => { :id => /\w+/ } do
+    resources :plans, :constraints => { :id => /\w+/ }, :only => [:show] do
       resources :profiles, :controller => 'plans/profiles', :except => [:edit, :update]
       resources :courses, :controller => 'plans/courses', :except => [:edit, :update]
-      resource :schedule, :controller => 'plans/schedule'
-      resource :record, :controller => 'plans/record'
+      resource :schedule, :controller => 'plans/schedule', :only => [:show, :edit]
+      resource :record, :controller => 'plans/record', :only => [:show]
     end
     
 #     scope "/:curriculum_id" do

@@ -6,59 +6,16 @@
   <%=h @profile.name(I18n.locale) %>
 </h1>
 
-
-<!-- Courses required -->
-<h2><%=t :profile_strict_prereqs %></h2>
-
-<table class="profile-prereq-matrix">
-  <tbody>
-    <!-- Prereq courses -->
-    <% @profile.strict_prereqs.each do |course| %>
-      <tr class="prereq-course-name">
-        <!-- Course name -->
-        <td class="prereq-course-name"><%= link_to h(course.code) + ' ' + h(course.name(I18n.locale)), curriculum_profile_course_path(:profile_id => @profile, :id => course) %></td>
-      </tr>
-    <% end %>
-
-  </tbody>
-</table>
+<p><%=h @profile.description(I18n.locale) %></p>
 
 
-<!-- Supporting courses -->
-<h2><%=t :profile_supporting_prereqs %></h2>
+<% @profile.competences.each do |competence| %>
+  <%= competence.name(I18n.locale) %>
+<% end %>
 
-<table class="profile-prereq-matrix">
-  <tbody>
-    <!-- Prereq courses -->
-    <% @profile.supporting_prereqs.each do |course| %>
-      <tr class="prereq-course-name">
-        <!-- Course name -->
-        <td class="prereq-course-name"><%= link_to h(course.code) + ' ' + h(course.name(I18n.locale)), curriculum_profile_course_path(:profile_id => @profile, :id => course) %></td>
-      </tr>
-    <% end %>
 
-  </tbody>
-</table>
-
-<!--p>TODO: mallilukujärjestys</p-->
-
-<!-- Skills provided -->
-<h2><%=t :profile_skills %></h2>
-
-<table class="course-skill-dependencies">
-  <thead>
-    <td>Prerequisites</td>
-    <td>Provides</td>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td id="skill-prereqs"></td>
-      <td id="course-skills-column">
-        <% @profile.skills.each do |skill| %>
-          <%= link_to skill.description(I18n.locale), skill, { :class => 'skill', 'data-skill-id' => skill.id } %>
-        <% end %>
-      </td>
-    </tr>
-  </tbody>
-</table>
+<% if can? :update, @profile %>
+  <div class="admin-tools">
+    <%= link_to 'Edit', edit_curriculum_profile_path(:curriculum_id => @curriculum.id, :id => @profile.id) %>
+  </div>
+<% end %>

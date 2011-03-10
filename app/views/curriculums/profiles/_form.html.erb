@@ -1,0 +1,19 @@
+<%= form_for [@curriculum, @profile] do |f| %>
+
+  <%= f.fields_for :profile_descriptions do |df| %>
+    <%= df.hidden_field :locale %>
+    <table>
+      <tr>
+        <td><%= df.label :name, t(:profile_name) %></td>
+        <td><%= df.text_field :name, :size => 40 %></td>
+      </tr>
+      <tr>
+        <td><%= df.label :description, t(:profile_description) %></td>
+        <td><%= df.text_area :description, :rows => 3, :cols => 80 %></td>
+      </tr>
+    </table>
+  
+  <% end %>
+  
+  <p><%= f.submit t(:Save) %></p>
+<% end %>

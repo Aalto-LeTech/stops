@@ -4,12 +4,12 @@
   
   <ul>
     <% @curriculum.profiles.each do |profile| %>
-      <li><%= link_to competence.name(I18n.locale), curriculum_profile_path(:curriculum_id => @curriculum, :id => profile) %></li>
+      <li><%= link_to profile.name(I18n.locale), curriculum_profile_path(:curriculum_id => @curriculum, :id => profile) %></li>
     <% end %>
   </ul>
   
   <% if can? :create, Profile %>
-    <p><%= link_to 'Create profile',  %><p>
+    <p><%= link_to t(:profile_create_link), new_curriculum_profile_path(@curriculum) %><p>
   <% end %>
   
   

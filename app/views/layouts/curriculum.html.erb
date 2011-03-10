@@ -21,7 +21,7 @@
           <li class="<%= profile == @profile ? 'selected' : '' %>"><%= link_to h(profile.name(I18n.locale)), curriculum_profile_path(:curriculum_id => @curriculum, :id => profile) %></li>
           <!-- Courses belonging to the profile -->
           
-          <% if profile == @profile %>
+          <% if false && profile == @profile %>
             <ul>
               <% profile.courses.each do |course| %>
                 <li class="<%= course == @course ? 'selected' : '' %>"><%= link_to h(course.name(I18n.locale)), curriculum_profile_course_path(:curriculum_id => @curriculum, :profile_id => profile, :id => course) %>

@@ -14,12 +14,14 @@ class Competence < ActiveRecord::Base
   has_many :strict_prereqs, :through => :profile_courses, :source => :scoped_course, :order => 'code', :conditions => "requirement = #{STRICT_PREREQ}"
   has_many :supporting_prereqs, :through => :profile_courses, :source => :scoped_course, :order => 'code', :conditions => "requirement = #{SUPPORTING_PREREQ}"
 
+  accepts_nested_attributes_for :competence_descriptions
+  
   # Users who have chosen this profile
   #has_many :user_profiles, :dependent => :destroy
   
   
   def name(locale)
-    description = ProfileDescription.where(:profile_id => self.id, :locale => locale.to_s).first
+    description = CompetenceDescription.where(:profile_id => self.id, :locale => locale.to_s).first
     description ? description.name : ''
   end
   

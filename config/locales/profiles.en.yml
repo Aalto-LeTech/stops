@@ -1,4 +1,16 @@
 en:
+  # curriculum/show
+  profile_create_link: "Create new profile"
+  
+  # New / Edit
+  profile_new_heading: "Create profile"
+  profile_edit_heading: "Edit profile"
+  profile_created_flash: "Profile created"
+
+  # Form
+  profile_name: "Heading"
+  profile_description: "Description"
+
   profiles_heading: "Competence profiles"
   selected_profiles_heading: "Selected competences"
   available_profiles_heading: "Available competences"

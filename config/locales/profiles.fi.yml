@@ -1,4 +1,16 @@
 fi: 
+  # curriculum/show
+  profile_create_link: "Luo uusi profiili"
+
+  # New / Edit
+  profile_new_heading: "Luo profiili"
+  profile_edit_heading: "Muokkaa profiilia"
+  profile_created_flash: "Profiili luotu"
+
+  # Form
+  profile_name: "Otsikko"
+  profile_description: "Kuvaus"
+
   # plan/profiles index
   profiles_heading: "Osaamisprofiilit"
   selected_profiles_heading: "Valitut osaamisprofiilit"

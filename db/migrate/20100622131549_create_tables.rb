@@ -60,11 +60,11 @@ class CreateTables < ActiveRecord::Migration
     add_index(:profile_descriptions, [:profile_id, :locale], :unique => true)
     
     create_table :competences do |t|
-      t.references :curriculum, :null => false
+      t.references :profile, :null => false
       t.integer :level, :default => 1
       t.float :credits, :null => false, :default => 0
     end
-    add_index(:competences, :curriculum_id)
+    add_index(:competences, :profile_id)
     
     create_table :competence_descriptions do |t|
       t.references :competence, :null => false
@@ -147,8 +147,8 @@ class CreateTables < ActiveRecord::Migration
 
   def self.down
     drop_table :competence_courses
-    drop_table :competence_skills
-    drop_table :course_skills
+    #drop_table :competence_skills
+    #drop_table :course_skills
     drop_table :skill_prereqs
     drop_table :course_prereqs
     drop_table :skill_descriptions

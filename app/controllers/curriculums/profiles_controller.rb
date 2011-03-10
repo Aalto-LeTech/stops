@@ -24,10 +24,41 @@ class Curriculums::ProfilesController < CurriculumsController
       format.xml  { render :xml => @course }
     end
   end
-
-  def new
+  
+  def edit
+    @profile = Profile.find(params[:id])
+    
+    authorize! :edit, @profile
     
   end
+
+  def new
+    @profile = Profile.new
+    
+    @profile.profile_descriptions << ProfileDescription.new(:locale => I18n.locale)
+  end
   
+  def create
+    @profile = Profile.new(params[:profile])
+    @profile.curriculum = @curriculum
+    authorize! :create, @profile
+
+    if @profile.save
+      redirect_to curriculum_path(@curriculum), :success => t(:profile_created_flash)
+    else
+      render :action => "new"
+    end
+  end
+  
+  def update
+    @profile = Profile.find(params[:id])
+    authorize! :edit, @profile
+
+    if @profile.update_attributes(params[:profile])
+      redirect_to curriculum_profile_path(:curriculum_id => @curriculum, :id => @profile)
+    else
+      render :action => "edit"
+    end
+  end
 
 end

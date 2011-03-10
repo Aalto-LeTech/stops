@@ -1,7 +1,7 @@
 <% @skill.prereq_to.each do |skill| %>
-  <% if skill.scoped_course %>
+  <% if skill.skillable_type == 'ScopedCourse' %>
     <p class="course">
-      <%= link_to h(skill.scoped_course.code) + ' ' + h(skill.scoped_course.name(I18n.locale)), course_url(:id => skill.scoped_course) %>:
+      <%= link_to h(skill.skillable.code) + ' ' + h(skill.skillable.name(I18n.locale)), course_url(:id => skill.skillable) %>:
       <%= skill.description(I18n.locale) %>
     </p>
   <% else %>

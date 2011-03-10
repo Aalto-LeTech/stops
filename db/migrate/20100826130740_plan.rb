@@ -13,16 +13,16 @@ class Plan < ActiveRecord::Migration
     add_index(:user_courses, :user_id)
     
     # Profiles that user has selected
-    create_table :user_profiles, :id => false do |t|
+    create_table :user_competences, :id => false do |t|
       t.references :user,    :null => false
-      t.references :profile, :null => false
+      t.references :competence, :null => false
     end
-    add_index(:user_profiles, :user_id)
+    add_index(:user_competences, :user_id)
     
   end
 
   def self.down
-    drop_table :user_profiles
+    drop_table :user_competences
     drop_table :user_courses
     remove_column :users, :curriculum_id
   end

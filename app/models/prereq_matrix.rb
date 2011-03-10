@@ -21,9 +21,10 @@ class PrereqMatrix < CsvMatrix
     process_relations
   end
   
-  # Reads course codes and skills in the left. If the course or skill does not exist in the database, creates it. Populates the @prereq_skills array.
+  # Reads course codes and skills in the left. If the course or skill does not exist in the database, creates it. Populates the @rows_skills array.
   def process_prereqs
-    @prereq_skills = Array.new(@row_count)
+    @rows_skills = Array.new(@row_count)
+    @rows_courses = Array.new(@row_count)
   
     Skill.transaction do
       row = 6
@@ -62,15 +63,19 @@ class PrereqMatrix < CsvMatrix
           level = @matrix[row][7] || '0'
           
           # Insert or update skill
-          skill = Skill.find(:first, :conditions => {:scoped_course_id => scoped_course.id, :position => skill_position})
+          #course_skill = CourseSkill.where(['scoped_course_id = ? AND position = ?', scoped_course.id, skill_position]).joins(:skill).first
+          skill = Skill.where(:skillable_type => 'ScopedCourse', :skillable_id => scoped_course.id, :position => skill_position).first
           
           unless skill
-            skill = Skill.create(:scoped_course_id => scoped_course.id, :credits => skill_credits.gsub(',','.').to_f, :level => level.to_i, :position => skill_position)
+            skill = Skill.create(:credits => skill_credits.gsub(',','.').to_f, :level => level.to_i, :position => skill_position, :skillable => scoped_course)
             SkillDescription.create(:skill_id => skill.id, :locale => @locale, :description => skill_description)
+            
+            #scoped_course.skills << skill
           end
           
           # Save for later use
-          @prereq_skills[row] = skill
+          @rows_skills[row] = skill
+          @rows_courses[row] = scoped_course
           
           skill_position += 1
           row += 1
@@ -81,9 +86,10 @@ class PrereqMatrix < CsvMatrix
   
 
   
-  # Reads course codes and skills in the top. Populates the @skills array.
+  # Reads course codes and skills in the top. Populates the @cols_skills array.
   def process_header
-    @skills = Array.new(@col_count)
+    @cols_skills = Array.new(@col_count)
+    @cols_courses = Array.new(@col_count)
   
     Skill.transaction do
       col = 8
@@ -120,7 +126,8 @@ class PrereqMatrix < CsvMatrix
           end
 
           # Load skill
-          skill = Skill.find(:first, :conditions => {:scoped_course_id => scoped_course.id, :position => skill_position})
+          skill = Skill.where(:skillable_type => 'ScopedCourse', :skillable_id => scoped_course.id, :position => skill_position).first
+          #course_skill = CourseSkill.where(['scoped_course_id = ? AND position = ?', scoped_course.id, skill_position]).joins(:skill).first
           
           unless skill
             puts "  SKILL #{skill_position} NOT FOUND"
@@ -132,7 +139,8 @@ class PrereqMatrix < CsvMatrix
           skill.prereqs.clear
           
           # Save for later use
-          @skills[col] = skill
+          @cols_skills[col] = skill
+          @cols_courses[col] = scoped_course
           
           skill_position += 1
           col += 1
@@ -143,34 +151,37 @@ class PrereqMatrix < CsvMatrix
   
   
   def process_relations
-    return unless @skills and @prereq_skills
+    return unless @cols_skills and @rows_skills
     
-    course_relations = Hash.new
+    handled_courses = Hash.new
     
     SkillPrereq.transaction do
       
       for row in 6...@row_count
         for col in 8...@col_count
-          next if @skills[col].nil?
+          next if @cols_skills[col].nil?
             
           relation_type = @@relation_types[(@matrix[row][col] || '').strip.upcase]
           
           if relation_type
             # Add skill prereq
-            SkillPrereq.create(:skill_id => @skills[col].id, :prereq_id => @prereq_skills[row].id, :requirement => relation_type)
+            SkillPrereq.create(:skill_id => @cols_skills[col].id, :prereq_id => @rows_skills[row].id, :requirement => relation_type)
             
             # Add course prereq
-            course_prereq = course_relations["#{@skills[col].scoped_course_id}#{@prereq_skills[row].scoped_course_id}"]
+            course_prereq = handled_courses["#{@cols_courses[col].id}-#{@rows_courses[row].id}"]
+            
             if course_prereq.nil? || (course_prereq == SUPPORTING_PREREQ && relation_type == STRICT_PREREQ)
+              # Does it exist?
+              p = CoursePrereq.where(:scoped_course_id => @cols_courses[col].id, :scoped_prereq_id => @rows_courses[row].id).first
+              
               # Insert if it does not exist
-              p = CoursePrereq.find(:first, :conditions => {:scoped_course_id => @skills[col].scoped_course_id, :scoped_prereq_id => @prereq_skills[row].scoped_course_id})
               if p.nil? || p.requirement == SUPPORTING_PREREQ && relation_type == STRICT_PREREQ  # FIXME: is this correct if we upload a changed matrix with reduced requirements
-                CoursePrereq.delete_all(["scoped_course_id = ? AND scoped_prereq_id = ?", @skills[col].scoped_course_id, @prereq_skills[row].scoped_course_id])
-                CoursePrereq.create(:scoped_course_id => @skills[col].scoped_course_id, :scoped_prereq_id => @prereq_skills[row].scoped_course_id, :requirement => relation_type)
+                CoursePrereq.delete_all(["scoped_course_id = ? AND scoped_prereq_id = ?", @cols_courses[col].id, @rows_courses[row].id])
+                CoursePrereq.create(:scoped_course_id => @cols_courses[col].id, :scoped_prereq_id => @rows_courses[row].id, :requirement => relation_type)
               end
               
               # Make a note that this relation has been added
-              course_relations["#{@skills[col].scoped_course_id}#{@prereq_skills[row].scoped_course_id}"] = relation_type
+              handled_courses["#{@cols_courses[col].id}-#{@rows_courses[row].id}"] = relation_type
             end
             
           end

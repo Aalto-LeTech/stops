@@ -43,23 +43,38 @@ class CreateTables < ActiveRecord::Migration
     create_table :course_instances do |t|
       t.references :abstract_course, :null => false
       t.references :period, :null => false
-      t.integer :length
+      t.integer :length                       # length in periods
     end
     add_index(:course_instances, [:abstract_course_id, :period_id], :unique => true)
     
     create_table :profiles do |t|
       t.references :curriculum, :null => false
-      t.integer :position, :default => 1
     end
-    add_index(:profiles, :curriculum_id)
     
     create_table :profile_descriptions do |t|
       t.references :profile, :null => false
       t.string :locale
       t.string :name, :null => false
+      t.string :description
     end
     add_index(:profile_descriptions, [:profile_id, :locale], :unique => true)
     
+    create_table :competences do |t|
+      t.references :curriculum, :null => false
+      t.integer :level, :default => 1
+      t.float :credits, :null => false, :default => 0
+    end
+    add_index(:competences, :curriculum_id)
+    
+    create_table :competence_descriptions do |t|
+      t.references :competence, :null => false
+      t.string :locale
+      t.string :name, :null => false
+      t.string :description
+    end
+    add_index(:competence_descriptions, [:competence_id, :locale], :unique => true)
+    
+    # Bloom levels
     create_table :skill_levels do |t|
       t.integer :level, :null => false
       t.string :locale
@@ -70,12 +85,12 @@ class CreateTables < ActiveRecord::Migration
     end
     
     create_table :skills do |t|
-      t.references :scoped_course
+      t.references :skillable, :polymorphic => true, :null => false
       t.integer :position
       t.integer :level
       t.float :credits
     end
-    add_index(:skills, :scoped_course_id)
+    #add_index(:skills, :scoped_course_id)
     
     create_table :skill_descriptions do |t|
       t.references :skill, :null => false
@@ -106,41 +121,43 @@ class CreateTables < ActiveRecord::Migration
     add_index(:skill_prereqs, :prereq_id)
     add_index(:skill_prereqs, [:prereq_id, :requirement])
     
-    # Which skills belong to which profile
-    create_table :profiles_skills, :id => false do |t|
-      t.references :profile, :null => false
-      t.references :skill, :null => false
-    end
-    add_index(:profiles_skills, :profile_id)
-
     # Which skills belong to which course
-    create_table :courses_skills, :id => false do |t|
-      t.references :scoped_course, :null => false
-      t.references :skill, :null => false
-    end
-    add_index(:courses_skills, :scoped_course_id)
+#     create_table :course_skills, :id => false do |t|
+#       t.references :scoped_course, :null => false
+#       t.references :skill, :null => false
+#     end
+#     add_index(:course_skills, :scoped_course_id)
+    
+    # Which skills belong to which competence
+#     create_table :competence_skills, :id => false do |t|
+#       t.references :competence, :null => false
+#       t.references :skill, :null => false
+#     end
+#     add_index(:competence_skills, :competence_id)
     
     # Courses that are direct prereqs of profiles
-    create_table :profile_courses do |t|
-      t.references :profile, :null => false
+    create_table :competence_courses, :id => false do |t|
+      t.references :competence, :null => false
       t.references :scoped_course, :null => false
       t.integer :requirement
     end
-    add_index(:profile_courses, :profile_id)
-    add_index(:profile_courses, [:profile_id, :requirement])
+    add_index(:competence_courses, :competence_id)
+    add_index(:competence_courses, [:competence_id, :requirement])
   end
 
   def self.down
-    drop_table :profile_courses
-    drop_table :courses_skills
-    drop_table :profiles_skills
+    drop_table :competence_courses
+    drop_table :competence_skills
+    drop_table :course_skills
     drop_table :skill_prereqs
     drop_table :course_prereqs
     drop_table :skill_descriptions
     drop_table :skills
     drop_table :skill_levels
-    drop_table :profile_descriptions
+    drop_table :competence_descriptions
+    drop_table :competences
     drop_table :profiles
+    drop_table :profile_descriptions
     drop_table :course_instances
     drop_table :scoped_courses
     drop_table :course_descriptions

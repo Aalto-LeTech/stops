@@ -1,5 +1,6 @@
 class CsvMatrix
-    # Searches for AbstractCourse with 'name'. Creates a new one if none is found.
+  
+  # Searches for AbstractCourse with 'name'. Creates a new one if none is found.
   # Returns an AbstactCourse
   def insert_or_update_abstract_course(code, name, locale, period)
     # Insert or update course

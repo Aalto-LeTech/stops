@@ -56,8 +56,6 @@ class ApplicationController < ActionController::Base
   def load_css
     @stylesheets = ['default']
     
-    logger.info "CONTROLLER: #{controller_name}"
-    
     if File.exists?(File.join(RAILS_ROOT, 'public', 'stylesheets', controller_name + '.css'))
       @stylesheets << controller_name
     end

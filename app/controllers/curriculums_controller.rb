@@ -135,4 +135,11 @@ class CurriculumsController < ApplicationController
       format.json { render :json => prereqs }
     end
   end
+  
+  def graph
+    @curriculum = Curriculum.find(params[:id])
+    
+    prereqs = CoursePrereq.joins(:course).where("scoped_courses.curriculum_id = ?", @curriculum).where(:requirement => STRICT_PREREQ)
+    render :action => 'graphviz', :locals => {:prereqs => prereqs}, :layout => false, :content_type => 'text/x-graphviz'
+  end
 end

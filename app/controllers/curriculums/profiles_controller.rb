@@ -3,8 +3,8 @@ class Curriculums::ProfilesController < CurriculumsController
   before_filter :load_curriculum
   
   
-  # GET /plans/1/profiles
-  # GET /plans/1//profiles.xml
+  # GET /curriculums/1/profiles
+  # GET /curriculums/1//profiles.xml
   def index
     @profiles = @curriculum.profiles
 
@@ -14,8 +14,8 @@ class Curriculums::ProfilesController < CurriculumsController
     end
   end
 
-  # GET /plans/1/profiles/1
-  # GET /plans/1/profiles/1.xml
+  # GET /curriculums/1/profiles/1
+  # GET /curriculums/1/profiles/1.xml
   def show
     @profile = Profile.find(params[:id])
     
@@ -23,6 +23,10 @@ class Curriculums::ProfilesController < CurriculumsController
       format.html # show.html.erb
       format.xml  { render :xml => @course }
     end
+  end
+
+  def new
+    
   end
   
 

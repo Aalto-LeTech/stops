@@ -1,6 +1,4 @@
 class Skill < ActiveRecord::Base
-  belongs_to :scoped_course #, :foreign_key => 'course_code', :primary_key => 'code'
-
   has_many :skill_descriptions, :dependent => :destroy
   
   has_many :skill_prereqs, :dependent => :destroy
@@ -10,6 +8,8 @@ class Skill < ActiveRecord::Base
   # Skills for which this is a prerequisite
   has_many :skill_prereq_to, :class_name => 'SkillPrereq', :foreign_key => :prereq_id
   has_many :prereq_to, :through => :skill_prereq_to, :source => :skill, :order => 'position', :conditions => "requirement = #{STRICT_PREREQ}"
+  
+  belongs_to :skillable, :polymorphic => true
   
   def description(locale)
     description = SkillDescription.where(:skill_id => self.id, :locale => locale.to_s).first
@@ -62,8 +62,6 @@ class Skill < ActiveRecord::Base
       skill.dfs(paths, path, path_lengths, target_skill_ids, course_ids)
       path.pop
     end
-    
-    
   end
   
 end

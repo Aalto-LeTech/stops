@@ -6,6 +6,7 @@ class Curriculum < ActiveRecord::Base
   validates_uniqueness_of :end_year
   
   has_many :profiles, :dependent => :destroy
+  has_many :competences                       # destroyed by profiles
   has_many :courses, :class_name => 'ScopedCourse', :dependent => :destroy, :order => 'code'
 
   # Returns a human-readable representation, e.g. "2010" or "2010-2011"

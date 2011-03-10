@@ -1,6 +1,6 @@
 <% @skill.prereqs.each do |skill| %>
   <p>
-    <%= skill.scoped_course.code + ' ' + skill.scoped_course.name(I18n.locale) %>:
+    <%= skill.skillable.code + ' ' + skill.skillable.name(I18n.locale) %>:
     <%= skill.description(I18n.locale) %><br />
   </p>
 <% end %>

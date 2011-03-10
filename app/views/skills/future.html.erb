@@ -1,7 +1,7 @@
 <% @skill.skill_prereq_to.each do |skill_prereq| %>
-  <% if skill_prereq.skill.scoped_course %>
+  <% if skill_prereq.skill.skillable_type == 'ScopedCourse' %>
     <div class="skill <%= skill_prereq.requirement == STRICT_PREREQ ? 'strict' : 'supporting' %>">
-      <%= skill_prereq.skill.scoped_course.code + ' ' + skill_prereq.skill.scoped_course.name(I18n.locale) %>:
+      <%= skill_prereq.skill.skillable.code + ' ' + skill_prereq.skill.skillable.name(I18n.locale) %>:
       <%= skill_prereq.skill.description(I18n.locale) %><br />
     </div>
   <% end %>

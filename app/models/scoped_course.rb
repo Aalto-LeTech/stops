@@ -1,8 +1,11 @@
+# Course as a part of a curriculum, e.g. Programming 101 as described in the 2011 study guide
 class ScopedCourse < ActiveRecord::Base
 
   belongs_to :abstract_course
   
-  has_many :skills, :order => 'position', :dependent => :destroy #, :foreign_key => 'course_code', :primary_key => 'code'
+  #has_many :skills, :order => 'position', :dependent => :destroy #, :foreign_key => 'course_code', :primary_key => 'code'
+  #has_many :course_skills, :dependent => :destroy
+  has_many :skills, :as => :skillable, :order => 'position', :dependent => :destroy #, :foreign_key => 'course_code', :primary_key => 'code'
   
   # Prerequisite courses of this course
   has_many :course_prereqs, :dependent => :destroy

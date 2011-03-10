@@ -1,5 +1,8 @@
+# Teaching period
 class Period < ActiveRecord::Base
 
+  has_many :period_descriptions, :dependent => :destroy
+  
   has_many :course_instances
   
   def name(locale)
@@ -14,7 +17,7 @@ class Period < ActiveRecord::Base
   
   # Returns the period that was active at the given date
   def self.find_by_date(date)
-    self.where(["begins_at < ? AND ends_at > ?", date, date]).first
+    self.where(["begins_at <= ? AND ends_at > ?", date, date]).first
   end
   
 

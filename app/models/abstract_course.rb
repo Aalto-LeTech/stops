@@ -1,8 +1,9 @@
+# Course that is not scoped to a specific curriculum or period.
 class AbstractCourse < ActiveRecord::Base
 
   has_many :course_descriptions, :dependent => :destroy
   has_many :scoped_courses, :dependent => :destroy      # Courses in curriculums. e.g. "Course X-0.1010 according to the 2005 study guide"
-  has_many :course_instances, :dependent => :destroy
+  has_many :course_instances, :dependent => :destroy    # Course implementations, e.g. "Course X-0.1010 (spring 2011)"
   
   # Users who have chosen this course
   has_many :user_courses, :dependent => :destroy
@@ -20,9 +21,9 @@ class AbstractCourse < ActiveRecord::Base
   end
   
   # Returns CourseInstances
-  #def instances
-    
-  #end
+  def instances
+    raise NotImplementedError, "AbstractCourse::instances not implemented"
+  end
   
   # Returns the scoped course associated with this abstract course and the given curriculum
   # curriculum: Curriculum object or id

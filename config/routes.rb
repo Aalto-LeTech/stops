@@ -23,9 +23,10 @@ ActionController::Routing::Routes.draw do |map|
       member do
         get 'cycles'
         get 'prereqs'
+        get 'graph'
       end
       
-      resources :profiles, :controller => 'curriculums/profiles', :only => [:show] do
+      resources :profiles, :controller => 'curriculums/profiles' do
         resources :courses, :controller => 'curriculums/courses', :only => [:show]  # ScopedCourses, courses that belong to the profile
       end
       

@@ -5,10 +5,10 @@
         <table class="path">
           <tr>
             <% path.each do |skill| %>
-              <% if skill.scoped_course %>
+              <% if skill.skillable_type == 'ScopedCourse' %>
                 <td>
                   <div class="skill">
-                    <%= skill.scoped_course.code + ' ' + skill.scoped_course.name(I18n.locale) %>:
+                    <%= skill.skillable.code + ' ' + skill.skillable.name(I18n.locale) %>:
                     <%= skill.description(I18n.locale) %>
                   </div>
                 </td>

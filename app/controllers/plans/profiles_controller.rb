@@ -13,7 +13,7 @@ class Plans::ProfilesController < PlansController
   # GET /plans/1//profiles.xml
   def index
     @profiles = @curriculum.profiles
-    @selected_profiles = @user.profiles
+    @selected_profiles = @user.competences
 
     respond_to do |format|
       format.html # index.html.erb

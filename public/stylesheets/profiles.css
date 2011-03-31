@@ -25,3 +25,60 @@
   background: #f0f0f0 !important;
   color: gray !important;
 }
+
+
+table.competence-selector {
+
+}
+
+table.competence-selector td {
+  padding: .5em .5em;
+}
+
+table.competence-selector tr.profile {
+  background: #ddf;
+}
+
+table.competence-selector td.profile-name{
+  font-weight: bold;
+  border-left: 1px solid gray;
+  border-top: 1px solid gray;
+}
+
+table.competence-selector td.profile-description {
+  font-size: small;
+  border-top: 1px solid gray;
+}
+
+table.competence-selector td.profile-credits {
+  border-right: 1px solid gray;
+  border-top: 1px solid gray;
+}
+
+table.competence-selector tr.competence {
+  border-left: 1px solid gray;
+  border-right: 1px solid gray;
+  background: #eef;
+}
+
+table.competence-selector td.competence-name {
+  font-weight: bold;
+  text-align: right;
+  border-left: 1px solid gray;
+  border-top: 1px solid #ccc;
+}
+
+table.competence-selector td.competence-description {
+  font-size: small;
+  border-top: 1px solid #ccc;
+}
+
+table.competence-selector td.competence-credits {
+  border-right: 1px solid gray;
+  border-top: 1px solid #ccc;
+}
+
+table.competence-selector tr.spacer td {
+  border-top: 1px solid gray;
+  padding: .5em;
+}

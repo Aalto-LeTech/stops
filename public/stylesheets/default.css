@@ -8,18 +8,13 @@ body {
   padding: 0px;
 }
 
-.error {
-  color: #ff0000;
-}
-
-.hint {
-  color: #a0a0a0;
-  font-size: small;
-  font-style: italic;
-}
-
 img {
   border: 0px;
+}
+
+table {
+  border-spacing: 0px;
+  border-collapse: collapse;
 }
 
 ul {
@@ -30,6 +25,16 @@ ul {
 li {
   margin: 0em 0em 0em 0em;
   padding: 0px;
+}
+
+.error {
+  color: #ff0000;
+}
+
+.hint {
+  color: #a0a0a0;
+  font-size: small;
+  font-style: italic;
 }
 
 .selected {
@@ -410,8 +415,6 @@ table.course-path td.current {
  *********************/
 
 table.skill-matrix-editor {
-  border-spacing: 0px;
-  border-collapse: collapse;
 }
 
 table.skill-matrix-editor td {

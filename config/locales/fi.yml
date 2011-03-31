@@ -21,6 +21,7 @@ fi:
   
   example_schedule: "Mallilukujärjestys"
   
+  cr: "op"
   Ok: "OK"
   Upload: "Tallenna"
   Edit: "Muokkaa"

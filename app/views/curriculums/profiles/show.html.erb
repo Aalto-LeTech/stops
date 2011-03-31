@@ -18,15 +18,13 @@
 <% end %>
 
 
+<!-- Profile description -->
 <p><%=h @profile.description(I18n.locale) %></p>
 
+<!-- Competences -->
 
 <% @profile.competences.each do |competence| %>
   <h2><%= link_to competence.name(I18n.locale), [@curriculum, competence] %></h2>
   
-  <ul>
-    <% competence.courses.each do |course| %>
-      <li><%= course.name(I18n.locale) %></li>
-    <% end %>
-  </ul>
+  <p><%= competence.description(I18n.locale) %></p>
 <% end %>

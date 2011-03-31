@@ -2,7 +2,7 @@
 # See http://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 en:
-  program_name: "Study planning tool"
+  program_name: "O4"
   navi_plan: "My study plan"
   navi_curriculums: "Curriculums"
   navi_profiles: "Profiilit"

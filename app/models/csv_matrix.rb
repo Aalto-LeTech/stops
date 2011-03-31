@@ -81,4 +81,64 @@ class CsvMatrix
     return period_end - period_begin + 1
   end
 
+    # Reads course codes and skills in the left. If the course or skill does not exist in the database, creates it. Populates the @rows_skills array.
+  def process_prereqs
+    @rows_skills = Array.new(@row_count)
+    @rows_courses = Array.new(@row_count)
+  
+    Skill.transaction do
+      row = 6
+      while row < @row_count
+        code = @matrix[row][0]  # Course code in the left column
+        
+        # Skip blank rows
+        if code.blank?
+          row += 1
+          next
+        end
+        
+        # Parse course attributes
+        code.strip!
+        name = (@matrix[row][1] || '').strip
+        period = (@matrix[row][2] || '').strip
+        credits = (@matrix[row][3] || '').strip
+        
+        # Insert or update course
+        abstract_course = insert_or_update_abstract_course(code, name, @locale, period)
+        scoped_course = insert_or_update_scoped_course(abstract_course, @curriculum, credits)
+        
+        # Read skills until we encounter the next course
+        skill_position = 0
+        begin
+          skill_description = @matrix[row][5]
+          
+          # Skip blank rows
+          if skill_description.blank?
+            row += 1
+            next
+          end
+
+          # Parse attributes
+          skill_credits = @matrix[row][6] || '0'
+          level = @matrix[row][7] || '0'
+          
+          # Insert or update skill
+          skill = Skill.where(:skillable_type => 'ScopedCourse', :skillable_id => scoped_course.id, :position => skill_position).first
+          
+          unless skill
+            skill = Skill.create(:credits => skill_credits.gsub(',','.').to_f, :level => level.to_i, :position => skill_position, :skillable => scoped_course)
+            SkillDescription.create(:skill_id => skill.id, :locale => @locale, :description => skill_description)
+          end
+          
+          # Save for later use
+          @rows_skills[row] = skill
+          @rows_courses[row] = scoped_course
+          
+          skill_position += 1
+          row += 1
+        end while row < @row_count and @matrix[row][0].blank?
+      end 
+    end # transaction
+  end
+  
 end

@@ -56,7 +56,7 @@ class CreateTables < ActiveRecord::Migration
       t.references :profile, :null => false
       t.string :locale
       t.string :name, :null => false
-      t.string :description
+      t.text :description
     end
     add_index(:profile_descriptions, [:profile_id, :locale], :unique => true)
     
@@ -71,7 +71,7 @@ class CreateTables < ActiveRecord::Migration
       t.references :competence, :null => false
       t.string :locale
       t.string :name, :null => false
-      t.string :description
+      t.text :description
     end
     add_index(:competence_descriptions, [:competence_id, :locale], :unique => true)
     

@@ -30,6 +30,7 @@ class Curriculums::ProfilesController < CurriculumsController
     
     authorize! :edit, @profile
     
+    @profile.profile_descriptions << ProfileDescription.new(:locale => I18n.locale) if @profile.profile_descriptions.empty?
   end
 
   def new

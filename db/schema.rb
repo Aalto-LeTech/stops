@@ -31,7 +31,7 @@ ActiveRecord::Schema.define(:version => 20100826130740) do
     t.integer "competence_id", :null => false
     t.string  "locale"
     t.string  "name",          :null => false
-    t.string  "description"
+    t.text    "description"
   end
 
   add_index "competence_descriptions", ["competence_id", "locale"], :name => "index_competence_descriptions_on_competence_id_and_locale", :unique => true

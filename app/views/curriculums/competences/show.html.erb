@@ -1,0 +1,29 @@
+<!-- curriculums/competences/show -->
+
+<h1><%= @competence.profile.name(I18n.locale) %> - <%= @competence.name(I18n.locale) %></h1>
+
+<% if can? :update, @competence %>
+  <div class="admin-tools">
+    <ul>
+      <li><%= link_to t(:competence_edit_link), edit_curriculum_competence_path(:curriculum_id => @curriculum.id, :id => @competence.id) %></li>
+    </ul>
+  </div>
+<% end %>
+
+<p><%= @competence.description(I18n.locale) %></p>
+
+
+<h2><%=t :competence_skills_heading %></h2>
+<ul id="skills">
+  <% @competence.skills.each do |skill| %>
+    <li><%= skill.description(I18n.locale) %></li>
+  <% end %>
+</ul>
+
+
+<h2><%=t :competence_courses_heading %></h2>
+<ul>
+  <% @competence.courses.each do |course| %>
+    <li><%= course.name(I18n.locale) %></li>
+  <% end %>
+</ul>

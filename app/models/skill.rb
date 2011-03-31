@@ -6,7 +6,7 @@ class Skill < ActiveRecord::Base
   has_many :strict_prereqs, :through => :skill_prereqs, :source => :prereq, :order => 'position', :conditions => "requirement = #{STRICT_PREREQ}"
   
   # Skills for which this is a prerequisite
-  has_many :skill_prereq_to, :class_name => 'SkillPrereq', :foreign_key => :prereq_id
+  has_many :skill_prereq_to, :class_name => 'SkillPrereq', :foreign_key => :prereq_id, :dependent => :destroy
   has_many :prereq_to, :through => :skill_prereq_to, :source => :skill, :order => 'position', :conditions => "requirement = #{STRICT_PREREQ}"
   
   belongs_to :skillable, :polymorphic => true

@@ -20,6 +20,7 @@ class ScopedCourse < ActiveRecord::Base
   has_many :prereq_to, :through => :course_prereq_to, :source => :course, :order => 'code', :conditions => "requirement = #{STRICT_PREREQ}"
   
   
+  
   def name(locale)
     description = CourseDescription.where(:abstract_course_id => self.abstract_course_id, :locale => locale.to_s).first
     description ? description.name : ''

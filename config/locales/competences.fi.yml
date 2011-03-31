@@ -1,0 +1,11 @@
+fi: 
+  competence_create_link: "Create new competence level"
+  competence_level_label: "Taso"
+  competence_name_label: "Nimi"
+  competence_description_label: "Kuvaus"
+  
+  # Show
+  competence_skills_heading: "Tuottaa valmiudet"
+  competence_courses_heading: "Kurssit"
+  competence_edit_link: "Muokkaa osaamiskokonaisuutta"
+  

@@ -1,0 +1,56 @@
+<h1>Editing competence</h1>
+
+<h2>Outcomes</h2>
+
+<ul id="skills">
+  <% @competence.skills.each do |skill| %>
+    <li id="skill-<%= skill.id %>"><%= skill.description(I18n.locale) %> <%= link_to t(:Edit), edit_skill_path(skill) %> <%= link_to t(:Delete), skill, :method => :delete %></li>
+  <% end %>
+</ul>
+
+<p><%= link_to 'Create new outcome', new_skill_path(:competence_id => @competence.id), :remote => true %></p>
+
+
+<h2>Matrix</h2>
+
+<%= form_tag matrix_skill_path do %>
+  <table class="skill-matrix-editor">
+    <thead>
+      <tr>
+        <td></td>
+        <% @competence.skills.each do |skill| %>
+          <td><%= skill.description(I18n.locale) %></td>
+        <% end %>
+      </tr>
+    </thead>
+
+    <% @courses.each do |course| %>
+      <tr class="course">
+        <td><%= course.code %> <%= course.name(I18n.locale) %></td>
+        <td colspan="<%= @n_skills %>"></td>
+      </tr>
+      
+      <% course.skills.each do |prereq| %>
+        <tr>
+          <td class="skill"><%= prereq.description(I18n.locale) %></td>
+          <%
+          @competence.skills.each do |skill|
+            requirement = nil
+            if @prereqs[prereq.id] && @prereqs[prereq.id][skill.id]
+              requirement = @prereqs[prereq.id][skill.id].requirement
+              logger.debug "@prereqs[#{prereq.id}][#{skill.id}] = #{requirement}"
+            end
+            %>
+            <td>
+              <%= radio_button_tag "prereqs[#{prereq.id}][#{skill.id}]", 0 %>
+              <%= radio_button_tag "prereqs[#{prereq.id}][#{skill.id}]", 1, requirement == SUPPORTING_PREREQ %>
+              <%= radio_button_tag "prereqs[#{prereq.id}][#{skill.id}]", 2, requirement == STRICT_PREREQ %>
+            </td>
+          <% end %>
+        </tr>
+      <% end %>
+    <% end %>
+  </table>
+  
+  <p><%= submit_tag t(:Save) %></p>
+<% end %>

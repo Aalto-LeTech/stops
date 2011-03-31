@@ -1,0 +1,12 @@
+<%= form_for @skill, :remote => true do |f| %>
+  <%= f.hidden_field :skillable_id %>
+  <%= f.hidden_field :skillable_type %>
+  <li>
+    <%= f.fields_for :skill_descriptions do |cf| %>
+      <%= cf.hidden_field :locale %>
+      <%= cf.text_field :description %>
+    <% end %>
+    
+    <%= f.submit t(:Save) %>
+  </li>
+<% end %>

@@ -26,6 +26,11 @@ class Competence < ActiveRecord::Base
     description ? description.name : ''
   end
   
+  def description(locale)
+    description = CompetenceDescription.where(:competence_id => self.id, :locale => locale.to_s).first
+    description ? description.description : ''
+  end
+  
   
   # returns an array of arrays of courses
   def semesters

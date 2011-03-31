@@ -1,0 +1,11 @@
+en:
+  competence_create_link: "Luo uusi osaamiskokonaisuus"
+  competence_level_label: "Level"
+  competence_name_label: "Name"
+  competence_description_label: "Desription"
+  
+  # Show
+  competence_skills_heading: "Outcomes"
+  competence_courses_heading: "Courses"
+  competence_edit_link: "Edit competence"
+  

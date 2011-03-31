@@ -23,7 +23,9 @@ fi:
   
   Ok: "OK"
   Upload: "Tallenna"
+  Edit: "Muokkaa"
   Save: "Tallenna"
+  Delete: "Poista"
   Select: "Valitse"
   Cancel: "Peruuta"
   Back: "Takaisin"

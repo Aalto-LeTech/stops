@@ -19,6 +19,7 @@ ActionController::Routing::Routes.draw do |map|
         get 'prereqs'
         get 'future'
         get 'profilepath'
+        post 'matrix'
       end
     end
     

@@ -403,3 +403,37 @@ table.course-path td.current {
   font-size: larger;
   font-weight: bold;
 }
+
+
+/*********************
+  Skill matrix editor
+ *********************/
+
+table.skill-matrix-editor {
+  border-spacing: 0px;
+  border-collapse: collapse;
+}
+
+table.skill-matrix-editor td {
+  border: 1px solid #eee;
+  font-size: small;
+  text-align: center;
+}
+
+table.skill-matrix-editor thead {
+  background: #eee;
+}
+
+table.skill-matrix-editor thead td {
+  text-align: left;
+  vertical-align: bottom;
+}
+
+table.skill-matrix-editor tr.course {
+  background: #bbf;
+  text-align: left;
+}
+
+table.skill-matrix-editor td.skill {
+  text-align: left;
+}

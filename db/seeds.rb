@@ -43,6 +43,7 @@ puts('Creating users')
 user = User.new(:password => 'admin', :password_confirmation => 'admin', :name => 'Admin', :email => 'admin@example.com')
 #user.studentnumber = '12345'
 user.login = 'admin'
+user.studentnumber = 'admin'
 user.admin = true
 user.save
 

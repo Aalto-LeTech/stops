@@ -1,12 +1,17 @@
 class User < ActiveRecord::Base
-  # Include default devise modules. Others available are:
-  # :token_authenticatable, :confirmable, :lockable and :timeoutable
-  devise :database_authenticatable, :recoverable, :rememberable, :trackable, :validatable
+  acts_as_authentic do |c|
+     c.login_field = :studentnumber
+     #c.validate_password_field = false
+     c.validate_email_field = false
+   end
+  
+  validates_uniqueness_of :login, :allow_nil => true
+  validates_uniqueness_of :studentnumber, :allow_nil => true
   
   # prevents a user from submitting a crafted form that bypasses activation
   # anything else you want your user to change should be added here.
-  attr_accessible :login, :email, :name, :locale, :password, :password_confirmation, :remember_me
-
+  attr_accessible :name, :locale, :password, :password_confirmation, :remember_me, :curriculum_id
+  
   # Plan
   has_and_belongs_to_many :competences, :join_table => 'user_competences', :uniq => true
   
@@ -15,6 +20,9 @@ class User < ActiveRecord::Base
   
   belongs_to :curriculum
   
+  def admin?
+    self.admin
+  end
   
   def add_profile(profile)
     # Dont't do anything if user already has this profile

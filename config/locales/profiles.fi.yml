@@ -1,11 +1,14 @@
 fi: 
   # curriculum/show
   profile_create_link: "Luo uusi profiili"
+  profile_edit_link: "Muokkaa profiilia"
+  profile_cycles_link: "Tarkista syklit"
 
   # New / Edit
   profile_new_heading: "Luo profiili"
   profile_edit_heading: "Muokkaa profiilia"
   profile_created_flash: "Profiili luotu"
+  profile_competences_heading: "Osaamiskokonaisuudet"
 
   # Form
   profile_name: "Otsikko"

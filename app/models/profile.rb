@@ -18,4 +18,16 @@ class Profile < ActiveRecord::Base
     description ? description.description : ''
   end
 
+  
+  # Creates competence levels I-III
+  def create_default_competences
+    level_names = ["","I","II","III"]
+    
+    for i in 1..3 do
+      competence = Competence.create(:profile => self, :level => i)
+      CompetenceDescription.create(:competence => competence, :locale => 'fi', :name => level_names[i], :description => '')
+      CompetenceDescription.create(:competence => competence, :locale => 'en', :name => level_names[i], :description => '')
+    end
+  end
+  
 end

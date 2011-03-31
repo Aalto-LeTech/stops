@@ -1,11 +1,14 @@
 en:
   # curriculum/show
   profile_create_link: "Create new profile"
+  profile_edit_link: "Edit profile"
+  profile_cycles_link: "Check cycles"
   
   # New / Edit
   profile_new_heading: "Create profile"
   profile_edit_heading: "Edit profile"
   profile_created_flash: "Profile created"
+  profile_competences_heading: "Competence levels"
 
   # Form
   profile_name: "Heading"

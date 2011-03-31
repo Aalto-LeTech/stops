@@ -6,7 +6,7 @@
   <%=h @profile.name(I18n.locale) %>
   
   <!-- Add / Remove -->
-  <% if user_signed_in? %>
+  <% if can? :choose, Profile %>
     <% if @user.profiles.exists?(@profile) %>
       <%= link_to image_tag('remove.png', :alt => t(:profe_remove_from_plan)), delete_studyplan_profile_path(:id => @profile.id), :title => t(:profe_remove_from_plan) %>
     <% else %>

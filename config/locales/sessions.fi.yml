@@ -1,7 +1,11 @@
 fi: 
-  login_heading: "Kirjaudu sisään"
-  login_button: "Kirjaudu"
-  login_username: "Käyttäjätunnus"
-  login_password: "Salasana"
-  remember_me: "Muista minut"
-  logout_message: "Olet kirjautunut ulos."
+  sessions_login_heading: "Kirjaudu sisään"
+  
+  sessions_logout_message: "Olet kirjautunut ulos."
+  
+  sessions_traditional_hint: "Kirjaudu erillisellä tunnuksella (testitunnukset)"
+  sessions_shibboleth_hint: "Kirjaudu kotiyliopiston tunnuksella (WebLogin)"
+  sessions_studentnumber_label: "Opiskelijanumero"
+  sessions_password_label: "Salasana"
+  sessions_remember_label: "Muista minut"
+  sessions_login_button: "Kirjaudu"

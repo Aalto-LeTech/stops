@@ -5,8 +5,7 @@ class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
   protect_from_forgery # See ActionController::RequestForgeryProtection for details
 
-  # Scrub sensitive parameters from your log
-  filter_parameter_logging :password, :passwod_confirmation
+  helper_method :current_session, :current_user, :logged_in?
   
   before_filter :redirect_to_ssl
   before_filter :set_locale
@@ -90,19 +89,65 @@ class ApplicationController < ActionController::Base
 
   # If require_login GET-parameter is set, this filter redirect to login. After successful login, the user is redirected back to the original location.
   def require_login?
-    authenticate_user! if params[:require_login] && !user_signed_in?
+    authenticate_user if params[:require_login] && !current_session
   end
   
   # Handle authorization failure
   rescue_from CanCan::AccessDenied do |exception|
-    unless user_signed_in?
-      # If user is not authenticated, redirect to login
-      authenticate_user!
+    if request.xhr?
+      head :forbidden
+    elsif logged_in?
+      render :template => 'shared/forbidden', :status => 403
     else
-      # If user is authenticated, show "Forbidden"
-      render :template => "shared/forbidden", :status => 403
+      # If not logged in, redirect to login
+      respond_to do |format|
+        format.html do
+          store_location
+          redirect_to new_session_path
+        end
+        format.any do
+          request_http_basic_authentication 'Web Password'
+        end
+      end
     end
+    
+    return false
   end
-
+  
+  private
+  
+  def current_session
+    return @current_session if defined?(@current_session)
+    @current_session = UserSession.find
+  end
+  
+  def current_user
+    return @current_user if defined?(@current_user)
+    @current_user = current_session && current_session.record
+  end
+  
+  def logged_in?
+    !!current_user
+  end
+  
+  def authenticate_user
+    return if current_user
+    
+    store_location
+      
+    # TODO: use shibboleth
+    redirect_to new_session_url
+    
+    return false
+  end
+    
+  def store_location
+    session[:return_to] = request.fullpath
+  end
+  
+  def redirect_back_or_default(default)
+    redirect_to(session[:return_to] || default)
+    session[:return_to] = nil
+  end
   
 end

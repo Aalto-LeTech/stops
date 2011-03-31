@@ -8,6 +8,11 @@ class Ability
     # Authenticated users
     return unless user
     
+    # Any authenticated user
+    can :choose, Profile
+    can :choose, ScopedCourse
+    
+    # Admin
     if user.admin?
       can :update, :all
       can :create, :all

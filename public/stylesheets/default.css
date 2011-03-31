@@ -76,9 +76,28 @@ a.bigNavibutton:hover {
 }
 
 div.admin-tools {
+  float: right;
+  overflow: hidden;
+  width: 10em;
   border: 1px solid #e0e0e0;
   padding: 1em;
   background: #f0f0f0;
+}
+
+.admin-tools ul {
+  list-style: none;
+  margin: 0px;
+  padding: 0px;
+}
+
+.admin-tools li {
+  margin: 0px;
+  padding: 0px;
+}
+
+.admin-tools a {
+  color: black;
+  font-size: small;
 }
 
 div.progress {
@@ -191,9 +210,12 @@ h1:first-child, h2:first-child, h3:first-child {
 }
 
 .header .login {
-  float: right;
+  position: absolute;
   font-size: small;
   margin: .5em;
+  right: 0px;
+  top: 0px;
+  color: white;
 }
 
 .header .logo, .header .program-name {

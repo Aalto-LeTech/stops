@@ -114,6 +114,16 @@ ActiveRecord::Schema.define(:version => 20100826130740) do
   add_index "scoped_courses", ["abstract_course_id", "curriculum_id"], :name => "index_scoped_courses_on_abstract_course_id_and_curriculum_id", :unique => true
   add_index "scoped_courses", ["curriculum_id"], :name => "index_scoped_courses_on_curriculum_id"
 
+  create_table "sessions", :force => true do |t|
+    t.string   "session_id", :null => false
+    t.text     "data"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "sessions", ["session_id"], :name => "index_sessions_on_session_id"
+  add_index "sessions", ["updated_at"], :name => "index_sessions_on_updated_at"
+
   create_table "skill_descriptions", :force => true do |t|
     t.integer "skill_id",    :null => false
     t.string  "locale"
@@ -168,27 +178,27 @@ ActiveRecord::Schema.define(:version => 20100826130740) do
   add_index "user_courses", ["user_id"], :name => "index_user_courses_on_user_id"
 
   create_table "users", :force => true do |t|
-    t.string   "login",                                                  :null => false
+    t.string   "login"
     t.string   "studentnumber"
     t.string   "name"
-    t.string   "email",                               :default => "",    :null => false
-    t.string   "encrypted_password",   :limit => 128, :default => "",    :null => false
-    t.string   "password_salt",                       :default => "",    :null => false
-    t.string   "reset_password_token"
-    t.string   "remember_token"
-    t.datetime "remember_created_at"
-    t.integer  "sign_in_count",                       :default => 0
-    t.datetime "current_sign_in_at"
-    t.datetime "last_sign_in_at"
-    t.string   "current_sign_in_ip"
-    t.string   "last_sign_in_ip"
-    t.string   "locale",               :limit => 5,   :default => "fi"
-    t.boolean  "admin",                               :default => false
+    t.string   "email",             :limit => 320
+    t.string   "locale",            :limit => 5,   :default => "fi"
+    t.boolean  "admin",                            :default => false
+    t.string   "crypted_password",                                    :null => false
+    t.string   "password_salt",                                       :null => false
+    t.string   "persistence_token",                                   :null => false
+    t.integer  "login_count",                      :default => 0,     :null => false
+    t.datetime "last_request_at"
+    t.datetime "last_login_at"
+    t.datetime "current_login_at"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "curriculum_id"
   end
 
+  add_index "users", ["last_request_at"], :name => "index_users_on_last_request_at"
   add_index "users", ["login"], :name => "index_users_on_login", :unique => true
+  add_index "users", ["persistence_token"], :name => "index_users_on_persistence_token"
+  add_index "users", ["studentnumber"], :name => "index_users_on_studentnumber", :unique => true
 
 end

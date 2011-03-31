@@ -1,32 +1,36 @@
+<!-- curriculums/show -->
+
 <h1><%= @curriculum.name %></h1>
-
-  <h1>Profiles</h1>
-  
-  <ul>
-    <% @curriculum.profiles.each do |profile| %>
-      <li><%= link_to profile.name(I18n.locale), curriculum_profile_path(:curriculum_id => @curriculum, :id => profile) %></li>
-    <% end %>
-  </ul>
-  
-  <% if can? :create, Profile %>
-    <p><%= link_to t(:profile_create_link), new_curriculum_profile_path(@curriculum) %><p>
-  <% end %>
-  
-  
-  <h1>Courses</h1>
-  
-  <ul>
-    <% @curriculum.courses.each do |course| %>
-      <li><%= link_to course.code + ' ' + course.name(I18n.locale), curriculum_course_path(:curriculum_id => @curriculum, :id => course) %></li>
-    <% end %>
-  </ul>
-
 
 <% if can? :update, @curriculum %>
   <!--div>TODO: courses list</div-->
 
   <div class="admin-tools">
-    <%= link_to 'Edit', edit_curriculum_path(:id => @curriculum) %>
-    <%= link_to 'Cycles', cycles_curriculum_path(:id => @curriculum) %>
+    <ul>
+      <li><%= link_to t(:curriculum_edit_link), edit_curriculum_path(:id => @curriculum) %></li>
+      <li><%= link_to t(:curriculum_cycles_link), cycles_curriculum_path(:id => @curriculum) %></li>
+    </ul>
   </div>
 <% end %>
+
+
+<h1>Profiles</h1>
+
+<ul>
+  <% @curriculum.profiles.each do |profile| %>
+    <li><%= link_to profile.name(I18n.locale), curriculum_profile_path(:curriculum_id => @curriculum, :id => profile) %></li>
+  <% end %>
+</ul>
+
+<% if can? :create, Profile %>
+  <p><%= link_to t(:profile_create_link), new_curriculum_profile_path(@curriculum) %><p>
+<% end %>
+
+
+<h1>Courses</h1>
+
+<ul>
+  <% @curriculum.courses.each do |course| %>
+    <li><%= link_to course.code + ' ' + course.name(I18n.locale), curriculum_course_path(:curriculum_id => @curriculum, :id => course) %></li>
+  <% end %>
+</ul>

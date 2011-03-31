@@ -1,13 +1,17 @@
 <%= form_for [@profile, @competence], :remote => true do |f| %>
   <p>
-    <%= f.label :level %><br>
+    <%= f.label :level, t(:competence_level_label) %><br>
     <%= f.text_field :level %>
   </p>
   
   <%= f.fields_for :competence_descriptions do |cf| %>
     <%= cf.hidden_field :locale %>
     <p>
-      <%= cf.label :description %><br>
+      <%= cf.label :name, t(:competence_name_label) %><br>
+      <%= cf.text_field :name %>
+    </p>
+    <p>
+      <%= cf.label :description, t(:competence_description_label) %><br>
       <%= cf.text_area :description, :rows => 3 %>
     </p>
   <% end %>

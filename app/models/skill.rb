@@ -11,6 +11,8 @@ class Skill < ActiveRecord::Base
   
   belongs_to :skillable, :polymorphic => true
   
+  accepts_nested_attributes_for :skill_descriptions
+  
   def description(locale)
     description = SkillDescription.where(:skill_id => self.id, :locale => locale.to_s).first
     description ? description.description : ''

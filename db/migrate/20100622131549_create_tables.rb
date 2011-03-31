@@ -5,6 +5,7 @@ class CreateTables < ActiveRecord::Migration
       t.integer :end_year
       t.string :name
     end
+    add_column :users, :curriculum_id, :integer
     
     create_table :periods do |t|
       t.integer :number, :null => false     #1,2,3,4,1,2,3,4,..
@@ -85,7 +86,7 @@ class CreateTables < ActiveRecord::Migration
     end
     
     create_table :skills do |t|
-      t.references :skillable, :polymorphic => true, :null => false
+      t.references :skillable, :polymorphic => true, :null => false  # can belong to course or competence
       t.integer :position
       t.integer :level
       t.float :credits
@@ -120,20 +121,6 @@ class CreateTables < ActiveRecord::Migration
     add_index(:skill_prereqs, [:skill_id, :requirement])
     add_index(:skill_prereqs, :prereq_id)
     add_index(:skill_prereqs, [:prereq_id, :requirement])
-    
-    # Which skills belong to which course
-#     create_table :course_skills, :id => false do |t|
-#       t.references :scoped_course, :null => false
-#       t.references :skill, :null => false
-#     end
-#     add_index(:course_skills, :scoped_course_id)
-    
-    # Which skills belong to which competence
-#     create_table :competence_skills, :id => false do |t|
-#       t.references :competence, :null => false
-#       t.references :skill, :null => false
-#     end
-#     add_index(:competence_skills, :competence_id)
     
     # Courses that are direct prereqs of profiles
     create_table :competence_courses, :id => false do |t|

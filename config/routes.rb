@@ -1,8 +1,12 @@
 ActionController::Routing::Routes.draw do |map|
   
   scope ":locale" do
-    devise_for :users
-
+    resource :session do
+      get 'shibboleth'
+    end
+    match '/login' => 'sessions#new', :as => :login
+    match '/logout' => 'sessions#destroy', :as => :logout
+  
     match '/preferences' => 'users#edit'
     resources :users
     
@@ -10,7 +14,7 @@ ActionController::Routing::Routes.draw do |map|
     
     resources :course_instances, :only => [:index]
     
-    resources :skills, :only => [] do
+    resources :skills do
       member do 
         get 'prereqs'
         get 'future'
@@ -18,7 +22,7 @@ ActionController::Routing::Routes.draw do |map|
       end
     end
     
-    resources :profiles, :only => [] do
+    resources :profiles, :only => [:destroy] do
       resources :competences
     end
     
@@ -33,6 +37,8 @@ ActionController::Routing::Routes.draw do |map|
       resources :profiles, :controller => 'curriculums/profiles' do
         resources :courses, :controller => 'curriculums/courses', :only => [:show]  # ScopedCourses, courses that belong to the profile
       end
+      
+      resources :competences, :controller => 'curriculums/competences', :only => [:show, :edit, :update]
       
       resources :courses, :controller => 'curriculums/courses', :only => [:index, :show]  # ScopedCourses
     end

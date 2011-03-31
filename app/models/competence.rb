@@ -1,11 +1,12 @@
 # Competence, e.g. Steel structures, level 1
 class Competence < ActiveRecord::Base
 
+  belongs_to :profile
   has_many :competence_descriptions, :dependent => :destroy
   
   # Prerequisite skills
   #has_many :competence_skills, :dependent => :destroy
-  has_many :skills, :as => :skillable, :order => 'position', :dependent => :destroy #:through => :competence_skills, :source => :skill
+  has_many :skills, :as => :skillable, :order => 'position', :dependent => :destroy
   
   # Prerequisite courses
   has_many :competence_courses, :dependent => :destroy
@@ -21,7 +22,7 @@ class Competence < ActiveRecord::Base
   
   
   def name(locale)
-    description = CompetenceDescription.where(:profile_id => self.id, :locale => locale.to_s).first
+    description = CompetenceDescription.where(:competence_id => self.id, :locale => locale.to_s).first
     description ? description.name : ''
   end
   

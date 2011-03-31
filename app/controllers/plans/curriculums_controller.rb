@@ -1,6 +1,6 @@
 class Plans::CurriculumsController < PlansController
   
-  before_filter :authenticate_user!
+  before_filter :authenticate_user
   before_filter :load_plan
   before_filter :load_plan
   before_filter :load_curriculum, :only => :show

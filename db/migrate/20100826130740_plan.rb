@@ -1,6 +1,5 @@
 class Plan < ActiveRecord::Migration
   def self.up
-    add_column :users, :curriculum_id, :integer
     
     # Courses that user has selected
     create_table :user_courses do |t|

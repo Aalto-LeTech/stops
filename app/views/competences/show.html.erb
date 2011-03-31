@@ -1,5 +1,9 @@
-<p id="notice"><%= notice %></p>
+<!-- competences/show -->
 
+<h1><%= @competence.profile.name(I18n.locale) %> - <%= @competence.name(I18n.locale) %></h1>
 
-<%= link_to 'Edit', edit_competence_path(@competence) %> |
-<%= link_to 'Back', competences_path %>
+<ul>
+  <% @competence.courses.each do |course| %>
+    <li><%= course.name(I18n.locale) %></li>
+  <% end %>
+</ul>

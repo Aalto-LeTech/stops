@@ -1,14 +1,4 @@
 class CompetencesController < ApplicationController
-  # GET /competences
-  # GET /competences.xml
-  def index
-    @competences = Competence.all
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.xml  { render :xml => @competences }
-    end
-  end
 
   # GET /competences/1
   # GET /competences/1.xml
@@ -44,7 +34,9 @@ class CompetencesController < ApplicationController
   # POST /competences.xml
   def create
     @profile = Profile.find(params[:profile_id])
+    
     @competence = Competence.new(params[:competence])
+    @competence.profile = @profile
 
     respond_to do |format|
       if @competence.save

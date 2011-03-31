@@ -1,6 +1,6 @@
 # Internationalized description of competence
 class CompetenceDescription < ActiveRecord::Base
-  belongs_to :profile
+  belongs_to :competence
   
   
 end

@@ -4,11 +4,8 @@
   
   <!-- Login -->
   <div class="login">
-    <%
-    user = current_user
-    if user
-    %>
-      <%= link_to "#{user.name}", preferences_path %>
+    <% if logged_in? %>
+      <%= current_user.name %>
     <% end %>
   </div>
 
@@ -22,9 +19,9 @@
         <li><%= link_to 'EN', url_for(:locale => 'en') %></li>
       <% end %>
 
-      <% if user_signed_in? %>
+      <% if logged_in? %>
         <li><%= link_to 'My preferences', preferences_path %></li>
-        <li><%= link_to 'Logout', destroy_user_session_path %></li>
+        <li><%= link_to 'Logout', logout_path %></li>
       <% else %>
         <li><%= link_to 'Login', url_for(:require_login => true) %></li>
       <% end %>

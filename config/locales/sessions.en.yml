@@ -1,7 +1,11 @@
 en:
-  login_heading: "Log in"
-  login_button: "Log in"
-  login_username: "Username"
-  login_password: "Password"
-  remember_me: "Remember me"
-  logout_message: "You have been logged out."
+  sessions_login_heading: "Log in"
+  
+  sessions_logout_message: "You have been logged out."
+  
+  sessions_traditional_hint: "Login using a local account (test accounts)"
+  sessions_shibboleth_hint: "Log in using the authentication service of your home university (WebLogin)"
+  sessions_studentnumber_label: "Student number"
+  sessions_password_label: "Password"
+  sessions_remember_label: "Remember me"
+  sessions_login_button: "Login"

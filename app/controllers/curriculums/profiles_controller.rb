@@ -44,6 +44,8 @@ class Curriculums::ProfilesController < CurriculumsController
     authorize! :create, @profile
 
     if @profile.save
+      @profile.create_default_competences
+      
       redirect_to curriculum_path(@curriculum), :success => t(:profile_created_flash)
     else
       render :action => "new"

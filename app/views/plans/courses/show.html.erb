@@ -5,7 +5,7 @@
 <h1>
   <%=h @course.code %> <%=h @course.name(I18n.locale) %>
   <!-- Add / Remove -->
-  <% if user_signed_in? %>
+  <% if can? :choose, Course %>
     <% unless @user.courses.exists?(@course) %>
       <%= link_to image_tag('add.png', :alt => t(:course_add_to_plan)), studyplan_courses_path(:course_id => @course.id), :title => t(:profe_add_to_plan), :method => :post %>
     <% end %>

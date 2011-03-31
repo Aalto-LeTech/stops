@@ -1,7 +1,12 @@
 en:
+  # Index
   curriculums_heading: "Curriculums"
   curriculum_new: "Add curriculum"
   new_curriculum_heading: "Create new curriculum"
+  
+  # Show
+  curriculum_edit_link: "Edit curriculum"
+  curriculum_cycles_link: "Check cycles"
   
   curriculum_start_year: "First year"
   curriculum_end_year: "Last year"

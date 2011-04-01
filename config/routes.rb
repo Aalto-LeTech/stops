@@ -19,7 +19,6 @@ ActionController::Routing::Routes.draw do |map|
         get 'prereqs'
         get 'future'
         get 'profilepath'
-        post 'matrix'
       end
     end
     
@@ -39,7 +38,9 @@ ActionController::Routing::Routes.draw do |map|
         resources :courses, :controller => 'curriculums/courses', :only => [:show]  # ScopedCourses, courses that belong to the profile
       end
       
-      resources :competences, :controller => 'curriculums/competences', :only => [:show, :edit, :update]
+      resources :competences, :controller => 'curriculums/competences', :only => [:show, :edit, :update] do
+        post 'matrix'
+      end
       
       resources :courses, :controller => 'curriculums/courses', :only => [:index, :show]  # ScopedCourses
     end

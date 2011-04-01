@@ -91,5 +91,30 @@ class Competence < ActiveRecord::Base
   end
   
   
+  def refresh_prereq_courses
+    prereq_courses = {}  # bag of courses, [course_id]
+    
+    # Make a list of prereq courses
+    skills.each do |competence_skill|
+      competence_skill.prereqs.each do |prereq_skill|
+        if prereq_skill.skillable_type == Competence
+          # Competence depends on other competence
+          # TODO: raise Exception
+          logger.error "Competence depends on competence"
+          next
+        end
+        
+        prereq_course = prereq_skill.skillable
+        prereq_courses[prereq_course.id] = true
+      end
+    end
+    
+    logger.debug "PREREQ COURSES: #{prereq_courses.keys.inspect}"
+    
+    # TODO: Update
+    # self.competence_course_ids = prereq_courses.keys
+    
+    # TODO: check cycles
+  end
   
 end

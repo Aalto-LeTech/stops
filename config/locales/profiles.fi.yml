@@ -16,8 +16,6 @@ fi:
 
   # plan/profiles index
   profiles_heading: "Osaamisprofiilit"
-  selected_profiles_heading: "Valitut osaamisprofiilit"
-  available_profiles_heading: "Tarjolla olevat osaamisprofiilit"
 
   profile_skills: "Tarjoaa valmiudet"
   profile_prereqs: "Esitiedot"
@@ -28,9 +26,6 @@ fi:
   profile_already_selected: "%{name} on jo opintosuunnitelmassa."
   
   profile_instructions: "Valitse opintosuunnitelmaasi osaamisprofiileja, niin että X opintopistettä täyttyy."
-  
-  # Add profile to plan
-  profile_add_heading: "Lisää %{name} opintosuunnitelmaan"
   
   # Remove profile from study plan
   profile_delete_heading: "Profiili %{name} poistetaan opintosuunnitelmasta"

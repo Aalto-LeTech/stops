@@ -9,3 +9,11 @@ en:
   competence_courses_heading: "Courses"
   competence_edit_link: "Edit competence"
   
+  # Add to plan
+  competence_add_heading: "Add %{profile} %{competence} to study plan"
+  competence_add_to_plan: "Add to studyplan"
+  competence_remove_from_plan: "Remove %{profile} %{competence} from studyplan"
+  competence_courses_to_add: "The following courses will be added to your study plan:"
+  competence_courses_already_in: "The following courses already were in your study plan:"
+  competence_courses_to_remove: "The following courses will be removed from your study plan:"
+  

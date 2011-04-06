@@ -1,22 +1,6 @@
-<h1><%=t :selected_profiles_heading %></h1>
+<p><%=t :profile_instructions %></p>
 
-<% if @selected_profiles.empty? %>
-  <p><%=t :profile_instructions %></p>
-<% else %>
-  <table>
-  
-    <% @selected_profiles.each do |profile| %>
-      <tr>
-        <td><%= link_to h(profile.name(I18n.locale)), studyplan_profile_url(:id => profile.id) %></td>
-        <td><%= link_to image_tag('remove.png', :alt => t(:profe_remove_from_plan)), delete_studyplan_profile_path(:id => profile.id), :title => t(:profe_remove_from_plan) %></td>
-      </tr>
-    <% end %>
-  
-  </table>
-<% end %>
-
-
-<h1><%=t :available_profiles_heading %></h1>
+<h1><%=t :profiles_heading %></h1>
 
 <table class="competence-selector">
   <% @profiles.each do |profile| %>
@@ -28,7 +12,16 @@
   
     <% profile.competences.each do |competence| %>
       <tr class="competence">
-        <td class="competence-name"><%= competence.name(I18n.locale) %></td>
+        <td class="competence-name">
+          <% if can? :choose, competence %>
+            <% if @user.has_competence?(competence) %>
+              <%= link_to image_tag('remove.png', :alt => t(:profe_remove_from_plan)), delete_studyplan_competence_path(:id => competence.id), :title => t(:competence_remove_from_plan) %>
+            <% else %>
+              <%= link_to image_tag('add.png', :alt => t(:profe_add_to_plan)), new_studyplan_competence_path(:id => competence.id), :title => t(:competence_add_to_plan) %>
+            <% end %>
+          <% end %>
+          <%= competence.name(I18n.locale) %>
+        </td>
         <td class="competence-description"><%= competence.description(I18n.locale) %></td>
         <td class="competence-credits"><%= competence.credits %> <%=t :cr %></td>
       </tr>

@@ -440,3 +440,20 @@ table.skill-matrix-editor tr.course {
 table.skill-matrix-editor td.skill {
   text-align: left;
 }
+
+/*********************
+  Generic course list
+ *********************/
+
+table.course-list {
+  font-size: small;
+}
+
+table.course-list td {
+  padding-right: 1em;
+}
+
+table.course-list tr.total {
+  font-size: large;
+  font-weight: bold;
+}

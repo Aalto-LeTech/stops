@@ -21,7 +21,10 @@ class Plans::CoursesController < PlansController
   def show
     @course = ScopedCourse.find(params[:id])
     
-    @profile = Profile.find(params[:profile_id]) if params[:profile_id]
+    if params[:competence_id]
+      @competence = Competence.find(params[:competence_id])
+      @profile = @competence.profile
+    end
 
     respond_to do |format|
       format.html # show.html.erb

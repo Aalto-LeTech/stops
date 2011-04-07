@@ -43,8 +43,8 @@
         <% credits_counter = passed_counter = 0 %>
         <% competence.courses_cumulative.each do |course| %>
           <tr>
-            <td><%= link_to course.code, studyplan_profile_course_path(:profile_id => @profile, :id => course) %></td>
-            <td><%= link_to course.name(I18n.locale), studyplan_profile_course_path(:profile_id => @profile, :id => course) %></td>
+            <td><%= link_to course.code, studyplan_competence_course_path(:competence_id => competence.id, :id => course) %></td>
+            <td><%= link_to course.name(I18n.locale), studyplan_competence_course_path(:competence_id => competence.id, :id => course) %></td>
             <td><%= course.credits %></td>
             <% credits_counter += course.credits || 0 %>
             <% passed_counter += course.credits if @user.passed?(course) %><!-- TODO: make this more efficient -->

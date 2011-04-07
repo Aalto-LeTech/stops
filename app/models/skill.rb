@@ -18,21 +18,22 @@ class Skill < ActiveRecord::Base
     description ? description.description : ''
   end
 
-  # Calculates study paths from this skill to the skills of the given profile
-  # Returns a hash where keys are the skill_ids of the profile skills, and values are arrays of skills on the study paths.
-  def path_to_profile(profile)
-    target_skill_ids = profile.skill_ids
+  # Calculates study paths from this skill to the skills of the given competence
+  # Returns a hash where keys are the skill_ids of the competence skills, and values are arrays of skills on the study paths.
+  def path_to_competence(competence)
+    target_skill_ids = competence.skill_ids
     
+    # Make a hash of course_ids that belong to the competence
     course_ids = {}
-    #course_ids = profile.courses.each
-    profile.courses.each do |scoped_course|
+    competence.courses_recursive.each do |scoped_course|
       course_ids[scoped_course.id] = true
       puts scoped_course.id
     end
     
     paths = {}
+    visited = {}
     prereq_to.each do |skill|
-      skill.dfs(paths, [], {}, target_skill_ids, course_ids)
+      skill.dfs(paths, [], {}, target_skill_ids, course_ids, visited)
     end
     paths
   end
@@ -42,14 +43,16 @@ class Skill < ActiveRecord::Base
   # path_lengths: keeps track of path_lengths
   # target_skill_ids: when a skill that is included in the target_skill_ids is encountered, current path is added to paths
   # course_ids: DFS does not proceed to courses that are not included in the course_ids hash
-  def dfs(paths, path, path_lengths, target_skill_ids, course_ids)
+  def dfs(paths, path, path_lengths, target_skill_ids, course_ids, visited)
     # If this skill belongs to a course that does not belong to the profile, kill this branch
-    if self.scoped_course_id && !course_ids.has_key?(self.scoped_course_id)
-      puts "#{self.scoped_course_id} not included"
+    if (self.skillable_type == 'ScopedCourse' && !course_ids.has_key?(self.skillable_id)) || visited.has_key?(self.id)
+      puts "#{self.skillable.name('fi')} not included"
       return
     end
     
     # Visit node
+    visited[self.id] = true
+    
     if target_skill_ids.include?(self.id) && (!path_lengths[self.id] || path.size < path_lengths[self.id])
       #puts "Reached target: #{self.description('fi')}. Path size: #{path.size}"
       
@@ -61,7 +64,7 @@ class Skill < ActiveRecord::Base
     # Visit each neighbor
     prereq_to.each do |skill|
       path.push(self)
-      skill.dfs(paths, path, path_lengths, target_skill_ids, course_ids)
+      skill.dfs(paths, path, path_lengths, target_skill_ids, course_ids, visited)
       path.pop
     end
   end

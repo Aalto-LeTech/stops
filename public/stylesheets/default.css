@@ -231,7 +231,7 @@ h1:first-child, h2:first-child, h3:first-child {
 }
 
 .header .logo sup {
-  color: #FF7900;
+  /* color: #FF7900; */
 }
 
 

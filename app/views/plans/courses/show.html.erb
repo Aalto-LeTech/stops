@@ -14,9 +14,9 @@
   <% end %>
 </h1>
 
-<% if @profile %>
+<% if @competence %>
   <!-- Study paths from course skills to profile skills -->
-  <table id="course-profile-graph" class="course-profile-graph" data-profile-id="<%= @profile.id %>">
+  <table id="course-profile-graph" class="course-profile-graph" data-competence-id="<%= @competence.id %>">
     <thead>
       <td>Provides</td>
       <td>Needed by</td>
@@ -26,7 +26,7 @@
       <tr>
         <td class="course-skills-column">
           <% @course.skills.each do |skill| %>
-            <%= link_to skill.description(I18n.locale), profilepath_skill_path(:id => skill.id, :profile_id => @profile), { :class => 'skill', 'data-skill-id' => skill.id } %>
+            <%= link_to skill.description(I18n.locale), competencepath_skill_path(:id => skill.id, :competence_id => @competence.id), { :class => 'skill', 'data-skill-id' => skill.id } %>
           <% end %>
         </td>
         <td id="skill-future"></td>

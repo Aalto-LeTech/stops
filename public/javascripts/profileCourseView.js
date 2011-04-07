@@ -38,7 +38,7 @@ var profileCourseView = {
     
     var element = $(this);
     var skillId = element.data('skill-id');
-    var profileId = $('#course-profile-graph').data('profile-id');
+    var profileId = $('#course-profile-graph').data('competence-id');
     var path = element.attr('href');
     
     // Dim other skills

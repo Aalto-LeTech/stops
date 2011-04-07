@@ -18,7 +18,7 @@ ActionController::Routing::Routes.draw do |map|
       member do 
         get 'prereqs'
         get 'future'
-        get 'profilepath'
+        get 'competencepath'
       end
     end
     
@@ -47,11 +47,11 @@ ActionController::Routing::Routes.draw do |map|
 
     # My Plan
     resource :studyplan, :controller => 'plans', :only => [:show] do
-      resources :profiles, :controller => 'plans/profiles', :only => [:index, :show] do
-        resources :courses, :controller => 'plans/courses', :only => [:show]  # ScopedCourses, courses that belong to the profile
-      end
+      resources :profiles, :controller => 'plans/profiles', :only => [:index, :show]
       
       resources :competences, :controller => 'plans/competences', :only => [:new, :destroy, :create] do
+        resources :courses, :controller => 'plans/courses', :only => [:show]  # ScopedCourses, courses that belong to the profile
+        
         member do
           get :delete
         end

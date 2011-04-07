@@ -158,13 +158,13 @@ class SkillsController < ApplicationController
   end
 
   
-  def profilepath
+  def competencepath
     skill = Skill.find(params[:id])
-    profile = Profile.find(params[:profile_id])
+    competence = Competence.find(params[:competence_id])
     
-    @paths = skill.path_to_profile(profile)
+    @paths = skill.path_to_competence(competence)
     
-    render 'profilepath', :paths => @paths, :layout => nil
+    render 'competencepath', :paths => @paths, :layout => nil
   end
   
 end

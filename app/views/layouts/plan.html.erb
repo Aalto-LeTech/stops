@@ -19,15 +19,13 @@
       <ul>
         <% @curriculum.profiles.each do |profile| %>
           <li class="<%= profile == @profile ? 'selected' : '' %>"><%= link_to h(profile.name(I18n.locale)), studyplan_profile_path(:id => profile.id) %></li>
-          <!-- Courses belonging to the profile -->
           
-          <% if profile == @profile %>
+          <!-- Courses belonging to the profile -->
+          <% if @competence && profile == @profile %>
             <ul>
-              <!--
-              < profile.courses.each do |course| >
-                #<li class="<= course == @course ? 'selected' : '' %>"><= link_to h(course.name(I18n.locale)), studyplan_profile_course_path(:profile_id => profile.id, :id => course.id) %>
-              < end >
-              -->
+              <% @competence.courses_recursive.each do |course| %>
+                <li class="<%= course == @course ? 'selected' : '' %>"><%= link_to h(course.name(I18n.locale)), studyplan_competence_course_path(:competence_id => @competence.id, :id => course.id) %>
+              <% end %>
             </ul>
           <% end %>
         <% end %>

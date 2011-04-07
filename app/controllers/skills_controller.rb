@@ -122,11 +122,37 @@ class SkillsController < ApplicationController
   def prereqs
     @skill = Skill.find(params[:id])
     
+    @prereq_courses = {}
+    
+    @skill.skill_prereqs.each do |prereq_skill|
+      @prereq_courses[prereq_skill.prereq.skillable] = [] unless @prereq_courses[prereq_skill.prereq.skillable]
+      @prereq_courses[prereq_skill.prereq.skillable] << prereq_skill
+    end
+    
     render 'prereqs', :layout => nil
   end
   
   def future
     @skill = Skill.find(params[:id])
+    
+    @future_courses = {}
+    @future_competences = {}
+    
+    if params[:user_id]
+      user = User.find(params[:user_id])
+    else
+      user = nil
+    end
+    
+    @skill.skill_prereq_to.each do |future_skill|
+      if future_skill.skill.skillable_type == 'ScopedCourse' && (!user || user.courses.include?(future_skill.skill.skillable))
+        @future_courses[future_skill.skill.skillable] = [] unless @future_courses[future_skill.skill.skillable]
+        @future_courses[future_skill.skill.skillable] << future_skill
+      elsif future_skill.skill.skillable_type == 'Competence' && (!user || user.competences.include?(future_skill.skill.skillable))
+        @future_competences[future_skill.skill.skillable] = [] unless @future_competences[future_skill.skill.skillable_id]
+        @future_competences[future_skill.skill.skillable] << future_skill
+      end
+    end
     
     render 'future', :layout => nil
   end

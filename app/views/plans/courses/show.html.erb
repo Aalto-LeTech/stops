@@ -1,3 +1,5 @@
+<!-- plans/courses/show -->
+
 <% content_for :javascript do %>
   <%= javascript_include_tag 'profileCourseView' %>
 <% end %>
@@ -5,7 +7,7 @@
 <h1>
   <%=h @course.code %> <%=h @course.name(I18n.locale) %>
   <!-- Add / Remove -->
-  <% if can? :choose, Course %>
+  <% if can? :choose, ScopedCourse %>
     <% unless @user.courses.exists?(@course) %>
       <%= link_to image_tag('add.png', :alt => t(:course_add_to_plan)), studyplan_courses_path(:course_id => @course.id), :title => t(:profe_add_to_plan), :method => :post %>
     <% end %>
@@ -44,9 +46,12 @@
       <tr>
         <td id="skill-prereqs"></td>
         <td id="course-skills-column">
-          <% @course.skills.each do |skill| %>
-            <%= link_to skill.description(I18n.locale), skill, { :class => 'skill', 'data-skill-id' => skill.id } %>
-          <% end %>
+          <div class="course">
+            <%= @course.code + ' ' + @course.name(I18n.locale) %>
+            <% @course.skills.each do |skill| %>
+              <%= link_to skill.description(I18n.locale), skill, { :class => 'skill', 'data-skill-id' => skill.id, 'data-user-id' => @user.id } %>
+            <% end %>
+          </div>
         </td>
         <td id="skill-future"></td>
       </tr>
@@ -82,7 +87,7 @@
         <% else %>
           <ul>
             <% @course.prereq_to.each do |course| %>
-              <% if !@profile || @profile.courses.include?(course) %>
+              <% if @user.courses.include?(course) %>
                 <li>
                   <%= link_to h(course.code) + ' ' + h(course.name(I18n.locale)), {:id => course.id} %>
                 </li>

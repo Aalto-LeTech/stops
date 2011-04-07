@@ -3,6 +3,7 @@ var profileCourseView = {
   showSkillDependencies: function() {
     var element = $(this);
     var skillId = element.data('skill-id');
+    var userId = element.data('user-id');
     var path = element.attr('href');
     
     // Dim other skills
@@ -19,7 +20,13 @@ var profileCourseView = {
     });
     
     // Get postreqs
-    $.get(path + '/future', function(data) {
+    if (userId) {
+      var p = path + '/future?user_id=' + userId;
+    } else {
+      var p = path + '/future';
+    }
+    
+    $.get(p, function(data) {
       $('#skill-future').html(data);
     });
     

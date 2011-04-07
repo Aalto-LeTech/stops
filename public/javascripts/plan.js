@@ -95,8 +95,7 @@ var planView = {
   },
   
   save: function() {
-    // TODO: remove hard coded path
-    var path = '/fi/studyplan/schedule'; // '/' + locale + '/curriculums/' + curriculum_id + '/prereqs'
+    var path = $('#plan').data('schedule-path');
     
     var periods = {};
     $('.course').each(function(i, element){

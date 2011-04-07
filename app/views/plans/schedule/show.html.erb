@@ -18,7 +18,7 @@
 
   <p id="status"></p>
 
-  <div class="plan" id="plan" data-prereqs-path="<%= prereqs_curriculum_path(@curriculum.id) %>" data-instances-path="<%= course_instances_path %>">
+  <div class="plan" id="plan" data-prereqs-path="<%= prereqs_curriculum_path(@curriculum.id) %>" data-instances-path="<%= course_instances_path %>" schedule-path="<%= studyplan_schedule_path %>">
     <% @periods.each do |period| %>
       <div class="period period-<%= period.number %>" data-id="<%= period.id %>" id="period-<%= period.id %>">
         <div class="period-name"><%= period.name(I18n.locale) %></div>

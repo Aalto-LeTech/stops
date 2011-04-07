@@ -7,6 +7,12 @@
   font-size: small;
 }
 
+.course-skill-dependencies .course {
+  border: 1px solid #d0d0d0;
+  background: #e0e0ff;
+  -moz-border-radius: 10px;
+}
+
 .course-skill-dependencies .skill {
   display: block;
   border: 1px solid #d0d0d0;

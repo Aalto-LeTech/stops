@@ -34,13 +34,13 @@ class Plans::CompetencesController < PlansController
     
     # Dont't do anything if user has already selected this profile
     if @user.has_competence?(params[:competence_id])
-      redirect_to studyplan_profiles_path, :flash => {:error => t(:profile_already_selected, :name => @competence.name(I18n.locale))}
+      redirect_to studyplan_profile_url(:id => competence.profile.id), :flash => {:error => t(:profile_already_selected, :name => @competence.name(I18n.locale))}
     end
     
     # Add profile to study plan
     @user.add_competence(competence)
     
-    redirect_to studyplan_profiles_path
+    redirect_to studyplan_profile_url(:id => competence.profile.id)
   end
 
   def delete
@@ -62,7 +62,7 @@ class Plans::CompetencesController < PlansController
     @user.remove_competence(@competence)
 
     respond_to do |format|
-      format.html { redirect_to(studyplan_profiles_path) }
+      format.html { redirect_to studyplan_profile_url(:id => @competence.profile.id) }
       format.xml  { head :ok }
     end
   end

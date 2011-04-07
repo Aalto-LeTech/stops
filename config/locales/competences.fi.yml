@@ -8,6 +8,7 @@ fi:
   competence_skills_heading: "Tuottaa valmiudet"
   competence_courses_heading: "Kurssit"
   competence_edit_link: "Muokkaa osaamiskokonaisuutta"
+  competence_already_passed_credits: "Jo suoritettu"
   
   # Add to plan
   competence_add_heading: "Lisää %{profile} %{competence} opintosuunnitelmaan"
@@ -16,4 +17,4 @@ fi:
   competence_courses_to_add: "Seuraavat kurssit lisätään opintosuunnitelmaasi:"
   competence_courses_already_in: "Seuraavat kurssit olivat jo ennestään opintosuunnitelmassasi:"
   competence_courses_to_remove: "Seuraavat kurssit poistetaan opintosuunnitelmastasi:"
-    
+  

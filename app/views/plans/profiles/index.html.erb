@@ -1,4 +1,4 @@
-<p><%=t :profile_instructions %></p>
+<!--p><%=t :profile_instructions %></p-->
 
 <h1><%=t :profiles_heading %></h1>
 
@@ -12,15 +12,13 @@
   
     <% profile.competences.each do |competence| %>
       <tr class="competence">
+      
+      
         <td class="competence-name">
-          <% if can? :choose, competence %>
-            <% if @user.has_competence?(competence) %>
-              <%= link_to image_tag('remove.png', :alt => t(:profe_remove_from_plan)), delete_studyplan_competence_path(:id => competence.id), :title => t(:competence_remove_from_plan) %>
-            <% else %>
-              <%= link_to image_tag('add.png', :alt => t(:profe_add_to_plan)), new_studyplan_competence_path(:id => competence.id), :title => t(:competence_add_to_plan) %>
-            <% end %>
-          <% end %>
-          <%= competence.name(I18n.locale) %>
+          <span <%= @user.has_competence?(competence) ? "class='selected-competence-name'" : '' %>>
+            <%= competence.name(I18n.locale) %>
+          </span>
+        
         </td>
         <td class="competence-description"><%= competence.description(I18n.locale) %></td>
         <td class="competence-credits"><%= competence.credits %> <%=t :cr %></td>

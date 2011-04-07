@@ -82,3 +82,10 @@ table.competence-selector tr.spacer td {
   border-top: 1px solid gray;
   padding: .5em;
 }
+
+table.competence-selector span.selected-competence-name {
+  border: 3px solid #303090;
+  background: #c0c0ff;
+  -moz-border-radius: 20px;
+  padding: 2px 5px;
+}

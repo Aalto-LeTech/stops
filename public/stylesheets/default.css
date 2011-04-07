@@ -37,15 +37,6 @@ li {
   font-style: italic;
 }
 
-.selected {
-  font-weight: bold;
-}
-
-.selected a {
-  text-decoration: underline !important;
-  color: blue !important;
-}
-
 hr {
   height: 1px;
   border-top: 1px solid #c0c0c0;
@@ -270,6 +261,16 @@ h1:first-child, h2:first-child, h3:first-child {
   font-size: 100%;
 }
 
+.leftNavi .selected {
+  font-weight: bold;
+}
+
+.leftNavi .selected a {
+  text-decoration: underline !important;
+  color: blue !important;
+}
+
+
 /*************************
   Content
  *************************/
@@ -459,13 +460,20 @@ div.competence.selected {
   background: #e1e1ff;
 }
 
-div.competence h2 {
+div.competence .buttons {
   position: absolute;
-  font-size: 150%;
   width: 50px;
   text-align: right;
   top: 10px;
   left: 0px;
+}
+
+div.competence h2 {
+  font-size: 150%;
+}
+
+div.competence li {
+  margin-bottom: .5em;
 }
 
 div.competence .competence-skills, div.competence .competence-courses {
@@ -490,4 +498,8 @@ table.course-list td {
 table.course-list tr.total {
   font-size: large;
   font-weight: bold;
+}
+
+table.course-list tr.total td {
+  padding-top: 1em;
 }

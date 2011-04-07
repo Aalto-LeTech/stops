@@ -17,6 +17,7 @@ class User < ActiveRecord::Base
   
   has_many :user_courses, :dependent => :destroy
   has_many :courses, :through => :user_courses, :source => :scoped_course, :uniq => true
+  has_many :passed_courses, :through => :user_courses, :source => :scoped_course, :uniq => true, :conditions => "grade IS NOT NULL"
   
   has_many :user_manual_courses, :class_name => 'UserCourse', :dependent => :destroy, :conditions => {:manually_added => true}
   has_many :manual_courses, :through => :user_manual_courses, :source => :scoped_course, :uniq => true # manually added courses
@@ -25,6 +26,10 @@ class User < ActiveRecord::Base
   
   def admin?
     self.admin
+  end
+  
+  def passed?(course)
+    passed_courses.include?(course.id)
   end
   
   def add_competence(competence)

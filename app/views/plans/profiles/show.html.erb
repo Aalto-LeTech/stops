@@ -4,15 +4,6 @@
 
 <h1>
   <%= @profile.name(I18n.locale) %>
-  
-  <!-- Add / Remove -->
-  <% if can? :choose, Profile %>
-    <% if false %>
-      <%= link_to image_tag('remove.png', :alt => t(:profe_remove_from_plan)), delete_studyplan_profile_path(:id => @profile.id), :title => t(:profe_remove_from_plan) %>
-    <% else %>
-      <%= link_to image_tag('add.png', :alt => t(:profe_add_to_plan)), new_studyplan_profile_path(:id => @profile.id), :title => t(:profe_add_to_plan) %>
-    <% end %>
-  <% end %>
 </h1>
 
 <!-- Description -->
@@ -20,15 +11,27 @@
 
 <!-- Competences -->
 <% @profile.competences.each do |competence| %>
-  <div class="competence">
-    <h2><%= competence.name(I18n.locale) %></h2>
+  <div class="competence<%= @user.has_competence?(competence) ? ' selected' : '' %>">
+    <div class="buttons">
+      <h2><%= competence.name(I18n.locale) %></h2>
+      
+      <!-- Add / Remove -->
+      <% if can? :choose, competence %>
+        <% if @user.has_competence? competence %>
+          <%= link_to image_tag('remove.png', :alt => t(:profe_remove_from_plan)), delete_studyplan_competence_path(:id => competence.id), :title => t(:profe_remove_from_plan) %>
+        <% else %>
+          <%= link_to image_tag('add.png', :alt => t(:profe_add_to_plan)), new_studyplan_competence_path(:id => competence.id), :title => t(:profe_add_to_plan) %>
+        <% end %>
+      <% end %>
+    </div>
+    
     <p><%= competence.description(I18n.locale) %><p>
 
     <div class="competence-skills">
       <h3><%=t :profile_skills %></h3>
       <ul>
         <% competence.skills.each do |skill| %>
-          <li><%= link_to skill.description(I18n.locale), skill, { :class => 'skill', 'data-skill-id' => skill.id } %></li>
+          <li><%= skill.description(I18n.locale) %></li>
         <% end %>
       </ul>
     </div>
@@ -36,14 +39,29 @@
     <div class="competence-courses">
       <h3><%=t :profile_strict_prereqs %></h3>
       
-      <table>
+      <table class="course-list">
+        <% credits_counter = passed_counter = 0 %>
         <% competence.courses_recursive.each do |course| %>
           <tr>
             <td><%= link_to course.code, studyplan_profile_course_path(:profile_id => @profile, :id => course) %></td>
             <td><%= link_to course.name(I18n.locale), studyplan_profile_course_path(:profile_id => @profile, :id => course) %></td>
             <td><%= course.credits %></td>
+            <% credits_counter += course.credits || 0 %>
+            <% passed_counter += course.credits if @user.passed?(course) %><!-- TODO: make this more efficient -->
           </tr>
         <% end %>
+        <tfoot>
+          <tr class="total">
+            <td></td>
+            <td></td>
+            <td><%= credits_counter %> <%=t :cr %></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td><%=t :competence_already_passed_credits %></td>
+            <td><%= passed_counter %> <%=t :cr %></td>
+          </tr>
+        </tfoot>
       </table>
     </div>
     
@@ -57,22 +75,6 @@
 TODO: opintopisteet (yht.)<br />
 olet jo suorittanut n opintopistettä
 </p-->
-
-
-
-<% @profile.competences.each do |competence| %>
-  <table class="profile-prereq-matrix">
-    <tbody>
-      <!-- Prereq courses -->
-      <% competence.supporting_prereqs.each do |course| %>
-        <tr class="prereq-course-name">
-          <!-- Course name -->
-          <td class="prereq-course-name"><%= link_to h(course.code) + ' ' + h(course.name(I18n.locale)), studyplan_profile_course_path(:profile_id => @profile, :id => course) %></td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-<% end %>
 
 <!-- 
 <h2><%=t :example_schedule %></h2>

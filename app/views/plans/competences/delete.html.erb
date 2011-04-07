@@ -1,0 +1,28 @@
+<h1><%=t :competence_remove_from_plan, :profile => @competence.profile.name(I18n.locale), :competence => @competence.name(I18n.locale) %></h1>
+
+<p><%=t :competence_courses_to_remove %></p>
+
+<table class="course-list">
+  <% credits_counter = 0 %>
+  <% @courses.each do |course| %>
+    <tr>
+      <td><%= course.code %></td>
+      <td><%= course.name(I18n.locale) %></td>
+      <td><%= course.credits %></td>
+    </tr>
+    <% credits_counter += course.credits || 0 %>
+  <% end %>
+  <tfoot>
+    <tr class="total">
+      <td></td>
+      <td></td>
+      <td><%= credits_counter %> <%=t :cr %></td>
+    </tr>
+  </tfoot>
+</table>
+
+<%= form_tag studyplan_competence_path, :method => :delete do %>
+  <p><%= submit_tag t(:Ok) %></p>
+  
+  <p><%= link_to t(:Cancel), studyplan_profiles_path %></p>
+<% end %>

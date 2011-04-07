@@ -9,3 +9,11 @@ fi:
   competence_courses_heading: "Kurssit"
   competence_edit_link: "Muokkaa osaamiskokonaisuutta"
   
+  # Add to plan
+  competence_add_heading: "Lisää %{profile} %{competence} opintosuunnitelmaan"
+  competence_add_to_plan: "Lisää opintosuunnitelmaan"
+  competence_remove_from_plan: "Poista %{profile} %{competence} opintosuunnitelmasta"
+  competence_courses_to_add: "Seuraavat kurssit lisätään opintosuunnitelmaasi:"
+  competence_courses_already_in: "Seuraavat kurssit olivat jo ennestään opintosuunnitelmassasi:"
+  competence_courses_to_remove: "Seuraavat kurssit poistetaan opintosuunnitelmastasi:"
+    

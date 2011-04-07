@@ -10,6 +10,7 @@ class Ability
     
     # Any authenticated user
     can :choose, Profile
+    can :choose, Competence
     can :choose, ScopedCourse
     
     # Admin

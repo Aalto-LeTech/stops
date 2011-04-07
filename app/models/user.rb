@@ -18,20 +18,23 @@ class User < ActiveRecord::Base
   has_many :user_courses, :dependent => :destroy
   has_many :courses, :through => :user_courses, :source => :scoped_course, :uniq => true
   
+  has_many :user_manual_courses, :class_name => 'UserCourse', :dependent => :destroy, :conditions => {:manually_added => true}
+  has_many :manual_courses, :through => :user_manual_courses, :source => :scoped_course, :uniq => true # manually added courses
+  
   belongs_to :curriculum
   
   def admin?
     self.admin
   end
   
-  def add_profile(profile)
+  def add_competence(competence)
     # Dont't do anything if user already has this profile
-    return if profiles.exists?(profile.id)
+    return if has_competence?(competence)
     
-    profiles << profile
+    competences << competence
     
     # Calculate union of existing and new courses, without duplicates
-    courses_array = self.courses | profile.courses_recursive
+    courses_array = self.courses | competence.courses_recursive
     
     #profile.courses_recursive.each do |course|
       # courses_array << course.abstract_course unless courses_array.include? course.abstract_course
@@ -42,36 +45,44 @@ class User < ActiveRecord::Base
   end
   
   # Removes the given profile and courses that are needed by it. Courses that are still needed by the remaining profiles, are not removed. Also, manually added courses are not reomved.
-  def remove_profile(profile)
+  def remove_competence(competence)
     # Remove profile
-    profiles.delete(profile)
+    competences.delete(competence)
     
-    # Make a list of courses that are needed by remaining profiles
-    needed_courses = Set.new
-    profiles.each do |profile|
-      needed_courses.merge(profile.courses_recursive)
-      
-      puts "needed_courses.size: #{needed_courses.size}"
-    end
-    
-    # TODO: add manually added courses to the list
-    #needed_courses.merge(manual_courses)
-    
-    self.courses = needed_courses
+    self.courses = needed_courses(self.competences)
+  end
+  
+  def has_competence?(competence)
+    competences.include? competence
   end
   
 
   # Returns a list of courses than can be deleted if the given profile is dropped from the study plan
-  def deletable_courses(profile)
-    # TODO
-    # Make an array of profiles that user has after deleting the given profile
-    #remaining_profiles = profiles.clone
-    #remaining_profiles.delete(profile)
+  def deletable_courses(competence)
+    # Make an array of competences that user has after deleting the given competence
+    remaining_competences = competences.clone
+    remaining_competences.delete(competence)
+    puts "#{competences.size} / #{remaining_competences.size}"
     
     # Make a list of courses that are needed by the remaining profiles
+    needed_courses = needed_courses(remaining_competences)
     
-    []
+    courses.to_set - needed_courses
   end
+  
+  # Returns a set of courses that are needed by the given competences
+  # competences: a collection of competence objects
+  def needed_courses(competences)
+    # Make a list of courses that are needed by remaining profiles
+    needed_courses = Set.new
+    competences.each do |competence|
+      needed_courses.merge(competence.courses_recursive)
+    end
+    
+    # Add manually added courses to the list
+    needed_courses.merge(manual_courses)
+  end
+  
   
   # Returns the periods between the beginning of the user's studies and the expected graduation
   def relevant_periods

@@ -1,0 +1,53 @@
+<h1><%=t :competence_add_heading, :profile => @competence.profile.name(I18n.locale), :competence => @competence.name(I18n.locale) %></h1>
+
+<p><%=t :competence_courses_to_add %></p>
+
+<table class="course-list">
+  <% credits_counter = 0 %>
+  <% @new_courses.each do |course| %>
+    <tr>
+      <td><%= course.code %></td>
+      <td><%= course.name(I18n.locale) %></td>
+      <td><%= course.credits %></td>
+    </tr>
+    <% credits_counter += course.credits || 0 %>
+  <% end %>
+  <tfoot>
+    <tr class="total">
+      <td></td>
+      <td></td>
+      <td><%= credits_counter %> <%=t :cr %></td>
+    </tr>
+  </tfoot>
+</table>
+
+<% unless @existing_courses.empty? %>
+  <p><%=t :competence_courses_already_in %></p>
+
+  <table class="course-list">
+    <% @existing_courses.each do |course| %>
+      <% credits_counter = 0 %>    
+      <tr>
+        <td><%= course.code %></td>
+        <td><%= course.name(I18n.locale) %></td>
+        <td><%= course.credits %></td>
+      </tr>
+      <% credits_counter += course.credits || 0 %>
+    <% end %>
+    <tfoot>
+      <tr class="total">
+        <td></td>
+        <td></td>
+        <td><%= credits_counter %> <%=t :cr %></td>
+      </tr>
+    </tfoot>
+  </table>
+<% end %>
+
+<%= form_tag studyplan_competences_path do %>
+  <%= hidden_field_tag :competence_id, @competence.id %>
+
+  <p><%= submit_tag t(:Ok) %></p>
+  
+  <p><%= link_to t(:Cancel), studyplan_profiles_path %></p>
+<% end %>

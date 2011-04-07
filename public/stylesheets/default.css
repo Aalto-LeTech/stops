@@ -437,7 +437,6 @@ table.skill-matrix-editor td.skill {
   text-align: left;
 }
 
-
 /************
  Competences
  ************/
@@ -476,6 +475,19 @@ div.competence .competence-skills, div.competence .competence-courses {
   margin: 0px 10px 10px 0px;
 }
 
-div.competence li {
-  
+/*********************
+  Generic course list
+ *********************/
+
+table.course-list {
+  font-size: small;
+}
+
+table.course-list td {
+  padding-right: 1em;
+}
+
+table.course-list tr.total {
+  font-size: large;
+  font-weight: bold;
 }

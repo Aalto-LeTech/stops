@@ -1,16 +1,18 @@
 function Period(element) {
-  element.data('object', this);
-  this.element = element;
+  element.data('object', this);    // Add a reference from element to this
+  this.element = element;          // Add a reference from this to element
+  
+  this.credits_element = this.element.find('.period-credits');
   
   this.courses = {};               // Courses that have been put to this period
   this.courseInstances = {};       // Courses that are available on this period. courseCode => courseInstance
-  this.slots = [];
+  this.slots = [];                 // Slots for parallel courses
   
-  this.previousPeriod = false;
-  this.nextPeriod = false;
+  this.previousPeriod = false;     // Reference to previous sibling
+  this.nextPeriod = false;         // Reference to next sibling
   this.sequenceNumber;             // Sequence number to allow easy comparison of periods
   
-  this.id = element.data('id');
+  this.id = element.data('id');    // Database id of this period
   
   element.droppable({
     drop: Period.prototype.dropCourse
@@ -71,10 +73,20 @@ Period.prototype.getNextPeriod = function() {
   return this.nextPeriod;
 }
 
+/**
+ * Adds a course to the list of courses that are arranged on this period.
+ */
+Period.prototype.addCourseInstance = function(courseInstance) {
+  this.courseInstances[courseInstance.getCourse().getCode()] = courseInstance;
+}
+
+/**
+ * Puts a course on this period.
+ */
 Period.prototype.addCourse = function(course, slot) {
   this.courses[course.getCode()] = course;
   
-  var length = course.getLength();
+  var length = course.getLength();  // Length in periods
   
   // Check that the slot is free. Find a free slot if it's occupied.
   if (!slot || !this.isSlotFree(slot, length)) {
@@ -84,6 +96,20 @@ Period.prototype.addCourse = function(course, slot) {
   // Occupy slots
   this.occupySlot(slot, length, course);
   course.setSlot(slot);
+  
+  // Update credits
+  this.updateCredits();
+}
+
+Period.prototype.updateCredits = function() {
+  var credits = 0;
+  for (var array_index in this.courses) {
+    var course = this.courses[array_index];
+    
+    credits += course.getCredits();
+  }
+  
+  this.credits_element.html(credits);
 }
 
 Period.prototype.removeCourse = function(course) {
@@ -92,17 +118,20 @@ Period.prototype.removeCourse = function(course) {
   
   // Free slots
   this.freeSlot(course.getSlot(), course.getLength());
+  
+  // Update credits
+  this.updateCredits();
 }
 
+/**
+ * Returns true if the given course has an instance available on this period.
+ */
 Period.prototype.courseAvailable = function(course) {
-  
   if (this.courseInstances[course.getCode()]) {
     return true;
   } else {
     return false;
   }
-  
-  //return !(this.courseInstances[course.getCode()] == false);
 }
 
 Period.prototype.findFreeSlot = function(length) {
@@ -113,6 +142,9 @@ Period.prototype.findFreeSlot = function(length) {
   }
 }
 
+/**
+ * Returns true if the given slot is free on this and the given number of succeeding periods.
+ */
 Period.prototype.isSlotFree = function(slot, length) {
   if (this.slots[slot]) {
     return false;
@@ -130,7 +162,7 @@ Period.prototype.isSlotFree = function(slot, length) {
  * Occupies slots in this and succeeding periods.
  * @param slot The slot to be freed.
  * @param length How many periods to span
- * @param course Course that occupios the slot.
+ * @param course Course that occupies the slot.
  */
 Period.prototype.occupySlot = function(slot, length, course) {
   this.slots[slot] = course;
@@ -157,17 +189,9 @@ Period.prototype.freeSlot = function(slot, length) {
   this.nextPeriod.freeSlot(slot, length - 1);
 }
 
-Period.prototype.autoplan = function() {
-
-}
-
 /**
- * Adds a course to the list of courses that are arranged on this period.
+ * Handles course drop events.
  */
-Period.prototype.addCourseInstance = function(courseInstance) {
-  this.courseInstances[courseInstance.getCourse().getCode()] = courseInstance;
-}
-
 Period.prototype.dropCourse = function(event, ui) {
   var period = $(this).data('object');
   var course = ui.draggable.data('object');
@@ -178,11 +202,17 @@ Period.prototype.dropCourse = function(event, ui) {
   // Find the course instance
   course.setPeriod(period);
   if (period.courseInstances[course.getCode()]) {
+    course.element.removeClass('noinstance');
   } else {
-    alert("No instance"); // If there is no instance on that period, show warning
+    // If there is no instance on that period, show warning
+    course.element.addClass('noinstance');
   }
   
-  course.satisfyPrereqs();
-  course.satisfyPostreqs();
-
+  if (planView.satisfyPrereqsAutomatically) {
+    // Move prereqs before the course
+    course.satisfyPrereqs();
+    
+    // Move postreqs after the course
+    course.satisfyPostreqs();
+  }
 }

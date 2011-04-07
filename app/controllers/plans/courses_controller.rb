@@ -8,7 +8,7 @@ class Plans::CoursesController < PlansController
   # GET /courses
   # GET /courses.xml
   def index
-    @user_courses = @user.user_courses.includes(:scoped_course)
+    @user_courses = @user.user_courses.joins("INNER JOIN scoped_courses ON scoped_courses.id = user_courses.scoped_course_id LEFT OUTER JOIN course_instances ON course_instances.id = user_courses.course_instance_id LEFT OUTER JOIN periods ON periods.id = course_instances.period_id").order("begins_at, code")
 
     respond_to do |format|
       format.html # index.html.erb

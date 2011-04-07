@@ -1,11 +1,13 @@
-function CourseInstance(course, period, length) {
+function CourseInstance(course, period, length, id) {
   this.course = course;
   this.period = period;
   this.length = length;
-  
-  period.addCourseInstance(this);
-  course.addCourseInstance(this);
+  this.id = id;
 };
+
+CourseInstance.prototype.getId = function() {
+  return this.id;
+}
 
 CourseInstance.prototype.getCourse = function() {
   return this.course;

@@ -1,4 +1,18 @@
+/**
+ * Schedule view.
+ */
 var planView = {
+  
+  satisfyPrereqsAutomatically: true,
+  periods: {},                         // Period objects, period_id => period object
+  
+  addPeriod: function(period) {
+    this.periods[period.getId()] = period;
+  },
+  
+  /**
+   * Helper function for escaping css selectors
+   */
   escapeSelector: function(myid) { 
     return '#' + myid.replace(/(:|\.)/g,'\\$1');
   },
@@ -9,6 +23,8 @@ var planView = {
   loadPrereqs: function(data) {
     for (var array_index in data) {
       var rawData = data[array_index].course_prereq;
+      
+      // TODO: would be better to have a dictionary for storing Course objects
       
       // Find elements by course code
       var $course = $(planView.escapeSelector('course-' + rawData.course_code));
@@ -36,8 +52,27 @@ var planView = {
         continue;
       }
       
-      new CourseInstance($course.data('object'), $period.data('object'), rawData.length);
+      var course = $course.data('object');
+      var period = $period.data('object');
+      var ci = new CourseInstance(course, period, rawData.length, rawData.id);
+      period.addCourseInstance(ci);
+      course.addCourseInstance(ci);
     }
+  },
+  
+  /**
+   * Places courses on periods according to the information provided in HTML
+   */
+  placeCourses: function() {
+    $('.course').each(function(i, element){
+      var course = $(element).data('object');
+      var period_id = $(element).data('period');
+      
+      var period = planView.periods[period_id];
+      if (period) {
+        course.setPeriod(period);
+      }
+    });
   },
   
   /**
@@ -47,14 +82,39 @@ var planView = {
     $('.course').each(function(i, element){
       var course = $(element).data('object');
       
-      course.postponeAfterPrereqs();   // Add course after its prereqs (those that have been located)
+      // Put course after its prereqs (those that have been attached)
+      course.postponeAfterPrereqs();
       
+      // If course is still unattached, put it on the first period
       if (!course.getPeriod()) {
         course.postponeTo(firstPeriod);
       }
       
       course.satisfyPostreqs();        // Move forward those courses that depend (recursively) on the newly added course
     });
+  },
+  
+  save: function() {
+    // TODO: remove hard coded path
+    var path = '/fi/studyplan/schedule'; // '/' + locale + '/curriculums/' + curriculum_id + '/prereqs'
+    
+    var periods = {};
+    $('.course').each(function(i, element){
+      course = $(element).data('object');
+      
+      if (course.changed && course.courseInstance) {
+        periods[course.id] = course.courseInstance.id;
+      }
+    });
+
+    $.ajax({
+      url: path,
+      type: 'put',
+      dataType: 'json',
+      data: {periods: periods},
+      async: false
+    });
+    
   }
 };
 
@@ -65,34 +125,34 @@ $(document).ready(function(){
   //var curriculum_id = $plan.data('curriculum-id');
   //var locale = $plan.data('locale');
   
-  // Prepare courses
+  // Create a Course object for each course element
   $('.course').each(function(i, element){
     new Course($(element));
   });
 
-  // Prepare periods
+  // Create a Period object for each period element
   var previousPeriod;
   var periodCounter = 0;
   $('.period').each(function(i, element){
     var period = new Period($(element));
-    period.setSequenceNumber(periodCounter);
+    planView.addPeriod(period)
     
     if (!previousPeriod) {
       firstPeriod = period;
     }
     
+    period.setSequenceNumber(periodCounter);
     period.setPreviousPeriod(previousPeriod);
+    
     previousPeriod = period;
     periodCounter++;
   });
   
   // Attach event listeners
-  $("#autoplan").click(planView.autoplan);
+  $("#save-button").click(planView.save);
   
   
-  // Get course prereqs
-  //$.getJSON('/' + locale + '/curriculums/' + curriculum_id + '/prereqs', planView.loadPrereqs);
-  //$.getJSON('/' + locale + '/course_instances', planView.loadCourseInstances);
+  // Get course prereqs by ajax
   var $plan = $('#plan');
   var prereqsPath = $plan.data('prereqs-path');     // '/' + locale + '/curriculums/' + curriculum_id + '/prereqs'
   var instancesPath = $plan.data('instances-path'); // '/' + locale + '/course_instances'
@@ -112,6 +172,10 @@ $(document).ready(function(){
   });
 
 
+  // Put courses on their places
+  planView.placeCourses();
+  
+  // Place new courses automatically
   planView.autoplan();
       
 });

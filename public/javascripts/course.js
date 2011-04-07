@@ -1,16 +1,22 @@
 function Course(element) {
-  element.data('object', this);     // Add a reference from the jQuery object to this
+  element.data('object', this);     // Add a reference from element to this
   this.element = element;           // jQuery element
   
-  this.instances = {};
-  this.periods = [];        // Periods on which this course is arranged
-  this.prereqs = {};        // Prerequisite courses. courseCode => course object
-  this.prereqTo = {};       // Courses for which this course is a prereq. courseCode => course object
-  this.period = false;      // Period 
-  this.slot = false;        // Slot number that this course occupies
+  this.instances = {};         // Available course instances
+  this.periods = [];           // Periods on which this course is arranged
+  this.prereqs = {};           // Prerequisite courses. courseCode => course object
+  this.prereqTo = {};          // Courses for which this course is a prereq. courseCode => course object
+  this.period = false;         // Period 
+  this.courseInstance = false; // Selected courseinstance
+  this.slot = false;           // Slot number that this course occupies
   this.length = 1;
+  this.locked = false;         // Is the course immovable?
+  this.changed = true;
   
+  this.id = element.data('id');    // Database id of the UserCourse
   this.code = element.data('code');
+  this.credits = element.data('credits');
+  this.passed = element.data('passed') == 'true';
   
   element.click(Course.prototype.click);
   
@@ -27,6 +33,14 @@ Course.prototype.getCode = function() {
 
 Course.prototype.getLength = function() {
   return this.length;
+}
+
+Course.prototype.getCredits = function() {
+  return this.credits;
+}
+
+Course.prototype.isPassed = function() {
+  return this.passed;
 }
 
 Course.prototype.setSlot = function(slot) {
@@ -69,9 +83,9 @@ Course.prototype.setPeriod = function(period) {
   }
   
   // Update length
-  var courseInstance = this.instances[period.getId()];
-  if (courseInstance) {
-    this.length = courseInstance.length;
+  this.courseInstance = this.instances[period.getId()];
+  if (this.courseInstance) {
+    this.length = this.courseInstance.length;
   } else {
     this.length = 1;
   }
@@ -101,10 +115,10 @@ Course.prototype.satisfyPrereqs = function() {
   }
   
   // Move prereqs before this course
-  for (var array_index in this.prereq) {
-    var other = this.prereq[array_index];
+  for (var array_index in this.prereqs) {
+    var other = this.prereqs[array_index];
     
-    if (this.period.eralierThan(other.period)) {
+    if (this.period.earlierThan(other.period)) {
       other.advanceTo(this.period.getPreviousPeriod());
       other.satisfyPrereqs();
     }
@@ -155,7 +169,6 @@ Course.prototype.postponeTo = function(period) {
 Course.prototype.advanceTo = function(period) {
   while (period) {
     if (period.courseAvailable(this)) {
-      //this.period = period;
       this.setPeriod(period);
       return;
     }

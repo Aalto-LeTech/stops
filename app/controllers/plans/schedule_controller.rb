@@ -1,11 +1,12 @@
 # Study plan controller
 class Plans::ScheduleController < PlansController
+  #respond_to :json
 
   before_filter :authenticate_user
 
   before_filter :load_plan
   
-  
+  layout 'wide'
   
   
   def show
@@ -13,7 +14,7 @@ class Plans::ScheduleController < PlansController
     @curriculum = Curriculum.first # FIXME: @user.curriculum
     
 
-    @courses = @user.courses # returns a list of AbstractCourses
+    @user_courses = @user.user_courses
     #@courses = Course.semesters(@user.courses) 
     
     #@credits = UserCourse.sum('credits', :include => :abstract_course, :conditions => ['user_id=?', @user.id])
@@ -23,5 +24,21 @@ class Plans::ScheduleController < PlansController
   def edit
   end
 
+  def update
+    # TODO: authentication
+    
+    params[:periods].each do |user_course_id, instance_id|
+      user_course = UserCourse.find(user_course_id)
+      next unless user_course
+        
+      user_course.course_instance_id = instance_id
+      user_course.save
+    end
+    
+#     respond_to do |format|
+#       format.js { render :head => :ok }
+#     end
+    render :text => 'ok'
+  end
   
 end

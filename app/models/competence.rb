@@ -15,6 +15,8 @@ class Competence < ActiveRecord::Base
   has_many :strict_prereqs, :through => :competence_courses, :source => :scoped_course, :order => 'code', :conditions => "requirement = #{STRICT_PREREQ}"
   has_many :supporting_prereqs, :through => :competence_courses, :source => :scoped_course, :order => 'code', :conditions => "requirement = #{SUPPORTING_PREREQ}"
 
+  
+  
   accepts_nested_attributes_for :competence_descriptions
   
   # Users who have chosen this profile
@@ -31,6 +33,15 @@ class Competence < ActiveRecord::Base
     description ? description.description : ''
   end
   
+  # Returns the sibling competences that have lower level value than this competence
+  def lower_siblings
+    profile.competences.where(["level < ?", level])
+  end
+  
+  # Returns the sibling competences that have higher level value than this competence
+  def higher_siblings
+    profile.competences.where(["level > ?", level])
+  end
   
   # returns an array of arrays of courses
   def semesters
@@ -90,6 +101,15 @@ class Competence < ActiveRecord::Base
     end
   end
   
+  # Returns a list of courses that are needed in addition to the courses in lower levels
+  def courses_cumulative
+    lower_courses = []
+    lower_siblings.each do |competence|
+      lower_courses.concat competence.courses_recursive
+    end
+    
+    courses_recursive - lower_courses
+  end
   
   def refresh_prereq_courses
     prereq_courses = {}  # bag of courses, [course_id]

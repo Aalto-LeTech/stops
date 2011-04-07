@@ -8,11 +8,11 @@ class Plans::CoursesController < PlansController
   # GET /courses
   # GET /courses.xml
   def index
-    @courses = @user.courses
+    @user_courses = @user.user_courses.includes(:scoped_course)
 
     respond_to do |format|
       format.html # index.html.erb
-      format.xml  { render :xml => @courses }
+      format.xml  { render :xml => @user_courses }
     end
   end
 

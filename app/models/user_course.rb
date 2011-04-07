@@ -3,5 +3,6 @@ class UserCourse < ActiveRecord::Base
 
   belongs_to :user
   belongs_to :scoped_course
- 
+  belongs_to :course_instance
+  
 end

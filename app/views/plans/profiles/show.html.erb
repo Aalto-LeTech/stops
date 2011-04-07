@@ -41,7 +41,7 @@
       
       <table class="course-list">
         <% credits_counter = passed_counter = 0 %>
-        <% competence.courses_recursive.each do |course| %>
+        <% competence.courses_cumulative.each do |course| %>
           <tr>
             <td><%= link_to course.code, studyplan_profile_course_path(:profile_id => @profile, :id => course) %></td>
             <td><%= link_to course.name(I18n.locale), studyplan_profile_course_path(:profile_id => @profile, :id => course) %></td>
@@ -58,7 +58,12 @@
           </tr>
           <tr>
             <td></td>
-            <td><%=t :competence_already_passed_credits %></td>
+            <td><%=t :competence_credits_shared %></td>
+            <td>0 <%=t :cr %></td><!-- TODO -->
+          </tr>
+          <tr>
+            <td></td>
+            <td><%=t :competence_credits_passed %></td>
             <td><%= passed_counter %> <%=t :cr %></td>
           </tr>
         </tfoot>

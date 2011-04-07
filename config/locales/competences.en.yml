@@ -8,7 +8,8 @@ en:
   competence_skills_heading: "Outcomes"
   competence_courses_heading: "Courses"
   competence_edit_link: "Edit competence"
-  competence_already_passed_credits: "Already passed"
+  competence_credits_passed: "Already passed"
+  competence_credits_shared: "Included in other competences"
   
   # Add to plan
   competence_add_heading: "Add %{profile} %{competence} to study plan"

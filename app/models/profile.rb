@@ -9,12 +9,12 @@ class Profile < ActiveRecord::Base
   accepts_nested_attributes_for :profile_descriptions
   
   def name(locale)
-    description = ProfileDescription.where(:profile_id => self.id, :locale => locale.to_s).first
+    description = profile_descriptions.where(:profile_id => self.id, :locale => locale.to_s).first
     description ? description.name : ''
   end
   
   def description(locale)
-    description = ProfileDescription.where(:profile_id => self.id, :locale => locale.to_s).first
+    description = profile_descriptions.where(:profile_id => self.id, :locale => locale.to_s).first
     description ? description.description : ''
   end
 

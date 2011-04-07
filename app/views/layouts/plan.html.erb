@@ -23,9 +23,11 @@
           
           <% if profile == @profile %>
             <ul>
-              <% profile.courses.each do |course| %>
-                <li class="<%= course == @course ? 'selected' : '' %>"><%= link_to h(course.name(I18n.locale)), studyplan_profile_course_path(:profile_id => profile.id, :id => course.id) %>
-              <% end %>
+              <!--
+              < profile.courses.each do |course| >
+                #<li class="<= course == @course ? 'selected' : '' %>"><= link_to h(course.name(I18n.locale)), studyplan_profile_course_path(:profile_id => profile.id, :id => course.id) %>
+              < end >
+              -->
             </ul>
           <% end %>
         <% end %>

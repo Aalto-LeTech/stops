@@ -12,8 +12,8 @@ class Competence < ActiveRecord::Base
   has_many :competence_courses, :dependent => :destroy
   has_many :courses, :through => :competence_courses, :source => :scoped_course, :order => 'code'
   
-  has_many :strict_prereqs, :through => :profile_courses, :source => :scoped_course, :order => 'code', :conditions => "requirement = #{STRICT_PREREQ}"
-  has_many :supporting_prereqs, :through => :profile_courses, :source => :scoped_course, :order => 'code', :conditions => "requirement = #{SUPPORTING_PREREQ}"
+  has_many :strict_prereqs, :through => :competence_courses, :source => :scoped_course, :order => 'code', :conditions => "requirement = #{STRICT_PREREQ}"
+  has_many :supporting_prereqs, :through => :competence_courses, :source => :scoped_course, :order => 'code', :conditions => "requirement = #{SUPPORTING_PREREQ}"
 
   accepts_nested_attributes_for :competence_descriptions
   
@@ -22,12 +22,12 @@ class Competence < ActiveRecord::Base
   
   
   def name(locale)
-    description = CompetenceDescription.where(:competence_id => self.id, :locale => locale.to_s).first
+    description = competence_descriptions.where(:locale => locale.to_s).first
     description ? description.name : ''
   end
   
   def description(locale)
-    description = CompetenceDescription.where(:competence_id => self.id, :locale => locale.to_s).first
+    description = competence_descriptions.where(:locale => locale.to_s).first
     description ? description.description : ''
   end
   

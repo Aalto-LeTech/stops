@@ -3,11 +3,11 @@
 <% end %>
 
 <h1>
-  <%=h @profile.name(I18n.locale) %>
+  <%= @profile.name(I18n.locale) %>
   
   <!-- Add / Remove -->
   <% if can? :choose, Profile %>
-    <% if @user.profiles.exists?(@profile) %>
+    <% if false %>
       <%= link_to image_tag('remove.png', :alt => t(:profe_remove_from_plan)), delete_studyplan_profile_path(:id => @profile.id), :title => t(:profe_remove_from_plan) %>
     <% else %>
       <%= link_to image_tag('add.png', :alt => t(:profe_add_to_plan)), new_studyplan_profile_path(:id => @profile.id), :title => t(:profe_add_to_plan) %>
@@ -15,67 +15,66 @@
   <% end %>
 </h1>
 
+<!-- Description -->
+<p><%= @profile.description(I18n.locale) %></p>
 
-<!-- Courses required -->
-<h2><%=t :profile_strict_prereqs %></h2>
+<!-- Competences -->
+<% @profile.competences.each do |competence| %>
+  <div class="competence">
+    <h2><%= competence.name(I18n.locale) %></h2>
+    <p><%= competence.description(I18n.locale) %><p>
 
-<table class="profile-prereq-matrix">
-  <tbody>
-    <!-- Prereq courses -->
-    <% @profile.strict_prereqs.each do |course| %>
-      <tr class="prereq-course-name">
-        <!-- Course name -->
-        <td class="prereq-course-name"><%= link_to h(course.code) + ' ' + h(course.name(I18n.locale)), studyplan_profile_course_path(:profile_id => @profile, :id => course) %></td>
-      </tr>
-    <% end %>
+    <div class="competence-skills">
+      <h3><%=t :profile_skills %></h3>
+      <ul>
+        <% competence.skills.each do |skill| %>
+          <li><%= link_to skill.description(I18n.locale), skill, { :class => 'skill', 'data-skill-id' => skill.id } %></li>
+        <% end %>
+      </ul>
+    </div>
+    
+    <div class="competence-courses">
+      <h3><%=t :profile_strict_prereqs %></h3>
+      
+      <table>
+        <% competence.courses_recursive.each do |course| %>
+          <tr>
+            <td><%= link_to course.code, studyplan_profile_course_path(:profile_id => @profile, :id => course) %></td>
+            <td><%= link_to course.name(I18n.locale), studyplan_profile_course_path(:profile_id => @profile, :id => course) %></td>
+            <td><%= course.credits %></td>
+          </tr>
+        <% end %>
+      </table>
+    </div>
+    
+    <div class="clear"></div>
+  </div>
+<% end %>
 
-  </tbody>
-</table>
-
+    
+    
 <!--p>
 TODO: opintopisteet (yht.)<br />
 olet jo suorittanut n opintopistettä
 </p-->
 
 
-<!-- Supporting courses -->
-<h2><%=t :profile_supporting_prereqs %></h2>
 
-<table class="profile-prereq-matrix">
-  <tbody>
-    <!-- Prereq courses -->
-    <% @profile.supporting_prereqs.each do |course| %>
-      <tr class="prereq-course-name">
-        <!-- Course name -->
-        <td class="prereq-course-name"><%= link_to h(course.code) + ' ' + h(course.name(I18n.locale)), studyplan_profile_course_path(:profile_id => @profile, :id => course) %></td>
-      </tr>
-    <% end %>
-
-  </tbody>
-</table>
+<% @profile.competences.each do |competence| %>
+  <table class="profile-prereq-matrix">
+    <tbody>
+      <!-- Prereq courses -->
+      <% competence.supporting_prereqs.each do |course| %>
+        <tr class="prereq-course-name">
+          <!-- Course name -->
+          <td class="prereq-course-name"><%= link_to h(course.code) + ' ' + h(course.name(I18n.locale)), studyplan_profile_course_path(:profile_id => @profile, :id => course) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
 
 <!-- 
 <h2><%=t :example_schedule %></h2>
 <p>TODO</p>
 -->
-
-<!-- Skills provided -->
-<h2><%=t :profile_skills %></h2>
-
-<table class="course-skill-dependencies">
-  <thead>
-    <td>Prerequisites</td>
-    <td>Provides</td>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td id="skill-prereqs"></td>
-      <td id="course-skills-column">
-        <% @profile.skills.each do |skill| %>
-          <%= link_to skill.description(I18n.locale), skill, { :class => 'skill', 'data-skill-id' => skill.id } %>
-        <% end %>
-      </td>
-    </tr>
-  </tbody>
-</table>

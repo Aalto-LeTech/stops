@@ -95,7 +95,7 @@ ActiveRecord::Schema.define(:version => 20100826130740) do
     t.integer "profile_id",  :null => false
     t.string  "locale"
     t.string  "name",        :null => false
-    t.string  "description"
+    t.text    "description"
   end
 
   add_index "profile_descriptions", ["profile_id", "locale"], :name => "index_profile_descriptions_on_profile_id_and_locale", :unique => true

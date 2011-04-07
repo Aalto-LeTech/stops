@@ -223,30 +223,26 @@ h1:first-child, h2:first-child, h3:first-child {
   color: white;
 }
 
-.header .logo, .header .program-name {
-  font: sans-serif;
-  font-weight: bold;
-  color: white;
-}
-
 .header .logo {
   margin: 0px;
   padding: 5px 10px;
+  color: white;
+  font-family: serif;
+  font-weight: bold;
 }
 
-.header .logo .a {
+.header .logo .o4 {
   font-size: 3em;
-  float: left;
-}
-
-.header .logo .ex {
-  font-size: 3em;
-  color: #FF7900;
 }
 
 .header .logo .program-name {
   font-size: 1em;
 }
+
+.header .logo sup {
+  color: #FF7900;
+}
+
 
 /*************************
   Left navi
@@ -439,4 +435,47 @@ table.skill-matrix-editor tr.course {
 
 table.skill-matrix-editor td.skill {
   text-align: left;
+}
+
+
+/************
+ Competences
+ ************/
+
+div.competence {
+  position: relative;
+  border: 1px solid #888;
+  background: #eee;
+  -moz-border-radius: 20px;
+  margin: 0px 0px 20px 0px;
+  padding: 10px 5px 10px 70px;
+}
+
+div.competence > p {
+  margin: 0px 0px 1em 0px;
+}
+
+div.competence.selected {
+  border: 5px solid #303090;
+  background: #e1e1ff;
+}
+
+div.competence h2 {
+  position: absolute;
+  font-size: 150%;
+  width: 50px;
+  text-align: right;
+  top: 10px;
+  left: 0px;
+}
+
+div.competence .competence-skills, div.competence .competence-courses {
+  font-size: small;
+  float: left;
+  width: 40em;
+  margin: 0px 10px 10px 0px;
+}
+
+div.competence li {
+  
 }

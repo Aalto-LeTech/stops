@@ -71,6 +71,10 @@
     </div>
     
     <div class="clear"></div>
+    
+    <% if @user.has_competence?(competence) %>
+      <%= link_to t(:competence_supporting_courses_link), supporting_studyplan_competence_path(:id => competence.id) %>
+    <% end %>
   </div>
 <% end %>
 

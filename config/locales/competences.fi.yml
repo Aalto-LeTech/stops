@@ -10,6 +10,9 @@ fi:
   competence_edit_link: "Muokkaa osaamiskokonaisuutta"
   competence_credits_passed: "Jo suoritettu"
   competence_credits_shared: "Sisältyy muihin osaamiskokonaisuuksiin"
+  competence_supporting_courses_link: "Valitse tukevia kursseja"
+  
+  competence_supporting_courses_heading: "Valitse tukevia kursseja"
   
   # Add to plan
   competence_add_heading: "Lisää %{profile} %{competence} opintosuunnitelmaan"

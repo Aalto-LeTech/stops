@@ -66,7 +66,7 @@ class Plans::CoursesController < PlansController
     end
     
     # Add course to study plan
-    @user.courses << course
+    UserCourse.create(:user_id => @user.id, :scoped_course_id => course.id, :manually_added => true)
     
     redirect_to studyplan_profiles_path, :flash => {:success => 'Course added to study plan'}
   end

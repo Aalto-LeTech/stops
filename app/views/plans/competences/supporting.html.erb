@@ -1,0 +1,23 @@
+<h1><%=t :competence_supporting_courses_heading %></h1>
+
+<div class="competence-supporting-courses">
+  <% @supporting_courses.each do |scoped_course, credits| %>
+    <% next if @user.courses.include?(scoped_course) %>
+    
+    <div class="course">
+      <%= link_to studyplan_courses_path(:course_id => scoped_course.id), :title => t(:course_add_to_plan), :method => :post do
+            image_tag('add.png', :alt => t(:course_add_to_plan))
+          end %>
+      
+      
+      <%= scoped_course.code %> <%= scoped_course.name(I18n.locale) %> (<%= scoped_course.credits %> <%=t :cr %>)</p>
+
+      <% scoped_course.skills.each do |skill| %>
+        <div class="skill"><%= skill.description(I18n.locale) %></div>
+      <% end %>
+    </div>
+    
+  <% end %>
+</div>
+
+<p><%= link_to t(:Cancel), studyplan_profile_path(:id => @competence.profile.id) %></p>

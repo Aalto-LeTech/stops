@@ -53,6 +53,7 @@ ActionController::Routing::Routes.draw do |map|
         resources :courses, :controller => 'plans/courses', :only => [:show]  # ScopedCourses, courses that belong to the profile
         
         member do
+          get 'supporting'
           get :delete
         end
       end

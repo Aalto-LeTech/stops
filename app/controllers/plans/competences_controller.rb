@@ -66,4 +66,27 @@ class Plans::CompetencesController < PlansController
       format.xml  { head :ok }
     end
   end
+  
+  def supporting
+    @competence = Competence.find(params[:id])
+    
+    skills = @competence.skills
+    
+    @supporting_courses = {}  # scoped_course_id => credits
+    
+    @competence.courses.each do |strict_prereq_course|
+      strict_prereq_course.skills.each do |skill|
+        skill.supporting_prereqs.each do |supporting_skill|
+          
+          
+          @supporting_courses[supporting_skill.skillable] = 0.0 unless @supporting_courses[supporting_skill.skillable]
+          
+          @supporting_courses[supporting_skill.skillable] += supporting_skill.credits
+        end
+      end
+    end
+    
+    
+  end
+  
 end

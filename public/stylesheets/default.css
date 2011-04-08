@@ -503,3 +503,21 @@ table.course-list tr.total {
 table.course-list tr.total td {
   padding-top: 1em;
 }
+
+
+.competence-supporting-courses .course {
+  border: 1px solid #8080a0;
+  background: #e0e0ff;
+  -moz-border-radius: 10px;
+  margin: 1em .5em;
+  padding: .2em .4em;
+}
+
+.competence-supporting-courses .skill {
+  border: 1px solid #d0d0d0;
+  background: #f0f0ff;
+  padding: .2em .5em;
+  margin: .5em 0em;
+  font-size: small;
+}
+

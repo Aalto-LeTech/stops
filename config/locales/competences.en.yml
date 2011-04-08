@@ -10,6 +10,9 @@ en:
   competence_edit_link: "Edit competence"
   competence_credits_passed: "Already passed"
   competence_credits_shared: "Included in other competences"
+  competence_supporting_courses_link: "Choose supporting courses"
+  
+  competence_supporting_courses_heading: "Select supporting courses"
   
   # Add to plan
   competence_add_heading: "Add %{profile} %{competence} to study plan"

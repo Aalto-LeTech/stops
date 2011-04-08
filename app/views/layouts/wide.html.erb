@@ -1,0 +1,24 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<%= I18n.locale %>" lang="<%= I18n.locale %>">
+<%= render :partial => 'layouts/head' %>
+
+<body>
+
+<%= render :partial => 'layouts/header' %>
+
+  
+<div class="page">
+  <!--div id="contextHelp">
+  </div-->
+ 
+  <%= render :partial => 'layouts/messages' %>
+
+  <%= yield %>
+  
+</div>
+
+
+</body>
+</html>

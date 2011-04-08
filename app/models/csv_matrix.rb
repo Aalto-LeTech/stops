@@ -21,13 +21,23 @@ class CsvMatrix
   def insert_or_update_scoped_course(abstract_course, curriculum, credits)
     # Insert or update course
     course = ScopedCourse.where(:abstract_course_id => abstract_course.id, :curriculum_id => curriculum.id).first
+    
     if course
       # Update existing course
-      course.credits = credits
+      unless credits.empty?
+        course.credits = credits.gsub(',','.').to_f
+      end
+      
       course.save
     else
+      if credits.empty?
+        cr = 5  # default credits
+      else
+        cr = credits.gsub(',','.').to_f
+      end
+      
       # Create new course
-      course = ScopedCourse.create(:abstract_course_id => abstract_course.id, :curriculum_id => curriculum.id, :code => abstract_course.code, :credits => credits.gsub(',','.').to_f)
+      course = ScopedCourse.create(:abstract_course_id => abstract_course.id, :curriculum_id => curriculum.id, :code => abstract_course.code, :credits => cr)
     end
     
     return course

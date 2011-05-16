@@ -15,18 +15,23 @@
 <% @profile.competences.each do |competence| %>
   <div class="competence<%= @user.has_competence?(competence) ? ' selected' : '' %>">
     <div class="buttons">
-      <h2><%= competence.name(I18n.locale) %></h2>
-      
       <!-- Add / Remove -->
       <% if can? :choose, competence %>
         <% if @user.has_competence? competence %>
-          <%= link_to image_tag('remove.png', :alt => t(:profile_remove_from_plan)), delete_studyplan_competence_path(:id => competence.id), :title => t(:profile_remove_from_plan) %>
+          <%= link_to delete_studyplan_competence_path(:id => competence.id), :title => t(:profile_remove_from_plan) do %>
+            <%= image_tag('remove.png', :alt => t(:profile_remove_from_plan)) %>
+            <%=t :profile_remove_from_plan %>
+          <% end %>
         <% else %>
-          <%= link_to image_tag('add.png', :alt => t(:profile_add_to_plan)), new_studyplan_competence_path(:id => competence.id), :title => t(:profile_add_to_plan) %>
+          <%= link_to new_studyplan_competence_path(:id => competence.id), :title => t(:profile_add_to_plan) do %>
+            <%= image_tag('add.png', :alt => t(:profile_add_to_plan)) %>
+            <%=t :profile_add_to_plan %>
+          <% end %>
         <% end %>
       <% end %>
     </div>
     
+    <h2><%= competence.name(I18n.locale) %></h2>
     <p><%= competence.description(I18n.locale) %><p>
 
     <div class="competence-skills">

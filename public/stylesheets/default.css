@@ -452,7 +452,7 @@ div.competence {
   background: #eee;
   -moz-border-radius: 20px;
   margin: 0px 0px 20px 0px;
-  padding: 10px 5px 10px 70px;
+  padding: 10px 20px 10px 20px;
 }
 
 div.competence > p {
@@ -465,15 +465,15 @@ div.competence.selected {
 }
 
 div.competence .buttons {
-  position: absolute;
-  width: 50px;
-  text-align: right;
+  float: right;
   top: 10px;
   left: 0px;
 }
 
 div.competence h2 {
   font-size: 150%;
+  margin-top: 0px;
+  padding-top: 0px;
 }
 
 div.competence li {

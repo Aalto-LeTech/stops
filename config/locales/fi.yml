@@ -4,7 +4,7 @@
 fi:
   program_name: "Opiskelijaa ohjaava opinto-ohjelma"
   navi_plan: "Oma opintosuunnitelma"
-  navi_curriculums: "Opinto-oppaat"
+  navi_curriculums: "Kaikki opinto-oppaat"
   navi_profiles: "Profiilit"
   navi_courses: "Kurssit"
   
@@ -12,12 +12,13 @@ fi:
   navi_browse_curriculums: "Selaa opinto-oppaita"
   
   frontpageTab: "Etusivu"
-  myPlanTabCurriculum: "Opinto-opas"
+  myPlanTabCurriculum: "Oma opinto-opas"
   myPlanTabProfiles: "Profiilit"
-  myPlanTabCourses: "Kurssit"
+  myPlanTabCourses: "Omat kurssit"
   myPlanTabSchedule: "Aikataulu"
   myPlanTabRecord: "Suoritukset"
-  curriculumsTab: "Opinto-oppaat"
+  myPlanThisPeriod: "Kuluva periodi"
+  curriculumsTab: "Kaikki opinto-oppaat"
   
   example_schedule: "Mallilukujärjestys"
   

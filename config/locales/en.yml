@@ -4,7 +4,7 @@
 en:
   program_name: "O4"
   navi_plan: "My study plan"
-  navi_curriculums: "Curriculums"
+  navi_curriculums: "All Curriculums"
   navi_profiles: "Profiilit"
   navi_courses: "Courses"
   
@@ -12,11 +12,12 @@ en:
   navi_browse_curriculums: "Browse study guides"
   
   frontpageTab: "Frontpage"
-  myPlanTabCurriculum: "Curriculum"
+  myPlanTabCurriculum: "My Curriculum"
   myPlanTabProfiles: "Profiles"
-  myPlanTabCourses: "Courses"
+  myPlanTabCourses: "My courses"
   myPlanTabSchedule: "Schedule"
   myPlanTabRecord: "Record"
+  myPlanThisPeriod: "Current period"
   curriculumsTab: "Study guides"
   
   example_schedule: "Example schedule"

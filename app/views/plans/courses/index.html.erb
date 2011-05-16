@@ -1,26 +1,32 @@
-<h1><%=t :courses_heading %></h1>
+<h1><%=t :my_courses_heading %></h1>
 
-<table>
-  <thead>
-    <tr>
-      <th>Course</th>
-      <th>Credits</th>
-      <th>Grade</th>
-      <th>Period</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @user_courses.each do |user_course| %>
+<% if @competences.empty? %>
+  <p><%= link_to t(:my_courses_no_profile_hint), studyplan_profiles_path %></p>
+<% end %>
+
+<% unless @user_courses.empty? %>
+  <table>
+    <thead>
       <tr>
-        <td><%= link_to h(user_course.scoped_course.code) + ' ' + user_course.scoped_course.name(I18n.locale), studyplan_course_url(:id => user_course.scoped_course.id) %></td>
-        <td><%= user_course.scoped_course.credits %></td>
-        <td><%= user_course.grade %></td>
-        <td>
-          <% if user_course.course_instance %>
-            <%= user_course.course_instance.period.name(I18n.locale) %>
-          <% end %>
-        </td>
+        <th>Course</th>
+        <th>Credits</th>
+        <th>Grade</th>
+        <th>Period</th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      <% @user_courses.each do |user_course| %>
+        <tr>
+          <td><%= link_to h(user_course.scoped_course.code) + ' ' + user_course.scoped_course.name(I18n.locale), studyplan_course_url(:id => user_course.scoped_course.id) %></td>
+          <td><%= user_course.scoped_course.credits %></td>
+          <td><%= user_course.grade %></td>
+          <td>
+            <% if user_course.course_instance %>
+              <%= user_course.course_instance.period.name(I18n.locale) %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

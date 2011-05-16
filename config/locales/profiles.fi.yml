@@ -16,16 +16,16 @@ fi:
 
   # plan/profiles index
   profiles_heading: "Osaamisprofiilit"
-
   profile_skills: "Tarjoaa valmiudet"
   profile_prereqs: "Esitiedot"
   profile_strict_prereqs: "Välttämättömät esitiedot"
   profile_supporting_prereqs: "Tukevat esitiedot"
-  profe_add_to_plan: "Lisää opintosuunnitelmaan"
-  profe_remove_from_plan: "Poista opintosuunnitelmasta"
+  profile_add_to_plan: "Lisää opintosuunnitelmaan"
+  profile_remove_from_plan: "Poista opintosuunnitelmasta"
   profile_already_selected: "%{name} on jo opintosuunnitelmassa."
   
-  profile_instructions: "Valitse opintosuunnitelmaasi osaamisprofiileja, niin että X opintopistettä täyttyy."
+  profile_index_instructions: "Osaamisprofiilit on jaettu tasoihin I-III. Taso I on kaikille pakollinen. Valitse muista osaamisprofiileista haluamasi tasot, niin että 250 op täyttyy. Vähintään yhdestä profiilista on valittava taso III. Myöhemmin voit valita valinnaisia kursseja niin, että 300 op täyttyy."
+  profile_show_instructions: "Kaikkien osaamisprofiilien taso I on kaikille pakollinen. Taso II syventää osaamista. Taso III tähtää diplomityöhön. Jokainen osaamistaso vaatii alempien tasojen sisällyttämistä opintosuunnitelmaan."
   
   # Remove profile from study plan
   profile_delete_heading: "Profiili %{name} poistetaan opintosuunnitelmasta"

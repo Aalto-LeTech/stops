@@ -6,6 +6,7 @@ fi:
   
   # Show
   competence_skills_heading: "Tuottaa valmiudet"
+  
   competence_courses_heading: "Kurssit"
   competence_edit_link: "Muokkaa osaamiskokonaisuutta"
   competence_credits_passed: "Jo suoritettu"

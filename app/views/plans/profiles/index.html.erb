@@ -1,6 +1,6 @@
-<!--p><%=t :profile_instructions %></p-->
-
 <h1><%=t :profiles_heading %></h1>
+
+<p><%=t :profile_index_instructions %></p>
 
 <table class="competence-selector">
   <% @profiles.each do |profile| %>
@@ -34,4 +34,4 @@
 </table>
 
 
-<!-- link_to image_tag('add.png', :alt => t(:profe_add_to_plan)), new_studyplan_profile_path(:id => profile.id), :title => t(:profe_add_to_plan) -->
+<!-- link_to image_tag('add.png', :alt => t(:profile_add_to_plan)), new_studyplan_profile_path(:id => profile.id), :title => t(:profe_add_to_plan) -->

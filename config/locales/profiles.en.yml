@@ -14,13 +14,20 @@ en:
   profile_name: "Heading"
   profile_description: "Description"
 
+  # plan/profiles index
   profiles_heading: "Competence profiles"
-  
   profile_skills: "Provides"
   profile_prereqs: "Prerequisites"
   profile_strict_prereqs: "Mandatory prerequisites"
   profile_supporting_prereqs: "Supporting prerequisites"
+  profile_add_to_plan: "Add to plan"
+  profile_remove_from_plan: "Poista opintosuunnitelmasta"
   profile_already_selected: "%{name} is already included in your studyplan."
   
-  profile_instructions: "Select competence profiles below"
+  profile_index_instructions: "Select competence profiles below"
+  profile_show_instructions: "Select competences"
+    
+  # Remove profile from study plan
+  profile_delete_heading: "Profile %{name} will be removed from study plan"
+  profile_delete_autodelete_courses: "Following courses will be removed:"
   

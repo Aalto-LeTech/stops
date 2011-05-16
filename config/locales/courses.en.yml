@@ -1,7 +1,12 @@
 en:
   courses_heading: "Courses"
+  
+  my_courses_heading: "My courses"
+  my_courses_no_profile_hint: "Choose profiles first"
 
-  course_provides: "Provides conpetences"
+  course_Provides: "Provides skills"
+  course_provides: "Provides skills"
+  course_paths_hint: "Click skills to see the study path"
   course_prereqs: "Prerequisites"
   course_prereqs_reqursive: "All prerequisites and their prerequisites"
   course_prereq_to: "is a prerequisite to"

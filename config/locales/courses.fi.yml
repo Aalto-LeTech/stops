@@ -1,7 +1,12 @@
 fi: 
   courses_heading: "Kurssit"
   
+  my_courses_heading: "Omat kurssit"
+  my_courses_no_profile_hint: "Valitse ensin Profiilit-osiosta itseäsi kiinnostavat profiilit"
+  
+  course_Provides: "Tarjoaa valmiudet"
   course_provides: "Tarjoaa valmiudet"
+  course_paths_hint: "Klikkaa valmiuksia nähdäksesi opintopolut valmiudesta osaamisprofiiliin"
   course_prereqs: "Esitiedot"
   course_prereqs_reqursive: "Kaikki esitiedot ja esitietojen esitiedot"
   course_prereq_to: "on esitietona kursseille"

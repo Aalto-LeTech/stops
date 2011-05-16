@@ -6,6 +6,7 @@ en:
   
   # Show
   competence_skills_heading: "Outcomes"
+  competence_instructions: ""
   competence_courses_heading: "Courses"
   competence_edit_link: "Edit competence"
   competence_credits_passed: "Already passed"

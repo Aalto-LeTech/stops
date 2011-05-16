@@ -9,7 +9,7 @@
   <!-- Add / Remove -->
   <% if can? :choose, ScopedCourse %>
     <% unless @user.courses.exists?(@course) %>
-      <%= link_to image_tag('add.png', :alt => t(:course_add_to_plan)), studyplan_courses_path(:course_id => @course.id), :title => t(:profe_add_to_plan), :method => :post %>
+      <%= link_to image_tag('add.png', :alt => t(:course_add_to_plan)), studyplan_courses_path(:course_id => @course.id), :title => t(:profile_add_to_plan), :method => :post %>
     <% end %>
   <% end %>
 </h1>
@@ -18,18 +18,18 @@
   <!-- Study paths from course skills to profile skills -->
   <table id="course-profile-graph" class="course-profile-graph" data-competence-id="<%= @competence.id %>">
     <thead>
-      <td>Provides</td>
-      <td>Needed by</td>
+      <td><%=t :course_Provides %></td>
+      <td></td>
     </thead>
 
     <tbody>
       <tr>
         <td class="course-skills-column">
           <% @course.skills.each do |skill| %>
-            <%= link_to skill.description(I18n.locale), competencepath_skill_path(:id => skill.id, :competence_id => @competence.id), { :class => 'skill', 'data-skill-id' => skill.id } %>
+            <%= link_to skill.description(I18n.locale), competencepath_skill_path(:id => skill.id, :competence_id => @competence.id), { :class => 'skill click-hint', 'data-skill-id' => skill.id } %>
           <% end %>
         </td>
-        <td id="skill-future"></td>
+        <td id="skill-future"><p class="hint"><%=t :course_paths_hint %></p></td>
       </tr>
     </tbody>
   </table>

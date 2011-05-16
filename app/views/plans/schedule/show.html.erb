@@ -13,7 +13,7 @@
   <h1><%=t :plan_heading %></h1>
 
   <% if @user.courses.empty? && @user.competences.empty? %>
-    <%= t :plan_empty_instructions %>
+    <p><%= link_to t(:plan_empty_instructions), studyplan_profiles_path %></p>
   <% end %>
 
   <p id="status"></p>

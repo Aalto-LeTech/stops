@@ -75,6 +75,11 @@
   padding: .2em .5em;
   margin: .5em 0em;
   font-size: small;
+  
+}
+
+.course-profile-graph .skill.click-hint {
+  background: #f0f0ff url('../images/future-arrow.png') no-repeat right;
 }
 
 .course-skill-dependencies a.skill {

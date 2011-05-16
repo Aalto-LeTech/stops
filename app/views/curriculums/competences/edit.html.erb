@@ -38,13 +38,11 @@
             requirement = nil
             if @prereqs[prereq.id] && @prereqs[prereq.id][skill.id]
               requirement = @prereqs[prereq.id][skill.id].requirement
-              logger.debug "@prereqs[#{prereq.id}][#{skill.id}] = #{requirement}"
+              #logger.debug "@prereqs[#{prereq.id}][#{skill.id}] = #{requirement}"
             end
             %>
             <td>
-              <%= radio_button_tag "prereqs[#{prereq.id}][#{skill.id}]", 0 %>
-              <%= radio_button_tag "prereqs[#{prereq.id}][#{skill.id}]", 1, requirement == SUPPORTING_PREREQ %>
-              <%= radio_button_tag "prereqs[#{prereq.id}][#{skill.id}]", 2, requirement == STRICT_PREREQ %>
+              <%= check_box_tag "prereqs[#{prereq.id}][#{skill.id}]", requirement == STRICT_PREREQ %>
             </td>
           <% end %>
         </tr>

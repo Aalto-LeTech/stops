@@ -8,7 +8,7 @@
 <div id="competences">
   <% @profile.competences.each do |competence| %>
     <ul>
-      <li><%= competence.name(I18n.locale) %></li>
+      <li><%= link_to competence.name(I18n.locale), edit_curriculum_competence_path(@curriculum, competence) %></li>
     </ul>
   <% end %>
 </div>

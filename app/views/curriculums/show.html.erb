@@ -29,8 +29,25 @@
 
 <h1>Courses</h1>
 
-<ul>
-  <% @curriculum.courses.each do |course| %>
-    <li><%= link_to course.code + ' ' + course.name(I18n.locale), curriculum_course_path(:curriculum_id => @curriculum, :id => course) %></li>
+<table>
+  <thead>
+    <tr>
+      <th>Code &darr;</th>
+      <th>Name &darr;</th>
+      <th>Credits &darr;</th>
+      <th>Period &darr;</th>
+      <th><span title="credits: new prerequisites + already included in plan">Prerequisites &darr;</span></th>
+    </tr>
+  </thead>
+  <% @curriculum.courses.each_with_index do |course, i| %>
+    <tbody>
+      <tr class="<%= i % 2 == 0 ? 'even' : 'odd' %>">
+        <td><%= link_to course.code, curriculum_course_path(:curriculum_id => @curriculum, :id => course) %></td>
+        <td><%= link_to course.name(I18n.locale), curriculum_course_path(:curriculum_id => @curriculum, :id => course) %></td>
+        <td><%= course.credits %></td>
+        <td></td>
+        <td><%= course.strict_prereqs.size %></td>
+      </tr>
+    </tbody>
   <% end %>
-</ul>
+</table>

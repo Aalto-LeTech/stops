@@ -6,6 +6,8 @@
   <%= @profile.name(I18n.locale) %>
 </h1>
 
+<p><%=t :profile_show_instructions %></p>
+
 <!-- Description -->
 <p><%= @profile.description(I18n.locale) %></p>
 
@@ -18,9 +20,9 @@
       <!-- Add / Remove -->
       <% if can? :choose, competence %>
         <% if @user.has_competence? competence %>
-          <%= link_to image_tag('remove.png', :alt => t(:profe_remove_from_plan)), delete_studyplan_competence_path(:id => competence.id), :title => t(:profe_remove_from_plan) %>
+          <%= link_to image_tag('remove.png', :alt => t(:profile_remove_from_plan)), delete_studyplan_competence_path(:id => competence.id), :title => t(:profile_remove_from_plan) %>
         <% else %>
-          <%= link_to image_tag('add.png', :alt => t(:profe_add_to_plan)), new_studyplan_competence_path(:id => competence.id), :title => t(:profe_add_to_plan) %>
+          <%= link_to image_tag('add.png', :alt => t(:profile_add_to_plan)), new_studyplan_competence_path(:id => competence.id), :title => t(:profile_add_to_plan) %>
         <% end %>
       <% end %>
     </div>

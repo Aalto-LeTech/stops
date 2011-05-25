@@ -4,7 +4,7 @@
   <ul>
     <!-- Prereq courses -->
     <% @course.prereqs_recursive.each do |prereq_course| %>
-      <li><%= link_to h(prereq_course.code) + ' ' + h(prereq_course.name(I18n.locale)), {:id => prereq_course} %></li>
+      <li><%= link_to prereq_course.code + ' ' + prereq_course.name(I18n.locale), {:id => prereq_course} %></li>
     <% end %>
   </ul>
 <% end %>

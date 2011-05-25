@@ -5,7 +5,7 @@
 <% end %>
   
 <h1>
-  <%=h @profile.name(I18n.locale) %>
+  <%= @profile.name(I18n.locale) %>
 </h1>
 
 <% if can? :update, @profile %>
@@ -19,7 +19,7 @@
 
 
 <!-- Profile description -->
-<p><%=h @profile.description(I18n.locale) %></p>
+<p><%= @profile.description(I18n.locale) %></p>
 
 <!-- Competences -->
 

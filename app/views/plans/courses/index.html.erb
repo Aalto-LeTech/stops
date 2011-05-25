@@ -8,23 +8,25 @@
   <table>
     <thead>
       <tr>
+        <th>Code</th>
         <th>Course</th>
         <th>Credits</th>
-        <th>Grade</th>
         <th>Period</th>
+        <th>Grade</th>
       </tr>
     </thead>
     <tbody>
       <% @user_courses.each do |user_course| %>
         <tr>
-          <td><%= link_to h(user_course.scoped_course.code) + ' ' + user_course.scoped_course.name(I18n.locale), studyplan_course_url(:id => user_course.scoped_course.id) %></td>
+          <td><%= link_to user_course.scoped_course.code, studyplan_course_url(:id => user_course.scoped_course.id) %></td>
+          <td><%= link_to user_course.scoped_course.name(I18n.locale), studyplan_course_url(:id => user_course.scoped_course.id) %></td>
           <td><%= user_course.scoped_course.credits %></td>
-          <td><%= user_course.grade %></td>
           <td>
             <% if user_course.course_instance %>
               <%= user_course.course_instance.period.name(I18n.locale) %>
             <% end %>
           </td>
+          <td><%= user_course.grade %></td>
         </tr>
       <% end %>
     </tbody>

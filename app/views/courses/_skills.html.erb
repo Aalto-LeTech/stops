@@ -1,6 +1,6 @@
 <h2><%=t :course_provides %></h2>
 <ul>
   <% @course.skills.each do |skill| %>
-    <li><%=h skill.description(I18n.locale) %></li>
+    <li><%= skill.description(I18n.locale) %></li>
   <% end %>
 </ul>

@@ -1,4 +1,4 @@
-<h1><%=h @profile.name(I18n.locale) %></h1>
+<h1><%= @profile.name(I18n.locale) %></h1>
 
 <!-- Add to my plan -->
 <% if can? :choose @profile %>
@@ -15,7 +15,7 @@
     <% @profile.strict_prereqs.each do |course| %>
       <tr class="prereq-course-name">
         <!-- Course name -->
-        <td class="prereq-course-name"><%= link_to h(course.code) + ' ' + h(course.name(I18n.locale)), profile_course_url(:profile_id => @profile, :id => course) %></td>
+        <td class="prereq-course-name"><%= link_to course.code + ' ' + course.name(I18n.locale), profile_course_url(:profile_id => @profile, :id => course) %></td>
       </tr>
     <% end %>
 
@@ -37,7 +37,7 @@ olet jo suorittanut n opintopistettä
     <% @profile.supporting_prereqs.each do |course| %>
       <tr class="prereq-course-name">
         <!-- Course name -->
-        <td class="prereq-course-name"><%= link_to h(course.code) + ' ' + h(course.name(I18n.locale)), profile_course_url(:profile_id => @profile, :id => course) %></td>
+        <td class="prereq-course-name"><%= link_to course.code + ' ' + course.name(I18n.locale), profile_course_url(:profile_id => @profile, :id => course) %></td>
       </tr>
     <% end %>
 
@@ -62,7 +62,7 @@ olet jo suorittanut n opintopistettä
       <td>
         <% @profile.skills.each do |skill| %>
           <p>
-            <%= link_to h(skill.description(I18n.locale)), prereqs_skill_url(:id => skill), :remote => true %>
+            <%= link_to skill.description(I18n.locale), prereqs_skill_url(:id => skill), :remote => true %>
           </p>
         <% end %>
       </td>

@@ -5,7 +5,7 @@
 <% end %>
 
 <h1>
-  <%=h @course.code %> <%=h @course.name(I18n.locale) %>
+  <%= @course.code %> <%= @course.name(I18n.locale) %>
   <!-- Add / Remove -->
   <% if can? :choose, ScopedCourse %>
     <% unless @user.courses.exists?(@course) %>
@@ -68,7 +68,7 @@
     <tr>
       <th><%=t :course_strict_prereqs %></th>
       <th></th>
-      <th><%=h @course.name(I18n.locale) %> <%=t :course_strict_prereq_of %></th>
+      <th><%= @course.name(I18n.locale) %> <%=t :course_strict_prereq_of %></th>
     </tr>
   </thead>
   <tbody>
@@ -77,8 +77,8 @@
         <%= render :partial => '/courses/prereqs' %>
       </td>
       <td class="current">
-        <%=h @course.code %><br />
-        <%=h @course.name(I18n.locale) %>
+        <%= @course.code %><br />
+        <%= @course.name(I18n.locale) %>
       </td>
       <td class="future">
         <!-- List of courses which depend on this course -->
@@ -89,7 +89,7 @@
             <% @course.prereq_to.each do |course| %>
               <% if @user.courses.include?(course) %>
                 <li>
-                  <%= link_to h(course.code) + ' ' + h(course.name(I18n.locale)), {:id => course.id} %>
+                  <%= link_to course.code + ' ' + course.name(I18n.locale), {:id => course.id} %>
                 </li>
               <% end %>
             <% end %>

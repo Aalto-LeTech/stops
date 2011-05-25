@@ -4,7 +4,7 @@
   <ul>
     <% @course.prereq_to.each do |course| %>
       <li>
-        <%= link_to h(course.code) + ' ' + h(course.name(I18n.locale)), {:id => course.id} %>
+        <%= link_to course.code + ' ' + course.name(I18n.locale), {:id => course.id} %>
       </li>
     <% end %>
   </ul>

@@ -26,13 +26,13 @@
         <!-- Profiles belonging to the curriculum -->
         <ul>
           <% @curriculum.profiles.each do |profile| %>
-            <li class="<%= profile == @profile ? 'selected' : '' %>"><%= link_to h(profile.name(I18n.locale)), profile_url(:id => profile.id) %></li>
+            <li class="<%= profile == @profile ? 'selected' : '' %>"><%= link_to profile.name(I18n.locale), profile_url(:id => profile.id) %></li>
             <!-- Courses belonging to the profile -->
             
             <% if profile == @profile %>
               <ul>
                 <% profile.courses.each do |course| %>
-                  <li class="<%= course == @course ? 'selected' : '' %>"><%= link_to h(course.name(I18n.locale)), profile_course_url(:profile_id => profile.id, :id => course.id) %>
+                  <li class="<%= course == @course ? 'selected' : '' %>"><%= link_to course.name(I18n.locale), profile_course_url(:profile_id => profile.id, :id => course.id) %>
                 <% end %>
               </ul>
             <% end %>

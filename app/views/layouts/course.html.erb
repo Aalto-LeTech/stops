@@ -28,7 +28,7 @@
         <!-- Courses belonging to the curriculum -->
         <ul>
           <% @curriculum.courses.each do |course| %>
-            <li class="<%= course == @course ? 'selected' : '' %>"><%= link_to h(course.name(I18n.locale)), course_url(:id => course.id) %></li>
+            <li class="<%= course == @course ? 'selected' : '' %>"><%= link_to course.name(I18n.locale), course_url(:id => course.id) %></li>
           <% end %>
         </ul>
 

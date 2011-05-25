@@ -5,7 +5,7 @@
 <table class="competence-selector">
   <% @profiles.each do |profile| %>
     <tr class="profile">
-      <td class="profile-name"><%= link_to h(profile.name(I18n.locale)), studyplan_profile_url(:id => profile.id) %></td>
+      <td class="profile-name"><%= link_to profile.name(I18n.locale), studyplan_profile_url(:id => profile.id) %></td>
       <td class="profile-description"><%= profile.description(I18n.locale) %></td>
       <td class="profile-credits"></td>
     </tr>

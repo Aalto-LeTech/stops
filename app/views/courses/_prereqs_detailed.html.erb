@@ -8,7 +8,7 @@
       <td></td>
       <!-- Skills provided -->
       <% @course.skills.each do |skill| %>
-        <td><%=h skill.description(I18n.locale) %></td>
+        <td><%= skill.description(I18n.locale) %></td>
       <% end %>
     </thead>
     <tbody>
@@ -24,7 +24,7 @@
         <tr class="prereq-course-name">
           <!-- Course name -->
           <td class="prereq-course-name">
-            <%= link_to h(prereq_course.code) + ' ' + h(prereq_course.name(I18n.locale)), root_url %>
+            <%= link_to prereq_course.code + ' ' + prereq_course.name(I18n.locale), root_url %>
           </td>
           <td colspan='<%= @course.skills.size %>'></td>
         </tr>
@@ -32,7 +32,7 @@
         <% prereq_course.skills.each do |prereq_skill| %>
           <tr>
             <!-- Skill -->
-            <td class="prereq-skill-description"><%=h prereq_skill.description(I18n.locale) %></td>
+            <td class="prereq-skill-description"><%= prereq_skill.description(I18n.locale) %></td>
             
             <!-- Relations -->
             <% @course.skills.each do |skill| %>

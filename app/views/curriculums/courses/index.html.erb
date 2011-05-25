@@ -11,7 +11,7 @@
   <tbody>
     <% @courses.each do |course| %>
       <tr>
-        <td><%= link_to h(course.code) + ' ' + course.name(I18n.locale), studyplan_course_url(:id => course.id) %></td>
+        <td><%= link_to course.code + ' ' + course.name(I18n.locale), studyplan_course_url(:id => course.id) %></td>
         <td><%= course.credits %></td>
         <td>Planned</td>
       </tr>

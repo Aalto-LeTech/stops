@@ -1,5 +1,3 @@
-
-
 <table class="course-graph">
 
   <thead>
@@ -12,18 +10,18 @@
     <tr>
       <td class="graph-prereqs">
         <% @course.strict_prereqs.each do |prereq_course| %>
-          <%= link_to h(prereq_course.code) + ' ' + h(prereq_course.name(I18n.locale)), graph_course_url(:id => prereq_course) %>
+          <%= link_to prereq_course.code + ' ' + prereq_course.name(I18n.locale), graph_course_url(:id => prereq_course) %>
         <% end %>
       </td>
 
       <td class="graph-current">
-        <%= link_to h(@course.code) + ' ' + h(@course.name(I18n.locale)), graph_course_url(:id => @course.id) %>
+        <%= link_to @course.code + ' ' + @course.name(I18n.locale), graph_course_url(:id => @course.id) %>
       </td>
 
       <!-- Prereq courses -->
       <td class="graph-future">
         <% @course.prereq_to.each do |course| %>
-          <%= link_to h(course.code) + ' ' + h(course.name(I18n.locale)), graph_course_url(:id => course.id) %>
+          <%= link_to course.code + ' ' + course.name(I18n.locale), graph_course_url(:id => course.id) %>
         <% end %>
       </td>
   </tbody>

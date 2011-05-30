@@ -8,7 +8,11 @@ ActionController::Routing::Routes.draw do |map|
     match '/logout' => 'sessions#destroy', :as => :logout
   
     match '/preferences' => 'users#edit'
-    resources :users
+    resources :users do
+      member do
+        get :courses
+      end
+    end
     
     #resources :courses  # AbstreactCourses
     

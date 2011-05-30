@@ -42,7 +42,7 @@ class PrereqMatrix < CsvMatrix
         # Find course
         scoped_course = ScopedCourse.where(:code => code, :curriculum_id => @curriculum.id).first
         unless scoped_course
-          logger.error "Header row contains an unknown course: #{code}"
+          puts "Header row contains an unknown course: #{code}"
           next
         end
         

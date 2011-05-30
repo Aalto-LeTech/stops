@@ -1,7 +1,7 @@
 <!-- plans/courses/show -->
 
 <% content_for :javascript do %>
-  <% #= javascript_include_tag 'profileCourseView'
+  <%= javascript_include_tag 'profileCourseView'
   %>
   <%= javascript_include_tag 'pathCourse' %>
   <%= javascript_include_tag 'pathViewer' %>
@@ -64,7 +64,7 @@
 <% end %>
 
 
-<canvas id="paths" data-prereqs-path="<%= prereqs_curriculum_path(@curriculum.id) %>" width="1000px" height="600px">
+<canvas id="paths" data-prereqs-path="<%= prereqs_curriculum_path(@curriculum.id) %>" data-course="<%= @course.id %>" data-user-courses-path="<%= courses_user_path(@user.id) %>" width="1000px" height="700px">
 </canvas>
 
 

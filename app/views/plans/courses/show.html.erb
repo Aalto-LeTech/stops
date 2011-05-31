@@ -61,11 +61,12 @@
       </tr>
     </tbody>
   </table>
+  
+  <canvas id="paths" data-prereqs-path="<%= prereqs_curriculum_path(@curriculum.id) %>" data-course="<%= @course.id %>" data-user-courses-path="<%= courses_user_path(@user.id) %>" width="1000px" height="700px">
+  </canvas>
 <% end %>
 
 
-<canvas id="paths" data-prereqs-path="<%= prereqs_curriculum_path(@curriculum.id) %>" data-course="<%= @course.id %>" data-user-courses-path="<%= courses_user_path(@user.id) %>" width="1000px" height="700px">
-</canvas>
 
 
 <h2><%=t :course_path_heading %></h2>

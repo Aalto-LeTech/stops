@@ -71,7 +71,11 @@ PathCourse.prototype.renderForward = function(c, view, depth) {
   }
   
   // Arrows
-  c.strokeStyle = "#808080";
+  if (depth == 1) {
+    c.strokeStyle = "#808080";
+  } else {
+    c.strokeStyle = "#ddd";
+  }
   c.lineWidth = 1;
   c.beginPath();
   for (var index in this.prereqTo) {
@@ -112,7 +116,11 @@ PathCourse.prototype.renderBackward = function(c, view, depth) {
   }
   
   // Arrows
-  c.strokeStyle = "#808080";
+  if (depth == 1) {
+    c.strokeStyle = "#808080";
+  } else {
+    c.strokeStyle = "#ddd";
+  }
   c.lineWidth = 1;
   c.beginPath();
   

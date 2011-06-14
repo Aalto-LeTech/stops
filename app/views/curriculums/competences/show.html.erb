@@ -24,6 +24,6 @@
 <h2><%=t :competence_courses_heading %></h2>
 <ul>
   <% @competence.courses.each do |course| %>
-    <li><%= course.name(I18n.locale) %></li>
+    <li><%= course.code %> <%= course.name(I18n.locale) %></li>
   <% end %>
 </ul>

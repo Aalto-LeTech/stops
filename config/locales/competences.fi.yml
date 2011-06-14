@@ -9,8 +9,10 @@ fi:
   
   competence_courses_heading: "Kurssit"
   competence_edit_link: "Muokkaa osaamiskokonaisuutta"
+  competence_credits_total: "Yhteensä"
+  competence_credits_added: "Suunnitelmaan lisätään"
   competence_credits_passed: "Jo suoritettu"
-  competence_credits_shared: "Sisältyy muihin osaamiskokonaisuuksiin"
+  competence_credits_shared: "Sisältyy jo suunnitelmaan"
   competence_supporting_courses_link: "Valitse tukevia kursseja"
   
   competence_supporting_courses_heading: "Valitse tukevia kursseja"

@@ -26,6 +26,9 @@ class Plans::ProfilesController < PlansController
   def show
     @profile = Profile.find(params[:id])
     
+    @competences = @profile.competences
+    @included_courses = @user.courses
+    
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @course }

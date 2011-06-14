@@ -18,7 +18,11 @@
 
 <ul>
   <% @curriculum.profiles.each do |profile| %>
-    <li><%= link_to profile.name(I18n.locale), curriculum_profile_path(:curriculum_id => @curriculum, :id => profile) %></li>
+    <%
+      profile_name = profile.name(I18n.locale)
+      profile_name = '<no name>' if profile_name.blank?
+    %>
+    <li><%= link_to profile_name, curriculum_profile_path(:curriculum_id => @curriculum, :id => profile) %></li>
   <% end %>
 </ul>
 

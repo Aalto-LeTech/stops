@@ -95,3 +95,20 @@ table.competence-selector span.selected-competence-name {
   -moz-border-radius: 20px;
   padding: 2px 5px;
 }
+
+
+/**
+ * Profile selection view
+ */
+
+.competence-courses a {
+  color: #00f;
+}
+
+.competence-courses a.included {
+  color: #888;
+}
+
+.competence-courses a.completed {
+  color: #88f;
+}

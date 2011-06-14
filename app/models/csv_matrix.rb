@@ -99,7 +99,7 @@ class CsvMatrix
     Skill.transaction do
       row = 6
       while row < @row_count
-        code = @matrix[row][0]  # Course code in the left column
+        code = (@matrix[row][0] || '').strip  # Course code in the left column
         
         # Skip blank rows
         if code.blank?
@@ -108,7 +108,6 @@ class CsvMatrix
         end
         
         # Parse course attributes
-        code.strip!
         name = (@matrix[row][1] || '').strip
         period = (@matrix[row][2] || '').strip
         credits = (@matrix[row][3] || '').strip

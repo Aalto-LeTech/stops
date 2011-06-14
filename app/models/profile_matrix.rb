@@ -29,7 +29,7 @@ class ProfileMatrix < CsvMatrix
     #ProfileDescription.create(:profile_id => @profile.id, :locale => @locale, :name => profile_name.strip)
   end
   
-  # Reads profiles
+  # Reads profiles at the top
   def process_header
     @competences = Array.new  # Holds copies so that profiles don't have to be re-loaded on the next iteration
     @skills = Array.new
@@ -96,9 +96,8 @@ class ProfileMatrix < CsvMatrix
         for col in 8...@col_count
           next if @competences[col].nil?
           
-          # Is this strict or supporting prereq
-          relation_type = @@relation_types[(@matrix[row][col] || '').strip.upcase]
-          next unless relation_type
+          # Skip empty cells
+          next if (@matrix[row][col] || '').strip.blank?
             
           if @competences[col].nil?
             puts "Unknown competence in column #{col}"
@@ -116,23 +115,23 @@ class ProfileMatrix < CsvMatrix
           end
           
           # Add skill prereq
-          SkillPrereq.create(:skill_id => @skills[col].id, :prereq_id => @rows_skills[row].id, :requirement => relation_type)
+          SkillPrereq.create(:skill_id => @skills[col].id, :prereq_id => @rows_skills[row].id, :requirement => STRICT_PREREQ)
           
           # Add course prereq if this competence-course pair has not been added
           course_prereq = handled_courses["#{@competences[col].id}-#{@rows_courses[row].id}"]
           
-          if course_prereq.nil? || (course_prereq == SUPPORTING_PREREQ && relation_type == STRICT_PREREQ)
+          if course_prereq.nil?
             # Does it exist?
             p = CompetenceCourse.where(:competence_id => @competences[col].id, :scoped_course_id => @rows_courses[row].id).first
             
             # Insert if it does not exist
-            if p.nil? || p.requirement == SUPPORTING_PREREQ && relation_type == STRICT_PREREQ
+            if p.nil?
               CompetenceCourse.delete_all(["competence_id = ? AND scoped_course_id = ?", @competences[col].id, @rows_courses[row].id])
-              CompetenceCourse.create(:competence_id => @competences[col].id, :scoped_course_id => @rows_courses[row].id, :requirement => relation_type)
+              CompetenceCourse.create(:competence_id => @competences[col].id, :scoped_course_id => @rows_courses[row].id, :requirement => STRICT_PREREQ)
             end
             
             # Make a note that this relation has been added
-            handled_courses["#{@competences[col].id}-#{@rows_courses[row].id}"] = relation_type
+            handled_courses["#{@competences[col].id}-#{@rows_courses[row].id}"] = STRICT_PREREQ
           end
         end
       end

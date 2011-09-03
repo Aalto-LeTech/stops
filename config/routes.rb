@@ -36,6 +36,7 @@ ActionController::Routing::Routes.draw do |map|
         get 'cycles'
         get 'prereqs'
         get 'graph'
+        get 'outcomes'
       end
       
       resources :profiles, :controller => 'curriculums/profiles' do
@@ -58,7 +59,7 @@ ActionController::Routing::Routes.draw do |map|
         
         member do
           get 'supporting'
-          get :delete
+          get 'delete'
         end
       end
       

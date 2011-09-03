@@ -1,6 +1,6 @@
 class CsvMatrix
   
-  # Searches for AbstractCourse with 'name'. Creates a new one if none is found.
+  # Searches for AbstractCourse with 'code'. Creates a new one if none is found.
   # Returns an AbstactCourse
   def insert_or_update_abstract_course(code, name, locale, period)
     # Insert or update course
@@ -91,13 +91,13 @@ class CsvMatrix
     return period_end - period_begin + 1
   end
 
-    # Reads course codes and skills in the left. If the course or skill does not exist in the database, creates it. Populates the @rows_skills array.
+  # Reads course codes and skills in the left. If the course or skill does not exist in the database, creates it. Populates the @rows_skills array.
   def process_prereqs
     @rows_skills = Array.new(@row_count)
     @rows_courses = Array.new(@row_count)
   
     Skill.transaction do
-      row = 6
+      row = 8
       while row < @row_count
         code = (@matrix[row][0] || '').strip  # Course code in the left column
         

@@ -9,6 +9,7 @@
     <ul>
       <li><%= link_to t(:curriculum_edit_link), edit_curriculum_path(:id => @curriculum) %></li>
       <li><%= link_to t(:curriculum_cycles_link), cycles_curriculum_path(:id => @curriculum) %></li>
+      <li><%= link_to 'List outcomes', outcomes_curriculum_path(:id => @curriculum) %></li>
     </ul>
   </div>
 <% end %>

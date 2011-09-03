@@ -43,6 +43,7 @@ class PrereqMatrix < CsvMatrix
         scoped_course = ScopedCourse.where(:code => code, :curriculum_id => @curriculum.id).first
         unless scoped_course
           puts "Header row contains an unknown course: #{code}"
+          col += 1
           next
         end
         

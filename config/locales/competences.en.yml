@@ -3,7 +3,7 @@ en:
   competence_level_label: "Level"
   competence_name_label: "Name"
   competence_description_label: "Desription"
-  
+
   # Show
   competence_skills_heading: "Outcomes"
   competence_instructions: ""
@@ -14,9 +14,10 @@ en:
   competence_credits_passed: "Already passed"
   competence_credits_shared: "Included in other competences"
   competence_supporting_courses_link: "Choose supporting courses"
-  
+  constributing_courses_link: 'Detailed list of course outcomes'
+
   competence_supporting_courses_heading: "Select supporting courses"
-  
+
   # Add to plan
   competence_add_heading: "Add %{profile} %{competence} to study plan"
   competence_add_to_plan: "Add to studyplan"
@@ -24,4 +25,6 @@ en:
   competence_courses_to_add: "The following courses will be added to your study plan:"
   competence_courses_already_in: "The following courses already were in your study plan:"
   competence_courses_to_remove: "The following courses will be removed from your study plan:"
-  
+
+  # Contributing outcomes
+  contributors_heading: "Courses contributing to %{competence}"

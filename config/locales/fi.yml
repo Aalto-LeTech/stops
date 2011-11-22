@@ -2,7 +2,7 @@
 # See http://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 fi:
-  program_name: "Opiskelijaa ohjaava opinto-ohjelma"
+  program_name: "Opiskelijaa ohjaava opinto-opas"
   navi_plan: "Oma opintosuunnitelma"
   navi_curriculums: "Kaikki opinto-oppaat"
   navi_profiles: "Profiilit"

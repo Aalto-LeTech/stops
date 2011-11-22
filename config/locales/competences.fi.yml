@@ -1,12 +1,12 @@
-fi: 
+fi:
   competence_create_link: "Create new competence level"
   competence_level_label: "Taso"
   competence_name_label: "Nimi"
   competence_description_label: "Kuvaus"
-  
+
   # Show
   competence_skills_heading: "Tuottaa valmiudet"
-  
+  competence_instructions: ""
   competence_courses_heading: "Kurssit"
   competence_edit_link: "Muokkaa osaamiskokonaisuutta"
   competence_credits_total: "Yhteensä"
@@ -14,9 +14,10 @@ fi:
   competence_credits_passed: "Jo suoritettu"
   competence_credits_shared: "Sisältyy jo suunnitelmaan"
   competence_supporting_courses_link: "Valitse tukevia kursseja"
-  
+  constributing_courses_link: "Kurssit, jotka tuottavat valmiuden"
+
   competence_supporting_courses_heading: "Valitse tukevia kursseja"
-  
+
   # Add to plan
   competence_add_heading: "Lisää %{profile} %{competence} opintosuunnitelmaan"
   competence_add_to_plan: "Lisää opintosuunnitelmaan"
@@ -24,4 +25,6 @@ fi:
   competence_courses_to_add: "Seuraavat kurssit lisätään opintosuunnitelmaasi:"
   competence_courses_already_in: "Seuraavat kurssit olivat jo ennestään opintosuunnitelmassasi:"
   competence_courses_to_remove: "Seuraavat kurssit poistetaan opintosuunnitelmastasi:"
-  
+
+  # Contributing outcomes
+  contributors_heading: "Kurssit, jotka tuottavat valmiuden %{competence}"

@@ -1,4 +1,7 @@
-<h1><%= @profile.name(I18n.locale) %> <%= @competence.name(I18n.locale) %></h1>
+<h1>
+  <%= link_to @profile.name(I18n.locale), curriculum_profile_path(:curriculum_id => @curriculum.id, :id => @profile.id) %>
+  <%= link_to @competence.name(I18n.locale), curriculum_competence_path(:curriculum_id => @curriculum.id, :id => @competence.id)  %>
+</h1>
 
 <h2><%= @skill.description(I18n.locale) %></h2>
 
@@ -11,3 +14,5 @@
     <% end %>
   </ul>
 <% end %>
+
+<p class="back-link"><%= link_to t(:Back), curriculum_competence_path(:curriculum_id => @curriculum.id, :id => @competence.id) %></p>

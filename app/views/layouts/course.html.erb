@@ -8,7 +8,7 @@
 
 <%= render :partial => 'layouts/header' %>
 
-  
+
 <div class="page">
   <!--div id="contextHelp">
   </div-->
@@ -17,14 +17,14 @@
       <li><%= link_to t(:navi_plan), plan_path %></li>
       <li><%= link_to t(:navi_curriculums), curriculums_path %></li>
     </ul>
-    
+
     <% if @curriculum %>
       <h2><%= @curriculum.name %></h2>
 
       <ul>
         <li><%= link_to t(:navi_profiles), profiles_path %></li>
         <li><%= link_to t(:navi_courses), courses_path %></li>
-        
+
         <!-- Courses belonging to the curriculum -->
         <ul>
           <% @curriculum.courses.each do |course| %>

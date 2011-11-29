@@ -60,11 +60,7 @@ class Curriculums::CompetencesController < CurriculumsController
   end
 
   def contributors
-
-    
     @courses = @competence.contributing_skills
-
-
   end
 
   def matrix

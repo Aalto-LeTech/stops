@@ -105,26 +105,25 @@ class Competence < ActiveRecord::Base
   def contributing_skills
     courses = {}  # {course_id => course}
     result = {}   # {course => {skill_id => skill}}
-    
+
     # Load courses
     courses_recursive.each do |course|
       result[course] = {}
       courses[course.id] = course
     end
-    
+
     stack = []
-    
+
     self.skills.each do |skill|
       skill.strict_prereqs.each do |prereq|
         stack.push prereq
-        #logger.info "#{skill.skillable_type} #{skill.description('fi')}"
       end
     end
-    
+
     # Run DFS for skills to construct an array of skills that make the competence
     while skill = stack.pop
       #logger.info "XXXXXX Processing #{skill.skillable.name('fi')} - #{skill.description('fi')}"
-      
+
       # Load course if it has not been loaded
       #courses[skill.skillable_id] = ScopedCourse.find(skill.skillable_id) unless courses[skill.skillable_id]
 

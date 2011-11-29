@@ -7,21 +7,22 @@ en:
   navi_curriculums: "All Curriculums"
   navi_profiles: "Profiilit"
   navi_courses: "Courses"
-  
+
   navi_my_plan: "My Study Plan"
   navi_browse_curriculums: "Browse study guides"
-  
+
   frontpageTab: "Frontpage"
   myPlanTabCurriculum: "My Curriculum"
   myPlanTabProfiles: "Profiles"
-  myPlanTabCourses: "My courses"
+  myPlanTabAllCourses: "Courses"
+  myPlanTabMyCourses: "My courses"
   myPlanTabSchedule: "Schedule"
   myPlanTabRecord: "Record"
   myPlanThisPeriod: "Current period"
   curriculumsTab: "Study guides"
-  
+
   example_schedule: "Example schedule"
-  
+
   cr: "cr"
   Ok: "OK"
   Upload: "Upload"
@@ -31,12 +32,12 @@ en:
   Select: "Select"
   Cancel: "Cancel"
   Back: "Takaisin"
-  
-  
+
+
   ##############
   # Time & Date
   ##############
-  
+
   date:
     formats:
       # Use the strftime parameters for formats.

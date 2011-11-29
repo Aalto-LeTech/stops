@@ -1,0 +1,13 @@
+<h1><%= @profile.name(I18n.locale) %> <%= @competence.name(I18n.locale) %></h1>
+
+<h2><%= @skill.description(I18n.locale) %></h2>
+
+<% @courses.each do |row| %>
+  <h3><%= row[0].code %> <%= row[0].name(I18n.locale) %></h3>
+
+  <ul>
+    <% row[1].each_value do |skill| %>
+      <li><%= skill.description(I18n.locale) %></li>
+    <% end %>
+  </ul>
+<% end %>

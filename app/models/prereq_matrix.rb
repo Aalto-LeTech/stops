@@ -50,7 +50,7 @@ class PrereqMatrix < CsvMatrix
         # Add translation
         name_en = @matrix[2][col] || ''   # Course name (en)
         cd = CourseDescription.where(:abstract_course_id => scoped_course.abstract_course.id, :locale => 'en').first
-        CourseDescription.create(:abstract_course_id => scoped_course.abstract_course.id, :locale => 'en', :name => name_en) unless cd
+        CourseDescription.create(:abstract_course_id => scoped_course.abstract_course.id, :locale => 'en', :name => name_en) unless cd || name_en.blank?
 
         # Reset course prereqs
         scoped_course.course_prereqs.clear
@@ -73,7 +73,7 @@ class PrereqMatrix < CsvMatrix
 
           # Add translation
           sd = SkillDescription.where(:skill_id => skill.id, :locale => 'en').first
-          SkillDescription.create(:skill_id => skill.id, :locale => 'en', :description => skill_description_en) unless sd
+          SkillDescription.create(:skill_id => skill.id, :locale => 'en', :description => skill_description_en) unless sd || skill_description_en.blank?
 
           unless skill
             puts "  SKILL #{skill_position} NOT FOUND"

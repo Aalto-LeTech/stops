@@ -6,7 +6,7 @@
   <%= @profile.name(I18n.locale) %>
 </h1>
 
-<p><%=t :profile_show_instructions %></p>
+<!--p><%=t :profile_show_instructions %></p-->
 
 <!-- Description -->
 <p><%= @profile.description(I18n.locale) %></p>
@@ -31,7 +31,7 @@
         <% end %>
       <% end %>
     </div>
-    
+
     <h2><%= competence.name(I18n.locale) %></h2>
     <p><%= competence.description(I18n.locale) %><p>
 
@@ -43,10 +43,10 @@
         <% end %>
       </ul>
     </div>
-    
+
     <div class="competence-courses">
       <h3><%=t :profile_strict_prereqs %></h3>
-      
+
       <table class="course-list">
         <% credits_counter = included_counter = passed_counter = 0 %>
         <% competence.courses_cumulative.each do |course| %>
@@ -76,7 +76,7 @@
             <td><%=t :competence_credits_total %></td>
             <td><%= credits_counter %> <%=t :cr %></td>
           </tr>
-          
+
           <% unless competence_selected %>
             <tr>
               <td></td>
@@ -97,9 +97,9 @@
         </tfoot>
       </table>
     </div>
-    
+
     <div class="clear"></div>
-    
+
     <% if @user.has_competence?(competence) %>
       <%= link_to t(:competence_supporting_courses_link), supporting_studyplan_competence_path(:id => competence.id) %>
     <% end %>

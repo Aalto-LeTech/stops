@@ -1,0 +1,17 @@
+body {
+  font-size: 9pt;
+}
+
+#header, .topNaviTabs, .leftNavi {
+  display: none;
+}
+
+.page {
+
+}
+
+.content {
+  margin: 0em;
+  padding: 0em;
+  border: none;
+}

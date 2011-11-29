@@ -48,6 +48,8 @@ ActionController::Routing::Routes.draw do |map|
           get 'contributors'
           post 'matrix'
         end
+
+        resources :skills, :controller => 'curriculums/skills', :only => :show
       end
 
       resources :courses, :controller => 'curriculums/courses', :only => [:index, :show]  # ScopedCourses

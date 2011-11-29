@@ -1,7 +1,7 @@
 <div id="header" class="header">
   <!-- Logo -->
   <div class="logo"><span class="o4">O<sup>4</sup></span> <span class="program-name"><%=t :program_name%></span></div>
-  
+
   <!-- Login -->
   <div class="login">
     <% if logged_in? %>
@@ -11,7 +11,7 @@
 
   <div class="navibar">
     <ul>
-      <% 
+      <%
       # Language
       # Only show the language button for GET requests. If the current page is the result of a POST request, doing a GET request to the same URL could lead to a different view or a 404.
       if request.get? %>
@@ -35,7 +35,7 @@
   <ul>
     <li><%= link_to t(:frontpageTab), root_path %></li>
   </ul>
-  
+
   <ul>
     <li><%= link_to t(:curriculumsTab), curriculums_path %></li>
   </ul>
@@ -44,7 +44,7 @@
     <li><%= link_to t(:myPlanTabCurriculum), studyplan_curriculum_path %></li>
     <li><%= link_to t(:myPlanTabProfiles), studyplan_profiles_path %></li>
     <li><%= link_to t(:myPlanTabAllCourses), studyplan_courses_path %></li>
-    <li><%= link_to t(:myPlanTabMyCourses), studyplan_courses_path %></li>
+    <!--li><%= link_to t(:myPlanTabMyCourses), studyplan_courses_path %></li-->
     <li><%= link_to t(:myPlanTabSchedule), studyplan_schedule_path %></li>
     <!--li><%= link_to t(:myPlanTabRecord), studyplan_record_path %></li-->
   </ul>

@@ -85,6 +85,7 @@ function GraphCourse(id, code, name) {
 
   this.visible = false;
   this.visibleNeighborsForward = 0;
+  this.visited = false;
 
 //   this.visited = false;
 //   this.prereqs = {};           // Prerequisite courses. courseCode => course object

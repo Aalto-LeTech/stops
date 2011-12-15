@@ -147,6 +147,10 @@ var skillGraphView = {
     while (stack.length > 0) {
       var course = stack.pop();
 
+      if (course.visited) {
+        continue;
+      }
+
       // Visit node
       //levels[1][course.id] = course;
       courses[course.id] = course;
@@ -156,6 +160,8 @@ var skillGraphView = {
       for (var array_index in course.prereqs) {
         stack.push(course.prereqs[array_index]);
       }
+
+      course.visited = true;
     }
 
     // Assign levels

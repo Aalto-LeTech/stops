@@ -23,16 +23,13 @@ GraphSkill.prototype.click = function(event) {
   // Reset hilights and SVG
   this.view.resetHilights();
 
-//   for (var neighbor_index in this.prereqTo) {
-//     var neighbor = this.prereqTo[neighbor_index];
-//     console.log(neighbor.description);
-//   }
-
   this.dfsBackward(true);
   this.visited = false;
   this.dfsForward(true);
 
   this.view.resetVisitedSkills();
+
+  return false;
 }
 
 GraphSkill.prototype.dfsBackward = function(drawEdges) {

@@ -54,6 +54,37 @@ GraphLevel.prototype.setYindicesBackwards = function() {
   this.distributeCoursesEvenly();
 }
 
+GraphLevel.prototype.setYindicesForward = function() {
+  // Set each course to the barycenter of the backward neighbors
+  for (var course_index in this.courses) {
+    var course = this.courses[course_index];
+    var visibleNeighbors = 0;
+
+    console.log("Positioning " + course.name);
+
+    // Calculate average of the y coordinates of the backward neighbor
+    var y = 0.0;
+    for (var neighbor_index in course.prereqs) {
+      var neighbor = course.prereqs[neighbor_index];
+      if (neighbor.visible) {
+        y += neighbor.y;
+        visibleNeighbors++;
+      }
+    }
+    console.log("Sum = " + y);
+
+    if (course.prereqTo.length > 0) {
+      y /= visibleNeighbors;
+    } else {
+      y = this.height / 2.0;
+    }
+
+    console.log("Average = " + y);
+  }
+
+  this.distributeCoursesEvenly();
+}
+
 GraphLevel.prototype.distributeCoursesEvenly = function() {
   // Sort courses by Y
   this.courses.sort(function(a,b){b.y - a.y});
@@ -61,6 +92,7 @@ GraphLevel.prototype.distributeCoursesEvenly = function() {
   // Distribute evenly
   //var step = (this.maxHeight - this.height) / (this.courses.length - 1)
   var y = this.maxHeight / 2.0 - this.height / 2;
+  console.log("maxHeight = " + this.maxHeight);
   for (var course_index in this.courses) {
     var course = this.courses[course_index]
     course.y = y;
@@ -116,6 +148,9 @@ GraphCourse.prototype.getElement = function(view) {
   }
 
   var div = $('<div class="course"><h1>' + this.code + ' ' + this.name + '</h1></div>');
+  div.click($.proxy(this.click, this));
+  this.view = view;
+
   var ul = $('<ul />');
   div.append(ul);
 
@@ -141,6 +176,21 @@ GraphCourse.prototype.setPosition = function(x, y) {
 
 GraphCourse.prototype.updatePosition = function() {
   this.element.offset({ left: this.x, top: this.y });
+}
+
+GraphCourse.prototype.click = function() {
+  // Reset hilights and SVG
+  this.view.resetHilights();
+
+  for (var skill_index in this.skills) {
+    var skill = this.skills[skill_index];
+
+    skill.dfsBackward(true);
+    skill.visited = false;
+    skill.dfsForward(true);
+  }
+
+  this.view.resetVisitedSkills();
 }
 
 // GraphCourse.prototype.calculateVisibleNeighbors = function() {

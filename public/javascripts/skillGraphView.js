@@ -136,10 +136,10 @@ var skillGraphView = {
       return;
     }
 
-    this.attachCourse(targetCourse);
+    //this.attachCourse(targetCourse);
 
 
-    // Run through course graph with DFS and add courses to level 1
+    // Run through course graph with DFS to find out which courses are visible
     //var levels = [targetCourse, {}];
     var courses = {};
     var stack = [targetCourse];
@@ -155,13 +155,34 @@ var skillGraphView = {
       //levels[1][course.id] = course;
       courses[course.id] = course;
       course.visible = true;
+      course.visited = true;
 
       // Add neighbors to stack
       for (var array_index in course.prereqs) {
         stack.push(course.prereqs[array_index]);
       }
+    }
 
+    // DFS forward
+    stack = [targetCourse];
+    targetCourse.visited = false;
+    while (stack.length > 0) {
+      var course = stack.pop();
+
+      if (course.visited) {
+        continue;
+      }
+
+      // Visit node
+      //levels[1][course.id] = course;
+      courses[course.id] = course;
+      course.visible = true;
       course.visited = true;
+
+      // Add neighbors to stack
+      for (var array_index in course.prereqTo) {
+        stack.push(course.prereqTo[array_index]);
+      }
     }
 
     // Assign levels
@@ -184,7 +205,6 @@ var skillGraphView = {
       }
 
       level++;
-      console.log("Level" + level);
     } while(nextLevel);
 
 
@@ -211,7 +231,7 @@ var skillGraphView = {
     }
 
     // Calculate level heights
-    var maxHeight = 0;
+    var maxHeight = $(document).height();
     for (var level_index in this.levels) {
       var height = this.levels[level_index].updateHeight();
       if (height > maxHeight) {
@@ -233,12 +253,18 @@ var skillGraphView = {
       */
 
     // Set Y indices
-    for (var level_index = 0; level_index < this.levels.length; level_index++) {
-      var level = this.levels[level_index];
-      //var neighbor = this.levels[level - 1];
-
-      level.setYindicesBackwards();
+    for (var level_index = targetCourse.level; level_index < this.levels.length; level_index++) {
+      this.levels[level_index].setYindicesBackwards();
     }
+
+    console.log("Levels: " + this.levels.length);
+    console.log(targetCourse.level);
+    console.log("set y indices forward");
+    for (var level_index = targetCourse.level - 1; level_index >= 0; level_index--) {
+      console.log("level " + level_index);
+      this.levels[level_index].setYindicesForward();
+    }
+    console.log("done setting y indices forward");
 
     // Updating positions
     for (var course_index in courses) {

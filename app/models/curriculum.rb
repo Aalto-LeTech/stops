@@ -2,8 +2,6 @@ class Curriculum < ActiveRecord::Base
 
   validates_presence_of :start_year
   validates_presence_of :end_year
-  validates_uniqueness_of :start_year
-  validates_uniqueness_of :end_year
 
   has_many :profiles, :dependent => :destroy
   has_many :courses, :class_name => 'ScopedCourse', :dependent => :destroy, :order => 'code'

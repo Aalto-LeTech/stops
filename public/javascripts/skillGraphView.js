@@ -184,6 +184,7 @@ var skillGraphView = {
       }
 
       level++;
+      console.log("Level" + level);
     } while(nextLevel);
 
 

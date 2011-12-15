@@ -1,20 +1,22 @@
-fi: 
+fi:
   # Index
   curriculums_heading: "Opinto-oppaat"
   curriculum_new: "Lisää opinto-opas"
   new_curriculum_heading: "Lisää opinto-opas"
-  
+
   # Show
   curriculum_edit_link: "Muokkaa opinto-opasta"
   curriculum_cycles_link: "Tarkista syklit"
-  
+
   curriculum_start_year: "Voimassaolo alkaa"
   curriculum_end_year: "Voimassaolo päättyy"
   curriculum_prereqs_csv: "Esitietomatriisi"
   curriculum_profiles_csv: "Profiilimatriisi"
-  
+
   curriculum_start_year_hint: "esim. 2010"
   curriculum_end_year_hint: "esim. 2011"
+  curriculum_name: "Nimi"
+  curriculum_name_hint: "esim. Rakennustekniikka 2012-2013"
 
   activerecord:
     errors:

@@ -121,6 +121,7 @@
   -moz-border-radius: 4px;
   padding: 2px;
   margin: 0px;
+  cursor: pointer;
 }
 
 #course-graph div.course h1 {

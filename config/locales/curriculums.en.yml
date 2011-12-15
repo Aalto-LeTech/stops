@@ -3,18 +3,20 @@ en:
   curriculums_heading: "Curriculums"
   curriculum_new: "Add curriculum"
   new_curriculum_heading: "Create new curriculum"
-  
+
   # Show
   curriculum_edit_link: "Edit curriculum"
   curriculum_cycles_link: "Check cycles"
-  
+
   curriculum_start_year: "First year"
   curriculum_end_year: "Last year"
   curriculum_prereqs_csv: "Prerequirement matrix"
   curriculum_profiles_csv: "Profiles matrix"
-  
+
   curriculum_start_year_hint: "e.g. 2010"
   curriculum_end_year_hint: "e.g. 2011"
+  curriculum_name: "Name"
+  curriculum_name_hint: "e.g. 2012-2013"
 
   activerecord:
     errors:

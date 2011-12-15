@@ -7,10 +7,10 @@ fi:
   navi_curriculums: "Kaikki opinto-oppaat"
   navi_profiles: "Profiilit"
   navi_courses: "Kurssit"
-  
+
   navi_my_plan: "Oma opintosuunnitelma"
   navi_browse_curriculums: "Selaa opinto-oppaita"
-  
+
   frontpageTab: "Etusivu"
   myPlanTabCurriculum: "Oma opinto-opas"
   myPlanTabProfiles: "Profiilit"
@@ -20,9 +20,9 @@ fi:
   myPlanTabRecord: "Suoritukset"
   myPlanThisPeriod: "Kuluva periodi"
   curriculumsTab: "Kaikki opinto-oppaat"
-  
+
   example_schedule: "Mallilukujärjestys"
-  
+
   cr: "op"
   Ok: "OK"
   Upload: "Tallenna"
@@ -32,7 +32,8 @@ fi:
   Select: "Valitse"
   Cancel: "Peruuta"
   Back: "Takaisin"
-  
+  Visualize: "Visualisoi"
+
   ##############
   # Time & Date
   ##############

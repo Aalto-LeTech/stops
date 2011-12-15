@@ -3,6 +3,11 @@
 <% form_for :curriculum, @curriculum, :url => curriculums_url do |f| %>
   <table>
     <tr>
+      <td><%= f.label :name, t(:curriculum_name) %></td>
+      <td><%= f.text_field :name %></td>
+      <td></td>
+    </tr>
+    <tr>
       <td><%= f.label :start_year, t(:curriculum_start_year) %></td>
       <td><%= f.text_field :start_year %></td>
       <td><%= f.hint :start_year %></td>
@@ -13,7 +18,7 @@
       <td><%= f.hint :end_year %></td>
     </tr>
   </table>
-  
+
   <p><%= f.submit t(:Upload) %></p>
 <% end %>
 

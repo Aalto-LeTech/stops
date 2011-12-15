@@ -12,7 +12,7 @@ class ScopedCourse < ActiveRecord::Base
 
   # Prerequisite skills of this course
   has_many :prereqs, :through => :course_prereqs, :source => :prereq, :order => 'requirement DESC, code'
-  has_many :strict_prereqs, :through => :course_prereqs, :source => :prereq, :order => 'requirement DESC, code', :conditions => "requirement = #{STRICT_PREREQ}"
+  has_many :strict_prereqs, :through => :course_prereqs, :source => :prereq, :conditions => "requirement = #{STRICT_PREREQ}" # TODO: :order => 'requirement DESC, code'
   has_many :supporting_prereqs, :through => :course_prereqs, :source => :prereq, :order => 'requirement DESC, code', :conditions => "requirement = #{SUPPORTING_PREREQ}"
 
   # Courses for which this is a prerequisite

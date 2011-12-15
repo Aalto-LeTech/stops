@@ -1,16 +1,16 @@
 class CurriculumsController < ApplicationController
-  
+
   respond_to :html
   respond_to :json, :only => 'prereqs'
-  
+
   layout 'curriculum'
-  
+
   caches_page :prereqs
-  
+
   def load_curriculum
     @curriculum = Curriculum.find(params[:curriculum_id])
   end
-  
+
   # GET /curriculums
   # GET /curriculums.xml
   def index
@@ -27,7 +27,7 @@ class CurriculumsController < ApplicationController
   # GET /curriculums/1.xml
   def show
     @curriculum = Curriculum.find(params[:id])
-    
+
     authorize! :read, @curriculum
 
     respond_to do |format|
@@ -82,15 +82,15 @@ class CurriculumsController < ApplicationController
       matrix.process
       flash[:success] = "#{params[:prereqs_csv].original_filename} uploaded"
     end
-    
+
     if params[:profiles_csv]
       matrix = ProfileMatrix.new(params[:profiles_csv], @curriculum, I18n.locale)
       matrix.process
       flash[:success] = "#{params[:profiles_csv].original_filename} uploaded"
     end
-    
+
     render :action => "edit"
-    
+
 #     respond_to do |format|
 #       if @curriculum.update_attributes(params[:curriculum])
 #         format.html { redirect_to(@curriculum, :notice => 'Curriculum was successfully updated.') }
@@ -107,7 +107,7 @@ class CurriculumsController < ApplicationController
   def destroy
     @curriculum = Curriculum.find(params[:id])
     authorize! :destroy, @curriculum
-    
+
     @curriculum.destroy
 
     respond_to do |format|
@@ -115,36 +115,36 @@ class CurriculumsController < ApplicationController
       format.xml  { head :ok }
     end
   end
-  
+
   def cycles
     @curriculum = Curriculum.find(params[:id])
-    
+
     @cycles = @curriculum.detect_cycles
   end
-  
+
 
   # Get all strict prereqs of all courses
   def prereqs
     @curriculum = Curriculum.find(params[:id])
-    
+
     prereqs = CoursePrereq.where(:requirement => STRICT_PREREQ).joins('INNER JOIN scoped_courses AS course ON course.id = course_prereqs.scoped_course_id INNER JOIN scoped_courses AS prereq ON prereq.id = course_prereqs.scoped_prereq_id').where("course.curriculum_id = ?", @curriculum).select('course.code AS course_code, prereq.code AS prereq_code, course.id AS course_id, prereq.id AS prereq_id')
-    
+
     respond_to do |format|
       format.html { render :text => prereqs.to_json }
       format.xml { render :xml => prereqs }
       format.json { render :json => prereqs }
     end
   end
-  
+
   def graph
     @curriculum = Curriculum.find(params[:id])
-    
+
     prereqs = CoursePrereq.joins(:course).where("scoped_courses.curriculum_id = ?", @curriculum).where(:requirement => STRICT_PREREQ)
     render :action => 'graphviz', :locals => {:prereqs => prereqs}, :layout => false, :content_type => 'text/x-graphviz'
   end
-  
+
   def outcomes
     @curriculum = Curriculum.find(params[:id])
   end
-  
+
 end

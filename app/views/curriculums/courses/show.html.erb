@@ -50,6 +50,8 @@
 
 <h2><%=t :course_path_heading %></h2>
 
+<%= link_to 'Visualize', prereqs_curriculum_course_path(:curriculum_id => @curriculum.id, :id => @course.id) %>
+
 <table class="course-path">
   <thead>
     <tr>

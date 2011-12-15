@@ -52,7 +52,13 @@ ActionController::Routing::Routes.draw do |map|
         resources :skills, :controller => 'curriculums/skills', :only => :show
       end
 
-      resources :courses, :controller => 'curriculums/courses', :only => [:index, :show]  # ScopedCourses
+      resources :courses, :controller => 'curriculums/courses', :only => [:index, :show] do  # ScopedCourses
+        member do
+          get :prereqs
+        end
+      end
+
+      resources :skills, :controller => 'curriculums/skills', :only => [:index]
     end
 
     # My Plan

@@ -43,7 +43,7 @@ ActionController::Routing::Routes.draw do |map|
         resources :courses, :controller => 'curriculums/courses', :only => [:show]  # ScopedCourses, courses that belong to the profile
       end
 
-      resources :competences, :controller => 'curriculums/competences', :only => [:show, :edit, :update] do
+      resources :competences, :controller => 'curriculums/competences', :only => [:index, :show, :edit, :update] do
         member do
           get 'contributors'
           post 'matrix'

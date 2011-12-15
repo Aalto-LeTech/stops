@@ -2,7 +2,16 @@ class Curriculums::CompetencesController < CurriculumsController
 
   #before_filter :load_curriculum
   #before_filter :load_profile
-  before_filter :load_competence
+  before_filter :load_competence, :except => [:index]
+
+  def index
+    load_curriculum
+    @competences = Competence.where(:profile_id => @curriculum.profile_ids).joins(:competence_descriptions).where(["competence_descriptions.locale = ?", I18n.locale])
+
+    respond_to do |format|
+      format.json { render :json => @competences.select("competences.id, competence_descriptions.name AS translated_name").to_json(:methods => :skill_ids) }
+    end
+  end
 
   def load_competence
     #if params[:competence_id]
@@ -17,7 +26,6 @@ class Curriculums::CompetencesController < CurriculumsController
 
   # curriculums/1/competences/1
   def show
-
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @competence }
@@ -26,7 +34,6 @@ class Curriculums::CompetencesController < CurriculumsController
 
   # GET /competences/1/edit
   def edit
-
     @courses = @curriculum.courses.includes(:skills)
 
     #top = @competence.skills
@@ -47,7 +54,6 @@ class Curriculums::CompetencesController < CurriculumsController
   # PUT /competences/1
   # PUT /competences/1.xml
   def update
-
     respond_to do |format|
       if @competence.update_attributes(params[:competence])
         format.html { redirect_to @competence }

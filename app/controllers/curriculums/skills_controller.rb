@@ -5,7 +5,8 @@ class Curriculums::SkillsController < CurriculumsController
   respond_to :json, :only => 'index'
 
   def index
-    @skills = Skill.where(:skillable_id => @curriculum.course_ids, :skillable_type => 'ScopedCourse').joins(:skill_descriptions).where(["skill_descriptions.locale = ?", I18n.locale]).select("skills.id, skills.skillable_id, skills.skillable_type, skills.position, skill_descriptions.description AS translated_name").includes(:strict_prereqs)
+    @skills = Skill.where(:skillable_id => @curriculum.course_ids).joins(:skill_descriptions).where(["skill_descriptions.locale = ?", I18n.locale]).select("skills.id, skills.skillable_id, skills.skillable_type, skills.position, skill_descriptions.description AS translated_name").includes(:strict_prereqs)
+    # :skillable_type => 'ScopedCourse'
       #.includes(:strict_prereqs)
 
 

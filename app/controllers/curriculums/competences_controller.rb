@@ -9,7 +9,7 @@ class Curriculums::CompetencesController < CurriculumsController
     @competences = Competence.where(:profile_id => @curriculum.profile_ids).joins(:competence_descriptions).where(["competence_descriptions.locale = ?", I18n.locale])
 
     respond_to do |format|
-      format.json { render :json => @competences.select("competences.id, competence_descriptions.name AS translated_name").to_json(:methods => :skill_ids) }
+      format.json { render :json => @competences.select("competences.id, competence_descriptions.name AS translated_name").to_json(:methods => :strict_prereq_ids) } # :skill_ids
     end
   end
 
@@ -98,5 +98,11 @@ class Curriculums::CompetencesController < CurriculumsController
     end
 
     @competence.refresh_prereq_courses
+  end
+
+  def prereqs
+    @competence = Competence.find(params[:id])
+
+    render :action => 'prereqs', :layout => 'fullscreen'
   end
 end

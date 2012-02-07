@@ -29,11 +29,13 @@ class PrereqMatrix < CsvMatrix
     Skill.transaction do
       col = 8
       while col < @col_count
+        puts "Column #{col}"
         code = @matrix[0][col]   # Course code
 
         # Skip blank cols
         if code.blank?
           col += 1
+          puts "BLANK"
           next
         end
 
@@ -64,8 +66,10 @@ class PrereqMatrix < CsvMatrix
           # Skip blank cells
           if @matrix[4][col].blank?
             col += 1
+            puts "Blank cell"
             next
           end
+          puts "Processing"
 
           # Load skill
           skill = Skill.where(:skillable_type => 'ScopedCourse', :skillable_id => scoped_course.id, :position => skill_position).first
@@ -86,6 +90,7 @@ class PrereqMatrix < CsvMatrix
 
           # Save for later use
           @cols_skills[col] = skill
+          puts "@cols_skills[#{col}]"
           @cols_courses[col] = scoped_course
 
           skill_position += 1
@@ -102,7 +107,6 @@ class PrereqMatrix < CsvMatrix
     handled_courses = Hash.new
 
     SkillPrereq.transaction do
-
       for row in 6...@row_count
         for col in 8...@col_count
           next if @cols_skills[col].nil?
@@ -124,10 +128,15 @@ class PrereqMatrix < CsvMatrix
             if p.nil? || p.requirement == SUPPORTING_PREREQ && relation_type == STRICT_PREREQ  # FIXME: is this correct if we upload a changed matrix with reduced requirements
               CoursePrereq.delete_all(["scoped_course_id = ? AND scoped_prereq_id = ?", @cols_courses[col].id, @rows_courses[row].id])
               CoursePrereq.create(:scoped_course_id => @cols_courses[col].id, :scoped_prereq_id => @rows_courses[row].id, :requirement => relation_type)
+              puts "CREATED PREREQ"
+            else
+              puts "Already exists"
             end
 
             # Make a note that this relation has been added
             handled_courses["#{@cols_courses[col].id}-#{@rows_courses[row].id}"] = relation_type
+          else
+            puts "Already done"
           end
         end
       end

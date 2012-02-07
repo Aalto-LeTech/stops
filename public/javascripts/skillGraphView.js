@@ -1,19 +1,28 @@
 
 var skillGraphView = {
   //svgNS: "http://www.w3.org/2000/svg",
-  courses: {},  // id -> course object
-  skills: {},   // id -> skill object
+  courses: {},     // id -> course object
+  competences: {}, // id -> course object
+  skills: {},      // id -> skill object
 
   initialize: function() {
     this.paper = Raphael(document.getElementById('svg'), 100, 100);
   },
 
-  load: function(coursesPath, skillsPath) {
+  load: function(coursesPath, competencesPath, skillsPath) {
     $.ajax({
       url: coursesPath,
       context: this,
       dataType: 'json',
       success: this.loadCourses,
+      async: false
+    });
+
+    $.ajax({
+      url: competencesPath,
+      context: this,
+      dataType: 'json',
+      success: this.loadCompetences,
       async: false
     });
 
@@ -30,16 +39,9 @@ var skillGraphView = {
    * Loads courses from JSON data.
    */
   loadCourses: function(data) {
-
-//           $.each(data.items, function(i,item){
-//             $("<img/>").attr("src", item.media.m).appendTo("#images");
-//             if ( i == 3 ) return false;
-//           });
-
     for (var array_index in data) {
       var rawData = data[array_index].scoped_course;
 
-      //var periodId = parseInt(rawData.period_id);
       var course = new GraphCourse(rawData.id, rawData.code, rawData.translated_name);
       this.courses[rawData.id] = course;
     }
@@ -57,28 +59,35 @@ var skillGraphView = {
         }
       }
     }
+  },
 
+  /**
+   * Loads competences from JSON data.
+   */
+  loadCompetences: function(data) {
+    for (var array_index in data) {
+      var rawData = data[array_index].competence;
 
-    /*
-    this.periodHeight = this.height / (this.maxPeriod - this.minPeriod + 1);
-    this.courseHeight = this.periodHeight - 4;
-    var courseYoffset = (this.courseHeight - this.periodHeight) / 2;
-
-    // Set coordinates
-    for (var array_index in this.courses) {
-      var course = this.courses[array_index];
-
-      if (course.period === false) {
-        continue;
-      }
-
-      var period = course.period - this.minPeriod;
-      course.y = this.periodHeight * period - courseYoffset;
-      course.x = Math.random() * this.height;
+      //var periodId = parseInt(rawData.period_id);
+      var course = new GraphCourse('c' + rawData.id, '', rawData.translated_name);
+      course.setCompetence(true);
+      this.courses['c' + rawData.id] = course;
     }
-    */
 
+    // Set connections between courses
+    for (var array_index in data) {
+      rawData = data[array_index].competence;
+      course = this.courses['c' + rawData.id];
 
+      for (var array_index2 in rawData.strict_prereq_ids) {
+        var prereq = this.courses[rawData.strict_prereq_ids[array_index2]];
+        console.log("Competence prereq: " + prereq.name)
+
+        if (prereq) {
+          course.addPrereq(prereq);
+        }
+      }
+    }
   },
 
   /**
@@ -94,16 +103,19 @@ var skillGraphView = {
       this.skills[rawData.id] = skill;
 
       // Add skill to course
+      var course = false;
       if (rawData.skillable_type == 'ScopedCourse') {
         var course = this.courses[rawData.skillable_id];
-        if (!course) {
-          //console.log("Course "+rawData.skillable_id+" not found.");
-          continue;
-        }
-
-        course.addSkill(skill);
-        skill.setCourse(course);
+      } else if (rawData.skillable_type == 'Competence') {
+        var course = this.courses['c' + rawData.skillable_id];
       }
+
+      if (!course) {
+        continue;
+      }
+
+      course.addSkill(skill);
+      skill.setCourse(course);
     }
 
     // Set connections between skills
@@ -246,25 +258,14 @@ var skillGraphView = {
     targetCourse.y = (maxHeight + targetCourse.getElement(this).height()) / 2
 
 
-      /*
-      for (var course_index in courses) {
-        var course = courses[course_index];
-      }
-      */
-
     // Set Y indices
     for (var level_index = targetCourse.level; level_index < this.levels.length; level_index++) {
       this.levels[level_index].setYindicesBackwards();
     }
 
-    console.log("Levels: " + this.levels.length);
-    console.log(targetCourse.level);
-    console.log("set y indices forward");
     for (var level_index = targetCourse.level - 1; level_index >= 0; level_index--) {
-      console.log("level " + level_index);
       this.levels[level_index].setYindicesForward();
     }
-    console.log("done setting y indices forward");
 
     // Updating positions
     for (var course_index in courses) {
@@ -320,32 +321,16 @@ var skillGraphView = {
     var element = course.getElement(this);
     courseCanvas.append(element);
   },
-
-  /*
-  clickSkill: function(event) {
-    // Reset hilights
-    // Reset svg
-
-    // Run DFS
-    // hilight visited nodes
-    // draw edges
-  }
-  */
-
 };
 
 
 $(document).ready(function(){
   var element = $('#course-graph');
-//   if (element.length > 0) {
-//     new PathViewer(element);
-//   }
-
-  skillGraphView.initialize();
   var coursesPath = element.data('courses-path');
+  var competencesPath = element.data('competences-path');
   var skillsPath = element.data('skills-path');
 
-  skillGraphView.load(coursesPath, skillsPath);
-  skillGraphView.initializeVisualization(parseInt(element.data('course-id')));
-
+  skillGraphView.initialize();
+  skillGraphView.load(coursesPath, competencesPath, skillsPath);
+  skillGraphView.initializeVisualization(element.data('course-id')); // parseInt
 });

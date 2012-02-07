@@ -46,6 +46,7 @@ ActionController::Routing::Routes.draw do |map|
       resources :competences, :controller => 'curriculums/competences', :only => [:index, :show, :edit, :update] do
         member do
           get 'contributors'
+          get 'prereqs'
           post 'matrix'
         end
 
@@ -54,7 +55,7 @@ ActionController::Routing::Routes.draw do |map|
 
       resources :courses, :controller => 'curriculums/courses', :only => [:index, :show] do  # ScopedCourses
         member do
-          get :prereqs
+          get 'prereqs'
         end
       end
 

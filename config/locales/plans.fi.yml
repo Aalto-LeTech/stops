@@ -1,8 +1,9 @@
-fi: 
+# encoding: utf-8
+fi:
   plan_heading: "Oma opintosuunnitelma"
   plan_empty_instructions: "Valitse opinto-oppaasta itseäsi kiinnostavat profiilit"
   plan_my_courses: "Omat kurssit"
-  
+
   current_curriculum_heading: "Opinto-opas"
   current_curriculum: "Käytät tällä hetkellä opinto-opasta %{name}"
   choose_curriculum_heading: "Valitse opinto-opas"

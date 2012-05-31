@@ -1,9 +1,10 @@
-fi: 
+# encoding: utf-8
+fi:
   courses_heading: "Kurssit"
-  
+
   my_courses_heading: "Omat kurssit"
   my_courses_no_profile_hint: "Valitse ensin Profiilit-osiosta itseäsi kiinnostavat profiilit"
-  
+
   course_Provides: "Tarjoaa valmiudet"
   course_provides: "Tarjoaa valmiudet"
   course_paths_hint: "Klikkaa valmiuksia nähdäksesi opintopolut valmiudesta osaamisprofiiliin"
@@ -16,7 +17,6 @@ fi:
   course_strict_prereq_of: "on välttämätön esitieto kursseille"
   course_path_heading: "Yhteys muihin kursseihin"
   course_add_to_plan: "Lisää opintosuunnitelmaan"
-  
+
   strict_prereq_char: 'X'
   supporting_prereq_char: 'x'
-  

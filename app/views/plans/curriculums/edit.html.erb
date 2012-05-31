@@ -4,12 +4,12 @@
   <p class="warning"><%=t :change_curriculum_warning %></p>
 <% end %>
 
-<% form_tag studyplan_curriculum_path, :method => :put do -%>
+<%= form_tag studyplan_curriculum_path, :method => :put do %>
   <% @curriculums.each do |curriculum| %>
     <%= radio_button('user', 'curriculum', curriculum.id) %>
     <%= curriculum.name %><br />
   <% end %>
-  
+
   <p><%= submit_tag t(:Select) %></p>
   <p><%= link_to t(:Cancel), studyplan_curriculum_path %></p>
-<% end -%>
+<% end %>

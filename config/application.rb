@@ -38,7 +38,13 @@ module Ops
 
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:password, :passwod_confirmation]
-    
+
+    # Enable the asset pipeline
+    config.assets.enabled = true
+
+    # Version of your assets, change this if you want to expire all your assets
+    config.assets.version = '1.0'
+
     config.action_mailer.default_url_options = { :host => 'localhost:3000' }
   end
 end

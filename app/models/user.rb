@@ -54,7 +54,7 @@ class User < ActiveRecord::Base
     # Remove profile
     competences.delete(competence)
 
-    self.courses = needed_courses(self.competences)
+    self.courses = needed_courses(self.competences).to_a
   end
 
   def has_competence?(competence)
@@ -94,7 +94,5 @@ class User < ActiveRecord::Base
     logger.warn "User::relevant_periods not implemented"
     Period.all
   end
-
-
 
 end

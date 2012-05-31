@@ -1,4 +1,4 @@
-ActionController::Routing::Routes.draw do |map|
+Ops::Application.routes.draw do
 
   scope ":locale" do
     resource :session do

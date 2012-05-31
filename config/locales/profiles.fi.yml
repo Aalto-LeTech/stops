@@ -1,4 +1,5 @@
-fi: 
+# encoding: utf-8
+fi:
   # curriculum/show
   profile_create_link: "Luo uusi profiili"
   profile_edit_link: "Muokkaa profiilia"
@@ -23,11 +24,10 @@ fi:
   profile_add_to_plan: "Lisää opintosuunnitelmaan"
   profile_remove_from_plan: "Poista opintosuunnitelmasta"
   profile_already_selected: "%{name} on jo opintosuunnitelmassa."
-  
+
   profile_index_instructions: ""
   profile_show_instructions: ""
-  
+
   # Remove profile from study plan
   profile_delete_heading: "Profiili %{name} poistetaan opintosuunnitelmasta"
   profile_delete_autodelete_courses: "Seuraavat kurssit poistetaan:"
-  

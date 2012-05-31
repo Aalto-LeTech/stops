@@ -1,8 +1,9 @@
-fi: 
+# encoding: utf-8
+fi:
   sessions_login_heading: "Kirjaudu sisään"
-  
+
   sessions_logout_message: "Olet kirjautunut ulos."
-  
+
   sessions_traditional_hint: "Kirjaudu erillisellä tunnuksella (testitunnukset)"
   sessions_shibboleth_hint: "Kirjaudu kotiyliopiston tunnuksella (WebLogin)"
   sessions_studentnumber_label: "Opiskelijanumero"

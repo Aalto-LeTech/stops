@@ -3,7 +3,7 @@ en:
   profile_create_link: "Create new profile"
   profile_edit_link: "Edit profile"
   profile_cycles_link: "Check cycles"
-  
+
   # New / Edit
   profile_new_heading: "Create profile"
   profile_edit_heading: "Edit profile"
@@ -23,11 +23,10 @@ en:
   profile_add_to_plan: "Add to plan"
   profile_remove_from_plan: "Poista opintosuunnitelmasta"
   profile_already_selected: "%{name} is already included in your studyplan."
-  
+
   profile_index_instructions: "Select competence profiles below"
   profile_show_instructions: "Select competences"
-    
+
   # Remove profile from study plan
   profile_delete_heading: "Profile %{name} will be removed from study plan"
   profile_delete_autodelete_courses: "Following courses will be removed:"
-  

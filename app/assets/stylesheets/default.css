@@ -1,0 +1,537 @@
+html {
+  margin: 0px;
+  padding: 0px;
+}
+
+body {
+  margin: 0px;
+  padding: 0px;
+}
+
+img {
+  border: 0px;
+}
+
+table {
+  border-spacing: 0px;
+  border-collapse: collapse;
+}
+
+ul {
+  margin: 0em 0em 0em 1em;
+  padding: 0px;
+}
+
+li {
+  margin: 0em 0em 0em 0em;
+  padding: 0px;
+}
+
+.error {
+  color: #ff0000;
+}
+
+.hint {
+  color: #a0a0a0;
+  font-size: small;
+  font-style: italic;
+}
+
+
+hr {
+  height: 1px;
+  border-top: 1px solid #c0c0c0;
+  border-bottom: none;
+  border-left: none;
+  border-right: none;
+}
+
+.clear {
+  clear: both;
+}
+
+a.bigNavibutton {
+  display: block;
+  float: left;
+  width: 10em;
+  height: 10em;
+
+  background: #928B81;
+  /* border: 1px solid #e0e0e0; */
+  -moz-border-radius: 15px;
+  border-radius: 15px;
+  margin: 1em;
+  padding: .5em;
+
+  color: white;
+  text-decoration: none;
+  font-size: small;
+}
+
+a.bigNavibutton:hover {
+  text-decoration: underline;
+}
+
+div.admin-tools {
+  float: right;
+  overflow: hidden;
+  width: 10em;
+  border: 1px solid #e0e0e0;
+  padding: 1em;
+  background: #f0f0f0;
+}
+
+.admin-tools ul {
+  list-style: none;
+  margin: 0px;
+  padding: 0px;
+}
+
+.admin-tools li {
+  margin: 0px;
+  padding: 0px;
+}
+
+.admin-tools a {
+  color: black;
+  font-size: small;
+}
+
+div.progress {
+  margin: 0px auto;
+  padding: 0px;
+  width: 24px;
+  height: 24px;
+  background: url('../images/progress.gif');
+}
+
+tr.odd {
+  background: #ddf;
+}
+
+/******************
+ * Headings
+ ******************/
+
+h1 {
+  font-family: sans-serif;
+  font-size: 140%;
+  margin: 2em 0em .5em 0em;
+}
+
+h2 {
+  font-family: sans-serif;
+  font-size: 120%;
+  margin: 2em 0em .5em 0em;
+}
+
+h3 {
+  font-family: sans-serif;
+  font-size: 100%;
+  margin: 2em 0em .5em 0em;
+}
+
+h1 + h2, h1 + h3, h2 + h3 {
+  margin-top: 1em;
+}
+
+h1:first-child, h2:first-child, h3:first-child {
+  margin-top: 0px;
+}
+
+/******************
+ * Flash messages
+ ******************/
+
+.flash {
+  padding: 4px;
+  margin: .6em 0em;
+  -moz-border-radius: 6px;
+}
+
+.flashNotice {
+  color: gray;
+  text-decoration: italic;
+}
+
+.flashAlert {
+  color: gray;
+  text-decoration: italic;
+}
+
+.flashWarning {
+  color: black;
+  background: #FFFFBB;
+  border: 1px solid #808000;
+}
+
+.flashSuccess {
+  color: black;
+  background: #BBFFBB;
+  border: 1px solid #008000;
+}
+
+.flashError {
+  color: black;
+  background: #FFBBBB;
+  border: 1px solid #B00000;
+}
+
+
+/*************************
+  Header
+ *************************/
+
+.header {
+  /*background: #f8f8f8;*/
+  background: #0065BD;
+  width: 100%;
+  height: 100px;
+  border-bottom: 1px solid #e0e0e0;
+  display: block;
+  position: relative;
+}
+
+.header .navibar {
+  position: absolute;
+  right: 0px;
+  bottom: 0px;
+  padding: 0px 1em;
+}
+
+.header ul {
+  margin: 0px;
+  padding: 0px;
+}
+
+.header li {
+  display: block;
+  float: left;
+  background: #928B81; /*#e0e0e0;*/
+  margin: 0px 2px;
+  padding: .2em;
+  font-size: small;
+  color: white;
+}
+
+.header li a {
+  text-decoration: none;
+  color: white;
+}
+
+.header .login {
+  position: absolute;
+  font-size: small;
+  margin: .5em;
+  right: 0px;
+  top: 0px;
+  color: white;
+}
+
+.header .logo {
+  margin: 0px;
+  padding: 5px 10px;
+  color: white;
+  font-family: serif;
+  font-weight: bold;
+}
+
+.header .logo .o4 {
+  font-size: 3em;
+}
+
+.header .logo .program-name {
+  font-size: 1em;
+}
+
+.header .logo sup {
+  /* color: #FF7900; */
+}
+
+
+/*************************
+  Left navi
+ *************************/
+
+.leftNavi {
+  /* float: left; */
+  width: 20em;
+  position: absolute;
+  overflow: hidden;
+  font-size: small;
+  padding: 1em 0em 1em 1em;
+}
+
+.leftNavi a {
+  color: #404040;
+  text-decoration: none;
+}
+
+.leftNavi a:hover {
+  text-decoration: underline;
+}
+
+.leftNavi h2 {
+  font-size: 100%;
+}
+
+.leftNavi .selected {
+  font-weight: bold;
+}
+
+.leftNavi .selected a {
+  text-decoration: underline !important;
+  color: blue !important;
+}
+
+
+/*************************
+  Content
+ *************************/
+
+.page {
+  margin: 0px 0px 1em 0px;
+}
+
+.content {
+  margin: 0em 1em 1em 20em;
+  padding: 1em;
+  border-left: 1px solid #e0e0e0;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+  border-top: 1px solid #e0e0e0;
+  color: gray;
+  font-size: small;
+}
+
+
+
+/*****************
+  Prereq graph
+ *****************/
+.course-graph td {
+  vertical-align: middle;
+  padding: .5em;
+  font-family: sans-serif;
+  /*width: 33%;*/
+}
+
+.course-graph .graph-current a {
+  border: 2px solid #8080ff;
+  font-size: 100%;
+  font-weight: bold;
+}
+
+.course-graph p {
+  display: block;
+  border: 1px solid #d0d0d0;
+  background: #e0e0ff;
+  margin: .5em 0em;
+  padding: .2em .5em;
+  font-size: small;
+}
+
+.course-graph a {
+  text-decoration: none;
+  color: black;
+}
+
+
+
+/*****************
+  Top navi
+ *****************/
+
+.topNaviTabs {
+  clear: both;
+  margin: 0em auto;
+}
+
+.topNaviTabs ul {
+  display: block;
+  float: left;
+
+  text-align: center;
+  text-align: center;
+  margin: 1em 1em;
+  padding: 0px 10px;
+
+  -moz-border-radius: 15px;
+  border: 1px solid gray;
+  background: #928B81;
+  color: white;
+  /*border-right: 1px solid gray;
+  border-bottom: 1px solid gray;*/
+}
+
+.topNaviTabs li {
+  display: inline;
+
+  /*border: 1px solid red;*/
+  border-left: 1px solid gray;
+  border-right: 1px solid gray;
+  margin: 0px;
+  padding: 0px;
+}
+
+.topNaviTabs li.selected {
+  background: blue;
+}
+
+.topNaviTabs li:hover {
+  text-decoration: underline;
+}
+
+.topNaviTabs a {
+  font: sans-serif;
+  font-size: 120%;
+  color: white;
+  line-height: 150%;
+  padding: 1em;
+  margin: 0px;
+  text-decoration: none;
+}
+
+/*****************
+  Course path
+ *****************/
+
+table.course-path {
+  margin: 1em 0em;
+}
+
+table.course-path td.prereqs, table.course-path td.current {
+  vertical-align: middle;
+  background: url('../images/future-arrow.png') no-repeat right;
+
+  padding-right: 30px;
+}
+
+table.course-path td.current, table.course-path td.future {
+  padding-left: 20px;
+}
+
+table.course-path td.current {
+  font-size: larger;
+  font-weight: bold;
+}
+
+
+/*********************
+  Skill matrix editor
+ *********************/
+
+table.skill-matrix-editor {
+}
+
+table.skill-matrix-editor td {
+  border: 1px solid #eee;
+  font-size: small;
+  text-align: center;
+}
+
+table.skill-matrix-editor thead {
+  background: #eee;
+}
+
+table.skill-matrix-editor thead td {
+  text-align: left;
+  vertical-align: bottom;
+}
+
+table.skill-matrix-editor tr.course {
+  background: #bbf;
+  text-align: left;
+}
+
+table.skill-matrix-editor td.skill {
+  text-align: left;
+}
+
+/************
+ Competences
+ ************/
+
+div.competence {
+  position: relative;
+  border: 1px solid #888;
+  background: #eee;
+  -moz-border-radius: 20px;
+  margin: 0px 0px 20px 0px;
+  padding: 10px 20px 10px 20px;
+}
+
+div.competence > p {
+  margin: 0px 0px 1em 0px;
+}
+
+div.competence.selected {
+  border: 5px solid #303090;
+  background: #e1e1ff;
+}
+
+div.competence .buttons {
+  float: right;
+  top: 10px;
+  left: 0px;
+}
+
+div.competence h2 {
+  font-size: 150%;
+  margin-top: 0px;
+  padding-top: 0px;
+}
+
+div.competence li {
+  margin-bottom: .5em;
+}
+
+div.competence .competence-skills, div.competence .competence-courses {
+  font-size: small;
+  float: left;
+  width: 40em;
+  margin: 0px 10px 10px 0px;
+}
+
+/*********************
+  Generic course list
+ *********************/
+
+table.course-list {
+  font-size: small;
+}
+
+table.course-list td {
+  padding-right: 1em;
+}
+
+table.course-list tr.total {
+  font-size: large;
+  font-weight: bold;
+}
+
+table.course-list tr.total td {
+  padding-top: 1em;
+}
+
+
+.competence-supporting-courses .course {
+  border: 1px solid #8080a0;
+  background: #e0e0ff;
+  -moz-border-radius: 10px;
+  margin: 1em .5em;
+  padding: .2em .4em;
+}
+
+.competence-supporting-courses .skill {
+  border: 1px solid #d0d0d0;
+  background: #f0f0ff;
+  padding: .2em .5em;
+  margin: .5em 0em;
+  font-size: small;
+}
+

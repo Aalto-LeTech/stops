@@ -1,0 +1,114 @@
+.profile-prereq-matrix thead {
+  font-size: smaller;
+}
+
+
+.profile-prereq-matrix tbody {
+  font-size: small;
+}
+
+.course-skill-dependencies .course {
+  border: 1px solid #d0d0d0;
+  background: #e0e0ff;
+  -moz-border-radius: 10px;
+}
+
+.course-skill-dependencies .skill {
+  display: block;
+  border: 1px solid #d0d0d0;
+  background: #e0e0ff;
+  padding: .2em .5em;
+  margin: .5em;
+  font-size: small;
+}
+
+.course-skill-dependencies .supporting {
+  color: gray;
+}
+
+.course-skill-dependencies .dim {
+  border: none !important;
+  background: #f0f0f0 !important;
+  color: gray !important;
+}
+
+
+table.competence-selector {
+
+}
+
+table.competence-selector td {
+  padding: .5em .5em;
+}
+
+table.competence-selector tr.profile {
+  background: #ddf;
+}
+
+table.competence-selector td.profile-name{
+  font-weight: bold;
+  border-left: 1px solid gray;
+  border-top: 1px solid gray;
+}
+
+table.competence-selector td.profile-description {
+  font-size: small;
+  border-top: 1px solid gray;
+}
+
+table.competence-selector td.profile-credits {
+  border-right: 1px solid gray;
+  border-top: 1px solid gray;
+}
+
+table.competence-selector tr.competence {
+  border-left: 1px solid gray;
+  border-right: 1px solid gray;
+  background: #eef;
+}
+
+table.competence-selector td.competence-name {
+  font-weight: bold;
+  text-align: right;
+  border-left: 1px solid gray;
+  border-top: 1px solid #ccc;
+}
+
+table.competence-selector td.competence-description {
+  font-size: small;
+  border-top: 1px solid #ccc;
+}
+
+table.competence-selector td.competence-credits {
+  border-right: 1px solid gray;
+  border-top: 1px solid #ccc;
+}
+
+table.competence-selector tr.spacer td {
+  border-top: 1px solid gray;
+  padding: .5em;
+}
+
+table.competence-selector span.selected-competence-name {
+  border: 3px solid #303090;
+  background: #c0c0ff;
+  -moz-border-radius: 20px;
+  padding: 2px 5px;
+}
+
+
+/**
+ * Profile selection view
+ */
+
+.competence-courses a {
+  color: #00f;
+}
+
+.competence-courses a.included {
+  color: #888;
+}
+
+.competence-courses a.completed {
+  color: #88f;
+}

@@ -1,6 +1,6 @@
 <h1><%=t :new_curriculum_heading %></h1>
 
-<% form_for :curriculum, @curriculum, :url => curriculums_url do |f| %>
+<%= form_for @curriculum, :as => :curriculum, :url => curriculums_url do |f| %>
   <table>
     <tr>
       <td><%= f.label :name, t(:curriculum_name) %></td>

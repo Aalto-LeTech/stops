@@ -1,5 +1,5 @@
-#require 'csv'
-require 'faster_csv'
+require 'csv'
+#require 'faster_csv'
 
 
 class ProfileMatrix < CsvMatrix
@@ -8,7 +8,7 @@ class ProfileMatrix < CsvMatrix
 
 
   def initialize(csv, curriculum, locale)
-    @matrix = FasterCSV.read(csv.path, :quote_char => '"')
+    @matrix = CSV.read(csv.path, :quote_char => '"')
     @row_count = @matrix.size
     @col_count = @row_count > 0 ? @matrix[0].size : 0
     @locale = locale.to_s

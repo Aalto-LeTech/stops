@@ -1,6 +1,6 @@
 <h1>Edit <%= @curriculum.name %></h1>
 
-<% form_for :curriculum, @curriculum, :url => curriculum_url(:id => @curriculum), :html => { :multipart => true, :method => :put } do |f| %>
+<%= form_for @curriculum, :as => :curriculum, :url => curriculum_url(:id => @curriculum), :html => { :multipart => true, :method => :put } do |f| %>
   
   <table>
     <tr>

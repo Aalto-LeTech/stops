@@ -5,7 +5,7 @@
 <% end %>
 
 <% unless @user_courses.empty? %>
-  <table>
+  <table class="plans-own-courses">
     <thead>
       <tr>
         <th>Code</th>
@@ -17,7 +17,7 @@
     </thead>
     <tbody>
       <% @user_courses.each do |user_course| %>
-        <tr>
+        <tr <%= "class='course-completed'" if user_course.grade %>>
           <td><%= link_to user_course.scoped_course.code, studyplan_course_url(:id => user_course.scoped_course.id) %></td>
           <td><%= link_to user_course.scoped_course.name(I18n.locale), studyplan_course_url(:id => user_course.scoped_course.id) %></td>
           <td><%= user_course.scoped_course.credits %></td>
@@ -26,7 +26,7 @@
               <%= user_course.course_instance.period.name(I18n.locale) %>
             <% end %>
           </td>
-          <td><%= user_course.grade %></td>
+          <td <%= "class='course-grade'" if user_course.grade %>><%= user_course.grade %></td>
         </tr>
       <% end %>
     </tbody>

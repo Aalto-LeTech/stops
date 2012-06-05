@@ -166,3 +166,25 @@
 svg {
   /*border: 1px solid green;*/
 }
+
+
+
+/**************
+/plans/courses
+***************/
+
+table.plans-own-courses td {
+  padding-top: 0px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 0px;
+}
+
+.course-completed a:link, .course-grade {
+  color: #00630C;
+}
+
+.course-completed a:visited {
+  color: #00B015;
+}
+

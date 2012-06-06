@@ -3,6 +3,7 @@ db/*.sqlite3
 tmp/**/*
 log/
 public/images/
+public/assets/
 config/database.yml
 config/initializers/settings.rb
 config/initializers/secret_token.rb

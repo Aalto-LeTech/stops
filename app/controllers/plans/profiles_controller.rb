@@ -29,6 +29,11 @@ class Plans::ProfilesController < PlansController
     @competences = @profile.competences
     @included_courses = @user.courses
     
+    @passed_courses = Hash.new
+    @user.passed_courses.each do |course|
+      @passed_courses[course.id] = course
+    end
+    
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @course }

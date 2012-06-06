@@ -61,8 +61,9 @@
             <td><%= link_to course.code, studyplan_competence_course_path(:competence_id => competence.id, :id => course), :class => a_class %></td>
             <td><%= link_to course.name(I18n.locale), studyplan_competence_course_path(:competence_id => competence.id, :id => course), :class => a_class %></td>
             <td><%= course.credits %></td>
+            <td class="passed-info"><%= t(:profile_course_passed) if @passed_courses.member? course.id %>
             <% credits_counter += course.credits || 0 %>
-            <% passed_counter += course.credits if @user.passed?(course) %><!-- TODO: make this more efficient -->
+            <% passed_counter += course.credits if @passed_courses.member? course.id %> <%#if @user.passed?(course) %><!-- TODO: make this more efficient --> 
           </tr>
         <% end %>
         <tfoot>

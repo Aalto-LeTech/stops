@@ -27,6 +27,7 @@ fi:
 
   profile_index_instructions: ""
   profile_show_instructions: ""
+  profile_course_passed: "Suoritettu"
 
   # Remove profile from study plan
   profile_delete_heading: "Profiili %{name} poistetaan opintosuunnitelmasta"

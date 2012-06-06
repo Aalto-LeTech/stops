@@ -112,3 +112,8 @@ table.competence-selector span.selected-competence-name {
 .competence-courses a.completed {
   color: #88f;
 }
+
+
+.competence-courses .passed-info {
+  color: green;
+}

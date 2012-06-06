@@ -26,6 +26,7 @@ en:
 
   profile_index_instructions: "Select competence profiles below"
   profile_show_instructions: "Select competences"
+  profile_course_passed: "Passed"
 
   # Remove profile from study plan
   profile_delete_heading: "Profile %{name} will be removed from study plan"

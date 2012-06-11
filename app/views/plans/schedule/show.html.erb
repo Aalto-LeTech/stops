@@ -1,8 +1,10 @@
 <% content_for :javascript do %>
+  <%= javascript_include_tag 'raphael-min' %>
   <%= javascript_include_tag 'period' %>
   <%= javascript_include_tag 'course' %>
   <%= javascript_include_tag 'courseinstance' %>
   <%= javascript_include_tag 'plan' %>
+  <%= javascript_include_tag 'o4-jquery-extensions.js' %>
 <% end %>
 
 <div class="leftNavi">
@@ -18,9 +20,14 @@
 
   <p id="status"></p>
 
-  <div class="plan" id="plan" data-prereqs-path="<%= prereqs_curriculum_path(@curriculum.id) %>" data-instances-path="<%= course_instances_path %>" schedule-path="<%= studyplan_schedule_path %>">
+
+  <div class="plan" id="plan" data-prereqs-path="<%= prereqs_curriculum_path(@curriculum.id) %>"
+    data-instances-path="<%= course_instances_path %>" 
+    schedule-path="<%= studyplan_schedule_path %>">
+    <%# <div id="svg"></div> %>
     <% @periods.each do |period| %>
-      <div class="period period-<%= period.number %>" data-id="<%= period.id %>" id="period-<%= period.id %>">
+      <div class="period period-<%= period.number %>" data-id="<%= period.id %>" 
+          id="period-<%= period.id %>">
         <div class="period-name"><%= period.name(I18n.locale) %></div>
         <div class="period-credits"></div>
       </div>
@@ -30,7 +37,12 @@
     <% @user_courses.each do |user_course| %>
       <% next unless user_course %>
       
-      <div class="course" id="course-<%= user_course.scoped_course.code %>" data-id="<%= user_course.id %>" data-code="<%= user_course.scoped_course.code %>" data-credits="<%= user_course.scoped_course.credits || '0' %>" data-passed="<%= user_course.passed? ? 'true' : 'false' %>" data-period="<%= user_course.course_instance_id ? user_course.course_instance.period_id : '' %>" ><%= user_course.scoped_course.code + ' ' + user_course.scoped_course.name(I18n.locale) %></div>
+      <div class="course" id="course-<%= user_course.scoped_course.code %>" 
+        data-id="<%= user_course.id %>"
+        data-code="<%= user_course.scoped_course.code %>" 
+        data-credits="<%= user_course.scoped_course.credits || '0' %>" 
+        data-passed="<%= user_course.passed? ? 'true' : 'false' %>" 
+        data-period="<%= user_course.course_instance_id ? user_course.course_instance.period_id : '' %>" ><%= user_course.scoped_course.code + ' ' + user_course.scoped_course.name(I18n.locale) %></div>
     <% end %>
   </div>
 

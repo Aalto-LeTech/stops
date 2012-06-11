@@ -6,6 +6,7 @@ function Course(element) {
   this.periods = [];           // Periods on which this course is arranged
   this.prereqs = {};           // Prerequisite courses. courseCode => course object
   this.prereqTo = {};          // Courses for which this course is a prereq. courseCode => course object
+  this.prereqPaths = [];       // Raphael paths to prerequirement courses
   this.period = false;         // Period 
   this.courseInstance = false; // Selected courseinstance
   this.slot = false;           // Slot number that this course occupies
@@ -23,7 +24,8 @@ function Course(element) {
   element.draggable({
     containment: 'parent',
     distance: 5,
-    start: Course.prototype.startDrag
+    start: Course.prototype.startDrag,
+    drag: Course.prototype.whileDragging
   });
 };
 
@@ -201,16 +203,32 @@ Course.prototype.postponeAfterPrereqs = function() {
   }
 }
 
+
+Course.prototype.clearPrereqPaths =  function() {
+  var selectedCourseElem = $("#plan .selected");
+  if (selectedCourseElem.length !== 0) {
+    var selectedCourse = selectedCourseElem.data('object'); 
+    for (var i = 0; i < selectedCourse.prereqPaths.length; i++) {
+       selectedCourse.prereqPaths[i].path.remove();
+    }
+  
+    selectedCourse.prereqPaths = [];
+  }
+};
+
 /**
  * Event listener
  */
 Course.prototype.click = function() {
   var course = $(this).data('object');
   
+  // Clear prerequirement graphs
+  course.clearPrereqPaths();
+
   // Reset hilights
   $('.course').removeClass('prereq-of').removeClass('prereq-to').removeClass('selected');
   $('.period').removeClass('receiver');
-  
+   
   // Hilight selected course
   $(this).addClass('selected');
   
@@ -228,7 +246,32 @@ Course.prototype.click = function() {
   for (var array_index in course.periods) {
     course.periods[array_index].element.addClass("receiver");
   }
+
+
+  /* Draw requirement graphs for selected course */
+  var preCourse; 
+  for (preCourse in course.prereqs) {
+    if (!course.prereqs.hasOwnProperty(preCourse)) {
+      continue;
+    }
+    preCourse = course.prereqs[preCourse];
+
+    var prereqElem = $(planView.escapeSelector('course-' + preCourse.code));
+  
+    // TODO: heights and widths not in use
+    var prereqPos = prereqElem.position();
+    var prereqWidth = prereqElem.outerWidth(true); 
+    var prereqHeight = prereqElem.outerHeight(false) + prereqElem.margin().top;
+  
+    var clickedElem = $(this);
+    var clickedPos = clickedElem.position();
+    var clickedWidth = clickedElem.outerWidth(true); 
+
+    var newPath = planView.paper.path(Course.calcPathString(clickedElem, prereqElem));
+    course.prereqPaths.push({ path: newPath, course: preCourse });
+  }
 }
+
 
 /**
  * Event listener
@@ -244,4 +287,40 @@ Course.prototype.startDrag = function(event, ui) {
   for (var array_index in periods) {
     periods[array_index].element.addClass("receiver");
   }
+}
+
+
+Course.prototype.whileDragging = function(event, ui) {
+  // Move prerequirement graphs
+  var elem = ui.helper,
+      position = elem.position(),
+      course = elem.data('object');
+
+  for (var i = 0; i < course.prereqPaths.length; i++) {
+    var node = course.prereqPaths[i],
+        path = node.path,
+        prereqCourse = node.course,
+        $prereqElem = $(planView.escapeSelector('course-' + prereqCourse.code));
+    path.attr({ path: Course.calcPathString(elem, $prereqElem) }); 
+  }
+}
+
+
+/* Class methods */
+
+/**
+ * Calculates SVG path string between course node element and a prerequirement
+ * element.
+ *
+ * */
+Course.calcPathString = function(courseNode, prereqNode) {
+  var fX, fY, tX, tY, coursePos, prereqPos;
+  coursePos = courseNode.position();
+  prereqPos = prereqNode.position();
+  fX = coursePos.left + courseNode.outerWidth(true) / 2.0;
+  fY = coursePos.top;
+  tX = prereqPos.left + prereqNode.outerWidth(true) / 2.0;
+  tY = prereqPos.top + prereqNode.outerHeight(false) + prereqNode.margin().top;
+
+  return "M" + fX + "," + fY + "T" + tX + "," + tY;
 }

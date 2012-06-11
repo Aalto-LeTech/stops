@@ -6,6 +6,20 @@ var planView = {
   satisfyPrereqsAutomatically: true,
   periods: {},                         // Period objects, period_id => period object
   
+  initializeRaphael: function() {
+    var planDiv = $('#plan');
+    this.paper = Raphael(document.getElementById('plan'), planDiv.width(), planDiv.height());
+    
+    /* Align SVG canvas with the schedule table
+     * an allow mouse events to pass through. */
+    $('#plan svg').css({ 
+      "position": "absolute", 
+      "pointer-events": "none",
+      "z-index": "1"
+    });
+
+  },
+  
   addPeriod: function(period) {
     this.periods[period.getId()] = period;
   },
@@ -170,6 +184,8 @@ $(document).ready(function(){
     async: false
   });
 
+  // Init Raphael
+  planView.initializeRaphael();
 
   // Put courses on their places
   planView.placeCourses();

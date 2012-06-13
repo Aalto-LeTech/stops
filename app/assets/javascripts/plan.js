@@ -15,7 +15,8 @@ var planView = {
     $('#plan svg').css({ 
       "position": "absolute", 
       "pointer-events": "none",
-      "z-index": "1"
+      "z-index": "1",
+      "left": "0px"             // Needed for Firefox
     });
 
   },

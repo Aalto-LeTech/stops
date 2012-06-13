@@ -9,3 +9,5 @@ fi:
   choose_curriculum_heading: "Valitse opinto-opas"
   change_curriculum: "Vaihda opinto-opasta..."
   change_curriculum_warning: "Varoitus: Kaikkia valittuja kursseja ja profiileja ei välttämättä ole tarjolla muissa opinto-oppaissa."
+  
+  schedule_controls: "Suunnitelman hallinta"

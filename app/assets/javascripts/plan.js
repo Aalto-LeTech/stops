@@ -139,6 +139,18 @@ $(document).ready(function(){
   //var curriculum_id = $plan.data('curriculum-id');
   //var locale = $plan.data('locale');
   
+  // Make schedule controls always visible (i.e., sticky)
+  var $scheduleControls = $("#schedule-controls-container");
+  var scheduleControlsOrig = $scheduleControls.offset().top;
+  $(window).scroll(function() {
+    var winY = $(this).scrollTop();
+    if (winY >= scheduleControlsOrig) {
+      $scheduleControls.addClass("schedule-controls-fixed");
+    } else {
+      $scheduleControls.removeClass("schedule-controls-fixed");
+    }
+  });
+  
   // Create a Course object for each course element
   $('.course').each(function(i, element){
     new Course($(element));

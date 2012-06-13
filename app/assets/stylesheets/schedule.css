@@ -105,3 +105,13 @@
 .plan .in-progress {
   background: white !important;
 }
+
+
+
+/* Left control elements */
+
+.schedule-controls-fixed {
+  position: fixed;
+  top: 0px;
+
+}

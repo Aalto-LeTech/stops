@@ -15,7 +15,8 @@ function Period(element) {
   this.id = element.data('id');    // Database id of this period
   
   element.droppable({
-    drop: Period.prototype.dropCourse
+    drop: Period.prototype.dropCourse,
+    accept: Period.prototype.acceptCourse 
   });
 };
 
@@ -189,12 +190,28 @@ Period.prototype.freeSlot = function(slot, length) {
   this.nextPeriod.freeSlot(slot, length - 1);
 }
 
+
+/**
+ *  Decides whether droppable should accept given draggable.
+ */
+Period.prototype.acceptCourse = function(draggable) {
+  var course = draggable.data('object');   
+  var period = $(this).data('object');
+  if (period.courseAvailable(course)) {
+    return true;
+  } else return false; 
+}
+
+
 /**
  * Handles course drop events.
  */
 Period.prototype.dropCourse = function(event, ui) {
   var period = $(this).data('object');
   var course = ui.draggable.data('object');
+
+  // Draggable needs to know that drop succeeded
+  ui.draggable.data('dropped', true);
   
   // Reset all hilights
   $('.period').removeClass('receiver');

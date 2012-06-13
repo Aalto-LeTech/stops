@@ -25,7 +25,9 @@ function Course(element) {
     containment: 'parent',
     distance: 5,
     start: Course.prototype.startDrag,
-    drag: Course.prototype.whileDragging
+    drag: Course.prototype.whileDragging,
+    stop: Course.prototype.stopDrag,
+    revert: "false"
   });
 };
 
@@ -279,6 +281,9 @@ Course.prototype.click = function() {
 Course.prototype.startDrag = function(event, ui) {
   // Reset hilights
   $('.period').removeClass('receiver');
+
+  // Dragging started, reset drop detection
+  ui.helper.data('dropped', false);
   
   // Hilight the periods that have this course
   var $element = ui.helper;
@@ -305,6 +310,28 @@ Course.prototype.whileDragging = function(event, ui) {
   }
 }
 
+Course.prototype.stopDrag = function(event, ui) {
+  if (!ui.helper.data('dropped')) {
+    // Animate draggable back to its original position
+    ui.helper.animate(ui.originalPosition, { 
+      duration: 500,
+      step: function(now, fx) {
+        var $courseElem = $(this),
+            course = $courseElem.data('object');
+
+        // Update graphs too
+        for (var i = 0; i < course.prereqPaths.length; i++) {
+          var node = course.prereqPaths[i],
+              path = node.path,
+              prereqCourse = node.course,
+              $prereqElem = $(planView.escapeSelector('course-' + prereqCourse.code));
+          path.attr({ path: Course.calcPathString($courseElem, $prereqElem) });
+        }
+      }
+    });
+  }
+}
+
 
 /* Class methods */
 
@@ -324,3 +351,4 @@ Course.calcPathString = function(courseNode, prereqNode) {
 
   return "M" + fX + "," + fY + "T" + tX + "," + tY;
 }
+

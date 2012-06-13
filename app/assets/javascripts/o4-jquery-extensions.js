@@ -5,7 +5,7 @@
     else return 0;
   }; 
 
-  // Accessor to retrieve margin as a number 
+  // Accessor to retrieve margins as numbers 
   $.fn.margin = function() {
     var res = { 
       top: numOf(this.css('margin-top')),

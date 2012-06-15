@@ -8,8 +8,37 @@
 <% end %>
 
 <div id="schedule-controls-container" class="leftNavi schedule-controls">
-  <h3><%= t :schedule_controls %></h3>
-  <button id="save-button">Save</button>
+  <h2><%= t :schedule_controls %></h2>
+  <div class="control-block">
+    <h3><%= t :schedule_preferences %></h3> <div class="control-group">
+      <label for="schedule-automatic-arrangement"><%= t :schedule_automatic_arrangement_checkbox %></label>  
+      <div class="controls">
+        <input id="schedule-automatic-arrangement" type="checkbox" /> 
+        <%= image_tag("glyphicons_195_circle_info.png", :size => "16x16" ) %>
+      </div>
+    </div>
+    <div class="control-group">
+      <label for="schedule-course-lock"><%= t :schedule_course_lock %></label>
+      <div class="controls">
+        <input id="schedule-course-lock" type="checkbox" /> 
+        <%= image_tag("glyphicons_195_circle_info.png", :size => "16x16" ) %>
+      </div>
+    </div>
+    <button id="save-button"><%= t :schedule_save_button %></button>
+  </div> 
+
+  <div id="course-desc-block" class="control-block hidden">
+    <h3><%= t :schedule_controls_selected_course %></h3>
+    <p id="course-id">
+      <span id="course-code" class="control-course-code"></span>
+      <span id="course-name" class="control-course-name"></span>
+    </p>
+    <p>
+    <span id="course-points"></span> <%= t :schedule_credits %>
+    </p>
+
+  </div> 
+
 </div>
   
 <div class="content">
@@ -41,6 +70,7 @@
       <div class="course" id="course-<%= user_course.scoped_course.code %>" 
         data-id="<%= user_course.id %>"
         data-code="<%= user_course.scoped_course.code %>" 
+        data-name="<%= user_course.scoped_course.abstract_course.course_descriptions_with_locale[0].name %>"
         data-credits="<%= user_course.scoped_course.credits || '0' %>" 
         data-passed="<%= user_course.passed? ? 'true' : 'false' %>" 
         data-period="<%= user_course.course_instance_id ? user_course.course_instance.period_id : '' %>" ><%= user_course.scoped_course.code + ' ' + user_course.scoped_course.name(I18n.locale) %></div>

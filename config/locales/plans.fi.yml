@@ -11,3 +11,10 @@ fi:
   change_curriculum_warning: "Varoitus: Kaikkia valittuja kursseja ja profiileja ei välttämättä ole tarjolla muissa opinto-oppaissa."
   
   schedule_controls: "Suunnitelman hallinta"
+  schedule_preferences: "Asetukset"
+  schedule_controls_selected_course: "Valittu kurssi"
+  schedule_credits: "opintopistettä"
+  schedule_courses_total: "Kursseja yhteensä"
+  schedule_automatic_arrangement_checkbox: "Siirrä kursseja esitietojen mukaan"
+  schedule_save_button: "Tallenna suunnitelma"
+  schedule_course_lock: "Lukitse kurssi nykyiselle paikalleen"

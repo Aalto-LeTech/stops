@@ -8,8 +8,10 @@ class AbstractCourse < ActiveRecord::Base
   # Users who have chosen this course
   has_many :user_courses, :dependent => :destroy
   
+  has_many :course_descriptions_with_locale, :class_name => "CourseDescription", 
+           :conditions => proc { "locale = '#{I18n.locale}'" }
   
-  def name(locale)
+  def get_name(locale)
     description = CourseDescription.where(:abstract_course_id => self.id, :locale => locale.to_s).first
     description ? description.name : ''
   end

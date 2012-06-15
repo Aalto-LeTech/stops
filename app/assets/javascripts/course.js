@@ -16,6 +16,7 @@ function Course(element) {
   
   this.id = element.data('id');    // Database id of the UserCourse
   this.code = element.data('code');
+  this.name = element.data('name');
   this.credits = element.data('credits');
   this.passed = element.data('passed') == 'true';
   
@@ -233,6 +234,14 @@ Course.prototype.click = function() {
    
   // Hilight selected course
   $(this).addClass('selected');
+
+  // Show short course details on the controls pane
+  var $courseDesc = $('#course-desc-block');
+  $("#course-code").text(course.code); 
+  $("#course-name").text(course.name);
+  $("#course-points").text(course.credits);
+  $courseDesc.removeClass("hidden"); // TODO animate
+  
   
   // Hilight prereqs
   for (var array_index in course.prereqs) {

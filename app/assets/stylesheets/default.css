@@ -109,6 +109,14 @@ tr.odd {
   background: #ddf;
 }
 
+input {
+  display: block;
+}
+
+label {
+  
+}
+
 /******************
  * Headings
  ******************/
@@ -255,10 +263,10 @@ h1:first-child, h2:first-child, h3:first-child {
 
 .leftNavi {
   /* float: left; */
-  width: 20em;
+  width: 23.38em; /* orignal 20em */
   position: absolute;
   overflow: hidden;
-  font-size: small;
+  font-size: 0.8125em;
   padding: 1em 0em 1em 1em;
 }
 
@@ -284,6 +292,46 @@ h1:first-child, h2:first-child, h3:first-child {
   color: blue !important;
 }
 
+/*************************
+  Controls
+**************************/
+
+#schedule-controls-container h2 {
+  font-size: 1.2308em;
+}
+
+.control-block {
+  margin-bottom: 1.9231em;
+}
+
+.hidden {
+  display: none;
+}
+
+.control-group {
+   margin-bottom: 0.75em; 
+}
+
+.control-group label {
+  float: left;
+  max-width: 17em;
+}
+
+.control-group input {
+  display: inline;
+}
+
+.control-group img {
+  margin-left: 1.538em; 
+}
+
+.control-group .controls {
+  margin-left: 17em; 
+}
+
+.control-course-code {
+
+}
 
 /*************************
   Content

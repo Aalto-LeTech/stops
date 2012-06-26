@@ -100,6 +100,37 @@ class Curriculums::CompetencesController < CurriculumsController
     @competence.refresh_prereq_courses
   end
 
+  # edit_skill_preqreqs.js.erb & _prereq_skills_selection.html.erb
+  def edit_skill_prereqs
+    respond_to do |format|
+      format.html do 
+        #render "edit_skill_prereqs.js.erb"
+
+        # Validate query string key
+        render :status => 500 unless /^\d+$/ =~ params[:skill_id] 
+
+        @skill = Skill.includes(:description_with_locale).find(params[:skill_id].to_i)
+
+        @skill_id = params[:skill_id]
+        render :partial => "prereq_skills_selection"
+        # TODO: Render whole the whole view with prereq_skills_selection -partial 
+      end 
+    end
+  end
+  
+
+  # Action for retrieving courses that match certain search terms
+  # using AJAX.
+  def search_skills_and_courses
+    @courses = ScopedCourse.search_full_text params[:q] 
+
+    respond_to do |format|
+      format.html do
+        render :partial => "search_results"
+      end 
+    end 
+  end
+
   def prereqs
     @competence = Competence.find(params[:id])
 

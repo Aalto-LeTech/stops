@@ -1,6 +1,8 @@
 # Course as a part of a curriculum, e.g. Programming 101 as described in the 2011 study guide
 class ScopedCourse < ActiveRecord::Base
 
+  include PgSearch
+
   belongs_to :abstract_course
 
   #has_many :skills, :order => 'position', :dependent => :destroy #, :foreign_key => 'course_code', :primary_key => 'code'
@@ -18,6 +20,14 @@ class ScopedCourse < ActiveRecord::Base
   # Courses for which this is a prerequisite
   has_many :course_prereq_to, :class_name => 'CoursePrereq', :foreign_key => :scoped_prereq_id
   has_many :prereq_to, :through => :course_prereq_to, :source => :course, :order => 'code', :conditions => "requirement = #{STRICT_PREREQ}"
+  
+  # pg_search indexing (free-text search)
+  pg_search_scope :search_full_text, 
+    :against => :code,
+    :using => { 
+      :tsearch => { :prefix => true }  
+    }
+   
 
 
   def name(locale)

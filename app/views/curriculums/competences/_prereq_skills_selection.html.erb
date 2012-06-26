@@ -1,0 +1,26 @@
+<div>
+  <h4>Lisää esivaatimusksia valitulle valmiudelle</h4>
+
+  <strong>Valittu valmius:</strong> <%= @skill.description_with_locale.description %>
+
+  <div id="metadata" style="display: none" 
+    data-skill-id="<%= @skill_id %>"
+    data-skill-search-url="<%= 
+      search_skills_and_courses_curriculum_competence_path(params[:locale], 
+                                                           params[:curriculum_id], params[:id]) %>">
+  </div>
+
+  <h5>Nykyiset vaatimukset</h5>
+
+  <h5>Lisää uusia valmiuksia</h5>
+
+  <p>Hae kursseja ja niiden valmiuksia</p>  
+
+  <input id="skill-search-box"></input>
+
+  <div id="skill-search-results">
+
+  </div>
+
+     
+</div>

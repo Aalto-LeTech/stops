@@ -1,12 +1,12 @@
 <%= form_for @skill, :remote => true do |f| %>
   <%= f.hidden_field :skillable_id %>
   <%= f.hidden_field :skillable_type %>
-  <li>
-    <%= f.fields_for :skill_descriptions do |cf| %>
+  <%= f.fields_for :skill_descriptions do |cf| %>
+    <div class="new-skill-field-group">
+      <%= cf.label t("language_in_" + cf.object.locale), :class => "new-skill-label" %>
       <%= cf.hidden_field :locale %>
-      <%= cf.text_field :description %>
-    <% end %>
-    
-    <%= f.submit t(:Save) %>
-  </li>
+      <%= cf.text_field :description, :class => "new-skill-field" %>
+    </div>
+  <% end %>
+  <%# <%= f.submit t(:Save) %>
 <% end %>

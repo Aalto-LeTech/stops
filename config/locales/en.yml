@@ -51,3 +51,12 @@ en:
       default: "%a %d %b %H:%M"
       short: "%d %b %H:%M"
       long: "%a %Y-%m-%d %H:%M:%S"
+      
+  #######################
+  # Language translations
+  #######################
+  language_in_en: "in English"
+  language_in_sv: "in Swedish"
+  language_in_fi: "in Finnish"
+  
+  

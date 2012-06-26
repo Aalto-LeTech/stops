@@ -10,8 +10,11 @@ class SkillsController < ApplicationController
     elsif params[:course_id]
       @skill.skillable = Course.find(params[:course_id])
     end
-    
-    @skill.skill_descriptions << SkillDescription.new(:locale => I18n.locale)
+   
+    # Create empty descriptions for each required locale
+    REQUIRED_LOCALES.each do |locale| 
+      @skill.skill_descriptions << SkillDescription.new(:locale => locale)
+    end
 
     respond_to do |format|
       format.html # new.html.erb

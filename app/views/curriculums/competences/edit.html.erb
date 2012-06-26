@@ -1,18 +1,17 @@
-<h1>Editing competence</h1>
+<% content_for :javascript do %>
+  <%= javascript_include_tag 'competencesEdit.js' %>
+<% end %>
 
-<h2>Outcomes</h2>
+<h1><%= t :competence_edit_heading %></h1>
 
-<ul id="skills">
-  <% @competence.skills.each do |skill| %>
-    <li id="skill-<%= skill.id %>"><%= skill.description(I18n.locale) %> <%= link_to t(:Edit), edit_skill_path(skill) %> <%= link_to t(:Delete), skill, :method => :delete %></li>
-  <% end %>
-</ul>
+<h2><%= t :competence_skills_heading %></h2>
 
-<p><%= link_to 'Create new outcome', new_skill_path(:competence_id => @competence.id), :remote => true %></p>
+<div id="dynamic-content-box">
+  <%= render :partial => "competence_list" %>
+</div>
 
-
+<% if false %>
 <h2>Matrix</h2>
-
 <%= form_tag matrix_curriculum_competence_path(@curriculum.id, @competence.id) do %>
   <table class="skill-matrix-editor">
     <thead>
@@ -51,4 +50,6 @@
   </table>
   
   <p><%= submit_tag t(:Save) %></p>
+<% end %>
+
 <% end %>

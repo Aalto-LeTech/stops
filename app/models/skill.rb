@@ -1,5 +1,7 @@
 class Skill < ActiveRecord::Base
   has_many :skill_descriptions, :dependent => :destroy
+  has_one :description_with_locale, :class_name => "SkillDescription", 
+          :conditions => proc { "locale = '#{I18n.locale}'" }
 
   has_many :skill_prereqs, :dependent => :destroy
   has_many :prereqs, :through => :skill_prereqs, :source => :prereq, :order => 'position'

@@ -12,7 +12,9 @@ en:
   schedule_controls: "Schedule controls"
   schedule_preferences: "Preferences"
   schedule_controls_selected_course: "Selected course"
-  schedule_credits: "credits"
+  schedule_credits: 
+    one: "credits"
+    other: "credits"
   schedule_courses_total: "Total courses"
   schedule_automatic_arrangement_checkbox: "Move courses to satisfy prerequirements"
   schedule_save_button: "Save schedule"

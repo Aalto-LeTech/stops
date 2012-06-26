@@ -18,6 +18,12 @@ en:
 
   competence_supporting_courses_heading: "Select supporting courses"
 
+  # Edit
+  competence_edit_heading: "Editing competences"
+  competence_create_new_outcome: "New outcome"
+  competence_create_outcome_heading: "Create a new outcome"
+  competence_create_outcome_help_text: "Please enter the skill description in all required languages."
+
   # Add to plan
   competence_add_heading: "Add %{profile} %{competence} to study plan"
   competence_add_to_plan: "Add to studyplan"

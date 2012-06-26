@@ -1,1 +1,15 @@
-$("#skills").append("<%= escape_javascript(render(:partial => "form"))%>"); 
+$("#new-skill-box-content").html("<%= escape_javascript(render(:partial => "form"))%>");
+$("#new-skill-box > .new-skill-box-footer > .save-button").click(function() {
+  $("#new-skill-box-content > form").submit();
+  $("#new-skill-box").addClass("hide");
+});
+
+$("#new-skill-box > .new-skill-box-footer > .cancel-button").click(function() {
+  $("#new-skill-box").addClass("hide");
+});
+
+$("#new-skill-box > .new-skill-close").click(function() {
+  $("#new-skill-box").addClass("hide");
+});
+
+$("#new-skill-box").removeClass("hide");

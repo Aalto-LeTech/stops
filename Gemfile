@@ -9,6 +9,8 @@ gem 'rails', '3.2.2'
 # gem 'sqlite3-ruby', :require => 'sqlite3'
 gem 'pg'
 
+gem 'pg_search'
+
 # Use unicorn as the web server
 # gem 'unicorn'
 #gem 'mongrel', '>= 1.2.0.pre2'

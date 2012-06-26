@@ -59,3 +59,11 @@ fi:
       long: "%a %d.%m.%Y klo %H:%M:%S"
     am: "am"
     pm: "pm"
+    
+  #######################
+  # Language translations
+  #######################
+  language_in_en: "englanniksi"
+  language_in_sv: "ruotsiksi"
+  language_in_fi: "suomeksi"
+  

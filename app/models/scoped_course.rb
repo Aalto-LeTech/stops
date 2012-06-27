@@ -4,10 +4,16 @@ class ScopedCourse < ActiveRecord::Base
   include PgSearch
 
   belongs_to :abstract_course
+  
+  has_one :course_description_with_locale, :class_name => "CourseDescription",
+          :through => :abstract_course,
+          :source => :course_description_with_locale
 
   #has_many :skills, :order => 'position', :dependent => :destroy #, :foreign_key => 'course_code', :primary_key => 'code'
   #has_many :course_skills, :dependent => :destroy
   has_many :skills, :as => :skillable, :order => 'position', :dependent => :destroy #, :foreign_key => 'course_code', :primary_key => 'code'
+  
+  has_many :skill_descriptions, :through => :skills
 
   # Prerequisite courses of this course
   has_many :course_prereqs, :dependent => :destroy
@@ -24,6 +30,10 @@ class ScopedCourse < ActiveRecord::Base
   # pg_search indexing (free-text search)
   pg_search_scope :search_full_text, 
     :against => :code,
+    :associated_against => {
+      :course_description_with_locale => [:name],
+      :skill_descriptions => [:description]
+    },
     :using => { 
       :tsearch => { :prefix => true }  
     }

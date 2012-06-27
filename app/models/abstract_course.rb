@@ -10,6 +10,9 @@ class AbstractCourse < ActiveRecord::Base
   
   has_many :course_descriptions_with_locale, :class_name => "CourseDescription", 
            :conditions => proc { "locale = '#{I18n.locale}'" }
+           
+  has_one :course_description_with_locale, :class_name => "CourseDescription", 
+           :conditions => proc { "locale = '#{I18n.locale}'" }
   
   def get_name(locale)
     description = CourseDescription.where(:abstract_course_id => self.id, :locale => locale.to_s).first

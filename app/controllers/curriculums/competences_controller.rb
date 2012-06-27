@@ -122,7 +122,7 @@ class Curriculums::CompetencesController < CurriculumsController
   # Action for retrieving courses that match certain search terms
   # using AJAX.
   def search_skills_and_courses
-    @courses = ScopedCourse.search_full_text params[:q] 
+    @courses = ScopedCourse.includes(:course_description_with_locale, :skill_descriptions).search_full_text params[:q] 
 
     respond_to do |format|
       format.html do
@@ -137,3 +137,5 @@ class Curriculums::CompetencesController < CurriculumsController
     render :action => 'prereqs', :layout => 'fullscreen'
   end
 end
+
+

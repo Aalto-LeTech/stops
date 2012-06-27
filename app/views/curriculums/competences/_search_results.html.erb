@@ -1,4 +1,16 @@
-<% @courses.each do |course| %>
-  <% @course = course %>
-  <%= render :partial => "single_search_result" %>
-<% end %>  
+<table>
+  <% @courses.each do |course| %>
+    <% @course = course %>
+    <tr class="skill-search-result">
+      <th class="skill-course-code"><%= @course.code %></th>
+      <th><%= @course.course_description_with_locale.name %></th>
+    </tr>
+
+    <% @course.skill_descriptions.each do |skill_desc| %>
+      <tr>
+        <td><%= skill_desc.description %></td> 
+        <td></td>
+      </tr>
+    <% end %>
+  <% end %>  
+</table>

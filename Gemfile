@@ -10,6 +10,7 @@ gem 'rails', '3.2.2'
 gem 'pg'
 
 gem 'pg_search'
+gem 'thinking-sphinx'
 
 # Use unicorn as the web server
 # gem 'unicorn'

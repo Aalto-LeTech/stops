@@ -1,5 +1,6 @@
 .bundle
 db/*.sqlite3
+db/sphinx/
 tmp/**/*
 log/
 public/images/
@@ -7,4 +8,6 @@ public/assets/
 config/database.yml
 config/initializers/settings.rb
 config/initializers/secret_token.rb
+config/*.sphinx.conf
+config/sphinx.yml
 Gemfile.lock

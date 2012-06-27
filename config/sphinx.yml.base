@@ -1,0 +1,2 @@
+development:
+  mem_limit: 128M

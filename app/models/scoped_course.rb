@@ -37,6 +37,17 @@ class ScopedCourse < ActiveRecord::Base
     :using => { 
       :tsearch => { :prefix => true }  
     }
+    
+  
+  define_index do
+    indexes code
+    indexes course_description_with_locale(:name), :as => :course_name
+    indexes skill_descriptions.description, :as => :skill_descriptions
+    
+    has :id, :as => :scoped_course_id
+    has :abstract_course_id
+    # has skills(:id)
+  end
    
 
 

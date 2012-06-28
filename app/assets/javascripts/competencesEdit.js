@@ -87,13 +87,17 @@ var prereq = (function() {
       searchURL;
  
   function _searchListener() {
-    var query = $searchbox.val().trim(); 
+    var query = $searchbox.val().trim();
 
-    $.get(searchURL, { q: query }, updateSearchResults);
+    if (query !== "") {
+      $.get(searchURL, { q: query }, updateSearchResults);
 
-    function updateSearchResults(data, textStatus, xhr) {
-      $searchResults.html(data); 
-    } 
+      function updateSearchResults(data, textStatus, xhr) {
+        $searchResults.html(data); 
+      } 
+    } else {
+      $searchResults.html("");
+    }
   } 
 
   /* Initialization */

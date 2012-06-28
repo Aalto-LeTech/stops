@@ -6,32 +6,6 @@
     var $first = $("#skills > li:first-child");
     var top = $first.position().top, left = $first.position().left;
     
-    /*$("#skills > li").each(function(i, el) {
-      var $this = $(this);
-      $this.css({
-        "top": $this.position().top,
-        "left": $this.position().left
-      });
-    });
-
-    $("#skills > li").each(function(i, el) {
-      if (this !== selected) $(this).css("z-index", "-1");
-      $(this).addClass("absolute");
-      $(this).animate({
-        top: top,
-        left: left 
-      }, {
-        duration: 1000,
-        complete: function() {"http://localhost:3000/fi/curriculums/1/competences/5/edit_skill_prereqs
-          if (this !== selected) $(this).addClass("hide");
-          $(selected).addClass("deactivated");
-          $(selected).find("a.button-base").addClass("hide");
-        }  
-      });
-      
-    }); */
-
-
     $("#skills > li").off("click");
 
     // Load new partial view

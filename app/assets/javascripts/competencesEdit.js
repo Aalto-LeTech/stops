@@ -101,7 +101,22 @@ var prereq = (function() {
     $searchbox = $("#skill-search-box");
     $searchResults = $("#skill-search-results");
     searchURL = $("#metadata").data("skill-search-url")
-    $searchbox.keyup(makeDebouncedFunction(500, _searchListener));
+
+    /* After the last keystroke, perform search after
+     * the specified delay has elapsed, unless the last
+     * key was enter, in which case search is performed
+     * immediately.  */
+    var delay = 500; // milliseconds
+    $searchbox.keyup((function() {
+      var debouncedFunc = makeDebouncedFunction(delay, _searchListener);
+      return function(evt) {
+        if(evt.which === 13) {
+          /* Enter pressed! Perform search immediately instead of
+           * debouncing */
+          _searchListener();
+        } else debouncedFunc();
+      }
+    })());
   };
 
   /* Module access object */

@@ -5,6 +5,7 @@ tmp/**/*
 log/
 public/images/
 public/assets/
+.sass-cache
 config/database.yml
 config/initializers/settings.rb
 config/initializers/secret_token.rb

@@ -125,13 +125,22 @@ class Curriculums::CompetencesController < CurriculumsController
     # @courses = ScopedCourse.includes(:course_description_with_locale, :skill_descriptions).search_full_text params[:q] 
     
     @courses = ScopedCourse.search params[:q], 
-                  :include => [:course_description_with_locale, :skill_descriptions]
+                  :include => [:course_description_with_locale, :skill_descriptions],
+                  :page => params[:p] || 1, :per_page => 20
 
-    respond_to do |format|
-      format.html do
-        render :partial => "search_results"
-      end 
-    end 
+
+    # Slow down request for testing
+    # sleep 1.5 unless not params[:p]
+
+    if @courses.empty?
+      respond_to do |format|
+        format.text { render :text => "nothing" }
+      end
+    else
+      respond_to do |format|
+        format.html { render :partial => "search_results" }
+      end
+    end
   end
 
   def prereqs

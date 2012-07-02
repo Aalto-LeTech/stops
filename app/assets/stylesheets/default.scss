@@ -230,6 +230,16 @@ $button_active_color: #024A68;
 
 }
 
+.button-disabled, 
+.button-disabled:hover, 
+.button-disabled:active, 
+.button-disabled:focus {
+  background-color: $button_dark_color;
+  background-image: none;
+  cursor: default;
+  opacity: 0.7;
+}
+
 
 /******************
  * Flash messages

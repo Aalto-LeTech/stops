@@ -18,12 +18,16 @@ fi:
   constributing_courses_link: "Kurssit"
 
   competence_supporting_courses_heading: "Valitse tukevia kursseja"
-  
+
   # Edit
   competence_edit_heading: "Muokkaa osaamiskokonaisuutta"
   competence_create_new_outcome: "Uusi valmius"
   competence_create_outcome_heading: "Luo uusi valmius"
   competence_create_outcome_help_text: "Syötä valmiuden kuvaus kaikilla pyydetyillä kielillä."
+  competence_skill_add_prereq_button: "Edellytykseksi"
+  competence_skill_add_prereq_button_loading: "Tallennetaan..."
+  competence_skill_add_prereq_button_loaded: "Talennettu"
+
 
   # Add to plan
   competence_add_heading: "Lisää %{profile} %{competence} opintosuunnitelmaan"

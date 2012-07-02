@@ -7,7 +7,9 @@
     data-skill-id="<%= @skill_id %>"
     data-skill-search-url="<%= 
       search_skills_and_courses_curriculum_competence_path(params[:locale], 
-                                                           params[:curriculum_id], params[:id]) %>">
+        params[:curriculum_id], params[:id]) %>"
+    data-skill-prereq-add-url="<%= add_prereq_skill_path(params[:locale], 
+      @skill_id) %>">
   </div>
 
   <h5>Nykyiset vaatimukset</h5>

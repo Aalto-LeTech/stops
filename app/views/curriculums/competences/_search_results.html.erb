@@ -1,15 +1,21 @@
-<table>
+<table class="search-results">
   <% @courses.each do |course| %>
     <% @course = course %>
     <tr class="skill-search-result">
-      <th class="skill-course-code"><%= @course.code %></th>
-      <th><%= @course.course_description_with_locale.name %></th>
+      <th class="skill-course-detail" colspan="2"><%= @course.code %> <%= @course.course_description_with_locale.name %></th>
     </tr>
 
     <% @course.skill_descriptions.each do |skill_desc| %>
       <tr>
         <td><%= skill_desc.description %></td> 
-        <td></td>
+        <td class="skill-search-button-cell">
+          <a href="#" class="button-base button-small" 
+            data-skill-id="<%= skill_desc.skill_id %>"
+            data-default-text="<%= t :competence_skill_add_prereq_button %>"
+            data-loading-text="<%= t :competence_skill_add_prereq_button_loading %>"
+            data-loaded-text="<%= t :competence_skill_add_prereq_button_loaded %>">
+          <%= t :competence_skill_add_prereq_button %></a>
+        </td>
       </tr>
     <% end %>
   <% end %>  

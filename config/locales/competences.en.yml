@@ -23,6 +23,9 @@ en:
   competence_create_new_outcome: "New outcome"
   competence_create_outcome_heading: "Create a new outcome"
   competence_create_outcome_help_text: "Please enter the skill description in all required languages."
+  competence_skill_add_prereq_button: "Add as preqrequirement"
+  competence_skill_add_prereq_button_loading: "Saving..."
+  competence_skill_add_prereq_button_loaded: "Saved"
 
   # Add to plan
   competence_add_heading: "Add %{profile} %{competence} to study plan"
@@ -34,3 +37,5 @@ en:
 
   # Contributing outcomes
   contributors_heading: "Courses contributing to %{competence}"
+
+

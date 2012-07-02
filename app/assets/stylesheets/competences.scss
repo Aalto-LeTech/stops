@@ -293,6 +293,26 @@ $new-skill-box-font-color: #24765C;
   padding: 3px 3px 3px;
   font-size: 15px;
   font-weight: 700;
+  margin-bottom: 40px;
+}
+
+table.search-results {
+
+  tr {
+
+  }
+
+  tr.skill-search-result {
+    background: #B0DAFF;
+  }
+  th {
+    padding: 8px 10px 8px;
+    text-align: left;
+  }
+
+  td {
+    padding: 4px 14px;
+  }
 }
 
 #skill-endless-pagination-footer {

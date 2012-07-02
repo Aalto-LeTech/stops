@@ -207,11 +207,34 @@ var prereq = (function() {
     }
   }
 
+
+  var prereqAddURL;
+
+  /* Click event listener to add selected skill as a prerequirement. */
+  function _addPrereqOnClick() {
+    //alert("Clicked");
+    $this = $(this);
+    var prereqSkillId = $this.data("skill-id");
+
+    $this.text($this.data("loading-text"));
+    $this.addClass("button-disabled");
+
+    $.post(prereqAddURL, { prereq_id: prereqSkillId }, function() {
+      $this.text($this.data("loaded-text"));
+    }).error(function() {
+      console.log("AJAX update failed!");
+      
+      $this.text($this.data("default-text"));
+      $this.removeClass("button-disabled");
+    });
+  }
+
   /* Initialization */
   function _init() {
     $searchbox = $("#skill-search-box");
     $searchResults = $("#skill-search-results");
-    searchURL = $("#metadata").data("skill-search-url")
+    searchURL = $("#metadata").data("skill-search-url");
+    prereqAddURL = $("#metadata").data("skill-prereq-add-url");
 
     /* After the last keystroke, perform search after
      * the specified delay has elapsed, unless the last
@@ -230,6 +253,14 @@ var prereq = (function() {
     })());
 
     $(window).scroll(_endlesslyPaginate);
+
+    $("#skill-search-results").on("click", "a.button-base:not(.button-disabled)", 
+      _addPrereqOnClick);
+
+    $("#skill-search-results").on("click", "a.button-base", function(evt) {
+      evt.preventDefault(); /* Disable links */
+    })
+
   };
 
   /* Module access object */

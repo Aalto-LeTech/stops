@@ -121,6 +121,14 @@ class SkillsController < ApplicationController
     end
     
   end
+
+  def add_prereq
+    SkillPrereq.create :skill_id     => Integer(params[:id]), 
+                       :prereq_id    => Integer(params[:prereq_id]), 
+                       :requirement  => STRICT_PREREQ
+
+    render :nothing => true
+  end
   
   def prereqs
     @skill = Skill.find(params[:id])

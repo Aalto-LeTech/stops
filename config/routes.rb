@@ -23,6 +23,7 @@ Ops::Application.routes.draw do
         get 'prereqs'
         get 'future'
         get 'competencepath'
+        post 'add_prereq'
       end
     end
 

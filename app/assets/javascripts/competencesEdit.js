@@ -207,26 +207,89 @@ var prereq = (function() {
     }
   }
 
+  var ButtonCompanion = function(state, button) {
+    /* States: readyToAdd, loading, readyToRemove */
+    var states = { readyToAdd: null, loading: null, readyToRemove: null };
 
-  var prereqAddURL;
+    this.currentState = state in states ? state : readyToAdd;
+    this.$button = $(button);
+  }
+
+  ButtonCompanion.prototype.stateTo = function(state) {
+    if (state === 'loading') {
+      this.$button.addClass("button-disabled");
+      this.$button.text(this.$button.data("loading-text"));
+    } else if (state === 'readyToAdd') {
+      this.$button.addClass("skill-add-prereq-button");
+      this.$button.removeClass("skill-remove-prereq-button");
+      this.$button.text(this.$button.data("add-text"));
+      this.$button.removeClass("button-disabled");
+    } else if (state === 'readyToRemove') {
+      this.$button.addClass("skill-remove-prereq-button");
+      this.$button.removeClass("skill-add-prereq-button");
+      this.$button.text(this.$button.data("remove-text"));
+      this.$button.removeClass("button-disabled");
+    }
+  };
+
+
+  var prereqAddURL,
+      prereqRemoveURL;
 
   /* Click event listener to add selected skill as a prerequirement. */
   function _addPrereqOnClick() {
     //alert("Clicked");
-    $this = $(this);
+    var $this = $(this);
     var prereqSkillId = $this.data("skill-id");
+    var buttonComp = $this.data("button-companion");
+    if (!buttonComp) {
+      buttonComp = new ButtonCompanion("readyToAdd", this);
+      $this.data("button-companion", buttonComp);
+    }
 
-    $this.text($this.data("loading-text"));
-    $this.addClass("button-disabled");
+    //$this.text($this.data("loading-text"));
+    //$this.addClass("button-disabled");
 
-    $.post(prereqAddURL, { prereq_id: prereqSkillId }, function() {
+    /*$.post(prereqAddURL, { prereq_id: prereqSkillId }, function() {
       $this.text($this.data("loaded-text"));
     }).error(function() {
       console.log("AJAX update failed!");
       
       $this.text($this.data("default-text"));
       $this.removeClass("button-disabled");
+    });*/
+
+    buttonComp.stateTo("loading");
+    $.post(prereqAddURL, { prereq_id: prereqSkillId }, function() {
+      buttonComp.stateTo("readyToRemove");
+    }).error(function() {
+      console.log("AJAX update failed!");
+      
+      // TODO Failure notification
+      buttonComp.stateTo("readyToAdd");
     });
+  }
+
+  function _removePrereqOnClick() {
+    var $this = $(this),
+        prereqSkillId = $this.data("skill-id"),
+        buttonComp = $this.data("button-companion");
+
+    if (!buttonComp) {
+      buttonComp = new ButtonCompanion("readyToAdd", this);
+      $this.data("button-companion", buttonComp);
+    }
+
+    buttonComp.stateTo("loading");
+    $.post(prereqRemoveURL, { prereq_id: prereqSkillId }, function() {
+      buttonComp.stateTo("readyToAdd");
+    }).error(function() {
+      console.log("AJAX update failed!");
+      
+      // TODO Failure notification
+      buttonComp.stateTo("readyToRemove");
+    });
+
   }
 
   /* Initialization */
@@ -235,6 +298,7 @@ var prereq = (function() {
     $searchResults = $("#skill-search-results");
     searchURL = $("#metadata").data("skill-search-url");
     prereqAddURL = $("#metadata").data("skill-prereq-add-url");
+    prereqRemoveURL = $("#metadata").data("skill-prereq-remove-url");
 
     /* After the last keystroke, perform search after
      * the specified delay has elapsed, unless the last
@@ -254,12 +318,15 @@ var prereq = (function() {
 
     $(window).scroll(_endlesslyPaginate);
 
-    $("#skill-search-results").on("click", "a.button-base:not(.button-disabled)", 
+    $("#skill-search-results").on("click", "button.skill-add-prereq-button", 
       _addPrereqOnClick);
 
-    $("#skill-search-results").on("click", "a.button-base", function(evt) {
+    $("#skill-search-results").on("click", "button.skill-remove-prereq-button", 
+      _removePrereqOnClick);
+
+    $("#skill-search-results").on("click", "button.button-base", function(evt) {
       evt.preventDefault(); /* Disable links */
-    })
+    });
 
   };
 

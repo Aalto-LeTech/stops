@@ -313,7 +313,35 @@ table.search-results {
   td {
     padding: 4px 14px;
   }
+
+  .skill-add-prereq-button {
+    /* Placeholder */
+  }
+
+  $prereq_remove_light_color: #8F1F1F;
+  $prereq_remove_dark_color: #9C2222;
+  $prereq_remove_active_color: #DB3030;
+
+  .skill-remove-prereq-button {
+    background-color: $prereq_remove_light_color;
+    background-repeat: repeat-x;
+    background-image: -webkit-linear-gradient(top, $prereq_remove_light_color, $prereq_remove_dark_color);
+    background-image: -moz-linear-gradient(top, $prereq_remove_light_color, $prereq_remove_dark_color);
+    background-image: -o-linear-gradient(top, $prereq_remove_light_color, $prereq_remove_dark_color);
+    background-image: -ms-linear-gradient(top, $prereq_remove_light_color, $prereq_remove_dark_color);
+    background-image: linear-gradient(top, $prereq_remove_light_color, $prereq_remove_dark_color);
+
+    &:hover {
+      background-color: $prereq_remove_light_color;
+    }
+
+    &:active {
+      background-color: $prereq_remove_active_color;
+    }
+  }
 }
+
+
 
 #skill-endless-pagination-footer {
   height: 120px;

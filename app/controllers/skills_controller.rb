@@ -129,6 +129,14 @@ class SkillsController < ApplicationController
 
     render :nothing => true
   end
+
+  def remove_prereq
+    @prereq = SkillPrereq.where "skill_id = ? AND prereq_id = ?", 
+                params[:id], params[:prereq_id]
+
+    @prereq.first.destroy
+    render :nothing => true
+  end
   
   def prereqs
     @skill = Skill.find(params[:id])

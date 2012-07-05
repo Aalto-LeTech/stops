@@ -247,18 +247,6 @@ var prereq = (function() {
       $this.data("button-companion", buttonComp);
     }
 
-    //$this.text($this.data("loading-text"));
-    //$this.addClass("button-disabled");
-
-    /*$.post(prereqAddURL, { prereq_id: prereqSkillId }, function() {
-      $this.text($this.data("loaded-text"));
-    }).error(function() {
-      console.log("AJAX update failed!");
-      
-      $this.text($this.data("default-text"));
-      $this.removeClass("button-disabled");
-    });*/
-
     buttonComp.stateTo("loading");
     $.post(prereqAddURL, { prereq_id: prereqSkillId }, function() {
       buttonComp.stateTo("readyToRemove");

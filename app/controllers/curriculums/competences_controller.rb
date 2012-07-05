@@ -1,3 +1,5 @@
+require 'eco'
+
 class Curriculums::CompetencesController < CurriculumsController
 
   #before_filter :load_curriculum
@@ -109,7 +111,46 @@ class Curriculums::CompetencesController < CurriculumsController
         # Validate query string key
         render :status => 500 unless /^\d+$/ =~ params[:skill_id] 
 
+        # Find all courses within curriculum that have at least one skill as a
+        # a prerequirement to the skill being edited
+        @prereq_courses = ScopedCourse.find(
+                            :all, 
+                            :conditions => [
+                              'curriculum_id = ? AND "skill_prereqs"."skill_id" = ?', 
+                              params[:curriculum_id], params[:skill_id]
+                            ], 
+                            :include => [
+                              :course_description_with_locale,
+                              { :skills => :prereq_to } 
+                            ]
+                          )
+
         @skill = Skill.includes(:description_with_locale).find(params[:skill_id].to_i)
+
+        # Render an eco template for each course (This is done to use the same template
+        # for Javascript view updates)
+
+        eco_template = File.join(Rails.root, 
+          "app/assets/javascripts/templates/_current_course_with_prereq_skills.jst.eco")
+
+        @courses_rendered = []
+        @prereq_courses.each do |course|
+          skills = []
+          course.skills.each do |skill|
+            skill_locals = {
+              :description  => skill.description_with_locale.description,
+              :id           => skill.id #, :is_prereq => TRUE/FALSE
+            }
+            skills << skill_locals
+          end
+          locals = { 
+            :course_code    => course.code,
+            :course_name    => course.course_description_with_locale.name,
+            :course_skills  => skills  # TODO Fill with needed details
+          }
+
+          @courses_rendered << Eco.render(eco_template, locals)
+        end
 
         @skill_id = params[:skill_id]
         render :partial => "prereq_skills_selection"

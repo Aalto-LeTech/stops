@@ -16,6 +16,11 @@
 
   <h5>Nykyiset vaatimukset</h5>
 
+  <% @courses_rendered.each do |course| %>
+    <%# The html code must not be escaped %>
+    <%= raw(course) %>
+  <% end %>
+
   <h5>Lisää uusia valmiuksia</h5>
 
   <p>Hae kursseja ja niiden valmiuksia</p>  

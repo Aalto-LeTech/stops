@@ -44,6 +44,10 @@ class Skill < ActiveRecord::Base
     description ? description.description : ''
   end
 
+  def is_prereq_to?(skill_id)
+    self.prereq_to.id == skill_id
+  end
+
   # Calculates study paths from this skill to the skills of the given competence
   # Returns a hash where keys are the skill_ids of the competence skills, and values are arrays of skills on the study paths.
   def path_to_competence(competence)

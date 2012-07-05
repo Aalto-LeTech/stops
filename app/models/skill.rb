@@ -1,16 +1,39 @@
 class Skill < ActiveRecord::Base
   has_many :skill_descriptions, :dependent => :destroy
-  has_one :description_with_locale, :class_name => "SkillDescription", 
+
+  has_one :description_with_locale, 
+          :class_name => "SkillDescription", 
           :conditions => proc { "locale = '#{I18n.locale}'" }
 
   has_many :skill_prereqs, :dependent => :destroy
-  has_many :prereqs, :through => :skill_prereqs, :source => :prereq, :order => 'position'
-  has_many :strict_prereqs, :through => :skill_prereqs, :source => :prereq, :conditions => "requirement = #{STRICT_PREREQ}" # TODO: :order => 'position',
-  has_many :supporting_prereqs, :through => :skill_prereqs, :source => :prereq, :order => 'position', :conditions => "requirement = #{SUPPORTING_PREREQ}"
+
+  has_many :prereqs, 
+           :through   => :skill_prereqs, 
+           :source    => :prereq, 
+           :order     => 'position'
+
+  has_many :strict_prereqs, 
+           :through     => :skill_prereqs, 
+           :source      => :prereq, 
+           :conditions  => "requirement = #{STRICT_PREREQ}" # TODO: :order => 'position',
+
+  has_many :supporting_prereqs, 
+           :through     => :skill_prereqs, 
+           :source      => :prereq, 
+           :order       => 'position', 
+           :conditions  => "requirement = #{SUPPORTING_PREREQ}"
 
   # Skills for which this is a prerequisite
-  has_many :skill_prereq_to, :class_name => 'SkillPrereq', :foreign_key => :prereq_id, :dependent => :destroy
-  has_many :prereq_to, :through => :skill_prereq_to, :source => :skill, :order => 'position', :conditions => "requirement = #{STRICT_PREREQ}"
+  has_many :skill_prereq_to, 
+           :class_name  => 'SkillPrereq', 
+           :foreign_key => :prereq_id, 
+           :dependent   => :destroy
+
+  has_many :prereq_to, 
+           :through     => :skill_prereq_to, 
+           :source      => :skill, 
+           :order       => 'position', 
+           :conditions  => "requirement = #{STRICT_PREREQ}"
 
   belongs_to :skillable, :polymorphic => true
 

@@ -5,38 +5,63 @@ class ScopedCourse < ActiveRecord::Base
 
   belongs_to :abstract_course
   
-  has_one :course_description_with_locale, :class_name => "CourseDescription",
-          :through => :abstract_course,
-          :source => :course_description_with_locale
+  has_one :course_description_with_locale, 
+          :class_name => "CourseDescription",
+          :through    => :abstract_course,
+          :source     => :course_description_with_locale
 
   #has_many :skills, :order => 'position', :dependent => :destroy #, :foreign_key => 'course_code', :primary_key => 'code'
   #has_many :course_skills, :dependent => :destroy
-  has_many :skills, :as => :skillable, :order => 'position', :dependent => :destroy #, :foreign_key => 'course_code', :primary_key => 'code'
+  has_many :skills, 
+           :as        => :skillable, 
+           :order     => 'position', 
+           :dependent => :destroy #, :foreign_key => 'course_code', :primary_key => 'code'
   
-  has_many :skill_descriptions, :through => :skills
+  has_many :skill_descriptions, 
+           :through => :skills
 
   # Prerequisite courses of this course
-  has_many :course_prereqs, :dependent => :destroy
+  has_many :course_prereqs, 
+           :dependent => :destroy
 
   # Prerequisite skills of this course
-  has_many :prereqs, :through => :course_prereqs, :source => :prereq, :order => 'requirement DESC, code'
-  has_many :strict_prereqs, :through => :course_prereqs, :source => :prereq, :conditions => "requirement = #{STRICT_PREREQ}" # TODO: :order => 'requirement DESC, code'
-  has_many :supporting_prereqs, :through => :course_prereqs, :source => :prereq, :order => 'requirement DESC, code', :conditions => "requirement = #{SUPPORTING_PREREQ}"
+  has_many :prereqs, 
+           :through => :course_prereqs, 
+           :source  => :prereq, 
+           :order   => 'requirement DESC, code'
+
+  has_many :strict_prereqs, 
+           :through     => :course_prereqs, 
+           :source      => :prereq, 
+           :conditions  => "requirement = #{STRICT_PREREQ}" # TODO: :order => 'requirement DESC, code'
+  
+  has_many :supporting_prereqs, 
+           :through     => :course_prereqs, 
+           :source      => :prereq, 
+           :order       => 'requirement DESC, code', 
+           :conditions  => "requirement = #{SUPPORTING_PREREQ}"
 
   # Courses for which this is a prerequisite
-  has_many :course_prereq_to, :class_name => 'CoursePrereq', :foreign_key => :scoped_prereq_id
-  has_many :prereq_to, :through => :course_prereq_to, :source => :course, :order => 'code', :conditions => "requirement = #{STRICT_PREREQ}"
+  has_many :course_prereq_to, 
+           :class_name  => 'CoursePrereq', 
+           :foreign_key => :scoped_prereq_id
+  
+  has_many :prereq_to, 
+           :through     => :course_prereq_to, 
+           :source      => :course, 
+           :order       => 'code', 
+           :conditions  => "requirement = #{STRICT_PREREQ}"
   
   # pg_search indexing (free-text search)
   pg_search_scope :search_full_text, 
-    :against => :code,
-    :associated_against => {
-      :course_description_with_locale => [:name],
-      :skill_descriptions => [:description]
-    },
-    :using => { 
-      :tsearch => { :prefix => true }  
-    }
+                  :against            => :code,
+                  :associated_against => {
+                    :course_description_with_locale => [:name],
+                    :skill_descriptions             => [:description]
+                  },
+                  :using => { 
+                    :tsearch => { :prefix => true }  
+                  }
     
   
   define_index do

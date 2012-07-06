@@ -121,7 +121,7 @@ class Curriculums::CompetencesController < CurriculumsController
                             ], 
                             :include => [
                               :course_description_with_locale,
-                              { :skills => :prereq_to } 
+                              { :skills => [:prereq_to, :description_with_locale] } 
                             ]
                           )
 
@@ -129,9 +129,9 @@ class Curriculums::CompetencesController < CurriculumsController
 
         # Render an eco template for each course (This is done to use the same template
         # for Javascript view updates)
-
-        eco_template = File.join(Rails.root, 
+        eco_template_path = File.join(Rails.root, 
           "app/assets/javascripts/templates/_current_course_with_prereq_skills.jst.eco")
+        eco_template = File.read(eco_template_path)
 
         @courses_rendered = []
         @prereq_courses.each do |course|
@@ -139,14 +139,15 @@ class Curriculums::CompetencesController < CurriculumsController
           course.skills.each do |skill|
             skill_locals = {
               :description  => skill.description_with_locale.description,
-              :id           => skill.id #, :is_prereq => TRUE/FALSE
+              :id           => skill.id,
+              :is_prereq    => skill.is_prereq_to?(@skill.id)
             }
             skills << skill_locals
           end
           locals = { 
             :course_code    => course.code,
             :course_name    => course.course_description_with_locale.name,
-            :course_skills  => skills  # TODO Fill with needed details
+            :course_skills  => skills
           }
 
           @courses_rendered << Eco.render(eco_template, locals)

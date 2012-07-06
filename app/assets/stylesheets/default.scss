@@ -149,6 +149,11 @@ h1:first-child, h2:first-child, h3:first-child {
   margin-top: 0px;
 }
 
+h4.colorful {
+  color: #F06118;
+  border-bottom: 1px solid #704500;
+}
+
 
 /************************
 * General utility classes
@@ -238,6 +243,26 @@ $button_active_color: #024A68;
   background-image: none;
   cursor: default;
   opacity: 0.7;
+}
+
+/******************
+* Information boxes
+*******************/
+
+$info_box_base_color:   #9FD7ED;
+$info_box_border_color: #749DAD;
+$info_box_text_color:   #285A6D;
+
+div.info {
+  @include border-radius(4px);
+  background-color: $info_box_base_color;
+  color: $info_box_text_color;
+  font-family: Helvetica, sans-serif;
+  border: 1px solid $info_box_border_color;
+  padding: 8px 8px;
+  margin-bottom: 15px;
+  width: 400px;
+  font-size: 13px;
 }
 
 

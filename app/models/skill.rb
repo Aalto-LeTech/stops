@@ -3,7 +3,7 @@ class Skill < ActiveRecord::Base
 
   has_one :description_with_locale, 
           :class_name => "SkillDescription", 
-          :conditions => proc { "locale = '#{I18n.locale}'" }
+          :conditions => proc { "skill_descriptions.locale = '#{I18n.locale}'" }
 
   has_many :skill_prereqs, :dependent => :destroy
 
@@ -45,7 +45,11 @@ class Skill < ActiveRecord::Base
   end
 
   def is_prereq_to?(skill_id)
-    self.prereq_to.id == skill_id
+    prereq_found = false
+    self.prereq_to.each do |prereq|
+      prereq_found = true if prereq.id == skill_id
+    end
+    prereq_found
   end
 
   # Calculates study paths from this skill to the skills of the given competence

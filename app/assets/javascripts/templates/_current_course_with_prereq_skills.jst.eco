@@ -1,8 +1,15 @@
-<div class="course-something-something">
-	<%= @course_code %> <%= @course_name %>
-	<% for skill in @course_skills: %>
-		<div class="skill-something-something" data-skill-id="<%= skill.id %>">
+<tr>
+	<th class="skill-prereq-course" colspan="2">
+		<%= @course_code %> <%= @course_name %>
+	</th>
+</tr>
+<% for skill in @course_skills: %>
+	<tr>
+		<td class="skill-prereq-skill" data-skill-id="<%= skill.id %>">
 			<%= skill.description %>
-		</div>
-	<% end %>
-</div>
+		</td>
+		<td>
+			<button class="button-base button-small skill-remove-prereq-button">Test</button>
+		</td>
+	</tr>
+<% end %>

@@ -1,5 +1,9 @@
 <div>
-  <h4>Lisää esivaatimusksia valitulle valmiudelle</h4>
+  <div class="info">
+    <strong>Ohje</strong>
+    Täällä voit lisätä esitietovaatimuksia valitsemallesi valmiudelle.
+    Käytä hakukenttää esitietovaatimusten etsimiseen.
+  </div>
 
   <strong>Valittu valmius:</strong> <%= @skill.description_with_locale.description %>
 
@@ -14,14 +18,18 @@
       @skill_id) %>">
   </div>
 
-  <h5>Nykyiset vaatimukset</h5>
+  <h4 class="colorful">Nykyiset vaatimukset</h4>
 
-  <% @courses_rendered.each do |course| %>
-    <%# The html code must not be escaped %>
-    <%= raw(course) %>
-  <% end %>
+  <div>
+    <table id="skill-current-prereqs">
+      <% @courses_rendered.each do |course| %>
+        <%# The html code must not be escaped %>
+        <%= raw(course) %>
+      <% end %>
+    </table>
+  </div>
 
-  <h5>Lisää uusia valmiuksia</h5>
+  <h4 class="colorful">Lisää uusia vaatimuksia</h4>
 
   <p>Hae kursseja ja niiden valmiuksia</p>  
 

@@ -16,7 +16,7 @@
     var skill_id = id_regexp.exec(skill_id_string)[1];
     $.get(skillPrereqEditUrl, { 'skill_id': skill_id }, function(data, textStatus, xhr) {
       $("#dynamic-content-box").html(data); 
-      prereq.initialization();
+      prereq.initialize();
     });
   };
   
@@ -207,6 +207,7 @@ var prereq = (function() {
     }
   }
 
+  /* Companion class for prerequirement buttons to handle view state */
   var ButtonCompanion = function(state, button) {
     /* States: readyToAdd, loading, readyToRemove */
     var states = { readyToAdd: null, loading: null, readyToRemove: null };
@@ -217,18 +218,24 @@ var prereq = (function() {
 
   ButtonCompanion.prototype.stateTo = function(state) {
     if (state === 'loading') {
+
       this.$button.addClass("button-disabled");
       this.$button.text(this.$button.data("loading-text"));
+
     } else if (state === 'readyToAdd') {
+
       this.$button.addClass("skill-add-prereq-button");
       this.$button.removeClass("skill-remove-prereq-button");
       this.$button.text(this.$button.data("add-text"));
       this.$button.removeClass("button-disabled");
+
     } else if (state === 'readyToRemove') {
+
       this.$button.addClass("skill-remove-prereq-button");
       this.$button.removeClass("skill-add-prereq-button");
       this.$button.text(this.$button.data("remove-text"));
       this.$button.removeClass("button-disabled");
+
     }
   };
 
@@ -236,12 +243,15 @@ var prereq = (function() {
   var prereqAddURL,
       prereqRemoveURL;
 
-  /* Click event listener to add selected skill as a prerequirement. */
-  function _addPrereqOnClick() {
+  /* Click event listener to add the selected skill from search results 
+   * as a prerequirement. */
+  function _addSearchedPrereqOnClick() {
     //alert("Clicked");
     var $this = $(this);
     var prereqSkillId = $this.data("skill-id");
     var buttonComp = $this.data("button-companion");
+
+    /* Lazily initialize ButtonCompanion object */
     if (!buttonComp) {
       buttonComp = new ButtonCompanion("readyToAdd", this);
       $this.data("button-companion", buttonComp);
@@ -258,11 +268,14 @@ var prereq = (function() {
     });
   }
 
-  function _removePrereqOnClick() {
+  /* Click handler for removing a searched prerequirement skill
+   * from prerequirements.  */
+  function _removeSearchedPrereqOnClick() {
     var $this = $(this),
         prereqSkillId = $this.data("skill-id"),
         buttonComp = $this.data("button-companion");
 
+    /* Lazily initialize ButtonCompanion object */
     if (!buttonComp) {
       buttonComp = new ButtonCompanion("readyToAdd", this);
       $this.data("button-companion", buttonComp);
@@ -278,6 +291,14 @@ var prereq = (function() {
       buttonComp.stateTo("readyToRemove");
     });
 
+  }
+
+  /* Click handler for removing a current prerequirement from the
+   * prerequirements listing on top of the page.  */
+  function _removeCurrentPrereqOnClick() {
+    var $this = $(this),
+        prereqSkillId = false,  // TODO Change these
+        buttonComp = false;
   }
 
   /* Initialization */
@@ -306,21 +327,21 @@ var prereq = (function() {
 
     $(window).scroll(_endlesslyPaginate);
 
+    /* Buttons of current prerequirements */
+    // TODO add it here
+
+    /* Buttons of search results */
     $("#skill-search-results").on("click", "button.skill-add-prereq-button", 
-      _addPrereqOnClick);
+      _addSearchedPrereqOnClick);
 
     $("#skill-search-results").on("click", "button.skill-remove-prereq-button", 
-      _removePrereqOnClick);
-
-    $("#skill-search-results").on("click", "button.button-base", function(evt) {
-      evt.preventDefault(); /* Disable links */
-    });
+      _removeSearchedPrereqFromSearchOnClick);
 
   };
 
   /* Module access object */
   return {
-    initialization: _init,
+    initialize: _init,
     PaginationLoader: _PaginationLoader
   }
 

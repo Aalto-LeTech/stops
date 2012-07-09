@@ -1,15 +1,16 @@
-<tr>
+<tr id="prereq-course-id-<%= @course_id %>">
 	<th class="skill-prereq-course" colspan="2">
 		<%= @course_code %> <%= @course_name %>
 	</th>
 </tr>
 <% for skill in @course_skills: %>
-	<tr>
+	<tr id="prereq-skill-id-<%= skill.id %>" data-for-course="<%= @course_id %>">
 		<td class="skill-prereq-skill" data-skill-id="<%= skill.id %>">
 			<%= skill.description %>
 		</td>
 		<td>
-			<button class="button-base button-small skill-remove-prereq-button">Test</button>
+			<button class="button-base button-small skill-remove-prereq-button"
+			 data-button-type="add-remove-prereq"><%= @button_text %></button>
 		</td>
 	</tr>
 <% end %>

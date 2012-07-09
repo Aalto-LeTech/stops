@@ -24,9 +24,10 @@ fi:
   competence_create_new_outcome: "Uusi valmius"
   competence_create_outcome_heading: "Luo uusi valmius"
   competence_create_outcome_help_text: "Syötä valmiuden kuvaus kaikilla pyydetyillä kielillä."
-  competence_skill_add_prereq_button: "Edellytykseksi"
-  competence_skill_add_prereq_button_loading: "Tallennetaan..."
-  competence_skill_add_prereq_button_loaded: "Talennettu"
+  competence_skill_add_prereq_button: "Lisää"
+  competence_skill_add_prereq_button_adding: "Lisätään..."
+  competence_skill_add_prereq_button_remove: "Poista"
+  competence_skill_add_prereq_button_removing: "Poistetaan..."
 
 
   # Add to plan

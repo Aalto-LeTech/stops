@@ -15,7 +15,11 @@
     data-skill-prereq-add-url="<%= add_prereq_skill_path(params[:locale], 
       @skill_id) %>"
     data-skill-prereq-remove-url="<%= remove_prereq_skill_path(params[:locale], 
-      @skill_id) %>">
+      @skill_id) %>"
+    data-prereq-add-text="<%= t :competence_skill_add_prereq_button %>"
+    data-prereq-adding-text="<%= t :competence_skill_add_prereq_button_adding %>"
+    data-prereq-remove-text="<%= t :competence_skill_add_prereq_button_remove %>"
+    data-prereq-removing-text="<%= t :competence_skill_add_prereq_button_removing %>">
   </div>
 
   <h4 class="colorful">Nykyiset vaatimukset</h4>

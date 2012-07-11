@@ -2,7 +2,14 @@
   <% @courses.each do |course| %>
     <% @course = course %>
     <tr id="search-course-id-<%= course.id %>" class="skill-search-result">
-      <th class="skill-course-detail" colspan="2"><%= @course.code %> <%= @course.course_description_with_locale.name %></th>
+      <th class="skill-course-detail" colspan="2">
+        <span class="skill-search-course-code">
+          <%= @course.code %>
+        </span>
+        <span class="skill-search-course-name">
+          <%= @course.course_description_with_locale.name %>
+        </span>
+      </th>
     </tr>
 
     <% @course.skill_descriptions.each do |skill_desc| %>

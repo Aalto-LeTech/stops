@@ -1,12 +1,7 @@
-<tr id="prereq-course-id-<%= @course_id %>">
-	<th class="skill-prereq-course" colspan="2">
-		<%= @course_code %> <%= @course_name %>
-	</th>
-</tr>
-<% for skill in @course_skills: %>
-	<tr id="prereq-skill-id-<%= skill.id %>" data-for-course="<%= @course_id %>">
-		<td class="skill-prereq-skill" data-skill-id="<%= skill.id %>">
-			<%= skill.description %>
+<% skill_block = (skill_id, skill_desc) => %>
+	<tr id="prereq-skill-id-<%= skill_id || @skill_id %>" data-for-course="<%= @course_id %>">
+		<td class="skill-prereq-skill" data-skill-id="<%= skill_id || @skill_id %>">
+			<%= skill_desc || @skill_description %>
 		</td>
 		<td>
 			<button class="button-base button-small skill-remove-prereq-button"
@@ -14,3 +9,19 @@
 		</td>
 	</tr>
 <% end %>
+
+
+<% if @render_whole_course: %>
+	<tr id="prereq-course-id-<%= @course_id %>">
+		<th class="skill-prereq-course" colspan="2">
+			<%= @course_code %> <%= @course_name %>
+		</th>
+	</tr>
+	<% for skill in @course_skills: %>
+		<%= skill_block(skill.id, skill.description) %>
+	<% end %>
+<% else: %>
+	<%= skill_block() %>
+<% end %>
+
+

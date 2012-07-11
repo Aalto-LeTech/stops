@@ -252,7 +252,8 @@ var prereq = (function() {
 
 
   var prereqAddURL,
-      prereqRemoveURL;
+      prereqRemoveURL,
+      skillIdRegexp = /^(search|prereq)-skill-id-(\d+)$/;
 
   /* Click event listener to add the selected skill from search results 
    * as a prerequirement. */
@@ -271,8 +272,63 @@ var prereq = (function() {
       $this.data("button-companion", buttonComp);
     }
 
+    function _parseSkillTemplateLocals($skillElem, includeCourseDetails) {
+      var idStr       = $skillElem.attr("id"),
+          skillId     = idStr.match(skillIdRegexp)[2],
+          courseId    = $skillElem.data("for-course"),
+          skillDesc   = $skillElem.find("td:first-child").text(),
+          $courseElem = $("#search-course-id-" + courseId);
+
+      var locals = {
+        course_id: courseId,
+        button_text: prereqRemoveTextStr
+      };
+
+      if (includeCourseDetails) {
+        /* Include local to render both the course and its skill */
+        locals.course_skills = [
+          {
+            id: skillId,
+            description: skillDesc
+          }
+        ];
+
+        locals.render_whole_course = true;
+        locals.course_code = $courseElem.find("span.skill-search-course-code").text().trim();
+        locals.course_name = $courseElem.find("span.skill-search-course-name").text().trim();
+      } else {
+        /* Include locals for rendering just one skill */
+        locals.skill_id           = skillId;
+        locals.skill_description  = skillDesc;
+      }
+
+      return locals;
+    }
+
     buttonComp.stateTo("adding");
     $.post(prereqAddURL, { prereq_id: prereqSkillId }, function() {
+      /* Render skill template and add the result to current prerequirements listing */
+      var courseId = $skillRow.data("for-course"),
+          courseShouldBeRendered = 
+            $("#prereq-course-id-" + courseId, "#skill-current-prereqs").length === 0;
+      if (courseShouldBeRendered) {
+        /* Course does not yet exist in prequirements listing and needs to
+         * be added. */
+        var templ_locals = _parseSkillTemplateLocals($skillRow, true);
+        
+      } else {
+        /* Course already exists in prerequirements listing */
+        var templ_locals = _parseSkillTemplateLocals($skillRow);
+      }
+      
+      var rendered_html = JST['templates/_current_course_with_prereq_skills'](templ_locals);
+
+      if (courseShouldBeRendered) {
+        $("#skill-current-prereqs tbody").prepend(rendered_html);
+      } else {
+        $("#prereq-course-id-" + courseId, "#skill-current-prereqs").after(rendered_html);
+      }
+      
       buttonComp.stateTo("readyToRemove");
     }).error(function() {
       console.log("AJAX update failed!");
@@ -345,13 +401,6 @@ var prereq = (function() {
 
   }
 
-  /* Click handler for removing a current prerequirement from the
-   * prerequirements listing on top of the page.  */
-  function _removeCurrentPrereqOnClick() {
-    var $this = $(this),
-        prereqSkillId = false,  // TODO Change these
-        buttonComp = false;
-  }
 
   /* Initialization */
   function _init() {

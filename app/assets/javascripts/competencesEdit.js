@@ -339,7 +339,8 @@ var prereq = (function() {
   }
 
   /* Click handler for removing a searched prerequirement skill
-   * from prerequirements.  */
+   * from prerequirements. This handler handles both current prerequirements'
+   * buttons and search results' buttons. */
   function _removeSearchedPrereqOnClick() {
     var $this           = $(this),
         $skillRow       = $this.parent().parent(),
@@ -348,6 +349,7 @@ var prereq = (function() {
         /* Button located either in prereq listing or search results */
         buttonLocation  = id_match[1], 
         prereqSkillId   = id_match[2];
+
 
     var $prereqButton, $searchResultButton;
     if (buttonLocation === "prereq") {
@@ -365,7 +367,7 @@ var prereq = (function() {
       if (!$button) { 
         var b = false; }
       if ($button && $button.length !== 0) { /* Do this only if we have a button */
-         companion = $button.data("button-companion");
+        companion = $button.data("button-companion");
         /* Lazily initialize ButtonCompanion object */
         if (!companion) {
           companion = new ButtonCompanion("readyToAdd", $button[0]);  /* ButtonCompanion takes plain DOM-object */
@@ -385,10 +387,28 @@ var prereq = (function() {
     $.post(prereqRemoveURL, { prereq_id: prereqSkillId }, function() {
       /* TODO Remove skill (and possibly course) from prerequirements listing */
       if ($prereqButton.length !== 0) {
-        /* Remove prerequirement skill from view */
-        $prereqButton.parent().parent().fadeOut("slow", function() {
-          $(this).detach();
-        });
+        var courseId          = $skillRow.data("for-course"),
+            $courseSkills     = $('tr[data-for-course="' + courseId + '"]', 
+                                  "#skill-current-prereqs > tbody"),
+            $skillToBeRemoved = $prereqButton.parent().parent();
+
+        /* Remove from current prerequirements list */
+        if ($courseSkills.length === 1) {
+          /* The whole course element needs to be removed from view. */
+          var $courseAndSkill = $("#prereq-course-id-" + courseId);
+          $courseAndSkill = $courseAndSkill.add($skillToBeRemoved);
+
+          $courseAndSkill.fadeOut("slow", function() {
+            $courseAndSkill.detach();
+          });
+        
+        } else {
+          /* Only the skill element needs to be removed */
+          $skillToBeRemoved.fadeOut("slow", function() {
+            $(this).detach();
+          });
+        }
+        
       }
       if (searchResultButtonComp) searchResultButtonComp.stateTo("readyToAdd");
     }).error(function() {

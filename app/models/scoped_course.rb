@@ -20,6 +20,11 @@ class ScopedCourse < ActiveRecord::Base
   has_many :skill_descriptions, 
            :through => :skills
 
+  has_many :skill_descriptions_with_locale,
+           :through     => :skills,
+           :class_name  => "SkillDescription",
+           :source      => :description_with_locale
+
   # Prerequisite courses of this course
   has_many :course_prereqs, 
            :dependent => :destroy

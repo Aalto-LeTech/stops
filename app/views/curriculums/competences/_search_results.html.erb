@@ -12,7 +12,7 @@
       </th>
     </tr>
 
-    <% @course.skill_descriptions.each do |skill_desc| %>
+    <% @course.skill_descriptions_with_locale.each do |skill_desc| %>
       <tr id="search-skill-id-<%= skill_desc.skill_id %>" data-for-course="<%= course.id %>">
         <td><%= skill_desc.description %></td> 
         <td class="skill-search-button-cell">

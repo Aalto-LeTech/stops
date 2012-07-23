@@ -170,7 +170,7 @@ class Curriculums::CompetencesController < CurriculumsController
     # @courses = ScopedCourse.includes(:course_description_with_locale, :skill_descriptions).search_full_text params[:q] 
     
     @courses = ScopedCourse.search params[:q], 
-                  :include => [:course_description_with_locale, :skill_descriptions],
+                  :include => [:course_description_with_locale, :skill_descriptions_with_locale],
                   :page => params[:p] || 1, :per_page => 20
 
 

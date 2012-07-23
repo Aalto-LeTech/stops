@@ -109,7 +109,7 @@ class Curriculums::CompetencesController < CurriculumsController
         #render "edit_skill_prereqs.js.erb"
 
         # Validate query string key
-        render :status => 500 unless /^\d+$/ =~ params[:skill_id] 
+        render(:nothing => true, :status => 500) unless /^\d+$/ =~ params[:skill_id] 
 
         # Find all courses within curriculum that have at least one skill as a
         # a prerequirement to the skill being edited
@@ -158,7 +158,6 @@ class Curriculums::CompetencesController < CurriculumsController
 
         @skill_id = params[:skill_id]
         render :partial => "prereq_skills_selection"
-        # TODO: Render whole the whole view with prereq_skills_selection -partial 
       end 
     end
   end
@@ -170,9 +169,32 @@ class Curriculums::CompetencesController < CurriculumsController
     # @courses = ScopedCourse.includes(:course_description_with_locale, :skill_descriptions).search_full_text params[:q] 
     
     @courses = ScopedCourse.search params[:q], 
-                  :include => [:course_description_with_locale, :skill_descriptions_with_locale],
-                  :page => params[:p] || 1, :per_page => 20
+                  :include  => [:course_description_with_locale, :skill_descriptions_with_locale],
+                  :page     => params[:p] || 1, :per_page => 20
 
+    # Validate skill_id!
+    render(:nothing => true, :status => 500) unless /^\d+$/ =~ params[:sid] 
+
+    skill_id = params[:sid]
+
+    # Query to find out if skills are already prerequirements to the
+    # skill being edited.
+    queryresults = ActiveRecord::Base.connection.select_all %Q{
+      SELECT DISTINCT ON (skills.id) skills.id, skills.id IN (
+        SELECT skill_prereqs.prereq_id 
+        FROM skills 
+        INNER JOIN skill_prereqs ON skills.id = skill_prereqs.prereq_id
+        WHERE skills.skillable_type = 'ScopedCourse' 
+        AND skill_prereqs.skill_id = #{skill_id}
+      ) AS alreadyPrereq
+      FROM skills
+    }
+
+    # Lookup table for view to check if skill is already a prerequirement
+    @alreadyPrereq = { }
+    queryresults.each do |row|
+      @alreadyPrereq[row["id"]] = row["alreadyprereq"] == 't' ? true : false
+    end
 
     # Slow down request for testing
     # sleep 1.5 unless not params[:p]

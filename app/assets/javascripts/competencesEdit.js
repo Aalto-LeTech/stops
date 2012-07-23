@@ -59,6 +59,7 @@ var prereq = (function() {
   var $searchbox,
       $searchResults,
       searchURL,
+      current_skill_id,
       pagination = new _PaginationLoader();
  
   /* Search box listener */
@@ -76,7 +77,7 @@ var prereq = (function() {
 
     if (query !== "") {
       // TODO Failures should be handled
-      $.get(searchURL, { q: query }, updateSearchResults);
+      $.get(searchURL, { q: query, sid: current_skill_id }, updateSearchResults);
 
     } else {
       pagination.disable();
@@ -131,8 +132,9 @@ var prereq = (function() {
 
         $.get(searchURL, 
           { 
-            q: query, 
-            p: this.paginationSeq 
+            q:    query, 
+            p:    this.paginationSeq,
+            sid:  current_skill_id
           }, 
           ajaxCallInProgress.success)
           .error(ajaxCallInProgress.failure);
@@ -427,6 +429,7 @@ var prereq = (function() {
     var $metadata         = $("#metadata");
     $searchbox            = $("#skill-search-box");
     $searchResults        = $("#skill-search-results");
+    current_skill_id      = $metadata.data("skill-id");
     searchURL             = $metadata.data("skill-search-url");
     prereqAddURL          = $metadata.data("skill-prereq-add-url");
     prereqRemoveURL       = $metadata.data("skill-prereq-remove-url");

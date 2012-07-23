@@ -56,6 +56,7 @@ class ScopedCourse < ActiveRecord::Base
            :source      => :course, 
            :order       => 'code', 
            :conditions  => "requirement = #{STRICT_PREREQ}"
+
   
   # pg_search indexing (free-text search)
   pg_search_scope :search_full_text, 

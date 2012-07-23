@@ -16,11 +16,18 @@
       <tr id="search-skill-id-<%= skill_desc.skill_id %>" data-for-course="<%= course.id %>">
         <td><%= skill_desc.description %></td> 
         <td class="skill-search-button-cell">
-          <button class="button-base button-small skill-add-prereq-button" 
-            data-skill-id="<%= skill_desc.skill_id %>"
-            data-button-type="add-remove-prereq">
-          <%= t :competence_skill_add_prereq_button %>
+          <% if @alreadyPrereq[skill_desc.skill_id.to_s] %>
+            <button class="button-base button-small skill-remove-prereq-button" 
+              data-skill-id="<%= skill_desc.skill_id %>"
+              data-button-type="add-remove-prereq">
+            <%= t :competence_skill_add_prereq_button_remove %>
+          <% else %>
+            <button class="button-base button-small skill-add-prereq-button" 
+              data-skill-id="<%= skill_desc.skill_id %>"
+              data-button-type="add-remove-prereq">
+            <%= t :competence_skill_add_prereq_button %>
           </button>
+          <% end %>
         </td>
       </tr>
     <% end %>

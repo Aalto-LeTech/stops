@@ -117,96 +117,97 @@ var prereq = (function() {
     this.enabled = true;
     this.paginationSeq = 2; /* Which batch should be loaded next */
     this.ajaxCallInProgress = false;
-    var loader = this; /* Binding for _handleSuccess and _handleFailure */
+  }
 
-    /* Load more results and display them on the page. */
-    _PaginationLoader.prototype.load = function() {
-      if (this.enabled && !this.ajaxCallInProgress) {
-        ajaxCallInProgress = bindHandlersToInstance();
-        var query = $searchbox.val().trim();
-        
-        var $hint = $("#skill-endless-pagination-hint");
-        if ($hint.css("display") !== 'none') $hint.hide(300);
-        $("#skill-endless-pagination-loading").show("slow");
+  /* Load more results and display them on the page. */
+  _PaginationLoader.prototype.load = function() {
+    if (this.enabled && !this.ajaxCallInProgress) {
+      var loader = this; /* Binding for _handleSuccess and _handleFailure */
+      ajaxCallInProgress = bindHandlersToInstance();
+      var query = $searchbox.val().trim();
+      
+      var $hint = $("#skill-endless-pagination-hint");
+      if ($hint.css("display") !== 'none') $hint.hide(300);
+      $("#skill-endless-pagination-loading").show("slow");
 
 
-        $.get(searchURL, 
-          { 
-            q:    query, 
-            p:    this.paginationSeq,
-            sid:  current_skill_id
-          }, 
-          ajaxCallInProgress.success)
-          .error(ajaxCallInProgress.failure);
-      }
-    }
+      $.get(searchURL, 
+        { 
+          q:    query, 
+          p:    this.paginationSeq,
+          sid:  current_skill_id
+        }, 
+        ajaxCallInProgress.success)
+        .error(ajaxCallInProgress.failure);
 
-    /* Reset pagination to beginning and cancel possible AJAX-call
-     * whose handlers have not yet been called. This should be
-     * called each time search box query is changed. */
-    _PaginationLoader.prototype.reset = function() {
-      if (this.ajaxCallInProgress) this.ajaxCallInProgress.cancel();
-      this.ajaxCallInProgress = false;
-      this.paginationSeq = 2;
-    }
+      /* Bind handlers to an instance that allows each request's 
+       * handling to be cancelled. This is needed so that cancelled
+       * AJAX call can still call old callbacks without side effects. */
+      function bindHandlersToInstance() {
+        var instance = {
+          success: _handleSuccess,
+          failure: _handleFailure,
+          cancelled: false,
+          cancel: _cancel
+        }
 
-    _PaginationLoader.prototype.isLoading = function() {
-      return this.ajaxCallInProgress ? true : false;
-    }
+        function _cancel() {
+          this.cancelled = true;
+        }
 
-    /* Methods to enable and disable PaginationLoader. */
-    _PaginationLoader.prototype.disable = function() {
-      this.enabled = false;
-    }
+        function _handleSuccess(data, textStatus, xhr) {
+          if (!instance.cancelled) {
+            /* Only handle the event if the handling hasn't been cancelled */
+            if (data === 'nothing') {
+              /* No more search results can be found */
+              loader.disable();
+            } else {
+              $("#skill-search-results").append(data);
 
-    _PaginationLoader.prototype.enable = function() {
-      this.enabled = true;
-    }
-
-    /* Bind handlers to an instance that allows each request's 
-     * handling to be cancelled. */
-    function bindHandlersToInstance() {
-      var instance = {
-        success: _handleSuccess,
-        failure: _handleFailure,
-        cancelled: false,
-        cancel: _cancel
-      }
-
-      function _cancel() {
-        this.cancelled = true;
-      }
-
-      function _handleSuccess(data, textStatus, xhr) {
-        if (!instance.cancelled) {
-          /* Only handle the event if the handling hasn't been cancelled */
-          if (data === 'nothing') {
-            /* No more search results can be found */
-            loader.disable();
+              loader.loadingPagination = false;
+              loader.paginationSeq += 1;
+              loader.ajaxCallInProgress = false;
+            }
           } else {
-            $("#skill-search-results").append(data);
-
-            loader.loadingPagination = false;
-            loader.paginationSeq += 1;
+            console.log("Endless paging: Successful AJAX-call CANCELLED!");
             loader.ajaxCallInProgress = false;
           }
-        } else {
-          console.log("Endless paging: Successful AJAX-call CANCELLED!");
-          loader.ajaxCallInProgress = false;
+
+          $("#skill-endless-pagination-loading").hide(400);
         }
 
-        $("#skill-endless-pagination-loading").hide(400);
-      }
-
-      function _handleFailure(data, textStatus, xhr) {
-        if (!instance.cancelled) {
-          /* Only handle the event if the handling hasn't been cancelled */
-          loader.ajaxCallInProgress = false;
+        function _handleFailure(data, textStatus, xhr) {
+          if (!instance.cancelled) {
+            /* Only handle the event if the handling hasn't been cancelled */
+            loader.ajaxCallInProgress = false;
+          }
         }
-      }
 
-      return instance;
+        return instance;
+      }
     }
+  }
+
+  /* Reset pagination to beginning and cancel possible AJAX-call
+   * whose handlers have not yet been called. This should be
+   * called each time search box query is changed. */
+  _PaginationLoader.prototype.reset = function() {
+    if (this.ajaxCallInProgress) this.ajaxCallInProgress.cancel();
+    this.ajaxCallInProgress = false;
+    this.paginationSeq = 2;
+  }
+
+  _PaginationLoader.prototype.isLoading = function() {
+    return this.ajaxCallInProgress ? true : false;
+  }
+
+  /* Methods to enable and disable PaginationLoader. */
+  _PaginationLoader.prototype.disable = function() {
+    this.enabled = false;
+  }
+
+  _PaginationLoader.prototype.enable = function() {
+    this.enabled = true;
   }
 
   /* Localized prerequirement add/remove button strings */
@@ -260,7 +261,6 @@ var prereq = (function() {
   /* Click event listener to add the selected skill from search results 
    * as a prerequirement. */
   function _addSearchedPrereqOnClick() {
-    //alert("Clicked");
     var $this           = $(this),
         $skillRow       = $this.parent().parent(),
         skillIdRegexp   = /^(search|prereq)-skill-id-(\d+)$/,

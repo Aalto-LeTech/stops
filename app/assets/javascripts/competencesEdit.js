@@ -60,7 +60,7 @@ var prereq = (function() {
       $searchResults,
       searchURL,
       current_skill_id,
-      pagination = new _PaginationLoader();
+      pagination;
  
   /* Search box listener */
   function _searchListener() {
@@ -85,29 +85,26 @@ var prereq = (function() {
     }
   } 
 
+  var $paginationFooter;
+
   /* Scroll listener for endless pagination */
   function _endlesslyPaginate(evt) {
     var $window = $(window),
-        bottomPos =  $window.scrollTop() + $window.height(),
-        $paginationFooter = $("#skill-endless-pagination-footer");
+        bottomPos =  $window.scrollTop() + $window.height();
 
     if (bottomPos - $paginationFooter.offset().top > 30) {
       /* When the bottom of the screen is 12 pixels past the top of
        * the footer. */
-      console.log("Showing hint!");
-      if (!pagination.isLoading())
-        $paginationFooter.find("#skill-endless-pagination-hint").show("slow");
-    } else {
-      $paginationFooter.find("#skill-endless-pagination-hint").hide(1000);
+      console.log("Should show a hint!");
+      pagination.showHint(); 
     }
 
     /* Old condition: $(document).height() - bottomPos < 2 */
     if (bottomPos - ($paginationFooter.offset().top + 
       $paginationFooter.outerHeight(true)) > 2) {
       /* Fetch more search results */
-      //$("#skill-search-results").append("<p><strong>Pagination activated!</strong></p>");
       console.log("Should paginate!");
-      pagination.load();
+      pagination.loadMore();
     }
 
   }
@@ -115,21 +112,30 @@ var prereq = (function() {
   /* Class for handling pagination AJAX-calls and page updates. */
   function _PaginationLoader() {
     this.enabled = true;
+    this.moreResultsAvailable = true;
+    this.message = false;   /* Values: "hint", "loading", "nomoreresults", false */
     this.paginationSeq = 2; /* Which batch should be loaded next */
     this.ajaxCallInProgress = false;
+
+    this.$paginationHint         = $("#skill-endless-pagination-hint");
+    this.$paginationLoadingIcon  = $("#skill-endless-pagination-loading");
+    this.$paginationNoResultsMsg = $("#skill-endless-pagination-no-results-msg");
+
+    this._msgToJQuery = {
+      hint:           this.$paginationHint,
+      loading:        this.$paginationLoadingIcon,
+      nomoreresults:  this.$paginationNoResultsMsg
+    };
   }
 
   /* Load more results and display them on the page. */
-  _PaginationLoader.prototype.load = function() {
-    if (this.enabled && !this.ajaxCallInProgress) {
+  _PaginationLoader.prototype.loadMore = function() {
+    if (this.enabled && this.moreResultsAvailable && !this.ajaxCallInProgress) {
       var loader = this; /* Binding for _handleSuccess and _handleFailure */
       ajaxCallInProgress = bindHandlersToInstance();
       var query = $searchbox.val().trim();
       
-      var $hint = $("#skill-endless-pagination-hint");
-      if ($hint.css("display") !== 'none') $hint.hide(300);
-      $("#skill-endless-pagination-loading").show("slow");
-
+      this._showMsg("loading");
 
       $.get(searchURL, 
         { 
@@ -137,8 +143,8 @@ var prereq = (function() {
           p:    this.paginationSeq,
           sid:  current_skill_id
         }, 
-        ajaxCallInProgress.success)
-        .error(ajaxCallInProgress.failure);
+        ajaxCallInProgress.success
+      ).error(ajaxCallInProgress.failure);
 
       /* Bind handlers to an instance that allows each request's 
        * handling to be cancelled. This is needed so that cancelled
@@ -160,26 +166,26 @@ var prereq = (function() {
             /* Only handle the event if the handling hasn't been cancelled */
             if (data === 'nothing') {
               /* No more search results can be found */
-              loader.disable();
+              loader.moreResultsAvailable = false;
+              loader._showMsg("nomoreresults");
             } else {
               $("#skill-search-results").append(data);
 
-              loader.loadingPagination = false;
               loader.paginationSeq += 1;
               loader.ajaxCallInProgress = false;
+
+              loader._hideAllMsgs();
             }
           } else {
             console.log("Endless paging: Successful AJAX-call CANCELLED!");
-            loader.ajaxCallInProgress = false;
           }
-
-          $("#skill-endless-pagination-loading").hide(400);
         }
 
         function _handleFailure(data, textStatus, xhr) {
           if (!instance.cancelled) {
             /* Only handle the event if the handling hasn't been cancelled */
             loader.ajaxCallInProgress = false;
+            // TODO Show error message
           }
         }
 
@@ -188,6 +194,41 @@ var prereq = (function() {
     }
   }
 
+  _PaginationLoader.prototype._hideAllMsgs = function(duration, callback) {
+    if (arguments.length === 1 && $.isFunction(duration)) {
+      callback = duration;
+      duration = 300;
+    } else {
+      duration = duration || 300; // milliseconds
+    }
+    
+    allMsgs = this.$paginationHint.add(this.$paginationLoadingIcon);
+    allMsgs = allMsgs.add(this.$paginationNoResultsMsg);
+
+    /* Stop ongoing animations */
+    allMsgs.stop();
+
+    if ($.isFunction(callback)) {
+      allMsgs.hide(duration, callback);
+    } else {
+      allMsgs.hide(duration);
+    }
+  }
+
+  _PaginationLoader.prototype._showMsg = function(message) {
+    var loader = this;
+    this._hideAllMsgs(function() {
+      loader._msgToJQuery[message].show(300);
+    });
+  };
+
+  _PaginationLoader.prototype.showHint = function() {
+    if (this.enabled && this.moreResultsAvailable && !this.isLoading()) {
+      this.$paginationHint.show("slow");
+      this.message = "hint";
+    }
+  };
+
   /* Reset pagination to beginning and cancel possible AJAX-call
    * whose handlers have not yet been called. This should be
    * called each time search box query is changed. */
@@ -195,20 +236,24 @@ var prereq = (function() {
     if (this.ajaxCallInProgress) this.ajaxCallInProgress.cancel();
     this.ajaxCallInProgress = false;
     this.paginationSeq = 2;
-  }
+    this.moreResultsAvailable = true;
+    this._hideAllMsgs();
+  };
 
   _PaginationLoader.prototype.isLoading = function() {
     return this.ajaxCallInProgress ? true : false;
-  }
+  };
 
   /* Methods to enable and disable PaginationLoader. */
   _PaginationLoader.prototype.disable = function() {
     this.enabled = false;
-  }
+  };
 
   _PaginationLoader.prototype.enable = function() {
     this.enabled = true;
-  }
+  };
+
+
 
   /* Localized prerequirement add/remove button strings */
   var prereqAddTextStr,
@@ -426,19 +471,26 @@ var prereq = (function() {
 
   /* Initialization */
   function _init() {
-    var $metadata         = $("#metadata");
-    $searchbox            = $("#skill-search-box");
-    $searchResults        = $("#skill-search-results");
-    current_skill_id      = $metadata.data("skill-id");
-    searchURL             = $metadata.data("skill-search-url");
-    prereqAddURL          = $metadata.data("skill-prereq-add-url");
-    prereqRemoveURL       = $metadata.data("skill-prereq-remove-url");
+    var $metadata           = $("#metadata");
+    $searchbox              = $("#skill-search-box");
+    $searchResults          = $("#skill-search-results");
+    $paginationHint         = $("#skill-endless-pagination-hint");
+    $paginationFooter       = $("#skill-endless-pagination-footer");
+    $paginationLoadingIcon  = $("#skill-endless-pagination-loading");
+    $paginationNoResultsMsg = $("#skill-endless-pagination-no-results-msg");
+
+    current_skill_id        = $metadata.data("skill-id");
+    searchURL               = $metadata.data("skill-search-url");
+    prereqAddURL            = $metadata.data("skill-prereq-add-url");
+    prereqRemoveURL         = $metadata.data("skill-prereq-remove-url");
 
     /* Fetch localized strings for prerequirement add/remove buttons */
-    prereqAddTextStr      = $metadata.data("prereq-add-text");
-    prereqRemoveTextStr   = $metadata.data("prereq-remove-text");
-    prereqAddingTextStr   = $metadata.data("prereq-adding-text");
-    prereqRemovingTextStr = $metadata.data("prereq-removing-text");
+    prereqAddTextStr        = $metadata.data("prereq-add-text");
+    prereqRemoveTextStr     = $metadata.data("prereq-remove-text");
+    prereqAddingTextStr     = $metadata.data("prereq-adding-text");
+    prereqRemovingTextStr   = $metadata.data("prereq-removing-text");
+
+    pagination = new _PaginationLoader();
 
     /* After the last keystroke, perform search after
      * the specified delay has elapsed, unless the last

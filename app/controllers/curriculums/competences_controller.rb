@@ -197,7 +197,7 @@ class Curriculums::CompetencesController < CurriculumsController
     end
 
     # Slow down request for testing
-    # sleep 1.5 unless not params[:p]
+    sleep 1.5
 
     if @courses.empty?
       respond_to do |format|

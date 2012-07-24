@@ -45,7 +45,12 @@
 
   <div id="skill-endless-pagination-footer">
       <p>
-        <span id="skill-endless-pagination-hint" class="hide">Scroll to bottom to load more</span>
+        <span id="skill-endless-pagination-hint" class="hide">
+          <%= t :competence_skill_search_footer_hint %>
+        </span>
+        <span id="skill-endless-pagination-no-results-msg" class="hide">
+          <%= t :competence_skill_search_footer_no_results %>
+        </span>
       </p>
       <p>
         <span id="skill-endless-pagination-loading" class="hide"><%= image_tag "progress.gif" %></span>

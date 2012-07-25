@@ -115,18 +115,20 @@ var prereq = (function() {
     /* State */
     this.enabled = false;
     this.moreResultsAvailable = true;
-    this.message = false;   /* Values: "hint", "loading", "nomoreresults", false */
+    this.message = false;   /* Values: "hint", "loading", "nomoreresults", "failure", false */
     this.paginationSeq = 1; /* Which batch should be loaded next */
     this.ajaxCallInProgress = false;
 
     /* Constants */
     this.$paginationHint         = $("#skill-endless-pagination-hint");
     this.$paginationLoadingIcon  = $("#skill-endless-pagination-loading");
+    this.$paginationFailureMsg   = $("#skill-endless-pagination-failure-msg");
     this.$paginationNoResultsMsg = $("#skill-endless-pagination-no-results-msg");
 
     this._msgToJQuery = {
       hint:           this.$paginationHint,
       loading:        this.$paginationLoadingIcon,
+      failure:        this.$paginationFailureMsg,
       nomoreresults:  this.$paginationNoResultsMsg
     };
   }
@@ -177,7 +179,7 @@ var prereq = (function() {
           if (!instance.cancelled) {
             /* Only handle the event if the handling hasn't been cancelled */
             loader.ajaxCallInProgress = false;
-            // TODO Show error message
+            loader._showMsg("failure");
           }
         }
 
@@ -213,7 +215,7 @@ var prereq = (function() {
     }
     
     allMsgs = this.$paginationHint.add(this.$paginationLoadingIcon);
-    allMsgs = allMsgs.add(this.$paginationNoResultsMsg);
+    allMsgs = allMsgs.add(this.$paginationNoResultsMsg).add(this.$paginationFailureMsg);
 
     /* Stop ongoing animations */
     allMsgs.stop();

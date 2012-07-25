@@ -30,6 +30,7 @@ fi:
   competence_skill_add_prereq_button_removing: "Poistetaan..."
   competence_skill_search_footer_hint: "Rullaa sivun loppuun ladatakasesi lisää hakutuloksia."
   competence_skill_search_footer_no_results: "Ei enempää hakutuloksia."
+  competence_skill_search_footer_failure: "Valitettavasti haku epäonnistui."
 
 
   # Add to plan

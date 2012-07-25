@@ -29,6 +29,7 @@ en:
   competence_skill_add_prereq_button_removing: "Removing..."
   competence_skill_search_footer_hint: "Scroll to bottom to load more results."
   competence_skill_search_footer_no_results: "No more results."
+  competence_skill_search_footer_failure: "Unfortunately, the search failed."
 
   # Add to plan
   competence_add_heading: "Add %{profile} %{competence} to study plan"

@@ -66,18 +66,11 @@ var prereq = (function() {
   function _searchListener() {
     var query = $searchbox.val().trim();
 
-    function updateSearchResults(data, textStatus, xhr) {
-      $searchResults.html(data);
-      pagination.enable();
-    } 
-
     /* Reset pagination to default state and cancel
      * possible pagination update. */
-    pagination.reset();
-
     if (query !== "") {
       // TODO Failures should be handled
-      $.get(searchURL, { q: query, sid: current_skill_id }, updateSearchResults);
+      pagination.resetAndLoad();
 
     } else {
       pagination.disable();
@@ -93,30 +86,30 @@ var prereq = (function() {
         bottomPos =  $window.scrollTop() + $window.height();
 
     if (bottomPos - $paginationFooter.offset().top > 30) {
-      /* When the bottom of the screen is 12 pixels past the top of
+      /* When the bottom of the screen is 30 pixels past the top of
        * the footer. */
       console.log("Should show a hint!");
       pagination.showHint(); 
     }
 
-    /* Old condition: $(document).height() - bottomPos < 2 */
     if (bottomPos - ($paginationFooter.offset().top + 
       $paginationFooter.outerHeight(true)) > 2) {
       /* Fetch more search results */
       console.log("Should paginate!");
       pagination.loadMore();
     }
-
   }
 
   /* Class for handling pagination AJAX-calls and page updates. */
   function _PaginationLoader() {
+    /* State */
     this.enabled = false;
     this.moreResultsAvailable = true;
     this.message = false;   /* Values: "hint", "loading", "nomoreresults", false */
-    this.paginationSeq = 2; /* Which batch should be loaded next */
+    this.paginationSeq = 1; /* Which batch should be loaded next */
     this.ajaxCallInProgress = false;
 
+    /* Constants */
     this.$paginationHint         = $("#skill-endless-pagination-hint");
     this.$paginationLoadingIcon  = $("#skill-endless-pagination-loading");
     this.$paginationNoResultsMsg = $("#skill-endless-pagination-no-results-msg");
@@ -199,7 +192,7 @@ var prereq = (function() {
         this.ajaxCallInProgress.success
       ).error(this.ajaxCallInProgress.failure);
     }
-  }
+  };
 
   _PaginationLoader.prototype._hideAllMsgs = function(duration, callback) {
     if (arguments.length === 1 && $.isFunction(duration)) {
@@ -228,7 +221,7 @@ var prereq = (function() {
     }
 
     this.message = false;
-  }
+  };
 
   _PaginationLoader.prototype._showMsg = function(message) {
     var loader = this;
@@ -245,15 +238,26 @@ var prereq = (function() {
     }
   };
 
+  _PaginationLoader.prototype._cancelAJAXCall = function(){
+    if (this.ajaxCallInProgress) this.ajaxCallInProgress.cancel();
+    this.ajaxCallInProgress = false;
+  };
+
   /* Reset pagination to beginning and cancel possible AJAX-call
    * whose handlers have not yet been called. This should be
    * called each time search box query is changed. */
-  _PaginationLoader.prototype.reset = function() {
-    if (this.ajaxCallInProgress) this.ajaxCallInProgress.cancel();
-    this.ajaxCallInProgress = false;
-    this.paginationSeq = 2;
+  _PaginationLoader.prototype.resetAndLoad = function() {
+    this._cancelAJAXCall();
+    this.paginationSeq = 1;
     this.moreResultsAvailable = true;
     this._hideAllMsgs();
+    
+    /* Clear possible old results before loading new ones */
+    $searchResults.html("");
+
+    /* Load first results */
+    this.enabled = true;
+    this.loadMore();
   };
 
   _PaginationLoader.prototype.isLoading = function() {
@@ -263,6 +267,8 @@ var prereq = (function() {
   /* Methods to enable and disable PaginationLoader. */
   _PaginationLoader.prototype.disable = function() {
     this.enabled = false;
+    this._cancelAJAXCall();
+    this._hideAllMsgs();
   };
 
   _PaginationLoader.prototype.enable = function() {

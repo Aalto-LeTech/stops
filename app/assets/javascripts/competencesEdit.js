@@ -490,10 +490,7 @@ var prereq = (function() {
     var $metadata           = $("#metadata");
     $searchbox              = $("#skill-search-box");
     $searchResults          = $("#skill-search-results");
-    $paginationHint         = $("#skill-endless-pagination-hint");
     $paginationFooter       = $("#skill-endless-pagination-footer");
-    $paginationLoadingIcon  = $("#skill-endless-pagination-loading");
-    $paginationNoResultsMsg = $("#skill-endless-pagination-no-results-msg");
 
     current_skill_id        = $metadata.data("skill-id");
     searchURL               = $metadata.data("skill-search-url");

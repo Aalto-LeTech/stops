@@ -111,7 +111,7 @@ var prereq = (function() {
 
   /* Class for handling pagination AJAX-calls and page updates. */
   function _PaginationLoader() {
-    this.enabled = true;
+    this.enabled = false;
     this.moreResultsAvailable = true;
     this.message = false;   /* Values: "hint", "loading", "nomoreresults", false */
     this.paginationSeq = 2; /* Which batch should be loaded next */

@@ -216,7 +216,13 @@ var prereq = (function() {
     allMsgs.stop();
 
     if ($.isFunction(callback)) {
-      allMsgs.hide(duration, callback);
+      var finished = 0; /* Hide callback is called once per matched element,
+                         * so we need to wait until all msgs have been hidden. */
+      allMsgs.hide(duration, function() {
+        if (++finished === allMsgs.length) {
+          callback();
+        }
+      });
     } else {
       allMsgs.hide(duration);
     }

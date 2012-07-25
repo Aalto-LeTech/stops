@@ -38,8 +38,8 @@
  * occur during the defined period. */
 var makeDebouncedFunction = function(waitPeriod, func) {
   var timer;
-      
-  return function() {
+
+  var debouncedFunc = function() {
     var targetFunc = func,
         args = arguments,
         contextObj = this;
@@ -50,7 +50,17 @@ var makeDebouncedFunction = function(waitPeriod, func) {
        * using the orignal execution context. */
       targetFunc.apply(contextObj, args);
     }, waitPeriod);
+  };
+
+  function _cancelExecution() {
+    if (timer) {
+      clearTimeout(timer);
+      timer = false;
+    }
   }
+  debouncedFunc.cancelExecution = _cancelExecution;
+      
+  return debouncedFunc;
 };
 
 
@@ -522,6 +532,8 @@ var prereq = (function() {
         if(evt.which === 13) {
           /* Enter pressed! Perform search immediately instead of
            * debouncing */
+           debouncedFunc.cancelExecution(); /* Make sure the function is not executed again
+                                             * right after the following call completes. */
           _searchListener();
         } else debouncedFunc();
       }

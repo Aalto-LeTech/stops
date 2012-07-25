@@ -131,20 +131,8 @@ var prereq = (function() {
   /* Load more results and display them on the page. */
   _PaginationLoader.prototype.loadMore = function() {
     if (this.enabled && this.moreResultsAvailable && !this.ajaxCallInProgress) {
-      var loader = this; /* Binding for _handleSuccess and _handleFailure */
-      ajaxCallInProgress = bindHandlersToInstance();
-      var query = $searchbox.val().trim();
-      
-      this._showMsg("loading");
 
-      $.get(searchURL, 
-        { 
-          q:    query, 
-          p:    this.paginationSeq,
-          sid:  current_skill_id
-        }, 
-        ajaxCallInProgress.success
-      ).error(ajaxCallInProgress.failure);
+      var loader = this; /* Binding for _handleSuccess and _handleFailure */
 
       /* Bind handlers to an instance that allows each request's 
        * handling to be cancelled. This is needed so that cancelled
@@ -165,6 +153,7 @@ var prereq = (function() {
           if (!instance.cancelled) {
             /* Only handle the event if the handling hasn't been cancelled */
             if (data === 'nothing') {
+              console.log("handleSuccess: No more results available");
               /* No more search results can be found */
               loader.moreResultsAvailable = false;
               loader._showMsg("nomoreresults");
@@ -191,6 +180,24 @@ var prereq = (function() {
 
         return instance;
       }
+
+
+      this.ajaxCallInProgress = bindHandlersToInstance();
+      var query = $searchbox.val().trim();
+
+      console.log("About to make an AJAX-query. ajaxCallInProgress? " + !!this.ajaxCallInProgress);
+      console.log("ajaxCallInProgress object: " + this.ajaxCallInProgress);
+      
+      this._showMsg("loading");
+
+      $.get(searchURL, 
+        { 
+          q:    query, 
+          p:    this.paginationSeq,
+          sid:  current_skill_id
+        }, 
+        this.ajaxCallInProgress.success
+      ).error(this.ajaxCallInProgress.failure);
     }
   }
 
@@ -213,6 +220,8 @@ var prereq = (function() {
     } else {
       allMsgs.hide(duration);
     }
+
+    this.message = false;
   }
 
   _PaginationLoader.prototype._showMsg = function(message) {
@@ -223,7 +232,8 @@ var prereq = (function() {
   };
 
   _PaginationLoader.prototype.showHint = function() {
-    if (this.enabled && this.moreResultsAvailable && !this.isLoading()) {
+    if (this.enabled && this.moreResultsAvailable && !this.isLoading() && !this.message) {
+      console.log("Trying to show hint");
       this.$paginationHint.show("slow");
       this.message = "hint";
     }

@@ -3,6 +3,11 @@
 		<td class="skill-prereq-skill" data-skill-id="<%= skill_id || @skill_id %>">
 			<%= skill_desc || @skill_description %>
 		</td>
+		<td class="skill-search-warning-image">
+			<span class="invisible">
+				<img src="/assets/glyphicons_078_warning_sign_white.png"></img>
+			</span>
+		</td>
 		<td>
 			<button class="button-base button-small skill-remove-prereq-button"
 			 data-button-type="add-remove-prereq"><%= @button_text %></button>
@@ -13,7 +18,7 @@
 
 <% if @render_whole_course: %>
 	<tr id="prereq-course-id-<%= @course_id %>">
-		<th class="skill-prereq-course" colspan="2">
+		<th class="skill-prereq-course" colspan="3">
 			<%= @course_code %> <%= @course_name %>
 		</th>
 	</tr>

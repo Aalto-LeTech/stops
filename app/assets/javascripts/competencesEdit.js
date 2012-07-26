@@ -411,11 +411,15 @@ var prereq = (function() {
       }
       
       buttonComp.stateTo("readyToRemove");
+      /* Hide failure icon */ 
+      $skillRow.find(".skill-search-warning-image span").addClass("invisible");
+
     }).error(function() {
       console.log("AJAX update failed!");
       
-      // TODO Failure notification
       buttonComp.stateTo("readyToAdd");
+      /* Show failure icon */
+      $skillRow.find(".skill-search-warning-image span").removeClass("invisible");
     });
   }
 
@@ -429,7 +433,7 @@ var prereq = (function() {
         id_match        = $skillRow.attr("id").match(skillIdRegexp),
         /* Button located either in prereq listing or search results */
         buttonLocation  = id_match[1], 
-        prereqSkillId   = id_match[2];
+        prereqSkillId   = id_match[2]; /* Id of the skill to be added as a prerequirement */
 
 
     var $prereqButton, $searchResultButton;
@@ -466,7 +470,6 @@ var prereq = (function() {
 
     /* Remove skill from prerequirements */
     $.post(prereqRemoveURL, { prereq_id: prereqSkillId }, function() {
-      /* TODO Remove skill (and possibly course) from prerequirements listing */
       if ($prereqButton.length !== 0) {
         var courseId          = $skillRow.data("for-course"),
             $courseSkills     = $('tr[data-for-course="' + courseId + '"]', 
@@ -492,12 +495,17 @@ var prereq = (function() {
         
       }
       if (searchResultButtonComp) searchResultButtonComp.stateTo("readyToAdd");
+      /* Hide failure icon */ 
+      $("td.skill-search-warning-image span", "#search-skill-id-" + prereqSkillId).addClass("invisible");
+
     }).error(function() {
       console.log("AJAX update failed!");
       
-      // TODO Failure notification
       if (prereqButtonComp) prereqButtonComp.stateTo("readyToRemove");
       if (searchResultButtonComp) searchResultButtonComp.stateTo("readyToRemove");
+      /* Show failure icon */
+      $("td.skill-search-warning-image span", "#prereq-skill-id-" + prereqSkillId).removeClass("invisible");
+      $("td.skill-search-warning-image span", "#search-skill-id-" + prereqSkillId).removeClass("invisible");
     });
 
   }

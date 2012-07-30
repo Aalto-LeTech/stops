@@ -21,11 +21,12 @@
   };
   
 
+  /* Initialization */
   $(function() {
     skillPrereqEditUrl = $("#metadata").data("skill-prereq-edit-url");
-    $("#skills > li > .competence-skill-desc").each(function() {
-      $(this).click(clickHandler); 
-    });
+
+    /* Click handler to catch clicks from every skill entry */
+    $("#skills").on("click", ".competence-skill-desc", clickHandler);
   });
 
 })();

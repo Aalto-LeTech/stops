@@ -16,6 +16,9 @@ class SkillsController < ApplicationController
       @skill.skill_descriptions << SkillDescription.new(:locale => locale)
     end
 
+    sleep 1.5
+    raise "NOPE"
+
     respond_to do |format|
       format.html # new.html.erb
       format.js

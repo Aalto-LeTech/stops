@@ -260,13 +260,43 @@ $info_box_text_color:   #285A6D;
 div.info {
   @include border-radius(4px);
   background-color: $info_box_base_color;
-  color: $info_box_text_color;
-  font-family: Helvetica, sans-serif;
-  border: 1px solid $info_box_border_color;
-  padding: 8px 8px;
-  margin-bottom: 15px;
-  width: 400px;
-  font-size: 13px;
+  color:            $info_box_text_color;
+  font-family:      Helvetica, sans-serif;
+  border:           1px solid $info_box_border_color;
+  padding:          8px 8px;
+  margin-bottom:    15px;
+  width:            400px;
+  font-size:        13px;
+}
+
+div.error-info {
+  @extend div.info;
+  padding-left:   57px;
+  padding-right:  20px;
+  position:       relative;
+  min-height:     35px;
+
+  div.error-image {
+    @include border-radius(3px);
+    background-color: red;
+
+    width:   29px;
+    height:  24px;
+    padding: 4px;
+    
+    position: absolute;
+    left:     10px;
+
+    img {
+      width:  29px;
+      height: 24px;
+      margin: 0px;
+    }
+  }
+
+  div.error-contents {
+    
+  }
 }
 
 

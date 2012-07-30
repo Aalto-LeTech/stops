@@ -19,14 +19,82 @@
       prereq.initialize();
     });
   };
+
+  function showNewSkillErrorMessage(message) {
+    var $error_box          = $("#new-skill-box-error-message"),
+        $error_box_contents = $error_box.find("div.error-contents");
+
+    $error_box_contents.html(message);
+    $error_box.removeClass("hide");
+  }
   
 
   /* Initialization */
   $(function() {
-    skillPrereqEditUrl = $("#metadata").data("skill-prereq-edit-url");
+    skillPrereqEditUrl              = $("#metadata").data("skill-prereq-edit-url");
+    var $new_skill_button           = $("#new-skill-button"),
+        $new_skill_box_loading_icon = $("#new-skill-box-loading-icon");
 
     /* Click handler to catch clicks from every skill entry */
     $("#skills").on("click", ".competence-skill-desc", clickHandler);
+
+
+    /* Save new skill button */
+    $("#new-skill-box > .new-skill-box-footer > .save-button").click(function() {
+      /* Check that all locales have required descriptions */
+      var descs = $("input.new-skill-field", "#new-skill-box"),
+          dataIsValid = true;
+      descs.each(function() {
+        if ($(this).val().length === 0) {
+          dataIsValid = false;
+        }
+      });  
+
+      if (dataIsValid) {
+        $("#new-skill-box-content > form").submit();
+        $("#new-skill-box").addClass("hide");
+        $("#new-skill-box-content").html("");
+        $new_skill_button.removeClass("button-disabled");
+      } else {
+        /* TODO Better error handling */
+        alert("Invalid form!");
+      }
+    });
+
+    function closeNewSkillBox() {
+      $("#new-skill-box").addClass("hide");
+      $new_skill_button.removeClass("button-disabled");
+    }
+
+    /* Cancel & close buttons */ 
+    $("#new-skill-box > .new-skill-box-footer > .cancel-button").click(closeNewSkillBox);
+    $("#new-skill-box > .new-skill-close").click(closeNewSkillBox);
+
+
+    /* Listeners to update view on new skill -button click */
+    $("#new-skill-button")
+      .on("ajax:before", function(evt) {
+        if ($new_skill_button.hasClass("button-disabled")) {
+          /* Request already in progress, do nothing */
+          return false;
+        } else {
+          /* Show loading icon and disable button */
+          $new_skill_box_loading_icon.removeClass("hide");
+          $new_skill_button.addClass("button-disabled");
+
+          return true;   /* Allow Rails UJS to perform AJAX-request */
+        }
+      })
+      .on("ajax:success", function(evt) {
+        $new_skill_box_loading_icon.addClass("hide");
+      })
+      .on("ajax:error", function(evt) {
+        $new_skill_box_loading_icon.addClass("hide");
+        $new_skill_button.removeClass("button-disabled");
+        showNewSkillErrorMessage("Opening new skill box bombed!");
+
+      });
+
   });
 
 })();

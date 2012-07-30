@@ -257,6 +257,15 @@ $new-skill-box-font-color: #24765C;
   color: #A66F28;
 }
 
+#new-skill-box-loading-icon {
+  width: 40em;
+
+  img {
+    margin:  0px auto 20px auto;
+    display: block;
+  }
+}
+
 
 .new-skill-field-group {
   @include clearfix; 

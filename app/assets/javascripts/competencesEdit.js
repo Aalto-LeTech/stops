@@ -65,6 +65,7 @@
       .on("ajax:error", "form", function() {
         hideNewSkillSavingMessage();
         showNewSkillErrorMessage(new_skill_save_failed_message);
+        $("#new-skill-box-validation-message").addClass("hide");
         $("#new-skill-box").removeClass("hide");
       });
 
@@ -83,8 +84,8 @@
         $("#new-skill-box-content > form").submit(); // Success & failure handling above
         
       } else {
-        /* TODO Better error handling */
-        alert("Invalid form!");
+        /* Show validation error message */
+        $("#new-skill-box-validation-message").removeClass("hide");
       }
     });
 
@@ -115,6 +116,7 @@
       })
       .on("ajax:success", function(evt) {
         $new_skill_box_loading_icon.addClass("hide");
+        $("#new-skill-box-validation-message").addClass("hide");
       })
       .on("ajax:error", function(evt) {
         $new_skill_box_loading_icon.addClass("hide");

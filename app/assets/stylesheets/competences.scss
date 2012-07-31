@@ -239,6 +239,11 @@ $new-skill-box-font-color: #24765C;
   text-align: right;
 }
 
+#new-skill-box-validation-message {
+  font-weight: bold;
+  color: red;
+}
+
 .new-skill-close {
   padding: 0;
   margin: 0;

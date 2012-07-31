@@ -65,7 +65,6 @@
       .on("ajax:error", "form", function() {
         hideNewSkillSavingMessage();
         showNewSkillErrorMessage(new_skill_save_failed_message);
-        //$new_skill_button.removeClass("button-disabled");
         $("#new-skill-box").removeClass("hide");
       });
 

@@ -26,7 +26,7 @@ class SkillsController < ApplicationController
   # POST /skills
   def create
     @skill = Skill.new(params[:skill])
-    
+
     respond_to do |format|
       if @skill.save
         format.html { redirect_to root_path }

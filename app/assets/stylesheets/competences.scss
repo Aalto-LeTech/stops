@@ -320,9 +320,9 @@ $new-skill-box-font-color: #24765C;
     /* Placeholder */
   }
 
-  $prereq_remove_light_color:   #8F1F1F;
+  $prereq_remove_light_color:   #DB3030;
   $prereq_remove_dark_color:    #9C2222;
-  $prereq_remove_active_color:  #DB3030;
+  $prereq_remove_active_color:  #8F1F1F;
 
 .skill-remove-prereq-button {
   background-color: $prereq_remove_light_color;

@@ -1,8 +1,6 @@
 # Course as a part of a curriculum, e.g. Programming 101 as described in the 2011 study guide
 class ScopedCourse < ActiveRecord::Base
 
-  include PgSearch
-
   belongs_to :abstract_course
   
   has_one :course_description_with_locale, 
@@ -56,18 +54,6 @@ class ScopedCourse < ActiveRecord::Base
            :source      => :course, 
            :order       => 'code', 
            :conditions  => "requirement = #{STRICT_PREREQ}"
-
-  
-  # pg_search indexing (free-text search)
-  pg_search_scope :search_full_text, 
-                  :against            => :code,
-                  :associated_against => {
-                    :course_description_with_locale => [:name],
-                    :skill_descriptions             => [:description]
-                  },
-                  :using => { 
-                    :tsearch => { :prefix => true }  
-                  }
     
   
   define_index do

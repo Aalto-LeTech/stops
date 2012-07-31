@@ -7,9 +7,6 @@
     var top = $first.position().top, left = $first.position().left;
     
     $("#skills > li").off("click");
-
-    // Load new partial view
-    //$("#dynamic-content-box").load(skillPrereqEditUrl); 
   
     var skill_id_string = $(selected).attr("id");
     var id_regexp = /skill-(\d+)/;
@@ -27,17 +24,50 @@
     $error_box_contents.html(message);
     $error_box.removeClass("hide");
   }
+
+  function hideNewSkillErrorMessage() {
+    $("#new-skill-box-error-message").addClass("hide");
+  }
+
+  function showNewSkillSavingMessage() {
+    $("#new-skill-box-saving-message").removeClass("hide");
+    $("#new-skill-box-loading-icon").removeClass("hide");
+  }
+
+  function hideNewSkillSavingMessage() {
+    $("#new-skill-box-loading-icon").addClass("hide");
+    $("#new-skill-box-saving-message").addClass("hide");
+  }
   
 
   /* Initialization */
   $(function() {
-    skillPrereqEditUrl              = $("#metadata").data("skill-prereq-edit-url");
-    var $new_skill_button           = $("#new-skill-button"),
-        $new_skill_box_loading_icon = $("#new-skill-box-loading-icon");
+    skillPrereqEditUrl                = $("#metadata").data("skill-prereq-edit-url");
+    var $new_skill_button             = $("#new-skill-button"),
+        $new_skill_box_loading_icon   = $("#new-skill-box-loading-icon"),
+        new_skill_box_error_message   = $("#metadata").data("skill-box-error-message"),
+        new_skill_save_failed_message = $("#metadata").data("new-skill-save-failed-message");
 
     /* Click handler to catch clicks from every skill entry */
     $("#skills").on("click", ".competence-skill-desc", clickHandler);
 
+    /* Handle success and error of saving new skill */
+    $("#new-skill-box-content")
+      .on("ajax:beforeSend", "form", function() {
+        $("#new-skill-box").addClass("hide");
+        hideNewSkillErrorMessage();
+        showNewSkillSavingMessage();
+      })
+      .on("ajax:success", "form", function() {
+        hideNewSkillSavingMessage();
+        $new_skill_button.removeClass("button-disabled");
+      })
+      .on("ajax:error", "form", function() {
+        hideNewSkillSavingMessage();
+        showNewSkillErrorMessage(new_skill_save_failed_message);
+        //$new_skill_button.removeClass("button-disabled");
+        $("#new-skill-box").removeClass("hide");
+      });
 
     /* Save new skill button */
     $("#new-skill-box > .new-skill-box-footer > .save-button").click(function() {
@@ -51,10 +81,8 @@
       });  
 
       if (dataIsValid) {
-        $("#new-skill-box-content > form").submit();
-        $("#new-skill-box").addClass("hide");
-        $("#new-skill-box-content").html("");
-        $new_skill_button.removeClass("button-disabled");
+        $("#new-skill-box-content > form").submit(); // Success & failure handling above
+        
       } else {
         /* TODO Better error handling */
         alert("Invalid form!");
@@ -79,6 +107,7 @@
           return false;
         } else {
           /* Show loading icon and disable button */
+          hideNewSkillErrorMessage();
           $new_skill_box_loading_icon.removeClass("hide");
           $new_skill_button.addClass("button-disabled");
 
@@ -91,7 +120,7 @@
       .on("ajax:error", function(evt) {
         $new_skill_box_loading_icon.addClass("hide");
         $new_skill_button.removeClass("button-disabled");
-        showNewSkillErrorMessage("Opening new skill box bombed!");
+        showNewSkillErrorMessage(new_skill_box_error_message);
 
       });
 
@@ -148,7 +177,6 @@ var prereq = (function() {
     /* Reset pagination to default state and cancel
      * possible pagination update. */
     if (query !== "") {
-      // TODO Failures should be handled
       pagination.resetAndLoad();
 
     } else {

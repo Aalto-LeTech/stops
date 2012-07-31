@@ -259,10 +259,16 @@ $new-skill-box-font-color: #24765C;
 
 #new-skill-box-loading-icon {
   width: 40em;
+  text-align: center;
 
-  img {
-    margin:  0px auto 20px auto;
-    display: block;
+  div.center-container {
+    margin: 0 0 20px 0;
+    display: inline-block;
+
+    span {
+      position: relative;
+      top: -8px;
+    }
   }
 }
 

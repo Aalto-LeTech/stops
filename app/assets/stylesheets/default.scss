@@ -182,6 +182,10 @@ $button_light_color: #3BA3D0;
 $button_dark_color: #225E79;
 $button_active_color: #024A68;
 
+$button_danger_light_color:   #DB3030;
+$button_danger_dark_color:    #9C2222;
+$button_danger_active_color:  #8F1F1F;
+
 .button-base {
   cursor: pointer;
   text-decoration: none;
@@ -197,10 +201,10 @@ $button_active_color: #024A68;
   background-color: $button_light_color;
   background-repeat: repeat-x;
   background-image: -webkit-linear-gradient(top, $button_light_color, $button_dark_color);
-  background-image: -moz-linear-gradient(top, $button_light_color, $button_dark_color);
-  background-image: -o-linear-gradient(top, $button_light_color, $button_dark_color);
-  background-image: -ms-linear-gradient(top, $button_light_color, $button_dark_color);
-  background-image: linear-gradient(top, $button_light_color, $button_dark_color);
+  background-image:    -moz-linear-gradient(top, $button_light_color, $button_dark_color);
+  background-image:     -ms-linear-gradient(top, $button_light_color, $button_dark_color);
+  background-image:      -o-linear-gradient(top, $button_light_color, $button_dark_color);
+  background-image:         linear-gradient(top, $button_light_color, $button_dark_color);
   border: solid 1px;
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
 }
@@ -236,7 +240,21 @@ $button_active_color: #024A68;
 }
 
 .button-danger {
+  background-color: $button_danger_light_color;
+  background-repeat: repeat-x;
+  background-image: -webkit-linear-gradient(top, $button_danger_light_color, $button_danger_dark_color);
+  background-image:    -moz-linear-gradient(top, $button_danger_light_color, $button_danger_dark_color);
+  background-image:     -ms-linear-gradient(top, $button_danger_light_color, $button_danger_dark_color);
+  background-image:      -o-linear-gradient(top, $button_danger_light_color, $button_danger_dark_color);
+  background-image:         linear-gradient(top, $button_danger_light_color, $button_danger_dark_color);
 
+  &:hover {
+    background-color: $button_danger_light_color;
+  }
+
+  &:active {
+    background-color: $button_danger_active_color;
+  }
 }
 
 .button-disabled, 

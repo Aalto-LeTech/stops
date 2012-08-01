@@ -1,0 +1,11 @@
+<%= form_for @skill, :remote => true, :url => curriculum_skills_path(params[:curriculum_id]) do |f| %>
+  <%= f.hidden_field :skillable_id %>
+  <%= f.hidden_field :skillable_type %>
+  <%= f.fields_for :skill_descriptions do |cf| %>
+    <div class="new-skill-field-group">
+      <%= cf.label t("language_in_" + cf.object.locale), :class => "new-skill-label" %>
+      <%= cf.hidden_field :locale %>
+      <%= cf.text_field :description, :class => "new-skill-field" %>
+    </div>
+  <% end %>
+<% end %>

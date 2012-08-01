@@ -1,7 +1,7 @@
 <li id="skill-<%= skill.id %>">
-  <div class="competence-skill-desc">
+  <%= link_to edit_curriculum_skill_path(params[:curriculum_id], skill), :class => "competence-skill-desc" do %>
     <%= skill.description_with_locale.description %>
-  </div>
+  <% end %>
   <%= link_to t(:Edit), edit_skill_path(skill), 
     :class => "button-base skill-item-button button-small" %> 
   <%= link_to t(:Delete), skill, :method => :delete, :remote => true,

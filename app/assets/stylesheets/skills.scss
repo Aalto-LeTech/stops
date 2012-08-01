@@ -1,0 +1,123 @@
+@import "general_mixins";
+
+/****************************************
+* Skill editing - add new prerequirements
+****************************************/
+
+#skill-search-box {
+  width: 600px;
+  height: 18px;
+  padding: 3px 3px 3px;
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 40px;
+}
+
+.skill-add-prereq-button {
+    /* Placeholder */
+  }
+
+  $prereq_remove_light_color:   #DB3030;
+  $prereq_remove_dark_color:    #9C2222;
+  $prereq_remove_active_color:  #8F1F1F;
+
+.skill-remove-prereq-button {
+  background-color: $prereq_remove_light_color;
+  background-repeat: repeat-x;
+  background-image: -webkit-linear-gradient(top, $prereq_remove_light_color, $prereq_remove_dark_color);
+  background-image:    -moz-linear-gradient(top, $prereq_remove_light_color, $prereq_remove_dark_color);
+  background-image:     -ms-linear-gradient(top, $prereq_remove_light_color, $prereq_remove_dark_color);
+  background-image:      -o-linear-gradient(top, $prereq_remove_light_color, $prereq_remove_dark_color);
+  background-image:         linear-gradient(top, $prereq_remove_light_color, $prereq_remove_dark_color);
+
+  &:hover {
+    background-color: $prereq_remove_light_color;
+  }
+
+  &:active {
+    background-color: $prereq_remove_active_color;
+  }
+}
+
+table.search-results {
+
+  tr {
+
+  }
+
+  tr.skill-search-result {
+    background: #B0DAFF;
+  }
+
+  th {
+    padding: 8px 10px 8px;
+    text-align: left;
+  }
+
+  td {
+    padding: 4px 14px;
+  }
+
+  
+}
+
+
+/* Current prerequirements listing */
+table#skill-current-prereqs {
+  th.skill-prereq-course {
+    text-align: left;
+    background-color: #DDB97F; /* Best so far: rgba(189, 116, 0, 0.5)  */
+    padding: 4px 5px;
+  }
+
+  .skill-prereq-skill {
+    padding-top:    6px;
+    padding-left:   15px;
+    padding-bottom: 6px;
+  }
+
+  /* Matches remove button of a prereq skill */
+  td.skill-prereq-skill + td {
+    padding: 4px 14px;
+  }
+
+}
+
+table.search-results, 
+table#skill-current-prereqs {
+
+  td.skill-search-warning-image {
+      padding-right: 0px;
+
+      span {
+        /* Styled box for add/remove-button failure image */
+        @include border-radius(2px);
+        background-color: red;
+        display: inline-block;
+        width: 19px;
+        height: 16px;
+        padding: 2px;
+
+        img {
+          width:  19px;
+          height: 16px;
+          margin: 0px;
+        }
+      }
+    }
+}
+
+
+#skill-endless-pagination-footer {
+  height: 120px;
+  border: 0;
+  text-align: center;
+}
+
+#skill-endless-pagination-hint {
+
+}
+
+#skill-endless-pagination-loading {
+
+}

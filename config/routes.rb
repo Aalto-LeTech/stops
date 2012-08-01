@@ -23,8 +23,6 @@ Ops::Application.routes.draw do
         get 'prereqs'
         get 'future'
         get 'competencepath'
-        post 'add_prereq'
-        post 'remove_prereq'
       end
     end
 
@@ -50,8 +48,6 @@ Ops::Application.routes.draw do
           get 'contributors'
           get 'prereqs'
           post 'matrix'
-          get 'edit_skill_prereqs'
-          get 'search_skills_and_courses'
         end
 
         resources :skills, :controller => 'curriculums/skills', :only => :show
@@ -63,7 +59,13 @@ Ops::Application.routes.draw do
         end
       end
 
-      resources :skills, :controller => 'curriculums/skills', :only => [:index]
+      resources :skills, :controller => 'curriculums/skills', :only => [:index, :new, :create, :edit] do
+        member do
+            post 'add_prereq'
+            post 'remove_prereq'
+            get 'search_skills_and_courses'
+          end
+      end
     end
 
     # My Plan

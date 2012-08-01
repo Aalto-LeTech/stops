@@ -4,52 +4,64 @@
 
 <h1><%= t :competence_edit_heading %></h1>
 
+<h2><%= t :competence_skills_heading %></h2>
 
+<p><%= link_to t(:competence_create_new_outcome), 
+        new_curriculum_skill_path(
+          :curriculum_id => params[:curriculum_id], 
+          :competence_id => @competence.id
+        ),
+        :remote => true, :class => "button-base",
+        :id => "new-skill-button" %>
+</p>
 
-<div id="dynamic-content-box">
-  <%= render :partial => "competence_list" %>
+<div id="metadata" style="display: none" 
+  data-skill-prereq-edit-url="<%= edit_skill_prereqs_curriculum_competence_path params[:locale], params[:curriculum_id], params[:id] %>"
+  data-skill-box-error-message="<%= t :competence_create_outcome_error_failed_to_load_skill_box %>"
+  data-new-skill-save-failed-message="<%= t :competence_create_outcome_save_failed %>">
 </div>
 
-<% if false %>
-<h2>Matrix</h2>
-<%= form_tag matrix_curriculum_competence_path(@curriculum.id, @competence.id) do %>
-  <table class="skill-matrix-editor">
-    <thead>
-      <tr>
-        <td></td>
-        <% @competence.skills.each do |skill| %>
-          <td><%= skill.description(I18n.locale) %></td>
-        <% end %>
-      </tr>
-    </thead>
+<div id="new-skill-box-loading-icon" class="hide">
+  <div class="center-container">
+    <%= image_tag "progress.gif" %>
+    <span id="new-skill-box-saving-message" class="hide">
+      <%= t :competence_create_outcome_saving %>
+    </span>
+  </div>
+</div>
 
-    <% @courses.each do |course| %>
-      <tr class="course">
-        <td><%= course.code %> <%= course.name(I18n.locale) %></td>
-        <td colspan="<%= @n_skills %>"></td>
-      </tr>
-      
-      <% course.skills.each do |prereq| %>
-        <tr>
-          <td class="skill"><%= prereq.description(I18n.locale) %></td>
-          <%
-          @competence.skills.each do |skill|
-            requirement = nil
-            if @prereqs[prereq.id] && @prereqs[prereq.id][skill.id]
-              requirement = @prereqs[prereq.id][skill.id].requirement
-              #logger.debug "@prereqs[#{prereq.id}][#{skill.id}] = #{requirement}"
-            end
-            %>
-            <td>
-              <%= check_box_tag "prereqs[#{prereq.id}][#{skill.id}]", requirement == STRICT_PREREQ %>
-            </td>
-          <% end %>
-        </tr>
-      <% end %>
-    <% end %>
-  </table>
-  
-  <p><%= submit_tag t(:Save) %></p>
-<% end %>
+<div id="new-skill-box-error-message" class="hide">
+  <div class="error-info">
+    <div class="error-image">
+      <%= image_tag "glyphicons_078_warning_sign_white.png" %>
+    </div> 
+    <strong><%= t :competence_create_outcome_error_heading %></strong>
+    <div class="error-contents">
+    </div>
+  </div>
+</div>
 
-<% end %>
+<div id="new-skill-box" class="new-skill-box hide">
+  <a class="new-skill-close" href="#">&times;</a>
+  <div class="new-skill-box-header">
+    <h4><%= t :competence_create_outcome_heading %></h4>
+    <p><%= t :competence_create_outcome_help_text %></p>
+  </div>
+  <div id="new-skill-box-content"></div>
+  <div id="new-skill-box-validation-message" class="hide">
+    <%= t :competence_create_outcome_validation_error %>
+  </div>
+  <div class="new-skill-box-footer">
+    <a class="button-base cancel-button"><%= t :Cancel %></a>
+    <a class="button-base save-button"><%= t :Save %></a>
+  </div>
+</div>
+
+
+<ul id="skills">
+  <% @competence.skills.each do |skill| %>
+    <%= render :partial => "skill", :object => skill %>
+  <% end %>
+</ul>
+
+

@@ -122,22 +122,6 @@ class SkillsController < ApplicationController
     end
     
   end
-
-  def add_prereq
-    SkillPrereq.create :skill_id     => Integer(params[:id]), 
-                       :prereq_id    => Integer(params[:prereq_id]), 
-                       :requirement  => STRICT_PREREQ
-
-    render :nothing => true
-  end
-
-  def remove_prereq
-    @prereq = SkillPrereq.where "skill_id = ? AND prereq_id = ?", 
-                params[:id], params[:prereq_id]
-
-    @prereq.first.destroy
-    render :nothing => true
-  end
   
   def prereqs
     @skill = Skill.find(params[:id])
@@ -185,6 +169,5 @@ class SkillsController < ApplicationController
     @paths = skill.path_to_competence(competence)
     
     render 'competencepath', :paths => @paths, :layout => nil
-  end
-  
+  end  
 end

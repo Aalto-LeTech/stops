@@ -5,22 +5,33 @@
   <%= javascript_include_tag 'courseinstance' %>
   <%= javascript_include_tag 'plan' %>
   <%= javascript_include_tag 'o4-jquery-extensions.js' %>
+  <%= javascript_include_tag 'bootstrap/bootstrap' %>
 <% end %>
 
+<script type="text/javascript">
+  <%= render "metadata.js.erb" %>
+</script>
+
+<%# Left-side floating settings panel %>
 <div id="schedule-controls-container" class="leftNavi schedule-controls">
   <h2><%= t :schedule_controls %></h2>
   <div class="control-block">
-    <h3><%= t :schedule_preferences %></h3> <div class="control-group">
-      <label for="schedule-automatic-arrangement"><%= t :schedule_automatic_arrangement_checkbox %></label>  
-      <div class="controls">
-        <input id="schedule-automatic-arrangement" type="checkbox" /> 
-        <%= image_tag("glyphicons_195_circle_info.png", :size => "16x16" ) %>
+    <h3><%= t :schedule_preferences %></h3>
+      <div class="control-group" id="schedule-automatic-arrangement">
+        <label for="schedule-automatic-arrangement-input">
+          <%= t :schedule_automatic_arrangement_checkbox %>
+        </label>  
+        <div class="controls">
+          <input id="schedule-automatic-arrangement-input" type="checkbox" /> 
+          <%= image_tag("glyphicons_195_circle_info.png", :size => "16x16" ) %>
+        </div>
       </div>
-    </div>
-    <div class="control-group">
-      <label for="schedule-course-lock"><%= t :schedule_course_lock %></label>
+    <div class="control-group" id="schedule-course-lock">
+      <label for="schedule-course-lock-input">
+        <%= t :schedule_course_lock %>
+      </label>
       <div class="controls">
-        <input id="schedule-course-lock" type="checkbox" /> 
+        <input id="schedule-course-lock-input" type="checkbox" /> 
         <%= image_tag("glyphicons_195_circle_info.png", :size => "16x16" ) %>
       </div>
     </div>

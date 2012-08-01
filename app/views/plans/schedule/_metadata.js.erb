@@ -1,0 +1,15 @@
+/* Loads metadata (such as i18n strings etc.) needed in schedule view */
+(function() {
+  var metadata = {
+    /* i18n strings */
+    translations: {
+      popover_help_title: 			      "<%= escape_javascript(t(:schedule_popover_help_title)) %>",
+      automatic_arrangement_help:     "<%= escape_javascript(t(:schedule_automatic_arrangement_help)) %>",
+      course_lock_help:               "<%= escape_javascript(t(:schedule_course_lock_help)) %>"
+    }
+
+  }
+
+  window.planView = window.planView || {};
+  $.extend(window.planView, metadata);
+})();

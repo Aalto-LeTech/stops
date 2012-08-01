@@ -1,8 +1,9 @@
+(function() {
 /**
  * Schedule view.
  */
-var planView = {
-  
+var planView = window.planView = window.planView || {};
+$.extend(window.planView, {
   satisfyPrereqsAutomatically: true,
   periods: {},                         // Period objects, period_id => period object
   
@@ -19,6 +20,21 @@ var planView = {
       "left": "0px"             // Needed for Firefox
     });
 
+  },
+
+  initializeFloatingSettingsPanel: function() {
+    var $automaticArrangement = $("#schedule-automatic-arrangement")
+        $courseLock           = $("#schedule-course-lock");
+
+    $automaticArrangement.find("img").popover({
+      title:    planView.translations['popover_help_title'],
+      content:  planView.translations['automatic_arrangement_help']
+    });
+
+    $courseLock.find("img").popover({
+      title:    planView.translations['popover_help_title'],
+      content:  planView.translations['course_lock_help']
+    });
   },
   
   addPeriod: function(period) {
@@ -130,7 +146,8 @@ var planView = {
     });
     
   }
-};
+});
+
 
 
 $(document).ready(function(){
@@ -205,5 +222,10 @@ $(document).ready(function(){
   
   // Place new courses automatically
   planView.autoplan();
+
+  // Init floating control panel
+  planView.initializeFloatingSettingsPanel();
       
 });
+
+})();

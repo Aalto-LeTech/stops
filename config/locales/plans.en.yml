@@ -19,4 +19,6 @@ en:
   schedule_automatic_arrangement_checkbox: "Move courses to satisfy prerequirements"
   schedule_save_button: "Save schedule"
   schedule_course_lock: "Lock course on its current position"
-  
+  schedule_popover_help_title: "What does this do?"
+  schedule_automatic_arrangement_help: "When this option is enabled, courses are automatically arranged according to their prerequirements."
+  schedule_course_lock_help: "When this option is enabled, the selected course won't move from the current position."

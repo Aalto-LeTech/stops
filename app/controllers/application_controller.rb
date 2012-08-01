@@ -9,7 +9,6 @@ class ApplicationController < ActionController::Base
 
   before_filter :redirect_to_ssl
   before_filter :set_locale
-  #before_filter :load_javascripts
   before_filter :require_login?
 
   protected
@@ -47,15 +46,6 @@ class ApplicationController < ActionController::Base
     #  I18n.locale = current_user.locale
     elsif !session[:locale].blank?  # Get locale from session
       I18n.locale = session[:locale]
-    end
-  end
-
-  # Loads extra javascripts
-  def load_javascripts
-    @javascripts = []
-
-    if File.exists?(File.join(Rails.root, 'public', 'javascripts', controller_name + '.js'))
-      @javascripts << controller_name
     end
   end
 

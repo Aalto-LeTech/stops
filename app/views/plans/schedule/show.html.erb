@@ -1,10 +1,10 @@
 <% content_for :javascript do %>
   <%= javascript_include_tag 'schedule/schedule' %>
+  <script type="text/javascript">
+    <%= render "metadata.js.erb" %>
+  </script>
 <% end %>
 
-<script type="text/javascript">
-  <%= render "metadata.js.erb" %>
-</script>
 
 <%# Left-side floating settings panel %>
 <div id="schedule-controls-container" class="leftNavi schedule-controls">

@@ -2,33 +2,33 @@ function Course(element) {
   element.data('object', this);     // Add a reference from element to this
   this.element = element;           // jQuery element
   
-  this.instances = {};         // Available course instances
-  this.periods = [];           // Periods on which this course is arranged
-  this.prereqs = {};           // Prerequisite courses. courseCode => course object
-  this.prereqTo = {};          // Courses for which this course is a prereq. courseCode => course object
-  this.prereqPaths = [];       // Raphael paths to prerequirement courses
-  this.period = false;         // Period 
-  this.courseInstance = false; // Selected courseinstance
-  this.slot = false;           // Slot number that this course occupies
-  this.length = 1;
-  this.locked = false;         // Is the course immovable?
-  this.changed = true;
+  this.instances      = {};         // Available course instances
+  this.periods        = [];         // Periods on which this course is arranged
+  this.prereqs        = {};         // Prerequisite courses. courseCode => course object
+  this.prereqTo       = {};         // Courses for which this course is a prereq. courseCode => course object
+  this.prereqPaths    = [];         // Raphael paths to prerequirement courses
+  this.period         = false;      // Period 
+  this.courseInstance = false;      // Selected courseinstance
+  this.slot           = false;      // Slot number that this course occupies
+  this.length         = 1;
+  this.locked         = false;      // Is the course immovable?
+  this.changed        = true;
   
-  this.id = element.data('id');    // Database id of the UserCourse
-  this.code = element.data('code');
-  this.name = element.data('name');
-  this.credits = element.data('credits');
-  this.passed = element.data('passed') == 'true';
+  this.id       = element.data('id');    // Database id of the UserCourse
+  this.code     = element.data('code');
+  this.name     = element.data('name');
+  this.credits  = element.data('credits');
+  this.passed   = element.data('passed') == 'true';
   
   element.click(Course.prototype.click);
   
   element.draggable({
     containment: 'parent',
-    distance: 5,
-    start: Course.prototype.startDrag,
-    drag: Course.prototype.whileDragging,
-    stop: Course.prototype.stopDrag,
-    revert: "false"
+    distance:     5,
+    start:        Course.prototype.startDrag,
+    drag:         Course.prototype.whileDragging,
+    stop:         Course.prototype.stopDrag,
+    revert:       "false"
   });
 };
 
@@ -219,6 +219,17 @@ Course.prototype.clearPrereqPaths =  function() {
   }
 };
 
+
+Course.prototype.lock = function() {
+  this.locked = true;
+  this.element.draggable("disable");
+};
+
+Course.prototype.unlock = function() {
+  this.locked = false;
+  this.element.draggable("enable");
+};
+
 /**
  * Event listener
  */
@@ -241,6 +252,10 @@ Course.prototype.click = function() {
   $("#course-name").text(course.name);
   $("#course-points").text(course.credits);
   $courseDesc.removeClass("hidden"); // TODO animate
+  var $courseLockInput = $("#schedule-course-lock-input");
+  $courseLockInput.removeAttr("disabled");
+  $courseLockInput.prop("checked", course.locked);
+
   
   
   // Hilight prereqs

@@ -225,7 +225,7 @@ Period.prototype.dropCourse = function(event, ui) {
     course.element.addClass('noinstance');
   }
   
-  if (planView.satisfyPrereqsAutomatically) {
+  if (planView.settings.satisfyReqsAutomatically) {
     // Move prereqs before the course
     course.satisfyPrereqs();
     

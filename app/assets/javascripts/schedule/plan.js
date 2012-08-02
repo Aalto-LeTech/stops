@@ -4,8 +4,10 @@
  */
 var planView = window.planView = window.planView || {};
 $.extend(window.planView, {
-  satisfyPrereqsAutomatically: true,
   periods: {},                         // Period objects, period_id => period object
+  settings: {
+    satisfyReqsAutomatically: true  
+  },
   
   initializeRaphael: function() {
     var planDiv = $('#plan');
@@ -34,6 +36,20 @@ $.extend(window.planView, {
     $courseLock.find("img").popover({
       title:    planView.translations['popover_help_title'],
       content:  planView.translations['course_lock_help']
+    });
+
+    $automaticArrangement.find("input").change(function(evt) {
+      planView.settings.satisfyReqsAutomatically = $(this).prop("checked");
+    });
+
+    $courseLock.find("input").change(function(evt) {
+      var $checkbox       = $(this),
+          $selectedCourse = $(".course.selected", "#plan"),
+          course          = $selectedCourse.data("object"); 
+
+      var must_be_locked = $checkbox.prop("checked");
+      if (must_be_locked) course.lock();
+      else course.unlock();
     });
   },
   
@@ -157,8 +173,8 @@ $(document).ready(function(){
   //var locale = $plan.data('locale');
   
   // Make schedule controls always visible (i.e., sticky)
-  var $scheduleControls = $("#schedule-controls-container");
-  var scheduleControlsOrig = $scheduleControls.offset().top;
+  var $scheduleControls     = $("#schedule-controls-container");
+  var scheduleControlsOrig  = $scheduleControls.offset().top;
   $(window).scroll(function() {
     var winY = $(this).scrollTop();
     if (winY >= scheduleControlsOrig) {
@@ -197,7 +213,7 @@ $(document).ready(function(){
   
   // Get course prereqs by ajax
   var $plan = $('#plan');
-  var prereqsPath = $plan.data('prereqs-path');     // '/' + locale + '/curriculums/' + curriculum_id + '/prereqs'
+  var prereqsPath   = $plan.data('prereqs-path');   // '/' + locale + '/curriculums/' + curriculum_id + '/prereqs'
   var instancesPath = $plan.data('instances-path'); // '/' + locale + '/course_instances'
   
   $.ajax({

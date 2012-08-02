@@ -11,24 +11,37 @@
   <h2><%= t :schedule_controls %></h2>
   <div class="control-block">
     <h3><%= t :schedule_preferences %></h3>
-      <div class="control-group" id="schedule-automatic-arrangement">
-        <label for="schedule-automatic-arrangement-input">
-          <%= t :schedule_automatic_arrangement_checkbox %>
-        </label>  
-        <div class="controls">
-          <input id="schedule-automatic-arrangement-input" type="checkbox" /> 
-          <%= image_tag("glyphicons_195_circle_info.png", :size => "16x16" ) %>
-        </div>
-      </div>
-    <div class="control-group" id="schedule-course-lock">
-      <label for="schedule-course-lock-input">
-        <%= t :schedule_course_lock %>
-      </label>
+
+    <div class="control-group" id="schedule-automatic-arrangement">
+      <label for="schedule-automatic-arrangement-input">
+        <%= t :schedule_automatic_arrangement_checkbox %>
+      </label>  
       <div class="controls">
-        <input id="schedule-course-lock-input" type="checkbox" /> 
+        <input id="schedule-automatic-arrangement-input" type="checkbox" /> 
         <%= image_tag("glyphicons_195_circle_info.png", :size => "16x16" ) %>
       </div>
     </div>
+
+    <div class="control-group" id="schedule-draw-req-graphs">
+      <label for="schedule-draw-req-graphs-input">
+        <%= t :schedule_draw_course_graphs_checkbox %>
+      </label>
+      <div class="controls">
+        <input id="schedule-draw-req-graphs-input" type="checkbox" /> 
+        <%= image_tag("glyphicons_195_circle_info.png", :size => "16x16" ) %>
+      </div>
+    </div>
+
+    <div class="control-group" id="schedule-course-lock">
+      <label for="schedule-course-lock-input">
+        <%= t :schedule_course_lock_checkbox %>
+      </label>
+      <div class="controls">
+        <input id="schedule-course-lock-input" type="checkbox" disabled="disabled" /> 
+        <%= image_tag("glyphicons_195_circle_info.png", :size => "16x16" ) %>
+      </div>
+    </div>
+
     <button id="save-button"><%= t :schedule_save_button %></button>
   </div> 
 

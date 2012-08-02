@@ -1,3 +1,5 @@
+(function() {
+
 function Period(element) {
   element.data('object', this);    // Add a reference from element to this
   this.element = element;          // Add a reference from this to element
@@ -15,10 +17,13 @@ function Period(element) {
   this.id = element.data('id');    // Database id of this period
   
   element.droppable({
-    drop: Period.prototype.dropCourse,
-    accept: Period.prototype.acceptCourse 
+    drop: courseDropped,
+    accept: isCourseAccepted 
   });
 };
+
+// Expose Period outside current scope
+window.Period = Period;
 
 Period.prototype.getId = function() {
   return this.id;
@@ -194,7 +199,7 @@ Period.prototype.freeSlot = function(slot, length) {
 /**
  *  Decides whether droppable should accept given draggable.
  */
-Period.prototype.acceptCourse = function(draggable) {
+function isCourseAccepted(draggable) {
   var course = draggable.data('object');   
   var period = $(this).data('object');
   if (period.courseAvailable(course)) {
@@ -206,7 +211,7 @@ Period.prototype.acceptCourse = function(draggable) {
 /**
  * Handles course drop events.
  */
-Period.prototype.dropCourse = function(event, ui) {
+ function courseDropped(event, ui) {
   var period = $(this).data('object');
   var course = ui.draggable.data('object');
 
@@ -233,3 +238,5 @@ Period.prototype.dropCourse = function(event, ui) {
     course.satisfyPostreqs();
   }
 }
+
+})();

@@ -14,7 +14,7 @@ $.extend(window.planView, {
     this.paper = Raphael(document.getElementById('plan'), planDiv.width(), planDiv.height());
     
     /* Align SVG canvas with the schedule table
-     * an allow mouse events to pass through. */
+     * and allow mouse events to pass through. */
     $('#plan svg').css({ 
       "position": "absolute", 
       "pointer-events": "none",

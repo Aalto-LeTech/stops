@@ -1,3 +1,5 @@
+var Course = (function() {
+
 function Course(element) {
   element.data('object', this);     // Add a reference from element to this
   this.element = element;           // jQuery element
@@ -20,46 +22,46 @@ function Course(element) {
   this.credits  = element.data('credits');
   this.passed   = element.data('passed') == 'true';
   
-  element.click(Course.prototype.click);
+  element.click(courseClicked);
   
   element.draggable({
     containment: 'parent',
     distance:     5,
-    start:        Course.prototype.startDrag,
-    drag:         Course.prototype.whileDragging,
-    stop:         Course.prototype.stopDrag,
+    start:        courseDragStarted,
+    drag:         courseBeingDragged,
+    stop:         courseDragStopped,
     revert:       "false"
   });
-};
+}
 
 Course.prototype.getCode = function() {
   return this.code;
-}
+};
 
 Course.prototype.getLength = function() {
   return this.length;
-}
+};
 
 Course.prototype.getCredits = function() {
   return this.credits;
-}
+};
 
 Course.prototype.isPassed = function() {
   return this.passed;
-}
+};
 
 Course.prototype.setSlot = function(slot) {
   this.slot = slot;
   this.element.css('left', slot * 100);
-}
+};
 
 Course.prototype.getSlot = function() {
   return this.slot;
-}
+};
 
 Course.prototype.getPrereqs = function() {
   return this.prereqs;
-}
+};
 
 /**
  * Adds a prerequisite course. This course is automatically added to the "prerequisite to" list of the other course.
@@ -67,7 +69,7 @@ Course.prototype.getPrereqs = function() {
 Course.prototype.addPrereq = function(other) {
   this.prereqs[other.code] = other;
   other.prereqTo[this.code] = this;
-}
+};
 
 /**
  * Adds an instance of this course to the given period. 
@@ -76,7 +78,7 @@ Course.prototype.addCourseInstance = function(courseInstance) {
   var period = courseInstance.getPeriod();
   this.instances[period.getId()] = courseInstance;
   this.periods.push(period);
-}
+};
 
 /**
  * Moves this course to the given period
@@ -104,11 +106,11 @@ Course.prototype.setPeriod = function(period) {
   //course.css('left', period_div_pos.left + freeSlot * 100);
   this.element.css('top', period_div_pos.top + 2);
   this.element.css('height', this.length * 50 - 6);
-}
+};
 
 Course.prototype.getPeriod = function(period) {
   return this.period;
-}
+};
 
 /**
  * Moves all prereqs before this course.
@@ -128,7 +130,7 @@ Course.prototype.satisfyPrereqs = function() {
       other.satisfyPrereqs();
     }
   }
-}
+};
 
 /**
  * Moves forward all courses that require this course
@@ -148,7 +150,7 @@ Course.prototype.satisfyPostreqs = function() {
       other.satisfyPostreqs();
     }
   }
-}
+};
 
 /**
  * Moves this course to the first available period starting from the given period.
@@ -166,7 +168,7 @@ Course.prototype.postponeTo = function(period) {
   
   // No period could be found.
   this.period = false;
-}
+};
 
 /**
  * Moves this to the given period or the closest possible earlier period
@@ -183,7 +185,7 @@ Course.prototype.advanceTo = function(period) {
   
   // No period could be found.
   this.period = false;
-}
+};
 
 /**
  * Moves the course forward after its prereqs (those that have been located on a period).
@@ -204,7 +206,7 @@ Course.prototype.postponeAfterPrereqs = function() {
   if (latest) {
     this.postponeTo(latest.getPeriod().getNextPeriod());
   }
-}
+};
 
 
 Course.prototype.clearPrereqPaths =  function() {
@@ -230,10 +232,13 @@ Course.prototype.unlock = function() {
   this.element.draggable("enable");
 };
 
+
+
 /**
- * Event listener
+ * Course event listeners
  */
-Course.prototype.click = function() {
+
+function courseClicked() {
   var course = $(this).data('object');
   
   // Clear prerequirement graphs
@@ -299,10 +304,7 @@ Course.prototype.click = function() {
 }
 
 
-/**
- * Event listener
- */
-Course.prototype.startDrag = function(event, ui) {
+function courseDragStarted(event, ui) {
   // Reset hilights
   $('.period').removeClass('receiver');
 
@@ -319,7 +321,7 @@ Course.prototype.startDrag = function(event, ui) {
 }
 
 
-Course.prototype.whileDragging = function(event, ui) {
+function courseBeingDragged(event, ui) {
   // Move prerequirement graphs
   var elem = ui.helper,
       position = elem.position(),
@@ -334,7 +336,7 @@ Course.prototype.whileDragging = function(event, ui) {
   }
 }
 
-Course.prototype.stopDrag = function(event, ui) {
+function courseDragStopped(event, ui) {
   if (!ui.helper.data('dropped')) {
     // Animate draggable back to its original position
     ui.helper.animate(ui.originalPosition, { 
@@ -374,5 +376,7 @@ Course.calcPathString = function(courseNode, prereqNode) {
   tY = prereqPos.top + prereqNode.outerHeight(false) + prereqNode.margin().top;
 
   return "M" + fX + "," + fY + "T" + tX + "," + tY;
-}
+};
 
+return Course;
+})();

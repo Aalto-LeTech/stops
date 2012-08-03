@@ -5,7 +5,6 @@
 var planView = window.planView = window.planView || {};
 $.extend(window.planView, {
   periods: {},                         // Period objects, period_id => period object
-  firstPeriod: false,
   settings: {
     satisfyReqsAutomatically: true,
     drawPrerequirementGraphs: true
@@ -157,8 +156,13 @@ $.extend(window.planView, {
       // Put course after its prereqs (those that have been attached)
       course.postponeAfterPrereqs();
       
+      /* Sanity check */
+      if (!course.getPeriod() && course.locked) {
+        console.log("SANITY CHECK FAILED: Course is locked, but doesn't have a period!");
+      }
+
       // If course is still unattached, put it on the first period
-      if (!course.getPeriod()) {
+      if (!course.getPeriod() && !course.unschedulable) {
         course.postponeTo(planView.firstPeriod);
       }
       

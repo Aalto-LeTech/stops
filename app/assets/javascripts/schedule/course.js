@@ -14,6 +14,7 @@ function Course(element) {
   this.slot           = false;      // Slot number that this course occupies
   this.length         = 1;
   this.locked         = false;      // Is the course immovable?
+  this.unschedulable  = false;      // true if period allocation algorithm cannot find suitable period
   this.changed        = true;
   
   this.id       = element.data('id');    // Database id of the UserCourse
@@ -106,6 +107,26 @@ Course.prototype.setPeriod = function(period) {
   //course.css('left', period_div_pos.left + freeSlot * 100);
   this.element.css('top', period_div_pos.top + 2);
   this.element.css('height', this.length * 50 - 6);
+  this.element.removeClass("hide");
+};
+
+/* Mark the course as unschedulable by the automatic scheduling algorithm
+ * (i.e., there were no available periods with course instances late enough
+ * to satisfy prerequirements). */
+Course.prototype.markUnschedulable = function() {
+  if (!this.locked) {
+    /* Remove period */
+    if (this.period) {
+      this.period.removeCourse(this);
+      this.courseInstance = false;
+      this.period = false;
+    }
+
+    this.unschedulable = true;
+
+    /* Remove course element from view */
+    this.element.addClass("hide");
+  }
 };
 
 Course.prototype.getPeriod = function(period) {
@@ -138,15 +159,40 @@ Course.prototype.satisfyPrereqs = function() {
 Course.prototype.satisfyPostreqs = function() {
   // Quit recursion if this course is part of an unsolvable chain
   if (!this.period) {
+    /* Mark the rest of the postrequirements as unschedulable since we weren't
+     * able to schedule the current course. */
+    this.markPostreqsUnschedulable();
     return;
+  }
+
+  /* Determine to which period postrerequirements should be postponed */
+  var targetPeriod;
+  if (this.locked) {
+    /* Since the current course is locked, the course might be before
+     * its prerequirements, so we need to find out the latest period of
+     * the set of the current course and its prerequirements. */
+    var latest = this.getPeriod();
+    for (var array_index in this.prereqs) {
+      var course = this.prereqs[array_index];
+      var period = course.getPeriod();
+      
+      if (period && (!latest || period.laterThan(latest))) {
+        latest = period;
+      }
+    }
+
+    targetPeriod = latest.getNextPeriod();
+  } else {
+    /* Move postrequirements right after the current course */
+    targetPeriod = this.getPeriod().getNextPeriod();
   }
   
   // Postpone postreqs that are earlier than this
   for (var array_index in this.prereqTo) {
     var other = this.prereqTo[array_index];
     
-    if (this.period.laterOrEqual(other.period)) {
-      other.postponeTo(this.period.getNextPeriod());
+    if (!targetPeriod || this.period.laterOrEqual(other.period)) {
+      if (!other.locked) other.postponeTo(targetPeriod);
       other.satisfyPostreqs();
     }
   }
@@ -158,7 +204,6 @@ Course.prototype.satisfyPostreqs = function() {
 Course.prototype.postponeTo = function(period) {
   while (period) {
     if (period.courseAvailable(this)) {
-      //this.period = period;
       this.setPeriod(period);
       return;
     }
@@ -167,7 +212,7 @@ Course.prototype.postponeTo = function(period) {
   }
   
   // No period could be found.
-  this.period = false;
+  this.markUnschedulable(); /* Also marks period as false */
 };
 
 /**
@@ -192,19 +237,38 @@ Course.prototype.advanceTo = function(period) {
  * If no prereqs are found, course remains on the current period.
  */
 Course.prototype.postponeAfterPrereqs = function() {
-  // Find the latest of the prereqs
-  var latest = false;
-  for (var array_index in this.prereqs) {
-    var course = this.prereqs[array_index];
-    var period = course.getPeriod();
+  // Only move if the course has not been locked into its current period
+  if (!this.locked) {
+    // Find the latest of the prereqs
+    var latest = false;
+    for (var array_index in this.prereqs) {
+      var course = this.prereqs[array_index];
+      var period = course.getPeriod();
+      
+      if (period && (!latest || course.getPeriod().laterThan(latest.getPeriod()))) {
+        latest = course;
+      }
+    }
     
-    if (period && (!latest || course.getPeriod().laterThan(latest.getPeriod()))) {
-      latest = course;
+    if (latest) {
+      this.postponeTo(latest.getPeriod().getNextPeriod());
     }
   }
+};
+
+/* Mark all (except locked courses) postrequirements and their
+ * postrequirements as unschedulable. */
+Course.prototype.markPostreqsUnschedulable = function() {
+  var to_be_processed = $.map(this.prereqTo, function(course) {
+    return course;
+  });
   
-  if (latest) {
-    this.postponeTo(latest.getPeriod().getNextPeriod());
+  while(to_be_processed.length > 0) {
+    var postreq = to_be_processed.pop();
+    postreq.markUnschedulable();
+    $.each(postreq.prereqTo, function(key, course) {
+      to_be_processed.push(course);
+    });
   }
 };
 

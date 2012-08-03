@@ -1,20 +1,20 @@
 (function() {
 
 function Period(element) {
-  element.data('object', this);    // Add a reference from element to this
-  this.element = element;          // Add a reference from this to element
+  element.data('object', this);     // Add a reference from element to this
+  this.element          = element;  // Add a reference from this to element
   
-  this.credits_element = this.element.find('.period-credits');
+  this.credits_element  = this.element.find('.period-credits');
   
-  this.courses = {};               // Courses that have been put to this period
-  this.courseInstances = {};       // Courses that are available on this period. courseCode => courseInstance
-  this.slots = [];                 // Slots for parallel courses
+  this.courses          = {};       // Courses that have been put to this period
+  this.courseInstances  = {};       // Courses that are available on this period. courseCode => courseInstance
+  this.slots            = [];       // Slots for parallel courses
   
-  this.previousPeriod = false;     // Reference to previous sibling
-  this.nextPeriod = false;         // Reference to next sibling
-  this.sequenceNumber;             // Sequence number to allow easy comparison of periods
+  this.previousPeriod   = false;    // Reference to previous sibling
+  this.nextPeriod       = false;    // Reference to next sibling
+  this.sequenceNumber;              // Sequence number to allow easy comparison of periods
   
-  this.id = element.data('id');    // Database id of this period
+  this.id = element.data('id');     // Database id of this period
   
   element.droppable({
     drop: courseDropped,

@@ -209,6 +209,29 @@ Course.prototype.postponeAfterPrereqs = function() {
 };
 
 
+Course.prototype.drawPrereqPaths = function() {
+  var preCourse; 
+  for (preCourse in this.prereqs) {
+    if (!this.prereqs.hasOwnProperty(preCourse)) {
+      continue;
+    }
+    preCourse = this.prereqs[preCourse];
+
+    var prereqElem = $(planView.escapeSelector('course-' + preCourse.code));
+  
+    // TODO: heights and widths not in use
+    var prereqPos     = prereqElem.position();
+    var prereqWidth   = prereqElem.outerWidth(true); 
+    var prereqHeight  = prereqElem.outerHeight(false) + prereqElem.margin().top;
+  
+    var courseElemPosition  = this.element.position();
+    var courseElemWidth     = this.element.outerWidth(true); 
+
+    var newPath = planView.paper.path(Course.calcPathString(this.element, prereqElem));
+    this.prereqPaths.push({ path: newPath, course: preCourse });
+  }
+};
+
 Course.prototype.clearPrereqPaths =  function() {
   var selectedCourseElem = $("#plan .selected");
   if (selectedCourseElem.length !== 0) {
@@ -280,27 +303,7 @@ function courseClicked() {
 
 
   /* Draw requirement graphs for selected course */
-  var preCourse; 
-  for (preCourse in course.prereqs) {
-    if (!course.prereqs.hasOwnProperty(preCourse)) {
-      continue;
-    }
-    preCourse = course.prereqs[preCourse];
-
-    var prereqElem = $(planView.escapeSelector('course-' + preCourse.code));
-  
-    // TODO: heights and widths not in use
-    var prereqPos = prereqElem.position();
-    var prereqWidth = prereqElem.outerWidth(true); 
-    var prereqHeight = prereqElem.outerHeight(false) + prereqElem.margin().top;
-  
-    var clickedElem = $(this);
-    var clickedPos = clickedElem.position();
-    var clickedWidth = clickedElem.outerWidth(true); 
-
-    var newPath = planView.paper.path(Course.calcPathString(clickedElem, prereqElem));
-    course.prereqPaths.push({ path: newPath, course: preCourse });
-  }
+  course.drawPrereqPaths(); // TODO draw only if settings value allows it
 }
 
 

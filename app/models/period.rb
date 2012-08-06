@@ -9,6 +9,11 @@ class Period < ActiveRecord::Base
     name = PeriodDescription.where(:period_id => self.id, :locale => locale.to_s).first
     name ? name.name : ''
   end
+
+  # Finds the next period following this period
+  def find_next_periods(limit=1)
+    Period.where(["begins_at > ?", self.ends_at]).order("begins_at").limit(limit)
+  end
   
   # Returns the ongoing period (according to Date.today)
   def self.current
@@ -19,6 +24,5 @@ class Period < ActiveRecord::Base
   def self.find_by_date(date)
     self.where(["begins_at <= ? AND ends_at > ?", date, date]).first
   end
-  
 
 end

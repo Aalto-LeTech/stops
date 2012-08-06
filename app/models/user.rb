@@ -118,8 +118,7 @@ class User < ActiveRecord::Base
 
   # Returns the periods between the beginning of the user's studies and the expected graduation
   def relevant_periods
-    logger.warn "User::relevant_periods not implemented"
-    Period.all
+    self.first_study_period.find_next_periods(35) # 5 periods * 7 years
   end
 
 end

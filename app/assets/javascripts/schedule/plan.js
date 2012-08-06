@@ -6,7 +6,8 @@ var planView = window.planView = window.planView || {};
 $.extend(window.planView, {
   periods: {},                         // Period objects, period_id => period object
   settings: {
-    satisfyReqsAutomatically: true  
+    satisfyReqsAutomatically: true,
+    drawPrerequirementGraphs: true
   },
   
   initializeRaphael: function() {
@@ -25,7 +26,8 @@ $.extend(window.planView, {
   },
 
   initializeFloatingSettingsPanel: function() {
-    var $automaticArrangement = $("#schedule-automatic-arrangement")
+    var $automaticArrangement = $("#schedule-automatic-arrangement"),
+        $drawPrereqGraphs     = $("#schedule-draw-req-graphs"),
         $courseLock           = $("#schedule-course-lock");
 
     $automaticArrangement.find("img").popover({
@@ -38,8 +40,30 @@ $.extend(window.planView, {
       content:  planView.translations['course_lock_help']
     });
 
+    /* Initialize checkboxes according to default values */
+    $automaticArrangement.find("input").prop("checked", planView.settings.satisfyReqsAutomatically);
+
+    $drawPrereqGraphs.find("input").prop("checked", planView.settings.drawPrerequirementGraphs);
+
+    /* Add checkbox change listeners */
+
     $automaticArrangement.find("input").change(function(evt) {
       planView.settings.satisfyReqsAutomatically = $(this).prop("checked");
+    });
+
+    $drawPrereqGraphs.find("input").change(function(evt) {
+      var $selected = $("#plan .selected");
+      if ($(this).prop("checked")) {
+        planView.settings.drawPrerequirementGraphs = true;
+        $selected.each(function(i) {
+          $(this).data("object").drawPrereqPaths();
+        });
+      } else {
+        planView.settings.drawPrerequirementGraphs = false;
+        $selected.each(function(i) {
+          $(this).data("object").clearPrereqPaths();
+        });
+      }
     });
 
     $courseLock.find("input").change(function(evt) {

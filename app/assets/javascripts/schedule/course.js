@@ -303,7 +303,9 @@ function courseClicked() {
 
 
   /* Draw requirement graphs for selected course */
-  course.drawPrereqPaths(); // TODO draw only if settings value allows it
+  if (planView.settings.drawPrerequirementGraphs) {
+    course.drawPrereqPaths();
+  }
 }
 
 

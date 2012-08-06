@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120626104226) do
+ActiveRecord::Schema.define(:version => 20120806070738) do
 
   create_table "abstract_courses", :force => true do |t|
     t.string "code"
@@ -182,19 +182,20 @@ ActiveRecord::Schema.define(:version => 20120626104226) do
     t.string   "login"
     t.string   "studentnumber"
     t.string   "name"
-    t.string   "email",             :limit => 320
-    t.string   "locale",            :limit => 5,   :default => "fi"
-    t.boolean  "admin",                            :default => false
-    t.string   "crypted_password",                                    :null => false
-    t.string   "password_salt",                                       :null => false
-    t.string   "persistence_token",                                   :null => false
-    t.integer  "login_count",                      :default => 0,     :null => false
+    t.string   "email",                 :limit => 320
+    t.string   "locale",                :limit => 5,   :default => "fi"
+    t.boolean  "admin",                                :default => false
+    t.string   "crypted_password",                                        :null => false
+    t.string   "password_salt",                                           :null => false
+    t.string   "persistence_token",                                       :null => false
+    t.integer  "login_count",                          :default => 0,     :null => false
     t.datetime "last_request_at"
     t.datetime "last_login_at"
     t.datetime "current_login_at"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "curriculum_id"
+    t.integer  "first_study_period_id"
   end
 
   add_index "users", ["last_request_at"], :name => "index_users_on_last_request_at"

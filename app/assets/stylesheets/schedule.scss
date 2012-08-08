@@ -67,6 +67,10 @@
   overflow: hidden;
   text-align: left;
   /* z-index: 2; */
+
+  &.locked {
+    cursor: not-allowed;
+  }
 }
 
 

@@ -317,11 +317,13 @@ Course.prototype.clearPrereqPaths =  function() {
 Course.prototype.lock = function() {
   this.locked = true;
   this.element.draggable("disable");
+  this.element.addClass("locked");
 };
 
 Course.prototype.unlock = function() {
   this.locked = false;
   this.element.draggable("enable");
+  this.element.removeClass("locked");
 };
 
 

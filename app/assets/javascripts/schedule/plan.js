@@ -5,6 +5,7 @@
 var planView = window.planView = window.planView || {};
 $.extend(window.planView, {
   periods: {},                         // Period objects, period_id => period object
+  firstPeriod: false,
   settings: {
     satisfyReqsAutomatically: true,
     drawPrerequirementGraphs: true
@@ -163,7 +164,7 @@ $.extend(window.planView, {
 
       // If course is still unattached, put it on the first period
       if (!course.getPeriod() && !course.unschedulable) {
-        course.postponeTo(planView.firstPeriod);
+        course.postponeTo(planView.firstPeriod.getCurrentPeriod());
       }
       
       course.satisfyPostreqs();        // Move forward those courses that depend (recursively) on the newly added course
@@ -223,7 +224,7 @@ $(document).ready(function(){
   var periodCounter = 0;
   $('.period').each(function(i, element){
     var period = new Period($(element));
-    planView.addPeriod(period)
+    planView.addPeriod(period);
     
     if (!previousPeriod) {
       planView.firstPeriod = period;

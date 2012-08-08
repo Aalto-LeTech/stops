@@ -13,6 +13,8 @@ function Period(element) {
   this.previousPeriod   = false;    // Reference to previous sibling
   this.nextPeriod       = false;    // Reference to next sibling
   this.sequenceNumber;              // Sequence number to allow easy comparison of periods
+  this.isCurrentPeriod  = element.data("current-period") === true;
+  if (this.isCurrentPeriod) this.currentPeriod = this;
   
   this.id = element.data('id');     // Database id of this period
   
@@ -52,11 +54,23 @@ Period.prototype.laterOrEqual = function(other) {
 /**
  * Sets the link from this period to the previous. This period is automatically added as the successor to the previous period.
  */
-Period.prototype.setPreviousPeriod = function(period) {
-  this.previousPeriod = period;
+Period.prototype.setPreviousPeriod = function(previousPeriod) {
+  this.previousPeriod = previousPeriod;
   
-  if (period) {
-    period.nextPeriod = this;
+  if (previousPeriod) {
+    previousPeriod.nextPeriod = this;
+
+    if (this.isCurrentPeriod) {
+      /* Propagate current period to previous periods */
+      var period = previousPeriod;
+      while (period) {
+        period.currentPeriod = this;
+        period = period.getPreviousPeriod();
+      }
+    } else if (previousPeriod.currentPeriod) {
+      /* Propagate current period to next periods */
+      this.currentPeriod = previousPeriod.currentPeriod;
+    }
   }
 }
 
@@ -77,6 +91,10 @@ Period.prototype.setNextPeriod = function(period) {
 
 Period.prototype.getNextPeriod = function() {
   return this.nextPeriod;
+}
+
+Period.prototype.getCurrentPeriod = function() {
+  return this.currentPeriod;
 }
 
 /**

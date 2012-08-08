@@ -213,6 +213,7 @@ Course.prototype.postponeTo = function(period) {
   
   // No period could be found.
   this.markUnschedulable(); /* Also marks period as false */
+  console.log("Unschedulable: " + this.code + " " + this.name + ": Could not postpone to wanted period!");
 };
 
 /**
@@ -245,13 +246,20 @@ Course.prototype.postponeAfterPrereqs = function() {
       var course = this.prereqs[array_index];
       var period = course.getPeriod();
       
-      if (period && (!latest || course.getPeriod().laterThan(latest.getPeriod()))) {
-        latest = course;
+      if (period && (!latest || period.laterThan(latest))) {
+        latest = period;
       }
     }
     
     if (latest) {
-      this.postponeTo(latest.getPeriod().getNextPeriod());
+      var targetPeriod  = latest.getNextPeriod(),
+          currentPeriod = latest.getCurrentPeriod();
+      if (targetPeriod && targetPeriod.earlierOrEqual(currentPeriod)) {
+        /* We must make sure that courses are scheduled only after the current ongoing
+         * period! */
+        targetPeriod = currentPeriod.getNextPeriod();
+      }
+      this.postponeTo(targetPeriod);
     }
   }
 };

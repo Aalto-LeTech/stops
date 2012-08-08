@@ -74,10 +74,12 @@
     schedule-path="<%= studyplan_schedule_path %>">
     <%# <div id="svg"></div> %>
     <% @periods.each do |period| %>
-      <div class="period period-<%= period.number %>" data-id="<%= period.id %>" 
-          id="period-<%= period.id %>">
-        <div class="period-name"><%= period.name(I18n.locale) %></div>
-        <div class="period-credits"></div>
+      <div class="period period-<%= period.number %>" 
+        data-id="<%= period.id %>" 
+        data-current-period="<%= period == @current_period ? "true" : "false" %>"
+        id="period-<%= period.id %>">
+          <div class="period-name"><%= period.name(I18n.locale) %></div>
+          <div class="period-credits"></div>
       </div>
     <% end %>
     

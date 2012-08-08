@@ -379,6 +379,15 @@ function courseClicked() {
 
 
 function courseDragStarted(event, ui) {
+  var $element = ui.helper;
+
+  if (!$element.hasClass("selected")) {
+    /* The course is being dragged before having been clicked
+     * and thus isn't selected yet. Call to clickhandler fixes that.
+     * Notice that we must call the clickhandler in the correct context! */
+    courseClicked.call(ui.helper[0]);
+  }
+
   // Reset hilights
   $('.period').removeClass('receiver');
 
@@ -386,7 +395,6 @@ function courseDragStarted(event, ui) {
   ui.helper.data('dropped', false);
   
   // Hilight the periods that have this course
-  var $element = ui.helper;
   var periods = $element.data('object').periods;
   
   for (var array_index in periods) {

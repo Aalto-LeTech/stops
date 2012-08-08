@@ -289,15 +289,12 @@ Course.prototype.drawPrereqPaths = function() {
     }
     preCourse = this.prereqs[preCourse];
 
+    if (!preCourse.period) {
+      /* The course is hidden and no prerequirement graph edge should be drawn! */
+      continue;
+    }
+
     var prereqElem = $(planView.escapeSelector('course-' + preCourse.code));
-  
-    // TODO: heights and widths not in use
-    var prereqPos     = prereqElem.position();
-    var prereqWidth   = prereqElem.outerWidth(true); 
-    var prereqHeight  = prereqElem.outerHeight(false) + prereqElem.margin().top;
-  
-    var courseElemPosition  = this.element.position();
-    var courseElemWidth     = this.element.outerWidth(true); 
 
     var newPath = planView.paper.path(Course.calcPathString(this.element, prereqElem));
     this.prereqPaths.push({ path: newPath, course: preCourse });

@@ -214,15 +214,14 @@ $(document).ready(function(){
     }
   });
   
-  var $courses = $('.course');
   // Create a Course object for each course element
-  $courses.each(function(i, element){
+  $('.course').each(function(i, element){
     new Course($(element));
   });
 
 
-  /* Make courses' text unselectable (to make UI less annoying). */
-  $courses.disableSelection();
+  /* Make text in the plan div unselectable (to make UI less annoying). */
+  $("#plan").disableSelection();
 
   // Create a Period object for each period element
   var previousPeriod;

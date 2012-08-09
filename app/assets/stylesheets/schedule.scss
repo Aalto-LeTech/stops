@@ -5,6 +5,9 @@
   border: 1px solid gray;
   /*background: #f2f2f2;*/
   text-align: right;
+  /* Text selection is disabled, so also disable
+   * the text selection cursor. */
+  cursor: default;
 }
 
 /*

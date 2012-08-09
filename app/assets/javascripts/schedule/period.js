@@ -236,9 +236,6 @@ function isCourseAccepted(draggable) {
   // Draggable needs to know that drop succeeded
   ui.draggable.data('dropped', true);
   
-  // Reset all hilights
-  $('.period').removeClass('receiver');
-  
   // Find the course instance
   course.setPeriod(period);
   if (period.courseInstances[course.getCode()]) {

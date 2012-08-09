@@ -23,7 +23,6 @@ function Course(element) {
   this.credits  = element.data('credits');
   this.passed   = element.data('passed') == 'true';
   
-  element.click(courseClicked);
   
   element.draggable({
     containment: 'parent',
@@ -33,6 +32,10 @@ function Course(element) {
     stop:         courseDragStopped,
     revert:       "false"
   });
+
+  /* Click handler registration must come after initializing draggable or otherwise 
+   * clicks will not be prevented correctly after drags. */
+  element.click(courseClicked);
 }
 
 Course.prototype.getCode = function() {
@@ -108,6 +111,13 @@ Course.prototype.setPeriod = function(period) {
   this.element.css('top', period_div_pos.top + 2);
   this.element.css('height', this.length * 50 - 6);
   this.element.removeClass("hide");
+
+  /* Update possible prerequirement graph paths of the current course
+   * and any of the paths of its postrequirement courses.  */
+  this.updatePrereqPaths();
+  $.each(this.prereqTo, function(key, postReqCourse) {
+    postReqCourse.updatePrereqPaths();
+  });
 };
 
 /* Mark the course as unschedulable by the automatic scheduling algorithm
@@ -301,6 +311,16 @@ Course.prototype.drawPrereqPaths = function() {
   }
 };
 
+Course.prototype.updatePrereqPaths = function() {
+  for (var i = 0; i < this.prereqPaths.length; i++) {
+    var node          = this.prereqPaths[i],
+        path          = node.path,
+        prereqCourse  = node.course,
+        $prereqElem   = $(planView.escapeSelector('course-' + prereqCourse.code));
+    path.attr({ path: Course.calcPathString(this.element, $prereqElem) });
+  }
+};
+
 Course.prototype.clearPrereqPaths =  function() {
   var selectedCourseElem = $("#plan .selected");
   if (selectedCourseElem.length !== 0) {
@@ -402,22 +422,17 @@ function courseDragStarted(event, ui) {
   for (var array_index in periods) {
     periods[array_index].element.addClass("receiver");
   }
+
+  var course = $element.data("object");
 }
 
 
 function courseBeingDragged(event, ui) {
   // Move prerequirement graphs
   var elem = ui.helper,
-      position = elem.position(),
       course = elem.data('object');
 
-  for (var i = 0; i < course.prereqPaths.length; i++) {
-    var node = course.prereqPaths[i],
-        path = node.path,
-        prereqCourse = node.course,
-        $prereqElem = $(planView.escapeSelector('course-' + prereqCourse.code));
-    path.attr({ path: Course.calcPathString(elem, $prereqElem) }); 
-  }
+  course.updatePrereqPaths();
 }
 
 function courseDragStopped(event, ui) {
@@ -430,13 +445,7 @@ function courseDragStopped(event, ui) {
             course = $courseElem.data('object');
 
         // Update graphs too
-        for (var i = 0; i < course.prereqPaths.length; i++) {
-          var node = course.prereqPaths[i],
-              path = node.path,
-              prereqCourse = node.course,
-              $prereqElem = $(planView.escapeSelector('course-' + prereqCourse.code));
-          path.attr({ path: Course.calcPathString($courseElem, $prereqElem) });
-        }
+        course.updatePrereqPaths();
       }
     });
   }

@@ -49,7 +49,16 @@ $.extend(window.planView, {
     /* Add checkbox change listeners */
 
     $automaticArrangement.find("input").change(function(evt) {
-      planView.settings.satisfyReqsAutomatically = $(this).prop("checked");
+      var shouldAutomaticallyArrange = $(this).prop("checked");
+      planView.settings.satisfyReqsAutomatically = shouldAutomaticallyArrange;
+      if (shouldAutomaticallyArrange) {
+        /* Reset 'unschedulable' values so scheduling is possible in every case */
+        $(".course").each(function(i) {
+          $(this).data("object").unschedulable = false;
+        });
+        /* Schedule */
+        planView.autoplan();
+      }
     });
 
     $drawPrereqGraphs.find("input").change(function(evt) {
@@ -163,7 +172,10 @@ $.extend(window.planView, {
       }
 
       // If course is still unattached, put it on the first period
-      if (!course.getPeriod() && !course.unschedulable) {
+      var period = course.getPeriod();
+      if ( !period && !course.unschedulable 
+           || period && period.earlierThan(period.getCurrentPeriod())
+         ) {
         course.postponeTo(planView.firstPeriod.getCurrentPeriod());
       }
       

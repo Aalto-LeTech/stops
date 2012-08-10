@@ -41,10 +41,27 @@
   /*border-bottom: 1px solid gray;*/
   padding: 0px;
   margin: 0px;
+  background-size: 50px 50px; /* Must match the true height of the div 
+                               (margin+border+padding+content) */
+
+
+/* TODO: linear gradient has not been defined for non-WebKit
+ * browsers. */
+  $warning_stripe: rgba(255, 0, 0, 0.7);
+  &.warning {
+    background-image: -webkit-linear-gradient(-45deg, 
+      $warning_stripe 25%,
+      transparent 25%, 
+      transparent 50%, 
+      $warning_stripe 50%,
+      $warning_stripe 75%,
+      transparent 75%,
+      transparent);
+  }
 }
 
 .plan div.period.receiver {
-  background: #e0ffe0;
+  background-color: #e0ffe0;
 }
 
 

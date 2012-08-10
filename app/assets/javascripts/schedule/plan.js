@@ -176,7 +176,7 @@ $.extend(window.planView, {
       if ( !period && !course.unschedulable 
            || period && period.earlierThan(period.getCurrentPeriod())
          ) {
-        course.postponeTo(planView.firstPeriod.getCurrentPeriod());
+        course.postponeTo(planView.firstPeriod.getCurrentPeriod().getNextPeriod());
       }
       
       course.satisfyPostreqs();        // Move forward those courses that depend (recursively) on the newly added course

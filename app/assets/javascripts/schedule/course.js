@@ -56,7 +56,7 @@ Course.prototype.isPassed = function() {
 
 Course.prototype.setSlot = function(slot) {
   this.slot = slot;
-  this.element.css('left', slot * 100);
+  this.element.css('left', slot * 115);
 };
 
 Course.prototype.getSlot = function() {
@@ -108,8 +108,8 @@ Course.prototype.setPeriod = function(period) {
   // Move the div
   var period_div_pos = period.element.position();
   //course.css('left', period_div_pos.left + freeSlot * 100);
-  this.element.css('top', period_div_pos.top + 2);
-  this.element.css('height', this.length * 50 - 6);
+  this.element.css('top', period_div_pos.top + 3);
+  this.element.css('height', this.length * 42 + (this.length - 1) * 15);
   this.element.removeClass("hide");
 
   /* Update possible prerequirement graph paths of the current course
@@ -338,12 +338,17 @@ Course.prototype.lock = function() {
   this.locked = true;
   this.element.draggable("disable");
   this.element.addClass("locked");
+  /* Show lock icon on course div */
+  var $img = $("img.course-locked", "#cloneable-imgs").clone();
+  this.element.append($img);
 };
 
 Course.prototype.unlock = function() {
   this.locked = false;
   this.element.draggable("enable");
   this.element.removeClass("locked");
+  /* Hide lock icon from course div */
+  this.element.find("img.course-locked").detach();
 };
 
 

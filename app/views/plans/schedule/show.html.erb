@@ -5,6 +5,11 @@
   </script>
 <% end %>
 
+<%# "Course locked" icon that will be cloned using JS. Do not include
+    id on the element, because that will also be copied! %>
+<div id="cloneable-imgs" class="hide">
+  <%= image_tag "glyphicons_203_lock.png", :class => "course-locked" %>
+</div>
 
 <%# Left-side floating settings panel %>
 <div id="schedule-controls-container" class="leftNavi schedule-controls">
@@ -93,7 +98,12 @@
         data-name="<%= user_course.scoped_course.abstract_course.course_descriptions_with_locale[0].name %>"
         data-credits="<%= user_course.scoped_course.credits || '0' %>" 
         data-passed="<%= user_course.passed? ? 'true' : 'false' %>" 
-        data-period="<%= user_course.course_instance_id ? user_course.course_instance.period_id : '' %>" ><%= user_course.scoped_course.code + ' ' + user_course.scoped_course.name(I18n.locale) %></div>
+        data-period="<%= user_course.course_instance_id ? user_course.course_instance.period_id : '' %>" >
+        <%# Following wrapper is needed to make sure text doesn't overflow on padding %>
+        <div class="course-text-wrapper">
+          <%= user_course.scoped_course.code + ' ' + user_course.scoped_course.name(I18n.locale) %>
+        </div>
+      </div>
     <% end %>
   </div>
 

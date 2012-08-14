@@ -375,6 +375,13 @@ function courseClicked() {
   $("#course-code").text(course.code); 
   $("#course-name").text(course.name);
   $("#course-points").text(course.credits);
+  var prereqs = $.map(course.prereqs, function(course) { return course; });
+  $("#course-prereqs-list").html(JST['templates/_schedule_prerequirement_courses'](
+    {
+      prereqs:            prereqs,
+      no_prereqs_message: planView.translations.no_prereqs_message
+    }
+  ));
   $courseDesc.removeClass("hidden"); // TODO animate
   var $courseLockInput = $("#schedule-course-lock-input");
   $courseLockInput.removeAttr("disabled");

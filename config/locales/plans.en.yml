@@ -16,6 +16,8 @@ en:
     one: "credits"
     other: "credits"
   schedule_courses_total: "Total courses"
+  schedule_course_prereqs_title: "Immediate prerequirements of selected course"
+  schedule_course_no_prereqs: "No prerequirements"
   schedule_automatic_arrangement_checkbox: "Move courses to satisfy prerequirements"
   schedule_save_button: "Save schedule"
   schedule_course_lock_checkbox: "Lock course on its current position"

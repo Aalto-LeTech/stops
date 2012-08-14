@@ -4,20 +4,22 @@ function Course(element) {
   element.data('object', this);     // Add a reference from element to this
   this.element = element;           // jQuery element
   
-  this.instances      = {};         // Available course instances
-  this.periods        = [];         // Periods on which this course is arranged
-  this.prereqs        = {};         // Prerequisite courses. courseCode => course object
-  this.prereqTo       = {};         // Courses for which this course is a prereq. courseCode => course object
-  this.prereqPaths    = [];         // Raphael paths to prerequirement courses
-  this.period         = false;      // Period 
-  this.courseInstance = false;      // Selected courseinstance
-  this.slot           = false;      // Slot number that this course occupies
-  this.length         = 1;
-  this.locked         = false;      // Is the course immovable?
-  this.unschedulable  = false;      // true if period allocation algorithm cannot find suitable period
-  this.changed        = true;
+  this.instances              = {};         // Available course instances
+  this.periods                = [];         // Periods on which this course is arranged
+  this.prereqs                = {};         // Prerequisite courses. courseCode => course object
+  this.prereqTo               = {};         // Courses for which this course is a prereq. courseCode => course object
+  this.prereqPaths            = [];         // Raphael paths to prerequirement courses
+  this.period                 = false;      // Period 
+  this.courseInstance         = false;      // Selected courseinstance
+  this.slot                   = false;      // Slot number that this course occupies
+  this.length                 = 1;
+  this.locked                 = false;      // Is the course immovable?
+  this.unschedulable          = false;      // true if period allocation algorithm cannot find suitable period
+  this.prereqsUnsatisfiableIn = {};         /* Set of periods where prereqs of the course cannot be satisfied.
+                                             * From period.id => period */
+  this.changed                = true;
   
-  this.id       = element.data('id');    // Database id of the UserCourse
+  this.id       = element.data('id');       // Database id of the UserCourse
   this.code     = element.data('code');
   this.name     = element.data('name');
   this.credits  = element.data('credits');
@@ -141,6 +143,81 @@ Course.prototype.markUnschedulable = function() {
 
 Course.prototype.getPeriod = function(period) {
   return this.period;
+};
+
+Course.prototype.checkPrereqSatisfiabilityInPeriod = function(period) {
+  var positions = {},               // Simulated current periods of courses
+      coursesToBeChecked = [this];
+
+  // The course must be in the period that we want to check
+  positions[this.id] = period;
+
+  function _getPeriodOfCourse(course) {
+    if (course.id in positions)
+      return positions[course.id];
+    else {
+      positions[course.id] = course.period;
+      return course.period;
+    }
+  }
+
+  /* Simulate satisfyPrereqs() */
+  while (coursesToBeChecked.length != 0) {
+    var course = coursesToBeChecked.pop(),
+        prereq_code,
+        periodOfCourse = _getPeriodOfCourse(course);
+
+    console.log("POP: Popped " + course.code + " " + course.name + " from stack");
+
+    if (!periodOfCourse) {
+      /* Prereqs cannot be satisfied */
+      this.prereqsUnsatisfiableIn[period.id] = period;
+      return;
+    }
+
+    for (prereq_code in this.prereqs) {
+      /* Get current simulated period values */
+      var prereq         = this.prereqs[prereq_code],
+          periodOfPrereq = _getPeriodOfCourse(prereq);
+
+      console.log("PREREQ: Handling prereq course " + prereq.code + " " + prereq.name);
+
+      if (periodOfCourse.earlierThan(periodOfPrereq)) {
+        /* advanceTo(period) simulation */
+        var targetPeriod = periodOfCourse.getPreviousPeriod();
+        while (targetPeriod) {
+          if (targetPeriod.courseAvailable(course)) {
+            break;
+          }
+
+          targetPeriod = targetPeriod.getPreviousPeriod();
+        }
+
+        positions[prereq.id] = targetPeriod;
+        if (!targetPeriod) console.log("PREREQ COURSE UNSCHEDULABLE: No target period could be found!");
+
+        coursesToBeChecked.push(prereq);
+        console.log("PUSH: Pushed " + prereq.code + " " + prereq.name + " into stack");
+      }
+    }
+  }
+
+};
+
+Course.prototype.checkPrereqSatisfiability = function() {
+  var course = this;
+  $.each(this.periods, function(i, period) {
+    if (period.earlierThan(course.period)) {
+      course.checkPrereqSatisfiabilityInPeriod(period);
+    }
+  });
+};
+
+Course.prototype.isSchedulableInPeriod = function(period) {
+  if (period.id in this.prereqsUnsatisfiableIn)
+    return false;
+  else
+    return true;
 };
 
 /**
@@ -365,7 +442,7 @@ function courseClicked() {
 
   // Reset hilights
   $('.course').removeClass('prereq-of').removeClass('prereq-to').removeClass('selected');
-  $('.period').removeClass('receiver');
+  $('.period').removeClass('receiver').removeClass("warning");
    
   // Hilight selected course
   $(this).addClass('selected');
@@ -388,7 +465,8 @@ function courseClicked() {
   $courseLockInput.prop("checked", course.locked);
 
   
-  
+  course.checkPrereqSatisfiability();
+
   // Hilight prereqs
   for (var array_index in course.prereqs) {
     course.prereqs[array_index].element.addClass('prereq-of');
@@ -401,7 +479,11 @@ function courseClicked() {
   
   // Hilight the periods that have this course
   for (var array_index in course.periods) {
-    course.periods[array_index].element.addClass("receiver");
+    var period = course.periods[array_index];
+    period.element.addClass("receiver");
+    if (period.id in course.prereqsUnsatisfiableIn) {
+      period.element.addClass("warning");
+    }
   }
 
 

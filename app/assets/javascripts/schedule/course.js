@@ -114,6 +114,8 @@ Course.prototype.setPeriod = function(period) {
   this.element.css('height', this.length * 42 + (this.length - 1) * 15);
   this.element.removeClass("hide");
 
+  console.log("setPeriod: called on course: " + this.code + " " + this.name);
+
   /* Update possible prerequirement graph paths of the current course
    * and any of the paths of its postrequirement courses.  */
   this.updatePrereqPaths();
@@ -135,6 +137,8 @@ Course.prototype.markUnschedulable = function() {
     }
 
     this.unschedulable = true;
+
+    console.log("markUnschedulable: Marked unschedulable course " + this.code + " " + this.name);
 
     /* Remove course element from view */
     this.element.addClass("hide");
@@ -289,18 +293,20 @@ Course.prototype.satisfyPostreqs = function() {
  * Moves this course to the first available period starting from the given period.
  */
 Course.prototype.postponeTo = function(period) {
-  while (period) {
-    if (period.courseAvailable(this)) {
-      this.setPeriod(period);
-      return;
-    }
+  if (!this.unschedulable) {
+    while (period) {
+      if (period.courseAvailable(this)) {
+        this.setPeriod(period);
+        return;
+      }
 
-    period = period.getNextPeriod();
+      period = period.getNextPeriod();
+    }
+    
+    // No period could be found.
+    this.markPostreqsUnschedulable(); /* Also marks period as false */
+    console.log("Unschedulable: " + this.code + " " + this.name + ": Could not postpone to wanted period!");
   }
-  
-  // No period could be found.
-  this.markUnschedulable(); /* Also marks period as false */
-  console.log("Unschedulable: " + this.code + " " + this.name + ": Could not postpone to wanted period!");
 };
 
 /**

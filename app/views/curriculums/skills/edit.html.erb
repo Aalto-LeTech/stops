@@ -29,10 +29,12 @@
 
   <div>
     <table id="skill-current-prereqs">
-      <% @courses_rendered.each do |course| %>
-        <%# The html code must not be escaped %>
-        <%= raw(course) %>
-      <% end %>
+      <tbody>
+        <% @courses_rendered.each do |course| %>
+          <%# The html code must not be escaped %>
+          <%= raw(course) %>
+        <% end %>
+      </tbody>
     </table>
   </div>
 

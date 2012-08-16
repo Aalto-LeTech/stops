@@ -4,12 +4,11 @@
 
 <div>
   <div class="info">
-    <strong>Ohje</strong>
-    Täällä voit lisätä esitietovaatimuksia valitsemallesi valmiudelle.
-    Käytä hakukenttää esitietovaatimusten etsimiseen.
+    <strong><%= t :skill_prereq_edit_help %></strong>
+    <%= t :skill_prereq_edit_help_text %>
   </div>
 
-  <strong>Valittu valmius:</strong> <%= @skill.description_with_locale.description %>
+  <strong><%= t :skill_prereq_edit_selected_skill %></strong> <%= @skill.description_with_locale.description %>
 
   <div id="metadata" style="display: none" 
     data-skill-id="<%= @skill_id %>"
@@ -26,7 +25,7 @@
     data-prereq-removing-text="<%= t :competence_skill_add_prereq_button_removing %>">
   </div>
 
-  <h4 class="colorful">Nykyiset vaatimukset</h4>
+  <h4 class="colorful"><%= t :skill_prereq_edit_current_prereqs %></h4>
 
   <div>
     <table id="skill-current-prereqs">
@@ -37,9 +36,9 @@
     </table>
   </div>
 
-  <h4 class="colorful">Lisää uusia vaatimuksia</h4>
+  <h4 class="colorful"><%= t :skill_prereq_edit_add_new_prereqs %></h4>
 
-  <p>Hae kursseja ja niiden valmiuksia</p>  
+  <p><%= t :skill_prereq_edit_search_courses_and_skills %></p>  
 
   <input id="skill-search-box"></input>
 

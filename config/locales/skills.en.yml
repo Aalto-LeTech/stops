@@ -1,2 +1,8 @@
 en:
   skill_no_future_path: "No path"
+  skill_prereq_edit_help: "Help"
+  skill_prereq_edit_help_text: Here you can add prerequirements to the selected skill. Use the search field to search for skills to be added as prerequirement.
+  skill_prereq_edit_selected_skill: "Selected skill:"
+  skill_prereq_edit_current_prereqs: "Current prerequirements"
+  skill_prereq_edit_add_new_prereqs: "Add new prerequirements"
+  skill_prereq_edit_search_courses_and_skills: "Search for courses and their skills"

@@ -1,3 +1,9 @@
 # encoding: utf-8
 fi:
   skill_no_future_path: "Ei johda mihinkään"
+  skill_prereq_edit_help: "Ohje"
+  skill_prereq_edit_help_text: Täällä voit lisätä esitietovaatimuksia valitsemallesi valmiudelle. Käytä hakukenttää esitietovaatimusten etsimiseen.
+  skill_prereq_edit_selected_skill: "Valittu valmius:"
+  skill_prereq_edit_current_prereqs: "Nykyiset vaatimukset"
+  skill_prereq_edit_add_new_prereqs: "Lisää uusia vaatimuksia"
+  skill_prereq_edit_search_courses_and_skills: "Hae kursseja ja niiden valmiuksia"

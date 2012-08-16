@@ -8,7 +8,7 @@
 				<img src="/assets/glyphicons_078_warning_sign_white.png"></img>
 			</span>
 		</td>
-		<td>
+		<td class="skill-current-prereq-remove">
 			<button class="button-base button-small skill-remove-prereq-button"
 			 data-button-type="add-remove-prereq"><%= @button_text %></button>
 		</td>

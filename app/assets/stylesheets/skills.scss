@@ -5,12 +5,12 @@
 ****************************************/
 
 #skill-search-box {
-  width: 600px;
-  height: 18px;
-  padding: 3px 3px 3px;
-  font-size: 15px;
-  font-weight: 700;
-  margin-bottom: 40px;
+  width:          600px;
+  height:         18px;
+  padding:        3px 3px 3px;
+  font-size:      15px;
+  font-weight:    700;
+  margin-bottom:  40px;
 }
 
 .skill-add-prereq-button {
@@ -64,25 +64,29 @@ table.search-results {
 
 /* Current prerequirements listing */
 table#skill-current-prereqs {
+  td {
+    padding: 4px 14px;
+  }
+
   th.skill-prereq-course {
-    text-align: left;
+    text-align:       left;
     background-color: #DDB97F; /* Best so far: rgba(189, 116, 0, 0.5)  */
-    padding: 4px 5px;
+    padding:          4px 5px;
   }
 
   .skill-prereq-skill {
     padding-top:    6px;
-    padding-left:   15px;
     padding-bottom: 6px;
+    width:          100%;
   }
 
   /* Matches remove button of a prereq skill */
-  td.skill-prereq-skill + td {
+  td.skill-current-prereq-remove {
     padding: 4px 14px;
   }
-
 }
 
+/* Prereq add/remove failure icon styling */
 table.search-results, 
 table#skill-current-prereqs {
 
@@ -94,7 +98,7 @@ table#skill-current-prereqs {
         @include border-radius(2px);
         background-color: red;
         display: inline-block;
-        width: 19px;
+        width:  19px;
         height: 16px;
         padding: 2px;
 
@@ -109,8 +113,8 @@ table#skill-current-prereqs {
 
 
 #skill-endless-pagination-footer {
-  height: 120px;
-  border: 0;
+  height:     120px;
+  border:     0;
   text-align: center;
 }
 

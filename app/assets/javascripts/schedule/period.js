@@ -220,7 +220,7 @@ Period.prototype.freeSlot = function(slot, length) {
 function isCourseAccepted(draggable) {
   var course = draggable.data('object');   
   var period = $(this).data('object');
-  if (period.courseAvailable(course)) {
+  if (period.laterOrEqual(planView.currentPeriod) && period.courseAvailable(course)) {
     return true;
   } else return false; 
 }

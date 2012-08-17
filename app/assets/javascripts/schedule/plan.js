@@ -5,6 +5,7 @@
 var planView = window.planView = window.planView || {};
 $.extend(window.planView, {
   periods: {},                         // Period objects, period_id => period object
+  currentPeriod: false,                // Current period object
   firstPeriod: false,
   settings: {
     satisfyReqsAutomatically: true,
@@ -252,6 +253,10 @@ $(document).ready(function(){
     previousPeriod = period;
     periodCounter++;
   });
+
+  // Set current period
+  var currentPeriodId     = $('.period[data-current-period="true"]', "#plan").data("id");
+  planView.currentPeriod  = planView.periods[currentPeriodId];
   
   // Attach event listeners
   $("#save-button").click(planView.save);

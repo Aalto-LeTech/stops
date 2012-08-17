@@ -47,7 +47,7 @@
 
 
   /* Striped warning background */
-  $warning_stripe: rgba(255, 0, 0, 0.7);
+  $warning_stripe: rgba(255, 0, 0, 0.55);
   &.warning {
     background-image: -webkit-linear-gradient(-45deg, 
       $warning_stripe 25%,
@@ -91,6 +91,10 @@
 
 .plan div.period.receiver {
   background-color: #e0ffe0;
+}
+
+.plan div.period.old-period {
+  background-color: #FF7A7A;
 }
 
 

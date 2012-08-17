@@ -448,7 +448,7 @@ function courseClicked() {
 
   // Reset hilights
   $('.course').removeClass('prereq-of').removeClass('prereq-to').removeClass('selected');
-  $('.period').removeClass('receiver').removeClass("warning");
+  $('.period').removeClass('receiver').removeClass("warning").removeClass("old-period");
    
   // Hilight selected course
   $(this).addClass('selected');
@@ -486,9 +486,14 @@ function courseClicked() {
   // Hilight the periods that have this course
   for (var array_index in course.periods) {
     var period = course.periods[array_index];
-    period.element.addClass("receiver");
-    if (period.id in course.prereqsUnsatisfiableIn) {
-      period.element.addClass("warning");
+    if (period.laterOrEqual(planView.currentPeriod)) {
+      period.element.addClass("receiver");
+
+      if (period.id in course.prereqsUnsatisfiableIn) {
+        period.element.addClass("warning");
+      }
+    } else {
+      period.element.addClass("old-period");
     }
   }
 

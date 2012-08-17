@@ -4,6 +4,9 @@ class Curriculums::SkillsController < CurriculumsController
 
   respond_to :json, :only => 'index'
 
+  authorize_resource
+  skip_authorize_resource :except => [:index, :show, :new, :create, :edit]
+
   def index
     @skills = Skill.where(:skillable_id => @curriculum.course_ids).joins(:skill_descriptions).where(["skill_descriptions.locale = ?", I18n.locale]).select("skills.id, skills.skillable_id, skills.skillable_type, skills.position, skill_descriptions.description AS translated_name").includes(:strict_prereqs)
     # :skillable_type => 'ScopedCourse'
@@ -57,6 +60,9 @@ class Curriculums::SkillsController < CurriculumsController
 
   # POST /add_prereq
   def add_prereq
+    authorize! :create, Skill
+    authorize! :update, Skill
+
     SkillPrereq.create :skill_id     => Integer(params[:id]), 
                        :prereq_id    => Integer(params[:prereq_id]), 
                        :requirement  => STRICT_PREREQ
@@ -66,6 +72,9 @@ class Curriculums::SkillsController < CurriculumsController
 
   # POST /remove_prereq
   def remove_prereq
+    authorize! :create, Skill
+    authorize! :update, Skill
+
     @prereq = SkillPrereq.where "skill_id = ? AND prereq_id = ?", 
                 params[:id], params[:prereq_id]
 
@@ -139,6 +148,8 @@ class Curriculums::SkillsController < CurriculumsController
   def search_skills_and_courses
     # @courses = ScopedCourse.includes(:course_description_with_locale, :skill_descriptions).search_full_text params[:q] 
     
+    authorize! :update, Skill
+
     @courses = ScopedCourse.search params[:q], 
                   :include  => [:course_description_with_locale, :skill_descriptions_with_locale],
                   :page     => params[:p] || 1, :per_page => 20

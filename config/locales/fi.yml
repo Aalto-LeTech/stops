@@ -67,3 +67,12 @@ fi:
   language_in_sv: "ruotsiksi"
   language_in_fi: "suomeksi"
 
+
+  ###########################
+  # Forbidden, Not found etc.
+  ###########################
+
+  shared:
+    forbidden:
+      heading: "Pääsy kielletty"
+      explanation: "Sinulla ei ole riittäviä oikeuksia sivun katseluun."

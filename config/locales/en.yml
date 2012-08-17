@@ -59,4 +59,12 @@ en:
   language_in_sv: "in Swedish"
   language_in_fi: "in Finnish"
   
-  
+
+  ###########################
+  # Forbidden, Not found etc.
+  ###########################
+
+  shared:
+    forbidden:
+      heading: "Forbidden"
+      explanation: "You do not have the required permissions to view this page."

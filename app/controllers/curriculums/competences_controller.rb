@@ -6,6 +6,9 @@ class Curriculums::CompetencesController < CurriculumsController
   #before_filter :load_profile
   before_filter :load_competence, :except => [:index]
 
+  authorize_resource
+  skip_authorize_resource :except => [:index, :show, :edit, :update]
+
   def index
     load_curriculum
     @competences = Competence.where(:profile_id => @curriculum.profile_ids).joins(:competence_descriptions).where(["competence_descriptions.locale = ?", I18n.locale])

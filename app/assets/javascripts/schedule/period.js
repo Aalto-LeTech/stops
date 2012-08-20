@@ -78,6 +78,13 @@ Period.prototype.getPreviousPeriod = function() {
   return this.previousPeriod;
 }
 
+Period.prototype.getPreviousPeriodUntilCurrent = function() {
+  if (this.previousPeriod.laterOrEqual(this.currentPeriod))
+    return this.previousPeriod;
+  else
+    return null;
+}
+
 /**
  * Sets the link from this period to the next. This period is automatically added as the predecessor to the next period.
  */

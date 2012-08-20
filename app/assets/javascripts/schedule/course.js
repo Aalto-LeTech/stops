@@ -117,11 +117,22 @@ Course.prototype.setPeriod = function(period) {
   console.log("setPeriod: called on course: " + this.code + " " + this.name);
 
   /* Update possible prerequirement graph paths of the current course
-   * and any of the paths of its postrequirement courses.  */
+   * and any of the paths of its postrequirement courses. */
   this.updatePrereqPaths();
   $.each(this.prereqTo, function(key, postReqCourse) {
     postReqCourse.updatePrereqPaths();
   });
+};
+
+
+Course.prototype.clearPeriodAndHide = function() {
+  if (this.period) {
+    this.period.removeCourse(this);
+  }
+  this.period = false;
+
+  this.clearPrereqPaths();
+  this.element.addClass("hide");
 };
 
 /* Mark the course as unschedulable by the automatic scheduling algorithm
@@ -238,7 +249,7 @@ Course.prototype.satisfyPrereqs = function() {
     var other = this.prereqs[array_index];
     
     if (this.period.earlierThan(other.period)) {
-      other.advanceTo(this.period.getPreviousPeriod());
+      other.advanceTo(this.period.getPreviousPeriodUntilCurrent());
       other.satisfyPrereqs();
     }
   }
@@ -319,11 +330,11 @@ Course.prototype.advanceTo = function(period) {
       return;
     }
 
-    period = period.getPreviousPeriod();
+    period = period.getPreviousPeriodUntilCurrent();
   }
   
   // No period could be found.
-  this.period = false;
+  this.clearPeriodAndHide();
 };
 
 /**

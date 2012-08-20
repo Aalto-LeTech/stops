@@ -20,23 +20,18 @@ fi:
   competence_supporting_courses_heading: "Valitse tukevia kursseja"
 
   # Edit
-  competence_edit_heading: "Muokkaa osaamiskokonaisuutta"
-  competence_create_new_outcome: "Uusi valmius"
-  competence_create_outcome_heading: "Luo uusi valmius"
-  competence_create_outcome_help_text: "Syötä valmiuden kuvaus kaikilla pyydetyillä kielillä."
-  competence_create_outcome_error_heading: "Virhe"
-  competence_create_outcome_error_failed_to_load_skill_box: "Uuden valmiuden syöttämiseen vaadittavaa lomaketta ei pystytty lataamaan."
-  competence_create_outcome_save_failed: "Valmiuden tallentaminen epäonnistui."
-  competence_create_outcome_validation_error: "Valmiuden kuvaus tulee antaa kaikilla pyydetyillä kielillä!"
-  competence_create_outcome_saving: "Tallennetaan..."
-  competence_skill_add_prereq_button: "Lisää"
-  competence_skill_add_prereq_button_adding: "Lisätään..."
-  competence_skill_add_prereq_button_remove: "Poista"
-  competence_skill_add_prereq_button_removing: "Poistetaan..."
-  competence_skill_search_footer_hint: "Rullaa sivun loppuun ladatakasesi lisää hakutuloksia."
-  competence_skill_search_footer_no_results: "Ei enempää hakutuloksia."
-  competence_skill_search_footer_failure: "Valitettavasti haku epäonnistui."
-
+  curriculums:
+    competences:
+      edit:
+        heading: "Muokkaa osaamiskokonaisuutta"
+        new_outcome: "Uusi valmius"
+        create_outcome_heading: "Luo uusi valmius"
+        create_outcome_help_text: "Syötä valmiuden kuvaus kaikilla pyydetyillä kielillä."
+        create_outcome_error_heading: "Virhe"
+        create_outcome_error_failed_to_load_skill_box: "Uuden valmiuden syöttämiseen vaadittavaa lomaketta ei pystytty lataamaan."
+        create_outcome_save_failed: "Valmiuden tallentaminen epäonnistui."
+        create_outcome_validation_error: "Valmiuden kuvaus tulee antaa kaikilla pyydetyillä kielillä!"
+        create_outcome_saving: "Tallennetaan..."
 
   # Add to plan
   competence_add_heading: "Lisää %{profile} %{competence} opintosuunnitelmaan"

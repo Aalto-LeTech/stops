@@ -4,11 +4,11 @@
 
 <div>
   <div class="info">
-    <strong><%= t :skill_prereq_edit_help %></strong>
-    <%= t :skill_prereq_edit_help_text %>
+    <strong><%= t '.help_heading' %></strong>
+    <%= t '.help_text' %>
   </div>
 
-  <strong><%= t :skill_prereq_edit_selected_skill %></strong> <%= @skill.description_with_locale.description %>
+  <strong><%= t '.selected_skill' %></strong> <%= @skill.description_with_locale.description %>
 
   <div id="metadata" style="display: none" 
     data-skill-id="<%= @skill_id %>"
@@ -19,13 +19,13 @@
       params[:curriculum_id], @skill_id) %>"
     data-skill-prereq-remove-url="<%= remove_prereq_curriculum_skill_path(params[:locale], 
       params[:curriculum_id], @skill_id) %>"
-    data-prereq-add-text="<%= t :competence_skill_add_prereq_button %>"
-    data-prereq-adding-text="<%= t :competence_skill_add_prereq_button_adding %>"
-    data-prereq-remove-text="<%= t :competence_skill_add_prereq_button_remove %>"
-    data-prereq-removing-text="<%= t :competence_skill_add_prereq_button_removing %>">
+    data-prereq-add-text="<%= t '.add_prereq_button' %>"
+    data-prereq-adding-text="<%= t '.add_prereq_button_adding' %>"
+    data-prereq-remove-text="<%= t '.add_prereq_button_remove' %>"
+    data-prereq-removing-text="<%= t '.add_prereq_button_removing' %>">
   </div>
 
-  <h4 class="colorful"><%= t :skill_prereq_edit_current_prereqs %></h4>
+  <h4 class="colorful"><%= t '.current_prereqs' %></h4>
 
   <div>
     <table id="skill-current-prereqs">
@@ -38,9 +38,9 @@
     </table>
   </div>
 
-  <h4 class="colorful"><%= t :skill_prereq_edit_add_new_prereqs %></h4>
+  <h4 class="colorful"><%= t '.add_new_prereqs' %></h4>
 
-  <p><%= t :skill_prereq_edit_search_courses_and_skills %></p>  
+  <p><%= t '.search_courses_and_skills' %></p>  
 
   <input id="skill-search-box"></input>
 
@@ -51,13 +51,13 @@
   <div id="skill-endless-pagination-footer">
       <p>
         <span id="skill-endless-pagination-hint" class="hide">
-          <%= t :competence_skill_search_footer_hint %>
+          <%= t '.search_footer_hint' %>
         </span>
         <span id="skill-endless-pagination-no-results-msg" class="hide">
-          <%= t :competence_skill_search_footer_no_results %>
+          <%= t '.search_footer_no_results' %>
         </span>
         <span id="skill-endless-pagination-failure-msg" class="hide">
-          <%= t :competence_skill_search_footer_failure %>
+          <%= t '.search_footer_failure' %>
         </span>
       </p>
       <p>

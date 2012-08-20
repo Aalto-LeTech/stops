@@ -130,7 +130,7 @@ class Curriculums::SkillsController < CurriculumsController
             :course_code          => course.code,
             :course_name          => course.course_description_with_locale.name,
             :course_skills        => skills,
-            :button_text          => t(:competence_skill_add_prereq_button_remove)
+            :button_text          => t('add_prereq_button_remove', :scope => 'curriculums.skills.edit')
           }
 
           @courses_rendered << Eco.render(eco_template, locals)

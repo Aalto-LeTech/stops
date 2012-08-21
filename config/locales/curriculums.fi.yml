@@ -19,6 +19,23 @@ fi:
   curriculum_name: "Nimi"
   curriculum_name_hint: "esim. Rakennustekniikka 2012-2013"
 
+  # show
+  curriculums:
+    show:
+      competence_profiles: "Osaamiskokonaisuudet"
+      no_profile_name: "kokonaisuudella ei nimeä"
+      curriculum_courses: "Opinto-ohjelman kurssit"
+      course_code: "Koodi"
+      course_name: "Nimi"
+      course_name_not_found: "suomenkielistä kurssinimeä ei saatavilla"
+      course_credits: "Opintopisteet"
+      course_period: "Periodi"
+      prerequisites: "Esitietovaatimukset"
+      prerequisites_help: "Opintopisteet: Uudet esitietovaatimukset + suunnitelmaan jo sisällytetyt"
+
+      # Admin tools
+      list_outcomes: "Listaa valmiudet"
+
   activerecord:
     errors:
       models:

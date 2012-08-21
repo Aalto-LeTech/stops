@@ -1,5 +1,4 @@
 <!-- curriculums/show -->
-
 <h1><%= @curriculum.name %></h1>
 
 <% if can? :update, @curriculum %>
@@ -9,19 +8,18 @@
     <ul>
       <li><%= link_to t(:curriculum_edit_link), edit_curriculum_path(:id => @curriculum) %></li>
       <li><%= link_to t(:curriculum_cycles_link), cycles_curriculum_path(:id => @curriculum) %></li>
-      <li><%= link_to 'List outcomes', outcomes_curriculum_path(:id => @curriculum) %></li>
+      <li><%= link_to t('.list_outcomes'), outcomes_curriculum_path(:id => @curriculum) %></li>
     </ul>
   </div>
 <% end %>
 
-
-<h1>Profiles</h1>
+<h1><%= t '.competence_profiles' %></h1>
 
 <ul>
   <% @curriculum.profiles.each do |profile| %>
     <%
       profile_name = profile.name(I18n.locale)
-      profile_name = '<no name>' if profile_name.blank?
+      profile_name = "<#{ t('.no_profile_name') }>" if profile_name.blank?
     %>
     <li><%= link_to profile_name, curriculum_profile_path(:curriculum_id => @curriculum, :id => profile) %></li>
   <% end %>
@@ -31,28 +29,31 @@
   <p><%= link_to t(:profile_create_link), new_curriculum_profile_path(@curriculum) %><p>
 <% end %>
 
+<h1><%= t '.curriculum_courses' %></h1>
 
-<h1>Courses</h1>
-
-<table>
+<table id="curriculum-courses">
   <thead>
     <tr>
-      <th>Code &darr;</th>
-      <th>Name &darr;</th>
-      <th>Credits &darr;</th>
-      <th>Period &darr;</th>
-      <th><span title="credits: new prerequisites + already included in plan">Prerequisites &darr;</span></th>
+      <th><%= t '.course_code' %> &darr;</th>
+      <th><%= t '.course_name' %> &darr;</th>
+      <th><%= t '.course_credits' %> &darr;</th>
+      <th><%= t '.course_period' %> &darr;</th>
+      <th><span title="<%= t '.prerequisites_help' %>"><%= t '.prerequisites' %> &darr;</span></th>
     </tr>
   </thead>
-  <% @curriculum.courses.each_with_index do |course, i| %>
-    <tbody>
+  <tbody>
+    <% @curriculum.courses.each_with_index do |course, i| %>
       <tr class="<%= i % 2 == 0 ? 'even' : 'odd' %>">
-        <td><%= link_to course.code, curriculum_course_path(:curriculum_id => @curriculum, :id => course) %></td>
-        <td><%= link_to course.name(I18n.locale), curriculum_course_path(:curriculum_id => @curriculum, :id => course) %></td>
-        <td><%= course.credits %></td>
-        <td></td>
-        <td><%= course.strict_prereqs.size %></td>
+        <td>
+          <%= link_to course.code, curriculum_course_path(:curriculum_id => @curriculum, :id => course) %>
+        </td>
+        <td>
+          <%= link_to course.name_or('<' + t('.course_name_not_found') + '>'), curriculum_course_path(:curriculum_id => @curriculum, :id => course) %>
+        </td>
+        <td class="centered"><%= course.credits %></td>
+        <td class="centered"><%= course.periods_as_roman_numerals.join(", ") %></td>
+        <td class="centered"><%= course.strict_prereqs.size %></td>
       </tr>
-    </tbody>
-  <% end %>
+    <% end %>
+  </tbody>
 </table>

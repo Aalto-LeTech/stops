@@ -18,6 +18,23 @@ en:
   curriculum_name: "Name"
   curriculum_name_hint: "e.g. 2012-2013"
 
+  # show
+  curriculums:
+    show:
+      competence_profiles: "Competence profiles"
+      no_profile_name: "no profile name"
+      curriculum_courses: "Curriculum courses"
+      course_code: "Code"
+      course_name: "Name"
+      course_name_not_found: "no course name available in English"
+      course_credits: "Credits"
+      course_period: "Period"
+      prerequisites: "Prerequisites"
+      prerequisites_help: "Credits: New prerequisites + already included in plan"
+
+      # Admin tools
+      list_outcomes: "List outcomes"
+
   activerecord:
     errors:
       models:

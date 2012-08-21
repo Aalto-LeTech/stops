@@ -26,7 +26,11 @@ class CurriculumsController < ApplicationController
   # GET /curriculums/1
   # GET /curriculums/1.xml
   def show
-    @curriculum = Curriculum.find(params[:id])
+    @curriculum = Curriculum.includes(
+      :courses, 
+      :profiles, 
+      :courses => [:abstract_course, :periods, :course_description_with_locale, :strict_prereqs],
+    ).find(params[:id])
 
     authorize! :read, @curriculum
 

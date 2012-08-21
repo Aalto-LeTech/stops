@@ -54,6 +54,11 @@ class ScopedCourse < ActiveRecord::Base
            :source      => :course, 
            :order       => 'code', 
            :conditions  => "requirement = #{STRICT_PREREQ}"
+
+  # Only the periods that have not yet ended or started.
+  has_many :periods,
+           :through     => :abstract_course,
+           :conditions  => proc { ["periods.ends_at > ?", Date.today] }
     
   
   define_index do
@@ -71,6 +76,13 @@ class ScopedCourse < ActiveRecord::Base
   def name(locale)
     description = CourseDescription.where(:abstract_course_id => self.abstract_course_id, :locale => locale.to_s).first
     description ? description.name : code
+  end
+
+  # Returns the name of the course in the current locale or fallback
+  # message if localized course name could not be found.
+  def name_or(fallback_message="<No name set for the locale>")
+    desc = course_description_with_locale
+    desc ? desc.name : fallback_message 
   end
 
   # Returns -1 if the is a prereq of other, +1 if this is a prereq to other, otherwise 0.
@@ -116,9 +128,12 @@ class ScopedCourse < ActiveRecord::Base
     return levels
   end
 
-  # Returns periods on which this course is arranged
-  def periods
-    raise NotImplementedError, "Course::periods not implemented"
+  # Returns the unique roman numerals of the periods where this course
+  # has an course instance and the period hasn't ended or started yet.
+  # Example: ["I", "III", "IV"]
+  def periods_as_roman_numerals
+    periods_sorted = self.periods.sort! { |x, y| x.number <=> y.number }
+    periods_sorted.map { |period| period.to_roman_numeral }.uniq
   end
 
 

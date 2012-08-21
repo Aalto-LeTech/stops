@@ -13,16 +13,13 @@ class AbstractCourse < ActiveRecord::Base
            
   has_one :course_description_with_locale, :class_name => "CourseDescription", 
            :conditions => proc { "locale = '#{I18n.locale}'" }
+
+  has_many  :periods,
+            :through  => :course_instances
   
   def get_name(locale)
     description = CourseDescription.where(:abstract_course_id => self.id, :locale => locale.to_s).first
     description ? description.name : ''
-  end
-
-  
-  # Returns periods on which this course is arranged
-  def periods
-    raise NotImplementedError, "AbstractCourse::periods not implemented"
   end
   
   # Returns CourseInstances

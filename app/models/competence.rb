@@ -20,7 +20,7 @@ class Competence < ActiveRecord::Base
   accepts_nested_attributes_for :competence_descriptions
 
   # Users who have chosen this profile
-  has_many :user_competences, :dependent => :destroy
+  has_and_belongs_to_many :users, :join_table => 'user_competences'
 
 
   def name(locale)

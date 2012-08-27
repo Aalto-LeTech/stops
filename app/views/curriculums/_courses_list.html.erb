@@ -1,0 +1,26 @@
+<table id="curriculum-courses">
+  <thead>
+    <tr>
+      <th><%= t '.course_code' %> &darr;</th>
+      <th><%= t '.course_name' %> &darr;</th>
+      <th><%= t '.course_credits' %> &darr;</th>
+      <th><%= t '.course_period' %> &darr;</th>
+      <th><span title="<%= t '.prerequisites_help' %>"><%= t '.prerequisites' %> &darr;</span></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @curriculum.courses.each_with_index do |course, i| %>
+      <tr class="<%= i % 2 == 0 ? 'even' : 'odd' %>">
+        <td>
+          <%= link_to course.code, curriculum_course_path(:curriculum_id => @curriculum, :id => course) %>
+        </td>
+        <td>
+          <%= link_to course.name_or('<' + t('.course_name_not_found') + '>'), curriculum_course_path(:curriculum_id => @curriculum, :id => course) %>
+        </td>
+        <td class="centered"><%= course.credits %></td>
+        <td class="centered"><%= course.periods_as_roman_numerals.join(", ") %></td>
+        <td class="centered"><%= course.strict_prereqs.size %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

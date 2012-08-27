@@ -21,10 +21,27 @@ fi:
 
   # show
   curriculums:
+    # Strings shared between views
+    competence_profiles: "Osaamisprofiilit"
+    curriculum_courses: "Opinto-ohjelman kurssit"
+
     show:
-      competence_profiles: "Osaamiskokonaisuudet"
+      # Admin tools
+      list_outcomes: "Listaa valmiudet"
+    edit:
+      import_csv_link: "Tuo tiedot CSV datasta"
+      change_name: "Muuta nimi"
+    edit_modal:
+      heading: "Muuta opinto-ohjelman nimi"
+      name_label: "Opinto-ohjelman nimi"
+      error_heading: "Virhe"
+      change_failed: "Nimen muuttaminen epäonnistui!"
+      box_empty: "Opinto-oppaalla on oltava nimi!"
+      saving: "Tallennetaan"
+    profiles_list:
+      edit_profile_prefix: "Muokkaa osaamisprofiilia"
       no_profile_name: "kokonaisuudella ei nimeä"
-      curriculum_courses: "Opinto-ohjelman kurssit"
+    courses_list:
       course_code: "Koodi"
       course_name: "Nimi"
       course_name_not_found: "suomenkielistä kurssinimeä ei saatavilla"
@@ -32,9 +49,6 @@ fi:
       course_period: "Periodi"
       prerequisites: "Esitietovaatimukset"
       prerequisites_help: "Opintopisteet: Uudet esitietovaatimukset + suunnitelmaan jo sisällytetyt"
-
-      # Admin tools
-      list_outcomes: "Listaa valmiudet"
 
   activerecord:
     errors:

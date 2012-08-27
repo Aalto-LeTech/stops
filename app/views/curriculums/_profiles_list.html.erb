@@ -1,0 +1,19 @@
+<ul>
+  <% @curriculum.profiles.each do |profile| %>
+    <%
+      profile_name = profile.name(I18n.locale)
+      profile_name = "<#{ t('.no_profile_name') }>" if profile_name.blank?
+
+      if params[:action] == "edit"
+        # Prefix the link text with 'Edit' to make destination clearer
+        profile_name = "#{ t '.edit_profile_prefix' }: " + profile_name
+
+        # Decides what method will be called (using Object#send) to get the link url
+        method = :edit_curriculum_profile_path
+      else
+        method = :curriculum_profile_path
+      end
+    %>
+    <li><%= link_to profile_name, send(method, :curriculum_id => @curriculum, :id => profile) %></li>
+  <% end %>
+</ul>

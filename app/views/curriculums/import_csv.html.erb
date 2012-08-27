@@ -1,0 +1,38 @@
+<h1>Edit <%= @curriculum.name %></h1>
+
+<%= form_for @curriculum, :as => :curriculum, :url => curriculum_url(:id => @curriculum), :html => { :multipart => true, :method => :put } do |f| %>
+  
+  <table>
+    <tr>
+      <td><%=t :curriculum_prereqs_csv %></td>
+      <td><%= file_field_tag :prereqs_csv %></td>
+      <td></td>
+    </tr>
+    
+    <tr>
+      <td><%=t :curriculum_profiles_csv %></td>
+      <td><%= file_field_tag :profiles_csv %></td>
+      <td></td>
+    </tr>
+  </table>
+  
+  <p><%= f.submit t(:Upload) %></p>
+<% end %>
+
+
+<h1>Statistics</h1>
+
+<table>
+  <tr>
+    <td>Profiles:</td><td><%= @curriculum.profiles.count %></td>
+  </tr>
+  <tr>
+    <td>Courses:</td><td><%= @curriculum.courses.count %></td>
+  </tr>
+</table>
+
+
+
+<p><%= link_to 'Delete', @curriculum, :method => :delete %></p>
+
+<p><%= link_to 'Back', curriculum_url(:id => @curriculum) %></p>

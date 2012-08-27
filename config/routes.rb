@@ -37,6 +37,7 @@ Ops::Application.routes.draw do
         get 'prereqs'
         get 'graph'
         get 'outcomes'
+        match 'edit/import_csv', :controller => 'curriculums', :action => :import_csv, :via => [:post, :get]
       end
 
       resources :profiles, :controller => 'curriculums/profiles' do

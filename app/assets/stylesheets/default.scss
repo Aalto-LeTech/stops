@@ -125,7 +125,7 @@ label {
 
 h1 {
   font-family: sans-serif;
-  font-size: 140%;
+  font-size: 180%;
   margin: 2em 0em .5em 0em;
 }
 
@@ -275,9 +275,13 @@ $button_danger_active_color:  #8F1F1F;
 * Information boxes
 *******************/
 
-$info_box_base_color:   #9FD7ED;
-$info_box_border_color: #749DAD;
-$info_box_text_color:   #285A6D;
+$info_box_base_color:     #9FD7ED;
+$info_box_border_color:   #749DAD;
+$info_box_text_color:     #285A6D;
+
+$error_info_base_color:   #F5BDBC;
+$error_info_border_color: #EDAAA8;
+$error_info_text_color:   #E8413F;
 
 div.info {
   @include border-radius(4px);
@@ -291,14 +295,28 @@ div.info {
   font-size:        13px;
 }
 
+div.long-info{
+  width: 100%;
+  box-sizing: border-box;
+}
+
 div.error-info {
+  background-color: $error_info_base_color;
+  border:           1px solid $error_info_border_color;
+  color:            $error_info_text_color;
+}
+
+
+
+/* Specialized error info box for /curriculums/:id/competences/:id/edit view */
+div.skill-error-info {
   @extend div.info;
   padding-left:   57px;
   padding-right:  20px;
   position:       relative;
   min-height:     35px;
 
-  div.error-image {
+  div.skill-error-image {
     @include border-radius(3px);
     background-color: red;
 
@@ -316,7 +334,7 @@ div.error-info {
     }
   }
 
-  div.error-contents {
+  div.skill-error-contents {
     
   }
 }

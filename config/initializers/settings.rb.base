@@ -4,3 +4,6 @@ ERRORS_EMAIL = nil
 
 # Regexp for detecting course codes
 COURSE_CODE_FORMAT = /^\w+-\d+\.\d+$/
+
+# Define locales for which translations must be found
+REQUIRED_LOCALES = ['fi', 'en']

@@ -3,7 +3,7 @@
 # The data can then be loaded with the rake db:seed (or created alongside the db with db:setup).
 #
 # Examples:
-#   
+#
 #   cities = City.create([{ :name => 'Chicago' }, { :name => 'Copenhagen' }])
 #   Major.create(:name => 'Daley', :city => cities.first)
 
@@ -36,30 +36,6 @@ SkillLevel.create(:level => 4, :locale => 'en', :name => 'Analysing/evaluating')
 SkillLevel.create(:level => 5, :locale => 'en', :name => 'Creating/synthesising')
 
 
-
-# Users
-puts('Creating users')
-
-user = User.new(:password => 'admin', :password_confirmation => 'admin', :name => 'Admin', :email => 'admin@example.com')
-#user.studentnumber = '12345'
-user.login = 'admin'
-user.studentnumber = 'admin'
-user.admin = true
-user.save
-
-# Create students
-for i in 1..10 do
-  r = User.new
-  r.studentnumber = i.to_s.rjust(5, '0')
-  r.login = i.to_s.rjust(5, '0')
-  r.password = "student#{i}"
-  r.password_confirmation = "student#{i}"
-  r.name = "Student #{i}"
-  r.email = "student#{i}@example.com"
-  r.save
-end
-
-
 # Periods
 puts('Creating periods')
 period_names_fi = ["III kevät","IV kevät"," kesä","I syksy","II syksy"]
@@ -74,8 +50,34 @@ for year in 2005..2020 do
     p.begins_at = "#{period_begins[period]}-#{year}"
     p.ends_at = "#{period_ends[period]}-#{year}"
     p.save
-    
+
     PeriodDescription.create(:period_id => p.id, :locale => 'fi', :name => "#{year} #{period_names_fi[period]}")
     PeriodDescription.create(:period_id => p.id, :locale => 'en', :name => "#{year} #{period_names_en[period]}")
   end
+end
+
+first_period = Period.order(:begins_at).first
+
+# Users
+puts('Creating users')
+
+user = User.new(:password => 'admin', :password_confirmation => 'admin', :name => 'Admin', :email => 'admin@example.com')
+#user.studentnumber = '12345'
+user.first_study_period = first_period
+user.login = 'admin'
+user.studentnumber = 'admin'
+user.admin = true
+user.save
+
+# Create students
+for i in 1..10 do
+  r = User.new
+  r.studentnumber = i.to_s.rjust(5, '0')
+  r.login = i.to_s.rjust(5, '0')
+  r.first_study_period = first_period
+  r.password = "student#{i}"
+  r.password_confirmation = "student#{i}"
+  r.name = "Student #{i}"
+  r.email = "student#{i}@example.com"
+  r.save
 end

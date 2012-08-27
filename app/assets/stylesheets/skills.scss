@@ -45,6 +45,10 @@ table.search-results {
 
   }
 
+  tr:hover {
+    background: #eee;
+  }
+
   tr.skill-search-result {
     background: #B0DAFF;
   }
@@ -58,7 +62,7 @@ table.search-results {
     padding: 4px 14px;
   }
 
-  
+
 }
 
 
@@ -87,7 +91,7 @@ table#skill-current-prereqs {
 }
 
 /* Prereq add/remove failure icon styling */
-table.search-results, 
+table.search-results,
 table#skill-current-prereqs {
 
   td.skill-search-warning-image {

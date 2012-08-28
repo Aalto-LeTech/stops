@@ -154,6 +154,20 @@ h4.colorful {
   border-bottom: 1px solid #704500;
 }
 
+/* Container which inlines headings, allowing other elements to be
+ * added inline with the heading. */
+.inline-heading-container {
+  * {
+    display:        inline-block;
+    margin-right:   10px;
+  }
+
+  a.vertical-fix {
+    position: relative;
+    top:      -5px;
+  }
+}
+
 
 /************************
 * General utility classes

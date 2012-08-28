@@ -2,10 +2,12 @@
   <%= javascript_include_tag "curriculums/curriculum" %>
 <% end %>
 
-<h1 id="name-heading"><%= @curriculum.name %></h1>
-<a href="#edit-modal" data-toggle="modal" class="button-base button-small">
-  <%= t '.change_name' %>
-</a>
+<div class="inline-heading-container">
+  <h1 id="name-heading"><%= @curriculum.name %></h1>
+  <a href="#edit-modal" data-toggle="modal" class="button-base button-small vertical-fix">
+    <%= t '.change_name' %>
+  </a>
+</div>
 
 <%= render "edit_modal" %>
 

@@ -30,7 +30,7 @@ fi:
       list_outcomes: "Listaa valmiudet"
     edit:
       import_csv_link: "Tuo tiedot CSV datasta"
-      change_name: "Muuta nimi"
+      change_name: "Nimeä uudelleen"
     edit_modal:
       heading: "Muuta opinto-ohjelman nimi"
       name_label: "Opinto-ohjelman nimi"

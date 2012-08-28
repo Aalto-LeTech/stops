@@ -44,6 +44,7 @@ fi:
     profiles_list:
       edit_profile_prefix: "Muokkaa osaamisprofiilia"
       no_profile_name: "kokonaisuudella ei nimeä"
+      no_profiles_placeholder: "Opinto-ohjelmassa ei ole yhtään osaamisprofiilia."
     courses_list:
       course_code: "Koodi"
       course_name: "Nimi"
@@ -52,6 +53,7 @@ fi:
       course_period: "Periodi"
       prerequisites: "Esitietovaatimukset"
       prerequisites_help: "Opintopisteet: Uudet esitietovaatimukset + suunnitelmaan jo sisällytetyt"
+      no_courses_placeholder: "Opinto-ohjelmassa ei ole kursseja."
 
   activerecord:
     errors:

@@ -43,6 +43,7 @@ en:
     profiles_list:
       edit_profile_prefix: "Edit profile"
       no_profile_name: "no profile name"
+      no_profiles_placeholder: "There are no profiles in the curriculum."
     courses_list:
       course_code: "Code"
       course_name: "Name"
@@ -51,6 +52,7 @@ en:
       course_period: "Period"
       prerequisites: "Prerequisites"
       prerequisites_help: "Credits: New prerequisites + already included in plan"
+      no_courses_placeholder: "There are no courses in the curriculum."
 
   activerecord:
     errors:

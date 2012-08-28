@@ -25,6 +25,9 @@ fi:
     competence_profiles: "Osaamisprofiilit"
     curriculum_courses: "Opinto-ohjelman kurssit"
 
+    index:
+      curriculum: "Opinto-opas"
+      years: "Käytössä vuosina"
     show:
       # Admin tools
       list_outcomes: "Listaa valmiudet"

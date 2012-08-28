@@ -24,6 +24,9 @@ en:
     competence_profiles: "Competence profiles"
     curriculum_courses: "Curriculum courses"
 
+    index:
+      curriculum: "Curriculum"
+      years: "Years in use"
     show:
       # Admin tools
       list_outcomes: "List outcomes"

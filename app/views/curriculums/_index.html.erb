@@ -1,13 +1,24 @@
 <h1><%=t :curriculums_heading %></h1>
 
-<table>
-  <% @curriculums.each do |curriculum| %>
+<% if can? :create, Curriculum %>
+  <p><%= link_to t(:curriculum_new), new_curriculum_path, :class => 'button-base' %></p>
+<% end %>
+
+<table class="basic-table">
+  <thead>
     <tr>
-      <td><%= link_to curriculum.name, curriculum_url(:id => curriculum) %></td>
+      <th><%= t '.curriculum' %></th>
+      <th><%= t '.years' %></th>
     </tr>
-  <% end %>
+  </thead>
+  <tbody>
+    <% @curriculums.each do |curriculum| %>
+      <tr>
+        <td><%= link_to curriculum.name, curriculum_url(:id => curriculum) %></td>
+        <td><%= curriculum.start_year %>-<%= curriculum.end_year %></td>
+      </tr>
+    <% end %>
+  </tbody>
 </table> 
 
-<% if can? :create, Curriculum %>
-  <p><%= link_to t(:curriculum_new), new_curriculum_path %></p>
-<% end %>
+

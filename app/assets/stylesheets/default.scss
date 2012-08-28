@@ -192,6 +192,68 @@ h4.colorful {
 }
 
 
+/*******************
+*  Generic tables
+********************/ 
+
+$table_radius: 6px;
+table.basic-table {
+  text-align:       left;
+  line-height:      1.3em;
+  border-collapse:  separate;
+  margin:           1.1em 1.1em 1.1em 0;
+
+  thead {
+    background-color: whitesmoke;
+    
+    tr {
+      
+
+      th {
+        padding:      10px 8px;
+        border-style: solid;
+        border-color: gray;
+        border-width: 1px 1px 1px 0;
+
+        &:first-child {
+          @include border-radius($table_radius 0 0 0);
+          border-left: 1px solid gray;
+        }
+
+        &:last-child {
+          @include border-radius(0 $table_radius 0 0);
+        }
+      }
+    }
+  }
+
+  tbody {
+    tr {
+      td {
+        border-style: solid;
+        border-color: gray;
+        border-width: 0 1px 1px 0;
+        padding:      6px 8px;
+
+        &:first-child {
+          border-left: 1px solid gray;
+        }
+      }
+
+      &:last-child {
+        td:first-child {
+          @include border-radius(0 0 0 $table_radius);
+        }
+
+        td:last-child {
+          @include border-radius(0 0 $table-radius 0);
+        }
+      }
+    }
+  }
+}
+
+
 /******************
  * Buttons
  *****************/

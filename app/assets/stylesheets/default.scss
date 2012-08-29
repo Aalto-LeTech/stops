@@ -317,6 +317,11 @@ $button_danger_active_color:  #8F1F1F;
   padding: 2px 9px;
 }
 
+.button-small-abs {
+  @extend .button-small;
+  line-height:  13px;
+}
+
 
 .button-success {
 

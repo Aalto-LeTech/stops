@@ -4,18 +4,28 @@
   <p><%= link_to t(:curriculum_new), new_curriculum_path, :class => 'button-base' %></p>
 <% end %>
 
-<table class="basic-table">
+<%= render 'remove_confirmation_modal' %>
+
+<table id="curriculums-table" class="basic-table">
   <thead>
     <tr>
       <th><%= t '.curriculum' %></th>
       <th><%= t '.years' %></th>
+      <% if can? :destroy, Curriculum %>
+        <th></th>
+      <% end %>
     </tr>
   </thead>
   <tbody>
     <% @curriculums.each do |curriculum| %>
       <tr>
-        <td><%= link_to curriculum.name, curriculum_url(:id => curriculum) %></td>
+        <td data-name="true"><%= link_to curriculum.name, curriculum_url(:id => curriculum) %></td>
         <td><%= curriculum.start_year %>-<%= curriculum.end_year %></td>
+        <% if can? :destroy, Curriculum %>
+          <td>
+            <a data-initiate-delete="true" data-target-id="<%= curriculum.id %>" class="button-base button-danger button-small-abs"><%= t 'Delete' %></a>
+          </td>
+        <% end %>
       </tr>
     <% end %>
   </tbody>

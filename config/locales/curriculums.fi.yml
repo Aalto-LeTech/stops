@@ -28,6 +28,10 @@ fi:
     index:
       curriculum: "Opinto-opas"
       years: "Käytössä vuosina"
+    remove_confirmation_modal:
+      heading: "Vahvista poisto"
+      message: "Oletko varma, että haluat poistaa seuraavan opetusohjelman?"
+      curriculum: "Opetusohjelma"
     show:
       # Admin tools
       list_outcomes: "Listaa valmiudet"

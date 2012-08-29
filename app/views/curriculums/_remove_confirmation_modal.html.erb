@@ -1,0 +1,27 @@
+<div id="delete-modal" class="modal fade hide">
+  <div id="delete-modal-strings"
+    data-locale="<%= I18n.locale %>"></div>
+
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3><%= t '.heading' %></h3>
+  </div>
+
+  <div class="modal-body">
+    <div id="delete-modal-error-box" class="info error-info long-info hide">
+    </div>
+    <div id="delete-modal-loading" class="hide">
+      <%= image_tag 'progress.gif' %> 
+      <div><%= t '.deleting' %>...</div>
+    </div>
+    <p><%= t '.message' %></p>
+    <p>
+        <%= t '.curriculum' %>: <strong id="delete-modal-target-name"></strong>
+    </p>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" data-dismiss="modal" class="button-base"><%= t 'Cancel' %></button>
+    <a href="" data-method="delete" id="delete-modal-delete-button" class="button-base button-danger"><%= t 'Delete' %></a>
+  </div>
+</div>

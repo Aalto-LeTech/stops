@@ -27,6 +27,10 @@ en:
     index:
       curriculum: "Curriculum"
       years: "Years in use"
+    remove_confirmation_modal:
+      heading: "Confirm deletion"
+      message: "Are you sure you want to delete the following curriculum?"
+      curriculum: "Curriculum" 
     show:
       # Admin tools
       list_outcomes: "List outcomes"

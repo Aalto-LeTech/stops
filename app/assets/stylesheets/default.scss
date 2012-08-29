@@ -230,6 +230,10 @@ table.basic-table {
         &:last-child {
           @include border-radius(0 $table_radius 0 0);
         }
+
+        &:only-child {
+          @include border-radius($table_radius $table_radius 0 0);
+        }
       }
     }
   }
@@ -254,6 +258,10 @@ table.basic-table {
 
         td:last-child {
           @include border-radius(0 0 $table-radius 0);
+        }
+
+        td:only-child {
+          @include border-radius(0 0 $table_radius $table_radius);
         }
       }
     }

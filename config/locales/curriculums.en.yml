@@ -31,6 +31,8 @@ en:
       heading: "Confirm deletion"
       message: "Are you sure you want to delete the following curriculum?"
       curriculum: "Curriculum" 
+    new:
+      confirm_create: "Create"
     show:
       # Admin tools
       list_outcomes: "List outcomes"

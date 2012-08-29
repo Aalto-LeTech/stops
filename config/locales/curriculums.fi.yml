@@ -32,6 +32,8 @@ fi:
       heading: "Vahvista poisto"
       message: "Oletko varma, että haluat poistaa seuraavan opetusohjelman?"
       curriculum: "Opetusohjelma"
+    new:
+      confirm_create: "Lisää"
     show:
       # Admin tools
       list_outcomes: "Listaa valmiudet"

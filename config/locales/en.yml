@@ -26,12 +26,13 @@ en:
   cr: "cr"
   Ok: "OK"
   Upload: "Upload"
+  Create: "Create"
   Edit: "Edit"
   Save: "Save"
   Delete: "Delete"
   Select: "Select"
   Cancel: "Cancel"
-  Back: "Takaisin"
+  Back: "Back"
   Visualize: "Visualize"
 
 

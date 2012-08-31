@@ -3,6 +3,8 @@ class CoursesController < ApplicationController
   layout 'course'
   
   before_filter :load_curriculum
+
+  add_translated_crumb 'breadcrumbs.users.index', :users_path
   
   # GET /courses
   # GET /courses.xml
@@ -20,6 +22,8 @@ class CoursesController < ApplicationController
   def show
     @course = ScopedCourse.find(params[:id])
 
+    add_translated_crumb @course.name, course_path(:id => params[:id])
+
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @course }
@@ -29,11 +33,16 @@ class CoursesController < ApplicationController
   # GET /courses/1/graph
   def graph
     @course = ScopedCourse.find(params[:id])
+
+    add_translated_crumb @course.name, course_path(:id => params[:id])
+    add_translated_crumb 'breadcrumbs.courses.graph', graph_course_path(:id => params[:id])
   end
 
   # GET /courses/new
   # GET /courses/new.xml
   def new
+    add_translated_crumb 'breadcrumbs.courses.new', new_course_path
+
     @course = Course.new
 
     respond_to do |format|
@@ -45,11 +54,16 @@ class CoursesController < ApplicationController
   # GET /courses/1/edit
   def edit
     @course = Course.find(params[:id])
+
+    add_translated_crumb @course.name, course_path(:id => params[:id])
+    add_translated_crumb 'breadcrumbs.courses.edit', edit_course_path(:id => params[:id])
   end
 
   # POST /courses
   # POST /courses.xml
   def create
+    add_translated_crumb 'breadcrumbs.courses.new', new_course_path
+
     @course = Course.new(params[:course])
 
     respond_to do |format|
@@ -67,6 +81,9 @@ class CoursesController < ApplicationController
   # PUT /courses/1.xml
   def update
     @course = Course.find(params[:id])
+
+    add_translated_crumb @course.name, course_path(:id => params[:id])
+    add_translated_crumb 'breadcrumbs.courses.edit', edit_course_path(:id => params[:id])
 
     respond_to do |format|
       if @course.update_attributes(params[:course])

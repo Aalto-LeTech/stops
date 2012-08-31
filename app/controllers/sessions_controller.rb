@@ -1,9 +1,14 @@
 class SessionsController < ApplicationController
+
   def new
+    add_translated_crumb 'breadcrumbs.sessions.login', login_path
+
     @user_session = UserSession.new
   end
 
   def create
+    add_translated_crumb 'breadcrumbs.sessions.login', login_path
+
     @user_session = UserSession.new(params[:user_session])
     
     session[:logout_url] = nil
@@ -32,7 +37,7 @@ class SessionsController < ApplicationController
     if logout_url
       redirect_to(logout_url)
     else
-      redirect_to(root_url)
+      redirect_to(localized_root_url)
     end
   end
   

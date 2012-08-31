@@ -9,6 +9,11 @@ class Curriculums::CompetencesController < CurriculumsController
   authorize_resource
   skip_authorize_resource :except => [:index, :show, :edit, :update]
 
+
+  add_translated_crumb 'breadcrumbs.curriculums.competences.index', Proc.new do
+    curriculum_competences_path(:curriculum_id => params[:curriculum_id], :id => params[:id])
+  end
+
   def index
     load_curriculum
     @competences = Competence.where(:profile_id => @curriculum.profile_ids).joins(:competence_descriptions).where(["competence_descriptions.locale = ?", I18n.locale])

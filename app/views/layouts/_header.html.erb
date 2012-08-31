@@ -31,6 +31,11 @@
 
 <div class="clear"></div>
 
+<%= render_crumbs :format => :html_list, 
+                  :separator => content_tag(:span, '&raquo;'.html_safe, :class => 'divider'),
+                  :ul_class => 'breadcrumb',
+                  :active_li_class => 'active' %>
+
 <div class="topNaviTabs">
   <ul>
     <li><%= link_to t(:frontpageTab), root_path %></li>
@@ -49,5 +54,7 @@
     <!--li><%= link_to t(:myPlanTabRecord), studyplan_record_path %></li-->
   </ul>
 </div>
+
+
 
 <div class="clear"></div>

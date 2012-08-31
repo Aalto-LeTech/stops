@@ -1,0 +1,29 @@
+en:
+  breadcrumbs:
+    home: "Home"
+
+    curriculums:
+      index: "Curriculums"
+      new: "Create new curriculum"
+      edit: "Edit"
+      import_csv: "Import from CSV data"
+      cycles: "Check cycles"
+
+    skills:
+      index: "Skills"
+      new: "Create new skill"
+      edit: "Edit"
+
+    sessions:
+      login: "Login"
+
+    users:
+      index: "Users"
+      new: "Create new user"
+      courses: "Courses"
+
+    courses:
+      index: "Courses"
+      new: "Create new course"
+      edit: "Edit"
+      graph: "Prereq graph"

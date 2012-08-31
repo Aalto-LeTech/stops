@@ -30,8 +30,8 @@ fi:
       years: "Käytössä vuosina"
     remove_confirmation_modal:
       heading: "Vahvista poisto"
-      message: "Oletko varma, että haluat poistaa seuraavan opetusohjelman?"
-      curriculum: "Opetusohjelma"
+      message: "Oletko varma, että haluat poistaa seuraavan opintoohjelman?"
+      curriculum: "Opinto-ohjelma"
     new:
       confirm_create: "Lisää"
     show:

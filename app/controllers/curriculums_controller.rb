@@ -7,6 +7,8 @@ class CurriculumsController < ApplicationController
 
   caches_page :prereqs
 
+  add_translated_crumb 'breadcrumbs.curriculums.index', :curriculums_path
+
   def load_curriculum
     @curriculum = Curriculum.find(params[:curriculum_id])
   end
@@ -14,6 +16,8 @@ class CurriculumsController < ApplicationController
   # GET /curriculums
   # GET /curriculums.xml
   def index
+    
+
     @curriculums = Curriculum.all(:order => 'start_year DESC')
     authorize! :read, Curriculum
 
@@ -28,6 +32,8 @@ class CurriculumsController < ApplicationController
   def show
     load_curriculum_for_show_and_edit
 
+    add_crumb @curriculum.name, curriculum_path(:id => params[:id])
+
     authorize! :read, @curriculum
 
     respond_to do |format|
@@ -39,6 +45,8 @@ class CurriculumsController < ApplicationController
   # GET /curriculums/new
   # GET /curriculums/new.xml
   def new
+    add_translated_crumb 'breadcrumbs.curriculums.new', new_curriculum_path
+
     @curriculum = Curriculum.new
     authorize! :create, @curriculum
 
@@ -52,12 +60,19 @@ class CurriculumsController < ApplicationController
   def edit
     load_curriculum_for_show_and_edit
     authorize! :update, @curriculum
+
+    add_crumb @curriculum.name, curriculum_path(:id => params[:id])
+    add_translated_crumb 'breadcrumbs.curriculums.edit', edit_curriculum_path(:id => params[:id])
   end
 
   # GET /curriculums/1/edit/import_csv
   def import_csv
     @curriculum = Curriculum.find(params[:id])
     authorize! :update, @curriculum
+
+    add_crumb @curriculum.name, curriculum_path(:id => params[:id])
+    add_translated_crumb 'breadcrumbs.curriculums.edit', edit_curriculum_path(:id => params[:id])
+    add_translated_crumb 'breadcrumbs.curriculums.import_csv', edit_import_csv_curriculum_path(:id => params[:id])
   end
 
   # POST /curriculums
@@ -65,6 +80,8 @@ class CurriculumsController < ApplicationController
   def create
     @curriculum = Curriculum.new(params[:curriculum])
     authorize! :create, @curriculum
+
+    add_translated_crumb 'breadcrumbs.curriculums.new', new_curriculum_path
 
     respond_to do |format|
       if @curriculum.save
@@ -122,6 +139,9 @@ class CurriculumsController < ApplicationController
 
   def cycles
     @curriculum = Curriculum.find(params[:id])
+
+    add_crumb @curriculum.name, curriculum_path(:id => params[:id])
+    add_translated_crumb 'breadcrumbs.curriculums.cycles', cycles_curriculum_path(:id => params[:id])
 
     @cycles = @curriculum.detect_cycles
   end

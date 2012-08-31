@@ -1,8 +1,12 @@
 class UsersController < ApplicationController
   respond_to :json, :only => 'courses'
 
+  add_translated_crumb 'breadcrumbs.users.index', :users_path
+
   # render new.rhtml
   def new
+    add_translated_crumb 'breadcrumbs.users.new', new_user_path
+
     @user = User.new
   end
   
@@ -15,6 +19,8 @@ class UsersController < ApplicationController
   end
  
   def create
+    add_translated_crumb 'breadcrumbs.users.new', new_user_path
+
     #logout_keeping_session!
     @user = User.new(params[:user])
     success = @user && @user.save
@@ -33,6 +39,8 @@ class UsersController < ApplicationController
   end
   
   def courses
+    add_translated_crumb 'breadcrumbs.users.courses', courses_user_path
+
     # TODO: authorization
     @user = User.find(params[:id])
     user_courses = @user.user_courses.joins(:course_instance, :scoped_course).select('code, scoped_course_id, period_id')

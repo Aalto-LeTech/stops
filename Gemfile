@@ -48,6 +48,8 @@ gem 'cancan'
 gem 'fastercsv'
 gem 'acts_as_list'
 
+#gem 'breadcrumbs_on_rails'
+gem 'crummy' #,:git => 'path_to_modified_crummy_repository', :branch => 'i18n'
 
 # Bundle gems for the local environment. Make sure to
 # put test-only gems in this group so their generators

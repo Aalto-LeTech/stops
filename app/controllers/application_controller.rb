@@ -11,6 +11,8 @@ class ApplicationController < ActionController::Base
   before_filter :set_locale
   before_filter :require_login?
 
+  add_translated_crumb 'breadcrumbs.home', :localized_root_path
+
   protected
 
   # Redirects from http to https if FORCE_SSL is set.

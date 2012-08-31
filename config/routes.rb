@@ -112,7 +112,7 @@ Ops::Application.routes.draw do
 
   end
 
-  match '/:locale' => "frontpage#index"
+  match '/:locale' => "frontpage#index", :as => 'localized_root'
   root :to => "frontpage#index"
 
 end

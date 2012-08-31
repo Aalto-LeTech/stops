@@ -1,8 +1,12 @@
 class SkillsController < ApplicationController
   
   #before_filter :load_curriculum
-    
+  
+  add_translated_crumb 'breadcrumbs.skills.index', :skills_path
+
   def new
+    add_translated_crumb 'breadcrumbs.skills.new', new_skill_path
+
     @skill = Skill.new
     
     if params[:competence_id]
@@ -25,6 +29,8 @@ class SkillsController < ApplicationController
   
   # POST /skills
   def create
+    add_translated_crumb 'breadcrumbs.skills.new', new_skill_path
+
     @skill = Skill.new(params[:skill])
 
     respond_to do |format|
@@ -41,6 +47,8 @@ class SkillsController < ApplicationController
   end
   
   def edit
+    add_translated_crumb 'breadcrumbs.skills.edit', edit_skill_path(:id => params[:id])
+
     @skill = Skill.find(params[:id])
     
     respond_to do |format|
@@ -52,6 +60,8 @@ class SkillsController < ApplicationController
   
   # PUT /skills/1
   def update
+    add_translated_crumb 'breadcrumbs.skills.edit', edit_skill_path(:id => params[:id])
+    
     @skill = Skill.find(params[:id])
     
     if @skill.skillable_type == ScopedCourse

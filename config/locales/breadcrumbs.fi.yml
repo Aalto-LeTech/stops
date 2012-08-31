@@ -1,0 +1,29 @@
+fi:
+  breadcrumbs:
+    home: "Etusivu"
+
+    curriculums:
+      index: "Opinto-ohjelmat"
+      new: "Luo uusi opinto-ohjelma"
+      edit: "Muokkaa"
+      import_csv: "Tuo CSV-datasta"
+      cycles: "Tarkista esitietosyklit"
+
+    skills:
+      index: "Valmiudet"
+      new: "Luo uusi valmius"
+      edit: "Muokkaa"
+
+    sessions:
+      login: "Kirjaudu sisään"
+
+    users:
+      index: "Käyttäjät"
+      new: "Luo uusi käyttäjä"
+      courses: "Kurssit"
+
+    courses:
+      index: "Kurssit"
+      new: "Luo uusi kurssi"
+      edit: "Muokkaa"
+      graph: "Esitietoverkko"

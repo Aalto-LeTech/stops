@@ -15,12 +15,12 @@ class Ability
     can :choose, ScopedCourse
     can :read, Skill
     
+    # User can edit own preferences
+    can [:read, :update], User, :id => user.id
+    
     # Admin
     if user.admin?
-      can :read, :all
-      can :update, :all
-      can :create, :all
-      can :destroy, :all
+      can :manage, :all
     end
   end
 end

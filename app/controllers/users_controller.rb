@@ -1,8 +1,9 @@
 class UsersController < ApplicationController
   respond_to :json, :only => 'courses'
 
-  # render new.rhtml
   def new
+    authorize! :create, User
+    
     @user = User.new
   end
   
@@ -12,9 +13,15 @@ class UsersController < ApplicationController
     else
       @user = current_user
     end
+    
+    authorize! :update, @user
   end
  
+  # TODO: update user
+  
   def create
+    authorize! :create, User
+    
     #logout_keeping_session!
     @user = User.new(params[:user])
     success = @user && @user.save
@@ -33,14 +40,15 @@ class UsersController < ApplicationController
   end
   
   def courses
-    # TODO: authorization
     @user = User.find(params[:id])
+    
+    authorize! :read, @user
+    
     user_courses = @user.user_courses.joins(:course_instance, :scoped_course).select('code, scoped_course_id, period_id')
     #prereqs = CoursePrereq.where(:requirement => STRICT_PREREQ).joins('INNER JOIN scoped_courses AS course ON course.id = course_prereqs.scoped_course_id INNER JOIN scoped_courses AS prereq ON prereq.id = course_prereqs.scoped_prereq_id').where("course.curriculum_id = ?", @curriculum).select('course.code AS course_code, prereq.code AS prereq_code, course.id')
     
     respond_to do |format|
       format.json { render :json => user_courses.to_json }
     end
-    
   end
 end

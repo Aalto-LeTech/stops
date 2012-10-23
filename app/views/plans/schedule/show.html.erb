@@ -88,7 +88,7 @@
       <div class="course" id="course-<%= user_course.scoped_course.code %>" 
         data-id="<%= user_course.id %>"
         data-code="<%= user_course.scoped_course.code %>" 
-        data-name="<%= user_course.scoped_course.abstract_course.course_descriptions_with_locale[0].name %>"
+        data-name="<%= user_course.scoped_course.abstract_course.course_descriptions_with_locale.empty? ? '' : user_course.scoped_course.abstract_course.course_descriptions_with_locale[0].name %>"
         data-credits="<%= user_course.scoped_course.credits || '0' %>" 
         data-passed="<%= user_course.passed? ? 'true' : 'false' %>" 
         data-period="<%= user_course.course_instance_id ? user_course.course_instance.period_id : '' %>" ><%= user_course.scoped_course.code + ' ' + user_course.scoped_course.name(I18n.locale) %></div>

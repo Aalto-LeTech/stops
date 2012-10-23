@@ -125,7 +125,7 @@ label {
 
 h1 {
   font-family: sans-serif;
-  font-size: 140%;
+  font-size: 180%;
   margin: 2em 0em .5em 0em;
 }
 
@@ -154,6 +154,20 @@ h4.colorful {
   border-bottom: 1px solid #704500;
 }
 
+/* Container which inlines headings, allowing other elements to be
+ * added inline with the heading. */
+.inline-heading-container {
+  * {
+    display:        inline-block;
+    margin-right:   10px;
+  }
+
+  a.vertical-fix {
+    position: relative;
+    top:      -5px;
+  }
+}
+
 
 /************************
 * General utility classes
@@ -175,6 +189,83 @@ h4.colorful {
 
 .centered {
   text-align: center;
+}
+
+.placeholder {
+  font-style:   italic;
+  color:        gray;
+  font-size:    0.9em;
+  font-family:  Arial, sans-serif;
+}
+
+
+/*******************
+*  Generic tables
+********************/ 
+
+$table_radius: 6px;
+table.basic-table {
+  text-align:       left;
+  line-height:      1.3em;
+  border-collapse:  separate;
+  margin:           1.1em 1.1em 1.1em 0;
+
+  thead {
+    background-color: whitesmoke;
+    
+    tr {
+      
+
+      th {
+        padding:      10px 8px;
+        border-style: solid;
+        border-color: gray;
+        border-width: 1px 1px 1px 0;
+
+        &:first-child {
+          @include border-radius($table_radius 0 0 0);
+          border-left: 1px solid gray;
+        }
+
+        &:last-child {
+          @include border-radius(0 $table_radius 0 0);
+        }
+
+        &:only-child {
+          @include border-radius($table_radius $table_radius 0 0);
+        }
+      }
+    }
+  }
+
+  tbody {
+    tr {
+      td {
+        border-style: solid;
+        border-color: gray;
+        border-width: 0 1px 1px 0;
+        padding:      6px 8px;
+
+        &:first-child {
+          border-left: 1px solid gray;
+        }
+      }
+
+      &:last-child {
+        td:first-child {
+          @include border-radius(0 0 0 $table_radius);
+        }
+
+        td:last-child {
+          @include border-radius(0 0 $table-radius 0);
+        }
+
+        td:only-child {
+          @include border-radius(0 0 $table_radius $table_radius);
+        }
+      }
+    }
+  }
 }
 
 
@@ -234,6 +325,11 @@ $button_danger_active_color:  #8F1F1F;
   padding: 2px 9px;
 }
 
+.button-small-abs {
+  @extend .button-small;
+  line-height:  13px;
+}
+
 
 .button-success {
 
@@ -275,9 +371,13 @@ $button_danger_active_color:  #8F1F1F;
 * Information boxes
 *******************/
 
-$info_box_base_color:   #9FD7ED;
-$info_box_border_color: #749DAD;
-$info_box_text_color:   #285A6D;
+$info_box_base_color:     #9FD7ED;
+$info_box_border_color:   #749DAD;
+$info_box_text_color:     #285A6D;
+
+$error_info_base_color:   #F5BDBC;
+$error_info_border_color: #EDAAA8;
+$error_info_text_color:   #E8413F;
 
 div.info {
   @include border-radius(4px);
@@ -291,14 +391,28 @@ div.info {
   font-size:        13px;
 }
 
+div.long-info{
+  width: 100%;
+  box-sizing: border-box;
+}
+
 div.error-info {
+  background-color: $error_info_base_color;
+  border:           1px solid $error_info_border_color;
+  color:            $error_info_text_color;
+}
+
+
+
+/* Specialized error info box for /curriculums/:id/competences/:id/edit view */
+div.skill-error-info {
   @extend div.info;
   padding-left:   57px;
   padding-right:  20px;
   position:       relative;
   min-height:     35px;
 
-  div.error-image {
+  div.skill-error-image {
     @include border-radius(3px);
     background-color: red;
 
@@ -316,7 +430,7 @@ div.error-info {
     }
   }
 
-  div.error-contents {
+  div.skill-error-contents {
     
   }
 }

@@ -3,3 +3,30 @@
     padding-right: 10px;
   }
 }
+
+#edit-modal {
+  .modal-body {
+    position: relative;
+
+    label {
+      margin-right: 15px;
+      font-weight:  bold;
+    }
+
+    input {
+      display: inline-block;
+    }
+
+    #edit-modal-loading {
+      text-align:       center;
+      position:         absolute;
+      top:              0px;
+      right:            0px;
+      bottom:           0px;
+      left:             0px;
+      opacity:          0.9;
+      background-color: whitesmoke;
+      padding-top:      15px;
+    }
+  }
+}

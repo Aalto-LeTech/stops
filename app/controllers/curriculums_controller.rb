@@ -26,11 +26,7 @@ class CurriculumsController < ApplicationController
   # GET /curriculums/1
   # GET /curriculums/1.xml
   def show
-    @curriculum = Curriculum.includes(
-      :courses, 
-      :profiles, 
-      :courses => [:abstract_course, :periods, :course_description_with_locale, :strict_prereqs],
-    ).find(params[:id])
+    load_curriculum_for_show_and_edit
 
     authorize! :read, @curriculum
 
@@ -54,6 +50,12 @@ class CurriculumsController < ApplicationController
 
   # GET /curriculums/1/edit
   def edit
+    load_curriculum_for_show_and_edit
+    authorize! :update, @curriculum
+  end
+
+  # GET /curriculums/1/edit/import_csv
+  def import_csv
     @curriculum = Curriculum.find(params[:id])
     authorize! :update, @curriculum
   end
@@ -66,7 +68,7 @@ class CurriculumsController < ApplicationController
 
     respond_to do |format|
       if @curriculum.save
-        format.html { redirect_to(curriculum_url(:id => @curriculum), :notice => 'Curriculum was successfully created.') }
+        format.html { redirect_to(edit_curriculum_url(:id => @curriculum), :notice => 'Curriculum was successfully created.') }
         format.xml  { render :xml => @curriculum, :status => :created, :location => @curriculum }
       else
         format.html { render :action => "new" }
@@ -93,17 +95,15 @@ class CurriculumsController < ApplicationController
       flash[:success] = "#{params[:profiles_csv].original_filename} uploaded"
     end
 
-    render :action => "edit"
-
-#     respond_to do |format|
-#       if @curriculum.update_attributes(params[:curriculum])
-#         format.html { redirect_to(@curriculum, :notice => 'Curriculum was successfully updated.') }
-#         format.xml  { head :ok }
-#       else
-#         format.html { render :action => "edit" }
-#         format.xml  { render :xml => @curriculum.errors, :status => :unprocessable_entity }
-#       end
-#     end
+    respond_to do |format|
+      if @curriculum.update_attributes(params[:curriculum])
+        format.html { redirect_to(@curriculum, :notice => 'Curriculum was successfully updated.') }
+        format.js { head :ok }
+      else
+        format.html { render :action => "edit", :notice => 'Saving unsuccessful, no data saved!'}
+        format.js { head :internal_server_error }
+      end
+    end
   end
 
   # DELETE /curriculums/1
@@ -149,6 +149,17 @@ class CurriculumsController < ApplicationController
 
   def outcomes
     @curriculum = Curriculum.find(params[:id])
+  end
+
+  private
+
+  # Loads curriculum object with necessary associations eagerly loaded
+  def load_curriculum_for_show_and_edit
+    @curriculum = Curriculum.includes(
+      :courses, 
+      :profiles, 
+      :courses => [:abstract_course, :periods, :course_description_with_locale, :strict_prereqs],
+    ).find(params[:id])
   end
 
 end

@@ -1,13 +1,34 @@
 <h1><%=t :curriculums_heading %></h1>
 
-<table>
-  <% @curriculums.each do |curriculum| %>
+<% if can? :create, Curriculum %>
+  <p><%= link_to t(:curriculum_new), new_curriculum_path, :class => 'button-base' %></p>
+<% end %>
+
+<%= render 'remove_confirmation_modal' %>
+
+<table id="curriculums-table" class="basic-table">
+  <thead>
     <tr>
-      <td><%= link_to curriculum.name, curriculum_url(:id => curriculum) %></td>
+      <th><%= t '.curriculum' %></th>
+      <th><%= t '.years' %></th>
+      <% if can? :destroy, Curriculum %>
+        <th></th>
+      <% end %>
     </tr>
-  <% end %>
+  </thead>
+  <tbody>
+    <% @curriculums.each do |curriculum| %>
+      <tr>
+        <td data-name="true"><%= link_to curriculum.name, curriculum_url(:id => curriculum) %></td>
+        <td><%= curriculum.start_year %>-<%= curriculum.end_year %></td>
+        <% if can? :destroy, Curriculum %>
+          <td>
+            <a data-initiate-delete="true" data-target-id="<%= curriculum.id %>" class="button-base button-danger button-small-abs"><%= t 'Delete' %></a>
+          </td>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
 </table> 
 
-<% if can? :create, Curriculum %>
-  <p><%= link_to t(:curriculum_new), new_curriculum_path %></p>
-<% end %>
+

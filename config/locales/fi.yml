@@ -27,6 +27,7 @@ fi:
   cr: "op"
   Ok: "OK"
   Upload: "Tallenna"
+  Create: "Luo"
   Edit: "Muokkaa"
   Save: "Tallenna"
   Delete: "Poista"

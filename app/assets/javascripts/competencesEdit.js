@@ -2,7 +2,7 @@
 
   function showNewSkillErrorMessage(message) {
     var $error_box          = $("#new-skill-box-error-message"),
-        $error_box_contents = $error_box.find("div.error-contents");
+        $error_box_contents = $error_box.find("div.skill-error-contents");
 
     $error_box_contents.html(message);
     $error_box.removeClass("hide");

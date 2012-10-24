@@ -26,6 +26,7 @@ group :assets do
   gem 'uglifier', '>= 1.0.3'
 
   gem 'eco'
+  gem 'jquery-ui-rails'
 end
 
 gem 'jquery-rails'

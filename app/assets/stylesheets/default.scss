@@ -112,11 +112,11 @@ tr.odd {
 }
 
 input {
-  display: block;
+  /*display: block;*/
 }
 
 label {
-  
+
 }
 
 /******************
@@ -184,7 +184,7 @@ h4.colorful {
 /* Micro clearfix hack
    source: http://nicolasgallagher.com/micro-clearfix-hack/ */
 .clearfix {
-  @include clearfix; 
+  @include clearfix;
 }
 
 .centered {
@@ -201,7 +201,7 @@ h4.colorful {
 
 /*******************
 *  Generic tables
-********************/ 
+********************/
 
 $table_radius: 6px;
 table.basic-table {
@@ -212,9 +212,9 @@ table.basic-table {
 
   thead {
     background-color: whitesmoke;
-    
+
     tr {
-      
+
 
       th {
         padding:      10px 8px;
@@ -357,9 +357,9 @@ $button_danger_active_color:  #8F1F1F;
   }
 }
 
-.button-disabled, 
-.button-disabled:hover, 
-.button-disabled:active, 
+.button-disabled,
+.button-disabled:hover,
+.button-disabled:active,
 .button-disabled:focus {
   background-color: $button_dark_color;
   background-image: none;
@@ -419,7 +419,7 @@ div.skill-error-info {
     width:   29px;
     height:  24px;
     padding: 4px;
-    
+
     position: absolute;
     left:     10px;
 
@@ -431,7 +431,7 @@ div.skill-error-info {
   }
 
   div.skill-error-contents {
-    
+
   }
 }
 
@@ -599,7 +599,7 @@ div.skill-error-info {
 }
 
 .control-group {
-   margin-bottom: 0.75em; 
+   margin-bottom: 0.75em;
 }
 
 .control-group label {
@@ -612,15 +612,15 @@ div.skill-error-info {
 }
 
 .control-group img {
-  margin-left: 1.538em; 
+  margin-left: 1.538em;
 }
 
 .control-group .controls {
-  margin-left: 17em; 
+  margin-left: 17em;
 }
 
 .control-course-code {
-   
+
 }
 
 /*************************

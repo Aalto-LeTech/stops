@@ -10,6 +10,7 @@ fi:
   sessions_password_label: "Salasana"
   sessions_remember_label: "Muista minut"
   sessions_login_button: "Kirjaudu"
+  sessions_register: "Luo testitunnus"
 
   activerecord:
     attributes:

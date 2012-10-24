@@ -63,7 +63,7 @@
             <td><%= course.credits %></td>
             <td class="passed-info"><%= t(:profile_course_passed) if @passed_courses.member? course.id %>
             <% credits_counter += course.credits || 0 %>
-            <% passed_counter += course.credits if @passed_courses.member? course.id %> <%#if @user.passed?(course) %><!-- TODO: make this more efficient --> 
+            <% passed_counter += course.credits if @passed_courses.member? course.id %> <%#if @user.passed?(course) %><!-- TODO: make this more efficient -->
           </tr>
         <% end %>
         <tfoot>
@@ -101,8 +101,10 @@
 
     <div class="clear"></div>
 
+    <!--
     <% if @user.has_competence?(competence) %>
       <%= link_to t(:competence_supporting_courses_link), supporting_studyplan_competence_path(:id => competence.id) %>
     <% end %>
+    -->
   </div>
 <% end %>

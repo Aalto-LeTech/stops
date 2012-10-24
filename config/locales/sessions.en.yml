@@ -1,3 +1,4 @@
+
 en:
   sessions_login_heading: "Log in"
 
@@ -9,3 +10,11 @@ en:
   sessions_password_label: "Password"
   sessions_remember_label: "Remember me"
   sessions_login_button: "Login"
+  sessions_register: "Register"
+
+  activerecord:
+    attributes:
+      user:
+        studentnumber: "User name"
+        password: "Password"
+        password_confirmation: "Password confirmation"

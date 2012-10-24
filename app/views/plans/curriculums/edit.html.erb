@@ -6,8 +6,10 @@
 
 <%= form_tag studyplan_curriculum_path, :method => :put do %>
   <% @curriculums.each do |curriculum| %>
-    <%= radio_button('user', 'curriculum', curriculum.id) %>
-    <%= curriculum.name %><br />
+    <label>
+      <%= radio_button('user', 'curriculum', curriculum.id) %>
+      <%= curriculum.name %>
+    </label><br />
   <% end %>
 
   <p><%= submit_tag t(:Select) %></p>

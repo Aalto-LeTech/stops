@@ -6,6 +6,8 @@ class Curriculum < ActiveRecord::Base
   has_many :profiles, :dependent => :destroy
   has_many :courses, :class_name => 'ScopedCourse', :dependent => :destroy, :order => 'code'
 
+  has_and_belongs_to_many :admins, :class_name => 'User', :join_table => 'curriculum_roles'
+
   # Returns a human-readable representation, e.g. "2010" or "2010-2011"
 #   def name
 #     return '' if self.new_record?
@@ -19,6 +21,10 @@ class Curriculum < ActiveRecord::Base
 #     end
 #   end
 
+  def has_admin?(user)
+    return false unless user
+    self.admins.exists?(:id => user.id)
+  end
 
   # Returns all courses and their prereqs that form this profile
   def detect_cycles

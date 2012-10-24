@@ -66,6 +66,8 @@ class CurriculumsController < ApplicationController
     @curriculum = Curriculum.new(params[:curriculum])
     authorize! :create, @curriculum
 
+    @curriculum.admins << @current_user
+
     respond_to do |format|
       if @curriculum.save
         format.html { redirect_to(edit_curriculum_url(:id => @curriculum), :notice => 'Curriculum was successfully created.') }
@@ -156,8 +158,8 @@ class CurriculumsController < ApplicationController
   # Loads curriculum object with necessary associations eagerly loaded
   def load_curriculum_for_show_and_edit
     @curriculum = Curriculum.includes(
-      :courses, 
-      :profiles, 
+      :courses,
+      :profiles,
       :courses => [:abstract_course, :periods, :course_description_with_locale, :strict_prereqs],
     ).find(params[:id])
   end

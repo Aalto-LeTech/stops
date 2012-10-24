@@ -20,3 +20,5 @@ fi:
 
   strict_prereq_char: 'X'
   supporting_prereq_char: 'x'
+
+  course_create_link: 'Luo kurssi'

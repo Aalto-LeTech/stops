@@ -1,6 +1,6 @@
 en:
   courses_heading: "Courses"
-  
+
   my_courses_heading: "My courses"
   my_courses_no_profile_hint: "Choose profiles first"
 
@@ -16,6 +16,8 @@ en:
   course_strict_prereq_of: "is prerequisite of"
   course_path_heading: "Relation to other courses"
   course_add_to_plan: "Add to study plan"
-  
+
   strict_prereq_char: 'X'
   supporting_prereq_char: 'x'
+
+  course_create_link: 'Create course'

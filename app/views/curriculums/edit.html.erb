@@ -17,21 +17,26 @@
     <ul>
       <li><%= link_to t('.import_csv_link'), edit_import_csv_curriculum_path(:id => @curriculum) %></li>
       <li><%= link_to t(:curriculum_cycles_link), cycles_curriculum_path(:id => @curriculum) %></li>
-      <li><%= link_to t('.list_outcomes'), outcomes_curriculum_path(:id => @curriculum) %></li>
+      <!--li><%= link_to t('.list_outcomes'), outcomes_curriculum_path(:id => @curriculum) %></li-->
     </ul>
   </div>
 <% end %>
 
 <h2><%= t 'curriculums.competence_profiles' %></h2>
 
-<% if can? :create, Profile %>
+<%= render 'profiles_list' %>
+
+<% if can? :update, @curriculum %>
   <p><%= link_to t(:profile_create_link), new_curriculum_profile_path(@curriculum), :class => "button-base" %><p>
 <% end %>
 
-<%= render 'profiles_list' %>
 
 
 <h2><%= t 'curriculums.curriculum_courses' %></h2>
 <%= render 'courses_list' %>
 
-
+<!--
+<% if can? :update, @curriculum %>
+  <p><%= link_to t(:course_create_link), new_curriculum_course_path(@curriculum), :class => "button-base" %><p>
+<% end %>
+-->

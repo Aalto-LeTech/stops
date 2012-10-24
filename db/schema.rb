@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120806070738) do
+ActiveRecord::Schema.define(:version => 20121024200623) do
 
   create_table "abstract_courses", :force => true do |t|
     t.string "code"
@@ -71,6 +71,12 @@ ActiveRecord::Schema.define(:version => 20120806070738) do
   add_index "course_prereqs", ["scoped_course_id"], :name => "index_course_prereqs_on_scoped_course_id"
   add_index "course_prereqs", ["scoped_prereq_id", "requirement"], :name => "index_course_prereqs_on_scoped_prereq_id_and_requirement"
   add_index "course_prereqs", ["scoped_prereq_id"], :name => "index_course_prereqs_on_scoped_prereq_id"
+
+  create_table "curriculum_roles", :force => true do |t|
+    t.integer "curriculum_id", :null => false
+    t.integer "user_id",       :null => false
+    t.string  "role"
+  end
 
   create_table "curriculums", :force => true do |t|
     t.integer "start_year"
@@ -196,6 +202,7 @@ ActiveRecord::Schema.define(:version => 20120806070738) do
     t.datetime "updated_at"
     t.integer  "curriculum_id"
     t.integer  "first_study_period_id"
+    t.boolean  "staff",                                :default => false
   end
 
   add_index "users", ["last_request_at"], :name => "index_users_on_last_request_at"

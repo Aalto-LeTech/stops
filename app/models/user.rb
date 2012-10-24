@@ -56,6 +56,10 @@ class User < ActiveRecord::Base
     self.admin
   end
 
+  def staff?
+    self.staff
+  end
+
   def passed?(course)
     passed_courses.include?(course.id)
   end

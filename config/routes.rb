@@ -54,7 +54,7 @@ Ops::Application.routes.draw do
         resources :skills, :controller => 'curriculums/skills', :only => :show
       end
 
-      resources :courses, :controller => 'curriculums/courses', :only => [:index, :show] do  # ScopedCourses
+      resources :courses, :controller => 'curriculums/courses' do  # ScopedCourses
         member do
           get 'prereqs'
         end

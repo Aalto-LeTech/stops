@@ -19,9 +19,20 @@ class Ability
     # User can edit own preferences
     can [:read, :update], User, :id => user.id
 
+    # Staff
+    if user.staff?
+      can :create, Curriculum
+    end
+
     # Admin
     if user.admin?
       can :manage, :all
+    end
+
+    # Curriculum roles
+
+    can [:edit, :update, :destroy], Curriculum do |curriculum|
+      curriculum.has_admin? user
     end
   end
 end

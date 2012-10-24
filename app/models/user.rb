@@ -5,51 +5,52 @@ class User < ActiveRecord::Base
     c.validate_email_field = false
   end
 
-  validates_uniqueness_of :login, :allow_nil => true
-  validates_uniqueness_of :studentnumber, :allow_nil => true
+  #validates_uniqueness_of :login #, :allow_nil => true
+  validates_uniqueness_of :studentnumber #, :allow_nil => true
   validates :first_study_period, :presence => true
 
   # prevents a user from submitting a crafted form that bypasses activation
   # anything else you want your user to change should be added here.
-  attr_accessible :name, 
-                  :locale, 
-                  :password, 
-                  :password_confirmation, 
-                  :remember_me, 
+  attr_accessible :name,
+                  :studentnumber,
+                  :locale,
+                  :password,
+                  :password_confirmation,
+                  :remember_me,
                   :curriculum_id
 
   # Plan
   has_and_belongs_to_many :competences, :join_table => 'user_competences', :uniq => true
 
   # The student's first period of study
-  belongs_to :first_study_period, 
+  belongs_to :first_study_period,
              :class_name => 'Period'
 
-  has_many  :user_courses, 
+  has_many  :user_courses,
             :dependent => :destroy
 
-  has_many  :courses, 
-            :through => :user_courses, 
-            :source => :scoped_course, 
+  has_many  :courses,
+            :through => :user_courses,
+            :source => :scoped_course,
             :uniq => true
 
-  has_many  :passed_courses, 
-            :through => :user_courses, 
-            :source => :scoped_course, 
-            :uniq => true, 
+  has_many  :passed_courses,
+            :through => :user_courses,
+            :source => :scoped_course,
+            :uniq => true,
             :conditions => "grade IS NOT NULL"
 
-  has_many  :user_manual_courses, 
-            :class_name => 'UserCourse', 
-            :dependent => :destroy, 
+  has_many  :user_manual_courses,
+            :class_name => 'UserCourse',
+            :dependent => :destroy,
             :conditions => {:manually_added => true}
 
-  has_many  :manual_courses, 
-            :through => :user_manual_courses, 
-            :source => :scoped_course, 
+  has_many  :manual_courses,
+            :through => :user_manual_courses,
+            :source => :scoped_course,
             :uniq => true # manually added courses
 
-  belongs_to :curriculum 
+  belongs_to :curriculum
 
   def admin?
     self.admin

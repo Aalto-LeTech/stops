@@ -19,7 +19,7 @@
   <% @competence.skills.each do |skill| %>
     <tr>
       <td><%= skill.description(I18n.locale) %></td>
-      <td><%= link_to t(:constributing_courses_link), curriculum_competence_skill_path(:curriculum_id => @curriculum.id, :competence_id => @competence.id, :id => skill.id) %></td>
+      <!--td><%= link_to t(:constributing_courses_link), curriculum_competence_skill_path(:curriculum_id => @curriculum.id, :competence_id => @competence.id, :id => skill.id) %></td-->
     </tr>
   <% end %>
 </table>
@@ -32,4 +32,4 @@
   <% end %>
 </ul>
 
-<p><%= link_to t(:Visualize), prereqs_curriculum_competence_path(:curriculum_id => @curriculum.id, :id => @competence.id) %></p>
+<p><%= link_to t('.graph_link'), prereqs_curriculum_competence_path(:curriculum_id => @curriculum.id, :id => @competence.id) %></p>

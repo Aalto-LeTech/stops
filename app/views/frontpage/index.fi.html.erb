@@ -1,6 +1,8 @@
-<p>O<sup>4</sup>.</p>
+<p>O<sup>4</sup> on työkalu koulutusohjelman suunnitteluun ja henkilökohtaisten opintosuunnitelmien tekemiseen. Järjestelmä on prototyyppivaiheessa.</p>
 
-
+<% unless logged_in? %>
+  <%= render :partial => 'sessions/login' %>
+<% end %>
 
 <ul>
 </ul>

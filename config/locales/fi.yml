@@ -77,3 +77,9 @@ fi:
     forbidden:
       heading: "Pääsy kielletty"
       explanation: "Sinulla ei ole riittäviä oikeuksia sivun katseluun."
+
+  errors:
+    messages:
+      taken: "on varattu"
+      too_short: "on liian lyhyt"
+      confirmation: "ei täsmää"

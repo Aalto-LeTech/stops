@@ -52,14 +52,14 @@ en:
       default: "%a %d %b %H:%M"
       short: "%d %b %H:%M"
       long: "%a %Y-%m-%d %H:%M:%S"
-      
+
   #######################
   # Language translations
   #######################
   language_in_en: "in English"
   language_in_sv: "in Swedish"
   language_in_fi: "in Finnish"
-  
+
 
   ###########################
   # Forbidden, Not found etc.
@@ -69,3 +69,9 @@ en:
     forbidden:
       heading: "Forbidden"
       explanation: "You do not have the required permissions to view this page."
+
+  errors:
+    messages:
+      taken: "has already been taken"
+      too_short: "is too short"
+      confirmation: "does not match"

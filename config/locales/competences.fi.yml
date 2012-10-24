@@ -22,6 +22,8 @@ fi:
   # Edit
   curriculums:
     competences:
+      show:
+        graph_link: 'Kurssiverkko'
       edit:
         heading: "Muokkaa osaamiskokonaisuutta"
         new_outcome: "Uusi valmius"

@@ -4,9 +4,16 @@ fi:
 
   sessions_logout_message: "Olet kirjautunut ulos."
 
-  sessions_traditional_hint: "Kirjaudu erillisellä tunnuksella (testitunnukset)"
+  sessions_traditional_hint: "Kirjaudu O4-tunnuksella"
   sessions_shibboleth_hint: "Kirjaudu kotiyliopiston tunnuksella (WebLogin)"
-  sessions_studentnumber_label: "Opiskelijanumero"
+  sessions_studentnumber_label: "Käyttäjätunnus"
   sessions_password_label: "Salasana"
   sessions_remember_label: "Muista minut"
   sessions_login_button: "Kirjaudu"
+
+  activerecord:
+    attributes:
+      user:
+        studentnumber: "Käyttäjätunnus"
+        password: "Salasana"
+        password_confirmation: "Salasanan vahvistus"

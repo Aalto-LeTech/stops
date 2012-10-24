@@ -6,8 +6,7 @@ class Curriculums::CompetencesController < CurriculumsController
   #before_filter :load_profile
   before_filter :load_competence, :except => [:index]
 
-  authorize_resource
-  skip_authorize_resource :except => [:index, :show, :edit, :update]
+  authorize_resource :only => [:matrix]
 
   def index
     load_curriculum

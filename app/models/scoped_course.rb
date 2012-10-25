@@ -89,14 +89,6 @@ class ScopedCourse < ActiveRecord::Base
     desc ? desc.name : fallback_message 
   end
 
-  def code
-    self.abstract_course.code
-  end
-  
-  def code=(new_code)
-    self.abstract_course.code = new_code
-  end
-  
   # Returns -1 if the is a prereq of other, +1 if this is a prereq to other, otherwise 0.
   def <=>(other)
     if strict_prereqs.exists?(other)

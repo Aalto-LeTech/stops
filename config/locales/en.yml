@@ -34,7 +34,8 @@ en:
   Cancel: "Cancel"
   Back: "Back"
   Visualize: "Visualize"
-
+  Course_code: "Code"
+  course_code: "code"
 
   ##############
   # Time & Date

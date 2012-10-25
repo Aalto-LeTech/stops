@@ -28,7 +28,7 @@ class Curriculums::ProfilesController < CurriculumsController
   def edit
     @profile = Profile.find(params[:id])
     
-    authorize! :edit, @profile
+    authorize! :update, @curriculum
     
     @profile.profile_descriptions << ProfileDescription.new(:locale => I18n.locale) if @profile.profile_descriptions.empty?
   end
@@ -42,7 +42,7 @@ class Curriculums::ProfilesController < CurriculumsController
   def create
     @profile = Profile.new(params[:profile])
     @profile.curriculum = @curriculum
-    authorize! :create, @profile
+    authorize! :create, @curriculum
 
     if @profile.save
       @profile.create_default_competences
@@ -55,7 +55,7 @@ class Curriculums::ProfilesController < CurriculumsController
   
   def update
     @profile = Profile.find(params[:id])
-    authorize! :edit, @profile
+    authorize! :update, @curriculum
 
     if @profile.update_attributes(params[:profile])
       redirect_to curriculum_profile_path(:curriculum_id => @curriculum, :id => @profile)

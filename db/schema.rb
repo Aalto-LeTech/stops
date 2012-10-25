@@ -72,7 +72,7 @@ ActiveRecord::Schema.define(:version => 20121024200623) do
   add_index "course_prereqs", ["scoped_prereq_id", "requirement"], :name => "index_course_prereqs_on_scoped_prereq_id_and_requirement"
   add_index "course_prereqs", ["scoped_prereq_id"], :name => "index_course_prereqs_on_scoped_prereq_id"
 
-  create_table "curriculum_roles", :force => true do |t|
+  create_table "curriculum_roles", :id => false, :force => true do |t|
     t.integer "curriculum_id", :null => false
     t.integer "user_id",       :null => false
     t.string  "role"

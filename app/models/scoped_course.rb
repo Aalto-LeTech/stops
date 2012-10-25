@@ -2,6 +2,10 @@
 class ScopedCourse < ActiveRecord::Base
 
   belongs_to :abstract_course
+  belongs_to :curriculum
+  
+  has_many :course_descriptions, :through => :abstract_course
+  accepts_nested_attributes_for :course_descriptions
   
   has_one :course_description_with_locale, 
           :class_name => "CourseDescription",
@@ -85,6 +89,14 @@ class ScopedCourse < ActiveRecord::Base
     desc ? desc.name : fallback_message 
   end
 
+  def code
+    self.abstract_course.code
+  end
+  
+  def code=(new_code)
+    self.abstract_course.code = new_code
+  end
+  
   # Returns -1 if the is a prereq of other, +1 if this is a prereq to other, otherwise 0.
   def <=>(other)
     if strict_prereqs.exists?(other)

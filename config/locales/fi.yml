@@ -35,6 +35,9 @@ fi:
   Cancel: "Peruuta"
   Back: "Takaisin"
   Visualize: "Visualisoi"
+  Course_code: "Kurssikoodi"
+  course_code: "kurssikoodi"
+  
 
   ##############
   # Time & Date

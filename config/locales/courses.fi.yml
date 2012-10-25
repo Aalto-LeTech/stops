@@ -22,3 +22,4 @@ fi:
   supporting_prereq_char: 'x'
 
   course_create_link: 'Luo kurssi'
+  course_new_heading: 'Luo kurssi'

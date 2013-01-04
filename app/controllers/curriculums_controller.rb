@@ -89,21 +89,21 @@ class CurriculumsController < ApplicationController
       matrix = PrereqMatrix.new(params[:prereqs_csv], @curriculum, I18n.locale)
       matrix.process
       flash[:success] = "#{params[:prereqs_csv].original_filename} uploaded"
-    end
-
-    if params[:profiles_csv]
+      redirect_to edit_import_csv_curriculum_path(@curriculum)
+    elsif params[:profiles_csv]
       matrix = ProfileMatrix.new(params[:profiles_csv], @curriculum, I18n.locale)
       matrix.process
       flash[:success] = "#{params[:profiles_csv].original_filename} uploaded"
-    end
-
-    respond_to do |format|
-      if @curriculum.update_attributes(params[:curriculum])
-        format.html { redirect_to(@curriculum, :notice => 'Curriculum was successfully updated.') }
-        format.js { head :ok }
-      else
-        format.html { render :action => "edit", :notice => 'Saving unsuccessful, no data saved!'}
-        format.js { head :internal_server_error }
+      redirect_to edit_import_csv_curriculum_path(@curriculum)
+    else
+      respond_to do |format|
+        if @curriculum.update_attributes(params[:curriculum])
+          format.html { redirect_to(@curriculum, :notice => 'Curriculum was successfully updated.') }
+          format.js { head :ok }
+        else
+          format.html { render :action => "edit", :notice => 'Saving unsuccessful, no data saved!'}
+          format.js { head :internal_server_error }
+        end
       end
     end
   end

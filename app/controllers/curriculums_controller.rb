@@ -5,7 +5,7 @@ class CurriculumsController < ApplicationController
 
   layout 'curriculum'
 
-  caches_page :prereqs
+  #caches_page :prereqs
 
   def load_curriculum
     @curriculum = Curriculum.find(params[:curriculum_id])

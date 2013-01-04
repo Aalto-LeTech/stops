@@ -10,7 +10,7 @@ gem 'rails', '3.2.2'
 gem 'pg'
 
 gem 'pg_search'
-gem 'thinking-sphinx'
+gem 'thinking-sphinx', '2.0.13'
 
 # Use unicorn as the web server
 # gem 'unicorn'
@@ -37,7 +37,7 @@ gem 'jquery-rails'
 
 # To use debugger
 # gem 'ruby-debug'
-gem 'debugger'
+# gem 'debugger'
 
 # Bundle the extra gems:
 # gem 'bj'

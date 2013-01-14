@@ -16,6 +16,8 @@ class AbstractCourse < ActiveRecord::Base
 
   has_many  :periods,
             :through  => :course_instances
+
+  accepts_nested_attributes_for :course_descriptions
   
   def get_name(locale)
     description = CourseDescription.where(:abstract_course_id => self.id, :locale => locale.to_s).first

@@ -1,0 +1,12 @@
+<%= form_for @abstract_course, :remote => true, :url => new_curriculum_course_path(params[:curriculum_id]) do |f| %>
+  <%= f.label 'code' %>
+  <%= f.text_field :code %>
+
+  <%= f.fields_for :course_descriptions do |cf| %>
+    <div class="new-course-field-group">
+      <%= cf.label t("language_in_" + cf.object.locale), :class => "new-course-label" %>
+      <%= cf.hidden_field :locale %>
+      <%= cf.text_field :name, :class => "new-skill-field" %>
+    </div>
+  <% end %>
+<% end %>

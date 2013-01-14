@@ -33,8 +33,18 @@
 
 
 <h2><%= t 'curriculums.curriculum_courses' %></h2>
-<%= render 'courses_list' %>
 
 <% if can? :update, @curriculum %>
-  <p><%= link_to t(:course_create_link), new_curriculum_course_path(@curriculum), :class => "button-base" %><p>
+  <p><%= link_to t('.course_create_link'), 
+    new_curriculum_course_path(I18n.locale, @curriculum),
+    :remote => true, :class => "button-base",
+    :id => "new-course-button" %>
+  </p>
+
+  <%= render 'new_course_form' %>
+
 <% end %>
+
+<%= render 'courses_list' %>
+
+

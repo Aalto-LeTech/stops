@@ -53,8 +53,18 @@ class Curriculums::CoursesController < CurriculumsController
     authorize! :update, @curriculum
     
     @abstract_course = AbstractCourse.new
-    @abstract_course.course_descriptions_with_locale << CourseDescription.new(:locale => I18n.locale)
     @scoped_course = ScopedCourse.new
+
+    @scoped_course.curriculum = Curriculum.find(params[:curriculum_id])
+
+    # Create empty descriptions for each required locale
+    REQUIRED_LOCALES.each do |locale|
+      @abstract_course.course_descriptions << CourseDescription.new(:locale => locale)
+    end
+
+    respond_to do |format|
+      format.js
+    end
   end
   
   def create

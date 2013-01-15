@@ -50,7 +50,10 @@
 
 <h2><%=t :course_path_heading %></h2>
 
-<%= link_to t(:Visualize), prereqs_curriculum_course_path(:curriculum_id => @curriculum.id, :id => @course.id) %>
+<%= link_to prereqs_curriculum_course_path(:curriculum_id => @curriculum.id, :id => @course.id) do %>
+  <%= image_tag 'visualization-button.png' %><br />
+  <%= t('.graph_link') %>
+<% end %>
 
 <table class="course-path">
   <thead>

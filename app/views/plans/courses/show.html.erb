@@ -95,11 +95,9 @@
         <% else %>
           <ul>
             <% @course.prereq_to.each do |course| %>
-              <% if @user.courses.include?(course) %>
-                <li>
-                  <%= link_to course.code + ' ' + course.name(I18n.locale), {:id => course.id} %>
-                </li>
-              <% end %>
+              <li>
+                <%= link_to course.code + ' ' + course.name(I18n.locale), {:id => course.id} %>
+              </li>
             <% end %>
           </ul>
         <% end %>

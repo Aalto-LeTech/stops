@@ -19,7 +19,7 @@ function Course(element) {
   this.id       = element.data('id');    // Database id of the UserCourse
   this.code     = element.data('code');
   this.name     = element.data('name');
-  this.credits  = element.data('credits');
+  this.credits  = parseFloat(element.data('credits'));
   this.passed   = element.data('passed') == 'true';
   
   element.click(courseClicked);

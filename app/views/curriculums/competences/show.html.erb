@@ -32,4 +32,9 @@
   <% end %>
 </ul>
 
-<p><%= link_to t('.graph_link'), prereqs_curriculum_competence_path(:curriculum_id => @curriculum.id, :id => @competence.id) %></p>
+<p>
+  <%= link_to prereqs_curriculum_competence_path(:curriculum_id => @curriculum.id, :id => @competence.id) do %>
+    <%= image_tag 'visualization-button.png' %><br />
+    <%= t('.graph_link') %>
+  <% end %>
+</p>

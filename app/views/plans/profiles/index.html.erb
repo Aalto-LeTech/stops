@@ -15,7 +15,7 @@
 
 
         <td class="competence-name">
-          <span <%= @user.has_competence?(competence) ? "class='selected-competence-name'" : '' %>>
+          <span <%= @user.has_competence?(competence) ? "class='selected-competence-name'".html_safe : '' %>>
             <%= competence.name(I18n.locale) %>
           </span>
 

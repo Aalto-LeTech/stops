@@ -39,6 +39,14 @@ en:
     edit:
       import_csv_link: "Import using CSV data"
       change_name: "Change name"
+      # Create new course form
+      course_create_link: 'New course'
+      create_course_error_failed_to_load_course_box: 'Unfortunately the form could not be loaded!'
+      create_course_saving: 'Saving...'
+      create_course_error_heading: 'Error'
+      create_course_heading: 'Create new course'
+      create_course_help_text: 'Here you can create a new course. Please fill the fields for all required languages.'
+      create_course_validation_error: "Please recheck your input."
     edit_modal:
       heading: "Change the name of the curriculum"
       name_label: "The name of the curriculum"
@@ -59,18 +67,6 @@ en:
       prerequisites: "Prerequisites"
       prerequisites_help: "Credits: New prerequisites + already included in plan"
       no_courses_placeholder: "There are no courses in the curriculum."
-
-
-  curriculums:
-    edit:
-      # Create new course form
-      course_create_link: 'New course'
-      create_course_error_failed_to_load_course_box: 'Unfortunately the form could not be loaded!'
-      create_course_saving: 'Saving...'
-      create_course_error_heading: 'Error'
-      create_course_heading: 'Create new course'
-      create_course_help_text: 'Here you can create a new course. Please fill the fields for all required languages.'
-      create_course_validation_error: "Please recheck your input."
 
   activerecord:
     errors:

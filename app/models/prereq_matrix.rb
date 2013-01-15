@@ -1,5 +1,4 @@
 require 'csv'
-#require 'faster_csv'
 
 class PrereqMatrix < CsvMatrix
 

@@ -1,6 +1,4 @@
 require 'csv'
-#require 'faster_csv'
-
 
 class ProfileMatrix < CsvMatrix
 

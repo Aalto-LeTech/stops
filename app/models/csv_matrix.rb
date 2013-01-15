@@ -43,9 +43,19 @@ class CsvMatrix
     return course
   end
   
+  def normalize_period(raw_period)
+    raw_period.gsub!(',','-')
+    raw_period.gsub!('IV','4')
+    raw_period.gsub!('III','3')
+    raw_period.gsub!('II','2')
+    raw_period.gsub!('I','1')
+    raw_period
+  end
   
-  def create_course_instances(abstract_course,period)
+  def create_course_instances(abstract_course, raw_period)
     arranged_on = []  # Periods on which the course is arranged
+    
+    period = normalize_period(raw_period)
     
     # Parse period
     if period.blank?
@@ -109,8 +119,8 @@ class CsvMatrix
         
         # Parse course attributes
         name = (@matrix[row][1] || '').strip
-        period = (@matrix[row][2] || '').strip
-        credits = (@matrix[row][3] || '').strip
+        period = (@matrix[row][3] || '').strip
+        credits = (@matrix[row][2] || '').split(/[,-]/)[0].strip
         
         # Insert or update course
         abstract_course = insert_or_update_abstract_course(code, name, @locale, period)

@@ -39,6 +39,7 @@ en:
     edit:
       import_csv_link: "Import using CSV data"
       change_name: "Change name"
+    new_course_form:
       # Create new course form
       course_create_link: 'New course'
       create_course_error_failed_to_load_course_box: 'Unfortunately the form could not be loaded!'

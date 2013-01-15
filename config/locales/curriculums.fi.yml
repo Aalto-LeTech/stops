@@ -40,8 +40,9 @@ fi:
     edit:
       import_csv_link: "Tuo tiedot CSV datasta"
       change_name: "Nimeä uudelleen"
-      # Create new course form
       course_create_link: 'Luo kurssi'
+    new_course_form:
+      # Create new course form
       create_course_error_failed_to_load_course_box: 'Valitettavasti lomaketta ei pystytty lataamaan'
       create_course_saving: 'Tallennetaan...'
       create_course_error_heading: 'Virhe'

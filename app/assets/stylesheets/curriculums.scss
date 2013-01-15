@@ -1,3 +1,5 @@
+@import "general_mixins";
+
 #curriculum-courses {
   th {
     padding-right: 10px;
@@ -29,4 +31,97 @@
       padding-top:      15px;
     }
   }
+}
+
+
+/* New course form box */
+
+$new-course-box-color: #9EC2DB;
+$new-course-box-border-color: #337070;
+$new-course-box-font-color: #24765C;
+
+#new-course-box {
+  padding-top: 15px;
+  padding-left: 12px;
+  padding-right: 35px;
+  padding-bottom: 15px;
+  background-color: $new-course-box-color;
+  border-radius: 4px; 
+  -webkit-border-radius: 5px;
+  border: 1px solid $new-course-box-border-color;
+  width: 40em;
+  margin: 0 0 15px 0;
+  color: #276A99;
+}
+
+.new-course-box-header h4 { 
+  margin: 0 0 10px; 
+}
+
+.new-course-box-footer {
+  margin: 10px 0 0;
+  text-align: right;
+}
+
+#new-course-box-validation-message {
+  font-weight: bold;
+  color: red;
+}
+
+.new-course-close {
+  padding: 0;
+  margin: 0;
+  border: 0;
+  position: relative;
+  top: -10px;
+  right: -22px;
+  float: right;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 22px;
+  font-family: "Helvetica Neue", Helvetica;
+  font-weight: bold;
+  opacity: 0.5;
+  background: transparent;
+  color: #A66F28;
+}
+
+#new-course-box-loading-icon {
+  width: 40em;
+  text-align: center;
+
+  div.center-container {
+    margin: 0 0 20px 0;
+    display: inline-block;
+
+    span {
+      position: relative;
+      top: -8px;
+    }
+  }
+}
+
+
+.new-course-field-group {
+  @include clearfix; 
+  margin-bottom: 10px;
+  input {
+    width: 450px;
+    padding: 3px 3px 3px;
+    border: 1px solid;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
+  }
+}
+
+.new-course-label {
+  float: left;
+  width: 120px;
+  text-align: right;
+  margin: 0 0 5px 0;
+  padding: 5px 0 0;
+}
+
+.new-course-field {
+  margin-left: 140px;
+  padding: 5px 0 0;
 }

@@ -1,3 +1,4 @@
+# O4
 class SessionsController < ApplicationController
   def new
     @user_session = UserSession.new
@@ -21,12 +22,10 @@ class SessionsController < ApplicationController
   end
   
   def destroy
+    return unless current_session
+    
     logout_url = session[:logout_url]
-    
-    session = current_session
-    return unless session
-    
-    session.destroy
+    current_session.destroy
     flash[:success] = I18n.t(:sessions_logout_message)
     
     if logout_url
@@ -39,14 +38,14 @@ class SessionsController < ApplicationController
   
   def shibboleth
     shibinfo = {
-      :login => request.env['HTTP_EPPN'],
-      :studentnumber => (request.env['HTTP_SCHACPERSONALUNIQUECODE'] || '').split(':').last,
-      :firstname => request.env['HTTP_DISPLAYNAME'],
-      :lastname => request.env['HTTP_SN'],
-      :email => request.env['HTTP_MAIL'],
-      :organization => request.env['HTTP_SCHACHOMEORGANIZATION']
+      :login => request.env[SHIB_ATTRIBUTES[:id]],
+      :studentnumber => (request.env[SHIB_ATTRIBUTES[:studentnumber]] || '').split(':').last,
+      :firstname => request.env[SHIB_ATTRIBUTES[:firstname]],
+      :lastname => request.env[SHIB_ATTRIBUTES[:lastname]],
+      :email => request.env[SHIB_ATTRIBUTES[:email]],
+      :affiliation => request.env[SHIB_ATTRIBUTES[:affiliation]]
     }
-    logout_url = request.env['HTTP_LOGOUTURL']
+    logout_url = request.env[SHIB_ATTRIBUTES[:logout]]
 
 #     shibinfo = {
 #       :login => '00002', #'student1@hut.fi',
@@ -65,12 +64,11 @@ class SessionsController < ApplicationController
   def shibboleth_login(shibinfo, logout_url)
     if shibinfo[:login].blank? && shibinfo[:studentnumber].blank?
       flash[:error] = "Shibboleth login failed (no studentnumber or username received)."
+      logger.warn("Shibboleth login failed (missing attributes). #{shibinfo}")
       render :action => 'new'
       return
     end
     
-    session[:logout_url] = logout_url
-
     # Find user by username (eppn)
     unless shibinfo[:login].blank?
       logger.debug "Trying to find by login #{shibinfo[:login]}"
@@ -79,25 +77,27 @@ class SessionsController < ApplicationController
 
     # If user was not found by login, search with student number. (User may have been created as part of a group, but has never actually logged in.)
     # Login must be null, otherwise the account may belong to someone else from another organization.
-    if !user && !shibinfo[:studentnumber].blank?
-      logger.debug "Trying to find by studentnumber #{shibinfo[:studentnumber]}"
-      user = User.find_by_studentnumber(shibinfo[:studentnumber], :conditions => "login IS NULL")
-    end
+    #if !user && !shibinfo[:studentnumber].blank?
+    #  logger.debug "Trying to find by studentnumber #{shibinfo[:studentnumber]}"
+    #  user = User.find_by_studentnumber(shibinfo[:studentnumber], :conditions => "login IS NULL")
+    #end
 
     # Create new account or update an existing
     unless user
       logger.debug "User not found. Trying to create."
       
       # New user
-      user = User.new(shibinfo)
-      user.login = shibinfo[:login]
-      user.studentnumber = shibinfo[:studentnumber]
-      user.organization = shibinfo[:organization]
-      if user.save
+      user = User.new()
+      shibinfo.each do |key, value|
+        user.write_attribute(key, value)
+      end
+      user.reset_persistence_token
+      user.reset_single_access_token
+      if user.save(:validate => false)
         logger.info("Created new user #{user.login} (#{user.studentnumber}) (shibboleth)")
       else
-        logger.info("Failed to create new user (shibboleth) #{shibinfo} Errors: #{user.errors}")
-        flash[:error] = 'Failed to create new user'
+        logger.info("Failed to create new user (shibboleth) #{shibinfo} Errors: #{user.errors.full_messages.join('. ')}")
+        flash[:error] = "Failed to create new user. #{user.errors.full_messages.join('. ')}"
         render :action => 'new'
         return
       end
@@ -105,20 +105,18 @@ class SessionsController < ApplicationController
       logger.debug "User found. Updating attributes."
       
       # Update metadata
-      user.login = shibinfo[:login] if user.login.blank?
-      user.studentnumber = shibinfo[:studentnumber] if user.studentnumber.blank?
-      user.firstname = shibinfo[:firstname] if user.firstname.blank?
-      user.lastname = shibinfo[:lastname] if user.lastname.blank?
-      user.email = shibinfo[:email] if user.email.blank?
-      user.organization = shibinfo[:organization] if user.organization.blank?
+      shibinfo.each do |key, value|
+        user.write_attribute(key, value) if user.read_attribute(key).blank?
+      end
       
-      #user.save
+      user.reset_persistence_token if user.persistence_token.blank?  # Authlogic won't work if persistence token is empty
+      user.reset_single_access_token if user.single_access_token.blank?
     end
 
     # Create session
-    user.reset_persistence_token  # Authlogic won't work if persistence token is empty
     if UserSession.create(user)
-      logger.info("Logged in #{user.login} (#{user.studentnumber}) (shibboleth) (Pers.token: #{user.persistence_token})")
+      session[:logout_url] = logout_url
+      logger.info("Logged in #{user.login} (#{user.studentnumber}) (shibboleth)")
       
       redirect_back_or_default root_url
     else

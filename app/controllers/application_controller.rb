@@ -1,6 +1,4 @@
-# Filters added to this controller apply to all controllers in the application.
-# Likewise, all the methods added will be available for all controllers.
-
+# O4
 class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
   protect_from_forgery # See ActionController::RequestForgeryProtection for details
@@ -67,10 +65,38 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  # If require_login GET-parameter is set, this filter redirect to login. After successful login, the user is redirected back to the original location.
-  def require_login?
-    authenticate_user if params[:require_login] && !current_session
+  private
+
+  def current_session
+    return @current_session if defined?(@current_session)
+    @current_session = UserSession.find
   end
+
+  def current_user
+    return @current_user if defined?(@current_user)
+    @current_user = current_session && current_session.record
+  end
+
+  def logged_in?
+    !!current_user
+  end
+
+  # If require_login GET-parameter is set, this filter redirect to login. After successful login, user is redirected back to the original location.
+  def require_login?
+    login_required if params[:require_login] && !logged_in?
+  end
+  
+  def login_required
+    return if current_user
+
+    store_location
+
+    # TODO: use shibboleth
+    redirect_to new_session_url
+
+    return false
+  end
+  alias :authenticate_user, :login_required
 
   # Handle authorization failure
   rescue_from CanCan::AccessDenied do |exception|
@@ -93,34 +119,7 @@ class ApplicationController < ActionController::Base
 
     return false
   end
-
-  private
-
-  def current_session
-    return @current_session if defined?(@current_session)
-    @current_session = UserSession.find
-  end
-
-  def current_user
-    return @current_user if defined?(@current_user)
-    @current_user = current_session && current_session.record
-  end
-
-  def logged_in?
-    !!current_user
-  end
-
-  def authenticate_user
-    return if current_user
-
-    store_location
-
-    # TODO: use shibboleth
-    redirect_to new_session_url
-
-    return false
-  end
-
+  
   def store_location
     session[:return_to] = request.fullpath
   end

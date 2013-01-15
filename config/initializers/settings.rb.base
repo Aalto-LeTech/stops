@@ -7,3 +7,14 @@ COURSE_CODE_FORMAT = /^\w+-\d+\.\d+$/
 
 # Define locales for which translations must be found
 REQUIRED_LOCALES = ['fi', 'en']
+
+# Shibboleth attribute names (attribute-map.xml)
+SHIB_ATTRIBUTES = {
+  :logout => 'Shib_logout-url',
+  :id => 'Shib_EP_PrincipalName',
+  :studentnumber => 'Shib_schac_PersonalUniqueCode',
+  :firstname => 'Shib_DisplayName',
+  :lastname => 'Shib_sn',
+  :email => 'Shib_mail',
+  :lang => 'Shib_preferredLanguage',
+}

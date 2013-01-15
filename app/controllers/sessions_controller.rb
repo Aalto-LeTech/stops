@@ -37,6 +37,8 @@ class SessionsController < ApplicationController
   
   
   def shibboleth
+    logger.error "SHIB_ATTRIBUTES is not set in config/initializers/settings.rb" unless SHIB_ATTRIBUTES
+    
     shibinfo = {
       :login => request.env[SHIB_ATTRIBUTES[:id]],
       :studentnumber => (request.env[SHIB_ATTRIBUTES[:studentnumber]] || '').split(':').last,

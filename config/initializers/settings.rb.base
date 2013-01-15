@@ -17,4 +17,5 @@ SHIB_ATTRIBUTES = {
   :lastname => 'Shib_sn',
   :email => 'Shib_mail',
   :lang => 'Shib_preferredLanguage',
+  :affiliation => 'Shib_unscoped-affiliation',
 }

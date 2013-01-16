@@ -1,0 +1,22 @@
+<h1><%=t '.heading' %></h1>
+
+<p class="hint"><%=t '.hint' %></p>
+
+<%= form_tag curriculum_roles_path do %>
+  <p>
+    <%=t '.recipients' %><br />
+    <%= text_area_tag :addresses, @addresses, :rows => 20, :cols => 80  %>
+  </p>
+
+  <p>
+    <%=t '.subject' %><br />
+    <%= text_field_tag :subject, @subject, :size => 80 %>
+  </p>
+  
+  <p>
+    <%=t '.content' %><br />
+    <%= text_area_tag :content, @content, :rows => 20, :cols => 80 %>
+  </p>
+<% end %>
+
+<%= link_to t(:Back), @curriculum %>

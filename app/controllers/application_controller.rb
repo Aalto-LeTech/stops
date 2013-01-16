@@ -81,22 +81,19 @@ class ApplicationController < ActionController::Base
     !!current_user
   end
 
-  # If require_login GET-parameter is set, this filter redirect to login. After successful login, user is redirected back to the original location.
+  # If require_login GET-parameter is set, this filter redirects to login. After a successful login, user is redirected back to the original location.
   def require_login?
     login_required if params[:require_login] && !logged_in?
   end
   
+  # Before filter that ensures that user is authenticated
   def login_required
     return if current_user
-
-    store_location
-
-    # TODO: use shibboleth
-    redirect_to new_session_url
-
+      
+    redirect_to_login
     return false
   end
-  alias :authenticate_user, :login_required
+  alias_method :authenticate_user, :login_required
 
   # Handle authorization failure
   rescue_from CanCan::AccessDenied do |exception|
@@ -105,19 +102,31 @@ class ApplicationController < ActionController::Base
     elsif logged_in?
       render :template => 'shared/forbidden', :status => 403
     else
-      # If not logged in, redirect to login
-      respond_to do |format|
-        format.html do
-          store_location
-          redirect_to new_session_path
-        end
-        format.any do
-          request_http_basic_authentication 'Web Password'
+      redirect_to_login
+    end
+  end
+  
+  def redirect_to_login
+    respond_to do |format|
+      format.html do
+        store_location
+
+        if defined?(SHIB_ATTRIBUTES)
+          if request.env[SHIB_ATTRIBUTES[:id]]
+            # If Shibboleth headers are present, redirect directly to session creation
+            redirect_to shibboleth_session_path
+          else
+            # If Shibboleth headers are not present, redirect to IdP
+            redirect_to SHIB_PATH + shibboleth_session_url(:protocol => 'https')
+          end
+        else
+          redirect_to new_session_url
         end
       end
+      format.any do
+        request_http_basic_authentication 'Web Password'
+      end
     end
-
-    return false
   end
   
   def store_location

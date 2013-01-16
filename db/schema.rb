@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121024200623) do
+ActiveRecord::Schema.define(:version => 20130115131933) do
 
   create_table "abstract_courses", :force => true do |t|
     t.string "code"
@@ -84,6 +84,16 @@ ActiveRecord::Schema.define(:version => 20121024200623) do
     t.string  "name"
   end
 
+  create_table "invitations", :force => true do |t|
+    t.string  "token",      :null => false
+    t.string  "type"
+    t.string  "email"
+    t.integer "target_id"
+    t.date    "expires_at"
+  end
+
+  add_index "invitations", ["token"], :name => "index_invitations_on_token"
+
   create_table "period_descriptions", :force => true do |t|
     t.integer "period_id", :null => false
     t.string  "locale"
@@ -109,6 +119,13 @@ ActiveRecord::Schema.define(:version => 20121024200623) do
 
   create_table "profiles", :force => true do |t|
     t.integer "curriculum_id", :null => false
+  end
+
+  create_table "roles", :force => true do |t|
+    t.integer "user_id",   :null => false
+    t.integer "target_id"
+    t.string  "type"
+    t.string  "role"
   end
 
   create_table "scoped_courses", :force => true do |t|

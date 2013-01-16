@@ -9,6 +9,7 @@
       <li><%= link_to t(:curriculum_edit_link), edit_curriculum_path(:id => @curriculum) %></li>
       <li><%= link_to t(:curriculum_cycles_link), cycles_curriculum_path(:id => @curriculum) %></li>
       <li><%= link_to t('.list_outcomes'), outcomes_curriculum_path(:id => @curriculum) %></li>
+      <li><%= link_to t('.edit_roles'), new_curriculum_role_path(:curriculum_id => @curriculum) %></li>
     </ul>
   </div>
 <% end %>
@@ -18,5 +19,3 @@
 
 <h2><%= t 'curriculums.curriculum_courses' %></h2>
 <%= render 'courses_list' %>
-
-

@@ -67,6 +67,8 @@ Ops::Application.routes.draw do
             get 'search_skills_and_courses'
           end
       end
+      
+      resources :roles, :controller => 'curriculums/roles', :only => [:new, :index, :create, :destroy]
     end
 
     # My Plan
@@ -112,6 +114,8 @@ Ops::Application.routes.draw do
 
   end
 
+  resources :invitations, :only => [:show, :destroy], :id => /[^\/]+/
+  
   match '/:locale' => "frontpage#index"
   root :to => "frontpage#index"
 

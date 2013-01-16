@@ -49,6 +49,10 @@ gem 'cancan'
 gem 'fastercsv'
 gem 'acts_as_list'
 
+gem 'delayed_job_active_record', :git => 'git://github.com/collectiveidea/delayed_job_active_record.git'
+gem 'daemons'
+
+
 
 # Bundle gems for the local environment. Make sure to
 # put test-only gems in this group so their generators

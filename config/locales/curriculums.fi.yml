@@ -37,9 +37,20 @@ fi:
     show:
       # Admin tools
       list_outcomes: "Listaa valmiudet"
+      edit_roles: "Lisää opettajia"
     edit:
       import_csv_link: "Tuo tiedot CSV datasta"
       change_name: "Nimeä uudelleen"
+      
+      # Create new course form
+      course_create_link: 'Luo kurssi'
+      create_course_error_failed_to_load_course_box: 'Valitettavasti lomaketta ei pystytty lataamaan'
+      create_course_saving: 'Tallennetaan...'
+      create_course_error_heading: 'Virhe'
+      create_course_heading: 'Luo uusi kurssi'
+      create_course_help_text: 'Tässä voit luoda uuden kurssin. Syötä tarvittavat tiedot kaikillta vaadituilla kielillä.'
+      create_course_validation_error: 'Jossakin kentässä on virheellinen syöte.'
+
     edit_modal:
       heading: "Muuta opinto-ohjelman nimi"
       name_label: "Opinto-ohjelman nimi"
@@ -60,18 +71,15 @@ fi:
       prerequisites: "Esitietovaatimukset"
       prerequisites_help: "Opintopisteet: Uudet esitietovaatimukset + suunnitelmaan jo sisällytetyt"
       no_courses_placeholder: "Opinto-ohjelmassa ei ole kursseja."
-
-  curriculums:
-    edit:
-      # Create new course form
-      course_create_link: 'Luo kurssi'
-      create_course_error_failed_to_load_course_box: 'Valitettavasti lomaketta ei pystytty lataamaan'
-      create_course_saving: 'Tallennetaan...'
-      create_course_error_heading: 'Virhe'
-      create_course_heading: 'Luo uusi kurssi'
-      create_course_help_text: 'Tässä voit luoda uuden kurssin. Syötä tarvittavat tiedot kaikillta vaadituilla kielillä.'
-      create_course_validation_error: 'Jossakin kentässä on virheellinen syöte.'
-
+    roles:
+      new:
+        heading: "Lähetä kutsulinkki opettajille"
+        hint: "Opettajille lähetetään sähköpostitse kutsulinkki, jota seuraamalla saa opettajan oikeudet O4-järjestelmään."
+        recipients: "Vastaanottajat (sähköpostiosoitteet erotettuna pilkulla tai rivinvaihdolla):"
+        subject: "Sähköpostin otsikko:"
+        content: "Sähköpostiviesti:"
+        subject_default: "Kurssitietojen syöttäminen O4-järjestelmään"
+        mail_template: "Käy syöttämässä kurssitiedot O4-järjestelmään allaolevasta linkistä:\n\nLINK\n"
 
   activerecord:
     errors:

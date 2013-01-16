@@ -436,6 +436,38 @@ div.skill-error-info {
 }
 
 
+/* Specialized error info box for /curriculums/:id/edit view */
+div.course-error-info {
+  @extend div.info;
+  padding-left:   57px;
+  padding-right:  20px;
+  position:       relative;
+  min-height:     35px;
+
+  div.course-error-image {
+    @include border-radius(3px);
+    background-color: red;
+
+    width:   29px;
+    height:  24px;
+    padding: 4px;
+
+    position: absolute;
+    left:     10px;
+
+    img {
+      width:  29px;
+      height: 24px;
+      margin: 0px;
+    }
+  }
+
+  div.course-error-contents {
+
+  }
+}
+
+
 /******************
  * Flash messages
  ******************/

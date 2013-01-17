@@ -23,3 +23,12 @@ fi:
 
   course_create_link: 'Luo kurssi'
   course_new_heading: 'Luo kurssi'
+
+  curriculums:
+    courses:
+      creation_form:
+        # New course creation form
+        course_code: "Kurssikoodi"
+        course_title_in_fi: "Kurssin nimi suomeksi"
+        course_title_in_se: "Kurssin nimi ruotsiksi"
+        course_title_in_en: "Kurssin nimi englanniksi"

@@ -112,7 +112,12 @@ tr.odd {
 }
 
 input {
-  /*display: block;*/
+  height:         20px;
+  line-height:    20px;
+  border:         1px solid #FFDEB3;
+  padding:        3px 5px;
+  border-radius:  4px;
+  font-size:      14px;
 }
 
 label {
@@ -653,6 +658,28 @@ div.course-error-info {
 
 .control-course-code {
 
+}
+
+/* General controls */
+
+.form-control-group {
+  margin-bottom: 20px;
+}
+
+.form-label {
+  width:          140px;
+  float:          left;
+  padding-top:    5px;
+  margin-bottom:  5px;
+  text-align:     right;
+}
+
+.form-controls {
+  margin-left: 160px;
+}
+
+.field-lenghty {
+  width: 300px;
 }
 
 /*************************

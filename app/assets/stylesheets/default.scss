@@ -905,5 +905,30 @@ table.course-list tr.total td {
   font-size: small;
 }
 
+/*********************
+  Sessions
+ *********************/
 
+.shibboleth-login {
+  a {
+    font-weight: bold;
+    text-decoration: none;
+    font-family: sans-serif;
+    border: 2px solid black;
+    padding: 1em;
+    @include border-radius(20px);
+  }
+  
+  p {
+    margin-bottom: 40px;
+  }
+}
 
+.traditional-login {
+  margin-top: 6em;
+  color: gray;
+
+  a {
+    color: gray;
+  }
+}

@@ -72,13 +72,16 @@ en:
       prerequisites_help: "Credits: New prerequisites + already included in plan"
       no_courses_placeholder: "There are no courses in the curriculum."
     roles:
-      heading: "Send invitation mails"
-      hint: "An invitation link is sent to teachers by email."
-      recipients: "Recipients (separated by comma or newline):"
-      subject: "Mail subject:"
-      content: "Mail content:"
-      subject_default: "Entering course data to STOPS"
-      mail_template: "Please follow this link to STOP:\n\nLINK\n"
+      new:
+        heading: "Send invitation mails"
+        hint: "An invitation link is sent to teachers by email."
+        recipients: "Recipients (separated by comma or newline):"
+        subject: "Mail subject:"
+        content: "Mail content:"
+        subject_default: "Entering course data to STOPS"
+        mail_template: "Please follow this link to STOP:\n\nLINK\n"
+        send: "Send"
+        existing_invitations: "Previously sent invitations"
 
   activerecord:
     errors:

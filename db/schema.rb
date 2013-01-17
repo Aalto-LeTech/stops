@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130115131933) do
+ActiveRecord::Schema.define(:version => 20130117115719) do
 
   create_table "abstract_courses", :force => true do |t|
     t.string "code"
@@ -83,6 +83,22 @@ ActiveRecord::Schema.define(:version => 20130115131933) do
     t.integer "end_year"
     t.string  "name"
   end
+
+  create_table "delayed_jobs", :force => true do |t|
+    t.integer  "priority",   :default => 0
+    t.integer  "attempts",   :default => 0
+    t.text     "handler"
+    t.text     "last_error"
+    t.datetime "run_at"
+    t.datetime "locked_at"
+    t.datetime "failed_at"
+    t.string   "locked_by"
+    t.string   "queue"
+    t.datetime "created_at",                :null => false
+    t.datetime "updated_at",                :null => false
+  end
+
+  add_index "delayed_jobs", ["priority", "run_at"], :name => "delayed_jobs_priority"
 
   create_table "invitations", :force => true do |t|
     t.string  "token",      :null => false

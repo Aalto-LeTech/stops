@@ -79,4 +79,17 @@ class Curriculum < ActiveRecord::Base
 
     return result
   end
+  
+  # Creates TeacherInvitations and mails them to users
+  # addresses: array of email addresses
+  # subject: subject of the email (string)
+  # content: body of the email (string). LINK will be replaced with the invitation URL
+  def invite_teachers(addresses, subject, content)
+    addresses.each do |address|
+      next unless address.include?('@')
+      
+      invitation = TeacherInvitation.create(:target => self, :email => address.strip, :expires_at => Time.now() + 2.weeks)
+      InvitationMailer.teacher_invitation(invitation, subject, content).deliver
+    end    
+  end
 end

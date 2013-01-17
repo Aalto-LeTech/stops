@@ -1,5 +1,6 @@
 class TeacherInvitation < Invitation
   belongs_to :target, :class_name => 'Curriculum'
+  attr_accessible :target
   
   def accept(user)
     # TODO

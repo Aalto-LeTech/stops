@@ -81,6 +81,8 @@ fi:
         content: "Sähköpostiviesti:"
         subject_default: "Kurssitietojen syöttäminen O4-järjestelmään"
         mail_template: "Käy syöttämässä kurssitiedot O4-järjestelmään allaolevasta linkistä:\n\nLINK\n"
+        send: "Lähetä"
+        existing_invitations: 'Voimassaolevat aiemmin lähetetyt kutsut'
 
   activerecord:
     errors:

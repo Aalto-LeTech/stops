@@ -6,7 +6,7 @@ ERRORS_EMAIL = nil
 EMAIL_FROM = "application@example.com"
 
 # Host for generating links in emails, without trailing slash
-EMAIL_HOST_PREFIX = "http://www.example.com"
+EMAIL_HOST_PREFIX = "www.example.com"
 
 # Regexp for detecting course codes
 COURSE_CODE_FORMAT = /^\w+-\d+\.\d+$/
@@ -15,7 +15,7 @@ COURSE_CODE_FORMAT = /^\w+-\d+\.\d+$/
 REQUIRED_LOCALES = ['fi', 'en']
 
 # Shibboleth attribute names (attribute-map.xml)
-SHIB_PATH = "/Shibboleth.sso/wayf?target=" 
+SHIB_PATH = "/Shibboleth.sso/wayf?target="
 SHIB_ATTRIBUTES = {
   :logout => 'Shib_logout-url',
   :id => 'Shib_EP_PrincipalName',

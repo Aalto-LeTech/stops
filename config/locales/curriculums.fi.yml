@@ -83,6 +83,7 @@ fi:
         mail_template: "Käy syöttämässä kurssitiedot O4-järjestelmään allaolevasta linkistä:\n\nLINK\n"
         send: "Lähetä"
         existing_invitations: 'Voimassaolevat aiemmin lähetetyt kutsut'
+        sent_success: "Kutsuviestejä lähetetään"
 
   activerecord:
     errors:

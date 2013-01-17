@@ -16,6 +16,7 @@ class CreateInvitations < ActiveRecord::Migration
       t.string :type
       t.string :role
     end
+    drop_table :curriculum_roles
   end
 
   def down

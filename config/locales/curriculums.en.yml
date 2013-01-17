@@ -82,6 +82,7 @@ en:
         mail_template: "Please follow this link to STOP:\n\nLINK\n"
         send: "Send"
         existing_invitations: "Previously sent invitations"
+        sent_success: "Invitation emails are being sent"
 
   activerecord:
     errors:

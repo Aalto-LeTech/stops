@@ -72,12 +72,6 @@ ActiveRecord::Schema.define(:version => 20130117115719) do
   add_index "course_prereqs", ["scoped_prereq_id", "requirement"], :name => "index_course_prereqs_on_scoped_prereq_id_and_requirement"
   add_index "course_prereqs", ["scoped_prereq_id"], :name => "index_course_prereqs_on_scoped_prereq_id"
 
-  create_table "curriculum_roles", :id => false, :force => true do |t|
-    t.integer "curriculum_id", :null => false
-    t.integer "user_id",       :null => false
-    t.string  "role"
-  end
-
   create_table "curriculums", :force => true do |t|
     t.integer "start_year"
     t.integer "end_year"
@@ -101,11 +95,12 @@ ActiveRecord::Schema.define(:version => 20130117115719) do
   add_index "delayed_jobs", ["priority", "run_at"], :name => "delayed_jobs_priority"
 
   create_table "invitations", :force => true do |t|
-    t.string  "token",      :null => false
-    t.string  "type"
-    t.string  "email"
-    t.integer "target_id"
-    t.date    "expires_at"
+    t.string   "token",      :null => false
+    t.string   "type"
+    t.string   "email"
+    t.integer  "target_id"
+    t.datetime "created_at"
+    t.date     "expires_at"
   end
 
   add_index "invitations", ["token"], :name => "index_invitations_on_token"

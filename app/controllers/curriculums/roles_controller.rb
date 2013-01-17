@@ -4,7 +4,7 @@ class Curriculums::RolesController < CurriculumsController
   
   def load_curriculum
     @curriculum = Curriculum.find(params[:curriculum_id])
-    authorize! :edit, @curriculum
+    authorize! :update, @curriculum
   end
   
   def index
@@ -18,13 +18,12 @@ class Curriculums::RolesController < CurriculumsController
   
   def create
     unless params[:addresses].blank?
-      params[:subject] ||= 'O4 registration'
-      params[:content] ||= 'LINK'
-      @curriculum.invite_teachers(params[:addresses].split(/[,\s]/), params[:subject], params[:content])
+      @curriculum.delay.invite_teachers(params[:addresses].split(/[,\s]/), params[:subject], params[:content])
     end
     
     #render :action => :new
-    redirect_to new_curriculum_role_path(@curriculum)
+    flash[:success] = t('curriculums.roles.new.sent_success')
+    redirect_to curriculum_path(@curriculum)
   end
   
   def destroy

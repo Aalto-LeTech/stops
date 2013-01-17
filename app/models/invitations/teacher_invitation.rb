@@ -3,15 +3,12 @@ class TeacherInvitation < Invitation
   attr_accessible :target
   
   def accept(user)
-    # TODO
-#     course = Course.find(self.target_id)
-#     course.teachers << user unless course.teachers.include?(user)
+    unless CurriculumRole.exists?(:user_id => user.id, :target_id => self.target.id)
+      role = CurriculumRole.new(:user => user, :target => self.target)
+      role.role = 'teacher'
+      role.save
+    end
     
-    role = CurriculumRole.new(:user => user, :target => self.target)
-    role.role = 'teacher'
-    role.save
-    
-    puts "INVITATION ACCEPTED"
     self.destroy
   end
 end

@@ -42,8 +42,7 @@ class SessionsController < ApplicationController
     shibinfo = {
       :login => request.env[SHIB_ATTRIBUTES[:id]],
       :studentnumber => (request.env[SHIB_ATTRIBUTES[:studentnumber]] || '').split(':').last,
-      :firstname => request.env[SHIB_ATTRIBUTES[:firstname]],
-      :lastname => request.env[SHIB_ATTRIBUTES[:lastname]],
+      :name => request.env[SHIB_ATTRIBUTES[:firstname]] + request.env[SHIB_ATTRIBUTES[:lastname]],
       :email => request.env[SHIB_ATTRIBUTES[:email]],
       :affiliation => request.env[SHIB_ATTRIBUTES[:affiliation]]
     }
@@ -92,8 +91,7 @@ class SessionsController < ApplicationController
       user = User.new()
       user.login = shibinfo[:login]
       user.studentnumber = shibinfo[:studentnumber]
-      user.firstname = shibinfo[:firstname]
-      user.lastname = shibinfo[:lastname]
+      user.name = shibinfo[:name]
       user.email = shibinfo[:email]
       user.reset_persistence_token
       user.reset_single_access_token
@@ -111,8 +109,7 @@ class SessionsController < ApplicationController
       # Update metadata
       user.login = shibinfo[:login]
       user.studentnumber = shibinfo[:studentnumber]
-      user.firstname = shibinfo[:firstname]
-      user.lastname = shibinfo[:lastname]
+      user.name = shibinfo[:name]
       user.email = shibinfo[:email]
       
       user.reset_persistence_token if user.persistence_token.blank?  # Authlogic won't work if persistence token is empty

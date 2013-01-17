@@ -42,7 +42,7 @@ class SessionsController < ApplicationController
     shibinfo = {
       :login => request.env[SHIB_ATTRIBUTES[:id]],
       :studentnumber => (request.env[SHIB_ATTRIBUTES[:studentnumber]] || '').split(':').last,
-      :name => request.env[SHIB_ATTRIBUTES[:firstname]] + request.env[SHIB_ATTRIBUTES[:lastname]],
+      :name => request.env[SHIB_ATTRIBUTES[:firstname]] + ' ' + request.env[SHIB_ATTRIBUTES[:lastname]],
       :email => request.env[SHIB_ATTRIBUTES[:email]],
       :affiliation => request.env[SHIB_ATTRIBUTES[:affiliation]]
     }

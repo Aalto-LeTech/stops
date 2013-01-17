@@ -1,0 +1,9 @@
+<% @curriculum.courses.each do |course| %>
+  <h2><%= course.code %> <%= course.name(I18n.locale) %></h2>
+  
+  <ul>
+    <% course.skills.each do |skill| %>
+      <li><%= skill.description(I18n.locale) %></li>
+    <% end %>
+  </ul>
+<% end %>

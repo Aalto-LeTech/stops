@@ -90,9 +90,11 @@ class SessionsController < ApplicationController
       
       # New user
       user = User.new()
-      shibinfo.each do |key, value|
-        user.write_attribute(key, value)
-      end
+      user.login = shibinfo[:login]
+      user.studentnumber = shibinfo[:studentnumber]
+      user.firstname = shibinfo[:firstname]
+      user.lastname = shibinfo[:lastname]
+      user.email = shibinfo[:email]
       user.reset_persistence_token
       user.reset_single_access_token
       if user.save(:validate => false)
@@ -107,9 +109,11 @@ class SessionsController < ApplicationController
       logger.debug "User found. Updating attributes."
       
       # Update metadata
-      shibinfo.each do |key, value|
-        user.write_attribute(key, value) if user.read_attribute(key).blank?
-      end
+      user.login = shibinfo[:login]
+      user.studentnumber = shibinfo[:studentnumber]
+      user.firstname = shibinfo[:firstname]
+      user.lastname = shibinfo[:lastname]
+      user.email = shibinfo[:email]
       
       user.reset_persistence_token if user.persistence_token.blank?  # Authlogic won't work if persistence token is empty
       user.reset_single_access_token if user.single_access_token.blank?

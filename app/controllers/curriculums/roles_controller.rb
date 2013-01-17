@@ -18,7 +18,7 @@ class Curriculums::RolesController < CurriculumsController
   
   def create
     unless params[:addresses].blank?
-      @curriculum.delay.invite_teachers(params[:addresses].split(/[,\s]/), params[:subject], params[:content])
+      Curriculum.delay.invite_teachers(@curriculum.id, params[:addresses].split(/[,\s]/), params[:subject], params[:content])
     end
     
     #render :action => :new

@@ -94,7 +94,6 @@ class SessionsController < ApplicationController
       user.name = shibinfo[:name]
       user.email = shibinfo[:email]
       user.reset_persistence_token
-      user.reset_single_access_token
       if user.save(:validate => false)
         logger.info("Created new user #{user.login} (#{user.studentnumber}) (shibboleth)")
       else
@@ -113,7 +112,6 @@ class SessionsController < ApplicationController
       user.email = shibinfo[:email]
       
       user.reset_persistence_token if user.persistence_token.blank?  # Authlogic won't work if persistence token is empty
-      user.reset_single_access_token if user.single_access_token.blank?
     end
 
     # Create session

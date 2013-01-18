@@ -39,7 +39,7 @@ fi:
       list_outcomes: "Listaa valmiudet"
       edit_roles: "Lisää opettajia"
     edit:
-      import_csv_link: "Tuo tiedot CSV datasta"
+      import_csv_link: "Tuo tiedot CSV-tiedostosta"
       change_name: "Nimeä uudelleen"
       course_create_link: 'Luo kurssi'
       

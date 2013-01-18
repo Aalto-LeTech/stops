@@ -2,13 +2,6 @@
   <!-- Logo -->
   <div class="logo"><span class="o4">O<sup>4</sup></span> <span class="program-name"><%=t :program_name%></span></div>
 
-  <!-- Login -->
-  <div class="login">
-    <% if logged_in? %>
-      <%= current_user.name %>
-    <% end %>
-  </div>
-
   <div class="navibar">
     <ul>
       <%
@@ -28,6 +21,10 @@
     </ul>
   </div>
 </div>
+
+<% if logged_in? %>
+  <div class="current-user"><%= current_user.name %></div>
+<% end %>
 
 <div class="clear"></div>
 

@@ -1,5 +1,4 @@
 Ops::Application.routes.draw do
-
   scope ":locale" do
     resource :session do
       get 'shibboleth'
@@ -69,6 +68,8 @@ Ops::Application.routes.draw do
       end
       
       resources :roles, :controller => 'curriculums/roles', :only => [:new, :index, :create, :destroy]
+      
+      resources :temp_courses, :controller => 'curriculums/temp_courses'
     end
 
     # My Plan

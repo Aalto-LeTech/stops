@@ -37,6 +37,7 @@ en:
       # Admin tools
       list_outcomes: "List outcomes"
       edit_roles: "Add teachers"
+      temp_courses_heading: "New bachelor level courses"
     edit:
       import_csv_link: "Import using CSV data"
       change_name: "Change name"

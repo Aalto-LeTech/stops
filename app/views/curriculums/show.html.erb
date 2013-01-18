@@ -14,8 +14,21 @@
   </div>
 <% end %>
 
+<!--
 <h2><%= t 'curriculums.competence_profiles' %></h2>
 <%= render 'profiles_list' %>
+-->
+
+<h2><%= t '.temp_courses' %></h2>
+
+<p><%=t '.temp_courses_hint' %></p>
+
+<%= render 'curriculums/temp_courses/index' %>
+
+<% if can? :create_course, @curriculum %>
+  <%= link_to t('.create_temp_course'), new_curriculum_temp_course_path(@curriculum) %>
+<% end %>
+
 
 <h2><%= t 'curriculums.curriculum_courses' %></h2>
 <%= render 'courses_list' %>

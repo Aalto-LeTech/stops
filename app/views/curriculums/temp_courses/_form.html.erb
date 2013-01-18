@@ -1,0 +1,90 @@
+<%= form_for([@curriculum, @temp_course]) do |f| %>
+
+  <div class="field">
+    <%= f.label :curriculum %><br />
+    <%= f.text_field :curriculum %>
+  </div>
+  <div class="field">
+    <%= f.label :code %><br />
+    <%= f.text_field :code %>
+  </div>
+  <div class="field">
+    <%= f.label :credits %><br />
+    <%= f.number_field :credits %>
+  </div>
+  <div class="field">
+    <%= f.label :name_fi %><br />
+    <%= f.text_field :name_fi %>
+  </div>
+  <div class="field">
+    <%= f.label :name_en %><br />
+    <%= f.text_field :name_en %>
+  </div>
+  <div class="field">
+    <%= f.label :name_sv %><br />
+    <%= f.text_field :name_sv %>
+  </div>
+  <div class="field">
+    <%= f.label :department %><br />
+    <%= f.text_field :department %>
+  </div>
+  <div class="field">
+    <%= f.label :language %><br />
+    <%= f.text_field :language %>
+  </div>
+  <div class="field">
+    <%= f.label :instructors %><br />
+    <%= f.text_field :instructors %>
+  </div>
+  <div class="field">
+    <%= f.label :grading %><br />
+    <%= f.text_area :grading %>
+  </div>
+  <div class="field">
+    <%= f.label :graduate %><br />
+    <%= f.check_box :graduate %>
+  </div>
+  <div class="field">
+    <%= f.label :changing %><br />
+    <%= f.text_area :changing %>
+  </div>
+  <div class="field">
+    <%= f.label :alternatives %><br />
+    <%= f.text_area :alternatives %>
+  </div>
+  <div class="field">
+    <%= f.label :period %><br />
+    <%= f.text_field :period %>
+  </div>
+  <div class="field">
+    <%= f.label :prerequisites %><br />
+    <%= f.text_area :prerequisites %>
+  </div>
+  <div class="field">
+    <%= f.label :content %><br />
+    <%= f.text_area :content %>
+  </div>
+  <div class="field">
+    <%= f.label :assignments %><br />
+    <%= f.text_area :assignments %>
+  </div>
+  <div class="field">
+    <%= f.label :grading_details %><br />
+    <%= f.text_area :grading_details %>
+  </div>
+  <div class="field">
+    <%= f.label :materials %><br />
+    <%= f.text_area :materials %>
+  </div>
+  <div class="field">
+    <%= f.label :replaces %><br />
+    <%= f.text_area :replaces %>
+  </div>
+  <div class="field">
+    <%= f.label :other %><br />
+    <%= f.text_area :other %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

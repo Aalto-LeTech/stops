@@ -29,6 +29,8 @@ class CurriculumsController < ApplicationController
     load_curriculum_for_show_and_edit
 
     authorize! :read, @curriculum
+    
+    @temp_courses = @curriculum.temp_courses
 
     respond_to do |format|
       format.html # show.html.erb

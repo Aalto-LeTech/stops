@@ -219,8 +219,8 @@ ActiveRecord::Schema.define(:version => 20130117115719) do
     t.string   "email",                 :limit => 320
     t.string   "locale",                :limit => 5,   :default => "fi"
     t.boolean  "admin",                                :default => false
-    t.string   "crypted_password"
-    t.string   "password_salt"
+    t.string   "crypted_password",                                        :null => false
+    t.string   "password_salt",                                           :null => false
     t.string   "persistence_token",                                       :null => false
     t.integer  "login_count",                          :default => 0,     :null => false
     t.datetime "last_request_at"

@@ -11,6 +11,7 @@ fi:
   sessions_remember_label: "Muista minut"
   sessions_login_button: "Kirjaudu"
   sessions_register: "Luo testitunnus"
+  shibboleth_button: "Aalto weblogin"
 
   activerecord:
     attributes:

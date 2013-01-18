@@ -2,6 +2,16 @@
 
 <p class="hint"><%=t '.hint' %></p>
 
+<% unless @invitations.empty? %>
+  <h2><%=t '.existing_invitations' %></h2>
+
+  <ul>
+    <% @invitations.each do |invitation| %>
+      <li><%= invitation.email %></li>
+    <% end %>
+  </ul>
+<% end %>
+
 <%= form_tag curriculum_roles_path do %>
   <p>
     <%=t '.recipients' %><br />
@@ -17,6 +27,8 @@
     <%=t '.content' %><br />
     <%= text_area_tag :content, @content, :rows => 20, :cols => 80 %>
   </p>
+  
+  <%= submit_tag t('.send'), :html => {:class => 'btn btn-primary'} %>
 <% end %>
 
-<%= link_to t(:Back), @curriculum %>
+<p><%= link_to t(:Back), @curriculum %></p>

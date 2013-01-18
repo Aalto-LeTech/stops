@@ -5,7 +5,8 @@ class CreateInvitations < ActiveRecord::Migration
       t.string  "type"
       t.string  "email"
       t.integer "target_id"
-      t.date    "expires_at"
+      t.timestamp "created_at"
+      t.date      "expires_at"
     end
     add_index "invitations", ["token"], :name => "index_invitations_on_token"
     
@@ -15,6 +16,7 @@ class CreateInvitations < ActiveRecord::Migration
       t.string :type
       t.string :role
     end
+    drop_table :curriculum_roles
   end
 
   def down

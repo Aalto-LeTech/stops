@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130115131933) do
+ActiveRecord::Schema.define(:version => 20130117115719) do
 
   create_table "abstract_courses", :force => true do |t|
     t.string "code"
@@ -72,24 +72,35 @@ ActiveRecord::Schema.define(:version => 20130115131933) do
   add_index "course_prereqs", ["scoped_prereq_id", "requirement"], :name => "index_course_prereqs_on_scoped_prereq_id_and_requirement"
   add_index "course_prereqs", ["scoped_prereq_id"], :name => "index_course_prereqs_on_scoped_prereq_id"
 
-  create_table "curriculum_roles", :id => false, :force => true do |t|
-    t.integer "curriculum_id", :null => false
-    t.integer "user_id",       :null => false
-    t.string  "role"
-  end
-
   create_table "curriculums", :force => true do |t|
     t.integer "start_year"
     t.integer "end_year"
     t.string  "name"
   end
 
+  create_table "delayed_jobs", :force => true do |t|
+    t.integer  "priority",   :default => 0
+    t.integer  "attempts",   :default => 0
+    t.text     "handler"
+    t.text     "last_error"
+    t.datetime "run_at"
+    t.datetime "locked_at"
+    t.datetime "failed_at"
+    t.string   "locked_by"
+    t.string   "queue"
+    t.datetime "created_at",                :null => false
+    t.datetime "updated_at",                :null => false
+  end
+
+  add_index "delayed_jobs", ["priority", "run_at"], :name => "delayed_jobs_priority"
+
   create_table "invitations", :force => true do |t|
-    t.string  "token",      :null => false
-    t.string  "type"
-    t.string  "email"
-    t.integer "target_id"
-    t.date    "expires_at"
+    t.string   "token",      :null => false
+    t.string   "type"
+    t.string   "email"
+    t.integer  "target_id"
+    t.datetime "created_at"
+    t.date     "expires_at"
   end
 
   add_index "invitations", ["token"], :name => "index_invitations_on_token"
@@ -208,8 +219,8 @@ ActiveRecord::Schema.define(:version => 20130115131933) do
     t.string   "email",                 :limit => 320
     t.string   "locale",                :limit => 5,   :default => "fi"
     t.boolean  "admin",                                :default => false
-    t.string   "crypted_password",                                        :null => false
-    t.string   "password_salt",                                           :null => false
+    t.string   "crypted_password"
+    t.string   "password_salt"
     t.string   "persistence_token",                                       :null => false
     t.integer  "login_count",                          :default => 0,     :null => false
     t.datetime "last_request_at"

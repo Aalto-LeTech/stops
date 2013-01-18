@@ -1,11 +1,17 @@
 <h1>Cycles</h1>
 
-<ul>
-  <% @cycles.each do |cycle| %>
-    <li>
-      <% cycle.each do |course| %>
-        <%= course.code %>
-      <% end %>
-    </li>
-  <% end %>
-</ul>
+<% if @cycles.empty? %>
+  <p>No cyclic prerequisites found.</p>
+<% else %>
+  <ul>
+    <% @cycles.each do |cycle| %>
+      <li>
+        <% cycle.each do |course| %>
+          <%= course.code %>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+<% end %>
+
+<p><%= link_to t(:Back), @curriculum %></p>

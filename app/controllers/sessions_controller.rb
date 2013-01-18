@@ -42,8 +42,7 @@ class SessionsController < ApplicationController
     shibinfo = {
       :login => request.env[SHIB_ATTRIBUTES[:id]],
       :studentnumber => (request.env[SHIB_ATTRIBUTES[:studentnumber]] || '').split(':').last,
-      :firstname => request.env[SHIB_ATTRIBUTES[:firstname]],
-      :lastname => request.env[SHIB_ATTRIBUTES[:lastname]],
+      :name => request.env[SHIB_ATTRIBUTES[:firstname]] + ' ' + request.env[SHIB_ATTRIBUTES[:lastname]],
       :email => request.env[SHIB_ATTRIBUTES[:email]],
       :affiliation => request.env[SHIB_ATTRIBUTES[:affiliation]]
     }
@@ -90,11 +89,11 @@ class SessionsController < ApplicationController
       
       # New user
       user = User.new()
-      shibinfo.each do |key, value|
-        user.write_attribute(key, value)
-      end
+      user.login = shibinfo[:login]
+      user.studentnumber = shibinfo[:studentnumber]
+      user.name = shibinfo[:name]
+      user.email = shibinfo[:email]
       user.reset_persistence_token
-      user.reset_single_access_token
       if user.save(:validate => false)
         logger.info("Created new user #{user.login} (#{user.studentnumber}) (shibboleth)")
       else
@@ -107,12 +106,12 @@ class SessionsController < ApplicationController
       logger.debug "User found. Updating attributes."
       
       # Update metadata
-      shibinfo.each do |key, value|
-        user.write_attribute(key, value) if user.read_attribute(key).blank?
-      end
+      user.login = shibinfo[:login]
+      user.studentnumber = shibinfo[:studentnumber]
+      user.name = shibinfo[:name]
+      user.email = shibinfo[:email]
       
       user.reset_persistence_token if user.persistence_token.blank?  # Authlogic won't work if persistence token is empty
-      user.reset_single_access_token if user.single_access_token.blank?
     end
 
     # Create session

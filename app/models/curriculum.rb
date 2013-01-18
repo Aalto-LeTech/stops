@@ -6,7 +6,13 @@ class Curriculum < ActiveRecord::Base
   has_many :profiles, :dependent => :destroy
   has_many :courses, :class_name => 'ScopedCourse', :dependent => :destroy, :order => 'code'
 
-  has_and_belongs_to_many :admins, :class_name => 'User', :join_table => 'curriculum_roles'
+  has_many :teacher_roles, :class_name => 'CurriculumRole', :conditions => {:type => 'CurriculumRole', :role => 'teacher'}, :foreign_key => 'target_id', :include => :user
+  has_many :teachers, :through => :teacher_roles, :source => :user
+  
+  has_many :admin_roles, :class_name => 'CurriculumRole', :conditions => {:type => 'CurriculumRole', :role => 'admin'}, :foreign_key => 'target_id', :include => :user
+  has_many :admins, :through => :admin_roles, :source => :user
+
+  #has_and_belongs_to_many :admins, :class_name => 'User', :join_table => 'curriculum_roles'
 
   # Returns a human-readable representation, e.g. "2010" or "2010-2011"
 #   def name
@@ -24,6 +30,11 @@ class Curriculum < ActiveRecord::Base
   def has_admin?(user)
     return false unless user
     self.admins.exists?(:id => user.id)
+  end
+  
+  def has_teacher?(user)
+    return false unless user
+    self.teachers.exists?(:id => user.id)
   end
 
   # Returns all courses and their prereqs that form this profile
@@ -78,5 +89,18 @@ class Curriculum < ActiveRecord::Base
     end
 
     return result
+  end
+  
+  # Creates TeacherInvitations and mails them to users
+  # addresses: array of email addresses
+  # subject: subject of the email (string)
+  # content: body of the email (string). LINK will be replaced with the invitation URL
+  def self.invite_teachers(curriculum_id, addresses, subject, content)
+    addresses.each do |address|
+      next unless address.include?('@')
+      
+      invitation = TeacherInvitation.create(:target_id => curriculum_id, :email => address.strip, :expires_at => Time.now() + 2.weeks)
+      InvitationMailer.teacher_invitation(invitation, subject, content).deliver
+    end    
   end
 end

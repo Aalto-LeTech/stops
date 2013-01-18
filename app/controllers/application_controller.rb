@@ -112,13 +112,13 @@ class ApplicationController < ActionController::Base
         store_location
 
         if defined?(SHIB_ATTRIBUTES)
-          if request.env[SHIB_ATTRIBUTES[:id]]
+          #if request.env[SHIB_ATTRIBUTES[:id]]
             # If Shibboleth headers are present, redirect directly to session creation
-            redirect_to shibboleth_session_path
-          else
+          #  redirect_to shibboleth_session_path
+          #else
             # If Shibboleth headers are not present, redirect to IdP
             redirect_to SHIB_PATH + shibboleth_session_url(:protocol => 'https')
-          end
+          #end
         else
           redirect_to new_session_url
         end

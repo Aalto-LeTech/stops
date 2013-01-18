@@ -3,6 +3,7 @@ db/*.sqlite3
 db/sphinx/
 tmp/**/*
 log/
+doc/
 public/images/
 public/assets/
 .sass-cache

@@ -11,6 +11,7 @@ en:
   sessions_remember_label: "Remember me"
   sessions_login_button: "Login"
   sessions_register: "Register"
+  shibboleth_button: "Aalto weblogin"
 
   activerecord:
     attributes:

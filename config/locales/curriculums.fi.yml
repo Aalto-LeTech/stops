@@ -81,9 +81,9 @@ fi:
         hint: "Opettajille lähetetään sähköpostitse kutsulinkki, jota seuraamalla saa opettajan oikeudet O4-järjestelmään."
         recipients: "Vastaanottajat (sähköpostiosoitteet erotettuna pilkulla tai rivinvaihdolla):"
         subject: "Sähköpostin otsikko:"
-        content: "Sähköpostiviesti:"
+        content: "Sähköpostiviesti: (%INVITATION% ja %FRONTPAGE% korvataan automaattisesti linkeillä)"
         subject_default: "Kurssitietojen syöttäminen O4-järjestelmään"
-        mail_template: "Käy syöttämässä kurssitiedot O4-järjestelmään allaolevasta linkistä:\n\nLINK\n"
+        mail_template: "Käy syöttämässä kurssitiedot O4-järjestelmään allaolevasta linkistä:\n\n%INVITATION%\n\nMyöhemmin pääset järjestelmään osoitteella:\n\n%FRONTPAGE%\n"
         send: "Lähetä"
         existing_invitations: 'Voimassaolevat aiemmin lähetetyt kutsut'
         sent_success: "Kutsuviestejä lähetetään"

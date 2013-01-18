@@ -212,6 +212,7 @@ ActiveRecord::Schema.define(:version => 20130118085213) do
     t.text     "alternatives"
     t.string   "period"
     t.text     "prerequisites"
+    t.text     "outcomes"
     t.text     "content"
     t.text     "assignments"
     t.text     "grading_details"

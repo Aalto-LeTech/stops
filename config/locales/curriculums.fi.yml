@@ -100,6 +100,9 @@ fi:
       form:
         heading: 'Syötä kurssin tiedot'
         hint: 'Voit täyttää osan lomakkeesta ja jatkaa myöhemmin (muista kuitenkin painaa "Tallenna" lomakkeen lopussa).'
+        contact: 'Tiedot antoi'
+        contact_hint: '(kyselyjä varten, ei mene Oodiin)'
+        
         code: 'Kurssikoodi'
         code_hint: 'Ohjeet uudesta kurssikoodijärjestelmästä annetaan myöhemmin'
         credits: 'Laajuus (op)'
@@ -126,6 +129,8 @@ fi:
         period_hint: 'Todennäköinen, mutta alustava tieto kurssisijoitteluista opetusperiodeihin ilmenee liitteestä "20130107 Kandiohj uudet kurssit ja vastuuopet.xlsx"'
         prerequisites: 'Esitiedot'
         prerequisites_hint: ''
+        outcomes: 'Osaamistavoitteet'
+        outcomes_hint: ''
         content: 'Sisältö'
         content_hint: ''
         assignments: 'Toteutus ja työmuodot'

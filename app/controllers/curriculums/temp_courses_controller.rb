@@ -31,6 +31,8 @@ class Curriculums::TempCoursesController < CurriculumsController
     authorize! :create_course, @curriculum
     @temp_course = TempCourse.new
     
+    @temp_course.contact = "#{current_user.name} <#{current_user.email}>"
+    
     respond_to do |format|
       format.html # new.html.erb
       format.json { render json: @temp_course }

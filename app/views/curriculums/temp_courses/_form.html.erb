@@ -3,7 +3,14 @@
 <p><%=t '.hint' %></p>
 
 <%= form_for([@curriculum, @temp_course], :html => {:class => 'form-horizontal'}) do |f| %>
-
+  <div class="control-group">
+    <%= f.label :contact, t('.contact'), :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :contact %>
+      <span class="help-inline"><%=t '.contact_hint' %></span>
+    </div>
+  </div>
+  
   <div class="control-group">
     <%= f.label :code, t('.code'), :class => 'control-label' %>
     <div class="controls">
@@ -83,7 +90,6 @@
     </div>
   </div>
   
-  
   <div class="control-group">
     <%= f.label :graduate_course, t('.graduate_course'), :class => 'control-label' %>
     <div class="controls">
@@ -123,6 +129,14 @@
     <div class="controls">
       <%= f.text_area :prerequisites, :rows => 3 %>
       <span class="help-inline"><%=t '.prerequisites_hint' %></span>
+    </div>
+  </div>
+  
+  <div class="control-group">
+    <%= f.label :outcomes, t('.outcomes'), :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_area :outcomes, :rows => 5, :class => 'input-xxlarge' %>
+      <span class="help-inline"><%=t '.outcomes_hint' %></span>
     </div>
   </div>
   

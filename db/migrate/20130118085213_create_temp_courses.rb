@@ -17,6 +17,7 @@ class CreateTempCourses < ActiveRecord::Migration
       t.text :alternatives
       t.string :period
       t.text :prerequisites
+      t.text :outcomes
       t.text :content
       t.text :assignments
       t.text :grading_details

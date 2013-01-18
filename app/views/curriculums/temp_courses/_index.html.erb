@@ -7,9 +7,8 @@
   <tbody>
     <% @temp_courses.each do |temp_course| %>
       <tr>
-        <td><%= link_to temp_course.code, [@curriculum, temp_course] %></td>
-        <td><%= link_to temp_course.name_fi, [@curriculum, temp_course] %></td>
-        <td><%= link_to 'Edit', edit_curriculum_temp_course_path(@curriculum, temp_course) %></td>
+        <td><%= link_to temp_course.code.blank? ? t('.code_missing') : temp_course.code, edit_curriculum_temp_course_path(@curriculum, temp_course) %></td>
+        <td><%= link_to temp_course.name_en.blank? ? t('.name_missing') : temp_course.name_en, edit_curriculum_temp_course_path(@curriculum, temp_course) %></td>
       </tr>
     <% end %>
   </tbody>

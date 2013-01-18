@@ -1,90 +1,182 @@
-<%= form_for([@curriculum, @temp_course]) do |f| %>
+<h1><%=t '.heading' %></h1>
 
-  <div class="field">
-    <%= f.label :curriculum %><br />
-    <%= f.text_field :curriculum %>
+<p><%=t '.hint' %></p>
+
+<%= form_for([@curriculum, @temp_course], :html => {:class => 'form-horizontal'}) do |f| %>
+
+  <div class="control-group">
+    <%= f.label :code, t('.code'), :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :code %>
+      <span class="help-inline"><%=t '.code_hint' %></span>
+    </div>
   </div>
-  <div class="field">
-    <%= f.label :code %><br />
-    <%= f.text_field :code %>
+  
+  <div class="control-group">
+    <%= f.label :credits, t('.credits'), :class => 'control-label' %>
+    <div class="controls">
+      <%= f.number_field :credits %>
+      <span class="help-inline"><%=t '.credits_hint' %></span>
+    </div>
   </div>
-  <div class="field">
-    <%= f.label :credits %><br />
-    <%= f.number_field :credits %>
+  
+  <p><span class="help-inline"><%=t '.name_hint' %></span></p>
+  
+  <div class="control-group">
+    <%= f.label :name_en, t('.name_en'), :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :name_en %>
+    </div>
   </div>
-  <div class="field">
-    <%= f.label :name_fi %><br />
-    <%= f.text_field :name_fi %>
+  
+  <div class="control-group">
+    <%= f.label :name_fi, t('.name_fi'), :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :name_fi %>
+    </div>
   </div>
-  <div class="field">
-    <%= f.label :name_en %><br />
-    <%= f.text_field :name_en %>
+  
+  <div class="control-group">
+    <%= f.label :name_sv, t('.name_sv'), :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :name_sv %>
+    </div>
   </div>
-  <div class="field">
-    <%= f.label :name_sv %><br />
-    <%= f.text_field :name_sv %>
+  
+  <div class="control-group">
+    <%= f.label :department, t('.department'), :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :department %>
+      <span class="help-inline"><%=t '.department_hint' %></span>
+    </div>
   </div>
-  <div class="field">
-    <%= f.label :department %><br />
-    <%= f.text_field :department %>
+  
+  <div class="control-group">
+    <%= f.label :language, t('.language'), :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :language %>
+      <span class="help-inline"><%=t '.language_hint' %></span>
+    </div>
   </div>
-  <div class="field">
-    <%= f.label :language %><br />
-    <%= f.text_field :language %>
+  
+  <div class="control-group">
+    <%= f.label :instructors, t('.instructors'), :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_area :instructors, :rows => 3 %>
+      <span class="help-inline"><%=t '.instructors_hint' %></span>
+    </div>
   </div>
-  <div class="field">
-    <%= f.label :instructors %><br />
-    <%= f.text_field :instructors %>
+  
+  <div class="control-group">
+    <%= f.label :grading_scale, t('.grading_scale'), :class => 'control-label' %>
+    
+    <div class="controls">
+      <label>
+        <%= f.radio_button :grading_scale, '1-5', :class => 'inline' %>
+        1-5
+      </label>
+      <br />
+      <label>
+        <%= f.radio_button :grading_scale, 'Hyväksytty/Hylätty', :class => 'inline' %>
+        Hyväksytty/Hylätty
+      </label>
+    </div>
   </div>
-  <div class="field">
-    <%= f.label :grading %><br />
-    <%= f.text_area :grading %>
+  
+  
+  <div class="control-group">
+    <%= f.label :graduate_course, t('.graduate_course'), :class => 'control-label' %>
+    <div class="controls">
+      <%= f.check_box :graduate_course %>
+      Kyllä
+      <span class="help-inline"><%=t '.graduate_course_hint' %></span>
+    </div>
   </div>
-  <div class="field">
-    <%= f.label :graduate %><br />
-    <%= f.check_box :graduate %>
+  
+  <div class="control-group">
+    <%= f.label :changing_topic, t('.changing_topic'), :class => 'control-label' %>
+    <div class="controls">
+      <%= f.check_box :changing_topic %>
+      Kyllä
+      <span class="help-inline"><%=t '.changing_topic_hint' %></span>
+    </div>
   </div>
-  <div class="field">
-    <%= f.label :changing %><br />
-    <%= f.text_area :changing %>
+  
+  <div class="control-group">
+    <%= f.label :alternatives, t('.alternatives'), :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_area :alternatives, :rows => 3 %>
+      <span class="help-inline"><%=t '.alternatives_hint' %></span>
+    </div>
   </div>
-  <div class="field">
-    <%= f.label :alternatives %><br />
-    <%= f.text_area :alternatives %>
+  
+  <div class="control-group">
+    <%= f.label :period, t('.period'), :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :period %>
+      <span class="help-inline"><%=t '.period_hint' %></span>
+    </div>
   </div>
-  <div class="field">
-    <%= f.label :period %><br />
-    <%= f.text_field :period %>
+  
+  <div class="control-group">
+    <%= f.label :prerequisites, t('.prerequisites'), :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_area :prerequisites, :rows => 3 %>
+      <span class="help-inline"><%=t '.prerequisites_hint' %></span>
+    </div>
   </div>
-  <div class="field">
-    <%= f.label :prerequisites %><br />
-    <%= f.text_area :prerequisites %>
+  
+  <div class="control-group">
+    <%= f.label :content, t('.content'), :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_area :content, :rows => 5, :class => 'input-xxlarge' %>
+      <span class="help-inline"><%=t '.content_hint' %></span>
+    </div>
   </div>
-  <div class="field">
-    <%= f.label :content %><br />
-    <%= f.text_area :content %>
+  
+  <div class="control-group">
+    <%= f.label :assignments, t('.assignments'), :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_area :assignments, :rows => 5, :class => 'input-xxlarge' %>
+      <span class="help-inline"><%=t '.assignments_hint' %></span>
+    </div>
   </div>
-  <div class="field">
-    <%= f.label :assignments %><br />
-    <%= f.text_area :assignments %>
+  
+  <div class="control-group">
+    <%= f.label :grading_details, t('.grading_details'), :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_area :grading_details, :rows => 5, :class => 'input-xxlarge' %>
+      <span class="help-inline"><%=t '.grading_details_hint' %></span>
+    </div>
   </div>
-  <div class="field">
-    <%= f.label :grading_details %><br />
-    <%= f.text_area :grading_details %>
+  
+  <div class="control-group">
+    <%= f.label :materials, t('.materials'), :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_area :materials, :rows => 5, :class => 'input-xxlarge' %>
+      <span class="help-inline"><%=t '.materials_hint' %></span>
+    </div>
   </div>
-  <div class="field">
-    <%= f.label :materials %><br />
-    <%= f.text_area :materials %>
+  
+  <div class="control-group">
+    <%= f.label :replaces, t('.replaces'), :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_area :replaces, :rows => 5, :class => 'input-xxlarge' %>
+      <span class="help-inline"><%=t '.replaces_hint' %></span>
+    </div>
   </div>
-  <div class="field">
-    <%= f.label :replaces %><br />
-    <%= f.text_area :replaces %>
+  
+  <div class="control-group">
+    <%= f.label :other, t('.other'), :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_area :other, :rows => 5, :class => 'input-xxlarge' %>
+      <span class="help-inline"><%=t '.other_hint' %></span>
+    </div>
   </div>
-  <div class="field">
-    <%= f.label :other %><br />
-    <%= f.text_area :other %>
-  </div>
+  
   <div class="actions">
-    <%= f.submit %>
+    <div class="controls">
+      <button type="submit" class="btn btn-primary"><%= t(:Save) %></button>
+    </div>
   </div>
 <% end %>

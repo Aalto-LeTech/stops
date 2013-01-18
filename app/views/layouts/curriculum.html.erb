@@ -7,11 +7,8 @@
 
 <%= render :partial => 'layouts/header' %>
 
-<div class="page">
-  <!--div id="contextHelp">
-  </div-->
-
-  <div class="leftNavi">
+<div class="row">
+  <div class="span4">
 
     <% if @profile %>
       <h1><%= link_to @curriculum.name, curriculum_path(:id => @curriculum) %></h1>
@@ -19,7 +16,6 @@
         <% @curriculum.profiles.each do |profile| %>
           <li class="<%= profile == @profile ? 'selected' : '' %>"><%= link_to profile.name(I18n.locale), curriculum_profile_path(:curriculum_id => @curriculum, :id => profile) %></li>
           <!-- Courses belonging to the profile -->
-
           <% if false && profile == @profile %>
             <ul>
               <% profile.courses.each do |course| %>
@@ -39,7 +35,7 @@
     <% end %>
   </div>
 
-  <div class="content">
+  <div class="span8">
     <%= render :partial => 'layouts/messages' %>
 
     <%= yield %>

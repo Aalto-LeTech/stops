@@ -1,7 +1,10 @@
 class Curriculums::TempCoursesController < CurriculumsController
+  before_filter :load_curriculum
+  
   # GET /temp_courses
   # GET /temp_courses.json
   def index
+    authorize! :read, @curriculum
     @temp_courses = TempCourse.all
 
     respond_to do |format|
@@ -13,6 +16,7 @@ class Curriculums::TempCoursesController < CurriculumsController
   # GET /temp_courses/1
   # GET /temp_courses/1.json
   def show
+    authorize! :read, @curriculum
     @temp_course = TempCourse.find(params[:id])
 
     respond_to do |format|
@@ -24,8 +28,9 @@ class Curriculums::TempCoursesController < CurriculumsController
   # GET /temp_courses/new
   # GET /temp_courses/new.json
   def new
+    authorize! :create_course, @curriculum
     @temp_course = TempCourse.new
-
+    
     respond_to do |format|
       format.html # new.html.erb
       format.json { render json: @temp_course }
@@ -34,17 +39,21 @@ class Curriculums::TempCoursesController < CurriculumsController
 
   # GET /temp_courses/1/edit
   def edit
+    authorize! :create_course, @curriculum
     @temp_course = TempCourse.find(params[:id])
   end
 
   # POST /temp_courses
   # POST /temp_courses.json
   def create
+    authorize! :create_course, @curriculum
+    
     @temp_course = TempCourse.new(params[:temp_course])
+    @temp_course.curriculum = @curriculum
 
     respond_to do |format|
       if @temp_course.save
-        format.html { redirect_to @temp_course, notice: 'Temp course was successfully created.' }
+        format.html { redirect_to @curriculum, notice: t('curriculums.temp_courses.created', :name => @temp_course.name_fi)}
         format.json { render json: @temp_course, status: :created, location: @temp_course }
       else
         format.html { render action: "new" }
@@ -56,11 +65,13 @@ class Curriculums::TempCoursesController < CurriculumsController
   # PUT /temp_courses/1
   # PUT /temp_courses/1.json
   def update
+    authorize! :create_course, @curriculum
+    
     @temp_course = TempCourse.find(params[:id])
 
     respond_to do |format|
       if @temp_course.update_attributes(params[:temp_course])
-        format.html { redirect_to @temp_course, notice: 'Temp course was successfully updated.' }
+        format.html { redirect_to @curriculum, notice: t('curriculums.temp_courses.updated', :name => @temp_course.name_fi) }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -72,6 +83,8 @@ class Curriculums::TempCoursesController < CurriculumsController
   # DELETE /temp_courses/1
   # DELETE /temp_courses/1.json
   def destroy
+    authorize! :create_course, @curriculum
+    
     @temp_course = TempCourse.find(params[:id])
     @temp_course.destroy
 

@@ -22,3 +22,7 @@ en:
 
   course_create_link: 'Create course'
   course_new_heading: 'Create course'
+
+  course_title_in_fi: "Course name in Finnnish"
+  course_title_in_se: "Course name in Swedish"
+  course_title_in_en: "Course name in English"

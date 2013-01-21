@@ -56,10 +56,15 @@ class Curriculums::CoursesController < CurriculumsController
     @scoped_course = ScopedCourse.new
 
     @scoped_course.curriculum = Curriculum.find(params[:curriculum_id])
+    @scoped_course.abstract_course = @abstract_course
 
     # Create empty descriptions for each required locale
     REQUIRED_LOCALES.each do |locale|
       @abstract_course.course_descriptions << CourseDescription.new(:locale => locale)
+    end
+
+    @teaching_lang_options = REQUIRED_LOCALES.map do |locale|
+      [t(locale + '_lang'), locale]
     end
 
     respond_to do |format|
@@ -69,17 +74,28 @@ class Curriculums::CoursesController < CurriculumsController
   
   def create
     authorize! :update, @curriculum
-    
-    @abstract_course = AbstractCourse.new
-    @scoped_course = ScopedCourse.new
-    @scoped_course.abstract_course = @abstract_course
-    @scoped_course.curriculum = @curriculum
-    @scoped_course.assign_attributes(params[:scoped_course])
 
-    if @scoped_course.save
-      redirect_to curriculum_path(@curriculum)
-    else
-      render :action => "new"
+    @abstract_course = AbstractCourse.new
+
+    @abstract_course.assign_attributes(params[:abstract_course])
+    @scoped_course = @abstract_course.scoped_courses.first
+    @scoped_course.code = @abstract_course.code
+    @scoped_course.curriculum = @curriculum
+
+
+    respond_to do |format|
+      format.html do
+        if @scoped_course.save
+          redirect_to curriculum_path(@curriculum)
+        else
+          render :action => "new" 
+        end
+      end
+
+      format.js do
+        @abstract_course.save! 
+        render :nothing => true
+      end
     end
   end
   

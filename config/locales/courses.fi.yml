@@ -30,5 +30,6 @@ fi:
         # New course creation form
         course_code: "Kurssikoodi"
         course_title_in_fi: "Kurssin nimi suomeksi"
-        course_title_in_se: "Kurssin nimi ruotsiksi"
+        course_title_in_sv: "Kurssin nimi ruotsiksi"
         course_title_in_en: "Kurssin nimi englanniksi"
+        credits: 'Opintopisteet'

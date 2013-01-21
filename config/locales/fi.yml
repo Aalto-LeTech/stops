@@ -71,6 +71,11 @@ fi:
   language_in_sv: "ruotsiksi"
   language_in_fi: "suomeksi"
 
+  en_lang: "englanti"
+  sv_lang: "ruotsi"
+  fi_lang: "suomi"
+
+
 
   ###########################
   # Forbidden, Not found etc.

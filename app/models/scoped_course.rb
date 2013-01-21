@@ -3,6 +3,8 @@ class ScopedCourse < ActiveRecord::Base
 
   belongs_to :abstract_course
   belongs_to :curriculum
+
+  accepts_nested_attributes_for :abstract_course
   
   has_many :course_descriptions, :through => :abstract_course
   accepts_nested_attributes_for :course_descriptions

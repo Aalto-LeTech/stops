@@ -167,4 +167,25 @@
 
   });
 
+
+  /* Code for handling different form options */
+  (function() {
+    var $contents = $('#new-course-box-content');
+    $('#new-course-box-content').on('change', '#course-form-teaching-lang', function() {
+      console.log("Course form: CHANGE event caught...");
+      var $this = $(this);
+      var $formGroups = $contents.find('.form-control-group');
+      var otherFields = $formGroups.filter('[data-name-locale="fi"]');
+      otherFields = otherFields.add($formGroups.filter('[data-name-locale="sv"]').first());
+      
+      /* If English is selected as the teaching language of the course,
+         slide up the fields for the other locales. */
+      if ($this.val() === 'en') {
+        otherFields.slideUp();
+      } else {
+        otherFields.slideDown();
+      }
+    });
+  })();
+
 })();

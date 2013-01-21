@@ -61,6 +61,10 @@ en:
   language_in_sv: "in Swedish"
   language_in_fi: "in Finnish"
 
+  en_lang: "English"
+  sv_lang: "Swedish"
+  fi_lang: "Finnish"
+
 
   ###########################
   # Forbidden, Not found etc.

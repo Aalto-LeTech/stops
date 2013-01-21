@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130117115719) do
+ActiveRecord::Schema.define(:version => 20130118085213) do
 
   create_table "abstract_courses", :force => true do |t|
     t.string "code"
@@ -194,6 +194,36 @@ ActiveRecord::Schema.define(:version => 20130117115719) do
     t.integer "level"
     t.float   "credits"
   end
+
+  create_table "temp_courses", :force => true do |t|
+    t.integer  "curriculum_id",   :null => false
+    t.text     "contact"
+    t.string   "code"
+    t.string   "name_fi"
+    t.string   "name_en"
+    t.string   "name_sv"
+    t.integer  "credits"
+    t.string   "department"
+    t.string   "language"
+    t.string   "instructors"
+    t.text     "grading_scale"
+    t.boolean  "graduate_course"
+    t.text     "changing_topic"
+    t.text     "alternatives"
+    t.string   "period"
+    t.text     "prerequisites"
+    t.text     "outcomes"
+    t.text     "content"
+    t.text     "assignments"
+    t.text     "grading_details"
+    t.text     "materials"
+    t.text     "replaces"
+    t.text     "other"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
+
+  add_index "temp_courses", ["curriculum_id"], :name => "index_temp_courses_on_curriculum_id"
 
   create_table "user_competences", :id => false, :force => true do |t|
     t.integer "user_id",       :null => false

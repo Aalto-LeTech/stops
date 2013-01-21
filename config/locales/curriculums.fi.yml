@@ -38,8 +38,11 @@ fi:
       # Admin tools
       list_outcomes: "Listaa valmiudet"
       edit_roles: "Lisää opettajia"
+      temp_courses_heading: "Uudet kandikurssit"
+      temp_courses_hint: "Klikkaa kurssiasi listasta ja anna pyydetyt tiedot. Jos kurssia ei löydy listasta, luo uusi painamalla 'Luo kurssi'-nappulaa."
+      create_temp_course: "Luo kurssi"
     edit:
-      import_csv_link: "Tuo tiedot CSV datasta"
+      import_csv_link: "Tuo tiedot CSV-tiedostosta"
       change_name: "Nimeä uudelleen"
       course_create_link: 'Luo kurssi'
       
@@ -78,13 +81,69 @@ fi:
         hint: "Opettajille lähetetään sähköpostitse kutsulinkki, jota seuraamalla saa opettajan oikeudet O4-järjestelmään."
         recipients: "Vastaanottajat (sähköpostiosoitteet erotettuna pilkulla tai rivinvaihdolla):"
         subject: "Sähköpostin otsikko:"
-        content: "Sähköpostiviesti:"
+        content: "Sähköpostiviesti: (%INVITATION% ja %FRONTPAGE% korvataan automaattisesti linkeillä)"
         subject_default: "Kurssitietojen syöttäminen O4-järjestelmään"
-        mail_template: "Käy syöttämässä kurssitiedot O4-järjestelmään allaolevasta linkistä:\n\nLINK\n"
+        mail_template: "Käy syöttämässä kurssitiedot O4-järjestelmään allaolevasta linkistä:\n\n%INVITATION%\n\nMyöhemmin pääset järjestelmään osoitteella:\n\n%FRONTPAGE%\n"
         send: "Lähetä"
         existing_invitations: 'Voimassaolevat aiemmin lähetetyt kutsut'
         sent_success: "Kutsuviestejä lähetetään"
-
+    temp_courses:
+      created: 'Kurssi %{name} luotu'
+      updated: 'Kurssi %{name} tallennettu'
+      new:
+        heading: 'Luo kurssi'
+      edit:
+        heading: 'Syötä kurssin tiedot'
+      index:
+        code_missing: ''
+        name_missing: 'Ei nimeä'
+      form:
+        heading: 'Syötä kurssin tiedot'
+        hint: 'Voit täyttää osan lomakkeesta ja jatkaa myöhemmin (muista kuitenkin painaa "Tallenna" lomakkeen lopussa).'
+        contact: 'Tiedot antoi'
+        contact_hint: '(kyselyjä varten, ei mene Oodiin)'
+        
+        code: 'Kurssikoodi'
+        code_hint: 'Ohjeet uudesta kurssikoodijärjestelmästä annetaan myöhemmin'
+        credits: 'Laajuus (op)'
+        credits_hint: ''
+        name_fi: 'Kurssin nimi suomeksi'
+        name_en: 'Kurssin nimi englanniksi'
+        name_sv: 'Kurssin nimi ruotsiksi'
+        name_hint: 'Suomenkielisestä ja ruotsinkielisestä kurssista kurssin nimi ja kuvaustiedot ilmoitetaan suomeksi, ruotsiksi ja englanniksi. Englanninkielisestä kurssista nimi ja kuvaustiedot ilmoitetaan vain englanniksi.'
+        department: 'Järjestävä laitos'
+        department_hint: 'Opetuksen järjestävän laitoksen vastuualuekoodi (T-koodi)'
+        language: 'Opetuskieli'
+        language_hint: ''
+        instructors: 'Opettajat'
+        instructors_hint: '(ei pakollinen tieto)'
+        grading_scale: 'Arvosteluasteikko'
+        grading_scale_hint: '1-5 tai hyväksytty/hylätty'
+        graduate_course: 'Jatko-opintokelpoisuus'
+        graduate_course_hint: ''
+        changing_topic: 'Vaihtuvasisältöisyys'
+        changing_topic_hint: ''
+        alternatives: 'Leikkaavuus toisen kurssin kanssa'
+        alternatives_hint: '(eli korvaavuus, voiko suorittaa molempia jne.)'
+        period: 'Opetusperiodi'
+        period_hint: 'Todennäköinen, mutta alustava tieto kurssisijoitteluista opetusperiodeihin ilmenee liitteestä "20130107 Kandiohj uudet kurssit ja vastuuopet.xlsx"'
+        prerequisites: 'Esitiedot'
+        prerequisites_hint: ''
+        outcomes: 'Osaamistavoitteet'
+        outcomes_hint: ''
+        content: 'Sisältö'
+        content_hint: ''
+        assignments: 'Toteutus ja työmuodot'
+        assignments_hint: ''
+        grading_details: 'Arvosteluperusteet'
+        grading_details_hint: ''
+        materials: 'Oppimateriaali'
+        materials_hint: ''
+        replaces: 'Korvaavuudet'
+        replaces_hint: ''
+        other: 'Muita tietoja'
+        other_hint: 'Kurssista voidaan ilmoittaa kurssin asema, kurssin taso, kurssin kotisivu, CEFR-taso (koskee kielikursseja) ja muita lisätietoja'
+        
   activerecord:
     errors:
       models:

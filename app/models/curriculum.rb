@@ -5,6 +5,8 @@ class Curriculum < ActiveRecord::Base
 
   has_many :profiles, :dependent => :destroy
   has_many :courses, :class_name => 'ScopedCourse', :dependent => :destroy, :order => 'code'
+  
+  has_many :temp_courses, :dependent => :destroy, :order => 'code, created_at'
 
   has_many :teacher_roles, :class_name => 'CurriculumRole', :conditions => {:type => 'CurriculumRole', :role => 'teacher'}, :foreign_key => 'target_id', :include => :user
   has_many :teachers, :through => :teacher_roles, :source => :user

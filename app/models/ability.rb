@@ -30,11 +30,11 @@ class Ability
     end
 
     # Curriculum roles
-    can [:update], Curriculum do |curriculum|
+    can [:create_course], Curriculum do |curriculum|
       curriculum.has_admin?(user) || curriculum.has_teacher?(user)
     end
     
-    can [:destroy], Curriculum do |curriculum|
+    can [:update, :destroy], Curriculum do |curriculum|
       curriculum.has_admin? user
     end
   end

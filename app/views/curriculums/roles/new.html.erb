@@ -15,20 +15,20 @@
 <%= form_tag curriculum_roles_path do %>
   <p>
     <%=t '.recipients' %><br />
-    <%= text_area_tag :addresses, @addresses, :rows => 20, :cols => 80  %>
+    <%= text_area_tag :addresses, @addresses, :rows => 10, :class => 'input-xxlarge'  %>
   </p>
 
   <p>
     <%=t '.subject' %><br />
-    <%= text_field_tag :subject, @subject, :size => 80 %>
+    <%= text_field_tag :subject, @subject, :class => 'input-xxlarge' %>
   </p>
   
   <p>
     <%=t '.content' %><br />
-    <%= text_area_tag :content, @content, :rows => 20, :cols => 80 %>
+    <%= text_area_tag :content, @content, :rows => 20, :class => 'input-xxlarge' %>
   </p>
   
-  <%= submit_tag t('.send'), :html => {:class => 'btn btn-primary'} %>
+  <button type="submit" class="btn btn-primary"><%= t('.send') %></button>
 <% end %>
 
 <p><%= link_to t(:Back), @curriculum %></p>

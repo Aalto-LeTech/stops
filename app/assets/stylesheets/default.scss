@@ -111,15 +111,6 @@ tr.odd {
   background: #ddf;
 }
 
-input {
-  height:         20px;
-  line-height:    20px;
-  border:         1px solid #FFDEB3;
-  padding:        3px 5px;
-  border-radius:  4px;
-  font-size:      14px;
-}
-
 label {
 
 }
@@ -620,41 +611,44 @@ div.current-user {
   Controls
 **************************/
 
-#schedule-controls-container h2 {
-  font-size: 1.2308em;
-}
+#schedule-controls-container {
+  h2 {
+    font-size: 1.2308em;
+  }
 
-.control-block {
-  margin-bottom: 1.9231em;
-}
 
-.hidden {
-  display: none;
-}
+  .control-block {
+    margin-bottom: 1.9231em;
+  }
 
-.control-group {
-   margin-bottom: 0.75em;
-}
+  .hidden {
+    display: none;
+  }
 
-.control-group label {
-  float: left;
-  max-width: 17em;
-}
+  .control-group {
+     margin-bottom: 0.75em;
+  }
 
-.control-group input {
-  display: inline;
-}
+  .control-group label {
+    float: left;
+    max-width: 17em;
+  }
 
-.control-group img {
-  margin-left: 1.538em;
-}
+  .control-group input {
+    display: inline;
+  }
 
-.control-group .controls {
-  margin-left: 17em;
-}
+  .control-group img {
+    margin-left: 1.538em;
+  }
 
-.control-course-code {
+  .control-group .controls {
+    margin-left: 17em;
+  }
 
+  .control-course-code {
+
+  }
 }
 
 /* General controls */

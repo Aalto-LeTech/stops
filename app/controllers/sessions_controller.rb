@@ -1,5 +1,8 @@
 # O4
 class SessionsController < ApplicationController
+  
+  layout 'single'
+
   def new
     @user_session = UserSession.new
   end

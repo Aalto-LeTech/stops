@@ -1,6 +1,8 @@
 class Curriculums::TempCoursesController < CurriculumsController
   before_filter :load_curriculum
   
+  layout 'wide'
+  
   # GET /temp_courses
   # GET /temp_courses.json
   def index
@@ -33,16 +35,15 @@ class Curriculums::TempCoursesController < CurriculumsController
     
     @temp_course.contact = "#{current_user.name} <#{current_user.email}>"
     
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @temp_course }
-    end
+    render :action => 'form'
   end
 
   # GET /temp_courses/1/edit
   def edit
     authorize! :create_course, @curriculum
     @temp_course = TempCourse.find(params[:id])
+    
+    render :action => 'form'
   end
 
   # POST /temp_courses
@@ -52,6 +53,7 @@ class Curriculums::TempCoursesController < CurriculumsController
     
     @temp_course = TempCourse.new(params[:temp_course])
     @temp_course.curriculum = @curriculum
+    @temp_course.update_comments(params[:comments])
 
     respond_to do |format|
       if @temp_course.save
@@ -70,6 +72,8 @@ class Curriculums::TempCoursesController < CurriculumsController
     authorize! :create_course, @curriculum
     
     @temp_course = TempCourse.find(params[:id])
+    
+    @temp_course.update_comments(params[:comments])
 
     respond_to do |format|
       if @temp_course.update_attributes(params[:temp_course])

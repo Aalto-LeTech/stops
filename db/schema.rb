@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130118085213) do
+ActiveRecord::Schema.define(:version => 20130121123635) do
 
   create_table "abstract_courses", :force => true do |t|
     t.string "code"
@@ -221,6 +221,7 @@ ActiveRecord::Schema.define(:version => 20130118085213) do
     t.text     "other"
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
+    t.text     "comments"
   end
 
   add_index "temp_courses", ["curriculum_id"], :name => "index_temp_courses_on_curriculum_id"

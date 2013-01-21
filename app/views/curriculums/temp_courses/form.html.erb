@@ -1,0 +1,159 @@
+<h1><%=t '.heading' %></h1>
+
+<p class="hint"><%=t '.hint' %></p>
+
+<%= form_for([@curriculum, @temp_course], :html => {:class => 'form-horizontal'}) do |f| %>
+
+  <table class="temp-course-form">
+    <tbody>
+      <tr>
+        <td><%= f.label :contact, t('.contact'), :class => 'control-label' %></td>
+        <td><%= f.text_field :contact %></td>
+        <td class="hint"><%=t '.contact_hint' %></td>
+      </tr>
+      <tr>
+        <td><%= f.label :code, t('.code'), :class => 'control-label' %></td>
+        <td><%= f.text_field :code %></td>
+        <td class="hint"><%=t '.code_hint' %></td>
+      </tr>
+      <tr>
+        <td><%= f.label :credits, t('.credits'), :class => 'control-label' %></td>
+        <td><%= f.number_field :credits %></td>
+        <td class="hint"><%=t '.credits_hint' %></td>
+      </tr>
+      <tr>
+        <td colspan="3"><span class="hint"><%= t('.name_hint').html_safe %></td>
+      </tr>
+      <tr>
+        <td><%= f.label :name_en, t('.name_en'), :class => 'control-label' %></td>
+        <td><%= f.text_field :name_en %></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><%= f.label :name_fi, t('.name_fi'), :class => 'control-label' %></td>
+        <td><%= f.text_field :name_fi %></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><%= f.label :name_sv, t('.name_sv'), :class => 'control-label' %></td>
+        <td><%= f.text_field :name_sv %></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><%= f.label :language, t('.language'), :class => 'control-label' %></td>
+        <td><%= f.text_field :language %></td>
+        <td class="hint"><%=t '.language_hint' %></td>
+      </tr>
+      <tr>
+        <td><%= f.label :department, t('.department'), :class => 'control-label' %></td>
+        <td><%= f.text_field :department %></td>
+        <td class="hint"><%=t '.department_hint' %></td>
+      </tr>
+      <tr>
+        <td><%= f.label :grading_scale, t('.grading_scale'), :class => 'control-label' %></td>
+        <td>
+          <label>
+            <%= f.radio_button :grading_scale, '1-5' %>
+            1-5
+          </label>
+          <label>
+            <%= f.radio_button :grading_scale, 'Hyväksytty/Hylätty' %>
+            Hyväksytty/Hylätty
+          </label>
+        </td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><%= f.label :graduate_course, t('.graduate_course'), :class => 'control-label' %></td>
+        <td><%= f.check_box :graduate_course %> Kyllä</td>
+        <td class="hint"><%=t '.graduate_course_hint' %></td>
+      </tr>
+      <tr>
+        <td><%= f.label :changing_topic, t('.changing_topic'), :class => 'control-label' %></td>
+        <td><%= f.check_box :changing_topic %> Kyllä</td>
+        <td class="hint"><%=t '.changing_topic_hint' %></td>
+      </tr>
+    </tbody>
+  </table>
+  <table class="temp-course-form">
+    <tbody>
+
+      <tr>
+        <td></td>
+        <td></td>
+        <td class="hint"><%=t '.comments' %></td>
+      </tr>
+
+      <tr>
+        <td><%= f.label :period, t('.period'), :class => 'control-label' %></td>
+        <td><%= f.text_field :period %></td>
+        <td><%= temp_course_comment('period') %></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td colspan="2" class="hint"><%=t '.period_hint' %></td>
+      </tr>
+      <tr>
+        <td><%= f.label :instructors, t('.instructors'), :class => 'control-label' %></td>
+        <td><%= f.text_area :instructors, :rows => 5, :class => 'input-xxlarge' %></td>
+        <td><%= temp_course_comment('instructors') %></td>
+      </tr>
+      <tr>
+        <td><%= f.label :alternatives, t('.alternatives'), :class => 'control-label' %></td>
+        <td><%= f.text_area :alternatives, :rows => 5, :class => 'input-xxlarge' %></td>
+        <td><%= temp_course_comment('alternatives') %></td>
+      </tr>
+      <tr>
+        <td><%= f.label :prerequisites, t('.prerequisites'), :class => 'control-label' %></td>
+        <td><%= f.text_area :prerequisites, :rows => 5, :class => 'input-xxlarge' %></td>
+        <td><%= temp_course_comment('prerequisites') %></td>
+      </tr>
+      <tr>
+        <td><%= f.label :outcomes, t('.outcomes'), :class => 'control-label' %></td>
+        <td><%= f.text_area :outcomes, :rows => 5, :class => 'input-xxlarge' %></td>
+        <td><%= temp_course_comment('outcomes') %></td>
+      </tr>
+      <tr>
+        <td><%= f.label :content, t('.content'), :class => 'control-label' %></td>
+        <td><%= f.text_area :content, :rows => 5, :class => 'input-xxlarge' %></td>
+        <td><%= temp_course_comment('content') %></td>
+      </tr>
+      <tr>
+        <td><%= f.label :assignments, t('.assignments'), :class => 'control-label' %></td>
+        <td><%= f.text_area :assignments, :rows => 5, :class => 'input-xxlarge' %></td>
+        <td><%= temp_course_comment('assignments') %></td>
+      </tr>
+      <tr>
+        <td><%= f.label :grading_details, t('.grading_details'), :class => 'control-label' %></td>
+        <td><%= f.text_area :grading_details, :rows => 5, :class => 'input-xxlarge' %></td>
+        <td><%= temp_course_comment('grading_details') %></td>
+      </tr>
+      <tr>
+        <td><%= f.label :materials, t('.materials'), :class => 'control-label' %></td>
+        <td><%= f.text_area :materials, :rows => 5, :class => 'input-xxlarge' %></td>
+        <td><%= temp_course_comment('materials') %></td>
+      </tr>
+      <tr>
+        <td><%= f.label :replaces, t('.replaces'), :class => 'control-label' %></td>
+        <td><%= f.text_area :replaces, :rows => 5, :class => 'input-xxlarge' %></td>
+        <td><%= temp_course_comment('replaces') %></td>
+      </tr>
+      <tr>
+        <td><%= f.label :other, t('.other'), :class => 'control-label' %></td>
+        <td><%= f.text_area :other, :rows => 5, :class => 'input-xxlarge' %></td>
+        <td><%= temp_course_comment('other') %></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td colspan="2"><span class="hint"><%=t '.other_hint' %></span></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <div class="actions">
+    <button type="submit" class="btn btn-primary"><%= t(:Save) %></button>
+  </div>
+
+<% end %>
+
+<p><%= link_to t(:Back), @curriculum %></p>

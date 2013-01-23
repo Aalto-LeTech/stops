@@ -7,6 +7,7 @@ class ApplicationController < ActionController::Base
 
   before_filter :redirect_to_ssl
   before_filter :set_locale
+  before_filter :store_location
 
   # Redirect root to the correct localized root (i.e., /:locale).
   # The reason this is done here instead of simply redirecting 

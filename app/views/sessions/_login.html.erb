@@ -8,7 +8,7 @@
 
 <p class="hint"><%=t :sessions_traditional_hint %></p>
 
-<%= form_for @user_session, :as => :user_session, :url => session_path, 
+<%= form_for @user_session, :as => :user_session, :url => login_path, 
   :html => { :class => 'form-horizontal' } do |f| %>
   <div class="control-group">
     <%= f.label :studentnumber, t(:sessions_studentnumber_label), 

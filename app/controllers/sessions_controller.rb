@@ -3,8 +3,14 @@ class SessionsController < ApplicationController
   
   layout 'single'
 
+  skip_before_filter :store_location
+
   def new
-    @user_session = UserSession.new
+    if not logged_in?
+      @user_session = UserSession.new
+    else
+      redirect_back_or_default frontpage_url
+    end
   end
 
   def create

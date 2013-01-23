@@ -3,7 +3,8 @@ Ops::Application.routes.draw do
     resource :session do
       get 'shibboleth'
     end
-    match '/login' => 'sessions#new', :as => :login
+    match '/login' => 'sessions#new', :as => :login, :via => :get
+    match '/login' => 'sessions#create', :via => :post
     match '/logout' => 'sessions#destroy', :as => :logout
 
     match '/preferences' => 'users#edit'

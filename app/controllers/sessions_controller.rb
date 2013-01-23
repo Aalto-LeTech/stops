@@ -15,7 +15,7 @@ class SessionsController < ApplicationController
     if @user_session.save
       # TODO: log username
       logger.info "Login successful" # "Logged in #{@user_session}"
-      redirect_back_or_default root_url
+      redirect_back_or_default frontpage_url
     else
       logger.info "Login failed. #{@user_session.errors.full_messages.join(',')}"
       

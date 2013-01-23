@@ -117,7 +117,7 @@ Ops::Application.routes.draw do
 
   resources :invitations, :only => [:show, :destroy], :id => /[^\/]+/
   
-  match '/:locale' => "frontpage#index"
-  root :to => "frontpage#index"
+  match '/:locale' => "frontpage#index", :as => :frontpage
+  root :to => "application#redirect_by_locale"
 
 end

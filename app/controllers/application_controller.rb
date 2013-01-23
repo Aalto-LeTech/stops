@@ -7,7 +7,15 @@ class ApplicationController < ActionController::Base
 
   before_filter :redirect_to_ssl
   before_filter :set_locale
-  before_filter :require_login?
+
+  # Redirect root to the correct localized root (i.e., /:locale).
+  # The reason this is done here instead of simply redirecting 
+  # the route in routes.rb, is that I18n.locale is that at that
+  # phase of processing I18n.locale is set to the default locale
+  # and not to the user's locale found in the session.
+  def redirect_by_locale
+    redirect_to '/' + I18n.locale.to_s
+  end
 
   protected
 
@@ -120,7 +128,7 @@ class ApplicationController < ActionController::Base
             redirect_to SHIB_PATH + shibboleth_session_url(:protocol => 'https')
           #end
         else
-          redirect_to new_session_url
+          redirect_to login_url
         end
       end
       format.any do

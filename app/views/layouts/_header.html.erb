@@ -1,18 +1,26 @@
-<div id="header" class="header">
-  <!-- Logo -->
-  <div class="logo"><span class="o4">O<sup>4</sup></span> <span class="program-name"><%=t :program_name%></span></div>
+<!-- bootstrap-based navbar -->
 
-  <div class="navibar">
-    <ul>
-      <%
-      # Language
-      # Only show the language button for GET requests.
-      if request.get? %>
-        <li><%= link_to 'FI', url_for(:locale => 'fi') %></li>
-        <li><%= link_to 'EN', url_for(:locale => 'en') %></li>
-      <% end %>
+<div class="navbar">
+  <div class="navbar-inner">
+    <a class="brand" href="#">
+      <div class="logo">
+        <span class="o4">O<sup>4</sup></span> 
+        <span class="program-name"><%=t :program_name%></span>
+      </div>
+    </a>
+    <ul class="nav">
+      <%= nav_link_to t(:frontpageTab), frontpage_path %>
+      <%= nav_link_to t(:curriculumsTab), curriculums_path %>
+    </ul>
+
+    <ul class="nav pull-right">
+      <li><%= link_to 'FI', url_for(:locale => 'fi') %></li>
+      <li><%= link_to 'EN', url_for(:locale => 'en') %></li>
+
+      <li class="divider-vertical"></li>
 
       <% if logged_in? %>
+        <li><%= current_user.name %></li>
         <!--li><%= link_to 'My preferences', preferences_path %></li-->
         <li><%= link_to 'Logout', logout_path %></li>
       <% else %>
@@ -22,20 +30,11 @@
   </div>
 </div>
 
-<% if logged_in? %>
-  <div class="current-user"><%= current_user.name %></div>
-<% end %>
+
 
 <div class="clear"></div>
 
 <div class="topNaviTabs">
-  <ul>
-    <li><%= link_to t(:frontpageTab), root_path %></li>
-  </ul>
-
-  <ul>
-    <li><%= link_to t(:curriculumsTab), curriculums_path %></li>
-  </ul>
 
   <% if false && logged_in? %>
     <ul>

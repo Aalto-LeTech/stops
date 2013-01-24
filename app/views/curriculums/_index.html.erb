@@ -1,31 +1,38 @@
-<h1><%=t :curriculums_heading %></h1>
+<div class="row-fluid">
+  <div class="span4 offset1">
 
-<!--%= render 'remove_confirmation_modal' %-->
+    <h1><%=t :curriculums_heading %></h1>
 
-<table id="curriculums-table" class="basic-table">
-  <thead>
-    <tr>
-      <th><%= t '.curriculum' %></th>
-      <th><%= t '.years' %></th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @curriculums.each do |curriculum| %>
-      <tr>
-        <td data-name="true"><%= link_to curriculum.name, curriculum_url(:id => curriculum) %></td>
-        <td><%= curriculum.start_year %>-<%= curriculum.end_year %></td>
-        <!--
-        <% if can? :destroy, curriculum %>
-          <td>
-            <a data-initiate-delete="true" data-target-id="<%= curriculum.id %>" class="button-base button-danger button-small-abs"><%= t 'Delete' %></a>
-          </td>
+    <!--%= render 'remove_confirmation_modal' %-->
+
+    <table id="curriculums-table" class="table">
+      <thead>
+        <tr>
+          <th><%= t '.curriculum' %></th>
+          <th><%= t '.years' %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @curriculums.each do |curriculum| %>
+          <tr>
+            <td data-name="true"><%= link_to curriculum.name, curriculum_url(:id => curriculum) %></td>
+            <td><%= curriculum.start_year %>-<%= curriculum.end_year %></td>
+            <!--
+            <% if can? :destroy, curriculum %>
+              <td>
+                <a data-initiate-delete="true" data-target-id="<%= curriculum.id %>" class="button-base button-danger button-small-abs"><%= t 'Delete' %></a>
+              </td>
+            <% end %>
+            -->
+          </tr>
         <% end %>
-        -->
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+      </tbody>
+    </table>
 
-<% if can? :create, Curriculum %>
-  <p><%= link_to t(:curriculum_new), new_curriculum_path, :class => 'button-base' %></p>
-<% end %>
+    <% if can? :create, Curriculum %>
+      <p><%= link_to t(:curriculum_new), new_curriculum_path, :class => 'button-base' %></p>
+    <% end %>
+
+  </div>
+
+</div>

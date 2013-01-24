@@ -3,5 +3,4 @@
 //= require schedule/course
 //= require schedule/courseinstance
 //= require schedule/plan
-//= require bootstrap
 

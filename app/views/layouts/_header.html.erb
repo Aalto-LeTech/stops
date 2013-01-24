@@ -2,7 +2,7 @@
 
 <div class="navbar">
   <div class="navbar-inner">
-    <a class="brand" href="#">
+    <a class="brand" href="<%= frontpage_path %>">
       <div class="logo">
         <span class="o4">O<sup>4</sup></span> 
         <span class="program-name"><%=t :program_name%></span>
@@ -11,16 +11,39 @@
     <ul class="nav">
       <%= nav_link_to t(:frontpageTab), frontpage_path %>
       <%= nav_link_to t(:curriculumsTab), curriculums_path %>
+      <% if false && logged_in? %>
+        <li class="dropdown">
+          <a class="dropdown-toggle" id="dLabel" role="button" data-toggle="dropdown" data-target="" href="#">
+            <%= t :myPlanDropdown %>
+            <b class="caret"></b>
+          </a>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+              <li><%= link_to t(:myPlanTabCurriculum), studyplan_curriculum_path %></li>
+              <li><%= link_to t(:myPlanTabProfiles), studyplan_profiles_path %></li>
+              <li><%= link_to t(:myPlanTabAllCourses), studyplan_courses_path %></li>
+              <!--li><%= link_to t(:myPlanTabMyCourses),  studyplan_courses_path %></li-->
+              <li><%= link_to t(:myPlanTabSchedule), studyplan_schedule_path %></li>
+              <!--li><%= link_to t(:myPlanTabRecord), studyplan_record_path %></li-->
+            </ul>
+        </li>
+      <% end %>
     </ul>
 
     <ul class="nav pull-right">
-      <li><%= link_to 'FI', url_for(:locale => 'fi') %></li>
-      <li><%= link_to 'EN', url_for(:locale => 'en') %></li>
+      <li>
+        <%= link_to 'FI', url_for(:locale => 'fi'), :class => 'lang-link' %>
+        <%= link_to 'EN', url_for(:locale => 'en'), :class => 'lang-link' %>
+      </li>
 
       <li class="divider-vertical"></li>
 
       <% if logged_in? %>
-        <li><%= current_user.name %></li>
+        <li>
+          <p class="navbar-text">
+            <i class="icon-user"></i>
+            <%= current_user.name %>
+          </p>
+        </li>
         <!--li><%= link_to 'My preferences', preferences_path %></li-->
         <li><%= link_to 'Logout', logout_path %></li>
       <% else %>
@@ -31,21 +54,5 @@
 </div>
 
 
-
 <div class="clear"></div>
 
-<div class="topNaviTabs">
-
-  <% if false && logged_in? %>
-    <ul>
-      <li><%= link_to t(:myPlanTabCurriculum), studyplan_curriculum_path %></li>
-      <li><%= link_to t(:myPlanTabProfiles), studyplan_profiles_path %></li>
-      <li><%= link_to t(:myPlanTabAllCourses), studyplan_courses_path %></li>
-      <!--li><%= link_to t(:myPlanTabMyCourses), studyplan_courses_path %></li-->
-      <li><%= link_to t(:myPlanTabSchedule), studyplan_schedule_path %></li>
-      <!--li><%= link_to t(:myPlanTabRecord), studyplan_record_path %></li-->
-    </ul>
-  <% end %>
-</div>
-
-<div class="clear"></div>

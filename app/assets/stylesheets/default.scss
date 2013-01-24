@@ -507,6 +507,46 @@ div.course-error-info {
   Header
  *************************/
 
+/* New header */
+
+.navbar {
+  .lang-link {
+
+    display: inline-block;
+
+    & + .lang-link {
+      padding-left:   5px;
+      padding-right:  5px;
+    }
+
+    &:first-child {
+      padding-right:  5px;
+    }
+
+    &:last-child {
+      padding-left:   5px;
+      padding-right:  15px;
+    }
+  }
+
+  .navbar-text {
+    .upper-text {
+      line-height:    12px;
+      font-size:      12px;
+      margin-bottom:  0px;
+    }
+
+    .lower-text {
+      line-height:    28px;
+      font-size:      14px;
+      margin-bottom:  0px;
+    }
+  }
+}
+
+
+/* Old header */
+
 .header {
   /*background: #f8f8f8;*/
   background: #0065BD;

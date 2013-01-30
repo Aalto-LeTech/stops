@@ -78,25 +78,26 @@ div.admin-tools {
   float: right;
   overflow: hidden;
   width: 10em;
-  border: 1px solid #e0e0e0;
-  padding: 1em;
-  background: #f0f0f0;
+  padding: 8px 0px;
+  //border: 1px solid #e0e0e0;
+  //background: #f0f0f0;
 }
 
+/* Bootstrap nav-list styling is in use instead of these */
 .admin-tools ul {
-  list-style: none;
-  margin: 0px;
-  padding: 0px;
+  //list-style: none;
+  //margin: 0px;
+  //padding: 0px;
 }
 
 .admin-tools li {
-  margin: 0px;
-  padding: 0px;
+  //margin: 0px;
+  //padding: 0px;
 }
 
 .admin-tools a {
-  color: black;
-  font-size: small;
+  //color: black;
+  //font-size: small;
 }
 
 div.progress {
@@ -111,9 +112,6 @@ tr.odd {
   background: #ddf;
 }
 
-label {
-
-}
 
 /******************
  * Headings

@@ -36,6 +36,7 @@ fi:
       confirm_create: "Lisää"
     show:
       # Admin tools
+      admin_heading: "Hallinta"
       list_outcomes: "Listaa valmiudet"
       edit_roles: "Lisää opettajia"
       temp_courses_heading: "Uudet kandikurssit"

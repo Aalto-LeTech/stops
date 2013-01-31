@@ -3,7 +3,8 @@ Ops::Application.routes.draw do
     resource :session do
       get 'shibboleth'
     end
-    match '/login' => 'sessions#new', :as => :login
+    match '/login' => 'sessions#new', :as => :login, :via => :get
+    match '/login' => 'sessions#create', :via => :post
     match '/logout' => 'sessions#destroy', :as => :logout
 
     match '/preferences' => 'users#edit'
@@ -117,7 +118,7 @@ Ops::Application.routes.draw do
 
   resources :invitations, :only => [:show, :destroy], :id => /[^\/]+/
   
-  match '/:locale' => "frontpage#index"
-  root :to => "frontpage#index"
+  match '/:locale' => "frontpage#index", :as => :frontpage
+  root :to => "application#redirect_by_locale"
 
 end

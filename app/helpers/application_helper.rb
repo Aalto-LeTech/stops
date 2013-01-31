@@ -1,6 +1,18 @@
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
 
+  def nav_link_to(text, path, active_class='active')
+    if current_page? path
+        content_tag :li, :class => active_class do
+            link_to text, path
+        end
+    else
+        content_tag :li do
+            link_to text, path
+        end
+    end
+  end
+
   class ActionView::Helpers::FormBuilder
     
     # Usage:

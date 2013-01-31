@@ -35,14 +35,17 @@ en:
       confirm_create: "Create"
     show:
       # Admin tools
+      admin_heading: "Administration"
       list_outcomes: "List outcomes"
       edit_roles: "Add teachers"
       temp_courses_heading: "New bachelor level courses"
-      
+      temp_courses_hint: "Click your course on the list and input the required information. If you cannot find the course from the list, create a new one by clicking 'Create course'-button."
+      create_temp_course: "Create course"
     edit:
+      additional_tools_heading: "Additional tools"
       import_csv_link: "Import using CSV data"
       change_name: "Change name"
-      
+      course_create_link: 'Create course'
 
     new_course_form_container:
       # Create new course form

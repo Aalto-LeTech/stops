@@ -4,8 +4,9 @@
 <% if can? :update, @curriculum %>
   <!--div>TODO: courses list</div-->
 
-  <div class="admin-tools">
-    <ul>
+  <div class="admin-tools well">
+    <ul class="nav nav-list">
+      <li class="nav-header"><%= t '.admin_heading' %></li>
       <li><%= link_to t(:curriculum_edit_link), edit_curriculum_path(:id => @curriculum) %></li>
       <li><%= link_to t(:curriculum_cycles_link), cycles_curriculum_path(:id => @curriculum) %></li>
       <li><%= link_to t('.list_outcomes'), outcomes_curriculum_path(:id => @curriculum) %></li>

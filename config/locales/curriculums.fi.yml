@@ -36,12 +36,14 @@ fi:
       confirm_create: "Lisää"
     show:
       # Admin tools
+      admin_heading: "Hallinta"
       list_outcomes: "Listaa valmiudet"
       edit_roles: "Lisää opettajia"
       temp_courses_heading: "Uudet kandikurssit"
       temp_courses_hint: "Klikkaa kurssiasi listasta ja anna pyydetyt tiedot. Jos kurssia ei löydy listasta, luo uusi painamalla 'Luo kurssi'-nappulaa."
       create_temp_course: "Luo kurssi"
     edit:
+      additional_tools_heading: "Lisätoiminnot"
       import_csv_link: "Tuo tiedot CSV-tiedostosta"
       change_name: "Nimeä uudelleen"
       course_create_link: 'Luo kurssi'

@@ -15,3 +15,4 @@
 //= require jquery-ui
 //= require_tree ./templates/
 //= require o4-jquery-extensions
+//= require bootstrap

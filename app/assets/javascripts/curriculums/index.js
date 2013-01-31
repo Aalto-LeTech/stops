@@ -1,4 +1,3 @@
-//= require bootstrap
 //= require curriculums/action_modal.js
 
 /* 

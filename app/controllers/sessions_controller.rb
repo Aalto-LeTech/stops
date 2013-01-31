@@ -3,8 +3,14 @@ class SessionsController < ApplicationController
   
   layout 'single'
 
+  skip_before_filter :store_location
+
   def new
-    @user_session = UserSession.new
+    if not logged_in?
+      @user_session = UserSession.new
+    else
+      redirect_back_or_default frontpage_url
+    end
   end
 
   def create
@@ -15,7 +21,7 @@ class SessionsController < ApplicationController
     if @user_session.save
       # TODO: log username
       logger.info "Login successful" # "Logged in #{@user_session}"
-      redirect_back_or_default root_url
+      redirect_back_or_default frontpage_url
     else
       logger.info "Login failed. #{@user_session.errors.full_messages.join(',')}"
       

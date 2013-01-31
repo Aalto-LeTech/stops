@@ -13,6 +13,7 @@ fi:
   navi_browse_curriculums: "Selaa opinto-oppaita"
 
   frontpageTab: "Etusivu"
+  myPlanDropdown: "Suunnitelma"
   myPlanTabCurriculum: "Oma opinto-opas"
   myPlanTabProfiles: "Profiilit"
   myPlanTabAllCourses: "Kurssit"
@@ -20,7 +21,7 @@ fi:
   myPlanTabSchedule: "Aikataulu"
   myPlanTabRecord: "Suoritukset"
   myPlanThisPeriod: "Kuluva periodi"
-  curriculumsTab: "Kaikki opinto-oppaat"
+  curriculumsTab: "Opinto-oppaat"
 
   example_schedule: "Mallilukujärjestys"
 

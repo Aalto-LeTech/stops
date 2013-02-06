@@ -3,15 +3,32 @@ class Curriculum < ActiveRecord::Base
   validates_presence_of :start_year
   validates_presence_of :end_year
 
-  has_many :profiles, :dependent => :destroy
-  has_many :courses, :class_name => 'ScopedCourse', :dependent => :destroy, :order => 'code'
-  
-  has_many :temp_courses, :dependent => :destroy, :order => 'code, created_at'
+  has_many :profiles, 
+           :dependent   => :destroy
 
-  has_many :teacher_roles, :class_name => 'CurriculumRole', :conditions => {:type => 'CurriculumRole', :role => 'teacher'}, :foreign_key => 'target_id', :include => :user
+  has_many :courses, 
+           :class_name  => 'ScopedCourse', 
+           :dependent   => :destroy, 
+           :order       => 'course_code'
+  
+  has_many :temp_courses, 
+           :dependent   => :destroy, 
+           :order       => 'code, created_at'
+
+  has_many :teacher_roles, 
+           :class_name  => 'CurriculumRole', 
+           :conditions  => {:type => 'CurriculumRole', :role => 'teacher'}, 
+           :foreign_key => 'target_id', 
+           :include     => :user
+
   has_many :teachers, :through => :teacher_roles, :source => :user
   
-  has_many :admin_roles, :class_name => 'CurriculumRole', :conditions => {:type => 'CurriculumRole', :role => 'admin'}, :foreign_key => 'target_id', :include => :user
+  has_many :admin_roles, 
+           :class_name  => 'CurriculumRole', 
+           :conditions  => {:type => 'CurriculumRole', :role => 'admin'}, 
+           :foreign_key => 'target_id', 
+           :include     => :user
+
   has_many :admins, :through => :admin_roles, :source => :user
 
   #has_and_belongs_to_many :admins, :class_name => 'User', :join_table => 'curriculum_roles'

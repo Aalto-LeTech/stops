@@ -79,7 +79,7 @@ class Curriculums::CoursesController < CurriculumsController
 
     @abstract_course.assign_attributes(params[:abstract_course])
     @scoped_course = @abstract_course.scoped_courses.first
-    @scoped_course.code = @abstract_course.code
+    @scoped_course.course_code = @abstract_course.code
     @scoped_course.curriculum = @curriculum
 
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130121123635) do
+ActiveRecord::Schema.define(:version => 20130204134728) do
 
   create_table "abstract_courses", :force => true do |t|
     t.string "code"
@@ -19,14 +19,14 @@ ActiveRecord::Schema.define(:version => 20130121123635) do
 
   add_index "abstract_courses", ["code"], :name => "index_abstract_courses_on_code", :unique => true
 
-  create_table "competence_courses", :id => false, :force => true do |t|
+  create_table "competence_courses_cache", :id => false, :force => true do |t|
     t.integer "competence_id",    :null => false
     t.integer "scoped_course_id", :null => false
     t.integer "requirement"
   end
 
-  add_index "competence_courses", ["competence_id", "requirement"], :name => "index_competence_courses_on_competence_id_and_requirement"
-  add_index "competence_courses", ["competence_id"], :name => "index_competence_courses_on_competence_id"
+  add_index "competence_courses_cache", ["competence_id", "requirement"], :name => "index_competence_courses_on_competence_id_and_requirement"
+  add_index "competence_courses_cache", ["competence_id"], :name => "index_competence_courses_on_competence_id"
 
   create_table "competence_descriptions", :force => true do |t|
     t.integer "competence_id", :null => false
@@ -37,13 +37,20 @@ ActiveRecord::Schema.define(:version => 20130121123635) do
 
   add_index "competence_descriptions", ["competence_id", "locale"], :name => "index_competence_descriptions_on_competence_id_and_locale", :unique => true
 
-  create_table "competences", :force => true do |t|
-    t.integer "profile_id",                  :null => false
-    t.integer "level",      :default => 1
-    t.float   "credits",    :default => 0.0, :null => false
+  create_table "competence_nodes", :force => true do |t|
+    t.string   "type"
+    t.integer  "credits"
+    t.integer  "profile_id"
+    t.integer  "level"
+    t.integer  "abstract_course_id"
+    t.integer  "curriculum_id"
+    t.string   "course_code"
+    t.datetime "created_at",         :null => false
+    t.datetime "updated_at",         :null => false
   end
 
-  add_index "competences", ["profile_id"], :name => "index_competences_on_profile_id"
+  add_index "competence_nodes", ["abstract_course_id", "curriculum_id"], :name => "index_competence_nodes_on_abstract_course_id_and_curriculum_id"
+  add_index "competence_nodes", ["profile_id"], :name => "index_competence_nodes_on_profile_id"
 
   create_table "course_descriptions", :force => true do |t|
     t.integer "abstract_course_id", :null => false
@@ -128,26 +135,12 @@ ActiveRecord::Schema.define(:version => 20130121123635) do
 
   add_index "profile_descriptions", ["profile_id", "locale"], :name => "index_profile_descriptions_on_profile_id_and_locale", :unique => true
 
-  create_table "profiles", :force => true do |t|
-    t.integer "curriculum_id", :null => false
-  end
-
   create_table "roles", :force => true do |t|
     t.integer "user_id",   :null => false
     t.integer "target_id"
     t.string  "type"
     t.string  "role"
   end
-
-  create_table "scoped_courses", :force => true do |t|
-    t.integer "abstract_course_id", :null => false
-    t.integer "curriculum_id",      :null => false
-    t.string  "code"
-    t.float   "credits"
-  end
-
-  add_index "scoped_courses", ["abstract_course_id", "curriculum_id"], :name => "index_scoped_courses_on_abstract_course_id_and_curriculum_id", :unique => true
-  add_index "scoped_courses", ["curriculum_id"], :name => "index_scoped_courses_on_curriculum_id"
 
   create_table "sessions", :force => true do |t|
     t.string   "session_id", :null => false
@@ -188,8 +181,7 @@ ActiveRecord::Schema.define(:version => 20130121123635) do
   add_index "skill_prereqs", ["skill_id"], :name => "index_skill_prereqs_on_skill_id"
 
   create_table "skills", :force => true do |t|
-    t.integer "skillable_id",   :null => false
-    t.string  "skillable_type", :null => false
+    t.integer "competence_node_id", :null => false
     t.integer "position"
     t.integer "level"
     t.float   "credits"

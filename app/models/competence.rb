@@ -1,19 +1,39 @@
 # Competence, e.g. Steel structures, level 1
-class Competence < ActiveRecord::Base
+class Competence < CompetenceNode
 
   belongs_to :profile
-  has_many :competence_descriptions, :dependent => :destroy
+
+  has_many :competence_nodes
+
+  has_many :competence_descriptions, 
+           :dependent   => :destroy
 
   # Prerequisite skills
-  #has_many :competence_skills, :dependent => :destroy
-  has_many :skills, :as => :skillable, :order => 'position', :dependent => :destroy
+  has_many :skills,
+           :foreign_key => 'competence_node_id',
+           :order       => 'position', 
+           :dependent   => :destroy
 
   # Prerequisite courses
-  has_many :competence_courses, :dependent => :destroy
-  has_many :courses, :through => :competence_courses, :source => :scoped_course, :order => 'code'
+  has_many :competence_courses, 
+           :dependent   => :destroy
+  
+  has_many :courses, 
+           :through     => :competence_courses, 
+           :source      => :scoped_course, 
+           :order       => 'code'
 
-  has_many :strict_prereqs, :through => :competence_courses, :source => :scoped_course, :order => 'code', :conditions => "requirement = #{STRICT_PREREQ}"
-  has_many :supporting_prereqs, :through => :competence_courses, :source => :scoped_course, :order => 'code', :conditions => "requirement = #{SUPPORTING_PREREQ}"
+  has_many :strict_prereqs, 
+           :through     => :competence_courses, 
+           :source      => :scoped_course, 
+           :order       => 'code', 
+           :conditions  => "requirement = #{STRICT_PREREQ}"
+
+  has_many :supporting_prereqs, 
+           :through     => :competence_courses, 
+           :source      => :scoped_course, 
+           :order       => 'code', 
+           :conditions  => "requirement = #{SUPPORTING_PREREQ}"
 
 
 

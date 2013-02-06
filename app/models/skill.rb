@@ -35,7 +35,8 @@ class Skill < ActiveRecord::Base
            :order       => 'position', 
            :conditions  => "requirement = #{STRICT_PREREQ}"
 
-  belongs_to :skillable, :polymorphic => true
+  has_many :competence_nodes
+  validates :competence_nodes, :length => { :minimum => 1 }
 
   accepts_nested_attributes_for :skill_descriptions
 

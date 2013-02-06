@@ -1,5 +1,5 @@
 # Course as a part of a curriculum, e.g. Programming 101 as described in the 2011 study guide
-class ScopedCourse < ActiveRecord::Base
+class ScopedCourse < CompetenceNode
 
   belongs_to :abstract_course
   belongs_to :curriculum

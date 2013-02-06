@@ -36,7 +36,7 @@ class Curriculums::SkillsController < CurriculumsController
 
   def new
     @skill = Skill.new
-    @skill.skillable = Competence.find(params[:competence_id])
+    @skill.competence_nodes << Competence.find(params[:competence_id])
 
     # Create empty descriptions for each required locale
     REQUIRED_LOCALES.each do |locale|

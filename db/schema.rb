@@ -52,6 +52,11 @@ ActiveRecord::Schema.define(:version => 20130204134728) do
   add_index "competence_nodes", ["abstract_course_id", "curriculum_id"], :name => "index_competence_nodes_on_abstract_course_id_and_curriculum_id"
   add_index "competence_nodes", ["profile_id"], :name => "index_competence_nodes_on_profile_id"
 
+  create_table "competence_nodes_skills", :force => true do |t|
+    t.integer "competence_node_id"
+    t.integer "skill_id"
+  end
+
   create_table "course_descriptions", :force => true do |t|
     t.integer "abstract_course_id", :null => false
     t.string  "locale"
@@ -181,7 +186,6 @@ ActiveRecord::Schema.define(:version => 20130204134728) do
   add_index "skill_prereqs", ["skill_id"], :name => "index_skill_prereqs_on_skill_id"
 
   create_table "skills", :force => true do |t|
-    t.integer "competence_node_id", :null => false
     t.integer "position"
     t.integer "level"
     t.float   "credits"

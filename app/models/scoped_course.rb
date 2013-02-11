@@ -16,10 +16,9 @@ class ScopedCourse < CompetenceNode
 
   #has_many :skills, :order => 'position', :dependent => :destroy #, :foreign_key => 'course_code', :primary_key => 'code'
   #has_many :course_skills, :dependent => :destroy
-  has_many :skills, 
-           :as        => :skillable, 
-           :order     => 'position', 
-           :dependent => :destroy #, :foreign_key => 'course_code', :primary_key => 'code'
+  # has_many :skills, 
+  #          :order     => 'position', 
+  #          :dependent => :destroy #, :foreign_key => 'course_code', :primary_key => 'code'
   
   has_many :skill_descriptions, 
            :through => :skills
@@ -76,7 +75,6 @@ class ScopedCourse < CompetenceNode
     has :abstract_course_id
     # has skills(:id)
   end
-   
 
 
   def name(locale)

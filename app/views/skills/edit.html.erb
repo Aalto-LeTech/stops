@@ -1,10 +1,7 @@
-<h1><%= @skill.skillable.name(I18n.locale) %></h1>
+<h1><%= @skill.competence_nodes.first.name(I18n.locale) %></h1>
 
 <%= form_for @skill do |f| %>
-<!--
-   f.hidden_field :skillable_id
-   f.hidden_field :skillable_type
-   -->
+
   <li>
     <%= f.fields_for :skill_descriptions do |cf| %>
       <%= cf.text_field :description %>

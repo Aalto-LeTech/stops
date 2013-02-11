@@ -35,7 +35,7 @@ class Skill < ActiveRecord::Base
            :order       => 'position', 
            :conditions  => "requirement = #{STRICT_PREREQ}"
 
-  has_many :competence_nodes
+  has_and_belongs_to_many :competence_nodes
   validates :competence_nodes, :length => { :minimum => 1 }
 
   accepts_nested_attributes_for :skill_descriptions

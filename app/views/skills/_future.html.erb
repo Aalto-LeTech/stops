@@ -1,16 +1,16 @@
 <% @skill.prereq_to.each do |skill| %>
-  <% if skill.skillable_type == 'ScopedCourse' %>
-    <% if !@user || @user.courses.include?(skill.skillable) %>
+  <% if skill.competence_nodes.first.type == 'ScopedCourse' %>
+    <% if !@user || @user.courses.include?(skill.competence_nodes.first) %>
       <p class="course">
         <%= @user.id %>
-        <%= link_to skill.skillable.code + ' ' + skill.skillable.name(I18n.locale), course_url(:id => skill.skillable) %>:
+        <%= link_to skill.competence_nodes.first.course_code + ' ' + skill.competence_nodes.first.name(I18n.locale), course_url(:id => skill.competence_nodes.first) %>:
         <%= skill.description(I18n.locale) %>
       </p>
     <% end %>
   <% else %>
     <p class="profile">
-      <% if !@user || @user.competences.include?(skill.skillable) %>
-        <%= skill.skillable.profile.name(I18n.locale) %> <%= skill.skillable.name(I18n.locale) %>:
+      <% if !@user || @user.competences.include?(skill.competence_nodes.first) %>
+        <%= skill.competence_nodes.first.profile.name(I18n.locale) %> <%= skill.competence_nodes.first.name(I18n.locale) %>:
         <%= skill.description(I18n.locale) %>
       <% end %>
     </p>

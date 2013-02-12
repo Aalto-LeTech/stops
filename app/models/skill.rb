@@ -88,8 +88,15 @@ class Skill < ActiveRecord::Base
   # course_ids: DFS does not proceed to courses that are not included in the course_ids hash
   def dfs(paths, path, path_lengths, target_skill_ids, course_ids, visited)
     # If this skill belongs to a course that does not belong to the profile, kill this branch
-    if (self.skillable_type == 'ScopedCourse' && !course_ids.has_key?(self.skillable_id)) || visited.has_key?(self.id)
-      puts "#{self.skillable.name('fi')} not included"
+    course_not_in_profile = false
+    self.competence_nodes.each do |node|
+      if node.type == 'ScopedCourse' && !course_ids.has_key?(node.id)
+        course_not_in_profile = true
+      end
+    end
+
+    if course_not_in_profile || visited.has_key?(self.id)
+      puts "#{self.skill_description.where(:locale => 'fi').first.description} not included"
       return
     end
 
@@ -133,22 +140,19 @@ class Skill < ActiveRecord::Base
 
     # Run DFS for skills to construct an array of skills that make the competence
     while skill = stack.pop
-      #logger.info "XXXXXX Processing #{skill.skillable.name('fi')} - #{skill.description('fi')}"
 
-      if skill.skillable_type == 'ScopedCourse'
-        # Load course if it has not been loaded
-        courses[skill.skillable_id] = ScopedCourse.find(skill.skillable_id) unless courses[skill.skillable_id]
+      skill_courses = skill.scoped_courses
+      skill_courses.each do |course|
+        courses[course.id] = course
 
-        course = courses[skill.skillable_id]
-        result[course] = {} unless result[course]
-        result[course][skill.id] = skill
+        result[course] ||= {}
+        resutl[course][skill.id] = skill
       end
 
       # Push neighbors to stack
       skill.strict_prereqs.each do |prereq|
         stack.push prereq
       end
-      #logger.info "XXXXXX Adding neighbor #{prereq.skillable.name('fi')} - #{prereq.description('fi')}"
     end
 
     result.sort_by {|course, skills| course.code}

@@ -5,11 +5,11 @@
 
 <h2><%= @skill.description(I18n.locale) %></h2>
 
-<% @courses.each do |row| %>
-  <h3><%= row[0].code %> <%= row[0].name(I18n.locale) %></h3>
+<% @courses.each do |course, skill_map| %>
+  <h3><%= course.code %> <%= course.name(I18n.locale) %></h3>
 
   <ul>
-    <% row[1].each_value do |skill| %>
+    <% skill_map.each_value do |skill| %>
       <li><%= skill.description(I18n.locale) %></li>
     <% end %>
   </ul>

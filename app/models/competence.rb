@@ -142,18 +142,18 @@ class Competence < CompetenceNode
 
     # Run DFS for skills to construct an array of skills that make the competence
     while skill = stack.pop
-      #logger.info "XXXXXX Processing #{skill.skillable.name('fi')} - #{skill.description('fi')}"
-
       # Load course if it has not been loaded
-      #courses[skill.skillable_id] = ScopedCourse.find(skill.skillable_id) unless courses[skill.skillable_id]
 
-      course = courses[skill.skillable_id]
-      result[course][skill.id] = skill
+      skill_courses = skill.scoped_courses
+
+      skill_courses.each do |course|
+        courses[course.id] = course
+        result[course][skill.id] = skill
+      end
 
       # Push neighbors to stack
       skill.strict_prereqs.each do |prereq|
         stack.push prereq
-        #logger.info "XXXXXX Adding neighbor #{prereq.skillable.name('fi')} - #{prereq.description('fi')}"
       end
     end
 
@@ -176,15 +176,16 @@ class Competence < CompetenceNode
     # Make a list of prereq courses
     skills.each do |competence_skill|
       competence_skill.prereqs.each do |prereq_skill|
-        if prereq_skill.skillable_type == Competence
+        if skill.competences.exists?
           # Competence depends on other competence
           # TODO: raise Exception
           logger.error "Competence depends on competence"
           next
         end
 
-        prereq_course = prereq_skill.skillable
-        prereq_courses[prereq_course.id] = true
+        prereq_skill.scoped_courses.each do |course|
+          prereq_courses[course.id] = true
+        end
       end
     end
 

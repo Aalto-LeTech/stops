@@ -71,12 +71,10 @@ class Plans::CompetencesController < PlansController
     @competence = Competence.includes(
                     :courses, 
                     :courses => { 
-                      :skills => {
+                      :skills => [
                         :supporting_prereqs,
-                        :supporting_prereqs => [
-                          :competence_nodes
-                        ]
-                      } 
+                        { :supporting_prereqs => :competence_nodes }
+                      ] 
                     }).find(params[:id])
 
     

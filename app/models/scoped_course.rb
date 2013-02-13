@@ -76,11 +76,15 @@ class ScopedCourse < CompetenceNode
     # has skills(:id)
   end
 
-
   def name(locale)
-    description = CourseDescription.where(:abstract_course_id => self.abstract_course_id, :locale => locale.to_s).first
-    description ? description.name : code
+    description = CourseDescription.where(
+                    :abstract_course_id => self.abstract_course_id, 
+                    :locale => locale.to_s
+                  ).first
+    description ? description.name : course_code
   end
+
+  alias_method :description, :name  
 
   # Returns the name of the course in the current locale or fallback
   # message if localized course name could not be found.
@@ -152,7 +156,8 @@ class ScopedCourse < CompetenceNode
     courses.values
   end
 
-  # Adds a course and its prereqs recursively to the given courses collection. If a course belongs to a prereq cycle, it is added to the cycles collection.
+  # Adds a course and its prereqs recursively to the given courses collection. 
+  # If a course belongs to a prereq cycle, it is added to the cycles collection.
   def collect_prereqs(courses)
     # Do not follow branches that have already been handled
     return if courses.has_key?(self.id)

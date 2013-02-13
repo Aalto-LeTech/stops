@@ -8,11 +8,11 @@ class Competence < CompetenceNode
   has_many :competence_descriptions, 
            :dependent   => :destroy
 
-  # Prerequisite skills
-  has_many :skills,
-           :foreign_key => 'competence_node_id',
-           :order       => 'position', 
-           :dependent   => :destroy
+  has_and_belongs_to_many :skills_ordered,
+           :class_name  => 'Skill',
+           :join_table  => 'competence_nodes_skills',
+           :foreign_key => :competence_node_id,
+           :order       => 'position'
 
   # Prerequisite courses
   has_many :competence_courses, 

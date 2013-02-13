@@ -6,9 +6,9 @@ class SkillsController < ApplicationController
     @skill = Skill.new
     
     if params[:competence_id]
-      @skill.skillable = Competence.find(params[:competence_id])
+      @skill.competence_nodes << Competence.find(params[:competence_id])
     elsif params[:course_id]
-      @skill.skillable = Course.find(params[:course_id])
+      @skill.competence_nodes << Course.find(params[:course_id])
     end
    
     # Create empty descriptions for each required locale
@@ -53,16 +53,16 @@ class SkillsController < ApplicationController
   # PUT /skills/1
   def update
     @skill = Skill.find(params[:id])
+    competence_node = @skill.competence_nodes.first
     
-    if @skill.skillable_type == ScopedCourse
-      @curriculum = @skill.skillable.curriculum
-    else
-      @curriculum = @skill.skillable.profile.curriculum
-    end
+    # Here we assume that a skill only has CompetenceNodes that belong to the
+    # same Curriculum. 
+    @curriculum = competence_node.curriculum
+    
 
     respond_to do |format|
       if @skill.update_attributes(params[:skill])
-        format.html { redirect_to [@curriculum, @skill.skillable] }
+        format.html { redirect_to [@curriculum, competence_node] }
         format.js
         format.xml  { head :ok }
       else
@@ -77,17 +77,16 @@ class SkillsController < ApplicationController
   def destroy
     @skill = Skill.find(params[:id])
     
-    skillable = @skill.skillable
-    if @skill.skillable_type == ScopedCourse
-      @curriculum = @skill.skillable.curriculum
-    else
-      @curriculum = @skill.skillable.profile.curriculum
-    end
+    competence_node = @skill.competence_nodes.first
+
+    # Here we assume that a skill only has CompetenceNodes that belong to the
+    # same Curriculum. 
+    @curriculum = competence_node.curriculum
     
     @skill.destroy
 
     respond_to do |format|
-      format.html { redirect_to [@curriculum, skillable] }
+      format.html { redirect_to [@curriculum, competence_node] }
       format.js
       format.xml  { head :ok }
     end
@@ -128,9 +127,12 @@ class SkillsController < ApplicationController
     
     @prereq_courses = {}
     
-    @skill.skill_prereqs.each do |prereq_skill|
-      @prereq_courses[prereq_skill.prereq.skillable] = [] unless @prereq_courses[prereq_skill.prereq.skillable]
-      @prereq_courses[prereq_skill.prereq.skillable] << prereq_skill
+    @skill.skill_prereqs.includes(:prereq, :prereq => [:competence_nodes]).each do |prereq_skill|
+      skill = prereq_skill.prereq
+      skill.competence_nodes.each do |competence_node|
+        @prereq_courses[competence_node] ||= []
+        @prereq_courses[competence_node] << prereq_skill
+      end
     end
     
     render 'prereqs', :layout => nil
@@ -148,13 +150,21 @@ class SkillsController < ApplicationController
       user = nil
     end
     
-    @skill.skill_prereq_to.each do |future_skill|
-      if future_skill.skill.skillable_type == 'ScopedCourse' && (!user || user.courses.include?(future_skill.skill.skillable))
-        @future_courses[future_skill.skill.skillable] = [] unless @future_courses[future_skill.skill.skillable]
-        @future_courses[future_skill.skill.skillable] << future_skill
-      elsif future_skill.skill.skillable_type == 'Competence' && (!user || user.competences.include?(future_skill.skill.skillable))
-        @future_competences[future_skill.skill.skillable] = [] unless @future_competences[future_skill.skill.skillable_id]
-        @future_competences[future_skill.skill.skillable] << future_skill
+    @skill.skill_prereq_to.includes(:skill, :skill => [:competence_nodes]).each do |future_skill_prereq|
+      future_skill_prereq.skill.competence_nodes.each do |competence_node|
+
+        if  competence_node.type == 'ScopedCourse' && 
+            (!user || user.courses.include?(competence_node))
+
+          @future_courses[competence_node] ||= []
+          @future_courses[competence_node] << future_skill_prereq
+
+        elsif competence_node.type == 'Competence' && 
+              (!user || user.competences.include?(competence_node))
+          
+          @future_competences[competence_node] ||= [] 
+          @future_competences[competence_node] << future_skill_prereq
+        end
       end
     end
     

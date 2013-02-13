@@ -68,25 +68,32 @@ class Plans::CompetencesController < PlansController
   end
   
   def supporting
-    @competence = Competence.find(params[:id])
-    
-    skills = @competence.skills
+    @competence = Competence.includes(
+                    :courses, 
+                    :courses => { 
+                      :skills => {
+                        :supporting_prereqs,
+                        :supporting_prereqs => [
+                          :competence_nodes
+                        ]
+                      } 
+                    }).find(params[:id])
+
     
     @supporting_courses = {}  # scoped_course_id => credits
     
-    @competence.courses.each do |strict_prereq_course|
-      strict_prereq_course.skills.each do |skill|
+    @competence.courses.each do |course|
+      course.skills.each do |skill|
         skill.supporting_prereqs.each do |supporting_skill|
-          
-          
-          @supporting_courses[supporting_skill.skillable] = 0.0 unless @supporting_courses[supporting_skill.skillable]
-          
-          @supporting_courses[supporting_skill.skillable] += supporting_skill.credits
+
+          supporting_skill.competence_nodes.each do |competence_node|
+            
+            @supporting_courses[competence_node] ||= 0.0
+            @supporting_courses[competence_node] += supporting_skill.credits
+          end
         end
       end
     end
-    
-    
   end
   
 end

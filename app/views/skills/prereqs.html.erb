@@ -1,6 +1,6 @@
 <% @prereq_courses.each do |scoped_course, skill_prereqs| %>
   <div class="course">
-    <%= scoped_course.code + ' ' + scoped_course.name(I18n.locale) %>
+    <%= scoped_course.course_code + ' ' + scoped_course.name(I18n.locale) %>
     
     <% skill_prereqs.each do |skill_prereq| %>
       <div class="skill <%= skill_prereq.requirement == STRICT_PREREQ ? 'strict' : 'supporting' %>">

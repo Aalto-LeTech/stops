@@ -71,7 +71,8 @@ class PrereqMatrix < CsvMatrix
           puts "Processing"
 
           # Load skill
-          skill = Skill.where(:skillable_type => 'ScopedCourse', :skillable_id => scoped_course.id, :position => skill_position).first
+          skill = Skill.joins(:competence_nodes)
+                       .where('competence_nodes.id' => scoped_course.id, :position => skill_position).first
           #course_skill = CourseSkill.where(['scoped_course_id = ? AND position = ?', scoped_course.id, skill_position]).joins(:skill).first
 
           # Add translation

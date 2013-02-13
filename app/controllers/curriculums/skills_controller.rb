@@ -7,9 +7,9 @@ class Curriculums::SkillsController < CurriculumsController
   authorize_resource :only => [:add_prereq, :remove_prereq]
 
   def index
-    @skills = Skill.where(:skillable_id => @curriculum.course_ids).joins(:skill_descriptions).where(["skill_descriptions.locale = ?", I18n.locale]).select("skills.id, skills.skillable_id, skills.skillable_type, skills.position, skill_descriptions.description AS translated_name").includes(:strict_prereqs)
-    # :skillable_type => 'ScopedCourse'
-      #.includes(:strict_prereqs)
+    @skills = Skill.joins(:scoped_courses)
+                .where('competence_nodes_skills.competence_node_id' => @curriculum.course_ids)
+                .includes(:strict_prereqs, :description_with_locale)
 
 
     respond_to do |format|
@@ -163,10 +163,8 @@ class Curriculums::SkillsController < CurriculumsController
     queryresults = ActiveRecord::Base.connection.select_all %Q{
       SELECT DISTINCT ON (skills.id) skills.id, skills.id IN (
         SELECT skill_prereqs.prereq_id
-        FROM skills
-        INNER JOIN skill_prereqs ON skills.id = skill_prereqs.prereq_id
-        WHERE skills.skillable_type = 'ScopedCourse'
-        AND skill_prereqs.skill_id = #{skill_id}
+        FROM skill_prereqs
+        WHERE skill_prereqs.skill_id = #{skill_id}
       ) AS alreadyPrereq
       FROM skills
     }
@@ -176,9 +174,6 @@ class Curriculums::SkillsController < CurriculumsController
     queryresults.each do |row|
       @alreadyPrereq[row["id"]] = row["alreadyprereq"] == 't' ? true : false
     end
-
-    # Slow down request for testing
-    # sleep 1.5
 
     if @courses.empty?
       respond_to do |format|

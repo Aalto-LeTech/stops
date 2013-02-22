@@ -34,6 +34,7 @@ gem 'jquery-rails'
 
 group :test do
   gem 'shoulda'
+  gem 'factory_girl', '~> 4.0'
 end
 
 

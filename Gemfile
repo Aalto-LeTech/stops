@@ -32,6 +32,11 @@ end
 gem 'jquery-rails'
 
 
+group :test do
+  gem 'shoulda'
+end
+
+
 # Deploy with Capistrano
 # gem 'capistrano'
 

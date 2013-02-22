@@ -2,12 +2,12 @@
 
 one:
   position: 1
-  course: 
-  dependency: 1
+  competence_nodes: courseOnSilliness 
+  level: 1
   credits: 1.5
 
 two:
   position: 1
-  course: 
-  dependency: 1
+  competence_nodes: anotherSillyCourse
+  level: 1
   credits: 1.5

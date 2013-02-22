@@ -1,0 +1,12 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+# ScopedCourses
+courseOnSilliness:
+  course_code: T-999.9999
+  type: ScopedCourse
+  abstract_course: sillyCourse
+
+anotherSillyCourse:
+  course_code: Mat-1.9999
+  type: ScopedCourse
+  abstract_course: equallySillyCourse

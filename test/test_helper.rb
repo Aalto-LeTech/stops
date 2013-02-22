@@ -4,6 +4,8 @@ require 'rails/test_help'
 require 'minitest_backtrace_filter'
 require 'authenticated_test_helper'
 
+# Initialize FactoryGirl factories
+FactoryGirl.find_definitions
 
 class ActiveSupport::TestCase
   # Setup all fixtures in test/fixtures/*.(yml|csv) for all tests in alphabetical order.

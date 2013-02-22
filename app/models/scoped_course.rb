@@ -2,7 +2,6 @@
 class ScopedCourse < CompetenceNode
 
   belongs_to :abstract_course
-  belongs_to :curriculum
 
   accepts_nested_attributes_for :abstract_course
   

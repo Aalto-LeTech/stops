@@ -1,5 +1,7 @@
 class CompetenceNode < ActiveRecord::Base
   # attr_accessible :title, :body
+  
+  belongs_to :curriculum
 
   has_and_belongs_to_many :skills, :autosave => true
 

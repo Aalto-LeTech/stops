@@ -88,14 +88,17 @@ class Skill < ActiveRecord::Base
   # course_ids: DFS does not proceed to courses that are not included in the course_ids hash
   def dfs(paths, path, path_lengths, target_skill_ids, course_ids, visited)
     # If this skill belongs to a course that does not belong to the profile, kill this branch
-    course_not_in_profile = false
+    course_in_profile = false
+    some_competence_found = false
     self.competence_nodes.each do |node|
-      if node.type == 'ScopedCourse' && !course_ids.has_key?(node.id)
-        course_not_in_profile = true
+      if node.type == 'ScopedCourse' && course_ids.has_key?(node.id)
+        course_in_profile = true
+      elsif node.type == 'Competence'
+        some_competence_found = true
       end
     end
 
-    if course_not_in_profile || visited.has_key?(self.id)
+    if not course_in_profile || (not some_competence_found) || visited.has_key?(self.id)
       puts "#{self.skill_description.where(:locale => 'fi').first.description} not included"
       return
     end

@@ -8,9 +8,8 @@ class Competence < CompetenceNode
   has_many :competence_descriptions, 
            :dependent   => :destroy
 
-  has_and_belongs_to_many :skills_ordered,
+  has_many :skills_ordered,
            :class_name  => 'Skill',
-           :join_table  => 'competence_nodes_skills',
            :foreign_key => :competence_node_id,
            :order       => 'position'
 

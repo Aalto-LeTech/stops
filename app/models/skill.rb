@@ -35,16 +35,7 @@ class Skill < ActiveRecord::Base
            :order       => 'position', 
            :conditions  => "requirement = #{STRICT_PREREQ}"
 
-  has_and_belongs_to_many :scoped_courses,
-           :class_name  => 'CompetenceNode',
-           :conditions  => "competence_nodes.type = 'ScopedCourse'"
-
-  has_and_belongs_to_many :competences,
-           :class_name  => 'CompetenceNode',
-           :conditions  => "competence_nodes.type = 'Competence'"
-
-  has_and_belongs_to_many :competence_nodes
-  validates :competence_nodes, :length => { :minimum => 1 }
+  belongs_to :competence_node
 
   accepts_nested_attributes_for :skill_descriptions
 

@@ -13,12 +13,26 @@ class Curriculums::CoursesController < CurriculumsController
   def index
     #@courses = @curriculum.courses
 
-    @courses = ScopedCourse.where(:curriculum_id => @curriculum.id).joins('INNER JOIN course_descriptions ON scoped_courses.abstract_course_id = course_descriptions.abstract_course_id').where(["course_descriptions.locale = ?", I18n.locale]).includes(:strict_prereqs)
+    @courses = ScopedCourse.where(:curriculum_id => @curriculum.id)
+                .joins(<<-SQL
+                    INNER JOIN course_descriptions 
+                      ON competence_nodes.abstract_course_id = course_descriptions.abstract_course_id
+                  SQL
+                )
+                .where(["course_descriptions.locale = ?", I18n.locale]).includes(:strict_prereqs)
 
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @courses }
-      format.json { render :json => @courses.select("scoped_courses.id, scoped_courses.course_code, course_descriptions.name AS translated_name").to_json(:methods => :strict_prereq_ids) }
+      format.json do 
+        render :json => @courses.select(<<-SQL
+            competence_nodes.id, 
+            competence_nodes.course_code, 
+            course_descriptions.name AS translated_name
+          SQL
+        ).to_json(:methods => :strict_prereq_ids)
+
+      end
     end
   end
 

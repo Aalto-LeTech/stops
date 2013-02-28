@@ -135,7 +135,19 @@ class CurriculumsController < ApplicationController
   def prereqs
     @curriculum = Curriculum.find(params[:id])
 
-    prereqs = CoursePrereq.where(:requirement => STRICT_PREREQ).joins('INNER JOIN scoped_courses AS course ON course.id = course_prereqs.scoped_course_id INNER JOIN scoped_courses AS prereq ON prereq.id = course_prereqs.scoped_prereq_id').where("course.curriculum_id = ?", @curriculum).select('course.course_code AS course_code, prereq.course_code AS prereq_code, course.id AS course_id, prereq.id AS prereq_id')
+    prereqs = CoursePrereq.where(:requirement => STRICT_PREREQ)
+                .joins(<<-SQL
+                    INNER JOIN competence_nodes AS course ON course.id = course_prereqs.scoped_course_id 
+                    INNER JOIN competence_nodes AS prereq ON prereq.id = course_prereqs.scoped_prereq_id
+                  SQL
+                ).where("course.curriculum_id = ?", @curriculum)
+                .select(<<-SQL
+                    course.course_code AS course_code, 
+                    prereq.course_code AS prereq_code, 
+                    course.id AS course_id, 
+                    prereq.id AS prereq_id
+                  SQL
+                )
 
     respond_to do |format|
       format.html { render :text => prereqs.to_json }
@@ -147,7 +159,10 @@ class CurriculumsController < ApplicationController
   def graph
     @curriculum = Curriculum.find(params[:id])
 
-    prereqs = CoursePrereq.joins(:course).where("scoped_courses.curriculum_id = ?", @curriculum).where(:requirement => STRICT_PREREQ)
+    prereqs = CoursePrereq.joins(:course)
+                .where("competence_nodes.curriculum_id = ?", @curriculum)
+                .where(:requirement => STRICT_PREREQ)
+
     render :action => 'graphviz', :locals => {:prereqs => prereqs}, :layout => false, :content_type => 'text/x-graphviz'
   end
 

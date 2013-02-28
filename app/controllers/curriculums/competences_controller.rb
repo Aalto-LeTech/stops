@@ -10,10 +10,16 @@ class Curriculums::CompetencesController < CurriculumsController
 
   def index
     load_curriculum
-    @competences = Competence.where(:profile_id => @curriculum.profile_ids).joins(:competence_descriptions).where(["competence_descriptions.locale = ?", I18n.locale])
+    @competences = Competence.where(:profile_id => @curriculum.profile_ids)
+                    .joins(:competence_descriptions)
+                    .where(["competence_descriptions.locale = ?", I18n.locale])
 
     respond_to do |format|
-      format.json { render :json => @competences.select("competences.id, competence_descriptions.name AS translated_name").to_json(:methods => :strict_prereq_ids) } # :skill_ids
+      format.json { render :json => @competences.select(<<-SQL
+          competence_nodes.id, 
+          competence_descriptions.name AS translated_name
+        SQL
+      ).to_json(:methods => :strict_prereq_ids) } # :skill_ids
     end
   end
 

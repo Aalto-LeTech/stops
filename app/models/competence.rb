@@ -1,8 +1,6 @@
 # Competence, e.g. Steel structures, level 1
 class Competence < CompetenceNode
 
-  belongs_to :profile
-
   has_many :competence_nodes
 
   has_many :competence_descriptions, 

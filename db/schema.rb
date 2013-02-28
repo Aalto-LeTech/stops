@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130226122654) do
+ActiveRecord::Schema.define(:version => 20130228090937) do
 
   create_table "abstract_courses", :force => true do |t|
     t.string "code"
@@ -40,17 +40,16 @@ ActiveRecord::Schema.define(:version => 20130226122654) do
   create_table "competence_nodes", :force => true do |t|
     t.string   "type"
     t.integer  "credits"
-    t.integer  "profile_id"
     t.integer  "level"
     t.integer  "abstract_course_id"
     t.integer  "curriculum_id"
     t.string   "course_code"
-    t.datetime "created_at",         :null => false
-    t.datetime "updated_at",         :null => false
+    t.datetime "created_at",           :null => false
+    t.datetime "updated_at",           :null => false
+    t.integer  "parent_competence_id"
   end
 
   add_index "competence_nodes", ["abstract_course_id", "curriculum_id"], :name => "index_competence_nodes_on_abstract_course_id_and_curriculum_id"
-  add_index "competence_nodes", ["profile_id"], :name => "index_competence_nodes_on_profile_id"
 
   create_table "course_descriptions", :force => true do |t|
     t.integer "abstract_course_id", :null => false

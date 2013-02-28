@@ -143,12 +143,8 @@ class Competence < CompetenceNode
     while skill = stack.pop
       # Load course if it has not been loaded
 
-      skill_courses = skill.scoped_courses
-
-      skill_courses.each do |course|
-        courses[course.id] = course
-        result[course][skill.id] = skill
-      end
+      course = courses[skill.competence_node_id]
+      result[course][skill.id] = skill
 
       # Push neighbors to stack
       skill.strict_prereqs.each do |prereq|
@@ -175,16 +171,16 @@ class Competence < CompetenceNode
     # Make a list of prereq courses
     skills.each do |competence_skill|
       competence_skill.prereqs.each do |prereq_skill|
-        if skill.competences.exists?
+        if prereq_skill.competence_node.type == 'Competence'
           # Competence depends on other competence
           # TODO: raise Exception
           logger.error "Competence depends on competence"
           next
         end
 
-        prereq_skill.scoped_courses.each do |course|
-          prereq_courses[course.id] = true
-        end
+        prereq_course_id = prereq_skill.competence_node_id # Must be a ScopedCourse
+        prereq_courses[prereq_course_id] = true
+
       end
     end
 

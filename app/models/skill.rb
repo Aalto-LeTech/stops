@@ -79,18 +79,8 @@ class Skill < ActiveRecord::Base
   # course_ids: DFS does not proceed to courses that are not included in the course_ids hash
   def dfs(paths, path, path_lengths, target_skill_ids, course_ids, visited)
     # If this skill belongs to a course that does not belong to the profile, kill this branch
-    course_in_profile = false
-    some_competence_found = false
-    self.competence_nodes.each do |node|
-      if node.type == 'ScopedCourse' && course_ids.has_key?(node.id)
-        course_in_profile = true
-      elsif node.type == 'Competence'
-        some_competence_found = true
-      end
-    end
-
-    if not course_in_profile || (not some_competence_found) || visited.has_key?(self.id)
-      puts "#{self.skill_description.where(:locale => 'fi').first.description} not included"
+    if (self.competence_node.type == 'ScopedCourse' && !course_ids.has_key?(self.competence_node_id)) || visited.has_key?(self.id)
+      puts "#{self.skillable.name('fi')} not included"
       return
     end
 
@@ -127,7 +117,7 @@ class Skill < ActiveRecord::Base
 
     stack = []
 
-    self.strict_prereqs.each do |prereq|
+    self.strict_prereqs.includes(:competence_node).each do |prereq|
       stack.push prereq
     end
 
@@ -135,16 +125,17 @@ class Skill < ActiveRecord::Base
     # Run DFS for skills to construct an array of skills that make the competence
     while skill = stack.pop
 
-      skill_courses = skill.scoped_courses
-      skill_courses.each do |course|
-        courses[course.id] = course
+      if skill.competence_node.type == 'ScopedCourse'
+        # Load course if it has not been loaded
+        courses[skill.competence_node_id] ||= skill.competence_node
 
-        result[course] ||= {}
-        resutl[course][skill.id] = skill
+        course = courses[skill.competence_node_id]
+        result[course] = {} unless result[course]
+        result[course][skill.id] = skill
       end
 
       # Push neighbors to stack
-      skill.strict_prereqs.each do |prereq|
+      skill.strict_prereqs.includes(:competence_node).each do |prereq|
         stack.push prereq
       end
     end

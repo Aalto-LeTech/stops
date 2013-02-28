@@ -6,9 +6,9 @@ class SkillsController < ApplicationController
     @skill = Skill.new
     
     if params[:competence_id]
-      @skill.competence_nodes << Competence.find(params[:competence_id])
+      @skill.competence_node = Competence.find(params[:competence_id])
     elsif params[:course_id]
-      @skill.competence_nodes << Course.find(params[:course_id])
+      @skill.competence_node = Course.find(params[:course_id])
     end
    
     # Create empty descriptions for each required locale
@@ -53,7 +53,7 @@ class SkillsController < ApplicationController
   # PUT /skills/1
   def update
     @skill = Skill.find(params[:id])
-    competence_node = @skill.competence_nodes.first
+    competence_node = @skill.competence_node
     
     # Here we assume that a skill only has CompetenceNodes that belong to the
     # same Curriculum. 
@@ -77,7 +77,7 @@ class SkillsController < ApplicationController
   def destroy
     @skill = Skill.find(params[:id])
     
-    competence_node = @skill.competence_nodes.first
+    competence_node = @skill.competence_node
 
     # Here we assume that a skill only has CompetenceNodes that belong to the
     # same Curriculum. 
@@ -127,12 +127,11 @@ class SkillsController < ApplicationController
     
     @prereq_courses = {}
     
-    @skill.skill_prereqs.includes(:prereq, :prereq => [:competence_nodes]).each do |prereq_skill|
+    @skill.skill_prereqs.includes(:prereq, :prereq => [:competence_node]).each do |prereq_skill|
       skill = prereq_skill.prereq
-      skill.competence_nodes.each do |competence_node|
-        @prereq_courses[competence_node] ||= []
-        @prereq_courses[competence_node] << prereq_skill
-      end
+      competence_node = skill.competence_node
+      @prereq_courses[competence_node] ||= []
+      @prereq_courses[competence_node] << prereq_skill
     end
     
     render 'prereqs', :layout => nil
@@ -150,8 +149,8 @@ class SkillsController < ApplicationController
       user = nil
     end
     
-    @skill.skill_prereq_to.includes(:skill, :skill => [:competence_nodes]).each do |future_skill_prereq|
-      future_skill_prereq.skill.competence_nodes.each do |competence_node|
+    @skill.skill_prereq_to.includes(:skill, :skill => [:competence_node]).each do |future_skill_prereq|
+      competence_node = future_skill_prereq.skill.competence_node
 
         if  competence_node.type == 'ScopedCourse' && 
             (!user || user.courses.include?(competence_node))
@@ -165,7 +164,6 @@ class SkillsController < ApplicationController
           @future_competences[competence_node] ||= [] 
           @future_competences[competence_node] << future_skill_prereq
         end
-      end
     end
     
     render 'future', :layout => nil

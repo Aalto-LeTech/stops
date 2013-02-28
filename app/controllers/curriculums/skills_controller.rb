@@ -7,8 +7,8 @@ class Curriculums::SkillsController < CurriculumsController
   authorize_resource :only => [:add_prereq, :remove_prereq]
 
   def index
-    @skills = Skill.joins(:scoped_courses)
-                .where('competence_nodes_skills.competence_node_id' => @curriculum.course_ids)
+    @skills = Skill.joins(:competence_nodes)
+                .where('competence_nodes.id' => @curriculum.course_ids)
                 .includes(:strict_prereqs, :description_with_locale)
 
 

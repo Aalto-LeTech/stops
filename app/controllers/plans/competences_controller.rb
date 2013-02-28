@@ -73,7 +73,7 @@ class Plans::CompetencesController < PlansController
                     :courses => { 
                       :skills => [
                         :supporting_prereqs,
-                        { :supporting_prereqs => :competence_nodes }
+                        { :supporting_prereqs => :competence_node }
                       ] 
                     }).find(params[:id])
 
@@ -84,11 +84,10 @@ class Plans::CompetencesController < PlansController
       course.skills.each do |skill|
         skill.supporting_prereqs.each do |supporting_skill|
 
-          supporting_skill.competence_nodes.each do |competence_node|
-            
-            @supporting_courses[competence_node] ||= 0.0
-            @supporting_courses[competence_node] += supporting_skill.credits
-          end
+          competence_node = supporting_skill.competence_node
+          
+          @supporting_courses[competence_node] ||= 0.0
+          @supporting_courses[competence_node] += supporting_skill.credits
         end
       end
     end

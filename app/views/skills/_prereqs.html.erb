@@ -1,8 +1,6 @@
 <% @skill.prereqs.each do |skill| %>
-  <% skill.competence_nodes.each do |competence_node| %>
-    <p>
-      <%= competence_node.course_code + ' ' + competence_node.name(I18n.locale) %>:
-      <%= competence_node.description(I18n.locale) %><br />
-    </p>
-  <% end %>
+  <p>
+    <%= skill.competence_node.course_code + ' ' + competence_node.name(I18n.locale) %>:
+    <%= skill.competence_node.description(I18n.locale) %><br />
+  </p>
 <% end %>

@@ -18,8 +18,8 @@ class CompetenceNode < ActiveRecord::Base
   private 
 
   def validates_parent_competence_not_a_self_reference
-    if self.parent_competence_id == self.id
-      errors[:base] << "CompetenceNode cannot refer to itself through 'parent_competence'."
+    if self.parent_competence == self
+      errors[:parent_competence] << "CompetenceNode cannot refer to itself through 'parent_competence'."
     end
   end
 

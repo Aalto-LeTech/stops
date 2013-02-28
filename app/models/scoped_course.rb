@@ -65,7 +65,7 @@ class ScopedCourse < CompetenceNode
            :conditions  => proc { ["periods.ends_at > ?", Date.today] }
 
   # ScopedCourse should not contain other ComptenceNodes
-  validates :contained_competences, :presence => false
+  # validates :contained_competences, :presence => false
     
   
   define_index do

@@ -6,7 +6,7 @@
 <h2><%= @skill.description(I18n.locale) %></h2>
 
 <% @courses.each do |course, skill_map| %>
-  <h3><%= course.code %> <%= course.name(I18n.locale) %></h3>
+  <h3><%= course.course_code %> <%= course.name(I18n.locale) %></h3>
 
   <ul>
     <% skill_map.each_value do |skill| %>

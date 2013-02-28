@@ -66,7 +66,7 @@ class ScopedCourse < CompetenceNode
     
   
   define_index do
-    indexes code
+    indexes course_code
     indexes course_description_with_locale(:name), :as => :course_name
     indexes skill_descriptions.description, :as => :skill_descriptions
     

@@ -6,7 +6,7 @@
   <% credits_counter = 0 %>
   <% @new_courses.each do |course| %>
     <tr>
-      <td><%= course.code %></td>
+      <td><%= course.course_code %></td>
       <td><%= course.name(I18n.locale) %></td>
       <td><%= course.credits %></td>
     </tr>
@@ -28,7 +28,7 @@
     <% @existing_courses.each do |course| %>
       <% credits_counter = 0 %>    
       <tr>
-        <td><%= course.code %></td>
+        <td><%= course.course_code %></td>
         <td><%= course.name(I18n.locale) %></td>
         <td><%= course.credits %></td>
       </tr>

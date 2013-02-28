@@ -140,7 +140,7 @@ class Skill < ActiveRecord::Base
       end
     end
 
-    result.sort_by {|course, skills| course.code}
+    result.sort_by {|course, skills| course.course_code}
   end
 
 end

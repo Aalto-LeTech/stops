@@ -37,7 +37,7 @@ class CsvMatrix
       end
       
       # Create new course
-      course = ScopedCourse.create(:abstract_course_id => abstract_course.id, :curriculum_id => curriculum.id, :code => abstract_course.code, :credits => cr)
+      course = ScopedCourse.create(:abstract_course_id => abstract_course.id, :curriculum_id => curriculum.id, :course_code => abstract_course.code, :credits => cr)
     end
     
     return course

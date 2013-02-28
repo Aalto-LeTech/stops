@@ -2,7 +2,7 @@
   <%= javascript_include_tag 'profileCourseView' %>
 <% end %>
 
-<h1><%= @course.code %> <%= @course.name(I18n.locale) %></h1>
+<h1><%= @course.course_code %> <%= @course.name(I18n.locale) %></h1>
 
 <% if @profile %>
   <!-- Study paths from course skills to profile skills -->
@@ -69,7 +69,7 @@
         <%= render :partial => '/courses/prereqs' %>
       </td>
       <td class="current">
-        <%= @course.code %><br />
+        <%= @course.course_code %><br />
         <%= @course.name(I18n.locale) %>
       </td>
       <td class="future">
@@ -81,7 +81,7 @@
             <% @course.prereq_to.each do |course| %>
               <% if !@profile || @profile.courses.include?(course) %>
                 <li>
-                  <%= link_to course.code + ' ' + course.name(I18n.locale), {:id => course.id} %>
+                  <%= link_to course.course_code + ' ' + course.name(I18n.locale), {:id => course.id} %>
                 </li>
               <% end %>
             <% end %>

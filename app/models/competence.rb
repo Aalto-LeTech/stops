@@ -152,7 +152,7 @@ class Competence < CompetenceNode
       end
     end
 
-    result.sort_by {|course, skills| course.code}
+    result.sort_by {|course, skills| course.course_code}
   end
 
   # Returns a list of courses that are needed in addition to the courses in lower levels

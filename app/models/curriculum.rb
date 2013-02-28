@@ -87,13 +87,13 @@ class Curriculum < ActiveRecord::Base
         return
       end
 
-      #puts "Proceeding to a prereq of #{course.code}"
+      #puts "Proceeding to a prereq of #{course.course_code}"
       self.add_course(start, prereq, courses, cycles, stack)
     end
 
     stack.pop
 
-    #puts "Returning from #{course.code}"
+    #puts "Returning from #{course.course_code}"
 
   end
 
@@ -104,7 +104,7 @@ class Curriculum < ActiveRecord::Base
 
     result = {}
     courses.each do |course|
-      result[course.code] = course.strict_prereq_ids
+      result[course.course_code] = course.strict_prereq_ids
     end
 
     return result

@@ -17,7 +17,7 @@ function Course(element) {
   this.changed        = true;
   
   this.id       = element.data('id');    // Database id of the UserCourse
-  this.code     = element.data('code');
+  this.course_code     = element.data('code');
   this.name     = element.data('name');
   this.credits  = parseFloat(element.data('credits'));
   this.passed   = element.data('passed') == 'true';
@@ -35,7 +35,7 @@ function Course(element) {
 }
 
 Course.prototype.getCode = function() {
-  return this.code;
+  return this.course_code;
 };
 
 Course.prototype.getLength = function() {
@@ -67,8 +67,8 @@ Course.prototype.getPrereqs = function() {
  * Adds a prerequisite course. This course is automatically added to the "prerequisite to" list of the other course.
  */
 Course.prototype.addPrereq = function(other) {
-  this.prereqs[other.code] = other;
-  other.prereqTo[this.code] = this;
+  this.prereqs[other.course_code] = other;
+  other.prereqTo[this.course_code] = this;
 };
 
 /**
@@ -217,7 +217,7 @@ Course.prototype.drawPrereqPaths = function() {
     }
     preCourse = this.prereqs[preCourse];
 
-    var prereqElem = $(planView.escapeSelector('course-' + preCourse.code));
+    var prereqElem = $(planView.escapeSelector('course-' + preCourse.course_code));
   
     // TODO: heights and widths not in use
     var prereqPos     = prereqElem.position();
@@ -276,7 +276,7 @@ function courseClicked() {
 
   // Show short course details on the controls pane
   var $courseDesc = $('#course-desc-block');
-  $("#course-code").text(course.code); 
+  $("#course-code").text(course.course_code); 
   $("#course-name").text(course.name);
   $("#course-points").text(course.credits);
   $courseDesc.removeClass("hidden"); // TODO animate
@@ -336,7 +336,7 @@ function courseBeingDragged(event, ui) {
     var node = course.prereqPaths[i],
         path = node.path,
         prereqCourse = node.course,
-        $prereqElem = $(planView.escapeSelector('course-' + prereqCourse.code));
+        $prereqElem = $(planView.escapeSelector('course-' + prereqCourse.course_code));
     path.attr({ path: Course.calcPathString(elem, $prereqElem) }); 
   }
 }
@@ -355,7 +355,7 @@ function courseDragStopped(event, ui) {
           var node = course.prereqPaths[i],
               path = node.path,
               prereqCourse = node.course,
-              $prereqElem = $(planView.escapeSelector('course-' + prereqCourse.code));
+              $prereqElem = $(planView.escapeSelector('course-' + prereqCourse.course_code));
           path.attr({ path: Course.calcPathString($courseElem, $prereqElem) });
         }
       }

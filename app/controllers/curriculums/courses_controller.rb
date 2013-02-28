@@ -18,7 +18,7 @@ class Curriculums::CoursesController < CurriculumsController
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @courses }
-      format.json { render :json => @courses.select("scoped_courses.id, scoped_courses.code, course_descriptions.name AS translated_name").to_json(:methods => :strict_prereq_ids) }
+      format.json { render :json => @courses.select("scoped_courses.id, scoped_courses.course_code, course_descriptions.name AS translated_name").to_json(:methods => :strict_prereq_ids) }
     end
   end
 

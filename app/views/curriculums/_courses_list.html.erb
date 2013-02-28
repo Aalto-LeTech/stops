@@ -13,7 +13,7 @@
       <% @curriculum.courses.each_with_index do |course, i| %>
         <tr class="<%= i % 2 == 0 ? 'even' : 'odd' %>">
           <td>
-            <%= link_to course.code, curriculum_course_path(:curriculum_id => @curriculum, :id => course) %>
+            <%= link_to course.course_code, curriculum_course_path(:curriculum_id => @curriculum, :id => course) %>
           </td>
           <td>
             <%= link_to course.name_or('<' + t('.course_name_not_found') + '>'), curriculum_course_path(:curriculum_id => @curriculum, :id => course) %>

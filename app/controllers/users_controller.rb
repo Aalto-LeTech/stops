@@ -39,7 +39,7 @@ class UsersController < ApplicationController
     authorize! :read, @user
 
     user_courses = @user.user_courses.joins(:course_instance, :scoped_course).select('code, scoped_course_id, period_id')
-    #prereqs = CoursePrereq.where(:requirement => STRICT_PREREQ).joins('INNER JOIN scoped_courses AS course ON course.id = course_prereqs.scoped_course_id INNER JOIN scoped_courses AS prereq ON prereq.id = course_prereqs.scoped_prereq_id').where("course.curriculum_id = ?", @curriculum).select('course.code AS course_code, prereq.code AS prereq_code, course.id')
+    #prereqs = CoursePrereq.where(:requirement => STRICT_PREREQ).joins('INNER JOIN scoped_courses AS course ON course.id = course_prereqs.scoped_course_id INNER JOIN scoped_courses AS prereq ON prereq.id = course_prereqs.scoped_prereq_id').where("course.curriculum_id = ?", @curriculum).select('course.course_code AS course_code, prereq.course_code AS prereq_code, course.id')
 
     respond_to do |format|
       format.json { render :json => user_courses.to_json }

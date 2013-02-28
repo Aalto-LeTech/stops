@@ -42,7 +42,7 @@ var skillGraphView = {
     for (var array_index in data) {
       var rawData = data[array_index].scoped_course;
 
-      var course = new GraphCourse(rawData.id, rawData.code, rawData.translated_name);
+      var course = new GraphCourse(rawData.id, rawData.course_code, rawData.translated_name);
       this.courses[rawData.id] = course;
     }
 

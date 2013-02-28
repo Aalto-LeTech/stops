@@ -117,7 +117,7 @@ $.extend(window.planView, {
   loadCourseInstances: function(data) {
     for (var array_index in data) {
       var rawData = data[array_index].course_instance;
-      var $course = $(planView.escapeSelector('course-' + rawData.code));
+      var $course = $(planView.escapeSelector('course-' + rawData.course_code));
       var $period = $('#period-' + rawData.period_id);
       
       if ($course.length < 1 || $period.length < 1) {

@@ -1,7 +1,14 @@
 # Competence, e.g. Steel structures, level 1
 class Competence < CompetenceNode
 
-  has_many :competence_nodes
+  belongs_to :parent_competence,
+           :class_name => 'Competence'
+
+  validate :validate_parent_competence_not_a_self_reference
+
+  has_many :contained_competences,
+           :foreign_key => :parent_competence_id,
+           :class_name  => 'Competence'
 
   has_many :competence_descriptions, 
            :dependent   => :destroy
@@ -31,7 +38,6 @@ class Competence < CompetenceNode
            :source      => :scoped_course, 
            :order       => 'code', 
            :conditions  => "requirement = #{SUPPORTING_PREREQ}"
-
 
 
   accepts_nested_attributes_for :competence_descriptions
@@ -188,6 +194,15 @@ class Competence < CompetenceNode
     # self.competence_course_ids = prereq_courses.keys
 
     # TODO: check cycles
+  end
+
+
+private 
+
+  def validate_parent_competence_not_a_self_reference
+    if self.parent_competence == self
+      errors[:parent_competence] << "Competence cannot refer to itself through 'parent_competence'."
+    end
   end
 
 end

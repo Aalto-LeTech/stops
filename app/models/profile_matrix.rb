@@ -65,7 +65,7 @@ class ProfileMatrix < CsvMatrix
 
           # Create skill
           skill = Skill.new(:position => skill_position)
-          skill.competence_nodes << competence
+          skill.competence_node = competence
           skill.save
           SkillDescription.create(:skill_id => skill.id, :locale => @locale, :description => skill_description.strip)
 

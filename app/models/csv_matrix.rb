@@ -142,11 +142,13 @@ class CsvMatrix
           level = @matrix[row][7] || '0'
           
           # Insert or update skill
-          skill = Skill.joins(:competence_nodes).where('competence_nodes.id' => scoped_course.id, :position => skill_position).first
+          skill = Skill.joins(:competence_node)
+                       .where('competence_nodes.id' => scoped_course.id, 
+                              :position => skill_position).first
           
           unless skill
             skill = Skill.new(:credits => skill_credits.gsub(',','.').to_f, :level => level.to_i, :position => skill_position)
-            skill.competence_nodes << scoped_course
+            skill.competence_node = scoped_course
             skill.save
             SkillDescription.create(:skill_id => skill.id, :locale => @locale, :description => skill_description)
           end

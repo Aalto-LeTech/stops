@@ -7,15 +7,25 @@ class Curriculums::SkillsController < CurriculumsController
   authorize_resource :only => [:add_prereq, :remove_prereq]
 
   def index
-    @skills = Skill.joins(:competence_nodes)
+    @skills = Skill.joins(:competence_node)
                 .where('competence_nodes.id' => @curriculum.course_ids)
-                .includes(:strict_prereqs, :description_with_locale)
+                .includes(:strict_prereqs, :description_with_locale, :competence_node)
 
 
     respond_to do |format|
       #format.html { render :text => @skills.to_json(:include => :strict_prereq_ids) }
       format.xml { render :xml => @skills }
-      format.json { render :json => @skills.to_json(:methods => :strict_prereq_ids) }
+      format.json do 
+        # 'type' is needed from CompetenceNode as it is used by skillGraphView.js
+        render :json => @skills.to_json(
+          :methods => :strict_prereq_ids, 
+          :include => { 
+            :competence_node => { 
+              :only => :type 
+            } 
+          }
+        )
+      end
     end
   end
 

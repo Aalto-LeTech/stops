@@ -80,7 +80,7 @@ class Skill < ActiveRecord::Base
   def dfs(paths, path, path_lengths, target_skill_ids, course_ids, visited)
     # If this skill belongs to a course that does not belong to the profile, kill this branch
     if (self.competence_node.type == 'ScopedCourse' && !course_ids.has_key?(self.competence_node_id)) || visited.has_key?(self.id)
-      puts "#{self.skillable.name('fi')} not included"
+      puts "#{self.competence_node.name('fi')} not included"
       return
     end
 

@@ -24,6 +24,7 @@ fi:
     # Strings shared between views
     competence_profiles: "Osaamisprofiilit"
     curriculum_courses: "Opinto-ohjelman kurssit"
+    competences_heading: "Kompetenssit"
 
     index:
       curriculum: "Opinto-opas"
@@ -47,7 +48,14 @@ fi:
       import_csv_link: "Tuo tiedot CSV-tiedostosta"
       change_name: "Nimeä uudelleen"
       course_create_link: 'Luo kurssi'
-      
+      competence_create_link: 'Luo kompetenssi'
+      course_name_not_found: "ei suomenkielistä kurssinimeä"
+      course_code: "Koodi"
+      course_name: "Nimi"
+      course_credits: "Opintopisteet"
+      course_period: "Periodi"
+      prerequisites: "Esitietovaatimukset"
+      no_courses_placeholder: "Opinto-ohjelmassa ei ole kursseja."
     new_course_form_container:
       # Create new course form
       create_course_error_failed_to_load_course_box: 'Valitettavasti lomaketta ei pystytty lataamaan'
@@ -67,7 +75,11 @@ fi:
     profiles_list:
       edit_profile_prefix: "Muokkaa osaamisprofiilia"
       no_profile_name: "kokonaisuudella ei nimeä"
-      no_profiles_placeholder: "Opinto-ohjelmassa ei ole yhtään osaamisprofiilia."
+      no_profiles_placeholder: "Opinto-oppaassa ei ole yhtään osaamisprofiilia."
+    competences_list:
+      edit_competence_prefix: "Muokkaa kompetenssia"
+      no_competence_name: "nimetön kompetenssi"
+      no_competences_placeholder: "Opinto-oppaassa ei ole yhtään kompetenssia."
     courses_list:
       course_code: "Koodi"
       course_name: "Nimi"

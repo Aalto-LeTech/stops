@@ -4,10 +4,21 @@ class Curriculums::CompetencesController < CurriculumsController
 
   #before_filter :load_curriculum
   #before_filter :load_profile
-  before_filter :load_competence, :except => [:index]
+  before_filter :load_competence, :except => [:index, :new, :create]
 
   authorize_resource :only => [:matrix]
 
+  def load_competence
+    #if params[:competence_id]
+    #  @competence = Competence.find(params[:competence_id])
+    #else params[:id]
+      @competence = Competence.find(params[:competence_id] || params[:id])
+    #end
+
+    @profile = @competence.profile
+    load_curriculum
+  end
+  
   def index
     load_curriculum
     @competences = Competence.where(:profile_id => @curriculum.profile_ids)
@@ -21,17 +32,6 @@ class Curriculums::CompetencesController < CurriculumsController
         SQL
       ).to_json(:methods => :strict_prereq_ids) } # :skill_ids
     end
-  end
-
-  def load_competence
-    #if params[:competence_id]
-    #  @competence = Competence.find(params[:competence_id])
-    #else params[:id]
-      @competence = Competence.find(params[:competence_id] || params[:id])
-    #end
-
-    @profile = @competence.profile
-    load_curriculum
   end
 
   # curriculums/1/competences/1
@@ -60,7 +60,7 @@ class Curriculums::CompetencesController < CurriculumsController
 
     @n_skills = @competence.skills.size
   end
-
+  
   # PUT /competences/1
   # PUT /competences/1.xml
   def update
@@ -71,6 +71,33 @@ class Curriculums::CompetencesController < CurriculumsController
       else
         format.html { render :action => "edit" }
         format.xml  { render :xml => @competence.errors, :status => :unprocessable_entity }
+      end
+    end
+  end
+  
+  def new
+    load_curriculum
+    @competence = Competence.new(:curriculum => @curriculum)    
+    
+    authorize! :create, @competence
+    
+    REQUIRED_LOCALES.each do |locale|
+      @competence.competence_descriptions << CompetenceDescription.new(:competence => @competence, :locale => locale)
+    end
+  end
+  
+  def create
+    load_curriculum
+    @competence = Competence.new(params[:competence])
+    
+    authorize! :create, @competence
+    
+    respond_to do |format|
+      if @competence.save
+        format.html { redirect_to(edit_curriculum_path(@curriculum), :notice => 'Competence was successfully created.') }
+        format.js { }
+      else
+        format.html { render :action => "new" }
       end
     end
   end

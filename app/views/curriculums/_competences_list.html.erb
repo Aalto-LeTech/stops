@@ -1,0 +1,26 @@
+<% unless @curriculum.competences.empty?  %>
+  <ul>
+    <% @curriculum.competences.each do |competence| %>
+      <%
+        competence_name = competence.name(I18n.locale)
+        competence_name = "<#{ t('.no_competence_name') }>" if competence_name.blank?
+
+        if params[:action] == "edit"
+          # Prefix the link text with 'Edit' to make destination clearer
+          competence_name = "#{ t '.edit_competence_prefix' }: " + competence_name
+
+          # Decides what method will be called (using Object#send) to get the link url
+          method = :edit_curriculum_competence_path
+        else
+          method = :curriculum_competence_path
+        end
+      %>
+      <li><%= link_to competence_name, send(method, :curriculum_id => @curriculum, :id => competence) %></li>
+    <% end %>
+  </ul>
+
+<% else %>
+  <p>
+    <span class="placeholder"><%= t '.no_competences_placeholder' %></span>
+  </p>
+<% end %>

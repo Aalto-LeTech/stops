@@ -17,6 +17,14 @@ class AbstractCourse < ActiveRecord::Base
   accepts_nested_attributes_for :course_descriptions
   accepts_nested_attributes_for :scoped_courses
   
+  
+  # Make sure that nested ScopedCourses create at the same time get the same course code
+  before_create do |abstract_course|
+    abstract_course.scoped_courses.each do |scoped_course|
+      scoped_course.course_code = abstract_course.code
+    end
+  end
+  
   def get_name(locale)
     description = CourseDescription.where(:abstract_course_id => self.id, :locale => locale.to_s).first
     description ? description.name : ''

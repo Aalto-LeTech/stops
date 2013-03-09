@@ -33,3 +33,12 @@ fi:
         course_title_in_sv: "Kurssin nimi ruotsiksi"
         course_title_in_en: "Kurssin nimi englanniksi"
         credits: 'Opintopisteet'
+      new:
+        create_course_heading: 'Luo kurssi'
+        course_code: "Kurssikoodi"
+        course_teaching_language: 'Opetuskieli'
+        course_title_in_fi: "Kurssin nimi suomeksi"
+        course_title_in_sv: "Kurssin nimi ruotsiksi"
+        course_title_in_en: "Kurssin nimi englanniksi"
+        credits: 'Opintopisteet'
+

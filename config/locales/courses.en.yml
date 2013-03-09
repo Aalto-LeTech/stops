@@ -32,3 +32,11 @@ en:
         course_title_in_sv: "Course name in Swedish"
         course_title_in_en: "Course name in English"
         credits: 'Credits'
+      new:
+        create_course_heading: 'Create course'
+        course_code: 'Course code'
+        course_teaching_language: 'Teaching language'
+        course_title_in_fi: "Course name in Finnnish"
+        course_title_in_sv: "Course name in Swedish"
+        course_title_in_en: "Course name in English"
+        credits: 'Credits'

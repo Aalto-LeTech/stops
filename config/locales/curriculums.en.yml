@@ -23,7 +23,8 @@ en:
     # Strings shared between views
     competence_profiles: "Competence profiles"
     curriculum_courses: "Curriculum courses"
-
+    competences_heading: "Competences"
+    
     index:
       curriculum: "Curriculum"
       years: "Years in use"
@@ -46,7 +47,14 @@ en:
       import_csv_link: "Import using CSV data"
       change_name: "Change name"
       course_create_link: 'Create course'
-
+      competence_create_link: 'Create competence'
+      course_name_not_found: "course name not available in English"
+      course_code: "Code"
+      course_name: "Name"
+      course_credits: "Credits"
+      course_period: "Period"
+      prerequisites: "Prerequisites"
+      no_courses_placeholder: "There are no courses in the curriculum."
     new_course_form_container:
       # Create new course form
       course_create_link: 'New course'
@@ -67,6 +75,10 @@ en:
       edit_profile_prefix: "Edit profile"
       no_profile_name: "no profile name"
       no_profiles_placeholder: "There are no profiles in the curriculum."
+    competences_list:
+      edit_competence_prefix: "Edit competence"
+      no_competence_name: "no competence name"
+      no_competences_placeholder: "There are no competences in the curriculum."
     courses_list:
       course_code: "Code"
       course_name: "Name"

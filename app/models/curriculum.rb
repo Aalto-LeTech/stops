@@ -6,6 +6,9 @@ class Curriculum < ActiveRecord::Base
   has_many :profiles, 
            :dependent   => :destroy
 
+  has_many :competences,
+           :dependent   => :destroy
+
   has_many :courses, 
            :class_name  => 'ScopedCourse', 
            :dependent   => :destroy, 

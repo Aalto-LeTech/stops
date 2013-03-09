@@ -67,9 +67,9 @@ class Curriculums::CoursesController < CurriculumsController
     authorize! :update, @curriculum
     
     @abstract_course = AbstractCourse.new
+    
     @scoped_course = ScopedCourse.new
-
-    @scoped_course.curriculum = Curriculum.find(params[:curriculum_id])
+    @scoped_course.curriculum = @curriculum #Curriculum.find(params[:curriculum_id])
     @scoped_course.abstract_course = @abstract_course
 
     # Create empty descriptions for each required locale
@@ -82,6 +82,7 @@ class Curriculums::CoursesController < CurriculumsController
     end
 
     respond_to do |format|
+      format.html
       format.js
     end
   end
@@ -89,18 +90,12 @@ class Curriculums::CoursesController < CurriculumsController
   def create
     authorize! :update, @curriculum
 
-    @abstract_course = AbstractCourse.new
-
-    @abstract_course.assign_attributes(params[:abstract_course])
-    @scoped_course = @abstract_course.scoped_courses.first
-    @scoped_course.course_code = @abstract_course.code
-    @scoped_course.curriculum = @curriculum
-
-
+    @abstract_course = AbstractCourse.new(params[:abstract_course])
+    
     respond_to do |format|
       format.html do
-        if @scoped_course.save
-          redirect_to curriculum_path(@curriculum)
+        if @abstract_course.save
+          redirect_to edit_curriculum_path(@curriculum)
         else
           render :action => "new" 
         end

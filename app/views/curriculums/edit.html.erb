@@ -23,29 +23,57 @@
   </div>
 <% end %>
 
-<h2><%= t 'curriculums.competence_profiles' %></h2>
 
-<%= render 'profiles_list' %>
+<!-- Create competence -->
+<h2><%= t 'curriculums.competences_heading' %></h2>
+
+<%= render 'competences_list' %>
 
 <% if can? :update, @curriculum %>
-  <p><%= link_to t(:profile_create_link), new_curriculum_profile_path(@curriculum), :class => "button-base" %><p>
+  <p><%= link_to t('.competence_create_link'), new_curriculum_competence_path(@curriculum), :class => "btn btn-primary" %><p>
 <% end %>
 
 
-
+<!-- Create course -->
 <h2><%= t 'curriculums.curriculum_courses' %></h2>
+
+<% unless @curriculum.courses.empty? %>
+  <table id="curriculum-courses">
+    <thead>
+      <tr>
+        <th><%= t '.course_code' %> &darr;</th>
+        <th><%= t '.course_name' %> &darr;</th>
+        <th><%= t '.course_credits' %> &darr;</th>
+        <th><%= t '.course_period' %> &darr;</th>
+        <th><%= t '.prerequisites' %> &darr;</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @curriculum.courses.each_with_index do |course, i| %>
+        <tr class="<%= i % 2 == 0 ? 'even' : 'odd' %>">
+          <td>
+            <%= link_to course.course_code, edit_curriculum_course_path(:curriculum_id => @curriculum, :id => course) %>
+          </td>
+          <td>
+            <%= link_to course.name_or('<' + t('.course_name_not_found') + '>'), edit_curriculum_course_path(:curriculum_id => @curriculum, :id => course) %>
+          </td>
+          <td class="centered"><%= course.credits %></td>
+          <td class="centered"><%= course.periods_as_roman_numerals.join(", ") %></td>
+          <td class="centered"><%= course.strict_prereqs.size %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p>
+    <span class="placeholder"><%= t '.no_courses_placeholder' %></span>
+  </p>
+<% end %>
 
 <% if can? :update, @curriculum %>
   <p><%= link_to t('.course_create_link'), 
     new_curriculum_course_path(I18n.locale, @curriculum),
-    :remote => true, :class => "button-base",
+    :class => "btn btn-primary",
     :id => "new-course-button" %>
   </p>
-
-  <%= render 'new_course_form_container' %>
-
 <% end %>
-
-<%= render 'courses_list' %>
-
-

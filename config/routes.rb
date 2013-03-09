@@ -44,7 +44,7 @@ Ops::Application.routes.draw do
         resources :courses, :controller => 'curriculums/courses', :only => [:show]  # ScopedCourses, courses that belong to the profile
       end
 
-      resources :competences, :controller => 'curriculums/competences', :only => [:index, :show, :edit, :update] do
+      resources :competences, :controller => 'curriculums/competences' do
         member do
           get 'contributors'
           get 'prereqs'

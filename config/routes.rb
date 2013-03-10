@@ -61,7 +61,7 @@ Ops::Application.routes.draw do
         end
       end
 
-      resources :skills, :controller => 'curriculums/skills', :only => [:index, :new, :create, :edit] do
+      resources :skills, :controller => 'curriculums/skills' do
         member do
             post 'add_prereq'
             post 'remove_prereq'

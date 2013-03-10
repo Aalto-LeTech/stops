@@ -171,13 +171,37 @@ class CurriculumsController < ApplicationController
   end
 
   def search_skills
-    # @courses = ScopedCourse.includes(:course_description_with_locale, :skill_descriptions).search_full_text params[:q]
-    
-    skills = SkillDescriptions.where(['description LIKE ?', params[:q]]).joins(:skill).select(:competence_node_id).uniq
-    logger.info skills
+    competence_node_ids = []
+    if params[:q] && params[:q].size > 1
+      # Search from skills
+      skills = SkillDescription.where(['description ILIKE ?', "%#{params[:q]}%"]).joins(:skill).select(:competence_node_id).uniq
+      competence_node_ids.concat skills.map {|skill| skill.competence_node_id.to_i }
+      
+      # Search from course names or codes
+      nodes = CourseDescription.where(['name ILIKE ? OR course_code ILIKE ?', "%#{params[:q]}%", "%#{params[:q]}%"]).joins(:scoped_course).select(:scoped_course_id).uniq
+      competence_node_ids.concat nodes.map {|node| node.scoped_course_id}
+    end
 
+    # TODO: make this work with CompetenceNodes
+    nodes = ScopedCourse.find(competence_node_ids)
+    
     respond_to do |format|
-      format.json { render :text => 'done' }
+      format.json { render :json => nodes.to_json(
+        :only => [:id, :course_code],
+        :include => [
+            {:skills => {
+              :only => [:id],
+              :include => [
+                :skill_descriptions => {
+                  :only => [:id, :locale, :description]
+                }
+              ]
+            }},
+            {:course_descriptions => {
+              :only => [:id, :locale, :name]
+            }}
+        ]
+      )}
     end
   end
   

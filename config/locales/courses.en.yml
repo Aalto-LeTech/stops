@@ -45,3 +45,6 @@ en:
         prereqs_heading: 'Prerequisites'
         outcomes_heading: 'Learning outcomes'
         add_skill: 'Add outcome'
+        supportingPrereqButton: 'Supporting'
+        strictPrereqButton: 'Mandatory'
+        

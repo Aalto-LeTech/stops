@@ -46,4 +46,5 @@ fi:
         prereqs_heading: 'Esitiedot'
         outcomes_heading: 'Oppimistavoitteet'
         add_skill: 'Lisää valmius'
-
+        supportingPrereqButton: 'Tukeva'
+        strictPrereqButton: 'Välttämätön'

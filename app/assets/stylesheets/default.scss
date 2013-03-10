@@ -347,6 +347,19 @@ $button_danger_active_color:  #8F1F1F;
   opacity: 0.7;
 }
 
+div.buttons {
+  float: right;
+}
+
+div.buttons-hover {
+  float: right;
+  visibility: hidden;
+}
+
+div:hover > div.buttons-hover {
+  visibility: visible;
+}
+
 /******************
 * Information boxes
 *******************/

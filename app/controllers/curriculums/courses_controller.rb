@@ -38,13 +38,50 @@ class Curriculums::CoursesController < CurriculumsController
 
   # GET /courses/1
   # GET /courses/1.xml
+  # Returns JSON:
+  #   {
+  #     "scoped_course": {
+  #       "course_code":"T-0.000",
+  #       "id":5,
+  #       "skills": [
+  #         {
+  #           "id":1231,
+  #           "skill_descriptions":[
+  #             {
+  #               "id":1760,
+  #               "locale": "en"
+  #               "description": "in english",
+  #             },
+  #             {...}
+  #           ]
+  #         },
+  #         { another skill... }
+  #       ]
+  #     }
+  #   }
   def show
     @course = ScopedCourse.find(params[:id])
     @profile = Profile.find(params[:profile_id]) if params[:profile_id]
 
     respond_to do |format|
       format.html # show.html.erb
-      format.json { render :json => @course.to_json(:only => [:course_code], :methods => [:course_description_with_locale, :skill_descriptions_with_locale]) }
+      format.json { render :json => @course.to_json(
+        :only => [:id, :course_code],
+        :include => {
+            :skills => {
+              :only => [:id],
+              :include => {
+                :skill_descriptions => {
+                  :only => [:id, :locale, :description]
+                },
+                :skill_prereqs => {:only => [:prereq_id, :requirement]}
+              }
+            },
+            :course_descriptions => {
+              :only => [:id, :locale, :name]
+            }
+        }
+      )}
     end
   end
 
@@ -56,7 +93,7 @@ class Curriculums::CoursesController < CurriculumsController
   end
 
   def edit
-    @scoped_course = ScopedCourse.find(params[:id])
+    @course = ScopedCourse.find(params[:id])
     
     authorize! :update, @curriculum
     
@@ -66,8 +103,6 @@ class Curriculums::CoursesController < CurriculumsController
 
   def new
     authorize! :update, @curriculum
-    
-    #@abstract_course = AbstractCourse.new
     
     @scoped_course = ScopedCourse.new
     @scoped_course.curriculum = @curriculum #Curriculum.find(params[:curriculum_id])

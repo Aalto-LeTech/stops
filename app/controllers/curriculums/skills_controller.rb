@@ -45,6 +45,8 @@ class Curriculums::SkillsController < CurriculumsController
   end
 
   def new
+    authorize! :update, @curriculum
+    
     @skill = Skill.new
     @skill.competence_node = Competence.find(params[:competence_id])
 
@@ -60,34 +62,75 @@ class Curriculums::SkillsController < CurriculumsController
 
   # POST /curriculum/:id/skills
   def create
-    @skill = Skill.new(params[:skill])
+    authorize! :update, @curriculum
 
+    @skill = Skill.new(params[:skill])
+    @skill.save!
+    
     respond_to do |format|
-      format.js { @skill.save! }
+      format.js {
+        render :json => @skill.to_json(:include => [:skill_descriptions])
+      }
+    end
+  end
+  
+  # PUT /curriculum/:curriculum_id/skills/:id
+  def update
+    authorize! :update, @curriculum
+    
+    @skill = Skill.find(params[:id])
+    @skill.update_attributes(params[:skill])
+    
+    respond_to do |format|
+      format.js {
+        render :json => @skill.to_json(:include => [:skill_descriptions])
+      }
     end
   end
 
-  # POST /add_prereq
-  def add_prereq
-    authorize! :create, Skill
-    authorize! :update, Skill
+  # DELETE /curriculums/:curriculum_id/skills/:id
+  def destroy
+    authorize! :update, @curriculum
+    
+    @skill = Skill.find(params[:id])
+    @skill.destroy
 
+    respond_to do |format|
+      format.js {
+        render :nothing => true
+      }
+    end
+  end
+  
+  # POST /curriculums/:curriculum_id/skills/:id/add_prereq
+  def add_prereq
+    authorize! :update, @curriculum
+
+    requirement_type = params[:requirement] || STRICT_PREREQ
+    
+    # Reset
+    SkillPrereq.where(:skill_id => params[:id], :prereq_id => params[:prereq_id]).delete_all
+    
+    # Add new
     SkillPrereq.create :skill_id     => Integer(params[:id]),
                        :prereq_id    => Integer(params[:prereq_id]),
-                       :requirement  => STRICT_PREREQ
+                       :requirement  => requirement_type
 
     render :nothing => true
   end
 
-  # POST /remove_prereq
+  # POST /curriculums/:curriculum_id/skills/:id/remove_prereq
+  # params: {'prereq_id': prereq_skill_id}
   def remove_prereq
-    authorize! :create, Skill
-    authorize! :update, Skill
+    authorize! :update, @curriculum
 
     @prereq = SkillPrereq.where "skill_id = ? AND prereq_id = ?",
                 params[:id], params[:prereq_id]
 
-    @prereq.first.destroy
+    @prereq.all.each do |prereq|
+      prereq.destroy
+    end
+    
     render :nothing => true
   end
 

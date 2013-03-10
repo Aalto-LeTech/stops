@@ -27,7 +27,7 @@
 <!-- Create competence -->
 <h2><%= t 'curriculums.competences_heading' %></h2>
 
-<%= render 'competences_list' %>
+<p><%= render 'competences_list' %></p>
 
 <% if can? :update, @curriculum %>
   <p><%= link_to t('.competence_create_link'), new_curriculum_competence_path(@curriculum), :class => "btn btn-primary" %><p>
@@ -55,7 +55,7 @@
             <%= link_to course.course_code, edit_curriculum_course_path(:curriculum_id => @curriculum, :id => course) %>
           </td>
           <td>
-            <%= link_to course.name_or('<' + t('.course_name_not_found') + '>'), edit_curriculum_course_path(:curriculum_id => @curriculum, :id => course) %>
+            <%= link_to course.localized_description.name.presence || ('<' + t('.course_name_not_found') + '>'), edit_curriculum_course_path(:curriculum_id => @curriculum, :id => course) %>
           </td>
           <td class="centered"><%= course.credits %></td>
           <td class="centered"><%= course.periods_as_roman_numerals.join(", ") %></td>
@@ -65,9 +65,7 @@
     </tbody>
   </table>
 <% else %>
-  <p>
-    <span class="placeholder"><%= t '.no_courses_placeholder' %></span>
-  </p>
+  <p><span class="placeholder"><%= t '.no_courses_placeholder' %></span></p>
 <% end %>
 
 <% if can? :update, @curriculum %>

@@ -1,3 +1,4 @@
+# CompetenceNode is either ScopedCourse or Competence. It consists of Skills.
 class CompetenceNode < ActiveRecord::Base
   # attr_accessible :title, :body
   

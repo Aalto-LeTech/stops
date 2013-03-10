@@ -41,4 +41,9 @@ fi:
         course_title_in_sv: "Kurssin nimi ruotsiksi"
         course_title_in_en: "Kurssin nimi englanniksi"
         credits: 'Opintopisteet'
+      edit:
+        edit_course_heading: 'Edit course'
+        prereqs_heading: 'Esitiedot'
+        outcomes_heading: 'Oppimistavoitteet'
+        add_skill: 'Lisää valmius'
 

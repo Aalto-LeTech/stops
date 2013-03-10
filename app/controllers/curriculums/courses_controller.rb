@@ -6,7 +6,7 @@ class Curriculums::CoursesController < CurriculumsController
   #layout 'curriculum', :only => [:index, :show]
   #layout 'fullscreen', :only => [:prereqs]
 
-  respond_to :json, :only => 'index'
+  respond_to :json
 
   # GET /courses
   # GET /courses.xml
@@ -44,7 +44,7 @@ class Curriculums::CoursesController < CurriculumsController
 
     respond_to do |format|
       format.html # show.html.erb
-      format.xml  { render :xml => @course }
+      format.json { render :json => @course.to_json(:only => [:course_code], :methods => [:course_description_with_locale, :skill_descriptions_with_locale]) }
     end
   end
 
@@ -61,20 +61,21 @@ class Curriculums::CoursesController < CurriculumsController
     authorize! :update, @curriculum
     
     #@profile.profile_descriptions << ProfileDescription.new(:locale => I18n.locale) if @profile.profile_descriptions.empty?
+    render :action => 'edit', :layout => 'wide'
   end
 
   def new
     authorize! :update, @curriculum
     
-    @abstract_course = AbstractCourse.new
+    #@abstract_course = AbstractCourse.new
     
     @scoped_course = ScopedCourse.new
     @scoped_course.curriculum = @curriculum #Curriculum.find(params[:curriculum_id])
-    @scoped_course.abstract_course = @abstract_course
+    #@scoped_course.abstract_course = @abstract_course
 
     # Create empty descriptions for each required locale
     REQUIRED_LOCALES.each do |locale|
-      @abstract_course.course_descriptions << CourseDescription.new(:locale => locale)
+      @scoped_course.course_descriptions << CourseDescription.new(:locale => locale)
     end
 
     @teaching_lang_options = REQUIRED_LOCALES.map do |locale|
@@ -90,20 +91,22 @@ class Curriculums::CoursesController < CurriculumsController
   def create
     authorize! :update, @curriculum
 
-    @abstract_course = AbstractCourse.new(params[:abstract_course])
+    @scoped_course = ScopedCourse.new(params[:scoped_course])
+    @scoped_course.curriculum = @curriculum
+    
+    # Find or create AbstractCourse
+    @abstract_course = AbstractCourse.find_by_code(@scoped_course.course_code)
+    @abstract_course = AbstractCourse.create(:code => @scoped_course.course_code) unless @abstract_course
+
+    @scoped_course.abstract_course = @abstract_course
     
     respond_to do |format|
       format.html do
-        if @abstract_course.save
+        if @scoped_course.save
           redirect_to edit_curriculum_path(@curriculum)
         else
           render :action => "new" 
         end
-      end
-
-      format.js do
-        @abstract_course.save! 
-        render :nothing => true
       end
     end
   end

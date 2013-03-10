@@ -109,7 +109,7 @@ class Curriculums::SkillsController < CurriculumsController
                               params[:curriculum_id], params[:id]
                             ],
                             :include => [
-                              :course_description_with_locale,
+                              :localized_course_description,
                               { :skills => [:prereq_to, :description_with_locale] }
                             ]
                           )
@@ -160,7 +160,7 @@ class Curriculums::SkillsController < CurriculumsController
     authorize! :update, Skill
 
     @courses = ScopedCourse.search params[:q],
-                  :include  => [:course_description_with_locale, :skill_descriptions_with_locale],
+                  :include  => [:localized_description, :skill_descriptions_with_locale],
                   :page     => params[:p] || 1, :per_page => 20
 
     # Validate skill_id!

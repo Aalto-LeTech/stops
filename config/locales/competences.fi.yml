@@ -35,9 +35,10 @@ fi:
         create_outcome_validation_error: "Valmiuden kuvaus tulee antaa kaikilla pyydetyillä kielillä!"
         create_outcome_saving: "Tallennetaan..."
       new:
-        competence_name_in_fi: 'Nimi (fi):'
-        competence_name_in_en: 'Nimi (en):'
-        competence_name_in_sv: 'Nimi (sv):'
+        competence_name_in_fi: 'Nimi suomeksi:'
+        competence_name_in_en: 'Nimi englanniksi:'
+        competence_name_in_sv: 'Nimi ruotsiksi:'
+        create_competence_heading: 'Luo kompetenssi'
 
   # Add to plan
   competence_add_heading: "Lisää %{profile} %{competence} opintosuunnitelmaan"

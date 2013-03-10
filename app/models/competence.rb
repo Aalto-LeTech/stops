@@ -14,6 +14,10 @@ class Competence < CompetenceNode
 
   has_many :competence_descriptions, 
            :dependent   => :destroy
+  
+  has_one :localized_description, :class_name => "CompetenceDescription", 
+           :conditions => proc { "locale = '#{I18n.locale}'" }
+  
 
   has_many :skills_ordered,
            :class_name  => 'Skill',

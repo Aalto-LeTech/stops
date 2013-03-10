@@ -1,11 +1,17 @@
 <h1><%=t '.create_course_heading' %></h1>
 
-<%= form_for @abstract_course, :url => curriculum_courses_path(@curriculum) do |f| %>
-  
+<%= form_for @scoped_course, :url => curriculum_courses_path(@curriculum) do |f| %>
   <div class="form-control-group">
     <%= f.label t('.course_code'), :class => 'form-label' %>
     <div class="form-controls">
-      <%= f.text_field :code, :class => 'field-lengthy' %>
+      <%= f.text_field :course_code, :class => 'field-lengthy' %>
+    </div>
+  </div>
+  
+  <div class="form-control-group">
+    <%= f.label t('.credits'), :class => "form-label" %>
+    <div class="form-controls">
+      <%= f.text_field :credits, :class => "field-lengthy" %>
     </div>
   </div>
 
@@ -26,14 +32,6 @@
     </div>
   <% end %>
 
-  <%= f.fields_for :scoped_courses, @scoped_course do |scoped| %>
-    <%= scoped.hidden_field :curriculum_id %>
-    <%= scoped.label t('.credits'), :class => "form-label" %>
-    <div class="form-controls">
-      <%= scoped.text_field :credits, :class => "field-lengthy" %>
-    </div>
-  <% end %>
-  
   <div class="form-controls">
     <%= f.submit t(:Save), :class => 'btn btn-primary' %>
   </div>

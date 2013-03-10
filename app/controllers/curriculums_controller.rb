@@ -170,6 +170,17 @@ class CurriculumsController < ApplicationController
     @curriculum = Curriculum.find(params[:id])
   end
 
+  def search_skills
+    # @courses = ScopedCourse.includes(:course_description_with_locale, :skill_descriptions).search_full_text params[:q]
+    
+    skills = SkillDescriptions.where(['description LIKE ?', params[:q]]).joins(:skill).select(:competence_node_id).uniq
+    logger.info skills
+
+    respond_to do |format|
+      format.json { render :text => 'done' }
+    end
+  end
+  
   private
 
   # Loads curriculum object with necessary associations eagerly loaded
@@ -177,7 +188,7 @@ class CurriculumsController < ApplicationController
     @curriculum = Curriculum.includes(
       :courses,
       :profiles,
-      :courses => [:abstract_course, :periods, :course_description_with_locale, :strict_prereqs],
+      :courses => [:abstract_course, :periods, :localized_description, :strict_prereqs],
     ).find(params[:id])
   end
 

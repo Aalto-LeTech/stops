@@ -34,9 +34,10 @@ en:
         create_outcome_validation_error: "Skill description must be given in all required languages!"
         create_outcome_saving: "Saving..."
       new:
-        competence_name_in_fi: 'Name (fi):'
-        competence_name_in_en: 'Name (en):'
-        competence_name_in_sv: 'Name (sv):'
+        competence_name_in_fi: 'Name in Finnish:'
+        competence_name_in_en: 'Name in English:'
+        competence_name_in_sv: 'Name in Swdish:'
+        create_competence_heading: 'Create competence'
 
   # Add to plan
   competence_add_heading: "Add %{profile} %{competence} to study plan"

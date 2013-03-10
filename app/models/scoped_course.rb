@@ -2,17 +2,17 @@
 class ScopedCourse < CompetenceNode
 
   belongs_to :abstract_course
-
   accepts_nested_attributes_for :abstract_course
   
-  has_many :course_descriptions, :through => :abstract_course
+
+  # Localized descriptions
+  has_many :course_descriptions, :dependent => :destroy
   accepts_nested_attributes_for :course_descriptions
   
-  has_one :course_description_with_locale, 
-          :class_name => "CourseDescription",
-          :through    => :abstract_course,
-          :source     => :course_description_with_locale
-
+  has_one :localized_description, :class_name => "CourseDescription", 
+           :conditions => proc { "locale = '#{I18n.locale}'" }
+  
+  
   #has_many :skills, :order => 'position', :dependent => :destroy #, :foreign_key => 'course_code', :primary_key => 'code'
   #has_many :course_skills, :dependent => :destroy
   # has_many :skills, 
@@ -22,11 +22,12 @@ class ScopedCourse < CompetenceNode
   has_many :skill_descriptions, 
            :through => :skills
 
-  has_many :skill_descriptions_with_locale,
+  has_many :localized_skill_descriptions,
            :through     => :skills,
            :class_name  => "SkillDescription",
-           :source      => :description_with_locale
+           :source      => :localized_description
 
+  
   # Prerequisite courses of this course
   has_many :course_prereqs, 
            :dependent => :destroy
@@ -67,7 +68,7 @@ class ScopedCourse < CompetenceNode
   
   define_index do
     indexes course_code
-    indexes course_description_with_locale(:name), :as => :course_name
+    indexes localized_description(:name), :as => :course_name
     indexes skill_descriptions.description, :as => :skill_descriptions
     
     has :id, :as => :scoped_course_id
@@ -88,7 +89,7 @@ class ScopedCourse < CompetenceNode
   # Returns the name of the course in the current locale or fallback
   # message if localized course name could not be found.
   def name_or(fallback_message="<No name set for the locale>")
-    desc = course_description_with_locale
+    desc = localized_description
     desc ? desc.name : fallback_message 
   end
 

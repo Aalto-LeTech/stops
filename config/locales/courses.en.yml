@@ -40,3 +40,8 @@ en:
         course_title_in_sv: "Course name in Swedish"
         course_title_in_en: "Course name in English"
         credits: 'Credits'
+      edit:
+        edit_course_heading: 'Edit course'
+        prereqs_heading: 'Prerequisites'
+        outcomes_heading: 'Learning outcomes'
+        add_skill: 'Add outcome'

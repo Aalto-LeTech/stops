@@ -1,4 +1,4 @@
-<h1>Create competence </h1>
+<h1><%=t '.create_competence_heading' %></h1>
 
 <%= form_for [@curriculum, @competence] do |f| %>
   <%= f.hidden_field :curriculum_id %>
@@ -18,3 +18,4 @@
   
 <% end %>
 
+<p><%= link_to t(:Back), edit_curriculum_path(@curriculum) %></p>

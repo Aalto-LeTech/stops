@@ -55,6 +55,9 @@ en:
       course_period: "Period"
       prerequisites: "Prerequisites"
       no_courses_placeholder: "There are no courses in the curriculum."
+      no_competences_placeholder: "There are no competences in the curriculum."
+      edit_competence_prefix: "Edit competence"
+      no_competence_name: "no competence name"
     new_course_form_container:
       # Create new course form
       course_create_link: 'New course'

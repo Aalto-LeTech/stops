@@ -4,8 +4,6 @@ class Curriculums::SkillsController < CurriculumsController
 
   respond_to :json, :only => [:index, :edit, :search_skills_and_courses]
 
-  authorize_resource :only => [:add_prereq, :remove_prereq]
-
   def index
     @skills = Skill.joins(:competence_node)
                 .where('competence_nodes.id' => @curriculum.course_ids)

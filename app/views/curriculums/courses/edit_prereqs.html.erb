@@ -1,0 +1,90 @@
+<% content_for :javascript do %>
+  <%= javascript_include_tag 'curriculums/competenceSkillEditor' %>
+<% end %>
+
+<h1><%=t '.edit_course_heading' %></h1>
+
+<ul class="nav nav-tabs">
+  <li><%= link_to t('curriculums.courses.edit_tab'), edit_curriculum_course_path(:curriculum_id => @curriculum, :id => @course) %></li>
+  <li class="active"><%= link_to t('curriculums.courses.prereqs_tab'), edit_prereqs_curriculum_course_path(:curriculum_id => @curriculum, :id => @course) %></li>
+</ul>
+
+<div class="row-fluid full-height">
+
+  <!-- Prereqs -->
+  <div class="span6 full-height scroll-vertical">
+    <h2><%=t '.prereqs_heading' %></h2>
+    
+    <div class="input-append">
+      <input class="span4" type="text" id="search" data-bind="value: searchString, event: { keyup: searchKeyPress }" />
+      <button class="btn" data-bind="click: clickSearch"><i class="icon-search"></i></button>
+      <button class="btn" data-bind="click: clickClearSearch"><i class="icon-remove"></i></button>
+    </div>
+    
+    <div data-bind="foreach: searchResults">
+      
+      <div class="course">
+        <p><span data-bind="text: code"></span> <span data-bind="text: localizedName"></span></p>
+        <!-- ko foreach: skills -->
+          <div class="skill" data-bind="css: { selected: selected(), supporting: prereqType() === 0, strict: prereqType() === 1}">
+            <span data-bind="text: localizedDescription"></span>
+            <div class="buttons">
+              <span data-bind="click: clickToggleSupportingPrereq" class="supportingPrereqButton"><%=t('.supportingPrereqButton') %></span>
+              <span data-bind="click: clickToggleStrictPrereq" class="strictPrereqButton"><%=t('.strictPrereqButton') %></span>
+            </div>
+          </div>
+        <!-- /ko -->
+      </div>
+      
+    </div>
+  </div>
+  
+  <!-- Outcomes -->
+  <div class="span6">
+    <h2><%=t '.outcomes_heading' %></h2>
+    
+    <div id="target-node" class="course" data-url="<%= curriculum_course_path(:curriculum_id => @curriculum, :course_id => @course) %>">
+      <!-- ko with: node -->
+        <p><span data-bind="text: code"></span> <span data-bind="text: localizedName"></span></p>
+        <!-- ko foreach: skills -->
+          <div class="skill" data-bind="click: clickSelectTarget, css: { selected: selected() }">
+            <span data-bind="text: localizedDescription"></span>
+            <div class="buttons">
+              <i class="icon-pencil" data-bind="click: clickEdit"></i>
+              <i class="icon-remove" data-bind="click: clickDelete, clickBubble: false"></i>
+            </div>
+          </div>
+        <!-- /ko -->
+      <!-- /ko -->
+      
+      <p><button class="btn btn-mini" data-bind="click: $root.clickAddSkill"><%=t '.add_skill' %></button></p>
+    </div>
+    
+  </div>
+
+</div>
+
+<p><%= link_to t(:Back), edit_curriculum_path(@curriculum) %></p>
+
+<!-- Skill editor modal -->
+<div id="modal-edit-skill" class="modal hide" data-current-locale="<%= I18n.locale %>" data-locales="<%= REQUIRED_LOCALES.join(',') %>" data-curriculum-url="<%= curriculum_path(@curriculum) %>">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3><%= @course.localized_description.name %> - <%= t('.add_skill') %></h3>
+  </div>
+  <div class="modal-body" data-bind="with: currentlyEditedSkill">
+    <ul data-bind="foreach: descriptions">
+      <li>
+        <label>
+          <span data-bind="text: locale"></span>:
+          <input type="text" class="span6" data-bind="value: description" />
+        </label>
+      </li>
+    </ul>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true"><%= t(:Cancel) %></button>
+    <button class="btn btn-primary" data-bind="click: clickSaveSkill"><%= t(:Save) %></button>
+  </div>
+</div>
+    

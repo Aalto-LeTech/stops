@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130310072044) do
+ActiveRecord::Schema.define(:version => 20130311074224) do
 
   create_table "abstract_courses", :force => true do |t|
     t.string "code"
@@ -53,6 +53,7 @@ ActiveRecord::Schema.define(:version => 20130310072044) do
     t.boolean  "graduate_course"
     t.text     "changing_topic"
     t.string   "period"
+    t.text     "comments"
   end
 
   add_index "competence_nodes", ["abstract_course_id", "curriculum_id"], :name => "index_competence_nodes_on_abstract_course_id_and_curriculum_id"

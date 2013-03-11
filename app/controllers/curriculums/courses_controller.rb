@@ -85,22 +85,19 @@ class Curriculums::CoursesController < CurriculumsController
     end
   end
 
-
   def prereqs
     @course = ScopedCourse.find(params[:id])
 
     render :action => 'prereqs', :layout => 'fullscreen'
   end
 
-  def edit
+  def edit_prereqs
     @course = ScopedCourse.find(params[:id])
-    
     authorize! :update, @curriculum
     
-    #@profile.profile_descriptions << ProfileDescription.new(:locale => I18n.locale) if @profile.profile_descriptions.empty?
-    render :action => 'edit', :layout => 'wide'
+    render :action => 'edit_prereqs', :layout => 'wide'
   end
-
+  
   def new
     authorize! :update, @curriculum
     
@@ -146,12 +143,28 @@ class Curriculums::CoursesController < CurriculumsController
     end
   end
   
+  def edit
+    @scoped_course = ScopedCourse.find(params[:id])
+    authorize! :update, @curriculum
+    
+    @localized_description = @scoped_course.localized_description
+    
+    render :action => 'edit', :layout => 'wide'
+  end
+  
   def update
-    @profile = Profile.find(params[:id])
+    @scoped_course = ScopedCourse.find(params[:id])
     authorize! :update, @curriculum
 
-    if @profile.update_attributes(params[:profile])
-      redirect_to curriculum_profile_path(:curriculum_id => @curriculum, :id => @profile)
+    #@localized_description = @scoped_course.localized_description
+    @scoped_course.localized_description.update_attributes(params[:course_description])
+    
+    @scoped_course.update_comments(params[:comments])
+    
+    if @scoped_course.update_attributes(params[:scoped_course])
+      flash[:success] = 'Information updated'
+      redirect_to edit_curriculum_course_path(:curriculum_id => @curriculum, :id => @scoped_course)
+      #edit_curriculum_path(@curriculum)
     else
       render :action => "edit"
     end

@@ -16,4 +16,8 @@ module CoursesHelper
   end
 
 
+  def scoped_course_comment(field)
+    "<textarea name='comments[#{field}]' class='input-xxlarge' rows='5'>#{html_escape(@scoped_course.comment(field))}</textarea>".html_safe
+  end
+  
 end

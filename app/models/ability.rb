@@ -35,7 +35,7 @@ class Ability
     end
     
     can [:update, :destroy], Curriculum do |curriculum|
-      curriculum.has_admin? user
+      curriculum.has_admin?(user) || curriculum.has_teacher?(user)
     end
   end
 end

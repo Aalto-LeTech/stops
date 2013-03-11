@@ -56,6 +56,9 @@ fi:
       course_period: "Periodi"
       prerequisites: "Esitietovaatimukset"
       no_courses_placeholder: "Opinto-ohjelmassa ei ole kursseja."
+      no_competences_placeholder: "Opinto-oppaassa ei ole yhtään kompetenssia."
+      edit_competence_prefix: "Muokkaa kompetenssia"
+      no_competence_name: "nimetön kompetenssi"
     new_course_form_container:
       # Create new course form
       create_course_error_failed_to_load_course_box: 'Valitettavasti lomaketta ei pystytty lataamaan'
@@ -101,59 +104,7 @@ fi:
         send: "Lähetä"
         existing_invitations: 'Voimassaolevat aiemmin lähetetyt kutsut'
         sent_success: "Kutsuviestejä lähetetään"
-    temp_courses:
-      created: 'Kurssi %{name} luotu'
-      updated: 'Kurssi %{name} tallennettu'
-      index:
-        code_missing: ''
-        name_missing: 'Ei nimeä'
-      form:
-        heading: 'Syötä kurssin tiedot'
-        hint: 'Voit täyttää osan lomakkeesta ja jatkaa myöhemmin (muista kuitenkin painaa "Tallenna" lomakkeen lopussa).'
-        contact: 'Tiedot antoi'
-        contact_hint: '(kyselyjä varten, ei mene Oodiin)'
-        comments: 'Oikeaan sarakkeeseen voit kirjoittaa kommentteja ja muistiinpanoja.'
-        code: 'Kurssikoodi'
-        code_hint: 'Ohjeet uudesta kurssikoodijärjestelmästä annetaan myöhemmin'
-        credits: 'Laajuus (op)'
-        credits_hint: ''
-        name_fi: 'Kurssin nimi suomeksi'
-        name_en: 'Kurssin nimi englanniksi'
-        name_sv: 'Kurssin nimi ruotsiksi'
-        name_hint: 'Suomenkielisestä ja ruotsinkielisestä kurssista kurssin nimi ja kuvaustiedot ilmoitetaan suomeksi, ruotsiksi ja englanniksi.<br />Englanninkielisestä kurssista nimi ja kuvaustiedot ilmoitetaan vain englanniksi.'
-        department: 'Järjestävä laitos'
-        department_hint: 'Opetuksen järjestävän laitoksen vastuualuekoodi (T-koodi)'
-        language: 'Opetuskieli'
-        language_hint: ''
-        instructors: 'Opettajat'
-        instructors_hint: ''
-        grading_scale: 'Arvosteluasteikko'
-        grading_scale_hint: '1-5 tai hyväksytty/hylätty'
-        graduate_course: 'Jatko-opintokelpoisuus'
-        graduate_course_hint: ''
-        changing_topic: 'Vaihtuvasisältöisyys'
-        changing_topic_hint: ''
-        alternatives: 'Leikkaavuus toisen kurssin kanssa (voiko suorittaa molempia jne.)'
-        alternatives_hint: ''
-        period: 'Opetusperiodi'
-        period_hint: 'Todennäköinen, mutta alustava tieto kurssisijoitteluista opetusperiodeihin ilmenee liitteestä "20130107 Kandiohj uudet kurssit ja vastuuopet.xlsx"'
-        prerequisites: 'Esitiedot'
-        prerequisites_hint: ''
-        outcomes: 'Osaamistavoitteet'
-        outcomes_hint: ''
-        content: 'Sisältö'
-        content_hint: ''
-        assignments: 'Toteutus ja työmuodot'
-        assignments_hint: ''
-        grading_details: 'Arvosteluperusteet'
-        grading_details_hint: ''
-        materials: 'Oppimateriaali'
-        materials_hint: ''
-        replaces: 'Korvaavuudet'
-        replaces_hint: ''
-        other: 'Muita tietoja'
-        other_hint: 'Kurssista voidaan ilmoittaa kurssin asema, kurssin taso, kurssin kotisivu, CEFR-taso (koskee kielikursseja) ja muita lisätietoja'
-        
+    
   activerecord:
     errors:
       models:

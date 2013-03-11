@@ -58,15 +58,16 @@ Ops::Application.routes.draw do
       resources :courses, :controller => 'curriculums/courses' do  # ScopedCourses
         member do
           get 'prereqs'
+          get 'edit_prereqs'
         end
       end
 
       resources :skills, :controller => 'curriculums/skills' do
         member do
-            post 'add_prereq'
-            post 'remove_prereq'
-            get 'search_skills_and_courses'
-          end
+          post 'add_prereq'
+          post 'remove_prereq'
+          get 'search_skills_and_courses'
+        end
       end
       
       resources :roles, :controller => 'curriculums/roles', :only => [:new, :index, :create, :destroy]

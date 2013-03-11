@@ -76,7 +76,7 @@ class Curriculums::CompetencesController < CurriculumsController
     load_curriculum
     @competence = Competence.new(:curriculum => @curriculum)    
     
-    authorize! :create, @competence
+    authorize! :update, @curriculum
     
     REQUIRED_LOCALES.each do |locale|
       @competence.competence_descriptions << CompetenceDescription.new(:competence => @competence, :locale => locale)
@@ -86,7 +86,7 @@ class Curriculums::CompetencesController < CurriculumsController
   def create
     load_curriculum
     @competence = Competence.new(params[:competence])
-    authorize! :create, @competence
+    authorize! :update, @curriculum
     
     respond_to do |format|
       if @competence.save

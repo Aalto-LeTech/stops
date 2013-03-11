@@ -42,7 +42,7 @@ var skillGraphView = {
     for (var array_index in data) {
       var rawData = data[array_index].scoped_course;
 
-      var course = new GraphCourse(rawData.id, rawData.code, rawData.translated_name);
+      var course = new GraphCourse(rawData.id, rawData.course_code, rawData.translated_name);
       this.courses[rawData.id] = course;
     }
 
@@ -104,10 +104,10 @@ var skillGraphView = {
 
       // Add skill to course
       var course = false;
-      if (rawData.skillable_type == 'ScopedCourse') {
-        var course = this.courses[rawData.skillable_id];
-      } else if (rawData.skillable_type == 'Competence') {
-        var course = this.courses['c' + rawData.skillable_id];
+      if (rawData.competence_node.type == 'ScopedCourse') {
+        var course = this.courses[rawData.competence_node_id];
+      } else if (rawData.competence_node.type == 'Competence') {
+        var course = this.courses['c' + rawData.competence_node_id];
       }
 
       if (!course) {

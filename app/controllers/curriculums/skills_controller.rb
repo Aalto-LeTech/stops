@@ -4,18 +4,26 @@ class Curriculums::SkillsController < CurriculumsController
 
   respond_to :json, :only => [:index, :edit, :search_skills_and_courses]
 
-  authorize_resource :only => [:add_prereq, :remove_prereq]
-
   def index
-    @skills = Skill.where(:skillable_id => @curriculum.course_ids).joins(:skill_descriptions).where(["skill_descriptions.locale = ?", I18n.locale]).select("skills.id, skills.skillable_id, skills.skillable_type, skills.position, skill_descriptions.description AS translated_name").includes(:strict_prereqs)
-    # :skillable_type => 'ScopedCourse'
-      #.includes(:strict_prereqs)
+    @skills = Skill.joins(:competence_node)
+                .where('competence_nodes.id' => @curriculum.course_ids)
+                .includes(:strict_prereqs, :description_with_locale, :competence_node)
 
 
     respond_to do |format|
       #format.html { render :text => @skills.to_json(:include => :strict_prereq_ids) }
       format.xml { render :xml => @skills }
-      format.json { render :json => @skills.to_json(:methods => :strict_prereq_ids) }
+      format.json do 
+        # 'type' is needed from CompetenceNode as it is used by skillGraphView.js
+        render :json => @skills.to_json(
+          :methods => :strict_prereq_ids, 
+          :include => { 
+            :competence_node => { 
+              :only => :type 
+            } 
+          }
+        )
+      end
     end
   end
 
@@ -35,8 +43,10 @@ class Curriculums::SkillsController < CurriculumsController
   end
 
   def new
+    authorize! :update, @curriculum
+    
     @skill = Skill.new
-    @skill.skillable = Competence.find(params[:competence_id])
+    @skill.competence_node = Competence.find(params[:competence_id])
 
     # Create empty descriptions for each required locale
     REQUIRED_LOCALES.each do |locale|
@@ -50,34 +60,75 @@ class Curriculums::SkillsController < CurriculumsController
 
   # POST /curriculum/:id/skills
   def create
-    @skill = Skill.new(params[:skill])
+    authorize! :update, @curriculum
 
+    @skill = Skill.new(params[:skill])
+    @skill.save!
+    
     respond_to do |format|
-      format.js { @skill.save! }
+      format.js {
+        render :json => @skill.to_json(:include => [:skill_descriptions])
+      }
+    end
+  end
+  
+  # PUT /curriculum/:curriculum_id/skills/:id
+  def update
+    authorize! :update, @curriculum
+    
+    @skill = Skill.find(params[:id])
+    @skill.update_attributes(params[:skill])
+    
+    respond_to do |format|
+      format.js {
+        render :json => @skill.to_json(:include => [:skill_descriptions])
+      }
     end
   end
 
-  # POST /add_prereq
-  def add_prereq
-    authorize! :create, Skill
-    authorize! :update, Skill
+  # DELETE /curriculums/:curriculum_id/skills/:id
+  def destroy
+    authorize! :update, @curriculum
+    
+    @skill = Skill.find(params[:id])
+    @skill.destroy
 
+    respond_to do |format|
+      format.js {
+        render :nothing => true
+      }
+    end
+  end
+  
+  # POST /curriculums/:curriculum_id/skills/:id/add_prereq
+  def add_prereq
+    authorize! :update, @curriculum
+
+    requirement_type = params[:requirement] || STRICT_PREREQ
+    
+    # Reset
+    SkillPrereq.where(:skill_id => params[:id], :prereq_id => params[:prereq_id]).delete_all
+    
+    # Add new
     SkillPrereq.create :skill_id     => Integer(params[:id]),
                        :prereq_id    => Integer(params[:prereq_id]),
-                       :requirement  => STRICT_PREREQ
+                       :requirement  => requirement_type
 
     render :nothing => true
   end
 
-  # POST /remove_prereq
+  # POST /curriculums/:curriculum_id/skills/:id/remove_prereq
+  # params: {'prereq_id': prereq_skill_id}
   def remove_prereq
-    authorize! :create, Skill
-    authorize! :update, Skill
+    authorize! :update, @curriculum
 
     @prereq = SkillPrereq.where "skill_id = ? AND prereq_id = ?",
                 params[:id], params[:prereq_id]
 
-    @prereq.first.destroy
+    @prereq.all.each do |prereq|
+      prereq.destroy
+    end
+    
     render :nothing => true
   end
 
@@ -99,7 +150,7 @@ class Curriculums::SkillsController < CurriculumsController
                               params[:curriculum_id], params[:id]
                             ],
                             :include => [
-                              :course_description_with_locale,
+                              :localized_course_description,
                               { :skills => [:prereq_to, :description_with_locale] }
                             ]
                           )
@@ -126,7 +177,7 @@ class Curriculums::SkillsController < CurriculumsController
           locals = {
             :render_whole_course  => true,
             :course_id            => course.id,
-            :course_code          => course.code,
+            :course_code          => course.course_code,
             :course_name          => course.course_description_with_locale.name,
             :course_skills        => skills,
             :button_text          => t('add_prereq_button_remove', :scope => 'curriculums.skills.edit')
@@ -150,7 +201,7 @@ class Curriculums::SkillsController < CurriculumsController
     authorize! :update, Skill
 
     @courses = ScopedCourse.search params[:q],
-                  :include  => [:course_description_with_locale, :skill_descriptions_with_locale],
+                  :include  => [:localized_description, :skill_descriptions_with_locale],
                   :page     => params[:p] || 1, :per_page => 20
 
     # Validate skill_id!
@@ -163,10 +214,8 @@ class Curriculums::SkillsController < CurriculumsController
     queryresults = ActiveRecord::Base.connection.select_all %Q{
       SELECT DISTINCT ON (skills.id) skills.id, skills.id IN (
         SELECT skill_prereqs.prereq_id
-        FROM skills
-        INNER JOIN skill_prereqs ON skills.id = skill_prereqs.prereq_id
-        WHERE skills.skillable_type = 'ScopedCourse'
-        AND skill_prereqs.skill_id = #{skill_id}
+        FROM skill_prereqs
+        WHERE skill_prereqs.skill_id = #{skill_id}
       ) AS alreadyPrereq
       FROM skills
     }
@@ -176,9 +225,6 @@ class Curriculums::SkillsController < CurriculumsController
     queryresults.each do |row|
       @alreadyPrereq[row["id"]] = row["alreadyprereq"] == 't' ? true : false
     end
-
-    # Slow down request for testing
-    # sleep 1.5
 
     if @courses.empty?
       respond_to do |format|

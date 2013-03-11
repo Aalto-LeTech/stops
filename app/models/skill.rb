@@ -35,9 +35,11 @@ class Skill < ActiveRecord::Base
            :order       => 'position', 
            :conditions  => "requirement = #{STRICT_PREREQ}"
 
-  belongs_to :skillable, :polymorphic => true
+  belongs_to :competence_node
 
   accepts_nested_attributes_for :skill_descriptions
+
+  
 
   def description(locale)
     description = SkillDescription.where(:skill_id => self.id, :locale => locale.to_s).first
@@ -79,8 +81,8 @@ class Skill < ActiveRecord::Base
   # course_ids: DFS does not proceed to courses that are not included in the course_ids hash
   def dfs(paths, path, path_lengths, target_skill_ids, course_ids, visited)
     # If this skill belongs to a course that does not belong to the profile, kill this branch
-    if (self.skillable_type == 'ScopedCourse' && !course_ids.has_key?(self.skillable_id)) || visited.has_key?(self.id)
-      puts "#{self.skillable.name('fi')} not included"
+    if (self.competence_node.type == 'ScopedCourse' && !course_ids.has_key?(self.competence_node_id)) || visited.has_key?(self.id)
+      puts "#{self.competence_node.name('fi')} not included"
       return
     end
 
@@ -117,32 +119,30 @@ class Skill < ActiveRecord::Base
 
     stack = []
 
-    self.strict_prereqs.each do |prereq|
+    self.strict_prereqs.includes(:competence_node).each do |prereq|
       stack.push prereq
     end
 
 
     # Run DFS for skills to construct an array of skills that make the competence
     while skill = stack.pop
-      #logger.info "XXXXXX Processing #{skill.skillable.name('fi')} - #{skill.description('fi')}"
 
-      if skill.skillable_type == 'ScopedCourse'
+      if skill.competence_node.type == 'ScopedCourse'
         # Load course if it has not been loaded
-        courses[skill.skillable_id] = ScopedCourse.find(skill.skillable_id) unless courses[skill.skillable_id]
+        courses[skill.competence_node_id] ||= skill.competence_node
 
-        course = courses[skill.skillable_id]
+        course = courses[skill.competence_node_id]
         result[course] = {} unless result[course]
         result[course][skill.id] = skill
       end
 
       # Push neighbors to stack
-      skill.strict_prereqs.each do |prereq|
+      skill.strict_prereqs.includes(:competence_node).each do |prereq|
         stack.push prereq
       end
-      #logger.info "XXXXXX Adding neighbor #{prereq.skillable.name('fi')} - #{prereq.description('fi')}"
     end
 
-    result.sort_by {|course, skills| course.code}
+    result.sort_by {|course, skills| course.course_code}
   end
 
 end

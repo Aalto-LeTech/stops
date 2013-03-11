@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130121123635) do
+ActiveRecord::Schema.define(:version => 20130311074224) do
 
   create_table "abstract_courses", :force => true do |t|
     t.string "code"
@@ -19,14 +19,14 @@ ActiveRecord::Schema.define(:version => 20130121123635) do
 
   add_index "abstract_courses", ["code"], :name => "index_abstract_courses_on_code", :unique => true
 
-  create_table "competence_courses", :id => false, :force => true do |t|
+  create_table "competence_courses_cache", :id => false, :force => true do |t|
     t.integer "competence_id",    :null => false
     t.integer "scoped_course_id", :null => false
     t.integer "requirement"
   end
 
-  add_index "competence_courses", ["competence_id", "requirement"], :name => "index_competence_courses_on_competence_id_and_requirement"
-  add_index "competence_courses", ["competence_id"], :name => "index_competence_courses_on_competence_id"
+  add_index "competence_courses_cache", ["competence_id", "requirement"], :name => "index_competence_courses_on_competence_id_and_requirement"
+  add_index "competence_courses_cache", ["competence_id"], :name => "index_competence_courses_on_competence_id"
 
   create_table "competence_descriptions", :force => true do |t|
     t.integer "competence_id", :null => false
@@ -37,21 +37,44 @@ ActiveRecord::Schema.define(:version => 20130121123635) do
 
   add_index "competence_descriptions", ["competence_id", "locale"], :name => "index_competence_descriptions_on_competence_id_and_locale", :unique => true
 
-  create_table "competences", :force => true do |t|
-    t.integer "profile_id",                  :null => false
-    t.integer "level",      :default => 1
-    t.float   "credits",    :default => 0.0, :null => false
+  create_table "competence_nodes", :force => true do |t|
+    t.string   "type"
+    t.integer  "credits"
+    t.integer  "level"
+    t.integer  "abstract_course_id"
+    t.integer  "curriculum_id"
+    t.string   "course_code"
+    t.datetime "created_at",           :null => false
+    t.datetime "updated_at",           :null => false
+    t.integer  "parent_competence_id"
+    t.text     "contact"
+    t.string   "language"
+    t.string   "instructors"
+    t.boolean  "graduate_course"
+    t.text     "changing_topic"
+    t.string   "period"
+    t.text     "comments"
   end
 
-  add_index "competences", ["profile_id"], :name => "index_competences_on_profile_id"
+  add_index "competence_nodes", ["abstract_course_id", "curriculum_id"], :name => "index_competence_nodes_on_abstract_course_id_and_curriculum_id"
 
   create_table "course_descriptions", :force => true do |t|
-    t.integer "abstract_course_id", :null => false
     t.string  "locale"
-    t.string  "name",               :null => false
+    t.string  "name",             :null => false
+    t.integer "scoped_course_id", :null => false
+    t.string  "department"
+    t.text    "grading_scale"
+    t.text    "alternatives"
+    t.text    "prerequisites"
+    t.text    "outcomes"
+    t.text    "content"
+    t.text    "assignments"
+    t.text    "grading_details"
+    t.text    "materials"
+    t.text    "replaces"
+    t.text    "other"
+    t.text    "comments"
   end
-
-  add_index "course_descriptions", ["abstract_course_id", "locale"], :name => "index_course_descriptions_on_abstract_course_id_and_locale", :unique => true
 
   create_table "course_instances", :force => true do |t|
     t.integer "abstract_course_id", :null => false
@@ -61,16 +84,16 @@ ActiveRecord::Schema.define(:version => 20130121123635) do
 
   add_index "course_instances", ["abstract_course_id", "period_id"], :name => "index_course_instances_on_abstract_course_id_and_period_id", :unique => true
 
-  create_table "course_prereqs", :force => true do |t|
+  create_table "course_prereqs_cache", :force => true do |t|
     t.integer "scoped_course_id", :null => false
     t.integer "scoped_prereq_id", :null => false
     t.integer "requirement"
   end
 
-  add_index "course_prereqs", ["scoped_course_id", "requirement"], :name => "index_course_prereqs_on_scoped_course_id_and_requirement"
-  add_index "course_prereqs", ["scoped_course_id"], :name => "index_course_prereqs_on_scoped_course_id"
-  add_index "course_prereqs", ["scoped_prereq_id", "requirement"], :name => "index_course_prereqs_on_scoped_prereq_id_and_requirement"
-  add_index "course_prereqs", ["scoped_prereq_id"], :name => "index_course_prereqs_on_scoped_prereq_id"
+  add_index "course_prereqs_cache", ["scoped_course_id", "requirement"], :name => "index_course_prereqs_on_scoped_course_id_and_requirement"
+  add_index "course_prereqs_cache", ["scoped_course_id"], :name => "index_course_prereqs_on_scoped_course_id"
+  add_index "course_prereqs_cache", ["scoped_prereq_id", "requirement"], :name => "index_course_prereqs_on_scoped_prereq_id_and_requirement"
+  add_index "course_prereqs_cache", ["scoped_prereq_id"], :name => "index_course_prereqs_on_scoped_prereq_id"
 
   create_table "curriculums", :force => true do |t|
     t.integer "start_year"
@@ -119,35 +142,12 @@ ActiveRecord::Schema.define(:version => 20130121123635) do
     t.date    "ends_at"
   end
 
-  create_table "profile_descriptions", :force => true do |t|
-    t.integer "profile_id",  :null => false
-    t.string  "locale"
-    t.string  "name",        :null => false
-    t.text    "description"
-  end
-
-  add_index "profile_descriptions", ["profile_id", "locale"], :name => "index_profile_descriptions_on_profile_id_and_locale", :unique => true
-
-  create_table "profiles", :force => true do |t|
-    t.integer "curriculum_id", :null => false
-  end
-
   create_table "roles", :force => true do |t|
     t.integer "user_id",   :null => false
     t.integer "target_id"
     t.string  "type"
     t.string  "role"
   end
-
-  create_table "scoped_courses", :force => true do |t|
-    t.integer "abstract_course_id", :null => false
-    t.integer "curriculum_id",      :null => false
-    t.string  "code"
-    t.float   "credits"
-  end
-
-  add_index "scoped_courses", ["abstract_course_id", "curriculum_id"], :name => "index_scoped_courses_on_abstract_course_id_and_curriculum_id", :unique => true
-  add_index "scoped_courses", ["curriculum_id"], :name => "index_scoped_courses_on_curriculum_id"
 
   create_table "sessions", :force => true do |t|
     t.string   "session_id", :null => false
@@ -188,11 +188,10 @@ ActiveRecord::Schema.define(:version => 20130121123635) do
   add_index "skill_prereqs", ["skill_id"], :name => "index_skill_prereqs_on_skill_id"
 
   create_table "skills", :force => true do |t|
-    t.integer "skillable_id",   :null => false
-    t.string  "skillable_type", :null => false
     t.integer "position"
     t.integer "level"
     t.float   "credits"
+    t.integer "competence_node_id", :null => false
   end
 
   create_table "temp_courses", :force => true do |t|
@@ -250,8 +249,8 @@ ActiveRecord::Schema.define(:version => 20130121123635) do
     t.string   "email",                 :limit => 320
     t.string   "locale",                :limit => 5,   :default => "fi"
     t.boolean  "admin",                                :default => false
-    t.string   "crypted_password",                                        :null => false
-    t.string   "password_salt",                                           :null => false
+    t.string   "crypted_password"
+    t.string   "password_salt"
     t.string   "persistence_token",                                       :null => false
     t.integer  "login_count",                          :default => 0,     :null => false
     t.datetime "last_request_at"

@@ -4,7 +4,7 @@
 
   <% @courses.each do |course| %>
     <tr>
-      <td><%= link_to course.code + ' ' + course.name(I18n.locale), course_url(:id => course.id) %></td>
+      <td><%= link_to course.course_code + ' ' + course.name(I18n.locale), course_url(:id => course.id) %></td>
       <td><% #= link_to 'Edit', edit_course_path(course) 
       %></td>
       <td><% #= link_to 'Destroy', course, :confirm => 'Are you sure?', :method => :delete 

@@ -37,6 +37,7 @@ Ops::Application.routes.draw do
         get 'prereqs'
         get 'graph'
         get 'outcomes'
+        get 'search_skills'
         match 'edit/import_csv', :controller => 'curriculums', :action => :import_csv, :via => [:post, :get]
       end
 
@@ -44,7 +45,7 @@ Ops::Application.routes.draw do
         resources :courses, :controller => 'curriculums/courses', :only => [:show]  # ScopedCourses, courses that belong to the profile
       end
 
-      resources :competences, :controller => 'curriculums/competences', :only => [:index, :show, :edit, :update] do
+      resources :competences, :controller => 'curriculums/competences' do
         member do
           get 'contributors'
           get 'prereqs'
@@ -57,15 +58,16 @@ Ops::Application.routes.draw do
       resources :courses, :controller => 'curriculums/courses' do  # ScopedCourses
         member do
           get 'prereqs'
+          get 'edit_prereqs'
         end
       end
 
-      resources :skills, :controller => 'curriculums/skills', :only => [:index, :new, :create, :edit] do
+      resources :skills, :controller => 'curriculums/skills' do
         member do
-            post 'add_prereq'
-            post 'remove_prereq'
-            get 'search_skills_and_courses'
-          end
+          post 'add_prereq'
+          post 'remove_prereq'
+          get 'search_skills_and_courses'
+        end
       end
       
       resources :roles, :controller => 'curriculums/roles', :only => [:new, :index, :create, :destroy]

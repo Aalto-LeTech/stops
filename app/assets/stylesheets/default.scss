@@ -1,31 +1,19 @@
 @import "general_mixins";
 
 html {
-  margin: 0px;
-  padding: 0px;
+  height: 100%;
 }
 
 body {
-  margin: 0px;
-  padding: 0px;
+  height: 100%;
 }
 
-img {
-  border: 0px;
-}
-
-table {
-  border-spacing: 0px;
-  border-collapse: collapse;
+.container-fluid {
+  height: 100%;
 }
 
 ul {
   margin: 0em 0em 0em 1em;
-  padding: 0px;
-}
-
-li {
-  margin: 0em 0em 0em 0em;
   padding: 0px;
 }
 
@@ -37,15 +25,6 @@ li {
   color: #a0a0a0;
   font-size: small;
   font-style: italic;
-}
-
-
-hr {
-  height: 1px;
-  border-top: 1px solid #c0c0c0;
-  border-bottom: none;
-  border-left: none;
-  border-right: none;
 }
 
 .clear {
@@ -192,6 +171,13 @@ h4.colorful {
   font-family:  Arial, sans-serif;
 }
 
+.full-height {
+  height: 100%;
+}
+
+.scroll-vertical {
+  overflow-y: scroll;
+}
 
 /*******************
 *  Generic tables
@@ -359,6 +345,19 @@ $button_danger_active_color:  #8F1F1F;
   background-image: none;
   cursor: default;
   opacity: 0.7;
+}
+
+div.buttons {
+  float: right;
+}
+
+div.buttons-hover {
+  float: right;
+  visibility: hidden;
+}
+
+div:hover > div.buttons-hover {
+  visibility: visible;
 }
 
 /******************

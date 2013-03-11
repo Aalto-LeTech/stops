@@ -3,15 +3,35 @@ class Curriculum < ActiveRecord::Base
   validates_presence_of :start_year
   validates_presence_of :end_year
 
-  has_many :profiles, :dependent => :destroy
-  has_many :courses, :class_name => 'ScopedCourse', :dependent => :destroy, :order => 'code'
-  
-  has_many :temp_courses, :dependent => :destroy, :order => 'code, created_at'
+  has_many :profiles, 
+           :dependent   => :destroy
 
-  has_many :teacher_roles, :class_name => 'CurriculumRole', :conditions => {:type => 'CurriculumRole', :role => 'teacher'}, :foreign_key => 'target_id', :include => :user
+  has_many :competences,
+           :dependent   => :destroy
+
+  has_many :courses, 
+           :class_name  => 'ScopedCourse', 
+           :dependent   => :destroy, 
+           :order       => 'course_code'
+  
+  has_many :temp_courses, 
+           :dependent   => :destroy, 
+           :order       => 'code, created_at'
+
+  has_many :teacher_roles, 
+           :class_name  => 'CurriculumRole', 
+           :conditions  => {:type => 'CurriculumRole', :role => 'teacher'}, 
+           :foreign_key => 'target_id', 
+           :include     => :user
+
   has_many :teachers, :through => :teacher_roles, :source => :user
   
-  has_many :admin_roles, :class_name => 'CurriculumRole', :conditions => {:type => 'CurriculumRole', :role => 'admin'}, :foreign_key => 'target_id', :include => :user
+  has_many :admin_roles, 
+           :class_name  => 'CurriculumRole', 
+           :conditions  => {:type => 'CurriculumRole', :role => 'admin'}, 
+           :foreign_key => 'target_id', 
+           :include     => :user
+
   has_many :admins, :through => :admin_roles, :source => :user
 
   #has_and_belongs_to_many :admins, :class_name => 'User', :join_table => 'curriculum_roles'
@@ -70,13 +90,13 @@ class Curriculum < ActiveRecord::Base
         return
       end
 
-      #puts "Proceeding to a prereq of #{course.code}"
+      #puts "Proceeding to a prereq of #{course.course_code}"
       self.add_course(start, prereq, courses, cycles, stack)
     end
 
     stack.pop
 
-    #puts "Returning from #{course.code}"
+    #puts "Returning from #{course.course_code}"
 
   end
 
@@ -87,7 +107,7 @@ class Curriculum < ActiveRecord::Base
 
     result = {}
     courses.each do |course|
-      result[course.code] = course.strict_prereq_ids
+      result[course.course_code] = course.strict_prereq_ids
     end
 
     return result

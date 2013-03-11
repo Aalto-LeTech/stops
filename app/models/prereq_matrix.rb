@@ -41,7 +41,7 @@ class PrereqMatrix < CsvMatrix
         code.strip!
 
         # Find course
-        scoped_course = ScopedCourse.where(:code => code, :curriculum_id => @curriculum.id).first
+        scoped_course = ScopedCourse.where(:course_code => code, :curriculum_id => @curriculum.id).first
         unless scoped_course
           puts "Header row contains an unknown course: #{code}"
           col += 1
@@ -71,7 +71,7 @@ class PrereqMatrix < CsvMatrix
           puts "Processing"
 
           # Load skill
-          skill = Skill.where(:skillable_type => 'ScopedCourse', :skillable_id => scoped_course.id, :position => skill_position).first
+          skill = Skill.where('competence_node_id' => scoped_course.id, :position => skill_position).first
           #course_skill = CourseSkill.where(['scoped_course_id = ? AND position = ?', scoped_course.id, skill_position]).joins(:skill).first
 
           # Add translation

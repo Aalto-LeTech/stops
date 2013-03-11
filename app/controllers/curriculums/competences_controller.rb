@@ -2,30 +2,31 @@ require 'eco'
 
 class Curriculums::CompetencesController < CurriculumsController
 
-  #before_filter :load_curriculum
-  #before_filter :load_profile
-  before_filter :load_competence, :except => [:index]
+  before_filter :load_competence, :except => [:index, :new, :create]
 
   authorize_resource :only => [:matrix]
 
-  def index
-    load_curriculum
-    @competences = Competence.where(:profile_id => @curriculum.profile_ids).joins(:competence_descriptions).where(["competence_descriptions.locale = ?", I18n.locale])
-
-    respond_to do |format|
-      format.json { render :json => @competences.select("competences.id, competence_descriptions.name AS translated_name").to_json(:methods => :strict_prereq_ids) } # :skill_ids
-    end
-  end
-
   def load_competence
-    #if params[:competence_id]
-    #  @competence = Competence.find(params[:competence_id])
-    #else params[:id]
-      @competence = Competence.find(params[:competence_id] || params[:id])
-    #end
+    @competence = Competence.find(params[:competence_id] || params[:id])
 
     @profile = @competence.profile
     load_curriculum
+  end
+  
+  def index
+    load_curriculum
+    # FIXME: there are no profiles any more.
+    @competences = Competence.where(:profile_id => @curriculum.profile_ids)
+                    .joins(:competence_descriptions)
+                    .where(["competence_descriptions.locale = ?", I18n.locale])
+
+    respond_to do |format|
+      format.json { render :json => @competences.select(<<-SQL
+          competence_nodes.id, 
+          competence_descriptions.name AS translated_name
+        SQL
+      ).to_json(:methods => :strict_prereq_ids) } # :skill_ids
+    end
   end
 
   # curriculums/1/competences/1
@@ -38,9 +39,9 @@ class Curriculums::CompetencesController < CurriculumsController
 
   # GET /competences/1/edit
   def edit
+    authorize! :update, @curriculum
+    
     @courses = @curriculum.courses.includes(:skills)
-
-    #top = @competence.skills
 
     @prereqs = {} # hash of hashes, contains SkillPrereq objects, [prereq_id][skill_id]
 
@@ -54,10 +55,12 @@ class Curriculums::CompetencesController < CurriculumsController
 
     @n_skills = @competence.skills.size
   end
-
+  
   # PUT /competences/1
   # PUT /competences/1.xml
   def update
+    authorize! :update, @curriculum
+    
     respond_to do |format|
       if @competence.update_attributes(params[:competence])
         format.html { redirect_to @competence }
@@ -65,6 +68,31 @@ class Curriculums::CompetencesController < CurriculumsController
       else
         format.html { render :action => "edit" }
         format.xml  { render :xml => @competence.errors, :status => :unprocessable_entity }
+      end
+    end
+  end
+  
+  def new
+    load_curriculum
+    @competence = Competence.new(:curriculum => @curriculum)    
+    
+    authorize! :update, @curriculum
+    
+    REQUIRED_LOCALES.each do |locale|
+      @competence.competence_descriptions << CompetenceDescription.new(:competence => @competence, :locale => locale)
+    end
+  end
+  
+  def create
+    load_curriculum
+    @competence = Competence.new(params[:competence])
+    authorize! :update, @curriculum
+    
+    respond_to do |format|
+      if @competence.save
+        format.html { redirect_to(edit_curriculum_path(@curriculum), :notice => 'Competence was successfully created.') }
+      else
+        format.html { render :action => "new" }
       end
     end
   end

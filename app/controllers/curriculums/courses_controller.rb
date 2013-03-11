@@ -6,34 +6,84 @@ class Curriculums::CoursesController < CurriculumsController
   #layout 'curriculum', :only => [:index, :show]
   #layout 'fullscreen', :only => [:prereqs]
 
-  respond_to :json, :only => 'index'
+  respond_to :json
 
   # GET /courses
   # GET /courses.xml
   def index
     #@courses = @curriculum.courses
 
-    @courses = ScopedCourse.where(:curriculum_id => @curriculum.id).joins('INNER JOIN course_descriptions ON scoped_courses.abstract_course_id = course_descriptions.abstract_course_id').where(["course_descriptions.locale = ?", I18n.locale]).includes(:strict_prereqs)
+    @courses = ScopedCourse.where(:curriculum_id => @curriculum.id)
+                .joins(<<-SQL
+                    INNER JOIN course_descriptions 
+                      ON competence_nodes.abstract_course_id = course_descriptions.abstract_course_id
+                  SQL
+                )
+                .where(["course_descriptions.locale = ?", I18n.locale]).includes(:strict_prereqs)
 
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @courses }
-      format.json { render :json => @courses.select("scoped_courses.id, scoped_courses.code, course_descriptions.name AS translated_name").to_json(:methods => :strict_prereq_ids) }
+      format.json do 
+        render :json => @courses.select(<<-SQL
+            competence_nodes.id, 
+            competence_nodes.course_code, 
+            course_descriptions.name AS translated_name
+          SQL
+        ).to_json(:methods => :strict_prereq_ids)
+
+      end
     end
   end
 
   # GET /courses/1
   # GET /courses/1.xml
+  # Returns JSON:
+  #   {
+  #     "scoped_course": {
+  #       "course_code":"T-0.000",
+  #       "id":5,
+  #       "skills": [
+  #         {
+  #           "id":1231,
+  #           "skill_descriptions":[
+  #             {
+  #               "id":1760,
+  #               "locale": "en"
+  #               "description": "in english",
+  #             },
+  #             {...}
+  #           ]
+  #         },
+  #         { another skill... }
+  #       ]
+  #     }
+  #   }
   def show
     @course = ScopedCourse.find(params[:id])
     @profile = Profile.find(params[:profile_id]) if params[:profile_id]
 
     respond_to do |format|
       format.html # show.html.erb
-      format.xml  { render :xml => @course }
+      format.json { render :json => @course.to_json(
+        :only => [:id, :course_code],
+        :include => {
+            :skills => {
+              :only => [:id],
+              :include => {
+                :skill_descriptions => {
+                  :only => [:id, :locale, :description]
+                },
+                :skill_prereqs => {:only => [:prereq_id, :requirement]}
+              }
+            },
+            :course_descriptions => {
+              :only => [:id, :locale, :name]
+            }
+        }
+      )}
     end
   end
-
 
   def prereqs
     @course = ScopedCourse.find(params[:id])
@@ -41,26 +91,23 @@ class Curriculums::CoursesController < CurriculumsController
     render :action => 'prereqs', :layout => 'fullscreen'
   end
 
-  def edit
-    @scoped_course = ScopedCourse.find(params[:id])
-    
+  def edit_prereqs
+    @course = ScopedCourse.find(params[:id])
     authorize! :update, @curriculum
     
-    #@profile.profile_descriptions << ProfileDescription.new(:locale => I18n.locale) if @profile.profile_descriptions.empty?
+    render :action => 'edit_prereqs', :layout => 'wide'
   end
-
+  
   def new
     authorize! :update, @curriculum
     
-    @abstract_course = AbstractCourse.new
     @scoped_course = ScopedCourse.new
-
-    @scoped_course.curriculum = Curriculum.find(params[:curriculum_id])
-    @scoped_course.abstract_course = @abstract_course
+    @scoped_course.curriculum = @curriculum #Curriculum.find(params[:curriculum_id])
+    #@scoped_course.abstract_course = @abstract_course
 
     # Create empty descriptions for each required locale
     REQUIRED_LOCALES.each do |locale|
-      @abstract_course.course_descriptions << CourseDescription.new(:locale => locale)
+      @scoped_course.course_descriptions << CourseDescription.new(:locale => locale)
     end
 
     @teaching_lang_options = REQUIRED_LOCALES.map do |locale|
@@ -68,6 +115,7 @@ class Curriculums::CoursesController < CurriculumsController
     end
 
     respond_to do |format|
+      format.html
       format.js
     end
   end
@@ -75,36 +123,48 @@ class Curriculums::CoursesController < CurriculumsController
   def create
     authorize! :update, @curriculum
 
-    @abstract_course = AbstractCourse.new
-
-    @abstract_course.assign_attributes(params[:abstract_course])
-    @scoped_course = @abstract_course.scoped_courses.first
-    @scoped_course.code = @abstract_course.code
+    @scoped_course = ScopedCourse.new(params[:scoped_course])
     @scoped_course.curriculum = @curriculum
+    
+    # Find or create AbstractCourse
+    @abstract_course = AbstractCourse.find_by_code(@scoped_course.course_code)
+    @abstract_course = AbstractCourse.create(:code => @scoped_course.course_code) unless @abstract_course
 
-
+    @scoped_course.abstract_course = @abstract_course
+    
     respond_to do |format|
       format.html do
         if @scoped_course.save
-          redirect_to curriculum_path(@curriculum)
+          redirect_to edit_curriculum_path(@curriculum)
         else
           render :action => "new" 
         end
       end
-
-      format.js do
-        @abstract_course.save! 
-        render :nothing => true
-      end
     end
   end
   
+  def edit
+    @scoped_course = ScopedCourse.find(params[:id])
+    authorize! :update, @curriculum
+    
+    @localized_description = @scoped_course.localized_description
+    
+    render :action => 'edit', :layout => 'wide'
+  end
+  
   def update
-    @profile = Profile.find(params[:id])
+    @scoped_course = ScopedCourse.find(params[:id])
     authorize! :update, @curriculum
 
-    if @profile.update_attributes(params[:profile])
-      redirect_to curriculum_profile_path(:curriculum_id => @curriculum, :id => @profile)
+    #@localized_description = @scoped_course.localized_description
+    @scoped_course.localized_description.update_attributes(params[:course_description])
+    
+    @scoped_course.update_comments(params[:comments])
+    
+    if @scoped_course.update_attributes(params[:scoped_course])
+      flash[:success] = 'Information updated'
+      redirect_to edit_curriculum_course_path(:curriculum_id => @curriculum, :id => @scoped_course)
+      #edit_curriculum_path(@curriculum)
     else
       render :action => "edit"
     end

@@ -25,6 +25,8 @@ en:
 
   curriculums:
     courses:
+      edit_tab: 'Course information'
+      prereqs_tab: 'Learning outcomes'
       creation_form:
         # New course creation form
         course_code: "Course code"
@@ -32,3 +34,19 @@ en:
         course_title_in_sv: "Course name in Swedish"
         course_title_in_en: "Course name in English"
         credits: 'Credits'
+      new:
+        create_course_heading: 'Create course'
+        course_code: 'Course code'
+        course_teaching_language: 'Teaching language'
+        course_title_in_fi: "Course name in Finnnish"
+        course_title_in_sv: "Course name in Swedish"
+        course_title_in_en: "Course name in English"
+        credits: 'Credits'
+      edit_prereqs:
+        edit_course_heading: 'Edit course'
+        prereqs_heading: 'Prerequisites'
+        outcomes_heading: 'Learning outcomes'
+        add_skill: 'Add outcome'
+        supportingPrereqButton: 'Supporting'
+        strictPrereqButton: 'Mandatory'
+        

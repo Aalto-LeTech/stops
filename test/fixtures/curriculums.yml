@@ -1,9 +1,11 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
 one:
-  year: 1
-  code: MyString
+  start_year: 2010
+  end_year: 2014
+  name: Äärimmäisen nohevien opiskelijoiden opas 
 
 two:
-  year: 1
-  code: MyString
+  start_year: 2011
+  end_year: 2015
+  name: Tietojenkäpistelyn opinto-opas

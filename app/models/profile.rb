@@ -1,5 +1,5 @@
 # Competence profile, e.g. Steel structures
-class Profile < ActiveRecord::Base
+class Profile < CompetenceNode
 
   belongs_to :curriculum
   

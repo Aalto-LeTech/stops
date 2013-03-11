@@ -9,7 +9,7 @@
 <% end %>
 
 <h1>
-  <%= @course.code %> <%= @course.name(I18n.locale) %>
+  <%= @course.course_code %> <%= @course.name(I18n.locale) %>
   <!-- Add / Remove -->
   <% if can? :choose, ScopedCourse %>
     <% unless @user.courses.exists?(@course) %>
@@ -51,7 +51,7 @@
         <td id="skill-prereqs"></td>
         <td id="course-skills-column">
           <div class="course">
-            <%= @course.code + ' ' + @course.name(I18n.locale) %>
+            <%= @course.course_code + ' ' + @course.name(I18n.locale) %>
             <% @course.skills.each do |skill| %>
               <%= link_to skill.description(I18n.locale), skill, { :class => 'skill', 'data-skill-id' => skill.id, 'data-user-id' => @user.id } %>
             <% end %>
@@ -85,7 +85,7 @@
         <%= render :partial => '/courses/prereqs' %>
       </td>
       <td class="current">
-        <%= @course.code %><br />
+        <%= @course.course_code %><br />
         <%= @course.name(I18n.locale) %>
       </td>
       <td class="future">
@@ -96,7 +96,7 @@
           <ul>
             <% @course.prereq_to.each do |course| %>
               <li>
-                <%= link_to course.code + ' ' + course.name(I18n.locale), {:id => course.id} %>
+                <%= link_to course.course_code + ' ' + course.name(I18n.locale), {:id => course.id} %>
               </li>
             <% end %>
           </ul>

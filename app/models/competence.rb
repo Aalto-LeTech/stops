@@ -1,20 +1,49 @@
 # Competence, e.g. Steel structures, level 1
-class Competence < ActiveRecord::Base
+class Competence < CompetenceNode
 
-  belongs_to :profile
-  has_many :competence_descriptions, :dependent => :destroy
+  belongs_to :curriculum
+  
+  belongs_to :parent_competence,
+           :class_name => 'Competence'
 
-  # Prerequisite skills
-  #has_many :competence_skills, :dependent => :destroy
-  has_many :skills, :as => :skillable, :order => 'position', :dependent => :destroy
+  validate :validate_parent_competence_not_a_self_reference
+
+  has_many :contained_competences,
+           :foreign_key => :parent_competence_id,
+           :class_name  => 'Competence'
+
+  has_many :competence_descriptions, 
+           :dependent   => :destroy
+  
+  has_one :localized_description, :class_name => "CompetenceDescription", 
+           :conditions => proc { "locale = '#{I18n.locale}'" }
+  
+
+  has_many :skills_ordered,
+           :class_name  => 'Skill',
+           :foreign_key => :competence_node_id,
+           :order       => 'position'
 
   # Prerequisite courses
-  has_many :competence_courses, :dependent => :destroy
-  has_many :courses, :through => :competence_courses, :source => :scoped_course, :order => 'code'
+  has_many :competence_courses, 
+           :dependent   => :destroy
+  
+  has_many :courses, 
+           :through     => :competence_courses, 
+           :source      => :scoped_course, 
+           :order       => 'code'
 
-  has_many :strict_prereqs, :through => :competence_courses, :source => :scoped_course, :order => 'code', :conditions => "requirement = #{STRICT_PREREQ}"
-  has_many :supporting_prereqs, :through => :competence_courses, :source => :scoped_course, :order => 'code', :conditions => "requirement = #{SUPPORTING_PREREQ}"
+  has_many :strict_prereqs, 
+           :through     => :competence_courses, 
+           :source      => :scoped_course, 
+           :order       => 'code', 
+           :conditions  => "requirement = #{STRICT_PREREQ}"
 
+  has_many :supporting_prereqs, 
+           :through     => :competence_courses, 
+           :source      => :scoped_course, 
+           :order       => 'code', 
+           :conditions  => "requirement = #{SUPPORTING_PREREQ}"
 
 
   accepts_nested_attributes_for :competence_descriptions
@@ -122,22 +151,18 @@ class Competence < ActiveRecord::Base
 
     # Run DFS for skills to construct an array of skills that make the competence
     while skill = stack.pop
-      #logger.info "XXXXXX Processing #{skill.skillable.name('fi')} - #{skill.description('fi')}"
-
       # Load course if it has not been loaded
-      #courses[skill.skillable_id] = ScopedCourse.find(skill.skillable_id) unless courses[skill.skillable_id]
 
-      course = courses[skill.skillable_id]
+      course = courses[skill.competence_node_id]
       result[course][skill.id] = skill
 
       # Push neighbors to stack
       skill.strict_prereqs.each do |prereq|
         stack.push prereq
-        #logger.info "XXXXXX Adding neighbor #{prereq.skillable.name('fi')} - #{prereq.description('fi')}"
       end
     end
 
-    result.sort_by {|course, skills| course.code}
+    result.sort_by {|course, skills| course.course_code}
   end
 
   # Returns a list of courses that are needed in addition to the courses in lower levels
@@ -156,15 +181,16 @@ class Competence < ActiveRecord::Base
     # Make a list of prereq courses
     skills.each do |competence_skill|
       competence_skill.prereqs.each do |prereq_skill|
-        if prereq_skill.skillable_type == Competence
+        if prereq_skill.competence_node.type == 'Competence'
           # Competence depends on other competence
           # TODO: raise Exception
           logger.error "Competence depends on competence"
           next
         end
 
-        prereq_course = prereq_skill.skillable
-        prereq_courses[prereq_course.id] = true
+        prereq_course_id = prereq_skill.competence_node_id # Must be a ScopedCourse
+        prereq_courses[prereq_course_id] = true
+
       end
     end
 
@@ -174,6 +200,15 @@ class Competence < ActiveRecord::Base
     # self.competence_course_ids = prereq_courses.keys
 
     # TODO: check cycles
+  end
+
+
+private 
+
+  def validate_parent_competence_not_a_self_reference
+    if self.parent_competence == self
+      errors[:parent_competence] << "Competence cannot refer to itself through 'parent_competence'."
+    end
   end
 
 end

@@ -104,7 +104,7 @@ GraphLevel.prototype.distributeCoursesEvenly = function() {
 function GraphCourse(id, code, name) {
   this.element = false;
   this.id = id;
-  this.code = code;
+  this.course_code = code;
   this.name = name;
   this.isCompetence = false;
 
@@ -149,7 +149,7 @@ GraphCourse.prototype.getElement = function(view) {
   }
 
   var cssClass = this.isCompetence ? ' competence' : ''
-  var div = $('<div class="course' + cssClass + '"><h1>' + this.code + ' ' + this.name + '</h1></div>');
+  var div = $('<div class="course' + cssClass + '"><h1>' + this.course_code + ' ' + this.name + '</h1></div>');
   div.click($.proxy(this.click, this));
   this.view = view;
 

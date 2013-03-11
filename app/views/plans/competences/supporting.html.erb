@@ -10,7 +10,7 @@
           end %>
       
       
-      <%= scoped_course.code %> <%= scoped_course.name(I18n.locale) %> (<%= scoped_course.credits %> <%=t :cr %>)</p>
+      <%= scoped_course.course_code %> <%= scoped_course.name(I18n.locale) %> (<%= scoped_course.credits %> <%=t :cr %>)</p>
 
       <% scoped_course.skills.each do |skill| %>
         <div class="skill"><%= skill.description(I18n.locale) %></div>

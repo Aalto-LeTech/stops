@@ -58,7 +58,7 @@
               included_counter += course.credits || 0
             end
             %>
-            <td><%= link_to course.code, studyplan_competence_course_path(:competence_id => competence.id, :id => course), :class => a_class %></td>
+            <td><%= link_to course.course_code, studyplan_competence_course_path(:competence_id => competence.id, :id => course), :class => a_class %></td>
             <td><%= link_to course.name(I18n.locale), studyplan_competence_course_path(:competence_id => competence.id, :id => course), :class => a_class %></td>
             <td><%= course.credits %></td>
             <td class="passed-info"><%= t(:profile_course_passed) if @passed_courses.member? course.id %>

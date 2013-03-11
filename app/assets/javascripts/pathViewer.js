@@ -59,7 +59,7 @@ PathViewer.prototype.loadUserCourses = function(data) {
     var rawData = data[array_index].user_course;
     
     var periodId = parseInt(rawData.period_id);
-    var course = new PathCourse(rawData.scoped_course_id, rawData.code, periodId);
+    var course = new PathCourse(rawData.scoped_course_id, rawData.course_code, periodId);
     this.courses[rawData.scoped_course_id] = course;
     
     // Find max and min period. FIXME: should use numbers instead of ids.
@@ -203,7 +203,7 @@ PathViewer.prototype.render = function() {
   c.font = "10px sans-serif"
   c.fillStyle = "#000000";
   c.textBaseline = "top";
-  c.fillText(this.rootCourse.code, this.rootCourse.x + 2, this.rootCourse.y + 2);
+  c.fillText(this.rootCourse.course_code, this.rootCourse.x + 2, this.rootCourse.y + 2);
   
   return;
   
@@ -263,7 +263,7 @@ PathViewer.prototype.render = function() {
       continue;
     }
     
-    c.fillText(course.code, course.x + 2, course.y + 2);
+    c.fillText(course.course_code, course.x + 2, course.y + 2);
   }
   
 };

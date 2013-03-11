@@ -1,11 +1,11 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
 one:
-  skill: 
-  locale: MyString
-  description: MyText
+  skill: one
+  locale: fi
+  description: Osaa raapustaa numeroita lappuseen
 
 two:
-  skill: 
-  locale: MyString
-  description: MyText
+  skill: two
+  locale: fi
+  description: Osaa laskea 1+1=2

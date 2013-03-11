@@ -37,7 +37,7 @@ class CsvMatrix
       end
       
       # Create new course
-      course = ScopedCourse.create(:abstract_course_id => abstract_course.id, :curriculum_id => curriculum.id, :code => abstract_course.code, :credits => cr)
+      course = ScopedCourse.create(:abstract_course_id => abstract_course.id, :curriculum_id => curriculum.id, :course_code => abstract_course.code, :credits => cr)
     end
     
     return course
@@ -142,10 +142,14 @@ class CsvMatrix
           level = @matrix[row][7] || '0'
           
           # Insert or update skill
-          skill = Skill.where(:skillable_type => 'ScopedCourse', :skillable_id => scoped_course.id, :position => skill_position).first
+          skill = Skill.joins(:competence_node)
+                       .where('competence_nodes.id' => scoped_course.id, 
+                              :position => skill_position).first
           
           unless skill
-            skill = Skill.create(:credits => skill_credits.gsub(',','.').to_f, :level => level.to_i, :position => skill_position, :skillable => scoped_course)
+            skill = Skill.new(:credits => skill_credits.gsub(',','.').to_f, :level => level.to_i, :position => skill_position)
+            skill.competence_node = scoped_course
+            skill.save
             SkillDescription.create(:skill_id => skill.id, :locale => @locale, :description => skill_description)
           end
           

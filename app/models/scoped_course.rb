@@ -1,34 +1,33 @@
 # Course as a part of a curriculum, e.g. Programming 101 as described in the 2011 study guide
-class ScopedCourse < ActiveRecord::Base
+class ScopedCourse < CompetenceNode
 
   belongs_to :abstract_course
-  belongs_to :curriculum
-
   accepts_nested_attributes_for :abstract_course
   
-  has_many :course_descriptions, :through => :abstract_course
+
+  # Localized descriptions
+  has_many :course_descriptions, :dependent => :destroy
   accepts_nested_attributes_for :course_descriptions
   
-  has_one :course_description_with_locale, 
-          :class_name => "CourseDescription",
-          :through    => :abstract_course,
-          :source     => :course_description_with_locale
-
+  has_one :localized_description, :class_name => "CourseDescription", 
+           :conditions => proc { "locale = '#{I18n.locale}'" }
+  
+  
   #has_many :skills, :order => 'position', :dependent => :destroy #, :foreign_key => 'course_code', :primary_key => 'code'
   #has_many :course_skills, :dependent => :destroy
-  has_many :skills, 
-           :as        => :skillable, 
-           :order     => 'position', 
-           :dependent => :destroy #, :foreign_key => 'course_code', :primary_key => 'code'
+  # has_many :skills, 
+  #          :order     => 'position', 
+  #          :dependent => :destroy #, :foreign_key => 'course_code', :primary_key => 'code'
   
   has_many :skill_descriptions, 
            :through => :skills
 
-  has_many :skill_descriptions_with_locale,
+  has_many :localized_skill_descriptions,
            :through     => :skills,
            :class_name  => "SkillDescription",
-           :source      => :description_with_locale
+           :source      => :localized_description
 
+  
   # Prerequisite courses of this course
   has_many :course_prereqs, 
            :dependent => :destroy
@@ -66,31 +65,46 @@ class ScopedCourse < ActiveRecord::Base
            :through     => :abstract_course,
            :conditions  => proc { ["periods.ends_at > ?", Date.today] }
     
-  
+  #attr_accessible :alternatives, :assignments, :changing_topic, :code, :contact, :content, :credits, :department, :grading_scale, :grading_details, :graduate_course, :instructors, :language, :materials, :name_en, :name_fi, :name_sv, :other, :outcomes, :period, :prerequisites, :replaces
+    
   define_index do
-    indexes code
-    indexes course_description_with_locale(:name), :as => :course_name
+    indexes course_code
+    indexes localized_description(:name), :as => :course_name
     indexes skill_descriptions.description, :as => :skill_descriptions
     
     has :id, :as => :scoped_course_id
     has :abstract_course_id
     # has skills(:id)
   end
-   
-
 
   def name(locale)
-    description = CourseDescription.where(:abstract_course_id => self.abstract_course_id, :locale => locale.to_s).first
-    description ? description.name : code
+    description = CourseDescription.where(
+                    :abstract_course_id => self.abstract_course_id, 
+                    :locale => locale.to_s
+                  ).first
+    description ? description.name : course_code
   end
+
+  alias_method :description, :name  
 
   # Returns the name of the course in the current locale or fallback
   # message if localized course name could not be found.
   def name_or(fallback_message="<No name set for the locale>")
-    desc = course_description_with_locale
+    desc = localized_description
     desc ? desc.name : fallback_message 
   end
 
+  def update_comments(hash)
+    self.comments = hash.to_json
+  end
+  
+  def comment(field)
+    @comments = JSON.parse(read_attribute(:comments) || '{}') unless defined?(@comments)
+    
+    @comments[field]
+  end
+  
+  
   # Returns -1 if the is a prereq of other, +1 if this is a prereq to other, otherwise 0.
   def <=>(other)
     if strict_prereqs.exists?(other)
@@ -154,7 +168,8 @@ class ScopedCourse < ActiveRecord::Base
     courses.values
   end
 
-  # Adds a course and its prereqs recursively to the given courses collection. If a course belongs to a prereq cycle, it is added to the cycles collection.
+  # Adds a course and its prereqs recursively to the given courses collection. 
+  # If a course belongs to a prereq cycle, it is added to the cycles collection.
   def collect_prereqs(courses)
     # Do not follow branches that have already been handled
     return if courses.has_key?(self.id)

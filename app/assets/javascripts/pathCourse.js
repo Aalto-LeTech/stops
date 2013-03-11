@@ -1,6 +1,6 @@
 function PathCourse(id, code, period) {
   this.id = id;
-  this.code = code;
+  this.course_code = code;
   this.period = period;
   this.onPath = false;
   this.visited = false;
@@ -23,8 +23,8 @@ PathCourse.prototype.getPrereqs = function() {
  * Adds a prerequisite course. This course is automatically added to the "prerequisite to" list of the other course.
  */
 PathCourse.prototype.addPrereq = function(other) {
-  this.prereqs[other.code] = other;
-  other.prereqTo[this.code] = this;
+  this.prereqs[other.course_code] = other;
+  other.prereqTo[this.course_code] = this;
 }
 
 
@@ -45,7 +45,7 @@ PathCourse.prototype.render = function(c, view) {
   c.font = "10px sans-serif"
   c.fillStyle = "#000000";
   c.textBaseline = "top";
-  c.fillText(this.code, this.x + 2, this.y + 2);
+  c.fillText(this.course_code, this.x + 2, this.y + 2);
 }
 
 PathCourse.prototype.renderForward = function(c, view, depth) {
@@ -83,7 +83,7 @@ PathCourse.prototype.renderForward = function(c, view, depth) {
     
     c.moveTo(this.x + view.courseWidth / 2, this.y + view.courseHeight);
     c.lineTo(other.x + view.courseWidth / 2, other.y);
-    //c.fillText(other.code, other.x + view.courseWidth / 2, other.y-20);
+    //c.fillText(other.course_code, other.x + view.courseWidth / 2, other.y-20);
     //c.fillText(other.period, other.x + view.courseWidth / 2, other.y-10);
     
   }

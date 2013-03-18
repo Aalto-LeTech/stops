@@ -9,7 +9,7 @@ class Curriculums::CompetencesController < CurriculumsController
   def load_competence
     @competence = Competence.find(params[:competence_id] || params[:id])
 
-    @profile = @competence.profile
+    #@profile = @competence.profile
     load_curriculum
   end
   
@@ -34,6 +34,24 @@ class Curriculums::CompetencesController < CurriculumsController
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @competence }
+
+      format.json { render :json => @competence.to_json(
+        :only => [:id],
+        :include => {
+            :skills => {
+              :only => [:id],
+              :include => {
+                :skill_descriptions => {
+                  :only => [:id, :locale, :description]
+                },
+                :skill_prereqs => {:only => [:prereq_id, :requirement]}
+              }
+            },
+            :competence_descriptions => {
+              :only => [:id, :locale, :description]
+            }
+        }
+      )}
     end
   end
 
@@ -54,6 +72,14 @@ class Curriculums::CompetencesController < CurriculumsController
     end
 
     @n_skills = @competence.skills.size
+  end
+
+
+  def edit_prereqs
+    @competence = Competence.find(params[:id])
+    authorize! :update, @curriculum
+    
+    render :action => 'edit_prereqs', :layout => 'wide'
   end
   
   # PUT /competences/1

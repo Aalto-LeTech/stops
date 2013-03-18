@@ -50,6 +50,7 @@ Ops::Application.routes.draw do
           get 'contributors'
           get 'prereqs'
           post 'matrix'
+          get 'edit_prereqs'
         end
 
         resources :skills, :controller => 'curriculums/skills', :only => :show

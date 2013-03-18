@@ -21,6 +21,8 @@ en:
   # Edit
   curriculums:
     competences:
+      edit_tab: 'Competence information'
+      prereqs_tab: 'Learning outcomes'
       show:
         graph_link: 'Show course graph'
       edit:
@@ -33,6 +35,13 @@ en:
         create_outcome_save_failed: "The skill could not be saved."
         create_outcome_validation_error: "Skill description must be given in all required languages!"
         create_outcome_saving: "Saving..."
+      edit_prereqs:
+        edit_course_heading: 'Edit competence'
+        prereqs_heading: 'Prerequisites'
+        outcomes_heading: 'Learning outcomes'
+        add_skill: 'Add outcome'
+        supportingPrereqButton: 'Supporting'
+        strictPrereqButton: 'Mandatory'
       new:
         competence_name_in_fi: 'Name in Finnish:'
         competence_name_in_en: 'Name in English:'

@@ -2,6 +2,15 @@
 
 class Node
   constructor: (@editor, data) ->
+    if data['scoped_course']
+      @type = 'scoped_course'
+      data = data['scoped_course']
+    else if data['competence']
+      @type = 'competence'
+      data = data['competence']
+    else
+      throw "Node constructor: data must contain either 'scoped_course' or 'competence'."
+
     @skills = ko.observableArray()
     
     @id = data['id']
@@ -19,6 +28,12 @@ class Node
         @descriptions.push(d)
         if d.locale == window.currentLocale
           @localizedName(d.name())
+    if data['competence_descriptions']
+      for description in data['competence_descriptions']
+        d = new LocalizedDescription(@editor, description)
+        @descriptions.push(d)
+        if d.locale == window.currentLocale
+          @localizedName(d.description())
 
 
 class Skill
@@ -195,7 +210,7 @@ class CompetenceSkillEditor
       url: @nodeUrl,
       dataType: 'json',
       success: (data) =>
-        @node(new Node(this, data['scoped_course']))
+        @node(new Node(this, data))
     
   
   clickSearch: () ->
@@ -213,7 +228,7 @@ class CompetenceSkillEditor
   
     # Create nodes
     for result in data
-      node = new Node(this, result['scoped_course'])
+      node = new Node(this, result)
       @searchResults.push(node)
     
     this.updatePrereqHighlights()

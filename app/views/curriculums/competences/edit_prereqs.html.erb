@@ -2,11 +2,11 @@
   <%= javascript_include_tag 'curriculums/competenceSkillEditor' %>
 <% end %>
 
-<h1><%=t '.edit_course_heading' %></h1>
+<h1><%=t '.edit_competence_heading' %></h1>
 
 <ul class="nav nav-tabs">
-  <li><%= link_to t('curriculums.courses.edit_tab'), edit_curriculum_course_path(:curriculum_id => @curriculum, :id => @course) %></li>
-  <li class="active"><%= link_to t('curriculums.courses.prereqs_tab'), edit_prereqs_curriculum_course_path(:curriculum_id => @curriculum, :id => @course) %></li>
+  <li><%= link_to t('curriculums.competences.edit_tab'), edit_curriculum_competence_path(:curriculum_id => @curriculum, :id => @competence) %></li>
+  <li class="active"><%= link_to t('curriculums.competences.prereqs_tab'), edit_prereqs_curriculum_competence_path(:curriculum_id => @curriculum, :id => @competence) %></li>
 </ul>
 
 <div class="row-fluid full-height">
@@ -43,7 +43,7 @@
   <div class="span6">
     <h2><%=t '.outcomes_heading' %></h2>
     
-    <div id="target-node" class="course" data-url="<%= curriculum_course_path(:curriculum_id => @curriculum, :course_id => @course) %>">
+    <div id="target-node" class="course" data-url="<%= curriculum_competence_path(:curriculum_id => @curriculum, :course_id => @competence) %>">
       <!-- ko with: node -->
         <p><span data-bind="text: code"></span> <span data-bind="text: localizedName"></span></p>
         <!-- ko foreach: skills -->
@@ -73,7 +73,7 @@
   data-curriculum-url="<%= curriculum_path(@curriculum) %>">
     <div class="modal-header">
       <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-      <h3><%= @course.localized_description.name %> - <%= t('.add_skill') %></h3>
+      <h3><%= @competence.localized_description.name %> - <%= t('.add_skill') %></h3>
     </div>
     <div class="modal-body" data-bind="with: currentlyEditedSkill">
       <ul data-bind="foreach: descriptions">

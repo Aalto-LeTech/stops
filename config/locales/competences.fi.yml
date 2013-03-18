@@ -22,6 +22,8 @@ fi:
   # Edit
   curriculums:
     competences:
+      edit_tab: 'Tiedot'
+      prereqs_tab: 'Osaamistavoitteet'
       show:
         graph_link: 'Kurssiverkko'
       edit:
@@ -34,6 +36,13 @@ fi:
         create_outcome_save_failed: "Valmiuden tallentaminen epäonnistui."
         create_outcome_validation_error: "Valmiuden kuvaus tulee antaa kaikilla pyydetyillä kielillä!"
         create_outcome_saving: "Tallennetaan..."
+      edit_prereqs:
+        edit_course_heading: 'Muokkaa kompetenssia'
+        prereqs_heading: 'Esitiedot'
+        outcomes_heading: 'Oppimistavoitteet'
+        add_skill: 'Lisää valmius'
+        supportingPrereqButton: 'Tukeva'
+        strictPrereqButton: 'Välttämätön'
       new:
         competence_name_in_fi: 'Nimi suomeksi:'
         competence_name_in_en: 'Nimi englanniksi:'

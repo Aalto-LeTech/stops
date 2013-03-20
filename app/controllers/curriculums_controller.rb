@@ -173,20 +173,35 @@ class CurriculumsController < ApplicationController
   def search_skills
     competence_node_ids = []
     if params[:q] && params[:q].size > 1
-      # Search from skills
+      excluded_node_id = false
+      if params[:exclude] 
+        excluded_node_id = Integer(params[:exclude]) rescue false
+      end
+
+      # Search from skill
       skills = SkillDescription.where(['description ILIKE ?', "%#{params[:q]}%"]).joins(:skill).select(:competence_node_id).uniq
-      competence_node_ids.concat skills.map {|skill| skill.competence_node_id.to_i }
+      skills.each do |skill| 
+        node_id = skill.competence_node_id.to_i
+        if not node_id == excluded_node_id
+          competence_node_ids << node_id
+        end
+      end
       
       # Search from course names or codes
       nodes = CourseDescription.where(['name ILIKE ? OR course_code ILIKE ?', "%#{params[:q]}%", "%#{params[:q]}%"]).joins(:scoped_course).select(:scoped_course_id).uniq
-      competence_node_ids.concat nodes.map {|node| node.scoped_course_id}
+      nodes.each do |node| 
+        node_id = node.scoped_course_id
+        if not node_id == excluded_node_id
+          competence_node_ids << node_id
+        end
+      end
     end
 
     # TODO: make this work with CompetenceNodes
     nodes = ScopedCourse.find(competence_node_ids)
     
     respond_to do |format|
-      format.json { render :json => nodes.to_json(
+      format.json do render :json => nodes.to_json(
         :only => [:id, :course_code],
         :include => [
             {:skills => {
@@ -200,8 +215,8 @@ class CurriculumsController < ApplicationController
             {:course_descriptions => {
               :only => [:id, :locale, :name]
             }}
-        ]
-      )}
+        ])
+      end
     end
   end
   

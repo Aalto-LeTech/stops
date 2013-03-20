@@ -196,7 +196,9 @@ class CompetenceSkillEditor
     @requiredLocales = @modalDiv.data('locales').split(',')
   
     @curriculumUrl = @modalDiv.data('curriculum-url')
-    @nodeUrl = $('#target-node').data('url')
+    $targetNode = $('#target-node')
+    @nodeUrl = $targetNode.data('url')
+    @nodeId = $targetNode.data('node-id')
   
     @node = ko.observable()
     ko.applyBindings(this)
@@ -215,9 +217,11 @@ class CompetenceSkillEditor
   
   clickSearch: () ->
     $.ajax
-      url: @curriculumUrl + '/search_skills',
-      dataType: 'json',
-      data: {q: @searchString()}
+      url: @curriculumUrl + '/search_skills'
+      dataType: 'json'
+      data: 
+        q: @searchString()
+        exclude: @nodeId 
       success: (data) => this.parseSearchResults(data)
   
   

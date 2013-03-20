@@ -43,7 +43,9 @@
   <div class="span6">
     <h2><%=t '.outcomes_heading' %></h2>
     
-    <div id="target-node" class="course" data-url="<%= curriculum_competence_path(:curriculum_id => @curriculum, :course_id => @competence) %>">
+    <div id="target-node" class="course" 
+      data-node-id="<%= @competence.id %>"
+      data-url="<%= curriculum_competence_path(:curriculum_id => @curriculum, :competence_id => @competence) %>">
       <!-- ko with: node -->
         <p><span data-bind="text: code"></span> <span data-bind="text: localizedName"></span></p>
         <!-- ko foreach: skills -->

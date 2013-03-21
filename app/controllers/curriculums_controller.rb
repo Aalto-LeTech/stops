@@ -171,7 +171,7 @@ class CurriculumsController < ApplicationController
   end
 
   def search_skills
-    competence_node_ids = []
+    node_ids = []
     if params[:q] && params[:q].size > 1
       excluded_node_id = false
       if params[:exclude] 
@@ -179,43 +179,75 @@ class CurriculumsController < ApplicationController
       end
 
       # Search from skill
-      skills = SkillDescription.where(['description ILIKE ?', "%#{params[:q]}%"]).joins(:skill).select(:competence_node_id).uniq
-      skills.each do |skill| 
-        node_id = skill.competence_node_id.to_i
+      skill_descriptions = SkillDescription.where(['description ILIKE ?', "%#{params[:q]}%"])
+                               .joins(:skill)
+                               .includes(:skill, :skill => :competence_node)
+                               .select(:competence_node_id).uniq
+      skill_descriptions.each do |skill_desc| 
+        node_id = skill_desc.skill.competence_node_id.to_i
         if not node_id == excluded_node_id
-          competence_node_ids << node_id
+          node_ids << node_id
         end
       end
       
       # Search from course names or codes
-      nodes = CourseDescription.where(['name ILIKE ? OR course_code ILIKE ?', "%#{params[:q]}%", "%#{params[:q]}%"]).joins(:scoped_course).select(:scoped_course_id).uniq
+      nodes = CourseDescription.where(['name ILIKE ? OR course_code ILIKE ?', "%#{params[:q]}%", "%#{params[:q]}%"])
+                               .joins(:scoped_course)
+                               .select(:scoped_course_id).uniq
       nodes.each do |node| 
         node_id = node.scoped_course_id
         if not node_id == excluded_node_id
-          competence_node_ids << node_id
+          node_ids << node_id
         end
       end
     end
 
-    # TODO: make this work with CompetenceNodes
-    nodes = ScopedCourse.find(competence_node_ids)
-    
-    respond_to do |format|
-      format.json do render :json => nodes.to_json(
-        :only => [:id, :course_code],
-        :include => [
+    nodes = CompetenceNode.find node_ids
+
+    # Prepare CompetenceNode JSONs separately, because ScopedCourse and Competence need
+    # different options for JSON generation.
+    nodes_json = nodes.map do |node|
+      if node.type == 'Competence'
+        node.as_json(
+          :only => [:id],
+          :include => [
             {:skills => {
-              :only => [:id],
-              :include => [
-                :skill_descriptions => {
-                  :only => [:id, :locale, :description]
-                }
-              ]
+                :only => [:id],
+                :include => [
+                  :skill_descriptions => {
+                    :only => [:id, :locale, :description]
+                  }
+                ]
+            }},
+            {:competence_descriptions => {
+                :only => [:id, :locale, :description]
+            }}
+          ]
+        )
+      else 
+        # Must be a ScopedCourse
+        node.as_json(
+          :only => [:id, :course_code],
+          :include => [
+            {:skills => {
+                :only => [:id],
+                :include => [
+                  :skill_descriptions => {
+                    :only => [:id, :locale, :description]
+                  }
+                ]
             }},
             {:course_descriptions => {
-              :only => [:id, :locale, :name]
+                :only => [:id, :locale, :name]
             }}
-        ])
+          ]
+        )
+      end
+    end
+    
+    respond_to do |format|
+      format.json do 
+        render :json => nodes_json
       end
     end
   end

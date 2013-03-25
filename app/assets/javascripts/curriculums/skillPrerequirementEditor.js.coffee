@@ -89,6 +89,8 @@ class Skill
 
   # Adds skill as the prerequisite of this skill. DB is updated immediately via AJAX
   addPrereq: (skill, requirement) ->
+    # Save state in case we need to rollback
+    savedState = @prereqIds[skill.id]
     @prereqIds[skill.id] = requirement
 
     skill.isLoading(true)
@@ -103,20 +105,42 @@ class Skill
       skill.isLoading(false)
     )
 
-    promise.fail((jqXHR, textStatus, error) ->
+    promise.fail((jqXHR, textStatus, error) =>
       console.log("AddPrereq: Failed: #{textStatus}")
+
+      # Return back to the state before the action
+      @prereqIds[skill.id] = savedState
+      @editor.updatePrereqHighlights()
+
       skill.isLoading(false)
     )
     
   
   # Removes skill from the prerequisites of this skill. DB is updated immediately via AJAX
   removePrereq: (skill) ->
+    # Save state in case we need to rollback
+    savedState = @prereqIds[skill.id]
     @prereqIds[skill.id] = false
     
-    $.ajax
+    promise = $.ajax
       type: "POST",
       url: "#{@editor.curriculumUrl}/skills/#{@id}/remove_prereq",
       data: {prereq_id: skill.id}
+
+    promise.done(() ->
+      console.log("RemovePrereq: Succesfully removed")
+      skill.isLoading(false)
+    )
+
+    promise.fail((jqXHR, textStatus, error) =>
+      console.log("RemovePrereq: Failed: #{textStatus}")
+
+      # Return back to the state before the action
+      @prereqIds[skill.id] = savedState
+      @editor.updatePrereqHighlights()
+
+      skill.isLoading(false)
+    )
 
   toJson: () ->
     hash = {competence_node_id: @node.id}
@@ -269,8 +293,6 @@ class CompetenceSkillEditor
 
       # Notify observable of changes
       @_currentPrereqNodes.valueHasMutated()
-
-
 
 
     promise.fail (jqXHR, textStatus, error) =>

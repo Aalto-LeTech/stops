@@ -45,6 +45,12 @@ Ops::Application.routes.draw do
         resources :courses, :controller => 'curriculums/courses', :only => [:show]  # ScopedCourses, courses that belong to the profile
       end
 
+      resources :competence_nodes, :controller => 'curriculums/competence_nodes' do
+        collection do
+          get 'nodes_by_skill_ids'
+        end
+      end
+
       resources :competences, :controller => 'curriculums/competences' do
         member do
           get 'contributors'

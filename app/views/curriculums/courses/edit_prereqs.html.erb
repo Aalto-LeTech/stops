@@ -21,7 +21,8 @@
       <button class="btn" data-bind="click: clickClearSearch"><i class="icon-remove"></i></button>
     </div>
     
-    <div data-bind="foreach: searchResults">
+
+    <div data-bind="foreach: visibleNodes">
       
       <div class="course">
         <p><span data-bind="text: code"></span> <span data-bind="text: localizedName"></span></p>

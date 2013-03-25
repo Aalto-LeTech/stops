@@ -1,4 +1,5 @@
 #= require knockout-2.2.1
+#= require underscore-min
 
 class Node
   constructor: (@editor, data) ->
@@ -125,8 +126,7 @@ class Skill
     
     # Select this one
     @selected(true)
-    @editor.currentlyEditedSkill(this)
-    @editor.updatePrereqHighlights()
+    @editor.setCurrentlyEditedSkill(this)
     
 
   clickToggleSupportingPrereq: () ->
@@ -188,6 +188,28 @@ class CompetenceSkillEditor
   constructor: () ->
     @searchString = ko.observable('')
     @searchResults = ko.observableArray()
+    # Internal lookup table to check if a CompetenceNode has skills as prerequirement
+    @_currentPrereqNodes = ko.observable({})
+
+    # Actual observable results to be shown 
+    @visibleNodes = ko.computed(() =>
+
+      console.log("Recomputing visible search result nodes")
+
+      excluded = _.clone(@_currentPrereqNodes())
+      searchResults = @searchResults()
+      _.each(searchResults, (node) ->
+        if excluded[node.id]
+          delete excluded[node.id]
+      )
+  
+      _.values(excluded).concat(searchResults)
+    )
+
+    @visibleNodes.subscribe(() =>
+      @updatePrereqHighlights()
+    )
+    
     
     @modalDiv = $('#modal-edit-skill')
     @currentlyEditedSkill = ko.observable()    # Skill under editing
@@ -213,6 +235,35 @@ class CompetenceSkillEditor
       dataType: 'json',
       success: (data) =>
         @node(new Node(this, data))
+
+  setCurrentlyEditedSkill: (skill) ->
+    @currentlyEditedSkill(skill)
+    @updateCurrentPrereqNodes()
+
+
+  updateCurrentPrereqNodes: () ->
+    @_currentPrereqNodes({})
+    promise = $.ajax
+      url: @curriculumUrl + '/competence_nodes/nodes_by_skill_ids'
+      dataType: 'json'
+      data:
+        ids: _.keys(@currentlyEditedSkill().prereqIds)
+
+    promise.done (data) => 
+      # Got nodes, now process them
+      newNodes = @_currentPrereqNodes()
+      for result in data
+        node = new Node(this, result)
+        newNodes[node.id] = node
+
+      # Notify observable of changes
+      @_currentPrereqNodes.valueHasMutated()
+
+
+
+
+    promise.fail (jqXHR, textStatus, error) =>
+      # TODO What to do when request fails?
     
   
   clickSearch: () ->
@@ -227,13 +278,20 @@ class CompetenceSkillEditor
   
   parseSearchResults: (data) ->
     return unless data
-  
+
     @searchResults.removeAll()
   
+    # Get the underlying array so that each 'push' won't trigger dependent observables
+    # to be computed.
+    searchResults = @searchResults()
+
     # Create nodes
     for result in data
       node = new Node(this, result)
-      @searchResults.push(node)
+      searchResults.push(node)
+
+    # Finally, trigger the mutation event
+    @searchResults.valueHasMutated()
     
     this.updatePrereqHighlights()
   
@@ -241,13 +299,14 @@ class CompetenceSkillEditor
     # Set highlights
     targetSkill = @currentlyEditedSkill()
     if targetSkill
-      for node in @searchResults()
+      for node in @visibleNodes()
         for skill in node.skills()
           skill.prereqType(targetSkill.prereqIds[skill.id])
   
   
   clickClearSearch: () ->
     @searchString('')
+    @searchResults.removeAll()
 
   searchKeyPress: (data, event) ->
     @clickSearch() if event.which == 13

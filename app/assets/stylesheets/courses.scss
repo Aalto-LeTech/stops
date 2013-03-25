@@ -90,6 +90,13 @@
   }
 }
 
+.skill.loading {
+  opacity: 0.5;
+  .supportingPrereqButton, .strictPrereqButton {
+    cursor: default;
+  }
+}
+
 .skill.supporting {
   .supportingPrereqButton {
     background: #aaf;

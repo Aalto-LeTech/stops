@@ -46,6 +46,7 @@ class Skill
     @selected = ko.observable(false)
     #@highlighted = ko.observable(false)
     @prereqType = ko.observable(false)
+    @isLoading = ko.observable(false)
     
     @prereqIds = {}
     
@@ -89,12 +90,23 @@ class Skill
   # Adds skill as the prerequisite of this skill. DB is updated immediately via AJAX
   addPrereq: (skill, requirement) ->
     @prereqIds[skill.id] = requirement
+
+    skill.isLoading(true)
     
-    $.ajax
+    promise = $.ajax
       type: "POST",
       url: "#{@editor.curriculumUrl}/skills/#{@id}/add_prereq",
-      data: {prereq_id: skill.id, requirement: requirement},
-      dataType: 'json'
+      data: {prereq_id: skill.id, requirement: requirement}
+
+    promise.done(() ->
+      console.log("AddPrereq: Succesfully added")
+      skill.isLoading(false)
+    )
+
+    promise.fail((jqXHR, textStatus, error) ->
+      console.log("AddPrereq: Failed: #{textStatus}")
+      skill.isLoading(false)
+    )
     
   
   # Removes skill from the prerequisites of this skill. DB is updated immediately via AJAX
@@ -104,8 +116,7 @@ class Skill
     $.ajax
       type: "POST",
       url: "#{@editor.curriculumUrl}/skills/#{@id}/remove_prereq",
-      data: {prereq_id: skill.id},
-      dataType: 'json'
+      data: {prereq_id: skill.id}
 
   toJson: () ->
     hash = {competence_node_id: @node.id}
@@ -130,10 +141,10 @@ class Skill
     
 
   clickToggleSupportingPrereq: () ->
-    this.togglePrereq(0)
+    this.togglePrereq(0) unless this.isLoading()
     
   clickToggleStrictPrereq: () ->
-    this.togglePrereq(1)
+    this.togglePrereq(1) unless this.isLoading()
   
   togglePrereq: (requirement) ->
     targetSkill = @editor.currentlyEditedSkill()

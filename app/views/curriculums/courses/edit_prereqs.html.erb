@@ -27,7 +27,12 @@
       <div class="course">
         <p><span data-bind="text: code"></span> <span data-bind="text: localizedName"></span></p>
         <!-- ko foreach: skills -->
-          <div class="skill" data-bind="css: { selected: selected(), supporting: prereqType() === 0, strict: prereqType() === 1}">
+          <div class="skill" data-bind="css: { 
+              selected: selected(), 
+              supporting: prereqType() === 0, 
+              strict: prereqType() === 1,
+              loading: isLoading()
+            }">
             <span data-bind="text: localizedDescription"></span>
             <div class="buttons">
               <span data-bind="click: clickToggleSupportingPrereq" class="supportingPrereqButton"><%=t('.supportingPrereqButton') %></span>

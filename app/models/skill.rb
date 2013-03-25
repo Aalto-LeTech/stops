@@ -7,21 +7,27 @@ class Skill < ActiveRecord::Base
 
   has_many :skill_prereqs, :dependent => :destroy
 
+  has_many :strict_skill_prereqs,
+           :conditions  => { :requirement => "#{STRICT_PREREQ}" },
+           :class_name  => 'SkillPrereq'
+
+  has_many :supporting_skill_prereqs,
+           :conditions  => { :requirement => "#{SUPPORTING_PREREQ}" },
+           :class_name  => 'SkillPrereq'
+
   has_many :prereqs, 
            :through   => :skill_prereqs, 
            :source    => :prereq, 
            :order     => 'position'
 
   has_many :strict_prereqs, 
-           :through     => :skill_prereqs, 
-           :source      => :prereq, 
-           :conditions  => "requirement = #{STRICT_PREREQ}" # TODO: :order => 'position',
+           :through     => :strict_skill_prereqs, 
+           :source      => :prereq                 # TODO: :order => 'position',
 
   has_many :supporting_prereqs, 
-           :through     => :skill_prereqs, 
+           :through     => :supporting_skill_prereqs, 
            :source      => :prereq, 
-           :order       => 'position', 
-           :conditions  => "requirement = #{SUPPORTING_PREREQ}"
+           :order       => 'position' 
 
   # Skills for which this is a prerequisite
   has_many :skill_prereq_to, 
@@ -38,7 +44,7 @@ class Skill < ActiveRecord::Base
   belongs_to :competence_node
 
   accepts_nested_attributes_for :skill_descriptions
-
+  
   
 
   def description(locale)

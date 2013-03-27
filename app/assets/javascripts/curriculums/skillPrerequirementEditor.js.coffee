@@ -272,14 +272,10 @@ class CompetenceSkillEditor
 
       console.log("Recomputing visible search result nodes")
 
-      excluded = _.clone(@_currentPrereqNodes())
-      searchResults = @searchResults()
-      _.each searchResults, (node) ->
-        if excluded[node.id]
-          delete excluded[node.id]
-      
-  
-      _.values(excluded).concat(searchResults)
+      if @searchString().length == 0
+        return _.values(@_currentPrereqNodes())
+      else
+        return @searchResults()  
     
     
     

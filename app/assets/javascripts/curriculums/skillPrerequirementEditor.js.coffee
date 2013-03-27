@@ -106,12 +106,12 @@ class Skill
       url: "#{@editor.curriculumUrl}/skills/#{@id}/add_prereq",
       data: {prereq_id: skill.id, requirement: requirement}
 
-    promise.done(() ->
+    promise.done () ->
       console.log("AddPrereq: Succesfully added")
       skill.isLoading(false)
-    )
+  
 
-    promise.fail((jqXHR, textStatus, error) =>
+    promise.fail (jqXHR, textStatus, error) =>
       console.log("AddPrereq: Failed: #{textStatus}")
 
       # Return back to the state before the action
@@ -120,7 +120,7 @@ class Skill
       @editor._currentPrereqIds.valueHasMutated()
 
       skill.isLoading(false)
-    )
+
     
   
   # Removes skill from the prerequisites of this skill. DB is updated immediately via AJAX
@@ -135,12 +135,12 @@ class Skill
       url: "#{@editor.curriculumUrl}/skills/#{@id}/remove_prereq",
       data: {prereq_id: skill.id}
 
-    promise.done(() ->
+    promise.done () ->
       console.log("RemovePrereq: Succesfully removed")
       skill.isLoading(false)
-    )
+    
 
-    promise.fail((jqXHR, textStatus, error) =>
+    promise.fail (jqXHR, textStatus, error) =>
       console.log("RemovePrereq: Failed: #{textStatus}")
 
       # Return back to the state before the action
@@ -149,7 +149,6 @@ class Skill
       @editor._currentPrereqIds.valueHasMutated()
 
       skill.isLoading(false)
-    )
 
   toJson: () ->
     hash = {competence_node_id: @node.id}
@@ -239,19 +238,19 @@ class CompetenceSkillEditor
     @_currentPrereqIds = ko.observable({})
 
     # Actual observable results to be shown 
-    @visibleNodes = ko.computed(() =>
+    @visibleNodes = ko.computed () =>
 
       console.log("Recomputing visible search result nodes")
 
       excluded = _.clone(@_currentPrereqNodes())
       searchResults = @searchResults()
-      _.each(searchResults, (node) ->
+      _.each searchResults, (node) ->
         if excluded[node.id]
           delete excluded[node.id]
-      )
+      
   
       _.values(excluded).concat(searchResults)
-    )
+    
     
     
     @modalDiv = $('#modal-edit-skill')

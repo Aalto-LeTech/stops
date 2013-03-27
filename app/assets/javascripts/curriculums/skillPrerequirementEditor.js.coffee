@@ -45,12 +45,17 @@ class Skill
     @localizedDescription = ko.observable('untitled')
     @selected = ko.observable(false)
     #@highlighted = ko.observable(false)
-    @prereqType = ko.observable(false)
     @isLoading = ko.observable(false)
     
+    # Mapping: skill_id => prereq requirement type (false, 0, or 1)
     @prereqIds = {}
     
     this.update(data) if data
+
+    # This should be after the Skill data is loaded so that id is set
+    @prereqType = ko.computed () =>
+      console.log("Recalculating prereqType for skill id: #{@id}")
+      @editor._currentPrereqIds()[@id]
   
   update: (data) ->
     @id = data['id']
@@ -92,6 +97,7 @@ class Skill
     # Save state in case we need to rollback
     savedState = @prereqIds[skill.id]
     @prereqIds[skill.id] = requirement
+    @editor._currentPrereqIds.valueHasMutated()
 
     skill.isLoading(true)
     
@@ -110,7 +116,8 @@ class Skill
 
       # Return back to the state before the action
       @prereqIds[skill.id] = savedState
-      @editor.updatePrereqHighlights()
+      #@editor.updatePrereqHighlights()
+      @editor._currentPrereqIds.valueHasMutated()
 
       skill.isLoading(false)
     )
@@ -121,6 +128,7 @@ class Skill
     # Save state in case we need to rollback
     savedState = @prereqIds[skill.id]
     @prereqIds[skill.id] = false
+    @editor._currentPrereqIds.valueHasMutated()
     
     promise = $.ajax
       type: "POST",
@@ -137,7 +145,8 @@ class Skill
 
       # Return back to the state before the action
       @prereqIds[skill.id] = savedState
-      @editor.updatePrereqHighlights()
+      #@editor.updatePrereqHighlights()
+      @editor._currentPrereqIds.valueHasMutated()
 
       skill.isLoading(false)
     )
@@ -179,11 +188,12 @@ class Skill
     # If this is already a prereq, remove it
     if targetSkill.prereqIds[@id] == requirement
       targetSkill.removePrereq(this)
-      @prereqType(false)
+      #@prereqType(false)
+
     
     else # If this is not a prereq, add it
       targetSkill.addPrereq(this, requirement)
-      @prereqType(requirement)
+      #@prereqType(requirement)
 
 
   clickEdit: () ->
@@ -225,6 +235,8 @@ class CompetenceSkillEditor
     @searchResults = ko.observableArray()
     # Internal lookup table to check if a CompetenceNode has skills as prerequirement
     @_currentPrereqNodes = ko.observable({})
+    # Internal lookup table from which skill prereq states are computed automatically
+    @_currentPrereqIds = ko.observable({})
 
     # Actual observable results to be shown 
     @visibleNodes = ko.computed(() =>
@@ -239,10 +251,6 @@ class CompetenceSkillEditor
       )
   
       _.values(excluded).concat(searchResults)
-    )
-
-    @visibleNodes.subscribe(() =>
-      @updatePrereqHighlights()
     )
     
     
@@ -273,7 +281,9 @@ class CompetenceSkillEditor
 
   setCurrentlyEditedSkill: (skill) ->
     @currentlyEditedSkill(skill)
+    @_currentPrereqIds(skill.prereqIds) # Shares underlying object with the skill
     @updateCurrentPrereqNodes()
+    # @updatePrereqHighlights()
 
 
   updateCurrentPrereqNodes: () ->
@@ -326,7 +336,7 @@ class CompetenceSkillEditor
     # Finally, trigger the mutation event
     @searchResults.valueHasMutated()
     
-    this.updatePrereqHighlights()
+    #this.updatePrereqHighlights()
   
   updatePrereqHighlights: () ->
     # Set highlights

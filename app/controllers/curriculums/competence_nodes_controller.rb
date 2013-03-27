@@ -4,7 +4,7 @@ class Curriculums::CompetenceNodesController < CurriculumsController
     nodes_json = nil
     
     if params[:ids]
-      nodes = CompetenceNode.joins(:skills).where('skills.id' => params[:ids])
+      nodes = CompetenceNode.joins(:skills).where('skills.id' => params[:ids]).uniq
 
       nodes_json = nodes.map do |node|
         if node.type == 'Competence'

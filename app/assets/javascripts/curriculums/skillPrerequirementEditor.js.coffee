@@ -69,6 +69,11 @@ class Skill
     if data['skill_prereqs']
       for prereq in data['skill_prereqs']
         @prereqIds[prereq['prereq_id']] = prereq['requirement']
+
+  dispose: () ->
+    # Make sure computed prereqType doesn't leak memory
+    @prereqType.dispose()
+    @prereqType = undefined
   
   # Saves the Skill to the DB by ajax
   save: (curriculumUrl) ->
@@ -97,6 +102,7 @@ class Skill
     # Save state in case we need to rollback
     savedState = @prereqIds[skill.id]
     @prereqIds[skill.id] = requirement
+    console.log "AddPrereq: Calling valueHasMutated()"
     @editor._currentPrereqIds.valueHasMutated()
 
     skill.isLoading(true)
@@ -287,6 +293,10 @@ class CompetenceSkillEditor
 
 
   updateCurrentPrereqNodes: () ->
+    _.each @_currentPrereqNodes(), (node) ->
+      _.each node.skills(), (skill) ->
+        skill.dispose()
+
     @_currentPrereqNodes({})
     promise = $.ajax
       url: @curriculumUrl + '/competence_nodes/nodes_by_skill_ids'

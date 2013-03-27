@@ -97,13 +97,29 @@ class Skill
         success: (data) =>
           this.update(data['skill'])
 
+  conditionallyRemoveFromPrereqs: (skill) ->
+    prereqNodes = @editor._currentPrereqNodes()
+    prereqFound = false
+    for skill in prereqNodes[skill.node.id].skills()
+      if @prereqIds[skill.id]
+        prereqFound = true
+    if not prereqFound
+      delete prereqNodes[skill.node.id]
+
   # Adds skill as the prerequisite of this skill. DB is updated immediately via AJAX
   addPrereq: (skill, requirement) ->
-    # Save state in case we need to rollback
+    # Save old state in case we need to roll back
     savedState = @prereqIds[skill.id]
+
+    # Update new state
+    prereqNodes = @editor._currentPrereqNodes()
     @prereqIds[skill.id] = requirement
+    if not prereqNodes[skill.node.id]
+      prereqNodes[skill.node.id] = skill.node
+
     console.log "AddPrereq: Calling valueHasMutated()"
     @editor._currentPrereqIds.valueHasMutated()
+    @editor._currentPrereqNodes.valueHasMutated()
 
     skill.isLoading(true)
     
@@ -120,10 +136,13 @@ class Skill
     promise.fail (jqXHR, textStatus, error) =>
       console.log("AddPrereq: Failed: #{textStatus}")
 
-      # Return back to the state before the action
+      # Roll back to the state before the action
       @prereqIds[skill.id] = savedState
+      @conditionallyRemoveFromPrereqs(skill)
+
       #@editor.updatePrereqHighlights()
       @editor._currentPrereqIds.valueHasMutated()
+      @editor._currentPrereqNodes.valueHasMutated()
 
       skill.isLoading(false)
 
@@ -134,7 +153,9 @@ class Skill
     # Save state in case we need to rollback
     savedState = @prereqIds[skill.id]
     @prereqIds[skill.id] = false
+    @conditionallyRemoveFromPrereqs(skill)
     @editor._currentPrereqIds.valueHasMutated()
+    @editor._currentPrereqNodes.valueHasMutated()
     
     promise = $.ajax
       type: "POST",
@@ -152,7 +173,9 @@ class Skill
       # Return back to the state before the action
       @prereqIds[skill.id] = savedState
       #@editor.updatePrereqHighlights()
+      @editor._currentPrereqNodes()[skill.node.id] = node
       @editor._currentPrereqIds.valueHasMutated()
+      @editor._currentPrereqNodes.valueHasMutated()
 
       skill.isLoading(false)
 

@@ -50,6 +50,7 @@ fi:
         add_skill: 'Lisää valmius'
         supportingPrereqButton: 'Tukeva'
         strictPrereqButton: 'Välttämätön'
+        search_box_placeholder: 'Haku'
       edit:
         heading: 'Kurssin tiedot'
         hint: 'Voit täyttää osan lomakkeesta ja jatkaa myöhemmin (muista kuitenkin painaa "Tallenna" lomakkeen lopussa).'

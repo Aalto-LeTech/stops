@@ -49,4 +49,4 @@ en:
         add_skill: 'Add outcome'
         supportingPrereqButton: 'Supporting'
         strictPrereqButton: 'Mandatory'
-        
+        search_box_placeholder: "Search"

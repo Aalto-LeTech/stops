@@ -163,13 +163,14 @@ class Skill
 
   # Click a skill of the target course
   clickSelectTarget: () ->
-    # Deselect all
-    for skill in @node.skills()
-      skill.selected(false)
-    
-    # Select this one
-    @selected(true)
-    @editor.setCurrentlyEditedSkill(this)
+    if not @selected()
+      # Deselect all
+      for skill in @node.skills()
+        skill.selected(false)
+
+      # Select this one
+      @selected(true)
+      @editor.setCurrentlyEditedSkill(this)
     
 
   clickToggleSupportingPrereq: () ->

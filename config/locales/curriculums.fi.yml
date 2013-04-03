@@ -59,6 +59,8 @@ fi:
       no_competences_placeholder: "Opinto-oppaassa ei ole yhtään kompetenssia."
       edit_competence_prefix: "Muokkaa kompetenssia"
       no_competence_name: "nimetön kompetenssi"
+    import_csv:
+      courses_csv: 'Kurssitiedot'
     new_course_form_container:
       # Create new course form
       create_course_error_failed_to_load_course_box: 'Valitettavasti lomaketta ei pystytty lataamaan'

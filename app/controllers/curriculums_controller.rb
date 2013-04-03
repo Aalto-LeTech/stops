@@ -97,6 +97,10 @@ class CurriculumsController < ApplicationController
       matrix.process
       flash[:success] = "#{params[:profiles_csv].original_filename} uploaded"
       redirect_to edit_import_csv_curriculum_path(@curriculum)
+    elsif params[:courses_csv]
+      @curriculum.import_courses params[:courses_csv].read
+      flash[:success] = "#{params[:courses_csv].original_filename} uploaded"
+      redirect_to edit_import_csv_curriculum_path(@curriculum)
     else
       respond_to do |format|
         if @curriculum.update_attributes(params[:curriculum])

@@ -22,9 +22,11 @@
 <h2><%= t 'curriculums.competences_heading' %></h2>
 
 <% unless @curriculum.competences.empty? %>
-  <% @curriculum.competences.each_with_index do |competence, i| %>
-    <%= link_to competence.localized_description.name, [@curriculum, competence] %>
-  <% end %>
+  <ul class="unstyled">
+    <% @curriculum.competences.each_with_index do |competence, i| %>
+      <li><%= link_to competence.localized_description.name, [@curriculum, competence] %></li>
+    <% end %>
+  </ul>
 <% end %>
 
 

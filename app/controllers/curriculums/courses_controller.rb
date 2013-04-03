@@ -14,12 +14,13 @@ class Curriculums::CoursesController < CurriculumsController
     #@courses = @curriculum.courses
 
     @courses = ScopedCourse.where(:curriculum_id => @curriculum.id)
-                .joins(<<-SQL
-                    INNER JOIN course_descriptions 
-                      ON competence_nodes.abstract_course_id = course_descriptions.abstract_course_id
-                  SQL
-                )
+                .joins(:course_descriptions)
                 .where(["course_descriptions.locale = ?", I18n.locale]).includes(:strict_prereqs)
+#                 .joins(<<-SQL
+#                     INNER JOIN course_descriptions 
+#                       ON competence_nodes.abstract_course_id = course_descriptions.abstract_course_id
+#                   SQL
+#                 )
 
     respond_to do |format|
       format.html # index.html.erb

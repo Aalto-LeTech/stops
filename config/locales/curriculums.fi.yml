@@ -22,8 +22,6 @@ fi:
   # show
   curriculums:
     # Strings shared between views
-    competence_profiles: "Osaamisprofiilit"
-    curriculum_competences: "Kompetenssit"
     curriculum_courses: "Opinto-ohjelman kurssit"
     competences_heading: "Kompetenssit"
     courses_heading: "Kurssit"

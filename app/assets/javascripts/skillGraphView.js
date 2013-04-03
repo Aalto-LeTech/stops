@@ -47,6 +47,7 @@ var skillGraphView = {
     }
 
     // Set connections between courses
+    /*
     for (var array_index in data) {
       rawData = data[array_index].scoped_course;
       course = this.courses[rawData.id];
@@ -59,6 +60,7 @@ var skillGraphView = {
         }
       }
     }
+    */
   },
 
   /**
@@ -75,6 +77,7 @@ var skillGraphView = {
     }
 
     // Set connections between courses
+    /*
     for (var array_index in data) {
       rawData = data[array_index].competence;
       course = this.courses['c' + rawData.id];
@@ -88,6 +91,7 @@ var skillGraphView = {
         }
       }
     }
+    */
   },
 
   /**
@@ -128,6 +132,10 @@ var skillGraphView = {
 
         if (prereq) {
           skill.addPrereq(prereq);
+          
+          // TODO:
+          skill.course.addPrereq(prereq.course)
+          
         }
       }
     }

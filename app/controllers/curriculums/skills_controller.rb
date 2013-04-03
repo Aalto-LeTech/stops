@@ -16,7 +16,8 @@ class Curriculums::SkillsController < CurriculumsController
       format.json do 
         # 'type' is needed from CompetenceNode as it is used by skillGraphView.js
         render :json => @skills.to_json(
-          :methods => :strict_prereq_ids, 
+          :only => [:competence_node_id],
+          :methods => :strict_prereq_ids,
           :include => { 
             :competence_node => { 
               :only => :type 
@@ -114,6 +115,12 @@ class Curriculums::SkillsController < CurriculumsController
                        :prereq_id    => Integer(params[:prereq_id]),
                        :requirement  => requirement_type
 
+    # Add course prereq
+    #target_skill = Skill.find(params[:id])
+    #prereq_skill = Skill.find(params[:prereq_id])
+    #target_node = CompetenceNode.find(params[:competence_node_id])
+    #prereq_node = CompetenceNode.find(params[:prereq_competence_node_id])
+    
     render :nothing => true
   end
 

@@ -1,4 +1,4 @@
-<h1><%=t '.heading' %></h1>
+<h1><%= @scoped_course.localized_description.name %></h1>
 
 <ul class="nav nav-tabs">
   <li class="active"><%= link_to t('curriculums.courses.edit_tab'), edit_curriculum_course_path(:curriculum_id => @curriculum, :id => @scoped_course) %></li>

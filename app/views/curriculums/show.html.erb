@@ -15,12 +15,12 @@
   </div>
 <% end %>
 
-<h2><%= t 'curriculums.curriculum_courses' %></h2>
 
 <% if can? :update, @curriculum %>
   <p><%= link_to t(:curriculum_edit_link), edit_curriculum_path(:id => @curriculum), :class=> 'btn btn-primary' %></p>
 <% end %>
 
+<h2><%= t 'curriculums.curriculum_courses' %></h2>
 
 <% unless @curriculum.courses.empty? %>
   <table id="curriculum-courses">

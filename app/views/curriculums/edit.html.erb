@@ -25,14 +25,12 @@
 <% end %>
 
 
-<!-- Create competence -->
 <h2><%= t 'curriculums.competences_heading' %></h2>
-
 <% unless @curriculum.competences.empty?  %>
   <ul>
     <% @curriculum.competences.each do |competence| %>
-      <!--li><%= link_to t('.edit_competence_prefix') + ': ' + competence.localized_description.name, edit_curriculum_competence_path(:curriculum_id => @curriculum, :id => competence) %></li-->
-      <li><%= competence.localized_description.name %></li>
+      <li><%= link_to t('.edit_competence_prefix') + ': ' + competence.localized_description.name, edit_curriculum_competence_path(:curriculum_id => @curriculum, :id => competence) %></li>
+      
     <% end %>
   </ul>
 <% else %>
@@ -41,7 +39,7 @@
   </p>
 <% end %>
 
-
+<!-- Create competence -->
 <% if can? :update, @curriculum %>
   <p><%= link_to t('.competence_create_link'), new_curriculum_competence_path(@curriculum), :class => "btn btn-primary" %><p>
 <% end %>

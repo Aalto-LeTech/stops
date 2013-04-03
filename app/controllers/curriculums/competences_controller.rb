@@ -59,19 +59,12 @@ class Curriculums::CompetencesController < CurriculumsController
   def edit
     authorize! :update, @curriculum
     
-    @courses = @curriculum.courses.includes(:skills)
-
-    @prereqs = {} # hash of hashes, contains SkillPrereq objects, [prereq_id][skill_id]
-
-    p = SkillPrereq.where(:skill_id => @competence.skill_ids)
-    p.each do |prereq|
-      @prereqs[prereq.prereq_id] = {} unless @prereqs[prereq.prereq_id] # Initialize inner hash
-      @prereqs[prereq.prereq_id][prereq.skill_id] = prereq
-
-      logger.debug "@prereqs[#{prereq.prereq_id}][#{prereq.skill_id}]"
+    # Add missing translations
+    existing_locales = @competence.competence_descriptions.map {|description| description.locale}
+    (REQUIRED_LOCALES - existing_locales).map do |locale|
+      existing_locales = @competence.competence_descriptions << CompetenceDescription.new(:competence => @competence, :locale => locale, :name => '')
     end
-
-    @n_skills = @competence.skills.size
+    
   end
 
 
@@ -89,11 +82,9 @@ class Curriculums::CompetencesController < CurriculumsController
     
     respond_to do |format|
       if @competence.update_attributes(params[:competence])
-        format.html { redirect_to @competence }
-        format.xml  { head :ok }
+        format.html { redirect_to edit_curriculum_path(@curriculum) }
       else
         format.html { render :action => "edit" }
-        format.xml  { render :xml => @competence.errors, :status => :unprocessable_entity }
       end
     end
   end

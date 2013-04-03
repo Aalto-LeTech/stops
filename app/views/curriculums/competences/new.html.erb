@@ -1,21 +1,5 @@
 <h1><%=t '.create_competence_heading' %></h1>
 
-<%= form_for [@curriculum, @competence] do |f| %>
-  <%= f.hidden_field :curriculum_id %>
-
-  <%= f.fields_for :competence_descriptions do |cf| %>
-    <div class="form-control-group">
-      <%= cf.label t(".competence_name_in_" + cf.object.locale), :class => "form-label" %>
-      <%= cf.hidden_field :locale %>
-      <div class="form-controls">
-        <%= cf.text_field :name, :class => 'field-lengthy' %>
-      </div>
-    </div>
-  <% end %>
-
-
-  <%= f.submit t(:Save), :class => 'btn btn-primary' %>
-  
-<% end %>
+<%= render :partial => 'form' %>
 
 <p><%= link_to t(:Back), edit_curriculum_path(@curriculum) %></p>

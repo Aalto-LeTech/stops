@@ -43,10 +43,11 @@ en:
         supportingPrereqButton: 'Supporting'
         strictPrereqButton: 'Mandatory'
       new:
+        create_competence_heading: 'Create competence'
+      form:
         competence_name_in_fi: 'Name in Finnish:'
         competence_name_in_en: 'Name in English:'
         competence_name_in_sv: 'Name in Swdish:'
-        create_competence_heading: 'Create competence'
 
   # Add to plan
   competence_add_heading: "Add %{profile} %{competence} to study plan"

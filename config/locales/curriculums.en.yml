@@ -22,8 +22,10 @@ en:
   curriculums:
     # Strings shared between views
     competence_profiles: "Competence profiles"
+    curriculum_competences: "Competences"
     curriculum_courses: "Curriculum courses"
     competences_heading: "Competences"
+    courses_heading: "Courses"
     
     index:
       curriculum: "Curriculum"

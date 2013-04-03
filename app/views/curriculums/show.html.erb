@@ -15,12 +15,20 @@
   </div>
 <% end %>
 
-
 <% if can? :update, @curriculum %>
   <p><%= link_to t(:curriculum_edit_link), edit_curriculum_path(:id => @curriculum), :class=> 'btn btn-primary' %></p>
 <% end %>
 
-<h2><%= t 'curriculums.curriculum_courses' %></h2>
+<h2><%= t 'curriculums.competences_heading' %></h2>
+
+<% unless @curriculum.competences.empty? %>
+  <% @curriculum.competences.each_with_index do |competence, i| %>
+    <%= link_to competence.localized_description.name, [@curriculum, competence] %>
+  <% end %>
+<% end %>
+
+
+<h2><%= t 'curriculums.courses_heading' %></h2>
 
 <% unless @curriculum.courses.empty? %>
   <table id="curriculum-courses">

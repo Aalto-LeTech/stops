@@ -1,6 +1,6 @@
 <!-- competences/show -->
 
-<h1><%= @competence.profile.name(I18n.locale) %> - <%= @competence.name(I18n.locale) %></h1>
+<h1><%= @competence.localized_description.name %></h1>
 
 <ul>
   <% @competence.courses.each do |course| %>

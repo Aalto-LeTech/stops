@@ -5,7 +5,7 @@
 
 <div class="inline-heading-container">
   <h1 id="name-heading"><%= @curriculum.name %></h1>
-  <a href="#edit-modal" data-toggle="modal" class="button-base button-small vertical-fix">
+  <a href="#edit-modal" data-toggle="modal" class="btn btn-primary btn-small vertical-fix">
     <%= t '.change_name' %>
   </a>
 </div>
@@ -46,7 +46,7 @@
 
 
 <!-- Create course -->
-<h2><%= t 'curriculums.curriculum_courses' %></h2>
+<h2><%= t 'curriculums.courses_heading' %></h2>
 
 <% unless @curriculum.courses.empty? %>
   <table id="curriculum-courses">
@@ -55,8 +55,10 @@
         <th><%= t '.course_code' %> &darr;</th>
         <th><%= t '.course_name' %> &darr;</th>
         <th><%= t '.course_credits' %> &darr;</th>
+        <!--
         <th><%= t '.course_period' %> &darr;</th>
         <th><%= t '.prerequisites' %> &darr;</th>
+        -->
       </tr>
     </thead>
     <tbody>
@@ -69,8 +71,10 @@
             <%= link_to course.localized_description.name.presence || ('<' + t('.course_name_not_found') + '>'), edit_curriculum_course_path(:curriculum_id => @curriculum, :id => course) %>
           </td>
           <td class="centered"><%= course.credits %></td>
+          <!--
           <td class="centered"><%= course.periods_as_roman_numerals.join(", ") %></td>
           <td class="centered"><%= course.strict_prereqs.size %></td>
+          -->
         </tr>
       <% end %>
     </tbody>
@@ -86,3 +90,5 @@
     :id => "new-course-button" %>
   </p>
 <% end %>
+
+<p><%= link_to t(:Back), @curriculum %></p>

@@ -324,6 +324,12 @@ class CompetenceSkillEditor
         ids: _.keys(@currentlyEditedSkill().prereqIds)
 
     promise.done (data) => 
+      # FIXME: Seems that data can be null. Is that a problem?
+      unless data
+        console.log "CompetenceSkillEditor::updateCurrentPrereqNodes() called with null. Check this."
+        return
+      
+      
       # Got nodes, now process them
       newNodes = @_currentPrereqNodes()
       for result in data

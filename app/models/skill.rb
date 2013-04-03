@@ -1,9 +1,10 @@
 class Skill < ActiveRecord::Base
   has_many :skill_descriptions, :dependent => :destroy
 
-  has_one :description_with_locale, 
+  has_one :description_with_locale,
           :class_name => "SkillDescription", 
           :conditions => proc { "skill_descriptions.locale = '#{I18n.locale}'" }
+  alias :localized_description :description_with_locale
 
   has_many :skill_prereqs, :dependent => :destroy
 

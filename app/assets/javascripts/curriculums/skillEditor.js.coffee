@@ -267,6 +267,7 @@ class CompetenceSkillEditor
   constructor: () ->
     @searchString = ko.observable('')
     @searchResults = ko.observableArray()
+    @isLoading = ko.observable(false)
     # Internal lookup table to check if a CompetenceNode has skills as prerequirement
     @_currentPrereqNodes = ko.observable({})
     # Internal lookup table from which skill prereq states are computed automatically
@@ -294,6 +295,7 @@ class CompetenceSkillEditor
     $targetNode = $('#target-node')
     @nodeUrl = $targetNode.data('url')
     @nodeId = $targetNode.data('node-id')
+    @targetNodeIsLoading = ko.observable(true)
   
     @node = ko.observable()
     ko.applyBindings(this)
@@ -303,11 +305,16 @@ class CompetenceSkillEditor
   
   loadNode: () ->
     
-    $.ajax
+    promise = $.ajax
       url: @nodeUrl,
-      dataType: 'json',
-      success: (data) =>
-        @node(new Node(this, data))
+      dataType: 'json'
+        
+    promise.done (data) =>
+      @targetNodeIsLoading(false)
+      @node(new Node(this, data))
+
+    promise.fail () =>
+      @targetNodeIsLoading(false)
 
   setCurrentlyEditedSkill: (skill) ->
     @currentlyEditedSkill(skill)
@@ -328,6 +335,8 @@ class CompetenceSkillEditor
       _.each node.skills(), (skill) ->
         skill.dispose()
 
+    @isLoading(true)
+
     @_currentPrereqNodes({})
     promise = $.ajax
       url: @curriculumUrl + '/competence_nodes/nodes_by_skill_ids'
@@ -336,6 +345,8 @@ class CompetenceSkillEditor
         ids: _.keys(@currentlyEditedSkill().prereqIds)
 
     promise.done (data) => 
+      @isLoading(false)
+
       # FIXME: Seems that data can be null. Is that a problem?
       unless data
         console.log "CompetenceSkillEditor::updateCurrentPrereqNodes() called with null. Check this."
@@ -354,16 +365,24 @@ class CompetenceSkillEditor
 
     promise.fail (jqXHR, textStatus, error) =>
       # TODO What to do when request fails?
+      @isLoading(false)
+
     
   
   clickSearch: () ->
-    $.ajax
+    @isLoading(true)
+
+    promise = $.ajax
       url: @curriculumUrl + '/search_skills'
       dataType: 'json'
       data: 
         q: @searchString()
         exclude: @nodeId 
-      success: (data) => this.parseSearchResults(data)
+
+    promise.done (data) => 
+      @isLoading(false)
+      this.parseSearchResults(data)
+    promise.fail () => @isLoading(false) # TODO Should show error
   
   
   parseSearchResults: (data) ->

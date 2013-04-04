@@ -24,6 +24,10 @@
       <button class="btn" data-bind="click: clickClearSearch"><i class="icon-remove"></i></button>
     </div>
     
+    <!-- loading icon -->
+    <div class="skill-editor-loading-icon hide" data-bind="css: { hide: isLoading() === false }">
+      <%= image_tag 'progress.gif' %>
+    </div>
 
     <div data-bind="foreach: visibleNodes">
       
@@ -52,6 +56,11 @@
   <div class="span6">
     <h2><%=t '.outcomes_heading' %></h2>
     
+    <!-- loading icon -->
+    <div class="skill-editor-loading-icon hide" data-bind="css: { hide: targetNodeIsLoading() === false }">
+      <%= image_tag 'progress.gif' %>
+    </div>
+
     <div id="target-node" class="course"
       data-node-id="<%= @course.id %>" 
       data-url="<%= curriculum_course_path(:curriculum_id => @curriculum, :course_id => @course) %>">

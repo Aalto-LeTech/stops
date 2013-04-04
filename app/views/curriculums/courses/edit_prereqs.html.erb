@@ -87,14 +87,16 @@
       <h3><%= @course.localized_description.name %> - <%= t('.add_skill') %></h3>
     </div>
     <div class="modal-body" data-bind="with: currentlyEditedSkill">
-      <ul data-bind="foreach: descriptions">
-        <li>
-          <label>
-            <span data-bind="text: localizedLocale"></span>:
-            <input type="text" class="span6" data-bind="value: description" />
+      <div class="form-horizontal" data-bind="foreach: descriptions">
+        <div class="control-group">
+          <label class="control-label">
+            <span data-bind="text: localizedLocale"></span>
           </label>
-        </li>
-      </ul>
+          <div class="controls">
+            <input type="text" class="input-xlarge" data-bind="value: description" />
+          </div>
+        </div>
+      </div>
     </div>
     <div class="modal-footer">
       <button class="btn" data-dismiss="modal" aria-hidden="true"><%= t(:Cancel) %></button>

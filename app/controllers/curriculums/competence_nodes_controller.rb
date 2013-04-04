@@ -20,7 +20,7 @@ class Curriculums::CompetenceNodesController < CurriculumsController
                   ]
               }},
               {:competence_descriptions => {
-                  :only => [:id, :locale, :description]
+                  :only => [:id, :locale, :name, :description]
               }}
             ]
           )

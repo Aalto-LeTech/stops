@@ -18,23 +18,21 @@ class Node
     @code = data['course_code']
     @descriptions = ko.observableArray()
     @localizedName = ko.observable('untitled')
-    
+
     if data['skills']
       for skill in data['skills']
         @skills.push(new Skill(@editor, this, skill))
 
     if data['course_descriptions']
-      for description in data['course_descriptions']
-        d = new LocalizedDescription(@editor, description)
-        @descriptions.push(d)
-        if d.locale == window.currentLocale
-          @localizedName(d.name())
-    if data['competence_descriptions']
-      for description in data['competence_descriptions']
-        d = new LocalizedDescription(@editor, description)
-        @descriptions.push(d)
-        if d.locale == window.currentLocale
-          @localizedName(d.description())
+      descriptionsAsJSON = data['course_descriptions']
+    else if data['competence_descriptions']
+      descriptionsAsJSON = data['competence_descriptions']
+
+    for description in descriptionsAsJSON
+      d = new LocalizedDescription(@editor, description)
+      @descriptions.push(d)
+      if d.locale == window.currentLocale
+        @localizedName(d.name())
 
 
 class Skill

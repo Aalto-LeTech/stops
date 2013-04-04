@@ -1,6 +1,10 @@
 #= require knockout-2.2.1
 #= require underscore-min
 
+# Check that i18n strings have been loaded before this file
+if not O4.skillEditor.i18n
+  throw "skillEditor i18n strings have not been loaded!"
+
 class Node
   constructor: (@editor, data) ->
     if data['scoped_course']
@@ -18,6 +22,7 @@ class Node
     @code = data['course_code']
     @descriptions = ko.observableArray()
     @localizedName = ko.observable('untitled')
+    @localizedType = O4.skillEditor.i18n[@type]
 
     if data['skills']
       for skill in data['skills']

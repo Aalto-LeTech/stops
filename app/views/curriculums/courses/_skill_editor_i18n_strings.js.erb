@@ -1,0 +1,13 @@
+/* Loads translated i18n strings used by skillEditor.js.coffee */
+(function() {
+  /* i18n strings */
+  var i18n = {
+    competence:                     "<%= escape_javascript(t(:competence)) %>",
+    scoped_course:                  "<%= escape_javascript(t(:scoped_course)) %>"
+  };
+
+  /* Translations available at O4.skillEditor.i18n */ 
+  var O4 = window.O4 = window.O4 || {};
+  O4.skillEditor = O4.skillEditor || {};
+  O4.skillEditor.i18n = i18n;
+})();

@@ -1,4 +1,7 @@
 <% content_for :javascript do %>
+  <script type="text/javascript">
+    <%= render "skill_editor_i18n_strings.js" %>
+  </script>
   <%= javascript_include_tag 'curriculums/skillEditor' %>
 <% end %>
 
@@ -25,7 +28,7 @@
     <div data-bind="foreach: visibleNodes">
       
       <div class="course">
-        <p><span data-bind="text: code"></span> <span data-bind="text: localizedName"></span></p>
+        <p><span data-bind="text: code"></span> <span data-bind="text: localizedName"></span> <span class="pull-right" data-bind="text: localizedType"></span></p>
         <!-- ko foreach: skills -->
           <div class="skill" data-bind="css: { 
               selected: selected(), 

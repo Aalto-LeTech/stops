@@ -81,3 +81,11 @@ en:
       taken: "has already been taken"
       too_short: "is too short"
       confirmation: "does not match"
+
+
+  ###############
+  # General terms
+  ###############
+
+  competence: "Competence"
+  scoped_course: "Course"

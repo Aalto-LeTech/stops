@@ -125,4 +125,72 @@ class Curriculum < ActiveRecord::Base
       InvitationMailer.teacher_invitation(invitation, subject, content).deliver
     end    
   end
+  
+  def import_courses(input)
+    lines = input.lines
+    #line_count = lines.size
+    #line_counter = 0
+    begin
+      while line = lines.next.strip
+        next if line.blank?
+        
+        if line.include?('-') && line.size < 15
+          code = line
+          name_en = lines.next.strip
+          name_fi = lines.next.strip
+          name_sv = lines.next.strip
+          credits = lines.next.strip.to_i
+        else
+          code = ''
+          name_fi = line
+          name_en = ''
+          name_sv = ''
+          credits = 5
+        end
+        
+        # Find or create abstract course
+        if code.blank?
+          abstract_course_id = nil
+        else
+          abstract_course = AbstractCourse.find_by_code(code) || AbstractCourse.create(:code => code)
+          abstract_course_id = abstract_course.id
+        end
+        
+        # Create course
+        course = ScopedCourse.create(:curriculum_id => self.id, :abstract_course_id => abstract_course_id, :credits => credits, :course_code => code)
+        description_fi = CourseDescription.create(:scoped_course_id => course.id, :locale => 'fi', :name => name_fi)
+        description_en = CourseDescription.create(:scoped_course_id => course.id, :locale => 'en', :name => name_en)
+        description_sv = CourseDescription.create(:scoped_course_id => course.id, :locale => 'sv', :name => name_sv)
+        puts "Code: #{code}, Name(en): #{name_en}, Name(fi): #{name_fi}, Credits: #{credits}"
+        
+        # Create skills
+        while line = lines.next.strip
+          break if line.blank?
+          
+          if line == 'Osaamistavoitteet:'
+            
+            while line = lines.next.strip
+              break if line.blank? || line.include?(':')
+              
+              if line[0] == '-'
+                text = line[2..-1]
+              else
+                text = line
+              end
+              
+              skill = Skill.create(:competence_node_id => course.id)
+              SkillDescription.create(:skill_id => skill.id, :locale => 'fi', :description => text)
+              SkillDescription.create(:skill_id => skill.id, :locale => 'en', :description => text)
+              SkillDescription.create(:skill_id => skill.id, :locale => 'sv', :description => text)
+              puts "  #{text}"
+            end
+          end
+        end
+        
+        
+      end
+    rescue StopIteration => e
+    end
+  end
+  
 end

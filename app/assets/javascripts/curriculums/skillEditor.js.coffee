@@ -124,7 +124,7 @@ class Skill
     promise = $.ajax
       type: "POST",
       url: "#{@editor.curriculumUrl}/skills/#{@id}/add_prereq",
-      data: {prereq_id: skill.id, requirement: requirement}
+      data: {prereq_id: skill.id, requirement: requirement} # competence_node_id: @node.id, prereq_competence_node_id: skill.node.id
 
     promise.done () ->
       console.log("AddPrereq: Succesfully added")
@@ -330,6 +330,12 @@ class CompetenceSkillEditor
         ids: _.keys(@currentlyEditedSkill().prereqIds)
 
     promise.done (data) => 
+      # FIXME: Seems that data can be null. Is that a problem?
+      unless data
+        console.log "CompetenceSkillEditor::updateCurrentPrereqNodes() called with null. Check this."
+        return
+      
+      
       # Got nodes, now process them
       newNodes = @_currentPrereqNodes()
       for result in data

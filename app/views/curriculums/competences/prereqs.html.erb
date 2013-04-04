@@ -10,7 +10,7 @@
 <div id="layers">
   <div id="svg"></div>
   <div id="course-graph" 
-    data-course-id="c<%= @competence.id %>" 
+    data-course-id="<%= @competence.id %>" 
     data-courses-path="<%= curriculum_courses_path(:curriculum_id => @curriculum.id) %>" 
     data-competences-path="<%= curriculum_competences_path(:curriculum_id => @curriculum.id) %>" 
     data-skills-path="<%= curriculum_skills_path(:curriculum_id => @curriculum.id) %>">

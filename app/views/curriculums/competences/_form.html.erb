@@ -1,0 +1,20 @@
+<%= form_for [@curriculum, @competence] do |f| %>
+  <%= f.hidden_field :curriculum_id %>
+
+  <%= f.fields_for :competence_descriptions do |cf| %>
+    <div class="form-control-group">
+      <%= cf.label t(".competence_name_in_" + cf.object.locale), :class => "form-label" %>
+      <%= cf.hidden_field :locale %>
+      <div class="form-controls">
+        <%= cf.text_field :name, :class => 'field-lengthy' %>
+      </div>
+    </div>
+  <% end %>
+  
+  <div class="form-control-group">
+    <div class="form-controls">
+      <%= f.submit t(:Save), :class => 'btn btn-primary' %>
+    </div>
+  </div>
+  
+<% end %> 

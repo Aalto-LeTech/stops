@@ -114,6 +114,7 @@ function GraphCourse(id, code, name) {
 
   this.skills = [];
   this.prereqs = [];
+  this.prereqsById = {};
   this.prereqTo = [];
 
   this.visible = false;
@@ -136,6 +137,12 @@ GraphCourse.prototype.addSkill = function(skill) {
 }
 
 GraphCourse.prototype.addPrereq = function(course) {
+  // Don't add duplicates
+  if (this.prereqsById[course.id]) {
+    return;
+  }
+  
+  this.prereqsById[course.id] = course;
   this.prereqs.push(course);
   course.prereqTo.push(this);
 }

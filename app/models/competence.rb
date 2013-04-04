@@ -13,7 +13,8 @@ class Competence < CompetenceNode
            :class_name  => 'Competence'
 
   has_many :competence_descriptions, 
-           :dependent   => :destroy
+           :dependent   => :destroy,
+           :order => 'locale'
   
   has_one :localized_description, :class_name => "CompetenceDescription", 
            :conditions => proc { "locale = '#{I18n.locale}'" }
@@ -27,23 +28,24 @@ class Competence < CompetenceNode
   # Prerequisite courses
   has_many :competence_courses, 
            :dependent   => :destroy
+           
   
   has_many :courses, 
            :through     => :competence_courses, 
-           :source      => :scoped_course, 
-           :order       => 'code'
+           :source      => :scoped_course
+           #:order       => 'code'
 
   has_many :strict_prereqs, 
            :through     => :competence_courses, 
            :source      => :scoped_course, 
-           :order       => 'code', 
            :conditions  => "requirement = #{STRICT_PREREQ}"
+           #:order       => 'code', 
 
   has_many :supporting_prereqs, 
            :through     => :competence_courses, 
            :source      => :scoped_course, 
-           :order       => 'code', 
            :conditions  => "requirement = #{SUPPORTING_PREREQ}"
+           #:order       => 'code', 
 
 
   accepts_nested_attributes_for :competence_descriptions

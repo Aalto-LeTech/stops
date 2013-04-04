@@ -21,9 +21,9 @@ en:
   # show
   curriculums:
     # Strings shared between views
-    competence_profiles: "Competence profiles"
     curriculum_courses: "Curriculum courses"
     competences_heading: "Competences"
+    courses_heading: "Courses"
     
     index:
       curriculum: "Curriculum"
@@ -58,6 +58,8 @@ en:
       no_competences_placeholder: "There are no competences in the curriculum."
       edit_competence_prefix: "Edit competence"
       no_competence_name: "no competence name"
+    import_csv:
+      courses_csv: 'Courses'
     new_course_form_container:
       # Create new course form
       course_create_link: 'New course'

@@ -47,6 +47,7 @@ var skillGraphView = {
     }
 
     // Set connections between courses
+    /*
     for (var array_index in data) {
       rawData = data[array_index].scoped_course;
       course = this.courses[rawData.id];
@@ -59,6 +60,7 @@ var skillGraphView = {
         }
       }
     }
+    */
   },
 
   /**
@@ -69,15 +71,16 @@ var skillGraphView = {
       var rawData = data[array_index].competence;
 
       //var periodId = parseInt(rawData.period_id);
-      var course = new GraphCourse('c' + rawData.id, '', rawData.translated_name);
+      var course = new GraphCourse(rawData.id, '', rawData.translated_name);
       course.setCompetence(true);
-      this.courses['c' + rawData.id] = course;
+      this.courses[rawData.id] = course;
     }
 
     // Set connections between courses
+    /*
     for (var array_index in data) {
       rawData = data[array_index].competence;
-      course = this.courses['c' + rawData.id];
+      course = this.courses[rawData.id];
 
       for (var array_index2 in rawData.strict_prereq_ids) {
         var prereq = this.courses[rawData.strict_prereq_ids[array_index2]];
@@ -88,6 +91,7 @@ var skillGraphView = {
         }
       }
     }
+    */
   },
 
   /**
@@ -98,36 +102,40 @@ var skillGraphView = {
     for (var array_index in data) {
       var rawData = data[array_index].skill;
 
-      // Create skill object
-      var skill = new GraphSkill(rawData.id, rawData.position, rawData.translated_name);
-      this.skills[rawData.id] = skill;
-
-      // Add skill to course
-      var course = false;
-      if (rawData.competence_node.type == 'ScopedCourse') {
-        var course = this.courses[rawData.competence_node_id];
-      } else if (rawData.competence_node.type == 'Competence') {
-        var course = this.courses['c' + rawData.competence_node_id];
-      }
-
+      // Skip if skills belongs to a course that is not shown
+      var course = this.courses[rawData.competence_node_id];
       if (!course) {
         continue;
       }
+      
+      // Skip skill if localized text is not available
+      if (!rawData.description_with_locale) {
+        continue;
+      }
+      
+      var localized_name = rawData.description_with_locale.skill_description.description;
+      
+      // Create skill object
+      var skill = new GraphSkill(rawData.id, rawData.position, localized_name);
+      this.skills[rawData.id] = skill;
 
+      // Add skill to course
       course.addSkill(skill);
       skill.setCourse(course);
     }
 
     // Set connections between skills
     for (var array_index in data) {
-      rawData = data[array_index].skill;
-      skill = this.skills[rawData.id];
+      var rawData = data[array_index].skill;
+      var skill = this.skills[rawData.id];
 
       for (var array_index2 in rawData.strict_prereq_ids) {
         var prereq = this.skills[rawData.strict_prereq_ids[array_index2]];
 
         if (prereq) {
           skill.addPrereq(prereq);
+          skill.course.addPrereq(prereq.course)
+          // console.log(prereq.course.name + " is prereq of " + skill.course.name);
         }
       }
     }
@@ -142,9 +150,7 @@ var skillGraphView = {
 
   initializeVisualization: function(courseId) {
     var targetCourse = this.courses[courseId];
-
     if (!targetCourse) {
-      //console.log("Target course "+courseId+" not found.");
       return;
     }
 

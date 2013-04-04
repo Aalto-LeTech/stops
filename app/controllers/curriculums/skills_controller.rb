@@ -5,23 +5,18 @@ class Curriculums::SkillsController < CurriculumsController
   respond_to :json, :only => [:index, :edit, :search_skills_and_courses]
 
   def index
+    # TODO: only load skills that belong to this curriculum
     @skills = Skill.joins(:competence_node)
-                .where('competence_nodes.id' => @curriculum.course_ids)
-                .includes(:strict_prereqs, :description_with_locale, :competence_node)
-
+                .includes(:strict_prereqs, :description_with_locale) # :competence_node
+                #.where('competence_nodes.id' => @curriculum.course_ids)
 
     respond_to do |format|
       #format.html { render :text => @skills.to_json(:include => :strict_prereq_ids) }
       format.xml { render :xml => @skills }
       format.json do 
-        # 'type' is needed from CompetenceNode as it is used by skillGraphView.js
         render :json => @skills.to_json(
-          :methods => :strict_prereq_ids, 
-          :include => { 
-            :competence_node => { 
-              :only => :type 
-            } 
-          }
+          :only => [:id, :competence_node_id],
+          :methods => [:strict_prereq_ids, :description_with_locale]
         )
       end
     end
@@ -114,6 +109,12 @@ class Curriculums::SkillsController < CurriculumsController
                        :prereq_id    => Integer(params[:prereq_id]),
                        :requirement  => requirement_type
 
+    # Add course prereq
+    #target_skill = Skill.find(params[:id])
+    #prereq_skill = Skill.find(params[:prereq_id])
+    #target_node = CompetenceNode.find(params[:competence_node_id])
+    #prereq_node = CompetenceNode.find(params[:prereq_competence_node_id])
+    
     render :nothing => true
   end
 

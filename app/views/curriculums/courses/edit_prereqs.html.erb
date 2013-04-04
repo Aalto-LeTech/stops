@@ -2,7 +2,7 @@
   <%= javascript_include_tag 'curriculums/skillEditor' %>
 <% end %>
 
-<h1><%=t '.edit_course_heading' %></h1>
+<h1><%= @course.localized_description.name %></h1>
 
 <ul class="nav nav-tabs">
   <li><%= link_to t('curriculums.courses.edit_tab'), edit_curriculum_course_path(:curriculum_id => @curriculum, :id => @course) %></li>
@@ -33,11 +33,11 @@
               strict: prereqType() === 1,
               loading: isLoading()
             }">
-            <span data-bind="text: localizedDescription"></span>
             <div class="buttons">
               <span data-bind="click: clickToggleSupportingPrereq" class="supportingPrereqButton"><%=t('.supportingPrereqButton') %></span>
               <span data-bind="click: clickToggleStrictPrereq" class="strictPrereqButton"><%=t('.strictPrereqButton') %></span>
             </div>
+            <span data-bind="text: localizedDescription"></span>
           </div>
         <!-- /ko -->
       </div>
@@ -56,11 +56,11 @@
         <p><span data-bind="text: code"></span> <span data-bind="text: localizedName"></span></p>
         <!-- ko foreach: skills -->
           <div class="skill" data-bind="click: clickSelectTarget, css: { selected: selected() }">
-            <span data-bind="text: localizedDescription"></span>
             <div class="buttons">
               <i class="icon-pencil" data-bind="click: clickEdit"></i>
               <i class="icon-remove" data-bind="click: clickDelete, clickBubble: false"></i>
             </div>
+            <span data-bind="text: localizedDescription"></span>
           </div>
         <!-- /ko -->
       <!-- /ko -->

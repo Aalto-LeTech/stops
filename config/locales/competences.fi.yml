@@ -44,10 +44,11 @@ fi:
         supportingPrereqButton: 'Tukeva'
         strictPrereqButton: 'Välttämätön'
       new:
+        create_competence_heading: 'Luo kompetenssi'
+      form:
         competence_name_in_fi: 'Nimi suomeksi:'
         competence_name_in_en: 'Nimi englanniksi:'
         competence_name_in_sv: 'Nimi ruotsiksi:'
-        create_competence_heading: 'Luo kompetenssi'
 
   # Add to plan
   competence_add_heading: "Lisää %{profile} %{competence} opintosuunnitelmaan"

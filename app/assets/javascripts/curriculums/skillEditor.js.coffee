@@ -100,11 +100,13 @@ class Skill
         success: (data) =>
           this.update(data['skill'])
 
+  # Remove the node of the skill if the skill is the last prerequirement 
   conditionallyRemoveFromPrereqs: (skill) ->
     prereqNodes = @editor._currentPrereqNodes()
     prereqFound = false
     for skill in prereqNodes[skill.node.id].skills()
-      if @prereqIds[skill.id]
+      value = @prereqIds[skill.id]
+      if value == 1 || value == 0
         prereqFound = true
     if not prereqFound
       delete prereqNodes[skill.node.id]
@@ -155,7 +157,7 @@ class Skill
   removePrereq: (skill) ->
     # Save state in case we need to rollback
     savedState = @prereqIds[skill.id]
-    @prereqIds[skill.id] = false
+    delete @prereqIds[skill.id]
     @conditionallyRemoveFromPrereqs(skill)
     @editor._currentPrereqIds.valueHasMutated()
     @editor._currentPrereqNodes.valueHasMutated()

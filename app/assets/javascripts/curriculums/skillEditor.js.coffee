@@ -212,6 +212,7 @@ class Skill
     targetSkill = @editor.currentlyEditedSkill()
     unless targetSkill
       # TODO: show a hint
+      console.log("togglePrereq: Returning without doing anything since there is no currently edited skill")
       return
     
     # If this is already a prereq, remove it
@@ -312,7 +313,14 @@ class CompetenceSkillEditor
 
 
   updateCurrentPrereqNodes: () ->
-    _.each @_currentPrereqNodes(), (node) ->
+    currentPrereqs = @_currentPrereqNodes()
+    # Current prereq Nodes that are also in the search results must not be included in
+    # the skill disposal below. 
+    _.each @searchResults(), (node) ->
+      if currentPrereqs[node.id]
+        delete currentPrereqs[node.id]
+
+    _.each currentPrereqs, (node) ->
       _.each node.skills(), (skill) ->
         skill.dispose()
 

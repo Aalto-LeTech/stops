@@ -5,6 +5,20 @@
 if not O4.skillEditor.i18n
   throw "skillEditor i18n strings have not been loaded!"
 
+
+ko.bindingHandlers.showModal =
+  init: (element, valueAccessor) ->
+    # Make sure the modal stays hidden once closed
+    $(element).on 'hide', () ->
+      valueAccessor()(false)
+
+  update: (element, valueAccessor) ->
+    value = valueAccessor()
+    if ko.utils.unwrapObservable(value)
+        $(element).modal('show')
+    else 
+        $(element).modal('hide')
+
 class Node
   constructor: (@editor, data) ->
     if data['scoped_course']
@@ -236,14 +250,29 @@ class Skill
   
   
   clickDelete: () ->
+    # Make sure this skill is selected
+    @clickSelectTarget()
+    @editor.showDeletionConfirmationModal(true)
+
+  clickConfirmDeletion: () ->
     return unless @id
   
-    $.ajax
+    @editor.showDeletionConfirmationModal(false)
+
+    promise = $.ajax
       type: "DELETE",
-      url: @editor.curriculumUrl + '/skills/' + @id,
-      dataType: 'json'
+      url: @editor.curriculumUrl + '/skills/' + @id
     
-    @node.skills.remove(this)
+    promise.done () =>
+      # Finally update view
+      @node.skills.remove(this)
+
+    promise.fail (jqXHR, textStatus, error) =>
+      # TODO Failures should be handled
+      console.log("Skill deletion failed!")
+
+  generateDeletionConfirmationString: () ->
+    O4.skillEditor.i18n['deletion_confirmation_question'] + " \"#{@localizedDescription()}\"?"
   
 
 class LocalizedDescription
@@ -285,9 +314,8 @@ class CompetenceSkillEditor
       else
         return @searchResults()  
     
-    
-    
     @modalDiv = $('#modal-edit-skill')
+    @showDeletionConfirmationModal = ko.observable(false)
     @currentlyEditedSkill = ko.observable()    # Skill under editing
     
     window.currentLocale = @modalDiv.data('current-locale')
@@ -434,7 +462,6 @@ class CompetenceSkillEditor
   openSkillEditor: (skill) ->
     @currentlyEditedSkill(skill)
     @modalDiv.modal('show')
-  
 
   # Click save in the modal skill editor
   clickSaveSkill: () ->

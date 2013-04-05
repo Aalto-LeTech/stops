@@ -51,6 +51,9 @@ fi:
         supportingPrereqButton: 'Tukeva'
         strictPrereqButton: 'Välttämätön'
         search_box_placeholder: 'Haku'
+        # Confirm skill deletion modal
+        deletion_confirmation_question: "Oletko varma, että haluat poistaa valmiuden"
+        delete_skill: "Poista valmius"
       edit:
         heading: 'Kurssin tiedot'
         hint: 'Voit täyttää osan lomakkeesta ja jatkaa myöhemmin (muista kuitenkin painaa "Tallenna" lomakkeen lopussa).'

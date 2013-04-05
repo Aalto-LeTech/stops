@@ -57,7 +57,7 @@
     <h2><%=t '.outcomes_heading' %></h2>
     
     <!-- loading icon -->
-    <div class="skill-editor-loading-icon hide" data-bind="css: { hide: targetNodeIsLoading() === false }">
+    <div class="skill-editor-loading-icon" data-bind="css: { hide: targetNodeIsLoading() === false }">
       <%= image_tag 'progress.gif' %>
     </div>
 
@@ -112,4 +112,17 @@
       <button class="btn btn-primary" data-bind="click: clickSaveSkill"><%= t(:Save) %></button>
     </div>
 </div>
+
+<!-- Deletion confirmation modal -->
+<div id="modal-confirm-skill-deletion" class="modal hide fade" 
+  data-bind="showModal: showDeletionConfirmationModal, with: currentlyEditedSkill">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h4 data-bind="text: generateDeletionConfirmationString()"></h4>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal"><%= t :Cancel %></button>
+    <button class="btn btn-danger" data-bind="click: clickConfirmDeletion"><%= t '.delete_skill' %></button>
+  </div>
+</div
     

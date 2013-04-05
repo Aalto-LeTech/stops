@@ -50,3 +50,6 @@ en:
         supportingPrereqButton: 'Supporting'
         strictPrereqButton: 'Mandatory'
         search_box_placeholder: "Search"
+        # Confirm skill deletion modal
+        deletion_confirmation_question: 'Are you sure you want to remove skill'
+        delete_skill: "Delete skill"

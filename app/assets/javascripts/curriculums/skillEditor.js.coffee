@@ -300,6 +300,7 @@ class CompetenceSkillEditor
     @searchResults = ko.observableArray()
     @isLoading = ko.observable(false)
     @loadFailed = ko.observable(false)
+    @targetNodeLoadFailed = ko.observable(false)
     # Internal lookup table to check if a CompetenceNode has skills as prerequirement
     @_currentPrereqNodes = ko.observable({})
     # Internal lookup table from which skill prereq states are computed automatically
@@ -342,10 +343,12 @@ class CompetenceSkillEditor
         
     promise.done (data) =>
       @targetNodeIsLoading(false)
+      @targetNodeLoadFailed(false)
       @node(new Node(this, data))
 
     promise.fail () =>
       @targetNodeIsLoading(false)
+      @targetNodeLoadFailed(true)
 
   setCurrentlyEditedSkill: (skill) ->
     @currentlyEditedSkill(skill)

@@ -27,7 +27,7 @@
     <!-- Error alert box -->
     <div class="row-fluid hide" data-bind="css: { hide: loadFailed() === false }">
       <div class="alert alert-error span11">
-        <strong>Loading failed!</strong> Failed to load content. Please try again later.
+        <strong><%= t '.load_failed_heading' %></strong> <%= t '.search_failure_message' %>
       </div>
     </div>
 
@@ -66,7 +66,7 @@
     <!-- Error alert box -->
     <div class="row-fluid hide" data-bind="css: { hide: targetNodeLoadFailed() === false }">
       <div class="alert alert-error span11">
-        <strong>Loading failed!</strong> Failed to load target node for editing. Please try again later.
+        <strong><%= t '.load_failed_heading' %></strong> <%= t '.node_load_failure_message' %>
       </div>
     </div>
     

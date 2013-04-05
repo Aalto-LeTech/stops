@@ -53,3 +53,6 @@ en:
         # Confirm skill deletion modal
         deletion_confirmation_question: 'Are you sure you want to remove skill'
         delete_skill: "Delete skill"
+        load_failed_heading: "Load failed!"
+        search_failure_message: "Failed to load content. Please try again later."
+        node_load_failure_message: "Failed to load target course for editing. Please try again later."

@@ -18,12 +18,19 @@
   <div class="span6 full-height scroll-vertical">
     <h2><%=t '.prereqs_heading' %></h2>
     
-    <div class="input-append">
+    <div class="input-append bottom-weight">
       <input class="span8" type="text" id="search" placeholder="<%= t '.search_box_placeholder' %>" data-bind="value: searchString, valueUpdate: 'keyup', event: { keyup: searchKeyPress }" />
       <button class="btn" data-bind="click: clickSearch"><i class="icon-search"></i></button>
       <button class="btn" data-bind="click: clickClearSearch"><i class="icon-remove"></i></button>
     </div>
     
+    <!-- Error alert box -->
+    <div class="row-fluid hide" data-bind="css: { hide: loadFailed() === false }">
+      <div class="alert alert-error span11">
+        <strong>Error!</strong> Failed to load content. Please try again later.
+      </div>
+    </div>
+
     <!-- loading icon -->
     <div class="skill-editor-loading-icon hide" data-bind="css: { hide: isLoading() === false }">
       <%= image_tag 'progress.gif' %>

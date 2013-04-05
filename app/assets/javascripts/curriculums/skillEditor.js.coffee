@@ -299,6 +299,7 @@ class CompetenceSkillEditor
     @searchString = ko.observable('')
     @searchResults = ko.observableArray()
     @isLoading = ko.observable(false)
+    @loadFailed = ko.observable(false)
     # Internal lookup table to check if a CompetenceNode has skills as prerequirement
     @_currentPrereqNodes = ko.observable({})
     # Internal lookup table from which skill prereq states are computed automatically
@@ -376,6 +377,7 @@ class CompetenceSkillEditor
 
     promise.done (data) => 
       @isLoading(false)
+      @loadFailed(false)
 
       # FIXME: Seems that data can be null. Is that a problem?
       unless data
@@ -396,6 +398,7 @@ class CompetenceSkillEditor
     promise.fail (jqXHR, textStatus, error) =>
       # TODO What to do when request fails?
       @isLoading(false)
+      @loadFailed(true)
 
     
   
@@ -411,8 +414,12 @@ class CompetenceSkillEditor
 
     promise.done (data) => 
       @isLoading(false)
+      @loadFailed(false)
       this.parseSearchResults(data)
-    promise.fail () => @isLoading(false) # TODO Should show error
+    promise.fail () => 
+      # TODO Should show error
+      @isLoading(false) 
+      @loadFailed(true)
   
   
   parseSearchResults: (data) ->

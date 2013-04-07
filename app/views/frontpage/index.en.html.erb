@@ -1,3 +1,6 @@
+<h1><%=t 'sessions.new.heading' %></h1>
 <% unless logged_in? %>
   <%= render :partial => 'sessions/login' %>
 <% end %>
+
+<%= render :partial => 'curriculums/index' %>

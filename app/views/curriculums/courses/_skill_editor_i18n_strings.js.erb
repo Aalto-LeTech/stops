@@ -2,6 +2,8 @@
 (function() {
   /* i18n strings */
   var i18n = {
+    current_locale:                 "<%= I18n.locale %>",
+    required_locales:               ["<%= REQUIRED_LOCALES.join('","').html_safe %>"],
     competence:                     "<%= escape_javascript(t(:competence)) %>",
     scoped_course:                  "<%= escape_javascript(t(:scoped_course)) %>",
 

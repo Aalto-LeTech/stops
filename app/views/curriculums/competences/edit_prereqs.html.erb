@@ -4,12 +4,7 @@
   <%= javascript_include_tag 'curriculums/skillPrerequirementEditor' %>
 <% end %>
 
-<h1><%= @competence.localized_description.name %></h1>
-
-<ul class="nav nav-tabs">
-  <li><%= link_to t('curriculums.competences.edit_tab'), edit_curriculum_competence_path(:curriculum_id => @curriculum, :id => @competence) %></li>
-  <li class="active"><%= link_to t('curriculums.competences.prereqs_tab'), edit_prereqs_curriculum_competence_path(:curriculum_id => @curriculum, :id => @competence) %></li>
-</ul>
+<%= render :partial => 'tabs', :locals => { :active_tab => 'edit_prereqs' } %>
 
 <div class="row-fluid full-height">
 

@@ -9,7 +9,7 @@ fi:
   competence_skills_heading: "Tuottaa valmiudet"
   competence_instructions: ""
   competence_courses_heading: "Kurssit"
-  competence_edit_link: "Muokkaa osaamiskokonaisuutta"
+  competence_edit_link: "Muokkaa kompetenssia"
   competence_credits_total: "Yhteensä"
   competence_credits_added: "Suunnitelmaan lisätään"
   competence_credits_passed: "Jo suoritettu"
@@ -24,10 +24,11 @@ fi:
     competences:
       edit_tab: 'Tiedot'
       prereqs_tab: 'Osaamistavoitteet'
+      graph_tab: 'Kurssiverkko'
       show:
         graph_link: 'Kurssiverkko'
       edit:
-        heading: "Muokkaa osaamiskokonaisuutta"
+        heading: "Muokkaa kompetenssia"
         title: 'Muokkaa'
         new_outcome: "Uusi valmius"
         create_outcome_heading: "Luo uusi valmius"

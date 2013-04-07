@@ -48,7 +48,7 @@ en:
       import_csv_link: "Import using CSV data"
       change_name: "Change name"
       course_create_link: 'Create course'
-      competence_create_link: 'Create competence'
+      competence_create_link: 'Create new competence'
       course_name_not_found: "course name not available in English"
       course_code: "Code"
       course_name: "Name"

@@ -2,12 +2,18 @@
 <h1><%= @competence.name(I18n.locale) %></h1>
 
 <% if can? :update, @competence %>
-  <div class="admin-tools">
-    <ul>
+  <div class="admin-tools well">
+    <ul class="nav nav-list">
+      <li class="nav-header"><%= t :admin_toolbox_heading %></li>
       <li><%= link_to t(:competence_edit_link), edit_curriculum_competence_path(:curriculum_id => @curriculum.id, :id => @competence.id) %></li>
     </ul>
   </div>
 <% end %>
+
+<% if can? :update, @competence %>
+  <p><%= link_to t(:competence_edit_link), edit_curriculum_competence_path(:curriculum_id => @curriculum.id, :id => @competence.id), :class => 'btn btn-primary' %></p>
+<% end %>
+
 
 <p><%= @competence.description(I18n.locale) %></p>
 
@@ -30,7 +36,7 @@
 </ul>
 
 <p>
-  <%= link_to prereqs_curriculum_competence_path(:curriculum_id => @curriculum.id, :id => @competence.id) do %>
+  <%= link_to graph_curriculum_competence_path(:curriculum_id => @curriculum.id, :id => @competence.id) do %>
     <%= image_tag 'visualization-button.png' %><br />
     <%= t('.graph_link') %>
   <% end %>

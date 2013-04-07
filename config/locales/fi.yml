@@ -38,6 +38,7 @@ fi:
   Visualize: "Visualisoi"
   Course_code: "Kurssikoodi"
   course_code: "kurssikoodi"
+  admin_toolbox_heading: "Admin"
   
 
   ##############

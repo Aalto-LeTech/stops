@@ -1,11 +1,6 @@
 <% content_for :title do %><%= @competence.localized_description.name %> - <%=t '.title' %><% end %>
 
-<h1><%= @competence.localized_description.name %></h1>
-
-<ul class="nav nav-tabs">
-  <li class="active"><%= link_to t('curriculums.competences.edit_tab'), edit_curriculum_competence_path(:curriculum_id => @curriculum, :id => @competence) %></li>
-  <li><%= link_to t('curriculums.competences.prereqs_tab'), edit_prereqs_curriculum_competence_path(:curriculum_id => @curriculum, :id => @competence) %></li>
-</ul>
+<%= render :partial => 'tabs' %>
 
 <%= render :partial => 'form' %>
 

@@ -4,7 +4,10 @@
   <%= javascript_include_tag 'curriculums/skillPrerequirementEditor' %>
 <% end %>
 
-<h1><%= @course.localized_description.name %></h1>
+<h1>
+  <%= link_to @curriculum.name, edit_curriculum_path(@curriculum) %> /
+  <%= @course.localized_description.name %>
+</h1>
 
 <ul class="nav nav-tabs">
   <li><%= link_to t('curriculums.courses.edit_tab'), edit_curriculum_course_path(:curriculum_id => @curriculum, :id => @course) %></li>

@@ -34,7 +34,7 @@ Ops::Application.routes.draw do
     resources :curriculums, :constraints => { :id => /\w+/ } do
       member do
         get 'cycles'
-        get 'prereqs'
+        #get 'prereqs'
         get 'graph'
         get 'outcomes'
         get 'search_skills'
@@ -54,7 +54,7 @@ Ops::Application.routes.draw do
       resources :competences, :controller => 'curriculums/competences' do
         member do
           get 'contributors'
-          get 'prereqs'
+          get 'graph'
           post 'matrix'
           get 'edit_prereqs'
         end

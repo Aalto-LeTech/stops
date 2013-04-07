@@ -15,7 +15,7 @@ class Ability
     can :read, Competence
     can :choose, ScopedCourse
     can :read, Skill
-
+    
     # User can edit own preferences
     can [:read, :update], User, :id => user.id
 
@@ -30,12 +30,21 @@ class Ability
     end
 
     # Curriculum roles
-    can [:create_course], Curriculum do |curriculum|
+    can [:destroy, :import], Curriculum do |curriculum|
+      curriculum.has_admin?(user)
+    end
+    
+    can [:update, :create_course], Curriculum do |curriculum|
       curriculum.has_admin?(user) || curriculum.has_teacher?(user)
     end
     
-    can [:update, :destroy], Curriculum do |curriculum|
-      curriculum.has_admin?(user) || curriculum.has_teacher?(user)
+    can [:update, :destroy], Competence do |competence|
+      competence.curriculum.has_admin?(user) || competence.curriculum.has_teacher?(user)
     end
+    
+    can [:update, :destroy], ScopedCourse do |scoped_course|
+      scoped_course.curriculum.has_admin?(user) || scoped_course.curriculum.has_teacher?(user)
+    end
+    
   end
 end

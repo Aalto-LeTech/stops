@@ -65,6 +65,7 @@ class Curriculums::CompetencesController < CurriculumsController
       existing_locales = @competence.competence_descriptions << CompetenceDescription.new(:competence => @competence, :locale => locale, :name => '')
     end
     
+    render :action => :edit, :layout => 'wide'
   end
 
 
@@ -149,10 +150,10 @@ class Curriculums::CompetencesController < CurriculumsController
     @competence.refresh_prereq_courses
   end
 
-  def prereqs
+  def graph
     @competence = Competence.find(params[:id])
 
-    render :action => 'prereqs', :layout => 'fullscreen'
+    render :action => 'graph', :layout => 'wide'
   end
 end
 

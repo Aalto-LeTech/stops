@@ -804,6 +804,71 @@ div.current-user {
   color: black;
 }
 
+/********************
+  Graph
+ ********************/
+
+#layers {
+  position: relative;
+}
+
+#course-graph {
+  z-index: 2;
+  position: relative;
+  left: 0px;
+  top: 0px;
+  
+  div.competence {
+    background: #e0ffe0;
+  }
+  
+  div.course {
+    position: absolute;
+    width: 500px;
+    font-size: 11px;
+    font-family: sans-serif;
+    border: 1px solid #8080a0;
+    background: #e0e0ff;
+    -moz-border-radius: 4px;
+    padding: 2px;
+    margin: 0px;
+    cursor: pointer;
+
+    h1 {
+      font-size: 10px;
+      padding: 0px;
+      margin: 0px;
+      line-height: 20px;
+    }
+
+    ul {
+      padding: 0px;
+      margin: 0px;
+      border-bottom: 1px solid #d0d0d0;
+      border-left: 1px solid #d0d0d0;
+      border-right: 1px solid #d0d0d0;
+    }
+
+    li {
+      display: block;
+      padding: 1px;
+      margin: 0px 0px;
+      border-top: 1px solid #d0d0d0;
+      background: #f0f0ff;
+    }
+
+    li.hilight {
+      background: #c0c0ff;
+    }
+  }
+}
+
+#svg {
+  z-index: 1;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+}
 
 
 /*****************

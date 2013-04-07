@@ -51,8 +51,12 @@ GraphSkill.prototype.dfsBackward = function(drawEdges) {
         var neighbor = skill.prereqs[neighbor_index];
 
         if (neighbor.element && neighbor.course.visible) {
-          var from = skill.element.offset();
-          var to = neighbor.element.offset();
+          var from = skill.element.position();
+          var to = neighbor.element.position();
+          from.left += this.course.x;
+          from.top += this.course.y;
+          to.left += neighbor.course.x;
+          to.top += neighbor.course.y;
           this.view.createLine(from.left, from.top + skill.element.height() / 2, to.left + neighbor.element.width(), to.top + neighbor.element.height() / 2, 1, false);
         }
 
@@ -91,8 +95,12 @@ GraphSkill.prototype.dfsForward = function(drawEdges) {
         //console.log(neighbor.description);
 
         if (neighbor.element && neighbor.course.visible) {
-          var from = skill.element.offset();
-          var to = neighbor.element.offset();
+          var from = skill.element.position();
+          var to = neighbor.element.position();
+          from.left += this.course.x;
+          from.top += this.course.y;
+          to.left += this.course.x;
+          to.top += this.course.y;
           this.view.createLine(from.left + skill.element.width(), from.top + skill.element.height() / 2, to.left, to.top + neighbor.element.height() / 2, 1, false);
         }
       }

@@ -184,11 +184,13 @@ GraphCourse.prototype.setCompetence = function(value) {
 GraphCourse.prototype.setPosition = function(x, y) {
   this.x = x;
   this.y = y;
-  this.element.offset({ left: this.x, top: this.y });
+  this.element.css('left', this.x);
+  this.element.css('top', this.y);
 }
 
 GraphCourse.prototype.updatePosition = function() {
-  this.element.offset({ left: this.x, top: this.y });
+  this.element.css('left', this.x);
+  this.element.css('top', this.y);
 }
 
 GraphCourse.prototype.click = function() {

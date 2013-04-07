@@ -45,6 +45,8 @@ fi:
         credits: 'Opintopisteet'
       edit_prereqs:
         edit_course_heading: 'Edit course'
+      
+      skill_editor:
         prereqs_heading: 'Esitiedot'
         outcomes_heading: 'Oppimistavoitteet'
         add_skill: 'Lisää valmius'

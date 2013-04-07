@@ -30,8 +30,7 @@
 <% unless @curriculum.competences.empty?  %>
   <ul>
     <% @curriculum.competences.each do |competence| %>
-      <li><%= link_to t('.edit_competence_prefix') + ': ' + competence.localized_description.name, edit_curriculum_competence_path(:curriculum_id => @curriculum, :id => competence) %></li>
-      
+      <li><%= link_to t('.edit_competence_prefix') + ': ' + competence.localized_description.name, edit_prereqs_curriculum_competence_path(:curriculum_id => @curriculum, :id => competence) %></li>
     <% end %>
   </ul>
 <% else %>
@@ -69,7 +68,7 @@
             <%= link_to course.course_code, edit_curriculum_course_path(:curriculum_id => @curriculum, :id => course) %>
           </td>
           <td>
-            <%= link_to course.localized_description.name.presence || ('<' + t('.course_name_not_found') + '>'), edit_curriculum_course_path(:curriculum_id => @curriculum, :id => course) %>
+            <%= link_to course.localized_description.name.presence || ('<' + t('.course_name_not_found') + '>'), edit_prereqs_curriculum_course_path(:curriculum_id => @curriculum, :id => course) %>
           </td>
           <td class="centered"><%= course.credits %></td>
           <!--

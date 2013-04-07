@@ -46,6 +46,8 @@ fi:
       edit_prereqs:
         title: 'Aseta esitiedot'
         edit_course_heading: 'Edit course'
+      
+      skill_editor:
         prereqs_heading: 'Esitiedot'
         outcomes_heading: 'Osaamistavoitteet'
         add_skill: 'Lisää osaamistavoite'
@@ -54,6 +56,12 @@ fi:
         supportingPrereqButton: 'Tukeva'
         strictPrereqButton: 'Välttämätön'
         search_box_placeholder: 'Haku'
+        # Confirm skill deletion modal
+        deletion_confirmation_question: "Oletko varma, että haluat poistaa valmiuden"
+        delete_skill: "Poista valmius"
+        load_failed_heading: "Lataus epäonnistui!"
+        search_failure_message: "Tietoja ei pystytty lataamaan. Ole hyvä ja kokeile myöhemmin uudestaan."
+        node_load_failure_message: "Muokattavan kurssin tietoja ei pystytty lataamaan. Ole hyvä ja kokeile myöhemmin uudestaan."
       edit:
         heading: 'Kurssin tiedot'
         hint: 'Voit täyttää osan lomakkeesta ja jatkaa myöhemmin (muista kuitenkin painaa "Tallenna" lomakkeen lopussa).'

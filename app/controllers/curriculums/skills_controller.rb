@@ -84,7 +84,7 @@ class Curriculums::SkillsController < CurriculumsController
   # DELETE /curriculums/:curriculum_id/skills/:id
   def destroy
     authorize! :update, @curriculum
-    
+
     @skill = Skill.find(params[:id])
     @skill.destroy
 

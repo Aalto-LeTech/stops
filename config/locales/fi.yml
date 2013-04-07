@@ -93,3 +93,10 @@ fi:
       taken: "on varattu"
       too_short: "on liian lyhyt"
       confirmation: "ei täsmää"
+
+  ###############
+  # General terms
+  ###############
+
+  competence: "Kompetenssi"
+  scoped_course: "Kurssi"

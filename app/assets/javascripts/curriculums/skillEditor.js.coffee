@@ -1,6 +1,24 @@
 #= require knockout-2.2.1
 #= require underscore-min
 
+# Check that i18n strings have been loaded before this file
+if not O4.skillEditor.i18n
+  throw "skillEditor i18n strings have not been loaded!"
+
+
+ko.bindingHandlers.showModal =
+  init: (element, valueAccessor) ->
+    # Make sure the modal stays hidden once closed
+    $(element).on 'hide', () ->
+      valueAccessor()(false)
+
+  update: (element, valueAccessor) ->
+    value = valueAccessor()
+    if ko.utils.unwrapObservable(value)
+        $(element).modal('show')
+    else 
+        $(element).modal('hide')
+
 class Node
   constructor: (@editor, data) ->
     if data['scoped_course']
@@ -18,24 +36,23 @@ class Node
     @code = data['course_code']
     @descriptions = ko.observableArray()
     @localizedName = ko.observable('untitled')
-    
+    @localizedType = O4.skillEditor.i18n[@type]
+
     if data['skills']
       for skill in data['skills']
         @skills.push(new Skill(@editor, this, skill))
 
     if data['course_descriptions']
-      for description in data['course_descriptions']
-        d = new LocalizedDescription(@editor, description)
-        @descriptions.push(d)
-        if d.locale == window.currentLocale
-          @localizedName(d.name())
-    if data['competence_descriptions']
-      for description in data['competence_descriptions']
-        d = new LocalizedDescription(@editor, description)
-        @descriptions.push(d)
-        if d.locale == window.currentLocale
-          @localizedName(d.description())
+      descriptionsAsJSON = data['course_descriptions']
+    else if data['competence_descriptions']
+      descriptionsAsJSON = data['competence_descriptions']
 
+    # Load descriptions
+    for description in descriptionsAsJSON
+      d = new LocalizedDescription(@editor, description)
+      @descriptions.push(d)
+      @localizedName(d.name()) if d.locale == O4.skillEditor.i18n['current_locale']
+    
 
 class Skill
   constructor: (@editor, node, data) ->
@@ -61,14 +78,27 @@ class Skill
     @id = data['id']
     @descriptions.removeAll()
     
+    missingLocales = {}
+    for locale in O4.skillEditor.i18n['required_locales']
+      missingLocales[locale] = true
+
+    # Load descriptions
     for description in data['skill_descriptions']
       d = new LocalizedDescription(@editor, description)
       @descriptions.push(d)
-      @localizedDescription(d.description()) if d.locale == window.currentLocale
+      @localizedDescription(d.description()) if d.locale == O4.skillEditor.i18n['current_locale']
+      delete missingLocales[description['locale']]    
+
+    # Add descriptions for missing locales
+    for locale, value of missingLocales
+      @descriptions.push(new LocalizedDescription(@editor, {locale: locale}))
+      
 
     if data['skill_prereqs']
       for prereq in data['skill_prereqs']
         @prereqIds[prereq['prereq_id']] = prereq['requirement']
+
+    
 
   dispose: () ->
     # Make sure computed prereqType doesn't leak memory
@@ -97,11 +127,13 @@ class Skill
         success: (data) =>
           this.update(data['skill'])
 
+  # Remove the node of the skill if the skill is the last prerequirement 
   conditionallyRemoveFromPrereqs: (skill) ->
     prereqNodes = @editor._currentPrereqNodes()
     prereqFound = false
     for skill in prereqNodes[skill.node.id].skills()
-      if @prereqIds[skill.id]
+      value = @prereqIds[skill.id]
+      if value == 1 || value == 0
         prereqFound = true
     if not prereqFound
       delete prereqNodes[skill.node.id]
@@ -152,7 +184,7 @@ class Skill
   removePrereq: (skill) ->
     # Save state in case we need to rollback
     savedState = @prereqIds[skill.id]
-    @prereqIds[skill.id] = false
+    delete @prereqIds[skill.id]
     @conditionallyRemoveFromPrereqs(skill)
     @editor._currentPrereqIds.valueHasMutated()
     @editor._currentPrereqNodes.valueHasMutated()
@@ -212,6 +244,7 @@ class Skill
     targetSkill = @editor.currentlyEditedSkill()
     unless targetSkill
       # TODO: show a hint
+      console.log("togglePrereq: Returning without doing anything since there is no currently edited skill")
       return
     
     # If this is already a prereq, remove it
@@ -230,14 +263,29 @@ class Skill
   
   
   clickDelete: () ->
+    # Make sure this skill is selected
+    @clickSelectTarget()
+    @editor.showDeletionConfirmationModal(true)
+
+  clickConfirmDeletion: () ->
     return unless @id
   
-    $.ajax
+    @editor.showDeletionConfirmationModal(false)
+
+    promise = $.ajax
       type: "DELETE",
-      url: @editor.curriculumUrl + '/skills/' + @id,
-      dataType: 'json'
+      url: @editor.curriculumUrl + '/skills/' + @id
     
-    @node.skills.remove(this)
+    promise.done () =>
+      # Finally update view
+      @node.skills.remove(this)
+
+    promise.fail (jqXHR, textStatus, error) =>
+      # TODO Failures should be handled
+      console.log("Skill deletion failed!")
+
+  generateDeletionConfirmationString: () ->
+    O4.skillEditor.i18n['deletion_confirmation_question'] + " \"#{@localizedDescription()}\"?"
   
 
 class LocalizedDescription
@@ -246,6 +294,7 @@ class LocalizedDescription
     @locale = data['locale']
     @name = ko.observable(data['name'] || '')
     @description = ko.observable(data['description'] || '')
+    @localizedLocale = O4.skillEditor.i18n['language_in_' + @locale]
 
   toJson: () ->
     return false if @description().length < 1 && @name().length < 1
@@ -262,6 +311,9 @@ class CompetenceSkillEditor
   constructor: () ->
     @searchString = ko.observable('')
     @searchResults = ko.observableArray()
+    @isLoading = ko.observable(false)
+    @loadFailed = ko.observable(false)
+    @targetNodeLoadFailed = ko.observable(false)
     # Internal lookup table to check if a CompetenceNode has skills as prerequirement
     @_currentPrereqNodes = ko.observable({})
     # Internal lookup table from which skill prereq states are computed automatically
@@ -277,9 +329,8 @@ class CompetenceSkillEditor
       else
         return @searchResults()  
     
-    
-    
     @modalDiv = $('#modal-edit-skill')
+    @showDeletionConfirmationModal = ko.observable(false)
     @currentlyEditedSkill = ko.observable()    # Skill under editing
     
     window.currentLocale = @modalDiv.data('current-locale')
@@ -289,6 +340,7 @@ class CompetenceSkillEditor
     $targetNode = $('#target-node')
     @nodeUrl = $targetNode.data('url')
     @nodeId = $targetNode.data('node-id')
+    @targetNodeIsLoading = ko.observable(true)
   
     @node = ko.observable()
     ko.applyBindings(this)
@@ -298,11 +350,18 @@ class CompetenceSkillEditor
   
   loadNode: () ->
     
-    $.ajax
+    promise = $.ajax
       url: @nodeUrl,
-      dataType: 'json',
-      success: (data) =>
-        @node(new Node(this, data))
+      dataType: 'json'
+        
+    promise.done (data) =>
+      @targetNodeIsLoading(false)
+      @targetNodeLoadFailed(false)
+      @node(new Node(this, data))
+
+    promise.fail () =>
+      @targetNodeIsLoading(false)
+      @targetNodeLoadFailed(true)
 
   setCurrentlyEditedSkill: (skill) ->
     @currentlyEditedSkill(skill)
@@ -312,9 +371,18 @@ class CompetenceSkillEditor
 
 
   updateCurrentPrereqNodes: () ->
-    _.each @_currentPrereqNodes(), (node) ->
+    currentPrereqs = @_currentPrereqNodes()
+    # Current prereq Nodes that are also in the search results must not be included in
+    # the skill disposal below. 
+    _.each @searchResults(), (node) ->
+      if currentPrereqs[node.id]
+        delete currentPrereqs[node.id]
+
+    _.each currentPrereqs, (node) ->
       _.each node.skills(), (skill) ->
         skill.dispose()
+
+    @isLoading(true)
 
     @_currentPrereqNodes({})
     promise = $.ajax
@@ -324,6 +392,9 @@ class CompetenceSkillEditor
         ids: _.keys(@currentlyEditedSkill().prereqIds)
 
     promise.done (data) => 
+      @isLoading(false)
+      @loadFailed(false)
+
       # FIXME: Seems that data can be null. Is that a problem?
       unless data
         console.log "CompetenceSkillEditor::updateCurrentPrereqNodes() called with null. Check this."
@@ -342,16 +413,29 @@ class CompetenceSkillEditor
 
     promise.fail (jqXHR, textStatus, error) =>
       # TODO What to do when request fails?
+      @isLoading(false)
+      @loadFailed(true)
+
     
   
   clickSearch: () ->
-    $.ajax
+    @isLoading(true)
+
+    promise = $.ajax
       url: @curriculumUrl + '/search_skills'
       dataType: 'json'
       data: 
         q: @searchString()
         exclude: @nodeId 
-      success: (data) => this.parseSearchResults(data)
+
+    promise.done (data) => 
+      @isLoading(false)
+      @loadFailed(false)
+      this.parseSearchResults(data)
+    promise.fail () => 
+      # TODO Should show error
+      @isLoading(false) 
+      @loadFailed(true)
   
   
   parseSearchResults: (data) ->
@@ -401,7 +485,6 @@ class CompetenceSkillEditor
   openSkillEditor: (skill) ->
     @currentlyEditedSkill(skill)
     @modalDiv.modal('show')
-  
 
   # Click save in the modal skill editor
   clickSaveSkill: () ->

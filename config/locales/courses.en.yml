@@ -45,6 +45,8 @@ en:
       edit_prereqs:
         title: 'Set prerequisites'
         edit_course_heading: 'Edit course'
+      
+      skill_editor:
         prereqs_heading: 'Prerequisites'
         outcomes_heading: 'Learning outcomes'
         add_skill: 'Add outcome'
@@ -53,3 +55,9 @@ en:
         supportingPrereqButton: 'Supporting'
         strictPrereqButton: 'Mandatory'
         search_box_placeholder: "Search"
+        # Confirm skill deletion modal
+        deletion_confirmation_question: 'Are you sure you want to remove skill'
+        delete_skill: "Delete skill"
+        load_failed_heading: "Load failed!"
+        search_failure_message: "Failed to load content. Please try again later."
+        node_load_failure_message: "Failed to load target course for editing. Please try again later."

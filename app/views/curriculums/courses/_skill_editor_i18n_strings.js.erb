@@ -1,0 +1,21 @@
+/* Loads translated i18n strings used by skillEditor.js.coffee */
+(function() {
+  /* i18n strings */
+  var i18n = {
+    current_locale:                 "<%= I18n.locale %>",
+    required_locales:               ["<%= REQUIRED_LOCALES.join('","').html_safe %>"],
+    competence:                     "<%= escape_javascript(t(:competence)) %>",
+    scoped_course:                  "<%= escape_javascript(t(:scoped_course)) %>",
+
+    language_in_fi:                 "<%= escape_javascript(t(:language_in_fi)) %>",
+    language_in_sv:                 "<%= escape_javascript(t(:language_in_sv)) %>",
+    language_in_en:                 "<%= escape_javascript(t(:language_in_en)) %>",
+
+    deletion_confirmation_question: "<%= escape_javascript(t('curriculums.courses.skill_editor.deletion_confirmation_question')) %>"
+  };
+
+  /* Translations available at O4.skillEditor.i18n */ 
+  var O4 = window.O4 = window.O4 || {};
+  O4.skillEditor = O4.skillEditor || {};
+  O4.skillEditor.i18n = i18n;
+})();

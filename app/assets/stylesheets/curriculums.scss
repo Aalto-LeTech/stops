@@ -126,4 +126,16 @@ $new-course-box-font-color: #24765C;
   padding: 5px 0 0;
 }
 
+/*
+ *  Skill Editor
+ */
+
+// 24px wide (progress.gif)
+.skill-editor-loading-icon {
+  img {
+    position:     relative;
+    left:         50%;
+    margin-left:  -12px; 
+  }
+}
 

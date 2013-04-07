@@ -54,6 +54,8 @@ class CurriculumsController < ApplicationController
   def edit
     load_curriculum_for_show_and_edit
     authorize! :update, @curriculum
+    
+    @courses = ScopedCourse.where(:curriculum_id => @curriculum.id).joins(:course_descriptions).includes(:localized_description).where(:course_descriptions => { :locale => I18n.locale }).order('course_code, name')
   end
 
   # GET /curriculums/1/edit/import_csv

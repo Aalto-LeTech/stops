@@ -49,7 +49,7 @@
 <!-- Create course -->
 <h2><%= t 'curriculums.courses_heading' %></h2>
 
-<% unless @curriculum.courses.empty? %>
+<% unless @courses.empty? %>
   <table id="curriculum-courses">
     <thead>
       <tr>
@@ -63,7 +63,7 @@
       </tr>
     </thead>
     <tbody>
-      <% @curriculum.courses.each_with_index do |course, i| %>
+      <% @courses.each_with_index do |course, i| %>
         <tr class="<%= i % 2 == 0 ? 'even' : 'odd' %>">
           <td>
             <%= link_to course.course_code, edit_curriculum_course_path(:curriculum_id => @curriculum, :id => course) %>
@@ -73,8 +73,8 @@
           </td>
           <td class="centered"><%= course.credits %></td>
           <!--
-          <td class="centered"><%= course.periods_as_roman_numerals.join(", ") %></td>
-          <td class="centered"><%= course.strict_prereqs.size %></td>
+          <td class="centered">< course.periods_as_roman_numerals.join(", ") ></td>
+          <td class="centered">< course.strict_prereqs.size ></td>
           -->
         </tr>
       <% end %>

@@ -1,6 +1,11 @@
 <head>
     <meta charset="UTF-8">
-    <title><%= content_for?(:title) ? yield(:title) : 'O4' %></title>
+    <title>
+      <% if content_for?(:title) -%>
+        <%=  yield(:title) %> -
+      <% end -%>
+      O4
+    </title>
     <%= csrf_meta_tag %>
     <%= stylesheet_link_tag "application", :media => 'all' %>
     <%= stylesheet_link_tag 'print', :media => 'print' %>

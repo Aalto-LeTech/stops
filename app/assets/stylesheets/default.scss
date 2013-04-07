@@ -1004,22 +1004,19 @@ table.course-list tr.total td {
  *********************/
 
 .shibboleth-login {
+  margin-bottom: 4em;
   a {
+    padding: 1em 2em;
     font-weight: bold;
-    text-decoration: none;
-    font-family: sans-serif;
-    border: 2px solid black;
-    padding: 1em;
     @include border-radius(20px);
   }
   
   p {
-    margin-bottom: 40px;
+    margin-bottom: 20px;
   }
 }
 
 .traditional-login {
-  margin-top: 6em;
   color: gray;
 
   a {

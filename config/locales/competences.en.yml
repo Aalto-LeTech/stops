@@ -27,6 +27,7 @@ en:
         graph_link: 'Show course graph'
       edit:
         heading: "Editing competences"
+        title: 'Edit'
         new_outcome: "New outcome"
         create_outcome_heading: "Create a new outcome"
         create_outcome_help_text: "Please enter the skill description in all required languages."
@@ -37,9 +38,12 @@ en:
         create_outcome_saving: "Saving..."
       edit_prereqs:
         edit_course_heading: 'Edit competence'
+        title: 'Set prerequisites'
         prereqs_heading: 'Prerequisites'
         outcomes_heading: 'Learning outcomes'
         add_skill: 'Add outcome'
+        remove_skill: 'Delete outcome'
+        edit_skill: 'Edit outcome'
         supportingPrereqButton: 'Supporting'
         strictPrereqButton: 'Mandatory'
       new:

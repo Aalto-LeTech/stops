@@ -3,6 +3,12 @@
     <title>
       <% if content_for?(:title) -%>
         <%=  yield(:title) %> -
+      <% elsif @scoped_course && @scoped_course.localized_description %>
+        <%= @scoped_course.localized_description.name %> -
+      <% elsif @competence && @competence.localized_description %>
+        <%= @competence.localized_description.name %> -
+      <% elsif @curriculum %>
+        <%= @curriculum.name %> -
       <% end -%>
       O4
     </title>

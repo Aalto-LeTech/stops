@@ -28,6 +28,7 @@ fi:
         graph_link: 'Kurssiverkko'
       edit:
         heading: "Muokkaa osaamiskokonaisuutta"
+        title: 'Muokkaa'
         new_outcome: "Uusi valmius"
         create_outcome_heading: "Luo uusi valmius"
         create_outcome_help_text: "Syötä valmiuden kuvaus kaikilla pyydetyillä kielillä."
@@ -38,9 +39,12 @@ fi:
         create_outcome_saving: "Tallennetaan..."
       edit_prereqs:
         edit_course_heading: 'Muokkaa kompetenssia'
+        title: 'Aseta esitiedot'
         prereqs_heading: 'Esitiedot'
-        outcomes_heading: 'Oppimistavoitteet'
-        add_skill: 'Lisää valmius'
+        outcomes_heading: 'Osaamistavoitteet'
+        add_skill: 'Lisää osaamistavoite'
+        remove_skill: 'Poista osaamistavoite'
+        edit_skill: 'Muokkaa osaamistavoitetta'
         supportingPrereqButton: 'Tukeva'
         strictPrereqButton: 'Välttämätön'
       new:

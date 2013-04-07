@@ -1,3 +1,5 @@
+<% content_for :title do %><%= @competence.localized_description.name %> - <%=t '.title' %><% end %>
+
 <% content_for :javascript do %>
   <%= javascript_include_tag 'curriculums/skillPrerequirementEditor' %>
 <% end %>

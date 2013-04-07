@@ -44,6 +44,7 @@ fi:
       temp_courses_hint: "Klikkaa kurssiasi listasta ja anna pyydetyt tiedot. Jos kurssia ei löydy listasta, luo uusi painamalla 'Luo kurssi'-nappulaa."
       create_temp_course: "Luo kurssi"
     edit:
+      title: 'Muokkaa'
       additional_tools_heading: "Lisätoiminnot"
       import_csv_link: "Tuo tiedot CSV-tiedostosta"
       change_name: "Nimeä uudelleen"

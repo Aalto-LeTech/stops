@@ -35,7 +35,8 @@ GraphSkill.prototype.click = function(event) {
 GraphSkill.prototype.dfsBackward = function(drawEdges) {
   // Run DFS
   var stack = [this];
-
+  var level = 0;
+  
   while (stack.length > 0) {
     var skill = stack.pop();
     // Hilight node
@@ -67,8 +68,14 @@ GraphSkill.prototype.dfsBackward = function(drawEdges) {
 
     // Add neighbors to stack
     for (var array_index in skill.prereqs) {
-      stack.push(skill.prereqs[array_index]);
+      var neighbor = skill.prereqs[array_index];
+      stack.push(neighbor);
+      
+      if (level == 0) {
+        neighbor.element.addClass('hilight-strong');
+      }
     }
+    level++;
   }
 }
 

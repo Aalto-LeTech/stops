@@ -860,6 +860,11 @@ div.current-user {
     li.hilight {
       background: #c0c0ff;
     }
+    
+    li.hilight-strong {
+      background: #b0b0ff;
+      text-decoration: underline;
+    }
   }
   
   div.competence {

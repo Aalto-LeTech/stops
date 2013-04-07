@@ -257,7 +257,7 @@ var skillGraphView = {
   },
 
   resetHilights: function() {
-    $('#course-graph li').removeClass('hilight');
+    $('#course-graph li').removeClass('hilight').removeClass('hilight-strong');
     this.paper.clear();
   },
 

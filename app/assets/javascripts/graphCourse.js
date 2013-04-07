@@ -32,16 +32,22 @@ GraphLevel.prototype.setYindicesBackwards = function() {
   // Set each course to the barycenter of the forward neighbors
   for (var course_index in this.courses) {
     var course = this.courses[course_index];
+    if (!course.visible) {
+      continue;
+    }
+    
     var visibleNeighbors = 0;
 
     // Calculate average of the y coordinates of the forward neighbor
     var y = 0.0;
     for (var neighbor_index in course.prereqTo) {
       var neighbor = course.prereqTo[neighbor_index];
-      if (neighbor.visible) {
-        y += neighbor.y;
-        visibleNeighbors++;
+      if (!neighbor.visible) {
+        continue;
       }
+      
+      y += neighbor.y;
+      visibleNeighbors++;
     }
 
     if (course.prereqTo.length > 0) {
@@ -58,6 +64,10 @@ GraphLevel.prototype.setYindicesForward = function() {
   // Set each course to the barycenter of the backward neighbors
   for (var course_index in this.courses) {
     var course = this.courses[course_index];
+    if (!course.visible) {
+      continue;
+    }
+    
     var visibleNeighbors = 0;
 
     //console.log("Positioning " + course.name);
@@ -66,10 +76,12 @@ GraphLevel.prototype.setYindicesForward = function() {
     var y = 0.0;
     for (var neighbor_index in course.prereqs) {
       var neighbor = course.prereqs[neighbor_index];
-      if (neighbor.visible) {
-        y += neighbor.y;
-        visibleNeighbors++;
+      if (!neighbor.visible) {
+        continue;
       }
+      
+      y += neighbor.y;
+      visibleNeighbors++;
     }
     //console.log("Sum = " + y);
 
@@ -107,6 +119,7 @@ function GraphCourse(id, code, name) {
   this.course_code = code;
   this.name = name;
   this.isCompetence = false;
+  this.cyclic = false;
 
   this.level = 0;
   this.x = 0;
@@ -155,7 +168,13 @@ GraphCourse.prototype.getElement = function(view) {
     return this.element;
   }
 
-  var cssClass = this.isCompetence ? ' competence' : ''
+  var cssClass = this.isCompetence ? ' competence' : '';
+  
+  if (this.cyclic) {
+    cssClass += ' cyclic';
+    this.name += "<br />(cyclic prerequisites!)";
+  }
+  
   var div = $('<div class="course' + cssClass + '"><h1>' + this.course_code + ' ' + this.name + '</h1></div>');
   div.click($.proxy(this.click, this));
   this.view = view;
@@ -206,4 +225,49 @@ GraphCourse.prototype.click = function() {
   }
 
   this.view.resetVisitedSkills();
+}
+
+GraphCourse.prototype.dfs = function(direction, level, callback) {
+  // Visit
+  //console.log("Visit " + this.name + ", level " + level);
+  this.visited = true;
+  if (callback) {
+    callback(this, level);
+  }
+  
+  // Visit neighbors
+  var container, nextLevel;
+  if (direction == 'forward') {
+    container = this.prereqTo;
+    nextLevel = level + 1;
+  } else {
+    container = this.prereqs;
+    nextLevel = level - 1;
+  }
+  
+  for (var neighbor_index in container) {
+    var neighbor = container[neighbor_index];
+    
+    // Detect cycles
+    if (neighbor.visited) {
+      //console.log("there is a cycle between "+this.name+" and "+neighbor.name);
+      this.setCyclic(true);
+      neighbor.setCyclic(true);
+      continue;
+    }
+    
+    neighbor.dfs(direction, nextLevel, callback);
+  }
+  
+  // Backtrack
+  this.visited = false;
+  
+}
+
+GraphCourse.prototype.setCyclic = function(new_value) {
+  this.cyclic = new_value;
+  
+  if (new_value) {
+    
+  }
 }

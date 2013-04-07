@@ -57,6 +57,7 @@ GraphSkill.prototype.dfsBackward = function(drawEdges) {
           from.top += this.course.y;
           to.left += neighbor.course.x;
           to.top += neighbor.course.y;
+          
           this.view.createLine(from.left, from.top + skill.element.height() / 2, to.left + neighbor.element.width(), to.top + neighbor.element.height() / 2, 1, false);
         }
 
@@ -99,8 +100,8 @@ GraphSkill.prototype.dfsForward = function(drawEdges) {
           var to = neighbor.element.position();
           from.left += this.course.x;
           from.top += this.course.y;
-          to.left += this.course.x;
-          to.top += this.course.y;
+          to.left += neighbor.course.x;
+          to.top += neighbor.course.y;
           this.view.createLine(from.left + skill.element.width(), from.top + skill.element.height() / 2, to.left, to.top + neighbor.element.height() / 2, 1, false);
         }
       }

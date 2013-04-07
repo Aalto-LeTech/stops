@@ -47,6 +47,8 @@ en:
         edit_skill: 'Edit outcome'
         supportingPrereqButton: 'Supporting'
         strictPrereqButton: 'Mandatory'
+      graph:
+        title: 'Course graph'
       new:
         create_competence_heading: 'Create competence'
       form:

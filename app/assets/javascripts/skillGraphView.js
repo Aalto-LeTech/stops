@@ -146,6 +146,13 @@ var skillGraphView = {
       skill.visited = false;
     }
   },
+  
+  resetVisitedCourses: function() {
+    for (var array_index in this.courses) {
+      var course = this.courses[array_index];
+      course.visited = false;
+    }
+  },
 
   initializeVisualization: function(courseId) {
     var targetCourse = this.courses[courseId];
@@ -155,80 +162,36 @@ var skillGraphView = {
 
     //this.attachCourse(targetCourse);
 
-
+    
     // Run through course graph with DFS to find out which courses are visible
-    //var levels = [targetCourse, {}];
-    var courses = {};
-    var stack = [targetCourse];
-
-    while (stack.length > 0) {
-      var course = stack.pop();
-
-      if (course.visited) {
-        continue;
+    // and to assign level numbers
+    var minLevel = 0;
+    var maxLevel = 0;
+    
+    targetCourse.dfs('backward', 0, function(course, level) {
+      course.visible = true
+      if (level < course.level) {
+        course.level = level;
       }
-
-      // Visit node
-      //levels[1][course.id] = course;
-      courses[course.id] = course;
-      course.visible = true;
-      course.visited = true;
-
-      // Add neighbors to stack
-      for (var array_index in course.prereqs) {
-        stack.push(course.prereqs[array_index]);
+      if (course.level < minLevel) {
+        minLevel = course.level;
       }
-    }
-
-    // DFS forward
-    stack = [targetCourse];
-    targetCourse.visited = false;
-    while (stack.length > 0) {
-      var course = stack.pop();
-
-      if (course.visited) {
-        continue;
+    });
+    targetCourse.dfs('forward', 0, function(course, level) {
+      course.visible = true
+      if (level > course.level) {
+        course.level = level;
       }
-
-      // Visit node
-      //levels[1][course.id] = course;
-      courses[course.id] = course;
-      course.visible = true;
-      course.visited = true;
-
-      // Add neighbors to stack
-      for (var array_index in course.prereqTo) {
-        stack.push(course.prereqTo[array_index]);
+      if (course.level > maxLevel) {
+        maxLevel = course.level;
       }
-    }
-
-    // Assign levels
-    var level = 0;
-    var nextLevel;
-
-    do {
-      nextLevel = false;
-
-      // Iterate through every course in the level. Push its prereqs to the next level.
-      for (var array_index in courses) {
-        var course = courses[array_index];
-
-        if (course.level == level) {
-          for (var array_index2 in course.prereqs) {
-            course.prereqs[array_index2].level = level + 1;
-            nextLevel = true;
-          }
-        }
-      }
-
-      level++;
-    } while(nextLevel);
+    });
 
 
     // Create levels
-    var levels = level;
-    this.levels = Array(levels);
-    for (var i = 0; i < levels; i++) {
+    var levelCount = maxLevel - minLevel;
+    this.levels = Array(levelCount);
+    for (var i = 0; i < levelCount; i++) {
       var level = new GraphLevel(i);
       this.levels[i] = level;
     }
@@ -237,12 +200,21 @@ var skillGraphView = {
     // Add courses to levels and the view
     var levelWidth = 600;
 
-    for (var array_index in courses) {
-      var course = courses[array_index];
+    for (var array_index in this.courses) {
+      var course = this.courses[array_index];
+      course.level -= minLevel + 1;  // Update course level numbers so that they start from zero
+      
+      if (!course.visible) {
+        continue;
+      }
+      
       this.attachCourse(course);
-      this.levels[course.level].addCourse(course);
+      level = this.levels[course.level];
+      if (level) {
+        level.addCourse(course);
+      }
 
-      var x = (levels - 1 - course.level) * levelWidth;
+      var x = course.level * levelWidth;
       var y = 0;
       course.setPosition(x, y);
     }
@@ -260,21 +232,24 @@ var skillGraphView = {
       this.levels[level_index].maxHeight = maxHeight;
     }
 
-    targetCourse.y = (maxHeight + targetCourse.getElement(this).height()) / 2
+    targetCourse.y = (maxHeight + targetCourse.getElement(this).height()) / 2;
 
 
     // Set Y indices
-    for (var level_index = targetCourse.level; level_index < this.levels.length; level_index++) {
+    for (var level_index = 0; level_index < this.levels.length; level_index++) {
       this.levels[level_index].setYindicesBackwards();
     }
 
-    for (var level_index = targetCourse.level - 1; level_index >= 0; level_index--) {
+    for (var level_index = this.levels.length - 1; level_index >= 0; level_index--) {
       this.levels[level_index].setYindicesForward();
     }
 
     // Updating positions
-    for (var course_index in courses) {
-      var course = courses[course_index];
+    for (var course_index in this.courses) {
+      var course = this.courses[course_index];
+      if (!course.visible) {
+        continue;
+      }
       course.updatePosition();
     }
 

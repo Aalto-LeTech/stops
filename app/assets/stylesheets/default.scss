@@ -818,10 +818,6 @@ div.current-user {
   left: 0px;
   top: 0px;
   
-  div.competence {
-    background: #e0ffe0;
-  }
-  
   div.course {
     position: absolute;
     width: 500px;
@@ -861,7 +857,16 @@ div.current-user {
       background: #c0c0ff;
     }
   }
+  
+  div.competence {
+    background: #e0ffe0;
+  }
+  
+  div.cyclic {
+    background: #ffe0e0;
+  }  
 }
+
 
 #svg {
   z-index: 1;

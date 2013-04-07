@@ -48,6 +48,8 @@ fi:
         edit_skill: 'Muokkaa osaamistavoitetta'
         supportingPrereqButton: 'Tukeva'
         strictPrereqButton: 'Välttämätön'
+      graph:
+        title: 'Kurssiverkko'
       new:
         create_competence_heading: 'Luo kompetenssi'
       form:

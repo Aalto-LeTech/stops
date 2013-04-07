@@ -48,7 +48,7 @@ class Curriculums::CompetencesController < CurriculumsController
               }
             },
             :competence_descriptions => {
-              :only => [:id, :locale, :description]
+              :only => [:id, :locale, :name]
             }
         }
       )}

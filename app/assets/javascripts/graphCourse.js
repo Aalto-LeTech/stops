@@ -70,8 +70,6 @@ GraphLevel.prototype.setYindicesForward = function() {
     
     var visibleNeighbors = 0;
 
-    //console.log("Positioning " + course.name);
-
     // Calculate average of the y coordinates of the backward neighbor
     var y = 0.0;
     for (var neighbor_index in course.prereqs) {

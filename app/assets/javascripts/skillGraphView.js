@@ -134,7 +134,6 @@ var skillGraphView = {
         if (prereq) {
           skill.addPrereq(prereq);
           skill.course.addPrereq(prereq.course)
-          // console.log(prereq.course.name + " is prereq of " + skill.course.name);
         }
       }
     }
@@ -169,7 +168,7 @@ var skillGraphView = {
     var maxLevel = 0;
     
     targetCourse.dfs('backward', 0, function(course, level) {
-      course.visible = true
+      course.visible = true;
       if (level < course.level) {
         course.level = level;
       }
@@ -178,7 +177,7 @@ var skillGraphView = {
       }
     });
     targetCourse.dfs('forward', 0, function(course, level) {
-      course.visible = true
+      course.visible = true;
       if (level > course.level) {
         course.level = level;
       }
@@ -189,7 +188,7 @@ var skillGraphView = {
 
 
     // Create levels
-    var levelCount = maxLevel - minLevel;
+    var levelCount = maxLevel - minLevel + 1;
     this.levels = Array(levelCount);
     for (var i = 0; i < levelCount; i++) {
       var level = new GraphLevel(i);
@@ -202,7 +201,7 @@ var skillGraphView = {
 
     for (var array_index in this.courses) {
       var course = this.courses[array_index];
-      course.level -= minLevel + 1;  // Update course level numbers so that they start from zero
+      course.level -= minLevel;  // Update course level numbers so that they start from zero
       
       if (!course.visible) {
         continue;

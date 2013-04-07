@@ -53,12 +53,12 @@ GraphSkill.prototype.dfsBackward = function(drawEdges) {
         if (neighbor.element && neighbor.course.visible) {
           var from = skill.element.position();
           var to = neighbor.element.position();
-          from.left += this.course.x;
-          from.top += this.course.y;
-          to.left += neighbor.course.x;
-          to.top += neighbor.course.y;
           
-          this.view.createLine(from.left, from.top + skill.element.height() / 2, to.left + neighbor.element.width(), to.top + neighbor.element.height() / 2, 1, false);
+          this.view.createLine(
+            from.left + skill.course.x,
+            from.top + skill.course.y + skill.element.height() / 2,
+            to.left + neighbor.course.x + neighbor.element.width(),
+            to.top + neighbor.course.y + neighbor.element.height() / 2, 1, false);
         }
 
         skill.visited = true;
@@ -66,11 +66,9 @@ GraphSkill.prototype.dfsBackward = function(drawEdges) {
     }
 
     // Add neighbors to stack
-    //console.log("starting stack");
     for (var array_index in skill.prereqs) {
       stack.push(skill.prereqs[array_index]);
     }
-    //console.log("ending stack");
   }
 }
 
@@ -93,16 +91,15 @@ GraphSkill.prototype.dfsForward = function(drawEdges) {
       for (var neighbor_index in skill.prereqTo) {
         var neighbor = skill.prereqTo[neighbor_index];
 
-        //console.log(neighbor.description);
-
         if (neighbor.element && neighbor.course.visible) {
           var from = skill.element.position();
           var to = neighbor.element.position();
-          from.left += this.course.x;
-          from.top += this.course.y;
-          to.left += neighbor.course.x;
-          to.top += neighbor.course.y;
-          this.view.createLine(from.left + skill.element.width(), from.top + skill.element.height() / 2, to.left, to.top + neighbor.element.height() / 2, 1, false);
+          
+          this.view.createLine(
+            from.left + skill.course.x + skill.element.width(),
+            from.top + skill.course.y + skill.element.height() / 2,
+            to.left + neighbor.course.x,
+            to.top + neighbor.course.y + neighbor.element.height() / 2, 1, false);
         }
       }
     }

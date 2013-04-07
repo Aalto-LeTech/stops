@@ -48,8 +48,10 @@ fi:
       
       skill_editor:
         prereqs_heading: 'Esitiedot'
-        outcomes_heading: 'Oppimistavoitteet'
-        add_skill: 'Lisää valmius'
+        outcomes_heading: 'Osaamistavoitteet'
+        add_skill: 'Lisää osaamistavoite'
+        remove_skill: 'Poista osaamistavoite'
+        edit_skill: 'Muokkaa osaamistavoitetta'
         supportingPrereqButton: 'Tukeva'
         strictPrereqButton: 'Välttämätön'
         search_box_placeholder: 'Haku'

@@ -16,15 +16,17 @@
 
 <%= render "edit_modal" %>
 
-<% if can? :import, @curriculum %>
-  <div class="admin-tools well">
-    <ul class="nav nav-list">
-      <li class="nav-header"><%= t :admin_toolbox_heading %></li>
+<div class="admin-tools well">
+  <ul class="nav nav-list">
+    <!--li class="nav-header"><%= t :admin_toolbox_heading %></li-->
+    <% if can? :import, @curriculum %>
       <li><%= link_to t('.import_csv_link'), edit_import_csv_curriculum_path(:id => @curriculum) %></li>
-      <!--li><%= link_to t(:curriculum_cycles_link), cycles_curriculum_path(:id => @curriculum) %></li-->
-    </ul>
-  </div>
-<% end %>
+    <% end %>
+    <li><a href="/O4-ohje.pdf">Käyttöohje</a></li>
+    <li><a href="/O4-Bloomin_taksonomia.pdf">Bloomin taksonomia</a></li>
+    <!--li><%= link_to t(:curriculum_cycles_link), cycles_curriculum_path(:id => @curriculum) %></li-->
+  </ul>
+</div>
 
 <h2><%= t 'curriculums.competences_heading' %></h2>
 <% unless @curriculum.competences.empty?  %>

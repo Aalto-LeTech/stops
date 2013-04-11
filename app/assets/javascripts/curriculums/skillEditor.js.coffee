@@ -260,10 +260,10 @@ class Skill
     
 
   clickToggleSupportingPrereq: () ->
-    this.togglePrereq(0) unless this.isLoading()
+    this.togglePrereq(0) unless this.isLoading() || @node.editor.skillBeingDeleted()
     
   clickToggleStrictPrereq: () ->
-    this.togglePrereq(1) unless this.isLoading()
+    this.togglePrereq(1) unless this.isLoading() || @node.editor.skillBeingDeleted()
   
   togglePrereq: (requirement) ->
     targetSkill = @editor.currentlyEditedSkill()
@@ -284,18 +284,21 @@ class Skill
 
 
   clickEdit: () ->
-    @editor.openSkillEditor(this)
+    if not @node.editor.skillBeingDeleted() && not @node.editor.currentlyEditedSkill() != this
+      @editor.openSkillEditor(this)
   
   
   clickDelete: () ->
-    # Make sure this skill is selected
-    @clickSelectTarget()
-    @editor.showDeletionConfirmationModal(true)
+    if not @node.editor.skillBeingDeleted()
+      # Make sure this skill is selected
+      @clickSelectTarget()
+      @editor.showDeletionConfirmationModal(true)
 
   clickConfirmDeletion: () ->
     return unless @id
   
     @editor.showDeletionConfirmationModal(false)
+    @editor.skillBeingDeleted(true)
 
     promise = $.ajax
       type: "DELETE",
@@ -306,10 +309,12 @@ class Skill
       @node.editor._currentPrereqNodes({})
       @node.editor._currentPrereqIds({})
       @node.skills.remove(this)
+      @editor.skillBeingDeleted(false)
 
     promise.fail (jqXHR, textStatus, error) =>
       # TODO Failures should be handled
       console.log("Skill deletion failed!")
+      @editor.skillBeingDeleted(false)
 
   generateDeletionConfirmationString: () ->
     O4.skillEditor.i18n['deletion_confirmation_question'] + " \"#{@localizedDescription()}\"?"
@@ -339,6 +344,7 @@ class CompetenceSkillEditor
     @searchString = ko.observable('')
     @searchResults = ko.observableArray()
     @isLoading = ko.observable(false)
+    @skillBeingDeleted = ko.observable(false)
     @loadFailed = ko.observable(false)
     @targetNodeLoadFailed = ko.observable(false)
     # Internal lookup table to check if a CompetenceNode has skills as prerequirement
@@ -523,7 +529,6 @@ class CompetenceSkillEditor
     @currentlyEditedSkill().save(@curriculumUrl)
       
     
-
 
 jQuery ->
   new CompetenceSkillEditor

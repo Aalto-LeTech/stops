@@ -94,9 +94,16 @@
   }
 }
 
-.skill.loading {
+.loading {
   opacity: 0.5;
+}
+
+.loading .skill, .loading.skill {
   .supportingPrereqButton, .strictPrereqButton {
+    cursor: default;
+  }
+
+  .buttons > i {
     cursor: default;
   }
 }

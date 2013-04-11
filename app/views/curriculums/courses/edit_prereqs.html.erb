@@ -36,7 +36,7 @@
       <%= image_tag 'progress.gif' %>
     </div>
 
-    <div data-bind="foreach: visibleNodes">
+    <div data-bind="foreach: visibleNodes, css: { loading: skillBeingDeleted() }">
       
       <div class="course" 
       data-bind="popover: { 
@@ -91,7 +91,10 @@
       <!-- ko with: node -->
         <p><span data-bind="text: code"></span> <span data-bind="text: localizedName"></span></p>
         <!-- ko foreach: skills -->
-          <div class="skill" data-bind="click: clickSelectTarget, css: { selected: selected() }">
+          <div class="skill" data-bind="click: clickSelectTarget, css: { 
+              selected: selected(), 
+              loading: selected() && node.editor.skillBeingDeleted()
+            }">
             <div class="buttons">
               <i class="icon-pencil" data-bind="click: clickEdit"></i>
               <i class="icon-remove" data-bind="click: clickDelete, clickBubble: false"></i>

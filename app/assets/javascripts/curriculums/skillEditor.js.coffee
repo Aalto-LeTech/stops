@@ -20,7 +20,7 @@ ko.bindingHandlers.showModal =
         $(element).modal('hide')
 
 ko.bindingHandlers.popover =
-  init: (element, valueAccessor) ->
+  init: (element, valueAccessor, allBindings, viewModel) ->
     options = valueAccessor()
     $element = $(element)
     bootstrapOptions = options.options || {}
@@ -28,9 +28,9 @@ ko.bindingHandlers.popover =
     options = $.extend(defaults, bootstrapOptions)
     $element.popover(options)
     # The following event listener expects the popover to be located within the
-    # associated div.
+    # associated target element.
     $element.on 'click', '.popover button.close', (event) ->
-      $(event.delegateTarget).popover('hide')
+      viewModel.skillErrorOccurred(false)
 
   update: (element, valueAccessor) ->
     options = valueAccessor()

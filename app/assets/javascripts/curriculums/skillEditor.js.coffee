@@ -303,6 +303,8 @@ class Skill
     
     promise.done () =>
       # Finally update view
+      @node.editor._currentPrereqNodes({})
+      @node.editor._currentPrereqIds({})
       @node.skills.remove(this)
 
     promise.fail (jqXHR, textStatus, error) =>

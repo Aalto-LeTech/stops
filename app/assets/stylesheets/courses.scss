@@ -81,6 +81,10 @@
     border: 1px solid #8080ff;
   }
 
+  .buttons > i {
+    cursor: pointer;
+  }
+
   .supportingPrereqButton, .strictPrereqButton {
     background: #ddd;
     border: 1px solid #888;

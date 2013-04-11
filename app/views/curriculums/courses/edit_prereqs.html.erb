@@ -38,7 +38,17 @@
 
     <div data-bind="foreach: visibleNodes">
       
-      <div class="course">
+      <div class="course" 
+      data-bind="popover: { 
+                  trigger: skillErrorOccurred(), 
+                  options: { 
+                    trigger: 'manual',
+                    html: true,
+                    template: O4.skillEditor.errorPopoverTemplate, 
+                    title: '<%= t ".prereq_change_failed_heading" %>', 
+                    content: '<%= t ".prereq_change_failed_message" %>'
+                  } 
+                }">
         <p><span data-bind="text: code"></span> <span data-bind="text: localizedName"></span> <span class="pull-right" data-bind="text: localizedType"></span></p>
         <!-- ko foreach: skills -->
           <div class="skill" data-bind="css: { 

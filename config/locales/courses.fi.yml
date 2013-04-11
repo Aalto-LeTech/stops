@@ -54,9 +54,12 @@ fi:
         # Confirm skill deletion modal
         deletion_confirmation_question: "Oletko varma, että haluat poistaa valmiuden"
         delete_skill: "Poista valmius"
+        # Failure messages
         load_failed_heading: "Lataus epäonnistui!"
         search_failure_message: "Tietoja ei pystytty lataamaan. Ole hyvä ja kokeile myöhemmin uudestaan."
         node_load_failure_message: "Muokattavan kurssin tietoja ei pystytty lataamaan. Ole hyvä ja kokeile myöhemmin uudestaan."
+        prereq_change_failed_heading: "Virhe"
+        prereq_change_failed_message: "Esitietovaatimuksen muuttaminen epäonnistui"
       edit:
         heading: 'Kurssin tiedot'
         hint: 'Voit täyttää osan lomakkeesta ja jatkaa myöhemmin (muista kuitenkin painaa "Tallenna" lomakkeen lopussa).'

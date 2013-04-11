@@ -19,6 +19,39 @@ ko.bindingHandlers.showModal =
     else 
         $(element).modal('hide')
 
+ko.bindingHandlers.popover =
+  init: (element, valueAccessor) ->
+    options = valueAccessor()
+    $element = $(element)
+    bootstrapOptions = options.options || {}
+    defaults = { container: $element }        
+    options = $.extend(defaults, bootstrapOptions)
+    $element.popover(options)
+    # The following event listener expects the popover to be located within the
+    # associated div.
+    $element.on 'click', '.popover button.close', (event) ->
+      $(event.delegateTarget).popover('hide')
+
+  update: (element, valueAccessor) ->
+    options = valueAccessor()
+    popoverShouldBeShown = ko.utils.unwrapObservable(options.trigger)
+    if popoverShouldBeShown
+      $(element).popover('show')
+    else
+      $(element).popover('hide')
+
+# Boostrap Popover template for skill error messages (adds a close button to the popover)
+O4.skillEditor.errorPopoverTemplate = """
+                                      <div class="popover closable-popover">
+                                        <div class="arrow"></div>
+                                        <div class="popover-inner">
+                                          <button class="pull-right close">&times;</button>
+                                          <h3 class="popover-title"></h3>
+                                          <div class="popover-content"></div>
+                                        </div>
+                                      </div>
+                                      """
+
 class Node
   constructor: (@editor, data) ->
     if data['scoped_course']
@@ -37,6 +70,8 @@ class Node
     @descriptions = ko.observableArray()
     @localizedName = ko.observable('untitled')
     @localizedType = O4.skillEditor.i18n[@type]
+
+    @skillErrorOccurred = ko.observable(false)
 
     if data['skills']
       for skill in data['skills']
@@ -164,6 +199,8 @@ class Skill
       @editor._currentPrereqNodes.valueHasMutated()
 
       skill.isLoading(false)
+      skill.node.skillErrorOccurred(true)
+
 
     
   
@@ -192,11 +229,12 @@ class Skill
       # Return back to the state before the action
       @prereqIds[skill.id] = savedState
       #@editor.updatePrereqHighlights()
-      @editor._currentPrereqNodes()[skill.node.id] = node
+      @editor._currentPrereqNodes()[skill.node.id] = skill.node
       @editor._currentPrereqIds.valueHasMutated()
       @editor._currentPrereqNodes.valueHasMutated()
 
       skill.isLoading(false)
+      skill.node.skillErrorOccurred(true)
 
   toJson: () ->
     hash = {competence_node_id: @node.id}
@@ -384,7 +422,7 @@ class CompetenceSkillEditor
 
       # FIXME: Seems that data can be null. Is that a problem?
       unless data
-        console.log "CompetenceSkillEditor::updateCurrentPrereqNodes() called with null. Check this."
+        console.log "CompetenceSkillEditor::updateCurrentPrereqNodes() AJAX-query received null JSON. Check this."
         return
       
       

@@ -71,6 +71,8 @@ fi:
         # e.g., 'Virheestä johtuen valmiutta "Osaa laskea 1+1=2" ei pystytty poistamaan.'
         deletion_failed_message_1: 'Virheestä johtuen valmiutta'
         deletion_failed_message_2: 'ei pystytty poistamaan.'
+        saving_skill_failed_heading: 'Tallennus epäonnistui'
+        saving_skill_failed_message: 'Valmiutta ei pystytty tallentamaan virheen vuoksi. Ole hyvä ja yritä myöhemmin uudelleen.'
       edit:
         heading: 'Kurssin tiedot'
         hint: 'Voit täyttää osan lomakkeesta ja jatkaa myöhemmin (muista kuitenkin painaa "Tallenna" lomakkeen lopussa).'

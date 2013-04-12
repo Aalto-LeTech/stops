@@ -151,15 +151,6 @@ class Skill
         url: curriculumUrl + '/skills/' + @id(),
         data: { skill: this.toJson() },
         dataType: 'json'
-      
-      promise.done (data) =>
-        @update(data['skill'])
-        @isLoading(false)
-      
-      promise.fail () =>
-        # TODO Show error message
-        @isLoading(false)
-
     else
       # Create
       promise = $.ajax
@@ -168,13 +159,16 @@ class Skill
         data: { skill: this.toJson() },
         dataType: 'json'
 
-      promise.done (data) =>
+    # Common handlers for both cases
+    promise.done (data) =>
         @update(data['skill'])
         @isLoading(false)
-      
-      promise.fail () =>
-        # TODO Show error 
-        @isLoading(false)
+
+    promise.fail () =>
+      @isLoading(false)
+      errorHeading = O4.skillEditor.i18n['saving_skill_failed_heading']
+      errorMessage = O4.skillEditor.i18n['saving_skill_failed_message']
+      @editor.skillErrorModelView.showErrorMessage(errorHeading, errorMessage)
 
   # Remove the node of the skill if the skill is the last prerequirement 
   conditionallyRemoveFromPrereqs: (skill) ->

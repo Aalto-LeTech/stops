@@ -70,3 +70,5 @@ en:
         deletion_failed_heading: "Deletion failed"
         deletion_failed_message_1: 'The skill'
         deletion_failed_message_2: 'could not be removed due to an error.'
+        saving_skill_failed_heading: 'Saving failed'
+        saving_skill_failed_message: 'The skill could not be saved due to an error. Please try again later.'

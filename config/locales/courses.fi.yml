@@ -65,6 +65,12 @@ fi:
         node_load_failure_message: "Muokattavan kurssin tietoja ei pystytty lataamaan. Ole hyvä ja kokeile myöhemmin uudestaan."
         prereq_change_failed_heading: "Virhe"
         prereq_change_failed_message: "Esitietovaatimuksen muuttaminen epäonnistui"
+        deletion_failed_heading: "Poisto epäonnistui"
+        # The following message is in two parts because its parameter must be embedded
+        # during runtime with JavaScript. 
+        # e.g., 'Virheestä johtuen valmiutta "Osaa laskea 1+1=2" ei pystytty poistamaan.'
+        deletion_failed_message_1: 'Virheestä johtuen valmiutta'
+        deletion_failed_message_2: 'ei pystytty poistamaan.'
       edit:
         heading: 'Kurssin tiedot'
         hint: 'Voit täyttää osan lomakkeesta ja jatkaa myöhemmin (muista kuitenkin painaa "Tallenna" lomakkeen lopussa).'

@@ -340,10 +340,13 @@ class Skill
       @editor.skillBeingDeleted(false)
 
     promise.fail (jqXHR, textStatus, error) =>
-      # TODO Failures should be handled
       console.log("Skill deletion failed!")
       @editor.skillBeingDeleted(false)
       @isBeingDeleted(false)
+
+      errorHeading = O4.skillEditor.i18n['deletion_failed_heading']
+      errorMessage = O4.skillEditor.i18n['deletion_failed_message'](@localizedDescription())
+      @editor.skillErrorModelView.showErrorMessage(errorHeading, errorMessage)
 
   generateDeletionConfirmationString: () ->
     O4.skillEditor.i18n['deletion_confirmation_question'] + " \"#{@localizedDescription()}\"?"
@@ -368,6 +371,21 @@ class LocalizedDescription
     return hash
 
 
+class ErrorModelView
+  constructor: ->
+    @shown   = ko.observable(false)
+    @heading = ko.observable('')
+    @message = ko.observable('')
+
+  showErrorMessage: (heading, message) ->
+    @heading heading
+    @message message
+    @shown true
+
+  clickClose: ->
+    @shown false
+
+
 class CompetenceSkillEditor 
   constructor: () ->
     @searchString = ko.observable('')
@@ -380,6 +398,8 @@ class CompetenceSkillEditor
     @_currentPrereqNodes = ko.observable({})
     # Internal lookup table from which skill prereq states are computed automatically
     @_currentPrereqIds = ko.observable({})
+
+    @skillErrorModelView = new ErrorModelView
 
     # Actual observable results to be shown 
     @visibleNodes = ko.computed () =>

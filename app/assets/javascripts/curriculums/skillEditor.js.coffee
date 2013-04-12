@@ -92,7 +92,7 @@ class Node
 class Skill
   constructor: (@editor, node, data) ->
     @node = node
-    @id = false
+    @id = ko.observable(false)
     @descriptions = ko.observableArray()
     @localizedDescription = ko.observable('untitled')
     @selected = ko.observable(false)
@@ -106,11 +106,11 @@ class Skill
 
     # This should be after the Skill data is loaded so that id is set
     @prereqType = ko.computed () =>
-      console.log("Recalculating prereqType for skill id: #{@id}")
-      @editor._currentPrereqIds()[@id]
+      console.log("Recalculating prereqType for skill id: #{@id()}")
+      @editor._currentPrereqIds()[@id()]
   
   update: (data) ->
-    @id = data['id']
+    @id(data['id'])
     @descriptions.removeAll()
     
     missingLocales = {}
@@ -142,11 +142,11 @@ class Skill
   
   # Saves the Skill to the DB by ajax
   save: (curriculumUrl) ->
-    if @id
+    if @id()
       # Update
       $.ajax
         type: "PUT",
-        url: curriculumUrl + '/skills/' + @id,
+        url: curriculumUrl + '/skills/' + @id(),
         data: {skill: this.toJson()},
         dataType: 'json',
         success: (data) =>
@@ -167,7 +167,7 @@ class Skill
     prereqNodes = @editor._currentPrereqNodes()
     prereqFound = false
     for skill in prereqNodes[skill.node.id].skills()
-      value = @prereqIds[skill.id]
+      value = @prereqIds[skill.id()]
       if value == 1 || value == 0
         prereqFound = true
     if not prereqFound
@@ -176,11 +176,11 @@ class Skill
   # Adds skill as the prerequisite of this skill. DB is updated immediately via AJAX
   addPrereq: (skill, requirement) ->
     # Save old state in case we need to roll back
-    savedState = @prereqIds[skill.id]
+    savedState = @prereqIds[skill.id()]
 
     # Update new state
     prereqNodes = @editor._currentPrereqNodes()
-    @prereqIds[skill.id] = requirement
+    @prereqIds[skill.id()] = requirement
     if not prereqNodes[skill.node.id]
       prereqNodes[skill.node.id] = skill.node
 
@@ -192,8 +192,8 @@ class Skill
     
     promise = $.ajax
       type: "POST",
-      url: "#{@editor.curriculumUrl}/skills/#{@id}/add_prereq",
-      data: {prereq_id: skill.id, requirement: requirement} # competence_node_id: @node.id, prereq_competence_node_id: skill.node.id
+      url: "#{@editor.curriculumUrl}/skills/#{@id()}/add_prereq",
+      data: {prereq_id: skill.id(), requirement: requirement} # competence_node_id: @node.id, prereq_competence_node_id: skill.node.id
 
     promise.done () ->
       console.log("AddPrereq: Succesfully added")
@@ -204,7 +204,7 @@ class Skill
       console.log("AddPrereq: Failed: #{textStatus}")
 
       # Roll back to the state before the action
-      @prereqIds[skill.id] = savedState
+      @prereqIds[skill.id()] = savedState
       @conditionallyRemoveFromPrereqs(skill)
 
       #@editor.updatePrereqHighlights()
@@ -220,16 +220,16 @@ class Skill
   # Removes skill from the prerequisites of this skill. DB is updated immediately via AJAX
   removePrereq: (skill) ->
     # Save state in case we need to rollback
-    savedState = @prereqIds[skill.id]
-    delete @prereqIds[skill.id]
+    savedState = @prereqIds[skill.id()]
+    delete @prereqIds[skill.id()]
     @conditionallyRemoveFromPrereqs(skill)
     @editor._currentPrereqIds.valueHasMutated()
     @editor._currentPrereqNodes.valueHasMutated()
     
     promise = $.ajax
       type: "POST",
-      url: "#{@editor.curriculumUrl}/skills/#{@id}/remove_prereq",
-      data: {prereq_id: skill.id}
+      url: "#{@editor.curriculumUrl}/skills/#{@id()}/remove_prereq",
+      data: {prereq_id: skill.id()}
 
     promise.done () ->
       console.log("RemovePrereq: Succesfully removed")
@@ -240,7 +240,7 @@ class Skill
       console.log("RemovePrereq: Failed: #{textStatus}")
 
       # Return back to the state before the action
-      @prereqIds[skill.id] = savedState
+      @prereqIds[skill.id()] = savedState
       #@editor.updatePrereqHighlights()
       @editor._currentPrereqNodes()[skill.node.id] = skill.node
       @editor._currentPrereqIds.valueHasMutated()
@@ -286,7 +286,7 @@ class Skill
       return
     
     # If this is already a prereq, remove it
-    if targetSkill.prereqIds[@id] == requirement
+    if targetSkill.prereqIds[@id()] == requirement
       targetSkill.removePrereq(this)
       #@prereqType(false)
 
@@ -308,14 +308,14 @@ class Skill
       @editor.showDeletionConfirmationModal(true)
 
   clickConfirmDeletion: () ->
-    return unless @id
+    return unless @id()
   
     @editor.showDeletionConfirmationModal(false)
     @editor.skillBeingDeleted(true)
 
     promise = $.ajax
       type: "DELETE",
-      url: @editor.curriculumUrl + '/skills/' + @id
+      url: @editor.curriculumUrl + '/skills/' + @id()
     
     promise.done () =>
       # Finally update view
@@ -509,7 +509,7 @@ class CompetenceSkillEditor
     if targetSkill
       for node in @visibleNodes()
         for skill in node.skills()
-          skill.prereqType(targetSkill.prereqIds[skill.id])
+          skill.prereqType(targetSkill.prereqIds[skill.id()])
   
   
   clickClearSearch: () ->
@@ -534,7 +534,7 @@ class CompetenceSkillEditor
 
   # Click save in the modal skill editor
   clickSaveSkill: () ->
-    @node().skills.push(@currentlyEditedSkill()) unless @currentlyEditedSkill().id
+    @node().skills.push(@currentlyEditedSkill()) unless @currentlyEditedSkill().id()
     #@currentlyEditedSkill().updateLocalizedDescription()
     @modalDiv.modal('hide')
     

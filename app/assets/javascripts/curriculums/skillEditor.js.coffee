@@ -98,6 +98,7 @@ class Skill
     @selected = ko.observable(false)
     #@highlighted = ko.observable(false)
     @isLoading = ko.observable(false)
+    @isBeingDeleted = ko.observable(false)
     
     # Mapping: skill_id => prereq requirement type (false, 0, or 1)
     @prereqIds = {}
@@ -275,7 +276,7 @@ class Skill
 
   # Click a skill of the target course
   clickSelectTarget: () ->
-    if not @selected() && not @isLoading()
+    if not @selected() && not @isLoading() && not @isBeingDeleted()
       # Deselect all
       for skill in @node.skills()
         skill.selected(false)
@@ -310,12 +311,12 @@ class Skill
 
 
   clickEdit: () ->
-    if not @isLoading() && not @node.editor.skillBeingDeleted() && not @node.editor.currentlyEditedSkill() != this
+    if not @isLoading() && not @isBeingDeleted()
       @editor.openSkillEditor(this)
   
   
   clickDelete: () ->
-    if not @isLoading() && not @node.editor.skillBeingDeleted()
+    if not @isLoading() && not @isBeingDeleted()
       # Make sure this skill is selected
       @clickSelectTarget()
       @editor.showDeletionConfirmationModal(true)
@@ -325,6 +326,7 @@ class Skill
   
     @editor.showDeletionConfirmationModal(false)
     @editor.skillBeingDeleted(true)
+    @isBeingDeleted(true)
 
     promise = $.ajax
       type: "DELETE",
@@ -341,6 +343,7 @@ class Skill
       # TODO Failures should be handled
       console.log("Skill deletion failed!")
       @editor.skillBeingDeleted(false)
+      @isBeingDeleted(false)
 
   generateDeletionConfirmationString: () ->
     O4.skillEditor.i18n['deletion_confirmation_question'] + " \"#{@localizedDescription()}\"?"

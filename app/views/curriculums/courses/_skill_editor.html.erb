@@ -79,7 +79,7 @@
         <!-- ko foreach: skills -->
           <div class="skill" data-bind="click: clickSelectTarget, css: { 
               selected: selected(), 
-              loading: isLoading() || selected() && node.editor.skillBeingDeleted()
+              loading: isLoading() || isBeingDeleted()
             }">
             <div class="buttons">
               <i class="icon-pencil" data-bind="click: clickEdit" title="<%=t '.edit_skill' %>"></i>

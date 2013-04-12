@@ -79,13 +79,14 @@
         <!-- ko foreach: skills -->
           <div class="skill" data-bind="click: clickSelectTarget, css: { 
               selected: selected(), 
-              loading: selected() && node.editor.skillBeingDeleted()
+              loading: isLoading() || selected() && node.editor.skillBeingDeleted()
             }">
             <div class="buttons">
               <i class="icon-pencil" data-bind="click: clickEdit" title="<%=t '.edit_skill' %>"></i>
               <i class="icon-trash" data-bind="click: clickDelete, clickBubble: false" title="<%=t '.remove_skill' %>"></i>
             </div>
-            <span data-bind="text: localizedDescription"></span>
+            <span class="skill-description" 
+              data-bind="text: isLoading() ? '<%= t :saving %>' : localizedDescription"></span>
           </div>
         <!-- /ko -->
       <!-- /ko -->

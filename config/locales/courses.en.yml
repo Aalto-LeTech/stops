@@ -44,7 +44,7 @@ en:
         credits: 'Credits'
       edit_prereqs:
         edit_course_heading: 'Edit course'
-      
+
       skill_editor:
         prereqs_heading: 'Prerequisites'
         outcomes_heading: 'Learning outcomes'

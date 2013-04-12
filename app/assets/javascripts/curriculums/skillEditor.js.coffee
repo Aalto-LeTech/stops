@@ -142,25 +142,38 @@ class Skill
   
   # Saves the Skill to the DB by ajax
   save: (curriculumUrl) ->
+    @isLoading(true)
     if @id()
       # Update
-      $.ajax
+      promise = $.ajax
         type: "PUT",
         url: curriculumUrl + '/skills/' + @id(),
-        data: {skill: this.toJson()},
-        dataType: 'json',
-        success: (data) =>
-          this.update(data['skill'])
-          
+        data: { skill: this.toJson() },
+        dataType: 'json'
+      
+      promise.done (data) =>
+        @update(data['skill'])
+        @isLoading(false)
+      
+      promise.fail () =>
+        # TODO Show error message
+        @isLoading(false)
+
     else
       # Create
-      $.ajax
+      promise = $.ajax
         type: "POST",
         url: curriculumUrl + '/skills',
-        data: {skill: this.toJson()},
-        dataType: 'json',
-        success: (data) =>
-          this.update(data['skill'])
+        data: { skill: this.toJson() },
+        dataType: 'json'
+
+      promise.done (data) =>
+        @update(data['skill'])
+        @isLoading(false)
+      
+      promise.fail () =>
+        # TODO Show error 
+        @isLoading(false)
 
   # Remove the node of the skill if the skill is the last prerequirement 
   conditionallyRemoveFromPrereqs: (skill) ->
@@ -262,7 +275,7 @@ class Skill
 
   # Click a skill of the target course
   clickSelectTarget: () ->
-    if not @selected()
+    if not @selected() && not @isLoading()
       # Deselect all
       for skill in @node.skills()
         skill.selected(false)
@@ -297,12 +310,12 @@ class Skill
 
 
   clickEdit: () ->
-    if not @node.editor.skillBeingDeleted() && not @node.editor.currentlyEditedSkill() != this
+    if not @isLoading() && not @node.editor.skillBeingDeleted() && not @node.editor.currentlyEditedSkill() != this
       @editor.openSkillEditor(this)
   
   
   clickDelete: () ->
-    if not @node.editor.skillBeingDeleted()
+    if not @isLoading() && not @node.editor.skillBeingDeleted()
       # Make sure this skill is selected
       @clickSelectTarget()
       @editor.showDeletionConfirmationModal(true)
@@ -524,7 +537,7 @@ class CompetenceSkillEditor
     for locale in @requiredLocales
       description = new LocalizedDescription(this, {locale: locale})
       skill.descriptions.push(description)
-      skill.localizedDescription(description) if locale == window.currentLocale
+      skill.localizedDescription(description.description()) if locale == window.currentLocale
     
     this.openSkillEditor(skill)
 

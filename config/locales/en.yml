@@ -38,6 +38,13 @@ en:
   Course_code: "Code"
   course_code: "code"
 
+  #########################
+  # General status messages
+  #########################
+
+  saving: "Saving..."
+
+
   ##############
   # Time & Date
   ##############

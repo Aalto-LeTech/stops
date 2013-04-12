@@ -38,7 +38,14 @@ fi:
   Visualize: "Visualisoi"
   Course_code: "Kurssikoodi"
   course_code: "kurssikoodi"
-  
+
+  #########################
+  # General status messages
+  #########################
+
+  saving: "Tallennetaan..."
+
+
 
   ##############
   # Time & Date

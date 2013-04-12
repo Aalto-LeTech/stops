@@ -35,7 +35,8 @@ GraphSkill.prototype.click = function(event) {
 GraphSkill.prototype.dfsBackward = function(drawEdges) {
   // Run DFS
   var stack = [this];
-
+  var level = 0;
+  
   while (stack.length > 0) {
     var skill = stack.pop();
     // Hilight node
@@ -51,9 +52,14 @@ GraphSkill.prototype.dfsBackward = function(drawEdges) {
         var neighbor = skill.prereqs[neighbor_index];
 
         if (neighbor.element && neighbor.course.visible) {
-          var from = skill.element.offset();
-          var to = neighbor.element.offset();
-          this.view.createLine(from.left, from.top + skill.element.height() / 2, to.left + neighbor.element.width(), to.top + neighbor.element.height() / 2, 1, false);
+          var from = skill.element.position();
+          var to = neighbor.element.position();
+          
+          this.view.createLine(
+            from.left + skill.course.x,
+            from.top + skill.course.y + skill.element.height() / 2,
+            to.left + neighbor.course.x + neighbor.element.width(),
+            to.top + neighbor.course.y + neighbor.element.height() / 2, 1, false);
         }
 
         skill.visited = true;
@@ -61,11 +67,15 @@ GraphSkill.prototype.dfsBackward = function(drawEdges) {
     }
 
     // Add neighbors to stack
-    //console.log("starting stack");
     for (var array_index in skill.prereqs) {
-      stack.push(skill.prereqs[array_index]);
+      var neighbor = skill.prereqs[array_index];
+      stack.push(neighbor);
+      
+      if (level == 0) {
+        neighbor.element.addClass('hilight-strong');
+      }
     }
-    //console.log("ending stack");
+    level++;
   }
 }
 
@@ -88,12 +98,15 @@ GraphSkill.prototype.dfsForward = function(drawEdges) {
       for (var neighbor_index in skill.prereqTo) {
         var neighbor = skill.prereqTo[neighbor_index];
 
-        //console.log(neighbor.description);
-
         if (neighbor.element && neighbor.course.visible) {
-          var from = skill.element.offset();
-          var to = neighbor.element.offset();
-          this.view.createLine(from.left + skill.element.width(), from.top + skill.element.height() / 2, to.left, to.top + neighbor.element.height() / 2, 1, false);
+          var from = skill.element.position();
+          var to = neighbor.element.position();
+          
+          this.view.createLine(
+            from.left + skill.course.x + skill.element.width(),
+            from.top + skill.course.y + skill.element.height() / 2,
+            to.left + neighbor.course.x,
+            to.top + neighbor.course.y + neighbor.element.height() / 2, 1, false);
         }
       }
     }

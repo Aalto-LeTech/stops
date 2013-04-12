@@ -1,3 +1,6 @@
-<!--p>O<sup>4</sup> on työkalu ja henkilökohtaisten opintosuunnitelmien laatimiseen ja koulutusohjelman suunnitteluun.</p-->
+<% unless logged_in? %>
+  <h1><%=t 'sessions.new.heading' %></h1>
+  <%= render :partial => 'sessions/login' %>
+<% end %>
 
 <%= render :partial => 'curriculums/index' %>

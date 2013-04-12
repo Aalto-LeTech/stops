@@ -35,7 +35,7 @@ class SessionsController < ApplicationController
     
     logout_url = session[:logout_url]
     current_session.destroy
-    flash[:success] = I18n.t(:sessions_logout_message)
+    flash[:success] = I18n.t('sessions.logout_message')
     
     if logout_url
       redirect_to(logout_url)

@@ -44,11 +44,12 @@ fi:
       temp_courses_hint: "Klikkaa kurssiasi listasta ja anna pyydetyt tiedot. Jos kurssia ei löydy listasta, luo uusi painamalla 'Luo kurssi'-nappulaa."
       create_temp_course: "Luo kurssi"
     edit:
+      title: 'Muokkaa'
       additional_tools_heading: "Lisätoiminnot"
       import_csv_link: "Tuo tiedot CSV-tiedostosta"
       change_name: "Nimeä uudelleen"
       course_create_link: 'Luo kurssi'
-      competence_create_link: 'Luo kompetenssi'
+      competence_create_link: 'Luo uusi kompetenssi'
       course_name_not_found: "ei suomenkielistä kurssinimeä"
       course_code: "Koodi"
       course_name: "Nimi"

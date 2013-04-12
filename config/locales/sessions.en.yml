@@ -1,17 +1,20 @@
-
 en:
-  sessions_login_heading: "Log in"
-
-  sessions_logout_message: "You have been logged out."
-
-  sessions_traditional_hint: "Login using a local account"
-  sessions_shibboleth_hint: "Log in using the authentication service of your home university (WebLogin)"
-  sessions_studentnumber_label: "Username"
-  sessions_password_label: "Password"
-  sessions_remember_label: "Remember me"
-  sessions_login_button: "Login"
-  sessions_register: "Register"
-  shibboleth_button: "Aalto weblogin"
+  sessions:
+    logout_message: "You have been logged out."
+    
+    login:
+      title: 'Login'
+      traditional_hint: "Login using a local account"
+      shibboleth_hint: "Log in using the authentication service of your home university (WebLogin)"
+      studentnumber_label: "Username"
+      password_label: "Password"
+      remember_label: "Remember me"
+      login_button: "Login"
+      register: "Register"
+      shibboleth_button: "Aalto weblogin"
+  
+    new:
+      heading: "Log in"
 
   activerecord:
     attributes:

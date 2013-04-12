@@ -1,36 +1,37 @@
+<% content_for :title do %><%= @curriculum.name %> - <%=t '.title' %><% end %>
 <% content_for :javascript do %>
-  <% #= javascript_include_tag "curriculums/curriculum"
-  %>
+  <%= javascript_include_tag "curriculums/curriculum" %>
 <% end %>
 
 <div class="inline-heading-container">
   <h1 id="name-heading"><%= @curriculum.name %></h1>
-  <a href="#edit-modal" data-toggle="modal" class="btn btn-primary btn-small vertical-fix">
-    <%= t '.change_name' %>
-  </a>
+  
+  <% if can? :update, @curriculum %>
+    <a href="#edit-modal" data-toggle="modal" class="btn btn-primary btn-small vertical-fix">
+      <%= t '.change_name' %>
+    </a>
+  <% end %>
 </div>
 
 <%= render "edit_modal" %>
 
-<% if can? :update, @curriculum %>
-
-  <div class="admin-tools well">
-    <ul class="nav nav-list">
-      <li class="nav-header"><%= t '.additional_tools_heading' %></li>
+<div class="admin-tools well">
+  <ul class="nav nav-list">
+    <!--li class="nav-header"><%= t :admin_toolbox_heading %></li-->
+    <% if can? :import, @curriculum %>
       <li><%= link_to t('.import_csv_link'), edit_import_csv_curriculum_path(:id => @curriculum) %></li>
-      <li><%= link_to t(:curriculum_cycles_link), cycles_curriculum_path(:id => @curriculum) %></li>
-      <!--li><%= link_to t('.list_outcomes'), outcomes_curriculum_path(:id => @curriculum) %></li-->
-    </ul>
-  </div>
-<% end %>
-
+    <% end %>
+    <li><a href="/O4-ohje.pdf">Käyttöohje</a></li>
+    <li><a href="/O4-Bloomin_taksonomia.pdf">Bloomin taksonomia</a></li>
+    <!--li><%= link_to t(:curriculum_cycles_link), cycles_curriculum_path(:id => @curriculum) %></li-->
+  </ul>
+</div>
 
 <h2><%= t 'curriculums.competences_heading' %></h2>
 <% unless @curriculum.competences.empty?  %>
   <ul>
     <% @curriculum.competences.each do |competence| %>
-      <li><%= link_to t('.edit_competence_prefix') + ': ' + competence.localized_description.name, edit_curriculum_competence_path(:curriculum_id => @curriculum, :id => competence) %></li>
-      
+      <li><%= link_to t('.edit_competence_prefix') + ': ' + competence.localized_description.name, edit_prereqs_curriculum_competence_path(:curriculum_id => @curriculum, :id => competence) %></li>
     <% end %>
   </ul>
 <% else %>
@@ -48,7 +49,7 @@
 <!-- Create course -->
 <h2><%= t 'curriculums.courses_heading' %></h2>
 
-<% unless @curriculum.courses.empty? %>
+<% unless @courses.empty? %>
   <table id="curriculum-courses">
     <thead>
       <tr>
@@ -62,18 +63,18 @@
       </tr>
     </thead>
     <tbody>
-      <% @curriculum.courses.each_with_index do |course, i| %>
+      <% @courses.each_with_index do |course, i| %>
         <tr class="<%= i % 2 == 0 ? 'even' : 'odd' %>">
           <td>
             <%= link_to course.course_code, edit_curriculum_course_path(:curriculum_id => @curriculum, :id => course) %>
           </td>
           <td>
-            <%= link_to course.localized_description.name.presence || ('<' + t('.course_name_not_found') + '>'), edit_curriculum_course_path(:curriculum_id => @curriculum, :id => course) %>
+            <%= link_to course.localized_description.name.presence || ('<' + t('.course_name_not_found') + '>'), edit_prereqs_curriculum_course_path(:curriculum_id => @curriculum, :id => course) %>
           </td>
           <td class="centered"><%= course.credits %></td>
           <!--
-          <td class="centered"><%= course.periods_as_roman_numerals.join(", ") %></td>
-          <td class="centered"><%= course.strict_prereqs.size %></td>
+          <td class="centered">< course.periods_as_roman_numerals.join(", ") ></td>
+          <td class="centered">< course.strict_prereqs.size ></td>
           -->
         </tr>
       <% end %>
@@ -90,5 +91,6 @@
     :id => "new-course-button" %>
   </p>
 <% end %>
+
 
 <p><%= link_to t(:Back), @curriculum %></p>

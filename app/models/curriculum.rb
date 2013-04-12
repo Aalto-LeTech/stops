@@ -165,12 +165,10 @@ class Curriculum < ActiveRecord::Base
         
         # Create skills
         while line = lines.next.strip
-          break if line.blank?
-          
           if line == 'Osaamistavoitteet:'
             
             while line = lines.next.strip
-              break if line.blank? || line.include?(':')
+              break if line.blank? # || line.include?(':')
               
               if line[0] == '-'
                 text = line[2..-1]
@@ -185,6 +183,8 @@ class Curriculum < ActiveRecord::Base
               puts "  #{text}"
             end
           end
+          
+          break if line.blank?
         end
         
         

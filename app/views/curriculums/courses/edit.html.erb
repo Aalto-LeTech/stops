@@ -1,9 +1,6 @@
-<h1><%= @scoped_course.localized_description.name %></h1>
+<% content_for :title do %><%= @scoped_course.localized_description.name %> - <%=t :Edit %><% end %>
 
-<ul class="nav nav-tabs">
-  <li class="active"><%= link_to t('curriculums.courses.edit_tab'), edit_curriculum_course_path(:curriculum_id => @curriculum, :id => @scoped_course) %></li>
-  <li><%= link_to t('curriculums.courses.prereqs_tab'), edit_prereqs_curriculum_course_path(:curriculum_id => @curriculum, :id => @scoped_course) %></li>
-</ul>
+<%= render 'tabs' %>
 
 <p class="hint"><%=t '.hint' %></p>
 

@@ -43,8 +43,9 @@ en:
         course_title_in_en: "Course name in English"
         credits: 'Credits'
       edit_prereqs:
+        title: 'Set prerequisites'
         edit_course_heading: 'Edit course'
-
+      
       skill_editor:
         prereqs_heading: 'Prerequisites'
         outcomes_heading: 'Learning outcomes'

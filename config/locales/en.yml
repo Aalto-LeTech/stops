@@ -37,6 +37,7 @@ en:
   Visualize: "Visualize"
   Course_code: "Code"
   course_code: "code"
+  admin_toolbox_heading: "Hallinta"
 
   #########################
   # General status messages

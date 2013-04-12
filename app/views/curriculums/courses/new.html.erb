@@ -1,3 +1,5 @@
+<% content_for :title do %><%= @curriculum.name %> - <%=t '.create_course_heading' %><% end %>
+
 <h1><%=t '.create_course_heading' %></h1>
 
 <%= form_for @scoped_course, :url => curriculum_courses_path(@curriculum) do |f| %>

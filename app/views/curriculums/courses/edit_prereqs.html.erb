@@ -1,3 +1,5 @@
+<% content_for :title do %><%= @scoped_course.localized_description.name %> - <%=t '.title' %><% end %>
+
 <% content_for :javascript do %>
   <script type="text/javascript">
     <%= render "skill_editor_i18n_strings.js" %>
@@ -5,11 +7,6 @@
   <%= javascript_include_tag 'curriculums/skillEditor' %>
 <% end %>
 
-<h1><%= @scoped_course.localized_description.name %></h1>
-
-<ul class="nav nav-tabs">
-  <li><%= link_to t('curriculums.courses.edit_tab'), edit_curriculum_course_path(:curriculum_id => @curriculum, :id => @scoped_course) %></li>
-  <li class="active"><%= link_to t('curriculums.courses.prereqs_tab'), edit_prereqs_curriculum_course_path(:curriculum_id => @curriculum, :id => @scoped_course) %></li>
-</ul>
+<%= render 'tabs' %>
 
 <%= render 'skill_editor' %>

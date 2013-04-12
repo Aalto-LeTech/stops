@@ -1,17 +1,21 @@
 # encoding: utf-8
 fi:
-  sessions_login_heading: "Kirjaudu sisään"
-
-  sessions_logout_message: "Olet kirjautunut ulos."
-
-  sessions_traditional_hint: "Kirjaudu O4-tunnuksella"
-  sessions_shibboleth_hint: "Kirjaudu kotiyliopiston tunnuksella (WebLogin)"
-  sessions_studentnumber_label: "Käyttäjätunnus"
-  sessions_password_label: "Salasana"
-  sessions_remember_label: "Muista minut"
-  sessions_login_button: "Kirjaudu"
-  sessions_register: "Luo testitunnus"
-  shibboleth_button: "Aalto weblogin"
+  sessions:
+    logout_message: "Olet kirjautunut ulos."
+    
+    login:
+      title: 'Kirjautuminen'
+      traditional_hint: "Kirjaudu O4-tunnuksella"
+      shibboleth_hint: "Kirjaudu kotiyliopiston tunnuksella (WebLogin)"
+      studentnumber_label: "Käyttäjätunnus"
+      password_label: "Salasana"
+      remember_label: "Muista minut"
+      login_button: "Kirjaudu"
+      register: "Luo testitunnus"
+      shibboleth_button: "Aalto weblogin"
+    
+    new:
+      heading: "Kirjaudu sisään"
 
   activerecord:
     attributes:

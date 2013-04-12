@@ -156,65 +156,7 @@
 
 
 
-/********************
-  Graph
- ********************/
 
-#course-graph div.course {
-  position: absolute;
-  width: 500px;
-  font-size: 11px;
-  font-family: sans-serif;
-  border: 1px solid #8080a0;
-  background: #e0e0ff;
-  -moz-border-radius: 4px;
-  padding: 2px;
-  margin: 0px;
-  cursor: pointer;
-}
-
-#course-graph div.competence {
-  background: #e0ffe0;
-}
-
-#course-graph div.course h1 {
-  font-size: 10px;
-  padding: 0px;
-  margin: 0px;
-}
-
-#course-graph div.course ul {
-  padding: 0px;
-  margin: 0px;
-  border-bottom: 1px solid #d0d0d0;
-  border-left: 1px solid #d0d0d0;
-  border-right: 1px solid #d0d0d0;
-}
-
-#course-graph div.course li {
-  display: block;
-  padding: 1px;
-  margin: 0px 0px;
-  border-top: 1px solid #d0d0d0;
-  background: #f0f0ff;
-}
-
-#course-graph div.course li.hilight {
-  background: #c0c0ff;
-}
-
-#svg {
-  /*border: 1px solid red;*/
-  z-index: 1;
-}
-
-#course-graph {
-  z-index: 2;
-}
-
-svg {
-  /*border: 1px solid green;*/
-}
 
 
 

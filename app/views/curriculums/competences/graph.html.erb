@@ -4,6 +4,9 @@
   <%= javascript_include_tag 'graphCourse' %>
   <%= javascript_include_tag 'graphSkill' %>
 <% end %>
+<% content_for :title do %><%= @competence.localized_description.name %> - <%=t '.title' %><% end %>
+
+<%= render :partial => 'tabs' %>
 
 <!--%= link_to t(:Back), curriculum_competence_path(:curriculum_id => @curriculum.id, :id => @competence.id) %-->
 

@@ -48,7 +48,7 @@ class Curriculums::CompetencesController < CurriculumsController
               }
             },
             :competence_descriptions => {
-              :only => [:id, :locale, :description]
+              :only => [:id, :locale, :name]
             }
         }
       )}
@@ -70,7 +70,10 @@ class Curriculums::CompetencesController < CurriculumsController
 
   def edit_prereqs
     @competence = Competence.find(params[:id])
+    @competence_node = @competence
     authorize! :update, @curriculum
+    
+    @competence_node_url = curriculum_competence_path(:curriculum_id => @curriculum, :competence_id => @competence)
     
     render :action => 'edit_prereqs', :layout => 'wide'
   end

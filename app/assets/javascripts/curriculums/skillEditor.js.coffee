@@ -82,12 +82,12 @@ class Node
     else if data['competence_descriptions']
       descriptionsAsJSON = data['competence_descriptions']
 
+    # Load descriptions
     for description in descriptionsAsJSON
       d = new LocalizedDescription(@editor, description)
       @descriptions.push(d)
-      if d.locale == window.currentLocale
-        @localizedName(d.name())
-
+      @localizedName(d.name()) if d.locale == O4.skillEditor.i18n['current_locale']
+    
 
 class Skill
   constructor: (@editor, node, data) ->
@@ -113,14 +113,27 @@ class Skill
     @id = data['id']
     @descriptions.removeAll()
     
+    missingLocales = {}
+    for locale in O4.skillEditor.i18n['required_locales']
+      missingLocales[locale] = true
+
+    # Load descriptions
     for description in data['skill_descriptions']
       d = new LocalizedDescription(@editor, description)
       @descriptions.push(d)
-      @localizedDescription(d.description()) if d.locale == window.currentLocale
+      @localizedDescription(d.description()) if d.locale == O4.skillEditor.i18n['current_locale']
+      delete missingLocales[description['locale']]    
+
+    # Add descriptions for missing locales
+    for locale, value of missingLocales
+      @descriptions.push(new LocalizedDescription(@editor, {locale: locale}))
+      
 
     if data['skill_prereqs']
       for prereq in data['skill_prereqs']
         @prereqIds[prereq['prereq_id']] = prereq['requirement']
+
+    
 
   dispose: () ->
     # Make sure computed prereqType doesn't leak memory

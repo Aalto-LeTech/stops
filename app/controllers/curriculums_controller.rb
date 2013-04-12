@@ -189,9 +189,7 @@ class CurriculumsController < ApplicationController
                                .select(:competence_node_id).uniq
       skill_descriptions.each do |skill_desc| 
         node_id = skill_desc.skill.competence_node_id.to_i
-        if not node_id == excluded_node_id
-          node_ids << node_id
-        end
+        node_ids << node_id if not node_id == excluded_node_id
       end
       
       # Search from course names or codes
@@ -200,9 +198,16 @@ class CurriculumsController < ApplicationController
                                .select(:scoped_course_id).uniq
       nodes.each do |node| 
         node_id = node.scoped_course_id
-        if not node_id == excluded_node_id
-          node_ids << node_id
-        end
+        node_ids << node_id if not node_id == excluded_node_id
+      end
+      
+      # Search from course names or codes
+      nodes = CompetenceDescription.where(['name ILIKE ?', "%#{params[:q]}%"])
+                               .joins(:competence)
+                               .select(:competence_id).uniq
+      nodes.each do |node| 
+        node_id = node.competence_id
+        node_ids << node_id if not node_id == excluded_node_id
       end
     end
 
@@ -224,7 +229,7 @@ class CurriculumsController < ApplicationController
                 ]
             }},
             {:competence_descriptions => {
-                :only => [:id, :locale, :description]
+                :only => [:id, :locale, :name]
             }}
           ]
         )

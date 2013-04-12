@@ -44,9 +44,13 @@ en:
         credits: 'Credits'
       edit_prereqs:
         edit_course_heading: 'Edit course'
+      
+      skill_editor:
         prereqs_heading: 'Prerequisites'
         outcomes_heading: 'Learning outcomes'
         add_skill: 'Add outcome'
+        remove_skill: 'Delete outcome'
+        edit_skill: 'Edit outcome'
         supportingPrereqButton: 'Supporting'
         strictPrereqButton: 'Mandatory'
         search_box_placeholder: "Search"

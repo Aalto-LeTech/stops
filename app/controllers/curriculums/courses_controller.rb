@@ -101,6 +101,16 @@ class Curriculums::CoursesController < CurriculumsController
     
     render :action => 'edit_prereqs', :layout => 'wide'
   end
+
+  def edit_as_a_prereq
+    @scoped_course = ScopedCourse.find(params[:id])
+    @competence_node = @scoped_course
+    authorize! :update, @curriculum
+    
+    @competence_node_url = curriculum_course_path(:curriculum_id => @curriculum, :course_id => @course)
+    
+    render :action => 'edit_as_a_prereq', :layout => 'wide'
+  end
   
   def new
     authorize! :update, @curriculum

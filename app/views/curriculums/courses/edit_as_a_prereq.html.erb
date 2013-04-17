@@ -1,0 +1,12 @@
+<% content_for :title do %><%= @scoped_course.localized_description.name %> - <%=t '.title' %><% end %>
+
+<% content_for :javascript do %>
+  <script type="text/javascript">
+    <%= render "skill_editor_i18n_strings.js" %>
+  </script>
+  <%= javascript_include_tag 'curriculums/skillEditor' %>
+<% end %>
+
+<%= render 'tabs' %>
+
+<%= render 'as_a_prereq_editor' %>

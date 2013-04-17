@@ -1,16 +1,15 @@
 <div class="row-fluid full-height">
 
+  <%= render 'current_course_column' %>
+
   <% content_for :searchable_column_heading do %>
-    <%= t 'curriculums.courses.searchable_column.prereqs_column_heading' %>
+    <%= t 'curriculums.courses.searchable_column.as_a_prereq_column_heading' %>
   <% end %>
 
   <%= render 'searchable_column' %>
-
-  <%= render 'current_course_column' %>
 
 </div>
 
 <p><%= link_to t(:Back), edit_curriculum_path(@curriculum) %></p>
 
 <%= render 'modals' %>
-

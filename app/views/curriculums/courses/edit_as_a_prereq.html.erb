@@ -2,11 +2,11 @@
 
 <% content_for :javascript do %>
   <script type="text/javascript">
-    <%= render "skill_editor_i18n_strings.js" %>
+    <%= render "curriculums/courses/skill_editor/skill_editor_i18n_strings.js" %>
   </script>
   <%= javascript_include_tag 'curriculums/skillEditor' %>
 <% end %>
 
 <%= render 'tabs' %>
 
-<%= render 'as_a_prereq_editor' %>
+<%= render 'curriculums/courses/skill_editor/as_a_prereq_editor' %>

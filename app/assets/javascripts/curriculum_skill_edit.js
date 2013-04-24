@@ -67,14 +67,14 @@
     if (bottomPos - $paginationFooter.offset().top > 30) {
       /* When the bottom of the screen is 30 pixels past the top of
        * the footer. */
-      console.log("Should show a hint!");
+      //console.log("Should show a hint!");
       pagination.showHint(); 
     }
 
     if (bottomPos - ($paginationFooter.offset().top + 
       $paginationFooter.outerHeight(true)) > 2) {
       /* Fetch more search results */
-      console.log("Should paginate!");
+      //console.log("Should paginate!");
       pagination.loadMore();
     }
   }
@@ -127,7 +127,7 @@
           if (!instance.cancelled) {
             /* Only handle the event if the handling hasn't been cancelled */
             if (data === 'nothing') {
-              console.log("handleSuccess: No more results available");
+              //console.log("handleSuccess: No more results available");
               /* No more search results can be found */
               loader.moreResultsAvailable = false;
               loader._showMsg("nomoreresults");
@@ -140,7 +140,7 @@
               loader._hideAllMsgs();
             }
           } else {
-            console.log("Endless paging: Successful AJAX-call CANCELLED!");
+            //console.log("Endless paging: Successful AJAX-call CANCELLED!");
           }
         }
 
@@ -159,8 +159,8 @@
       this.ajaxCallInProgress = bindHandlersToInstance();
       var query = $searchbox.val().trim();
 
-      console.log("About to make an AJAX-query. ajaxCallInProgress? " + !!this.ajaxCallInProgress);
-      console.log("ajaxCallInProgress object: " + this.ajaxCallInProgress);
+      //console.log("About to make an AJAX-query. ajaxCallInProgress? " + !!this.ajaxCallInProgress);
+      //console.log("ajaxCallInProgress object: " + this.ajaxCallInProgress);
       
       this._showMsg("loading");
 
@@ -213,7 +213,7 @@
 
   _PaginationLoader.prototype.showHint = function() {
     if (this.enabled && this.moreResultsAvailable && !this.isLoading() && !this.message) {
-      console.log("Trying to show hint");
+      //console.log("Trying to show hint");
       this.$paginationHint.show("slow");
       this.message = "hint";
     }
@@ -384,7 +384,7 @@
       $skillRow.find(".skill-search-warning-image span").addClass("invisible");
 
     }).error(function() {
-      console.log("AJAX update failed!");
+      //console.log("AJAX update failed!");
       
       buttonComp.stateTo("readyToAdd");
       /* Show failure icon */
@@ -468,7 +468,7 @@
       $("td.skill-search-warning-image span", "#search-skill-id-" + prereqSkillId).addClass("invisible");
 
     }).error(function() {
-      console.log("AJAX update failed!");
+      //console.log("AJAX update failed!");
       
       if (prereqButtonComp) prereqButtonComp.stateTo("readyToRemove");
       if (searchResultButtonComp) searchResultButtonComp.stateTo("readyToRemove");

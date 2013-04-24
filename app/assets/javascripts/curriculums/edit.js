@@ -172,7 +172,7 @@
   (function() {
     var $contents = $('#new-course-box-content');
     $('#new-course-box-content').on('change', '#course-form-teaching-lang', function() {
-      console.log("Course form: CHANGE event caught...");
+      //console.log("Course form: CHANGE event caught...");
       var $this = $(this);
       var $formGroups = $contents.find('.form-control-group');
       var otherFields = $formGroups.filter('[data-name-locale="fi"]');

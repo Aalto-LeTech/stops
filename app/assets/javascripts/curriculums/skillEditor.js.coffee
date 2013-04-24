@@ -71,7 +71,7 @@ class Skill
 
     # This should be after the Skill data is loaded so that id is set
     @prereqType = ko.computed () =>
-      console.log("Recalculating prereqType for skill id: #{@id}")
+      #console.log("Recalculating prereqType for skill id: #{@id}")
       @editor._currentPrereqIds()[@id]
   
   update: (data) ->
@@ -149,7 +149,7 @@ class Skill
     if not prereqNodes[skill.node.id]
       prereqNodes[skill.node.id] = skill.node
 
-    console.log "AddPrereq: Calling valueHasMutated()"
+    #console.log "AddPrereq: Calling valueHasMutated()"
     @editor._currentPrereqIds.valueHasMutated()
     @editor._currentPrereqNodes.valueHasMutated()
 
@@ -161,12 +161,12 @@ class Skill
       data: {prereq_id: skill.id, requirement: requirement} # competence_node_id: @node.id, prereq_competence_node_id: skill.node.id
 
     promise.done () ->
-      console.log("AddPrereq: Succesfully added")
+      #console.log("AddPrereq: Succesfully added")
       skill.isLoading(false)
   
 
     promise.fail (jqXHR, textStatus, error) =>
-      console.log("AddPrereq: Failed: #{textStatus}")
+      #console.log("AddPrereq: Failed: #{textStatus}")
 
       # Roll back to the state before the action
       @prereqIds[skill.id] = savedState
@@ -195,12 +195,12 @@ class Skill
       data: {prereq_id: skill.id}
 
     promise.done () ->
-      console.log("RemovePrereq: Succesfully removed")
+      #console.log("RemovePrereq: Succesfully removed")
       skill.isLoading(false)
     
 
     promise.fail (jqXHR, textStatus, error) =>
-      console.log("RemovePrereq: Failed: #{textStatus}")
+      #console.log("RemovePrereq: Failed: #{textStatus}")
 
       # Return back to the state before the action
       @prereqIds[skill.id] = savedState
@@ -244,7 +244,7 @@ class Skill
     targetSkill = @editor.currentlyEditedSkill()
     unless targetSkill
       # TODO: show a hint
-      console.log("togglePrereq: Returning without doing anything since there is no currently edited skill")
+      #console.log("togglePrereq: Returning without doing anything since there is no currently edited skill")
       return
     
     # If this is already a prereq, remove it
@@ -282,7 +282,7 @@ class Skill
 
     promise.fail (jqXHR, textStatus, error) =>
       # TODO Failures should be handled
-      console.log("Skill deletion failed!")
+      #console.log("Skill deletion failed!")
 
   generateDeletionConfirmationString: () ->
     O4.skillEditor.i18n['deletion_confirmation_question'] + " \"#{@localizedDescription()}\"?"
@@ -322,7 +322,7 @@ class CompetenceSkillEditor
     # Actual observable results to be shown 
     @visibleNodes = ko.computed () =>
 
-      console.log("Recomputing visible search result nodes")
+      #console.log("Recomputing visible search result nodes")
 
       if @searchString().length == 0
         return _.values(@_currentPrereqNodes())
@@ -397,7 +397,7 @@ class CompetenceSkillEditor
 
       # FIXME: Seems that data can be null. Is that a problem?
       unless data
-        console.log "CompetenceSkillEditor::updateCurrentPrereqNodes() called with null. Check this."
+        #console.log "CompetenceSkillEditor::updateCurrentPrereqNodes() called with null. Check this."
         return
       
       

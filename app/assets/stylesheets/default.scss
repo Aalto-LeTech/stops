@@ -617,12 +617,12 @@ div.current-user {
 .navbar-inner {
   background-color: #0065BD;
   background-image: none;
-  
   background-image: -moz-linear-gradient(top, #0072d6, #0057a3);
   background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#0072d6), to(#0057a3));
   background-image: -webkit-linear-gradient(top, #0072d6, #0057a3);
   background-image: -o-linear-gradient(top, #0072d6, #0057a3);
   background-image: linear-gradient(to bottom, #0072d6, #0057a3);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff0072d6', endColorstr='#ff0057a3', GradientType=0);
   -webkit-border-radius: 0px;
      -moz-border-radius: 0px;
           border-radius: 0px;

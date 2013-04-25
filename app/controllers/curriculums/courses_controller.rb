@@ -103,6 +103,26 @@ class Curriculums::CoursesController < CurriculumsController
     render :action => 'edit_prereqs', :layout => 'wide'
   end
   
+  def comments
+    @scoped_course = ScopedCourse.find(params[:id])
+    @new_comment = Comment.new
+
+    render :action => 'comments', :layout => 'wide'
+  end
+  
+  def create_comment
+    @scoped_course = ScopedCourse.find(params[:id])
+    authorize! :update, @curriculum
+    
+    @comment = Comment.new(params[:comment])
+    @comment.commentable = @scoped_course
+    @comment.user = current_user
+    
+    @comment.save
+    
+    redirect_to comments_curriculum_course_path(:curriculum_id => @curriculum, :id => @scoped_course)
+  end
+  
   def new
     authorize! :update, @curriculum
     

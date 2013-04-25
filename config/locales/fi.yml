@@ -31,6 +31,7 @@ fi:
   Create: "Luo"
   Edit: "Muokkaa"
   Save: "Tallenna"
+  Send: "Lähetä"
   Delete: "Poista"
   Select: "Valitse"
   Cancel: "Peruuta"

@@ -1,0 +1,26 @@
+<% content_for :title do %><%= @scoped_course.localized_description.name %><% end %>
+
+<%= render 'tabs' %>
+
+<div class="row">
+  <div class="span12">
+    <% @scoped_course.comments.each do |comment| %>
+      <div class="comment">
+        <p class="comment"><%= comment.comment %></p>
+        <p class="sender">
+          <% if comment.user %><%= comment.user.name %>,<% end %>
+          <%=l comment.created_at %>
+        </p>
+      </div>
+      <hr />
+    <% end %>
+
+    <p><%=t '.leave_new_comment' %></p>
+    <%= form_for @new_comment, :url => create_comment_curriculum_course_path(:curriculum_id => @curriculum, :id => @scoped_course) do |f| %>
+      <p><%= f.text_area :comment, :rows => 4, :class => 'input-xxlarge' %></p>
+      
+      <p><%= f.submit t(:Send), :class => 'btn btn-primary' %></p>
+    <% end %>
+
+  </div>
+</div>

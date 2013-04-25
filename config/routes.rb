@@ -66,6 +66,8 @@ Ops::Application.routes.draw do
         member do
           get 'prereqs'
           get 'edit_prereqs'
+          get 'comments'
+          post 'create_comment'
         end
       end
 

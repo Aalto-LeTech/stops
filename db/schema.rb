@@ -11,13 +11,23 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130311074224) do
+ActiveRecord::Schema.define(:version => 20130425133915) do
 
   create_table "abstract_courses", :force => true do |t|
     t.string "code"
   end
 
   add_index "abstract_courses", ["code"], :name => "index_abstract_courses_on_code", :unique => true
+
+  create_table "comments", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "comment_id"
+    t.integer  "commentable_id",   :null => false
+    t.string   "commentable_type", :null => false
+    t.text     "comment"
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
+  end
 
   create_table "competence_courses_cache", :id => false, :force => true do |t|
     t.integer "competence_id",    :null => false

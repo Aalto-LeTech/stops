@@ -28,6 +28,7 @@ fi:
     courses:
       edit_tab: 'Tiedot'
       prereqs_tab: 'Osaamistavoitteet'
+      comments_tab: 'Kommentit'
       creation_form:
         # New course creation form
         course_code: "Kurssikoodi"
@@ -109,6 +110,9 @@ fi:
         other: 'Muita tietoja'
         other_hint: 'Kurssista voidaan ilmoittaa kurssin asema, kurssin taso, kurssin kotisivu, CEFR-taso (koskee kielikursseja) ja muita lisätietoja'
       
+      comments:
+        leave_new_comment: "Jätä uusi kommentti"
+        
       skill_editor_i18n_strings:
         delete_skill_no_dependencies: "Tämä osaamistavoite ei toimi esitietona muille osaamistavoitteille, joten se on melko turvallista poistaa."
         delete_skill_dependency_warning_pre: "Tämä toimii esitietona"

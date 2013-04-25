@@ -64,7 +64,9 @@ class ScopedCourse < CompetenceNode
   has_many :periods,
            :through     => :abstract_course,
            :conditions  => proc { ["periods.ends_at > ?", Date.today] }
-    
+  
+  has_many :comments, :as => :commentable, :dependent => :destroy, :order => 'created_at'
+  
   #attr_accessible :alternatives, :assignments, :changing_topic, :code, :contact, :content, :credits, :department, :grading_scale, :grading_details, :graduate_course, :instructors, :language, :materials, :name_en, :name_fi, :name_sv, :other, :outcomes, :period, :prerequisites, :replaces
     
   define_index do

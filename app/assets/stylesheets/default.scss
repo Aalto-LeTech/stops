@@ -757,6 +757,7 @@ div.current-user {
   Content
  *************************/
 
+/*
 .page {
   margin: 0px 0px 1em 0px;
 }
@@ -775,7 +776,7 @@ div.current-user {
   color: gray;
   font-size: small;
 }
-
+*/
 
 
 /*****************
@@ -1100,5 +1101,18 @@ table.course-list tr.total td {
 
   a {
     color: gray;
+  }
+}
+
+div.comment {
+  p.comment {
+    white-space: pre-wrap;
+    line-height: 100%;
+  }
+  
+  .sender {
+    font-size: small;
+    color: gray;
+    font-style: italic;
   }
 }

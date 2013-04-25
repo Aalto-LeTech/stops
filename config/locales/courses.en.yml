@@ -27,6 +27,7 @@ en:
     courses:
       edit_tab: 'Course information'
       prereqs_tab: 'Learning outcomes'
+      comments_tab: 'Comments'
       creation_form:
         # New course creation form
         course_code: "Course code"
@@ -62,6 +63,9 @@ en:
         search_failure_message: "Failed to load content. Please try again later."
         node_load_failure_message: "Failed to load target course for editing. Please try again later."
       
+      comments:
+        leave_new_comment: "Leave a new comment"
+        
       skill_editor_i18n_strings:
         delete_skill_no_dependencies: "This learning outcome is not a prerequisite to any other outcome, so it is quite safe to delete."
         delete_skill_dependency_warning_pre: "This learning outcome is a prerequisite to"

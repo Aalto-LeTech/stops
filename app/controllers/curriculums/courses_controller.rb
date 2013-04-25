@@ -75,7 +75,8 @@ class Curriculums::CoursesController < CurriculumsController
                 :skill_descriptions => {
                   :only => [:id, :locale, :description]
                 },
-                :skill_prereqs => {:only => [:prereq_id, :requirement]}
+                :skill_prereqs => {:only => [:prereq_id, :requirement]},
+                :skill_prereq_to => {:only => [:prereq_id, :requirement]}
               }
             },
             :course_descriptions => {

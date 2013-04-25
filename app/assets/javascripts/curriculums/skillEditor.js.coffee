@@ -66,6 +66,7 @@ class Skill
     
     # Mapping: skill_id => prereq requirement type (false, 0, or 1)
     @prereqIds = {}
+    @prereqToIds = []    # Array of ids of skills which depend on this
     
     this.update(data) if data
 
@@ -98,6 +99,9 @@ class Skill
       for prereq in data['skill_prereqs']
         @prereqIds[prereq['prereq_id']] = prereq['requirement']
 
+    if data['skill_prereq_to']
+      for prereq in data['skill_prereq_to']
+        @prereqToIds.push(prereq['requirement'])
     
 
   dispose: () ->
@@ -309,6 +313,8 @@ class LocalizedDescription
 
 class CompetenceSkillEditor 
   constructor: () ->
+    @i18n = O4.skillEditor.i18n  # Access in the view like this: <span data-bind="text: $root.i18n['qwerty'] ">
+    
     @searchString = ko.observable('')
     @searchResults = ko.observableArray()
     @isLoading = ko.observable(false)

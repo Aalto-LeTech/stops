@@ -108,4 +108,8 @@ fi:
         replaces_hint: ''
         other: 'Muita tietoja'
         other_hint: 'Kurssista voidaan ilmoittaa kurssin asema, kurssin taso, kurssin kotisivu, CEFR-taso (koskee kielikursseja) ja muita lisätietoja'
-        
+      
+      skill_editor_i18n_strings:
+        delete_skill_no_dependencies: "Tämä osaamistavoite ei toimi esitietona muille osaamistavoitteille, joten se on melko turvallista poistaa."
+        delete_skill_dependency_warning_pre: "Tämä toimii esitietona"
+        delete_skill_dependency_warning_post: "muulle osaamistavoitteelle. Vältä poistamista."

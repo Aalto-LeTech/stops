@@ -61,3 +61,9 @@ en:
         load_failed_heading: "Load failed!"
         search_failure_message: "Failed to load content. Please try again later."
         node_load_failure_message: "Failed to load target course for editing. Please try again later."
+      
+      skill_editor_i18n_strings:
+        delete_skill_no_dependencies: "This learning outcome is not a prerequisite to any other outcome, so it is quite safe to delete."
+        delete_skill_dependency_warning_pre: "This learning outcome is a prerequisite to"
+        delete_skill_dependency_warning_post: "other outcomes. Avoid deleting."
+        

@@ -114,11 +114,24 @@
 </div>
 
 <!-- Deletion confirmation modal -->
-<div id="modal-confirm-skill-deletion" class="modal hide" 
-  data-bind="showModal: showDeletionConfirmationModal, with: currentlyEditedSkill">
+<div id="modal-confirm-skill-deletion" class="modal hide" data-bind="showModal: showDeletionConfirmationModal, with: currentlyEditedSkill">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
     <h4 data-bind="text: generateDeletionConfirmationString()"></h4>
+  </div>
+  <div class="modal-body">
+    <p>
+      <!-- ko if: prereqToIds.length <= 0 -->
+        <span class="badge badge-success"><i class="icon-ok icon-white"></i></span>
+        <span data-bind="text: $root.i18n['delete_skill_no_dependencies']"></span>
+      <!-- /ko -->
+      <!-- ko if: prereqToIds.length > 0 -->
+        <span class="badge badge-important">!</span>
+        <span data-bind="text: $root.i18n['delete_skill_dependency_warning_pre']"></span>
+        <span data-bind="text: prereqToIds.length"></span>
+        <span data-bind="text: $root.i18n['delete_skill_dependency_warning_post']"></span>
+      <!-- /ko -->
+    </p>
   </div>
   <div class="modal-footer">
     <button class="btn" data-dismiss="modal"><%= t :Cancel %></button>

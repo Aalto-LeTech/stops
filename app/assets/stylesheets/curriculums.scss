@@ -139,3 +139,12 @@ $new-course-box-font-color: #24765C;
   }
 }
 
+#modal-edit-skill {
+  top: 1%;
+  width: 1000px;
+  margin: 0px 0 0 -500px; /* original margin: -250px 0 0 -280px; */
+  
+  .modal-body {
+    max-height: 800px;
+  }
+}

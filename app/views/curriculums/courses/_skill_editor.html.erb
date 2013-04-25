@@ -95,22 +95,35 @@
       <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
       <h3><%= @competence_node.localized_description.name %> - <%= t('.add_skill') %></h3>
     </div>
-    <div class="modal-body" data-bind="with: currentlyEditedSkill">
-      <div class="form-horizontal" data-bind="foreach: descriptions">
+    <div class="modal-body">
+      <div class="form-horizontal">
+        <!-- ko with: currentlyEditedSkill -->
+          <!-- ko foreach: descriptions -->
+            <div class="control-group">
+              <label class="control-label">
+                <span data-bind="text: localizedLocale"></span>
+              </label>
+              <div class="controls">
+                <input type="text" class="input-xlarge" data-bind="value: description" />
+              </div>
+            </div>
+          <!-- /ko -->
+        <!-- /ko -->
+
         <div class="control-group">
-          <label class="control-label">
-            <span data-bind="text: localizedLocale"></span>
-          </label>
           <div class="controls">
-            <input type="text" class="input-xlarge" data-bind="value: description" />
+            <button class="btn" data-dismiss="modal" aria-hidden="true"><%= t(:Cancel) %></button>
+            <button class="btn btn-primary" data-bind="click: clickSaveSkill"><%= t(:Save) %></button>
           </div>
         </div>
       </div>
+      
+      <%= render :partial => 'curriculums/courses/bloom_instructions' %>
     </div>
+    <!--
     <div class="modal-footer">
-      <button class="btn" data-dismiss="modal" aria-hidden="true"><%= t(:Cancel) %></button>
-      <button class="btn btn-primary" data-bind="click: clickSaveSkill"><%= t(:Save) %></button>
     </div>
+    -->
 </div>
 
 <!-- Deletion confirmation modal -->

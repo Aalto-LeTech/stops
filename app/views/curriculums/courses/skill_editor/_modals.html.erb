@@ -5,7 +5,7 @@
   data-curriculum-url="<%= curriculum_path(@curriculum) %>">
     <div class="modal-header">
       <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-      <h3><%= @competence_node.localized_description.name %> - <%= t('.add_skill') %></h3>
+      <h3><%= @competence_node.localized_description.name %> - <%= t('curriculums.courses.skill_editor.add_skill') %></h3>
     </div>
     <div class="modal-body" data-bind="with: currentlyEditedSkill">
       <div class="form-horizontal" data-bind="foreach: descriptions">

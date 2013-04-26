@@ -49,6 +49,7 @@ fi:
         edit_course_heading: 'Edit course'
 
       skill_editor:
+        add_skill: 'Lisää osaamistavoite'
         supportingPrereqButton: 'Tukeva'
         strictPrereqButton: 'Välttämätön'
         # Failure messages
@@ -63,7 +64,6 @@ fi:
           search_failure_message: "Tietoja ei pystytty lataamaan. Ole hyvä ja kokeile myöhemmin uudestaan."
 
         current_course_column:
-          add_skill: 'Lisää osaamistavoite'
           remove_skill: 'Poista osaamistavoite'
           edit_skill: 'Muokkaa osaamistavoitetta'
           outcomes_heading: 'Osaamistavoitteet'

@@ -122,11 +122,8 @@ class CompetenceSkillEditor
       @isLoading(false)
       @loadFailed(false)
 
-      # FIXME: Seems that data can be null. Is that a problem?
-      unless data
-        console.log "CompetenceSkillEditor::updateCurrentPrereqNodes() AJAX-query received null JSON. Check this."
-        return
-      
+      # At least an empty array is expected
+      return unless data
       
       # Got nodes, now process them
       newNodes = @_currentPrereqNodes()

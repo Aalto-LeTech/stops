@@ -1,7 +1,7 @@
 class Curriculums::CompetenceNodesController < CurriculumsController
 
   def nodes_by_skill_ids
-    nodes_json = nil
+    nodes_json = []
     
     if params[:ids]
       nodes = CompetenceNode.joins(:skills).where('skills.id' => params[:ids]).uniq

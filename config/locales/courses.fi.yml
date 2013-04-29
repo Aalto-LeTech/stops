@@ -48,7 +48,6 @@ fi:
       edit_prereqs:
         title: 'Aseta esitiedot'
         edit_course_heading: 'Edit course'
-      
       skill_editor:
         prereqs_heading: 'Esitiedot'
         outcomes_heading: 'Osaamistavoitteet'
@@ -89,6 +88,12 @@ fi:
           # Confirm skill deletion modal
           deletion_confirmation_question: "Oletko varma, että haluat poistaa valmiuden"
           delete_skill: "Poista valmius"
+        comments:
+          leave_new_comment: "Jätä uusi kommentti"
+        skill_editor_i18n_strings:
+          delete_skill_no_dependencies: "Tämä osaamistavoite ei toimi esitietona muille osaamistavoitteille, joten se on melko turvallista poistaa."
+          delete_skill_dependency_warning_pre: "Tämä toimii esitietona"
+          delete_skill_dependency_warning_post: "muulle osaamistavoitteelle. Vältä poistamista."
       edit:
         heading: 'Kurssin tiedot'
         hint: 'Voit täyttää osan lomakkeesta ja jatkaa myöhemmin (muista kuitenkin painaa "Tallenna" lomakkeen lopussa).'
@@ -135,11 +140,3 @@ fi:
         replaces_hint: ''
         other: 'Muita tietoja'
         other_hint: 'Kurssista voidaan ilmoittaa kurssin asema, kurssin taso, kurssin kotisivu, CEFR-taso (koskee kielikursseja) ja muita lisätietoja'
-      
-      comments:
-        leave_new_comment: "Jätä uusi kommentti"
-        
-      skill_editor_i18n_strings:
-        delete_skill_no_dependencies: "Tämä osaamistavoite ei toimi esitietona muille osaamistavoitteille, joten se on melko turvallista poistaa."
-        delete_skill_dependency_warning_pre: "Tämä toimii esitietona"
-        delete_skill_dependency_warning_post: "muulle osaamistavoitteelle. Vältä poistamista."

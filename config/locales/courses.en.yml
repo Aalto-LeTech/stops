@@ -47,7 +47,7 @@ en:
       edit_prereqs:
         title: 'Set prerequisites'
         edit_course_heading: 'Edit course'
-      
+
       skill_editor:
         prereqs_heading: 'Prerequisites'
         outcomes_heading: 'Learning outcomes'
@@ -90,13 +90,9 @@ en:
           deletion_confirmation_question: 'Are you sure you want to remove skill'
           delete_skill: "Delete skill"
 
-
-      
-      comments:
-        leave_new_comment: "Leave a new comment"
-        
-      skill_editor_i18n_strings:
-        delete_skill_no_dependencies: "This learning outcome is not a prerequisite to any other outcome, so it is quite safe to delete."
-        delete_skill_dependency_warning_pre: "This learning outcome is a prerequisite to"
-        delete_skill_dependency_warning_post: "other outcomes. Avoid deleting."
-        
+        comments:
+          leave_new_comment: "Leave a new comment"
+        skill_editor_i18n_strings:
+          delete_skill_no_dependencies: "This learning outcome is not a prerequisite to any other outcome, so it is quite safe to delete."
+          delete_skill_dependency_warning_pre: "This learning outcome is a prerequisite to"
+          delete_skill_dependency_warning_post: "other outcomes. Avoid deleting."

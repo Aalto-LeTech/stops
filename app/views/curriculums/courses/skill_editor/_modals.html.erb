@@ -1,0 +1,68 @@
+<!-- Skill editor modal -->
+<div id="modal-edit-skill" class="modal hide" 
+  data-current-locale="<%= I18n.locale %>" 
+  data-locales="<%= REQUIRED_LOCALES.join(',') %>" 
+  data-curriculum-url="<%= curriculum_path(@curriculum) %>">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      <h3><%= @competence_node.localized_description.name %> - <%= t('curriculums.courses.skill_editor.add_skill') %></h3>
+    </div>
+    <div class="modal-body">
+      <div class="form-horizontal">
+        <!-- ko with: currentlyEditedSkill -->
+          <!-- ko foreach: descriptions -->
+            <div class="control-group">
+              <label class="control-label">
+                <span data-bind="text: localizedLocale"></span>
+              </label>
+              <div class="controls">
+                <input type="text" class="input-xlarge" data-bind="value: description" />
+              </div>
+            </div>
+          <!-- /ko -->
+        <!-- /ko -->
+
+        <div class="control-group">
+          <div class="controls">
+            <button class="btn" data-dismiss="modal" aria-hidden="true"><%= t(:Cancel) %></button>
+            <button class="btn btn-primary" data-bind="click: clickSaveSkill"><%= t(:Save) %></button>
+          </div>
+        </div>
+      </div>
+      
+      <%= render :partial => 'curriculums/courses/bloom_instructions' %>
+    </div>
+    <!--
+    <div class="modal-footer">
+      <button class="btn" data-dismiss="modal" aria-hidden="true"><%= t(:Cancel) %></button>
+      <button class="btn btn-primary" data-bind="click: clickSaveSkill"><%= t(:Save) %></button>
+    </div>
+    -->
+</div>
+
+<!-- Deletion confirmation modal -->
+<div id="modal-confirm-skill-deletion" class="modal hide" 
+  data-bind="showModal: showDeletionConfirmationModal, with: currentlyEditedSkill">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h4 data-bind="text: generateDeletionConfirmationString()"></h4>
+  </div>
+  <div class="modal-body">
+    <p>
+      <!-- ko if: prereqToIds.length <= 0 -->
+        <span class="badge badge-success"><i class="icon-ok icon-white"></i></span>
+        <span data-bind="text: $root.i18n['delete_skill_no_dependencies']"></span>
+      <!-- /ko -->
+      <!-- ko if: prereqToIds.length > 0 -->
+        <span class="badge badge-important">!</span>
+        <span data-bind="text: $root.i18n['delete_skill_dependency_warning_pre']"></span>
+        <span data-bind="text: prereqToIds.length"></span>
+        <span data-bind="text: $root.i18n['delete_skill_dependency_warning_post']"></span>
+      <!-- /ko -->
+    </p>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal"><%= t :Cancel %></button>
+    <button class="btn btn-danger" data-bind="click: clickConfirmDeletion"><%= t '.delete_skill' %></button>
+  </div>
+</div

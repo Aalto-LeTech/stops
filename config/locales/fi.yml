@@ -42,6 +42,14 @@ fi:
   admin_toolbox_heading: "Admin"
   
 
+  #########################
+  # General status messages
+  #########################
+
+  saving: "Tallennetaan..."
+
+
+
   ##############
   # Time & Date
   ##############

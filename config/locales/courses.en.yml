@@ -27,6 +27,7 @@ en:
     courses:
       edit_tab: 'Course information'
       prereqs_tab: 'Learning outcomes'
+      as_a_prereq_tab: 'Prerequirement to'
       comments_tab: 'Comments'
       creation_form:
         # New course creation form
@@ -60,8 +61,36 @@ en:
         deletion_confirmation_question: 'Are you sure you want to remove skill'
         delete_skill: "Delete skill"
         load_failed_heading: "Load failed!"
-        search_failure_message: "Failed to load content. Please try again later."
-        node_load_failure_message: "Failed to load target course for editing. Please try again later."
+        prereq_change_failed_heading: "Error"
+        prereq_change_failed_message: "Modifying prerequirement failed"
+        searchable_column:
+          prereqs_column_heading: 'Prerequirements'
+          as_a_prereq_column_heading: 'Prerequirement of'
+          search_box_placeholder: "Search"
+          # Failure messages
+          search_failure_message: "Failed to load content. Please try again later."
+
+        current_course_column:
+          remove_skill: 'Delete outcome'
+          edit_skill: 'Edit outcome'
+          outcomes_heading: 'Learning outcomes'
+          # Failure messages
+          node_load_failure_message: "Failed to load target course for editing. Please try again later."
+           # The following message is in two parts because its parameter must be embedded
+          # during runtime with JavaScript.
+          # e.g., 'The skill "Is able to count 1+1=2" could not be removed due to an error.'
+          deletion_failed_heading: "Deletion failed"
+          deletion_failed_message_1: 'The skill'
+          deletion_failed_message_2: 'could not be removed due to an error.'
+          saving_skill_failed_heading: 'Saving failed'
+          saving_skill_failed_message: 'The skill could not be saved due to an error. Please try again later.'
+
+        modals:
+          # Confirm skill deletion modal
+          deletion_confirmation_question: 'Are you sure you want to remove skill'
+          delete_skill: "Delete skill"
+
+
       
       comments:
         leave_new_comment: "Leave a new comment"

@@ -183,6 +183,23 @@ h4.colorful {
   margin-bottom: 20px;
 }
 
+/**************************
+* Bootstrap style additions
+***************************/
+.popover.closable-popover {
+  // Better positiniong for popover close button
+  .close {
+    position: relative;
+    top:   5px;
+    right: 5px;
+  }
+
+  // Leave some space for close button
+  .popover-title {
+    padding-right: 30px;
+  }
+}
+
 /*******************
 *  Generic tables
 ********************/

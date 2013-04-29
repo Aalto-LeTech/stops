@@ -1,0 +1,16 @@
+<div class="row-fluid full-height">
+
+  <% content_for :searchable_column_heading do %>
+    <%= t 'curriculums.courses.searchable_column.prereqs_column_heading' %>
+  <% end %>
+
+  <%= render 'curriculums/courses/skill_editor/searchable_column' %>
+
+  <%= render 'curriculums/courses/skill_editor/current_course_column' %>
+
+</div>
+
+<p><%= link_to t(:Back), edit_curriculum_path(@curriculum) %></p>
+
+<%= render 'curriculums/courses/skill_editor/modals' %>
+

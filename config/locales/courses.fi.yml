@@ -28,6 +28,7 @@ fi:
     courses:
       edit_tab: 'Tiedot'
       prereqs_tab: 'Osaamistavoitteet'
+      as_a_prereq_tab: 'Esitietona muille'
       comments_tab: 'Kommentit'
       creation_form:
         # New course creation form
@@ -61,8 +62,33 @@ fi:
         deletion_confirmation_question: "Oletko varma, että haluat poistaa valmiuden"
         delete_skill: "Poista valmius"
         load_failed_heading: "Lataus epäonnistui!"
-        search_failure_message: "Tietoja ei pystytty lataamaan. Ole hyvä ja kokeile myöhemmin uudestaan."
-        node_load_failure_message: "Muokattavan kurssin tietoja ei pystytty lataamaan. Ole hyvä ja kokeile myöhemmin uudestaan."
+        prereq_change_failed_heading: "Virhe"
+        prereq_change_failed_message: "Esitietovaatimuksen muuttaminen epäonnistui"
+        searchable_column:
+          prereqs_column_heading: 'Esitiedot'
+          as_a_prereq_column_heading: 'Esitietona seuraaville valmiuksille'
+          search_box_placeholder: 'Haku'
+          # Failure messages
+          search_failure_message: "Tietoja ei pystytty lataamaan. Ole hyvä ja kokeile myöhemmin uudestaan."
+
+        current_course_column:
+          remove_skill: 'Poista osaamistavoite'
+          edit_skill: 'Muokkaa osaamistavoitetta'
+          outcomes_heading: 'Osaamistavoitteet'
+          # Failure messages
+          node_load_failure_message: "Muokattavan kurssin tietoja ei pystytty lataamaan. Ole hyvä ja kokeile myöhemmin uudestaan."
+          # The following message is in two parts because its parameter must be embedded
+          # during runtime with JavaScript. 
+          # e.g., 'Virheestä johtuen valmiutta "Osaa laskea 1+1=2" ei pystytty poistamaan.'
+          deletion_failed_heading: "Poisto epäonnistui"
+          deletion_failed_message_1: 'Virheestä johtuen valmiutta'
+          deletion_failed_message_2: 'ei pystytty poistamaan.'
+          saving_skill_failed_heading: 'Tallennus epäonnistui'
+          saving_skill_failed_message: 'Valmiutta ei pystytty tallentamaan virheen vuoksi. Ole hyvä ja yritä myöhemmin uudelleen.'
+        modals:
+          # Confirm skill deletion modal
+          deletion_confirmation_question: "Oletko varma, että haluat poistaa valmiuden"
+          delete_skill: "Poista valmius"
       edit:
         heading: 'Kurssin tiedot'
         hint: 'Voit täyttää osan lomakkeesta ja jatkaa myöhemmin (muista kuitenkin painaa "Tallenna" lomakkeen lopussa).'

@@ -127,7 +127,10 @@ var skillGraphView = {
     for (var array_index in data) {
       var rawData = data[array_index].skill;
       var skill = this.skills[rawData.id];
-
+      if (!skill) {
+        continue;
+      }
+      
       for (var array_index2 in rawData.strict_prereq_ids) {
         var prereq = this.skills[rawData.strict_prereq_ids[array_index2]];
 

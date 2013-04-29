@@ -1,0 +1,55 @@
+ <!-- Prereqs -->
+  <div class="span6 full-height scroll-vertical">
+    <!-- <h2><%=t '.prereqs_heading' %></h2> -->
+    <h2><%= yield :searchable_column_heading %></h2>
+    
+    <div class="input-append bottom-weight">
+      <input class="span8" type="text" id="search" placeholder="<%= t '.search_box_placeholder' %>" data-bind="value: searchString, valueUpdate: 'keyup', event: { keyup: searchKeyPress }" />
+      <button class="btn" data-bind="click: clickSearch"><i class="icon-search"></i></button>
+      <button class="btn" data-bind="click: clickClearSearch"><i class="icon-remove"></i></button>
+    </div>
+    
+    <!-- Error alert box -->
+    <div class="row-fluid hide" data-bind="css: { hide: loadFailed() === false }">
+      <div class="alert alert-error span11">
+        <strong><%= t 'curriculums.courses.skill_editor.load_failed_heading' %></strong> <%= t '.search_failure_message' %>
+      </div>
+    </div>
+
+    <!-- loading icon -->
+    <div class="skill-editor-loading-icon hide" data-bind="css: { hide: isLoading() === false }">
+      <%= image_tag 'progress.gif' %>
+    </div>
+
+    <div data-bind="foreach: visibleNodes, css: { loading: skillBeingDeleted() }">
+      
+      <div class="course" 
+      data-bind="popover: { 
+                  trigger: skillErrorOccurred,
+                  options: { 
+                    trigger: 'manual',
+                    html: true,
+                    template: O4.skillEditor.errorPopoverTemplate, 
+                    title: '<%= t "curriculums.courses.skill_editor.prereq_change_failed_heading" %>', 
+                    content: '<%= t "curriculums.courses.skill_editor.prereq_change_failed_message" %>'
+                  } 
+                }">
+        <p><span data-bind="text: code"></span> <span data-bind="text: localizedName"></span> <span class="pull-right" data-bind="text: localizedType"></span></p>
+        <!-- ko foreach: skills -->
+          <div class="skill" data-bind="css: { 
+              selected: selected(), 
+              supporting: prereqType() === 0, 
+              strict: prereqType() === 1,
+              loading: isLoading()
+            }">
+            <div class="buttons">
+              <span data-bind="click: clickToggleSupportingPrereq" class="supportingPrereqButton"><%=t('curriculums.courses.skill_editor.supportingPrereqButton') %></span>
+              <span data-bind="click: clickToggleStrictPrereq" class="strictPrereqButton"><%=t('curriculums.courses.skill_editor.strictPrereqButton') %></span>
+            </div>
+            <span data-bind="text: localizedDescription"></span>
+          </div>
+        <!-- /ko -->
+      </div>
+      
+    </div>
+  </div>

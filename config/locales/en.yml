@@ -40,6 +40,13 @@ en:
   course_code: "code"
   admin_toolbox_heading: "Hallinta"
 
+  #########################
+  # General status messages
+  #########################
+
+  saving: "Saving..."
+
+
   ##############
   # Time & Date
   ##############

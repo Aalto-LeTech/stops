@@ -1,0 +1,50 @@
+  <!-- Outcomes -->
+  <div class="span6">
+    <h2><%=t '.outcomes_heading' %></h2>
+
+    <!-- Target node loading error alert box -->
+    <div class="row-fluid hide" data-bind="css: { hide: targetNodeLoadFailed() === false }">
+      <div class="alert alert-error span11">
+        <strong><%= t 'curriculums.courses.skill_editor.load_failed_heading' %></strong> <%= t '.node_load_failure_message' %>
+      </div>
+    </div>
+
+    <!-- Error alert box for deletion/edit-errors -->
+    <div class="row-fluid hide" 
+      data-bind="css: { hide: skillErrorModelView.shown() === false }, 
+        with: skillErrorModelView">
+      <div class="alert alert-error span11">
+        <button type="button" class="close" data-bind="click: clickClose">&times;</button>
+        <strong data-bind="text: heading"></strong> <span data-bind="text: message"></span>
+      </div>
+    </div>
+    
+    <!-- loading icon -->
+    <div class="skill-editor-loading-icon" data-bind="css: { hide: targetNodeIsLoading() === false }">
+      <%= image_tag 'progress.gif' %>
+    </div>
+
+    <div id="target-node" class="course"
+      data-node-id="<%= @competence_node.id %>" 
+      data-url="<%= @competence_node_url %>">
+      <!-- ko with: node -->
+        <p><span data-bind="text: code"></span> <span data-bind="text: localizedName"></span></p>
+        <!-- ko foreach: skills -->
+          <div class="skill" data-bind="click: clickSelectTarget, css: { 
+              selected: selected(), 
+              loading: isLoading() || isBeingDeleted()
+            }">
+            <div class="buttons">
+              <i class="icon-pencil" data-bind="click: clickEdit" title="<%=t '.edit_skill' %>"></i>
+              <i class="icon-trash" data-bind="click: clickDelete, clickBubble: false" title="<%=t '.remove_skill' %>"></i>
+            </div>
+            <span class="skill-description" 
+              data-bind="text: isLoading() ? '<%= t :saving %>' : localizedDescription"></span>
+          </div>
+        <!-- /ko -->
+      <!-- /ko -->
+      
+      <p><button class="btn btn-mini" data-bind="click: $root.clickAddSkill"><i class="icon-plus"></i> <%=t 'curriculums.courses.skill_editor.add_skill' %></button></p>
+    </div>
+    
+  </div>

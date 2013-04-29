@@ -81,6 +81,10 @@
     border: 1px solid #8080ff;
   }
 
+  .buttons > i {
+    cursor: pointer;
+  }
+
   .supportingPrereqButton, .strictPrereqButton {
     background: #ddd;
     border: 1px solid #888;
@@ -90,10 +94,22 @@
   }
 }
 
-.skill.loading {
+.loading {
   opacity: 0.5;
+}
+
+.loading .skill, .loading.skill {
   .supportingPrereqButton, .strictPrereqButton {
     cursor: default;
+  }
+
+  .buttons > i {
+    cursor: default;
+  }
+
+  .skill-description {
+    color:        red;
+    font-weight:  bold;
   }
 }
 

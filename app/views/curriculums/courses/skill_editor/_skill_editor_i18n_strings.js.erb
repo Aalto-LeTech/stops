@@ -1,0 +1,40 @@
+/* Loads translated i18n strings used by skillEditor.js.coffee */
+(function() {
+  var i18n;
+
+  /* Embeds translation parameter into translated string. */
+  function deletion_failed_message(skill) {
+    return i18n['deletion_failed_message_1'] + ' "' + skill + '" ' + i18n['deletion_failed_message_2'];
+  };
+
+  /* i18n strings */
+  i18n = {
+    current_locale:                 "<%= I18n.locale %>",
+    required_locales:               ["<%= REQUIRED_LOCALES.join('","').html_safe %>"],
+    competence:                     "<%= escape_javascript(t(:competence)) %>",
+    scoped_course:                  "<%= escape_javascript(t(:scoped_course)) %>",
+
+    language_in_fi:                 "<%= escape_javascript(t(:language_in_fi)) %>",
+    language_in_sv:                 "<%= escape_javascript(t(:language_in_sv)) %>",
+    language_in_en:                 "<%= escape_javascript(t(:language_in_en)) %>",
+    
+    delete_skill_no_dependencies:   "<%= escape_javascript(t('.delete_skill_no_dependencies')) %>",
+    delete_skill_dependency_warning_pre:"<%= escape_javascript(t('.delete_skill_dependency_warning_pre')) %>",
+    delete_skill_dependency_warning_post:"<%= escape_javascript(t('.delete_skill_dependency_warning_post')) %>",
+
+    deletion_confirmation_question: "<%= escape_javascript(t('curriculums.courses.skill_editor.modals.deletion_confirmation_question')) %>",
+    deletion_failed_heading:        "<%= escape_javascript(t('curriculums.courses.skill_editor.current_course_column.deletion_failed_heading')) %>",
+    deletion_failed_message_1:      "<%= escape_javascript(t('curriculums.courses.skill_editor.current_course_column.deletion_failed_message_1')) %>",
+    deletion_failed_message_2:      "<%= escape_javascript(t('curriculums.courses.skill_editor.current_course_column.deletion_failed_message_2')) %>",
+    /* The following is a function! */
+    deletion_failed_message: deletion_failed_message,
+
+    saving_skill_failed_heading:    "<%= escape_javascript(t('curriculums.courses.skill_editor.current_course_column.saving_skill_failed_heading')) %>",
+    saving_skill_failed_message:    "<%= escape_javascript(t('curriculums.courses.skill_editor.current_course_column.saving_skill_failed_message')) %>"
+  };
+
+  /* Translations available at O4.skillEditor.i18n */ 
+  var O4 = window.O4 = window.O4 || {};
+  O4.skillEditor = O4.skillEditor || {};
+  O4.skillEditor.i18n = i18n;
+})();

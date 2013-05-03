@@ -71,8 +71,7 @@ en:
           search_failure_message: "Failed to load content. Please try again later."
 
         current_course_column:
-          remove_skill: 'Delete outcome'
-          edit_skill: 'Edit outcome'
+
           outcomes_heading: 'Learning outcomes'
           # Failure messages
           node_load_failure_message: "Failed to load target course for editing. Please try again later."
@@ -84,7 +83,10 @@ en:
           deletion_failed_message_2: 'could not be removed due to an error.'
           saving_skill_failed_heading: 'Saving failed'
           saving_skill_failed_message: 'The skill could not be saved due to an error. Please try again later.'
-
+        competence_node:
+         
+          remove_skill: 'Delete outcome'
+          edit_skill: 'Edit outcome'
         modals:
           # Confirm skill deletion modal
           deletion_confirmation_question: 'Are you sure you want to remove skill'

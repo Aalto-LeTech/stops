@@ -189,7 +189,7 @@
 
       # Click a skill of the target course
       clickSelectTarget: () ->
-        if not @selected() && not @isLoading() && not @isBeingDeleted()
+        if @node.selectable()  && not @selected() && not @isLoading() && not @isBeingDeleted()
           # Deselect all
           for skill in @node.skills()
             skill.selected(false)

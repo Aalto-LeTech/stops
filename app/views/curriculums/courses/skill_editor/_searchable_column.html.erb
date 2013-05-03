@@ -21,18 +21,28 @@
       <%= image_tag 'progress.gif' %>
     </div>
 
+    <!-- NEW COURSE -->
+
+    <div data-bind="foreach: visibleNodes, css: { loading: skillBeingDeleted() }">
+      <%= render 'curriculums/courses/skill_editor/competence_node' %>
+    </div>
+
+
+
+    <!-- OLD COURSE -->
+    <% if false %>
     <div data-bind="foreach: visibleNodes, css: { loading: skillBeingDeleted() }">
       
-      <div class="course" 
-      data-bind="popover: { 
+      <div class="course"
+      data-bind="popover: {
                   trigger: skillErrorOccurred,
-                  options: { 
+                  options: {
                     trigger: 'manual',
                     html: true,
                     template: O4.skillEditor.errorPopoverTemplate, 
                     title: '<%= t "curriculums.courses.skill_editor.prereq_change_failed_heading" %>', 
                     content: '<%= t "curriculums.courses.skill_editor.prereq_change_failed_message" %>'
-                  } 
+                  }
                 }">
         <p><span data-bind="text: code"></span> <span data-bind="text: localizedName"></span> <span class="pull-right" data-bind="text: localizedType"></span></p>
         <!-- ko foreach: skills -->
@@ -50,6 +60,9 @@
           </div>
         <!-- /ko -->
       </div>
-      
     </div>
+    <% end %>
+    <!-- OLD COURSE ENDS -->
+
+
   </div>

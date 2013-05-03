@@ -23,6 +23,29 @@
         @localizedName = ko.observable('untitled')
         @localizedType = O4.skillEditor.i18n[@type]
 
+        # Are the skills of this node selectable?
+        @selectable = ko.computed () =>
+          isTarget = this == @editor.node()
+          if (isTarget && not @editor.editingAsAPrereq()) || (not isTarget && @editor.editingAsAPrereq())
+            true
+          else
+            false
+
+
+        @prereqButtonsShown = ko.computed () =>
+          isTargetNode = this == @editor.node()
+          if (isTargetNode && @editor.editingAsAPrereq()) || (not isTargetNode && not @editor.editingAsAPrereq())
+            true
+          else
+            false
+
+        @editButtonsShown = ko.computed () =>
+          # Check if node is the target node
+          if this == @editor.node()
+            true
+          else 
+            false
+
         @skillErrorOccurred = ko.observable(false)
 
         if data['skills']

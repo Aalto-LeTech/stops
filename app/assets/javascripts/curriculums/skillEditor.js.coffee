@@ -32,9 +32,10 @@ ErrorModelView        = O4.skillEditor.ErrorModelView
 
 
 class CompetenceSkillEditor 
-  constructor: () ->
+  constructor: (opts) ->
     @i18n = O4.skillEditor.i18n  # Access in the view like this: <span data-bind="text: $root.i18n['qwerty'] ">
     
+    @editingAsAPrereq = !!opts['editAsPrereq']
     @searchString = ko.observable('')
     @searchResults = ko.observableArray()
     @isLoading = ko.observable(false)

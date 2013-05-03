@@ -102,6 +102,9 @@ ErrorModelView        = O4.skillEditor.ErrorModelView
 
 
       updateCurrentPrereqNodes: () ->
+
+        return if @editingAsAPrereq
+
         currentPrereqs = @_currentPrereqNodes()
         # Current prereq Nodes that are also in the search results must not be included in
         # the skill disposal below. 
@@ -185,6 +188,7 @@ ErrorModelView        = O4.skillEditor.ErrorModelView
         
         #this.updatePrereqHighlights()
       
+      # TODO Dead code?
       updatePrereqHighlights: () ->
         # Set highlights
         targetSkill = @currentlyEditedSkill()

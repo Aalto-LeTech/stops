@@ -19,8 +19,8 @@
           loading: isLoading() || isBeingDeleted()
         }">
         <div class="buttons" data-bind="visible: $parent.prereqButtonsShown">
-          <span data-bind="click: clickToggleSupportingPrereq" class="supportingPrereqButton"><%= t('curriculums.courses.skill_editor.supportingPrereqButton') %></span>
-          <span data-bind="click: clickToggleStrictPrereq" class="strictPrereqButton"><%= t('curriculums.courses.skill_editor.strictPrereqButton') %></span>
+          <span data-bind="click: clickToggleSupportingPrereq, clickBubble: false" class="supportingPrereqButton"><%= t('curriculums.courses.skill_editor.supportingPrereqButton') %></span>
+          <span data-bind="click: clickToggleStrictPrereq, clickBubble: false" class="strictPrereqButton"><%= t('curriculums.courses.skill_editor.strictPrereqButton') %></span>
         </div>
         <div class="buttons" data-bind="visible: $parent.editButtonsShown">
           <i class="icon-pencil" data-bind="click: clickEdit" title="<%=t '.edit_skill' %>"></i>

@@ -35,7 +35,7 @@ class CompetenceSkillEditor
   constructor: (opts) ->
     @i18n = O4.skillEditor.i18n  # Access in the view like this: <span data-bind="text: $root.i18n['qwerty'] ">
     
-    @editingAsAPrereq = !!opts['editAsPrereq']
+    @editingAsAPrereq = !!opts['editAsPrereq'] if opts
     @searchString = ko.observable('')
     @searchResults = ko.observableArray()
     @isLoading = ko.observable(false)
@@ -222,8 +222,7 @@ class CompetenceSkillEditor
     # save skill by ajax
     @currentlyEditedSkill().save(@curriculumUrl)
       
-    
-
+  
 
 jQuery ->
   new CompetenceSkillEditor

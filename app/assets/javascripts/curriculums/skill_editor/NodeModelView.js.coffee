@@ -26,15 +26,14 @@
         # Are the skills of this node selectable?
         @selectable = ko.computed () =>
           isTarget = this == @editor.node()
-          if (isTarget && not @editor.editingAsAPrereq()) || (not isTarget && @editor.editingAsAPrereq())
+          if (isTarget && not @editor.editingAsAPrereq) || (not isTarget && @editor.editingAsAPrereq)
             true
           else
             false
 
-
         @prereqButtonsShown = ko.computed () =>
           isTargetNode = this == @editor.node()
-          if (isTargetNode && @editor.editingAsAPrereq()) || (not isTargetNode && not @editor.editingAsAPrereq())
+          if (isTargetNode && @editor.editingAsAPrereq) || (not isTargetNode && not @editor.editingAsAPrereq)
             true
           else
             false

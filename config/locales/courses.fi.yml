@@ -71,8 +71,6 @@ fi:
           search_failure_message: "Tietoja ei pystytty lataamaan. Ole hyvä ja kokeile myöhemmin uudestaan."
 
         current_course_column:
-          remove_skill: 'Poista osaamistavoite'
-          edit_skill: 'Muokkaa osaamistavoitetta'
           outcomes_heading: 'Osaamistavoitteet'
           # Failure messages
           node_load_failure_message: "Muokattavan kurssin tietoja ei pystytty lataamaan. Ole hyvä ja kokeile myöhemmin uudestaan."
@@ -84,6 +82,9 @@ fi:
           deletion_failed_message_2: 'ei pystytty poistamaan.'
           saving_skill_failed_heading: 'Tallennus epäonnistui'
           saving_skill_failed_message: 'Valmiutta ei pystytty tallentamaan virheen vuoksi. Ole hyvä ja yritä myöhemmin uudelleen.'
+        competence_node:
+          remove_skill: 'Poista osaamistavoite'
+          edit_skill: 'Muokkaa osaamistavoitetta'
         modals:
           # Confirm skill deletion modal
           deletion_confirmation_question: "Oletko varma, että haluat poistaa valmiuden"

@@ -1,0 +1,37 @@
+<div class="course" 
+  data-bind="popover: { 
+              trigger: skillErrorOccurred,
+              options: { 
+                trigger: 'manual',
+                html: true,
+                template: O4.skillEditor.errorPopoverTemplate, 
+                title: '<%= t "curriculums.courses.skill_editor.prereq_change_failed_heading" %>', 
+                content: '<%= t "curriculums.courses.skill_editor.prereq_change_failed_message" %>'
+              } 
+            }">
+    <p><span data-bind="text: code"></span> <span data-bind="text: localizedName"></span> <span class="pull-right" data-bind="text: localizedType"></span></p>
+    <!-- ko foreach: skills -->
+      <div class="skill" data-bind="click: clickSelectTarget,
+        css: {
+          selected: selected(),
+          supporting: prereqType() === 0,
+          strict: prereqType() === 1,
+          loading: isLoading() || isBeingDeleted()
+        }">
+        <div class="buttons" data-bind="visible: $parent.prereqButtonsShown">
+          <span data-bind="click: clickToggleSupportingPrereq, clickBubble: false" class="supportingPrereqButton"><%= t('curriculums.courses.skill_editor.supportingPrereqButton') %></span>
+          <span data-bind="click: clickToggleStrictPrereq, clickBubble: false" class="strictPrereqButton"><%= t('curriculums.courses.skill_editor.strictPrereqButton') %></span>
+        </div>
+        <div class="buttons" data-bind="visible: $parent.editButtonsShown">
+          <i class="icon-pencil" data-bind="click: clickEdit" title="<%=t '.edit_skill' %>"></i>
+          <i class="icon-trash" data-bind="click: clickDelete, clickBubble: false" title="<%=t '.remove_skill' %>"></i>
+        </div>
+         <span class="skill-description" 
+              data-bind="text: isLoading() ? '<%= t :saving %>' : localizedDescription"></span>
+      </div>
+     <!-- /ko -->
+
+    <p data-bind="visible: editButtonsShown, with: $root">
+      <button class="btn btn-mini" data-bind="click: $root.clickAddSkill"><i class="icon-plus"></i> <%= t 'curriculums.courses.skill_editor.add_skill' %></button>
+    </p>
+</div>

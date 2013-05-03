@@ -23,7 +23,7 @@
 
         # This should be after the Skill data is loaded so that id is set
         @prereqType = ko.computed () =>
-          #console.log("Recalculating prereqType for skill id: #{@id}")
+          console.log("Recalculating prereqType for skill id: #{@id()}")
           @editor._currentPrereqIds()[@id()]
       
       update: (data) ->
@@ -189,10 +189,14 @@
 
       # Click a skill of the target course
       clickSelectTarget: () ->
-        if not @selected() && not @isLoading() && not @isBeingDeleted()
+        if @node.selectable()  && not @selected() && not @isLoading() && not @isBeingDeleted()
           # Deselect all
           for skill in @node.skills()
             skill.selected(false)
+
+          for node in @editor.visibleNodes()
+            for skill in node.skills()
+              skill.selected(false)
 
           # Select this one
           @selected(true)

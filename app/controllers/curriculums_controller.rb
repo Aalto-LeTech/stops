@@ -224,11 +224,12 @@ class CurriculumsController < ApplicationController
           :include => [
             {:skills => {
                 :only => [:id],
-                :include => [
+                :include => {
                   :skill_descriptions => {
                     :only => [:id, :locale, :description]
-                  }
-                ]
+                  },
+                  :skill_prereqs => {:only => [:prereq_id, :requirement]}
+                }
             }},
             {:competence_descriptions => {
                 :only => [:id, :locale, :name]
@@ -239,19 +240,20 @@ class CurriculumsController < ApplicationController
         # Must be a ScopedCourse
         node.as_json(
           :only => [:id, :course_code],
-          :include => [
-            {:skills => {
+          :include => {
+            :skills => {
                 :only => [:id],
-                :include => [
+                :include => {
                   :skill_descriptions => {
                     :only => [:id, :locale, :description]
-                  }
-                ]
-            }},
-            {:course_descriptions => {
+                  },
+                  :skill_prereqs => {:only => [:prereq_id, :requirement]}
+                }
+            },
+            :course_descriptions => {
                 :only => [:id, :locale, :name]
-            }}
-          ]
+            }
+          }
         )
       end
     end

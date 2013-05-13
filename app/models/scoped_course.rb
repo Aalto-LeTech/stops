@@ -97,7 +97,7 @@ class ScopedCourse < CompetenceNode
   end
 
   def update_comments(hash)
-    self.comments = hash.to_json
+    write_attribute(:comments, hash.to_json)
   end
   
   def comment(field)

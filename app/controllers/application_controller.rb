@@ -60,22 +60,22 @@ class ApplicationController < ActionController::Base
     @profile = Profile.find(params[:profile_id])
   end
 
-  # Sends email to admin if an exception occurrs. Recipient is defined by the ERRORS_EMAIL constant.
-  def log_error(exception)
-    super(exception)
-
-    begin
-      # Send email
-      if ERRORS_EMAIL && !(local_request? || exception.is_a?(ActionController::RoutingError))
-        ErrorMailer.deliver_snapshot(exception, clean_backtrace(exception), params, request)
-      end
-    rescue => e
-      logger.error(e)
-    end
-  end
-
   private
 
+  # Send email on exception
+  rescue_from Exception do |exception|
+    begin
+      # Send email
+      if ERRORS_EMAIL && Rails.env == 'production' && !(exception.is_a?(ActionController::RoutingError)) # || local_request?
+        ErrorMailer.snapshot(exception, params, request).deliver
+      end
+    rescue => e
+      logger.error e
+    end
+    
+    raise exception
+  end
+  
   def current_session
     return @current_session if defined?(@current_session)
     @current_session = UserSession.find

@@ -4,9 +4,9 @@
   <script type="text/javascript">
     <%= render "curriculums/courses/skill_editor/skill_editor_i18n_strings.js" %>
   </script>
-  <%= javascript_include_tag 'curriculums/skillEditor' %>
+  <%= javascript_include_tag 'curriculums/skillEditor_edit_prereqs_init.js' %>
 <% end %>
 
-<%= render :partial => 'tabs', :locals => { :active_tab => 'edit_prereqs' } %>
+<%= render 'tabs' %>
 
 <%= render 'curriculums/courses/skill_editor/prereq_editor' %>

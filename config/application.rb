@@ -42,10 +42,18 @@ module Ops
     # Enable the asset pipeline
     config.assets.enabled = true
 
-    config.assets.precompile += ['console_shim.js', 'curriculums/skillEditor.js', 'curriculums/curriculum.js', 'print.css', 'raphael-min.js', 'skillGraphView.js', 'graphCourse.js', 'graphSkill.js']
+    config.assets.precompile += [
+      'curriculums/curriculum.js',
+      'curriculums/skillEditor_edit_prereqs_init.js',
+      'curriculums/skillEditor_edit_as_a_prereq_init.js',
+      'print.css',
+      'raphael-min.js',
+      'skillGraphView.js',
+      'graphCourse.js',
+      'graphSkill.js'
+    ]
     
     # Version of your assets, change this if you want to expire all your assets
-    config.assets.version = '1.7'
+    config.assets.version = '1.8'
   end
 end
-

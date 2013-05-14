@@ -47,11 +47,13 @@ module Ops
       'curriculums/skillEditor.js',
       'curriculums/curriculum.js',
       'curriculums/skillEditor_edit_prereqs_init.js',
+      'curriculums/skillEditor_edit_as_a_prereq_init.js',
       'print.css',
       'raphael-min.js',
       'skillGraphView.js',
       'graphCourse.js',
-      'graphSkill.js']
+      'graphSkill.js'
+    ]
     
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.8'

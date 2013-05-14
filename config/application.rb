@@ -43,7 +43,6 @@ module Ops
     config.assets.enabled = true
 
     config.assets.precompile += [
-      'console_shim.js',
       'curriculums/curriculum.js',
       'curriculums/skillEditor_edit_prereqs_init.js',
       'curriculums/skillEditor_edit_as_a_prereq_init.js',

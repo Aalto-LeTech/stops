@@ -60,20 +60,6 @@ class ApplicationController < ActionController::Base
     @profile = Profile.find(params[:profile_id])
   end
 
-  # Sends email to admin if an exception occurrs. Recipient is defined by the ERRORS_EMAIL constant.
-  def log_error(exception)
-    super(exception)
-
-    begin
-      # Send email
-      if ERRORS_EMAIL && !(local_request? || exception.is_a?(ActionController::RoutingError))
-        ErrorMailer.deliver_snapshot(exception, clean_backtrace(exception), params, request)
-      end
-    rescue => e
-      logger.error(e)
-    end
-  end
-
   private
 
   def current_session
@@ -145,6 +131,20 @@ class ApplicationController < ActionController::Base
   def redirect_back_or_default(default)
     redirect_to(session[:return_to] || default)
     session[:return_to] = nil
+  end
+  
+  # Send email on exception
+  rescue_from Exception do |exception|
+    begin
+      # Send email
+      if ERRORS_EMAIL && Rails.env == 'production' && !(exception.is_a?(ActionController::RoutingError)) # || local_request?
+        ErrorMailer.snapshot(exception, params, request).deliver
+      end
+    rescue => e
+      logger.error e
+    end
+    
+    raise exception
   end
 
 end

@@ -1,0 +1,12 @@
+Error report from <%= @request.host %> (<%= Time.now %>)
+
+<%= @exception.to_s.html_safe %>
+
+Request: <%= @env['REQUEST_METHOD'] %> <%= @env['REQUEST_URI'] %>
+Controller: <%= @params['controller'] %>#<%= @params['action'] %>
+Params:
+<% for key, val in @params -%>
+  <%= key %>: <%= val %>
+<% end -%>
+
+Agent: <%= @env['HTTP_USER_AGENT']  %>

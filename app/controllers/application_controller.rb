@@ -62,6 +62,20 @@ class ApplicationController < ActionController::Base
 
   private
 
+  # Send email on exception
+  rescue_from Exception do |exception|
+    begin
+      # Send email
+      if ERRORS_EMAIL && Rails.env == 'production' && !(exception.is_a?(ActionController::RoutingError)) # || local_request?
+        ErrorMailer.snapshot(exception, params, request).deliver
+      end
+    rescue => e
+      logger.error e
+    end
+    
+    raise exception
+  end
+  
   def current_session
     return @current_session if defined?(@current_session)
     @current_session = UserSession.find
@@ -131,20 +145,6 @@ class ApplicationController < ActionController::Base
   def redirect_back_or_default(default)
     redirect_to(session[:return_to] || default)
     session[:return_to] = nil
-  end
-  
-  # Send email on exception
-  rescue_from Exception do |exception|
-    begin
-      # Send email
-      if ERRORS_EMAIL && Rails.env == 'production' && !(exception.is_a?(ActionController::RoutingError)) # || local_request?
-        ErrorMailer.snapshot(exception, params, request).deliver
-      end
-    rescue => e
-      logger.error e
-    end
-    
-    raise exception
   end
 
 end

@@ -47,8 +47,9 @@ en:
       edit_prereqs:
         title: 'Set prerequisites'
         edit_course_heading: 'Edit course'
-
       skill_editor:
+        prereq_editor:
+          help_text: "Here you can edit the prerequirement skills for the current course (located on the right side). Please begin by selecting a skill from the right side and then use the search on the left to add or remove prerequirement skills. If the search is cleared, only the current prerequirements will be shown."
         prereqs_heading: 'Prerequisites'
         outcomes_heading: 'Learning outcomes'
         add_skill: 'Add outcome'

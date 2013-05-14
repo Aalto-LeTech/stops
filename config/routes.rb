@@ -70,6 +70,10 @@ Ops::Application.routes.draw do
           get 'comments'
           post 'create_comment'
         end
+
+        collection do
+          get 'hide_messages'
+        end
       end
 
       resources :skills, :controller => 'curriculums/skills' do

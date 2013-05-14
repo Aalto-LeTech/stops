@@ -6,6 +6,7 @@
 #= require curriculums/skill_editor/SkillModelView
 #= require curriculums/skill_editor/NodeModelView
 #= require curriculums/skill_editor/ErrorModelView
+#= require curriculums/HintModelView
 
 # Check that i18n strings have been loaded before this file
 if not O4.skillEditor.i18n
@@ -48,8 +49,6 @@ ErrorModelView        = O4.skillEditor.ErrorModelView
         # Internal lookup table from which skill prereq states are computed automatically
         @_currentPrereqIds = ko.observable({})
 
-        @skillErrorModelView = new ErrorModelView
-
         # Actual observable results to be shown 
         @visibleNodes = ko.computed () =>
 
@@ -74,8 +73,12 @@ ErrorModelView        = O4.skillEditor.ErrorModelView
         @targetNodeIsLoading = ko.observable(true)
       
         @node = ko.observable()
+      
+        @skillErrorModelView = new ErrorModelView
+        hintHidingKey = if @editingAsAPrereq then 'edit_as_a_prereq_help' else 'edit_prereqs_help'
+        @hintModelView = new O4.misc.HintModelView hintHidingKey, @curriculumUrl + '/courses/hide_messages'
+
         ko.applyBindings(this)
-        
         this.loadNode()
       
       

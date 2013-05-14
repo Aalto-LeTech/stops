@@ -97,7 +97,9 @@ class Curriculums::CoursesController < CurriculumsController
     @scoped_course = ScopedCourse.find(params[:id])
     @competence_node = @scoped_course
     authorize! :update, @curriculum
-    
+
+    @hide_help = cookies[:hide_edit_prereqs_help] == 't' ? true : false
+
     @competence_node_url = curriculum_course_path(:curriculum_id => @curriculum, :course_id => @course)
     
     render :action => 'edit_prereqs', :layout => 'wide'
@@ -108,6 +110,8 @@ class Curriculums::CoursesController < CurriculumsController
     @competence_node = @scoped_course
     authorize! :update, @curriculum
     
+    @hide_help = cookies[:hide_edit_as_a_prereq_help] == 't' ? true : false
+
     @competence_node_url = curriculum_course_path(:curriculum_id => @curriculum, :course_id => @course)
     
     render :action => 'edit_as_a_prereq', :layout => 'wide'
@@ -131,6 +135,14 @@ class Curriculums::CoursesController < CurriculumsController
     @comment.save
     
     redirect_to comments_curriculum_course_path(:curriculum_id => @curriculum, :id => @scoped_course)
+  end
+
+  def hide_messages
+    # Set cookie that will hide the specified messages    
+    cookies[:hide_edit_prereqs_help] = 't' if params[:edit_prereqs_help]
+    cookies[:hide_edit_as_a_prereq_help] = 't' if params[:edit_as_a_prereq_help]
+
+    render :nothing => true
   end
   
   def new

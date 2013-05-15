@@ -75,8 +75,8 @@ ErrorModelView        = O4.skillEditor.ErrorModelView
         @node = ko.observable()
       
         @skillErrorModelView = new ErrorModelView
-        hintHidingKey = if @editingAsAPrereq then 'edit_as_a_prereq_help' else 'edit_prereqs_help'
-        @hintModelView = new O4.misc.HintModelView hintHidingKey, @curriculumUrl + '/courses/hide_messages', $('#help-alert')
+        hintHidingKey = if @editingAsAPrereq then 'hide_edit_as_a_prereq_help' else 'hide_edit_prereqs_help'
+        @hintModelView = new O4.misc.HintModelView hintHidingKey, $('#help-alert')
 
         ko.applyBindings(this)
         this.loadNode()

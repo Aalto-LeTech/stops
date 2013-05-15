@@ -136,14 +136,6 @@ class Curriculums::CoursesController < CurriculumsController
     
     redirect_to comments_curriculum_course_path(:curriculum_id => @curriculum, :id => @scoped_course)
   end
-
-  def hide_messages
-    # Set cookie that will hide the specified messages    
-    cookies[:hide_edit_prereqs_help] = 't' if params[:edit_prereqs_help]
-    cookies[:hide_edit_as_a_prereq_help] = 't' if params[:edit_as_a_prereq_help]
-
-    render :nothing => true
-  end
   
   def new
     authorize! :update, @curriculum

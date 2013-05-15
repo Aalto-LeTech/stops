@@ -2,13 +2,18 @@
   @module 'misc', ->
 
     class @HintModelView
-      constructor: (@hidingKey, @url) ->
-        @hidden = ko.observable(false)
+      constructor: (@hidingKey, @url, @$hintElement) ->
+        isElementShown = $hintElement.is(':visible')
+        @shown = ko.observable(isElementShown)
 
-      hideMessage: ->
-        @hidden(true)
+        @shown.subscribe (shown) =>
+          @setCookie() if not shown
 
-        # Set a cookie through AJAX request
+      hideHint: ->
+        @shown(false)
+
+      setCookie: ->
+        # Set a cookie that keeps the hint hidden on page loads
         dataObj = {}
         dataObj[@hidingKey] = ''
 

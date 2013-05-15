@@ -1,6 +1,6 @@
 <!-- ko with: hintModelView -->
-  <div class="alert alert-info <%= "hide" if @hide_help %>">
-    <button type="button" class="close" data-dismiss="alert" data-bind="click: hideMessage">&times;</button>
+  <div id='help-alert' class="alert alert-info <%= "hide" if @hide_help %>" data-bind="css: { hide: !shown() }">
+    <button type="button" class="close" data-bind="click: hideHint">&times;</button>
     <%= t '.help_text' %>
   </div>
 <!-- /ko -->

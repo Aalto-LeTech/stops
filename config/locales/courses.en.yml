@@ -25,6 +25,8 @@ en:
 
   curriculums:
     courses:
+      tabs:
+        show_help: "Show help"
       edit_tab: 'Course information'
       prereqs_tab: 'Learning outcomes'
       as_a_prereq_tab: 'Prerequirement to'

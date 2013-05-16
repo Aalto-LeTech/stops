@@ -35,8 +35,8 @@
   <% end %>
 
   <div class="form-controls">
+    <%= link_to t(:Cancel), edit_curriculum_path(@curriculum), :class => 'btn' %>
     <%= f.submit t(:Save), :class => 'btn btn-primary' %>
   </div>
 <% end %>
 
-<p><%= link_to t(:Back), edit_curriculum_path(@curriculum) %></p>

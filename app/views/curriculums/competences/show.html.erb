@@ -11,7 +11,7 @@
 <% end %>
 
 <% if can? :update, @competence %>
-  <p><%= link_to t(:competence_edit_link), edit_curriculum_competence_path(:curriculum_id => @curriculum.id, :id => @competence.id), :class => 'btn btn-primary' %></p>
+  <p><%= link_to t(:competence_edit_link), edit_curriculum_competence_path(:curriculum_id => @curriculum.id, :id => @competence.id), :class => 'btn' %></p>
 <% end %>
 
 

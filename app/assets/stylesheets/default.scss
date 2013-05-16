@@ -13,7 +13,8 @@ body {
 }
 
 ul {
-  margin: 0em 0em 0em 1em;
+  /* The following rule is disabled, because it overrides Bootstrap styling. */
+  /*margin: 0em 0em 0em 1em;*/
   padding: 0px;
 }
 

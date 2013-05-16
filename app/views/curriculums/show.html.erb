@@ -16,7 +16,12 @@
 <% end %>
 
 <% if can? :update, @curriculum %>
-  <p><%= link_to t(:curriculum_edit_link), edit_curriculum_path(:id => @curriculum), :class=> 'btn btn-primary' %></p>
+  <p>
+    <%= link_to edit_curriculum_path(:id => @curriculum), { :class => 'btn' } do %>
+      <i class="icon-edit"></i>
+      <%= t(:curriculum_edit_link) %>
+    <% end %>
+  </p>
 <% end %>
 
 <h2><%= t 'curriculums.competences_heading' %></h2>

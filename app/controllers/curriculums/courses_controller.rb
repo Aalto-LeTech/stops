@@ -97,7 +97,9 @@ class Curriculums::CoursesController < CurriculumsController
     @scoped_course = ScopedCourse.find(params[:id])
     @competence_node = @scoped_course
     authorize! :update, @curriculum
-    
+
+    @hide_help = cookies[:hide_edit_prereqs_help] == 't' ? true : false
+
     @competence_node_url = curriculum_course_path(:curriculum_id => @curriculum, :course_id => @course)
     
     render :action => 'edit_prereqs', :layout => 'wide'
@@ -108,6 +110,8 @@ class Curriculums::CoursesController < CurriculumsController
     @competence_node = @scoped_course
     authorize! :update, @curriculum
     
+    @hide_help = cookies[:hide_edit_as_a_prereq_help] == 't' ? true : false
+
     @competence_node_url = curriculum_course_path(:curriculum_id => @curriculum, :course_id => @course)
     
     render :action => 'edit_as_a_prereq', :layout => 'wide'

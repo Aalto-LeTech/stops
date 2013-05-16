@@ -25,6 +25,8 @@ en:
 
   curriculums:
     courses:
+      tabs:
+        show_help: "Show help"
       edit_tab: 'Course information'
       prereqs_tab: 'Learning outcomes'
       as_a_prereq_tab: 'Prerequirement to'
@@ -47,7 +49,9 @@ en:
       edit_prereqs:
         title: 'Set prerequisites'
         edit_course_heading: 'Edit course'
-
+        help_text: "Here you can edit the prerequirement skills for the current course (located on the right side). Please begin by selecting a skill from the right side and then use the search on the left to add or remove prerequirement skills. If the search is cleared, only the current prerequirements will be shown."
+      edit_as_a_prereq:
+        help_text: "Here you can edit the skills of the current course (found on the left side) as a prerequirement to other skills, which can be searched using the search box on the right. Please begin by using the search on the right to find skills to which some skill from the left should be a prerequirement. Then select a skill from the right side and add or remove skills of the current course by clicking the 'Supporting' and 'Mandatory' buttons on the left side."
       skill_editor:
         prereqs_heading: 'Prerequisites'
         outcomes_heading: 'Learning outcomes'
@@ -84,7 +88,6 @@ en:
           saving_skill_failed_heading: 'Saving failed'
           saving_skill_failed_message: 'The skill could not be saved due to an error. Please try again later.'
         competence_node:
-         
           remove_skill: 'Delete outcome'
           edit_skill: 'Edit outcome'
         modals:

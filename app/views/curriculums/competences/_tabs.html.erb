@@ -7,4 +7,16 @@
   <li<%= controller.action_name == 'edit' ? ' class="active"'.html_safe : '' %>><%= link_to t('curriculums.competences.edit_tab'), edit_curriculum_competence_path(:curriculum_id => @curriculum, :id => @competence) %></li>
   <li<%= controller.action_name == 'edit_prereqs' ? ' class="active"'.html_safe : '' %>><%= link_to t('curriculums.competences.prereqs_tab'), edit_prereqs_curriculum_competence_path(:curriculum_id => @curriculum, :id => @competence) %></li>
   <li<%= controller.action_name == 'graph' ? ' class="active"'.html_safe : '' %>><%= link_to t('curriculums.competences.graph_tab'), graph_curriculum_competence_path(:curriculum_id => @curriculum, :id => @competence) %></li>
+
+  <% if controller.action_name == 'edit_prereqs' || controller.action_name == 'edit_as_a_prereq' %>
+    <!-- ko with: hintModelView -->
+      <li>
+        <button class="btn btn-mini btn-info" 
+                type="button" 
+                data-bind="toggle: shown">
+          <%= t '.show_help' %>
+        </button>
+      </li>
+    <!-- /ko -->
+  <% end %>
 </ul>

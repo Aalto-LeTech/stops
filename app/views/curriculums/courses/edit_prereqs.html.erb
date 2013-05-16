@@ -9,4 +9,11 @@
 
 <%= render 'tabs' %>
 
+<!-- ko with: hintModelView -->
+  <div id='help-alert' class="alert alert-info <%= "hide" if @hide_help %>" data-bind="css: { hide: !shown() }">
+    <button type="button" class="close" data-bind="click: hideHint">&times;</button>
+    <%= t '.help_text' %>
+  </div>
+<!-- /ko -->
+
 <%= render 'curriculums/courses/skill_editor/prereq_editor' %>

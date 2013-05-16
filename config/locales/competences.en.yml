@@ -47,6 +47,7 @@ en:
         edit_skill: 'Edit outcome'
         supportingPrereqButton: 'Supporting'
         strictPrereqButton: 'Mandatory'
+        help_text: "Here you can edit the prerequirement skills for the current competence (located on the right side). Please begin by selecting a skill from the right side and then use the search on the left to add or remove prerequirement skills. If the search is cleared, only the current prerequirements will be shown."
       graph:
         title: 'Course graph'
       new:

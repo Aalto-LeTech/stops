@@ -6,6 +6,7 @@
 #= require curriculums/skill_editor/SkillModelView
 #= require curriculums/skill_editor/NodeModelView
 #= require curriculums/skill_editor/ErrorModelView
+#= require curriculums/HintModelView
 
 # Check that i18n strings have been loaded before this file
 if not O4.skillEditor.i18n
@@ -36,7 +37,8 @@ ErrorModelView        = O4.skillEditor.ErrorModelView
       constructor: (opts) ->
         @i18n = O4.skillEditor.i18n  # Access in the view like this: <span data-bind="text: $root.i18n['qwerty'] ">
         
-        @editingAsAPrereq = !!opts['editAsAPrereq'] if opts
+        @editingAsAPrereq = if opts then !!opts['editAsAPrereq'] else false
+        @editingCompetence = if opts then !!opts['editCompetence'] else false
         @searchString = ko.observable('')
         @searchResults = ko.observableArray()
         @isLoading = ko.observable(false)
@@ -47,8 +49,6 @@ ErrorModelView        = O4.skillEditor.ErrorModelView
         @_currentPrereqNodes = ko.observable({})
         # Internal lookup table from which skill prereq states are computed automatically
         @_currentPrereqIds = ko.observable({})
-
-        @skillErrorModelView = new ErrorModelView
 
         # Actual observable results to be shown 
         @visibleNodes = ko.computed () =>
@@ -74,8 +74,17 @@ ErrorModelView        = O4.skillEditor.ErrorModelView
         @targetNodeIsLoading = ko.observable(true)
       
         @node = ko.observable()
+      
+        @skillErrorModelView = new ErrorModelView
+        if @editingCompetence
+          hintHidingKey = 'hide_edit_competence_prereqs_help'
+        else
+          hintHidingKey = if @editingAsAPrereq
+            'hide_edit_as_a_prereq_help' 
+          else 'hide_edit_prereqs_help'
+        @hintModelView = new O4.misc.HintModelView hintHidingKey, $('#help-alert')
+
         ko.applyBindings(this)
-        
         this.loadNode()
       
       

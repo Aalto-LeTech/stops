@@ -33,7 +33,7 @@
 <h2><%= t 'curriculums.courses_heading' %></h2>
 
 <% unless @curriculum.courses.empty? %>
-  <table id="curriculum-courses">
+  <table id="curriculum-courses" class='table table-striped table-condensed table-bordered'>
     <thead>
       <tr>
         <th><%= t '.course_code' %> &darr;</th>
@@ -45,7 +45,7 @@
     </thead>
     <tbody>
       <% @curriculum.courses.each_with_index do |course, i| %>
-        <tr class="<%= i % 2 == 0 ? 'even' : 'odd' %>">
+        <tr>
           <td>
             <%= course.course_code %>
           </td>

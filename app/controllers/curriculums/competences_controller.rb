@@ -73,6 +73,8 @@ class Curriculums::CompetencesController < CurriculumsController
     @competence = Competence.find(params[:id])
     @competence_node = @competence
     authorize! :update, @curriculum
+
+    @hide_help = cookies[:hide_edit_competence_prereqs_help] == 't' ? true : false
     
     @competence_node_url = curriculum_competence_path(:curriculum_id => @curriculum, :competence_id => @competence)
     

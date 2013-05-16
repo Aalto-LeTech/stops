@@ -50,11 +50,10 @@ fi:
       edit_prereqs:
         title: 'Aseta esitiedot'
         edit_course_heading: 'Edit course'
+        help_text: 'Täällä voit muokata valitun kurssin valmiuksien esitietoja. Valitse oikealta valmius ja hae sitten vasemmalta valmiuksia, joita voit lisätä esitiedoksi tai poistaa. Mikäli haku tyhjennetään, näytetään tuloksissa vain nykyiset esitiedot. '
+      edit_as_a_prereq:
+         help_text: "Täällä voit muokata valitun kurssin valmiuksia esitietona muille valmiuksille. Hae ensin oikealla olevalla hakukentällä valmiuksia, joille jokin vasemman puolen valmius voisi olla esitietona ja valitse sitten hakutuloksista sopiva valmius. Vasemmalla olevien valmiuksien 'Tukeva' ja 'Välttämätön' -painikkeilla valmiuden voi asettaa esitiedoksi tai poistaa."
       skill_editor:
-        prereq_editor:
-          help_text: 'Täällä voit muokata valitun kurssin valmiuksien esitietoja. Valitse oikealta valmius ja hae sitten vasemmalta valmiuksia, joita voit lisätä esitiedoksi tai poistaa. Mikäli haku tyhjennetään, näytetään tuloksissa vain nykyiset esitiedot. '
-        as_a_prereq_editor:
-          help_text: "Täällä voit muokata valitun kurssin valmiuksia esitietona muille valmiuksille. Hae ensin oikealla olevalla hakukentällä valmiuksia, joille jokin vasemman puolen valmius voisi olla esitietona ja valitse sitten hakutuloksista sopiva valmius. Vasemmalla olevien valmiuksien 'Tukeva' ja 'Välttämätön' -painikkeilla valmiuden voi asettaa esitiedoksi tai poistaa."
         prereqs_heading: 'Esitiedot'
         outcomes_heading: 'Osaamistavoitteet'
         add_skill: 'Lisää osaamistavoite'

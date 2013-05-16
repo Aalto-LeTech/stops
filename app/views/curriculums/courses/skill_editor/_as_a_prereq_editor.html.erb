@@ -1,10 +1,3 @@
-<!-- ko with: hintModelView -->
-  <div id='help-alert' class="alert alert-info <%= "hide" if @hide_help %>" data-bind="css: { hide: !shown() }">
-    <button type="button" class="close" data-bind="click: hideHint">&times;</button>
-    <%= t '.help_text' %>
-  </div>
-<!-- /ko -->
-
 <div class="row-fluid full-height">
 
   <%= render 'curriculums/courses/skill_editor/current_course_column' %>

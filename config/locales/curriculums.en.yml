@@ -26,6 +26,7 @@ en:
     courses_heading: "Courses"
     course_name_not_available: "course name not available"
     localized_course_name_not_available: "course name not available in English"
+    show_help: "Show help"
     index:
       curriculum: "Curriculum"
       years: "Years in use"

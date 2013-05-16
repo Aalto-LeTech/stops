@@ -26,8 +26,6 @@ fi:
 
   curriculums:
     courses:
-      tabs:
-        show_help: "Näytä ohje"
       edit_tab: 'Tiedot'
       prereqs_tab: 'Osaamistavoitteet'
       as_a_prereq_tab: 'Esitietona muille'

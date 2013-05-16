@@ -670,6 +670,15 @@ div.current-user {
   border-left: 1px solid #0057a3;
 }
 
+/* Display width dependent navbar tweaks */
+@media (max-width: 808px) {
+
+  /* Hide the full-length program name when there isn't enough space to display it. */
+  .navbar > .navbar-inner > .brand > .logo > .program-name {
+    display: none !important;
+  }
+}
+
 /*************************
   Left navi
  *************************/

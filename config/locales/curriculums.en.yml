@@ -24,7 +24,8 @@ en:
     curriculum_courses: "Curriculum courses"
     competences_heading: "Competences"
     courses_heading: "Courses"
-    course_name_not_found: "course name not available in English"
+    course_name_not_available: "course name not available"
+    localized_course_name_not_available: "course name not available in English"
     index:
       curriculum: "Curriculum"
       years: "Years in use"

@@ -96,6 +96,38 @@ class ScopedCourse < CompetenceNode
     desc ? desc.name : fallback_message 
   end
 
+  def localized_name_exists?
+    not localized_name.nil?
+  end
+
+  def localized_name
+    desc = localized_description
+    (desc && desc.name != "" ) ? desc.name : nil
+  end
+
+  def localized_name_if_possible(fallback='')
+    name = localized_name
+    if not name
+      descriptions = course_descriptions
+      locale_to_desc = descriptions.inject({}) do |hash, desc| 
+        hash[desc.locale] = desc
+        hash
+      end
+
+      # Try the locales in prioritized order
+      ['en', 'fi', 'sv'].each do |locale|
+        if locale_to_desc[locale] && locale_to_desc[locale].name != ''
+          name = locale_to_desc[locale].name
+          break
+        end
+      end
+
+      name = fallback if name.nil?
+    end
+
+    name
+  end
+
   def update_comments(hash)
     write_attribute(:comments, hash.to_json)
   end

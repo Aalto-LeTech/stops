@@ -25,7 +25,8 @@ fi:
     curriculum_courses: "Opinto-ohjelman kurssit"
     competences_heading: "Kompetenssit"
     courses_heading: "Kurssit"
-    course_name_not_found: "ei suomenkielistä kurssinimeä"
+    course_name_not_available: "kurssinimeä ei ole saatavilla"
+    localized_course_name_not_available: "ei suomenkielistä kurssinimeä"
     index:
       curriculum: "Opinto-opas"
       years: "Käytössä vuosina"

@@ -50,7 +50,7 @@
             <%= course.course_code %>
           </td>
           <td>
-            <%= course.name_or('<' + t('.course_name_not_found') + '>') %>
+            <%= course.name_or('<' + t('curriculums.course_name_not_found') + '>') %>
           </td>
           <td class="centered"><%= course.credits %></td>
           <td class="centered"><%= course.periods_as_roman_numerals.join(", ") %></td>

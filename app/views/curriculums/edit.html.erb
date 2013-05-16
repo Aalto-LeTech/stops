@@ -69,7 +69,7 @@
             <%= link_to course.course_code, edit_curriculum_course_path(:curriculum_id => @curriculum, :id => course) %>
           </td>
           <td>
-            <%= link_to course.localized_description.name.presence || ('<' + t('.course_name_not_found') + '>'), edit_prereqs_curriculum_course_path(:curriculum_id => @curriculum, :id => course) %>
+            <%= link_to course.localized_description.name.presence || ('<' + t('curriculums.course_name_not_found') + '>'), edit_prereqs_curriculum_course_path(:curriculum_id => @curriculum, :id => course) %>
           </td>
           <td class="centered"><%= course.credits %></td>
           <!--

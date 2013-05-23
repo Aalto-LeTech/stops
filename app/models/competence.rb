@@ -12,11 +12,11 @@ class Competence < CompetenceNode
            :foreign_key => :parent_competence_id,
            :class_name  => 'Competence'
 
-  has_many :competence_descriptions, 
+  has_many :competence_descriptions,
            :dependent   => :destroy,
            :order => 'locale'
   
-  has_one :localized_description, :class_name => "CompetenceDescription", 
+  has_one  :localized_description, :class_name => "CompetenceDescription", 
            :conditions => proc { "locale = '#{I18n.locale}'" }
   
 
@@ -31,19 +31,23 @@ class Competence < CompetenceNode
            
   
   has_many :courses, 
-           :through     => :competence_courses, 
+           :through     => :competence_courses,
            :source      => :scoped_course
            #:order       => 'code'
 
-  has_many :strict_prereqs, 
-           :through     => :competence_courses, 
-           :source      => :scoped_course, 
-           :conditions  => "requirement = #{STRICT_PREREQ}"
-           #:order       => 'code', 
+  has_many :strict_prerequirement_skills,
+           :through     => :skills,
+           :source      => :strict_prereqs
+           #:order       => 'code',
+
+  has_many :strict_prereqs,
+           :through     => :strict_prerequirement_skills,
+           :source      => :competence_node,
+           :uniq        => true
 
   has_many :supporting_prereqs, 
-           :through     => :competence_courses, 
-           :source      => :scoped_course, 
+           :through     => :competence_courses,
+           :source      => :scoped_course,
            :conditions  => "requirement = #{SUPPORTING_PREREQ}"
            #:order       => 'code', 
 
@@ -57,6 +61,10 @@ class Competence < CompetenceNode
   def name(locale)
     description = competence_descriptions.where(:locale => locale.to_s).first
     description ? description.name : ''
+  end
+
+  def localized_name
+    localized_description.nil? ? "" : localized_description.name 
   end
 
   def description(locale)

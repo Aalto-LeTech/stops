@@ -32,16 +32,19 @@ class ScopedCourse < CompetenceNode
   has_many :course_prereqs, 
            :dependent => :destroy
 
-  # Prerequisite skills of this course
+  has_many :strict_prerequirement_skills, 
+           :through     => :skills,
+           :source      => :strict_prereqs 
+
+  # Prerequisite courses of this course
   has_many :prereqs, 
            :through => :course_prereqs, 
            :source  => :prereq, 
            :order   => 'requirement DESC, code'
 
   has_many :strict_prereqs, 
-           :through     => :course_prereqs, 
-           :source      => :prereq, 
-           :conditions  => "requirement = #{STRICT_PREREQ}" # TODO: :order => 'requirement DESC, code'
+           :through     => :strict_prerequirement_skills, 
+           :source      => :competence_node
   
   has_many :supporting_prereqs, 
            :through     => :course_prereqs, 

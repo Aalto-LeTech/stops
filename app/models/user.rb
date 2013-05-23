@@ -20,6 +20,8 @@ class User < ActiveRecord::Base
                   :curriculum_id
 
   # Plan
+  has_one :study_plan
+
   has_and_belongs_to_many :competences, :join_table => 'user_competences', :uniq => true
 
   # The student's first period of study

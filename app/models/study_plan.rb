@@ -1,32 +1,43 @@
 class StudyPlan < ActiveRecord::Base
 
   module RefCountExtension
-    def add_or_increment_ref_count(course)
+    def add_or_increment_ref_count(*args)
+      options = args.extract_options!
+      course, = *args # Last comma forces nil value when args is empty
+
+      course_id = options[:id] || course.id
+
       StudyPlan.transaction do 
         study_plan = proxy_association.owner
         plan_id = study_plan.id
 
         existing_entry = StudyPlanCourse.where(:study_plan_id => plan_id, 
-                                               :scoped_course_id => course.id).first
+                                               :scoped_course_id => course_id).first
 
         if not existing_entry.nil?
           # Increment reference counter
           existing_entry.competence_ref_count += 1
           existing_entry.save!
-        else
+        else 
+          course = ScopedCourse.find(course_id) if not course
           proxy_association.concat course
         end
       end
     end
 
 
-    def remove_or_decrement_ref_count(course)
+    def remove_or_decrement_ref_count(*args)
+      options = args.extract_options!
+      course, = *args # Last comma forces nil value when args is empty
+
+      course_id = options[:id] || course.id
+
       StudyPlan.transaction do 
         study_plan = proxy_association.owner
         plan_id = study_plan.id
 
         existing_entry = StudyPlanCourse.where(:study_plan_id => plan_id, 
-                                               :scoped_course_id => course.id).first
+                                               :scoped_course_id => course_id).first
 
         if not existing_entry.nil?
           # Decrement reference counter

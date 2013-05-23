@@ -89,12 +89,17 @@ Ops::Application.routes.draw do
     resource :studyplan, :controller => 'plans', :only => [:show] do
       resources :profiles, :controller => 'plans/profiles', :only => [:index, :show]
 
-      resources :competences, :controller => 'plans/competences', :only => [:new, :destroy, :create] do
+      resources :competences, :controller => 'plans/competences', :only => [:index, :new, :destroy, :create] do
         resources :courses, :controller => 'plans/courses', :only => [:show]  # ScopedCourses, courses that belong to the profile
 
         member do
           get 'supporting'
           get 'delete'
+        end
+
+        collection do
+          get 'add_competence_to_plan'
+          get 'remove_competence_from_plan'
         end
       end
 

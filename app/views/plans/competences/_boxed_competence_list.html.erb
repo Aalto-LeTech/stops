@@ -1,0 +1,39 @@
+<% @curriculum.competences.each do |competence| %>
+  <!-- ko with: competencesById['<%= competence.id %>'] -->
+  <div class="rounded-box" 
+       data-competence-id='<%= competence.id %>'
+       data-competence-included='<%= @chosen_competences.include? competence.id %>'>
+    <h2 style="display: inline-block"><%= competence.localized_name %></h2> <%# TODO Get rid of the style attribute %>
+
+    <button 
+      class="btn <%= @chosen_competences.include?(competence.id) ? 
+                        'btn-danger' : 'btn-success' %> pull-right"
+      data-bind="statefulButton: { 
+                   click: clickAddOrRemoveButton,
+                   loading: loading,
+                   primaryState: !includedInPlan(),
+                   primaryText: i18n.add_to_plan,
+                   secondaryText: i18n.remove_from_plan,
+                   primaryLoadingText: i18n.adding_to_plan,
+                   secondaryLoadingText: i18n.removing_from_plan 
+                 }">
+      <% if @chosen_competences.include?(competence.id) %>
+        <%= t 'plans.competences.remove_from_plan' %>
+      <% else %>
+        <%= t 'plans.competences.add_to_plan' %>
+      <% end %>
+    </button>
+
+    <p>
+      <%= t '.provided_skills_heading' %>
+      <ul>
+        <% competence.skills.each do |skill| %>
+          <li><%= skill.localized_description.description %></li>
+        <% end %>
+      </ul>
+    </p>
+
+  </div>
+  <!-- /ko -->
+
+<% end %>

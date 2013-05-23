@@ -1,5 +1,16 @@
 # encoding: utf-8
 fi:
+  plans:
+    competences:
+      add_to_plan: "Lisää suunnitelmaan"
+      remove_from_plan: "Poista suunnitelmasta"
+      adding_to_plan: "Lisätään..."
+      removing_from_plan: "Poistetaan..."
+      index:
+        heading: "Kompetenssivalinnat"
+      boxed_competence_list:
+        provided_skills_heading: "Tuottaa seuraavat valmiudet"
+
   plan_heading: "Oma opintosuunnitelma"
   plan_empty_instructions: "Valitse opinto-oppaasta itseäsi kiinnostavat profiilit"
   plan_my_courses: "Omat kurssit"

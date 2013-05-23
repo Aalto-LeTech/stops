@@ -1,0 +1,19 @@
+/* Loads translated i18n strings used by CompetenceElectionEditor.js.coffee. */
+(function() {
+  var i18n;
+
+  /* i18n strings */
+  i18n = {
+ 
+    add_to_plan:                    "<%= escape_javascript(t('plans.competences.add_to_plan')) %>",
+    remove_from_plan:               "<%= escape_javascript(t('plans.competences.remove_from_plan')) %>",
+    adding_to_plan:                 "<%= escape_javascript(t('plans.competences.adding_to_plan')) %>",
+    removing_from_plan:             "<%= escape_javascript(t('plans.competences.removing_from_plan')) %>"
+    
+  };
+
+  /* Translations available at O4.competenceElection.i18n */ 
+  var O4 = window.O4 = window.O4 || {};
+  O4.competenceElection = O4.competenceElection || {};
+  O4.competenceElection.i18n = i18n;
+})();

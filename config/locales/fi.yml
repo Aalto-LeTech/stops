@@ -15,6 +15,7 @@ fi:
   frontpageTab: "Etusivu"
   myPlanDropdown: "Suunnitelma"
   myPlanTabCurriculum: "Oma opinto-opas"
+  myPlanTabCompetences: "Kompetenssivalinnat"
   myPlanTabProfiles: "Profiilit"
   myPlanTabAllCourses: "Kurssit"
   myPlanTabMyCourses: "Omat kurssit"

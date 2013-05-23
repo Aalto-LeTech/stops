@@ -1,0 +1,16 @@
+<% content_for :javascript do %>
+  <script type="text/javascript">
+    <%= render "plans/competences/i18n_strings.js" %>
+  </script>
+  <%= javascript_include_tag 'plans/CompetenceElectionEditor.js' %>
+<% end %>
+
+<div class="row-fluid">
+
+  <div id='competence-list' class="span8">
+    <h1><%= t '.heading' %></h1>
+
+    <%= render 'boxed_competence_list' %>
+
+  </div>
+</div>

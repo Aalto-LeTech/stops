@@ -184,6 +184,18 @@ h4.colorful {
   margin-bottom: 20px;
 }
 
+/* Rounded box that matches Bootstrap styling */
+.rounded-box {
+  background-color: #fff;
+  -webkit-border-radius: 4px;
+     -moz-border-radius: 4px;
+          border-radius: 4px;
+  margin: 15px 0;
+  border: 1px solid #ddd;
+  padding: 19px 19px 14px;
+  *padding-top: 19px;
+}
+
 /**************************
 * Bootstrap style additions
 ***************************/

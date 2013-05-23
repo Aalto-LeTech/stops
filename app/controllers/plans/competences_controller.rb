@@ -1,3 +1,5 @@
+require 'set'
+
 class Plans::CompetencesController < PlansController
   
   #before_filter :login_required
@@ -7,6 +9,18 @@ class Plans::CompetencesController < PlansController
   
   def load_plan
     @user = current_user
+  end
+
+  def index
+
+    @curriculum = @user.curriculum || Curriculum.first # TODO Improve
+
+    @chosen_competences = @user.study_plan.competence_ids.inject(Set.new) do |set, id|
+      set << id
+    end
+
+    # TODO Change this
+    @competence = Competence.first
   end
   
   # Prepare to add competence to studyplan
@@ -91,6 +105,50 @@ class Plans::CompetencesController < PlansController
         end
       end
     end
+  end
+
+  # TODO Authorization
+  def add_competence_to_plan
+    if is_valid_integer params[:id]
+      id = params[:id].to_i
+      competence = Competence.find id
+      if competence && @user.curriculum_id == competence.curriculum_id
+        @user.study_plan.competences << competence
+
+        render :nothing => true
+      else
+        render :nothing => true, :status => 403
+      end
+    else
+      render :nothing => true, :status => 403
+    end
+  end
+
+
+  # TODO Authorization
+  def remove_competence_from_plan
+    if is_valid_integer params[:id]
+      id = params[:id].to_i
+      competence = @user.study_plan.competences.find id
+
+      if competence
+        @user.study_plan.competences.delete competence
+
+        render :nothing => true
+      else      
+        render :nothing => true, :status => 403
+      end
+    else
+      render :nothign => true, :status => 403
+    end
+  end
+
+  
+
+  private
+
+  def is_valid_integer(str)
+    str =~ /\A\d+\z/
   end
   
 end

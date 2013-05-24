@@ -66,13 +66,15 @@ class StudyPlan < ActiveRecord::Base
   has_many  :courses,
             :through => :study_plan_courses,
             :source => :scoped_course,
-            :extend => RefCountExtension
+            :extend => RefCountExtension,
+            :dependent => :destroy
 
   has_many  :passed_courses,
             :through => :study_plan_courses,
             :source => :scoped_course,
             :uniq => true,
-            :conditions => "grade IS NOT NULL"
+            :conditions => "grade IS NOT NULL",
+            :dependent => :destroy
 
   has_many  :study_plan_manual_courses,
             :class_name => 'StudyPlanCourse',
@@ -82,10 +84,12 @@ class StudyPlan < ActiveRecord::Base
   has_many  :manual_courses,
             :through => :study_plan_manual_courses,
             :source => :scoped_course,
+            :dependent => :destroy,
             :uniq => true # manually added courses
 
   has_many :competences,
-           :through => :study_plan_competences
+           :through => :study_plan_competences,
+           :dependent => :destroy
 
 
 

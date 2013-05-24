@@ -8,6 +8,8 @@ gem 'rails', '3.2.11'
 
 # gem 'sqlite3-ruby', :require => 'sqlite3'
 gem 'pg'
+# We need 'em arrays; this shouldn't be needed in Rails 4.0 >=
+gem 'postgres_ext'
 
 gem 'pg_search'
 gem 'thinking-sphinx', '2.0.13'

@@ -4,14 +4,22 @@ class Plans::CurriculumsController < PlansController
   before_filter :load_plan
   before_filter :load_plan
   before_filter :load_curriculum, :only => :show
+
+  # Make sure 'redirect_to' value is not saved here, because edit page uses it for redirect!
+  skip_before_filter :store_location
   
   def show
-    
+    # Store 'redirect_to' address so that cancel button works on edit page
+    store_location
   end
   
 
   def edit
     @curriculums = Curriculum.order(:start_year)
+  end
+
+  def cancel_edit
+    redirect_back_or_default studyplan_curriculum_path
   end
 
   
@@ -20,7 +28,7 @@ class Plans::CurriculumsController < PlansController
     @user.curriculum_id = params[:user][:curriculum]
     @user.save
 
-    redirect_to studyplan_path
+    redirect_back_or_default studyplan_curriculum_path
 #     respond_to do |format|
 #       if @course.update_attributes(params[:course])
 #         format.html { redirect_to(@course, :notice => 'Course was successfully updated.') }

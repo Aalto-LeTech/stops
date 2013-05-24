@@ -12,15 +12,9 @@ class Plans::CompetencesController < PlansController
   end
 
   def index
-
-    @curriculum = @user.curriculum || Curriculum.first # TODO Improve
-
     @chosen_competences = @user.study_plan.competence_ids.inject(Set.new) do |set, id|
       set << id
     end
-
-    # TODO Change this
-    @competence = Competence.first
   end
   
   # Prepare to add competence to studyplan

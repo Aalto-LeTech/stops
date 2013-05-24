@@ -107,7 +107,9 @@ Ops::Application.routes.draw do
       resource :schedule, :controller => 'plans/schedule', :only => [:show, :edit, :update]
       resource :record, :controller => 'plans/record', :only => [:show]
 
-      resource :curriculum, :controller => 'plans/curriculums', :only => [:show, :edit, :update]
+      resource :curriculum, :controller => 'plans/curriculums', :only => [:show, :edit, :update] do
+        get 'cancel_edit'
+      end
     end
 
     # Any plan (specify student ID)

@@ -20,9 +20,11 @@ class User < ActiveRecord::Base
                   :curriculum_id
 
   # Plan
-  has_one :study_plan
-
   has_and_belongs_to_many :competences, :join_table => 'user_competences', :uniq => true
+  has_one :study_plan, :dependent => :destroy
+  
+  validates_presence_of :study_plan
+  before_create { |user| user.build_study_plan }
 
   # The student's first period of study
   belongs_to :first_study_period,

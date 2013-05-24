@@ -75,7 +75,7 @@ class StudyPlan < ActiveRecord::Base
             :conditions => "grade IS NOT NULL"
 
   has_many  :study_plan_manual_courses,
-            :class_name => 'UserCourse',
+            :class_name => 'StudyPlanCourse',
             :dependent => :destroy,
             :conditions => { :manually_added => true }
 

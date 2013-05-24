@@ -20,7 +20,6 @@ class User < ActiveRecord::Base
                   :curriculum_id
 
   # Plan
-  has_and_belongs_to_many :competences, :join_table => 'user_competences', :uniq => true
   has_one :study_plan, :dependent => :destroy
   
   validates_presence_of :study_plan
@@ -30,29 +29,35 @@ class User < ActiveRecord::Base
   belongs_to :first_study_period,
              :class_name => 'Period'
 
-  has_many  :user_courses,
-            :dependent => :destroy
+  has_many  :study_plan_courses,
+            :through => :study_plan
 
   has_many  :courses,
-            :through => :user_courses,
+            :through => :study_plan_courses,
             :source => :scoped_course,
             :uniq => true
 
   has_many  :passed_courses,
-            :through => :user_courses,
+            :through => :study_plan_courses,
             :source => :scoped_course,
             :uniq => true,
             :conditions => "grade IS NOT NULL"
 
-  has_many  :user_manual_courses,
-            :class_name => 'UserCourse',
-            :dependent => :destroy,
+  has_many  :study_plan_manual_courses,
+            :class_name => 'StudyPlanCourse',
             :conditions => {:manually_added => true}
 
   has_many  :manual_courses,
-            :through => :user_manual_courses,
+            :through => :study_plan_manual_courses,
             :source => :scoped_course,
             :uniq => true # manually added courses
+
+
+  has_many  :study_plan_competences,
+            :through => :study_plan
+
+  has_many  :competences,
+            :through => :study_plan_competences
 
   belongs_to :curriculum
 

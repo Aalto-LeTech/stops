@@ -30,6 +30,12 @@ class CreateStudyPlans < ActiveRecord::Migration
     add_index "study_plan_competences", ["study_plan_id"],                  :name => "index_study_plan_competences_on_study_plan_id"
     add_index "study_plan_courses", ["study_plan_id", "scoped_course_id"],  :name => "index_study_plan_courses_on_study_plan_id_and_scoped_course_id", :unique => true
     add_index "study_plan_competences", ["study_plan_id", "competence_id"], :name => "index_study_plan_competences_on_study_plan_id_and_competence_id", :unique => true
+  
+    # Make sure each User has a StudyPlan
+    User.pluck(:id).each do |user_id|
+      StudyPlan.create :user_id => user_id
+    end
+
   end
 
 

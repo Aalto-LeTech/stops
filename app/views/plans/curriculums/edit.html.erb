@@ -1,17 +1,26 @@
 <h1><%=t :choose_curriculum_heading %></h1>
 
 <% if @user.curriculum %>
-  <p class="warning"><%=t :change_curriculum_warning %></p>
+  <div class="alert">
+    <h4><%=t :change_curriculum_warning_heading %></h4>
+    <%=t :change_curriculum_warning %>
+  </div>
 <% end %>
 
-<%= form_tag studyplan_curriculum_path, :method => :put do %>
+<%= form_tag studyplan_curriculum_path, :method => :put, :class => 'form-horizontal' do %>
   <% @curriculums.each do |curriculum| %>
-    <label>
-      <%= radio_button('user', 'curriculum', curriculum.id) %>
-      <%= curriculum.name %>
-    </label><br />
+    <div class="form-control-group">
+      <div class="controls">
+        <label class="radio">
+          <%= radio_button('user', 'curriculum', curriculum.id) %>
+          <%= curriculum.name %>
+        </label>
+      </div>
+    </div>
   <% end %>
 
-  <p><%= submit_tag t(:Select) %></p>
-  <p><%= link_to t(:Cancel), studyplan_curriculum_path %></p>
+  <div class="form-actions">
+      <%= link_to t(:Cancel), studyplan_curriculum_path, :class => 'btn' %>
+      <%= submit_tag t(:Select), :class => 'btn btn-primary' %>
+  </div>
 <% end %>

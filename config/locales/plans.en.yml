@@ -17,7 +17,8 @@ en:
   current_curriculum: "You are currently using the %{name} study guide"
   choose_curriculum_heading: "Choose curriculum"
   change_curriculum: "Change curriculum..."
-  change_curriculum_warning: "Warning: Some currently selected courses or profiles may not be available in other curriculums."
+  change_curriculum_warning_heading: "Warning"
+  change_curriculum_warning: "Some currently selected courses or profiles may not be available in other curriculums."
   
   schedule_controls: "Schedule controls"
   schedule_preferences: "Preferences"

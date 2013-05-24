@@ -7,8 +7,6 @@ class StudyPlanCompetence < ActiveRecord::Base
   before_destroy :remove_course_dependencies_from_study_plan
 
   def add_course_dependency_ids
-    # TODO
-
     # Fetch the course ids that are needed by the skills of this competence
     courses = self.competence.courses_recursive
     ids = courses.map { |course| course.id  }

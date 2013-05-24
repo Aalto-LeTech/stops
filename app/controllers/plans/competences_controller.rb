@@ -101,7 +101,7 @@ class Plans::CompetencesController < PlansController
     end
   end
 
-  # TODO Authorization
+
   def add_competence_to_plan
     if is_valid_integer params[:id]
       id = params[:id].to_i
@@ -119,7 +119,7 @@ class Plans::CompetencesController < PlansController
   end
 
 
-  # TODO Authorization
+
   def remove_competence_from_plan
     if is_valid_integer params[:id]
       id = params[:id].to_i

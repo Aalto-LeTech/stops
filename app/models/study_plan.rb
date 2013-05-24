@@ -90,7 +90,4 @@ class StudyPlan < ActiveRecord::Base
   has_many :competences,
            :through => :study_plan_competences,
            :dependent => :destroy
-
-
-
  end

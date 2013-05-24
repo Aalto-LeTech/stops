@@ -20,9 +20,13 @@
             <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
               <li><%= link_to t(:myPlanTabCurriculum), studyplan_curriculum_path %></li>
               <li><%= link_to t(:myPlanTabCompetences), studyplan_competences_path %></li>
-              <li><%= link_to t(:myPlanTabAllCourses), studyplan_courses_path %></li>
+              <% if false # Temporarily disabled %>
+                <li><%= link_to t(:myPlanTabAllCourses), studyplan_courses_path %></li>
+              <% end %>
               <!--li><%= link_to t(:myPlanTabMyCourses),  studyplan_courses_path %></li-->
-              <li><%= link_to t(:myPlanTabSchedule), studyplan_schedule_path %></li>
+              <% if false # Temporarily disabled %>
+                <li><%= link_to t(:myPlanTabSchedule), studyplan_schedule_path %></li>
+              <% end %>
               <!--li><%= link_to t(:myPlanTabRecord), studyplan_record_path %></li-->
             </ul>
         </li>

@@ -46,6 +46,23 @@ class Skill < ActiveRecord::Base
 
   accepts_nested_attributes_for :skill_descriptions
   
+  before_create :assign_valid_position
+  before_destroy :shift_skill_positions
+
+  def assign_valid_position
+    self.position = Skill.where(:competence_node_id => self.competence_node_id).count
+  end
+
+  # Shifts skill positions to fill the position previously occupied by the skill being
+  # removed.
+  def shift_skill_positions
+    self.competence_node.skills.where('skills.id != ?', self.id)
+                               .where('position > ?', self.position).each do |skill|
+
+      skill.position -= 1
+      skill.save!
+    end
+  end
   
 
   def description(locale)

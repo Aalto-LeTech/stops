@@ -46,6 +46,8 @@ module Ops
       'curriculums/curriculum.js',
       'curriculums/skillEditor_edit_prereqs_init.js',
       'curriculums/skillEditor_edit_as_a_prereq_init.js',
+      'curriculums/skillEditor_edit_competence_prereqs_init.js',
+      'plans/CompetenceElectionEditor.js',
       'print.css',
       'raphael-min.js',
       'skillGraphView.js',
@@ -54,6 +56,6 @@ module Ops
     ]
     
     # Version of your assets, change this if you want to expire all your assets
-    config.assets.version = '1.8'
+    config.assets.version = '1.9'
   end
 end

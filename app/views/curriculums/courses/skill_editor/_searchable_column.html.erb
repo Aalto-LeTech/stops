@@ -21,48 +21,7 @@
       <%= image_tag 'progress.gif' %>
     </div>
 
-    <!-- NEW COURSE -->
-
     <div data-bind="foreach: visibleNodes, css: { loading: skillBeingDeleted() }">
       <%= render 'curriculums/courses/skill_editor/competence_node' %>
     </div>
-
-
-
-    <!-- OLD COURSE -->
-    <% if false %>
-    <div data-bind="foreach: visibleNodes, css: { loading: skillBeingDeleted() }">
-      
-      <div class="course"
-      data-bind="popover: {
-                  trigger: skillErrorOccurred,
-                  options: {
-                    trigger: 'manual',
-                    html: true,
-                    template: O4.skillEditor.errorPopoverTemplate, 
-                    title: '<%= t "curriculums.courses.skill_editor.prereq_change_failed_heading" %>', 
-                    content: '<%= t "curriculums.courses.skill_editor.prereq_change_failed_message" %>'
-                  }
-                }">
-        <p><span data-bind="text: code"></span> <span data-bind="text: localizedName"></span> <span class="pull-right" data-bind="text: localizedType"></span></p>
-        <!-- ko foreach: skills -->
-          <div class="skill" data-bind="css: { 
-              selected: selected(), 
-              supporting: prereqType() === 0, 
-              strict: prereqType() === 1,
-              loading: isLoading()
-            }">
-            <div class="buttons">
-              <span data-bind="click: clickToggleSupportingPrereq" class="supportingPrereqButton"><%=t('curriculums.courses.skill_editor.supportingPrereqButton') %></span>
-              <span data-bind="click: clickToggleStrictPrereq" class="strictPrereqButton"><%=t('curriculums.courses.skill_editor.strictPrereqButton') %></span>
-            </div>
-            <span data-bind="text: localizedDescription"></span>
-          </div>
-        <!-- /ko -->
-      </div>
-    </div>
-    <% end %>
-    <!-- OLD COURSE ENDS -->
-
-
   </div>

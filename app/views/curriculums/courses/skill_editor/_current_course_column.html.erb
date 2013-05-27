@@ -29,7 +29,8 @@
       data-url="<%= @competence_node_url %>"></div>
 
     <!-- ko with: node -->
-    <%= render 'curriculums/courses/skill_editor/competence_node' %>
+    <%= render :partial => 'curriculums/courses/skill_editor/competence_node', 
+               :locals => { :skills_sortable => true } %>
     <!-- /ko -->
     
   </div>

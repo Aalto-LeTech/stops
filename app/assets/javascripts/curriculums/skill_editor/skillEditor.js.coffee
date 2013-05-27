@@ -1,4 +1,5 @@
 #= require knockout-2.2.1
+#= require knockout-sortable.min
 #= require underscore-min
 #= require module_pattern
 #= require curriculums/skill_editor/knockout_bindings

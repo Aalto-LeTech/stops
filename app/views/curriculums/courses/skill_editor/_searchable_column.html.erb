@@ -22,6 +22,7 @@
     </div>
 
     <div data-bind="foreach: visibleNodes, css: { loading: skillBeingDeleted() }">
-      <%= render 'curriculums/courses/skill_editor/competence_node' %>
+      <%= render :partial => 'curriculums/courses/skill_editor/competence_node', 
+                 :locals => { :skills_sortable => false } %>
     </div>
   </div>

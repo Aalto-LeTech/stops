@@ -77,6 +77,7 @@ Ops::Application.routes.draw do
           post 'add_prereq'
           post 'remove_prereq'
           get 'search_skills_and_courses'
+          put 'update_position'
         end
       end
       

@@ -103,7 +103,7 @@ class Plans::CompetencesController < PlansController
 
 
   def add_competence_to_plan
-    if is_valid_integer params[:id]
+    if is_non_negative_integer params[:id]
       id = params[:id].to_i
       competence = Competence.find id
       if competence && @user.curriculum_id == competence.curriculum_id
@@ -121,7 +121,7 @@ class Plans::CompetencesController < PlansController
 
 
   def remove_competence_from_plan
-    if is_valid_integer params[:id]
+    if is_non_negative_integer params[:id]
       id = params[:id].to_i
       competence = @user.study_plan.competences.find id
 
@@ -135,14 +135,6 @@ class Plans::CompetencesController < PlansController
     else
       render :nothign => true, :status => 403
     end
-  end
-
-  
-
-  private
-
-  def is_valid_integer(str)
-    str =~ /\A\d+\z/
   end
   
 end

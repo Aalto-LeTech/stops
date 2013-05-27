@@ -47,6 +47,7 @@ module Ops
       'curriculums/skillEditor_edit_prereqs_init.js',
       'curriculums/skillEditor_edit_as_a_prereq_init.js',
       'curriculums/skillEditor_edit_competence_prereqs_init.js',
+      'templates/_current_course_with_prereq_skills.js',
       'plans/CompetenceElectionEditor.js',
       'print.css',
       'raphael-min.js',

@@ -40,6 +40,11 @@
           <span data-bind="click: clickToggleStrictPrereq, clickBubble: false" class="strictPrereqButton"><%= t('curriculums.courses.skill_editor.strictPrereqButton') %></span>
         </div>
         <div class="buttons" data-bind="visible: $parent.editButtonsShown">
+          <i class="icon-move" title="<%=t '.move_skill' %>" 
+             data-bind="tooltip: {
+               trigger: 'click hover focus',
+               placement: 'top'
+             }"></i>
           <i class="icon-pencil" data-bind="click: clickEdit" title="<%=t '.edit_skill' %>"></i>
           <i class="icon-trash" data-bind="click: clickDelete, clickBubble: false" title="<%=t '.remove_skill' %>"></i>
         </div>

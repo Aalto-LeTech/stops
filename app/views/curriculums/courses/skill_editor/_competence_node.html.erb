@@ -17,12 +17,16 @@
     <div data-bind="<% if !skills_sortable.nil? && skills_sortable %>
         sortable: { 
           data: skills,
-          afterMove: O4.skillEditor.Skill.afterSkillMoved
+          afterMove: O4.skillEditor.Skill.afterSkillMoved,
+          options: { 
+            cursor: 'move',
+            helper: O4.skillEditor.Skill.createDragHelperElement
+          }
         }
       <% else %>
         foreach: skills 
       <% end %>">
-      <div class="skill" data-bind="click: clickSelectTarget,
+      <div class="skill <%= 'draggable-skill' if skills_sortable %>" data-bind="click: clickSelectTarget,
         css: {
           selected: selected(),
           supporting: prereqType() === 0,

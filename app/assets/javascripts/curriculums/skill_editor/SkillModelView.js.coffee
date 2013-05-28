@@ -8,6 +8,13 @@
 
       # Class method #
       #
+      # Function that returns the DOMElement to be displayed while dragging a skill.
+      @createDragHelperElement: (event, skillElement) ->
+        # Clone the element and add a class that enables 'move' cursor
+        $(skillElement).clone().removeAttr('id').addClass("dragging-skill")
+
+      # Class method #
+      #
       # We need to use a class method here, because the knockout binding handler for
       # jQuery-sortable makes it hard to bind an instance method to the 'afterMove' 
       # callback.

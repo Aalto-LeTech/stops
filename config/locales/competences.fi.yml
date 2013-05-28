@@ -48,7 +48,7 @@ fi:
         edit_skill: 'Muokkaa osaamistavoitetta'
         supportingPrereqButton: 'Tukeva'
         strictPrereqButton: 'Välttämätön'
-        help_text: 'Täällä voit muokata kompetenssin esitietoja. Valitse ensin oikealta jokin kompetenssin osaamistavoite. Hae sitten vasemmalta muiden kurssien osaamistavoitteita ja merkitse niitä tukeviksi tai välttämättömiksi esitiedoiksi. Mikäli haku tyhjennetään, näytetään tuloksissa kaikki tämänhetkiset esitiedot.'
+        help_text: 'Täällä voit muokata kompetenssin esitietoja. Valitse ensin oikealta jokin kompetenssin osaamistavoite. Hae sitten vasemmalta muiden kurssien osaamistavoitteita ja merkitse niitä tukeviksi tai välttämättömiksi esitiedoiksi. Mikäli haku tyhjennetään, näytetään tuloksissa valitun osaamistavoitteen tämänhetkiset esitiedot.'
       graph:
         title: 'Kurssiverkko'
       new:

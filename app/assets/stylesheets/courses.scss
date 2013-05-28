@@ -103,13 +103,18 @@
   }
   .skill-icon-knowledge:before {
     content: "\2605";
-    color: #880;
+    color: #db0;
   }
   .skill-icon-identity:before {
-    content: "\2665";
-    color: #c44;
+    content: "\263B";
+    color: #4c4;
   }
 }
+
+/*
+ * smiley: 263B
+ * heart: 2665
+ */
 
 .loading {
   opacity: 0.5;

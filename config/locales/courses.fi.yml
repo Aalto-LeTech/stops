@@ -48,7 +48,7 @@ fi:
       edit_prereqs:
         title: 'Aseta esitiedot'
         edit_course_heading: 'Edit course'
-        help_text: 'Täällä voit muokata valitun kurssin esitietoja. Valitse ensin oikealta jokin kurssin osaamistavoite. Hae sitten vasemmalta muiden kurssien osaamistavoitteita ja merkitse niitä tukeviksi tai välttämättömiksi esitiedoksi. Mikäli haku tyhjennetään, näytetään tuloksissa kaikki tämänhetkiset esitiedot.'
+        help_text: 'Täällä voit muokata valitun kurssin esitietoja. Valitse ensin oikealta jokin kurssin osaamistavoite. Hae sitten vasemmalta muiden kurssien osaamistavoitteita ja merkitse niitä tukeviksi tai välttämättömiksi esitiedoksi. Mikäli haku tyhjennetään, näytetään tuloksissa valitun osaamistavoitteen tämänhetkiset esitiedot.'
       edit_as_a_prereq:
          help_text: "Täällä voit merkitä, miten kurssi toimii esitietona tuleville kursseille tai kompetensseille. Hae vasemmalle jonkin jatkokurssin tai kompetenssin osaamistavoitteet ja valitse yksi, jolle haluat asettaa esitietoja. Merkitse sitten vasemmalta kurssin osaamistavoitteita tukeviksi tai välttämättömiksi esitiedoiksi."
       skill_editor:
@@ -68,7 +68,7 @@ fi:
         prereq_change_failed_message: "Esitietovaatimuksen muuttaminen epäonnistui"
         searchable_column:
           prereqs_column_heading: 'Esitiedot'
-          as_a_prereq_column_heading: 'Esitietona seuraaville osaamistavoitteille'
+          as_a_prereq_column_heading: 'Esitietona osaamistavoitteille'
           search_box_placeholder: 'Haku'
           # Failure messages
           search_failure_message: "Tietoja ei pystytty lataamaan. Ole hyvä ja kokeile myöhemmin uudestaan."

@@ -137,10 +137,10 @@
             position: newPosition
 
         promise.done ->
-          console.log("Skill: Successfully updated position")
+          #console.log("Skill: Successfully updated position")
 
         promise.fail ->
-          console.log("Skill: saving updated position failed")
+          #console.log("Skill: saving updated position failed")
 
       # Remove the node of the skill if the skill is the last prerequirement 
       conditionallyRemoveFromPrereqs: (skill) ->

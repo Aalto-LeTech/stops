@@ -1,3 +1,6 @@
+# Shortcut
+unwrap = ko.utils.unwrapObservable
+
 ko.bindingHandlers.showModal =
   init: (element, valueAccessor) ->
     # Make sure the modal stays hidden once closed
@@ -6,10 +9,16 @@ ko.bindingHandlers.showModal =
 
   update: (element, valueAccessor) ->
     value = valueAccessor()
-    if ko.utils.unwrapObservable(value)
+    if unwrap(value)
         $(element).modal('show')
     else 
         $(element).modal('hide')
+
+ko.bindingHandlers.tooltip = 
+  init: (element, valueAccessor, allBindings, viewModel) ->
+    options = unwrap(valueAccessor())
+    $(element).tooltip(options)
+
 
 ko.bindingHandlers.popover =
   init: (element, valueAccessor, allBindings, viewModel) ->
@@ -26,7 +35,7 @@ ko.bindingHandlers.popover =
 
   update: (element, valueAccessor) ->
     options = valueAccessor()
-    popoverShouldBeShown = ko.utils.unwrapObservable(options.trigger)
+    popoverShouldBeShown = unwrap(options.trigger)
     if popoverShouldBeShown
       $(element).popover('show')
     else

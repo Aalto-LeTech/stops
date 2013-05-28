@@ -81,6 +81,52 @@ class Curriculums::SkillsController < CurriculumsController
     end
   end
 
+  def update_position
+    Skill.transaction do
+      begin
+        skill = Skill.find params[:id]
+      rescue ActiveRecord::RecordNotFound
+        return render :nothing => true, :status => 500
+      end
+
+      if is_non_negative_integer params[:position]
+        target = params[:position].to_i
+      else
+        return render :nothing => true, :status => 500
+      end
+
+      current = skill.position
+      node_id = skill.competence_node_id
+
+      if current == target || target >= Skill.where(:competence_node_id => node_id).count
+        return render :nothing => true
+      end
+
+      if current < target
+        skills = Skill.where(:competence_node_id => node_id)
+                      .where('? < position AND position <= ?', current, target)
+
+        skills.each do |skill|
+          skill.position -= 1
+          skill.save!
+        end
+      else # target < current
+        skills = Skill.where(:competence_node_id => node_id)
+                      .where('? <= position AND position < ?', target, current)
+
+        skills.each do |skill|
+          skill.position += 1
+          skill.save!
+        end
+      end
+
+      skill.position = target
+      skill.save!
+
+      render :nothing => true
+    end
+  end
+
   # DELETE /curriculums/:curriculum_id/skills/:id
   def destroy
     authorize! :update, @curriculum

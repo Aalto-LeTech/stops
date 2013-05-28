@@ -51,11 +51,26 @@ class Competence < CompetenceNode
            :conditions  => "requirement = #{SUPPORTING_PREREQ}"
            #:order       => 'code', 
 
+  # Study plans in which the competence is included
+
+  has_many :study_plan_competences
+
+  has_many :study_plans_included_in,
+           :class_name  => 'StudyPlan',
+           :through     => :study_plan_competences,
+           :source      => :study_plan
+
+  # Users that have included this competence in their study plan and therefore
+  # plan to study it.
+  has_many :users_that_have_planned,
+           :class_name  => 'User',
+           :through     => :study_plans_included_in,
+           :source      => :user
+
 
   accepts_nested_attributes_for :competence_descriptions
 
-  # Users who have chosen this profile
-  has_and_belongs_to_many :users, :join_table => 'user_competences'
+
 
 
   def name(locale)

@@ -5,6 +5,22 @@
     LocalizedDescription = O4.skillEditor.LocalizedDescription
 
     class @Skill
+
+      # Class method #
+      #
+      # Function that returns the DOMElement to be displayed while dragging a skill.
+      @createDragHelperElement: (event, skillElement) ->
+        # Clone the element and add a class that enables 'move' cursor
+        $(skillElement).clone().removeAttr('id').addClass("dragging-skill")
+
+      # Class method #
+      #
+      # We need to use a class method here, because the knockout binding handler for
+      # jQuery-sortable makes it hard to bind an instance method to the 'afterMove' 
+      # callback.
+      @afterSkillMoved: (moveDetails, event) ->
+        moveDetails.item.saveUpdatedPosition(moveDetails.targetIndex)
+
       constructor: (@editor, node, data) ->
         @node = node
         @id = ko.observable(false)
@@ -88,6 +104,19 @@
           errorHeading = O4.skillEditor.i18n['saving_skill_failed_heading']
           errorMessage = O4.skillEditor.i18n['saving_skill_failed_message']
           @editor.skillErrorModelView.showErrorMessage(errorHeading, errorMessage)
+
+      saveUpdatedPosition: (newPosition) ->
+        promise = $.ajax
+          url: @node.editor.curriculumUrl + "/skills/#{@id()}/update_position"
+          type: 'PUT'
+          data:
+            position: newPosition
+
+        promise.done ->
+          console.log("Skill: Successfully updated position")
+
+        promise.fail ->
+          console.log("Skill: saving updated position failed")
 
       # Remove the node of the skill if the skill is the last prerequirement 
       conditionallyRemoveFromPrereqs: (skill) ->
@@ -200,7 +229,7 @@
 
           # Select this one
           @selected(true)
-          @editor.setCurrentlyEditedSkill(this)
+        @editor.setCurrentlyEditedSkill(this)
         
 
       clickToggleSupportingPrereq: () ->
@@ -225,6 +254,9 @@
         else # If this is not a prereq, add it
           targetSkill.addPrereq(this, requirement)
           #@prereqType(requirement)
+
+      afterBeingDraggedAndMoved: (details, event) ->
+        console.log("This is a test")
 
 
       clickEdit: () ->

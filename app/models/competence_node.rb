@@ -4,6 +4,9 @@ class CompetenceNode < ActiveRecord::Base
   
   belongs_to :curriculum
 
-  has_many :skills, :autosave => true, :dependent => :destroy
+  has_many :skills, 
+           :autosave  => true, 
+           :dependent => :destroy,
+           :order     => :position
 
 end

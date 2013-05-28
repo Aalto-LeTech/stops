@@ -147,4 +147,8 @@ class ApplicationController < ActionController::Base
     session[:return_to] = nil
   end
 
+  def is_non_negative_integer(str)
+    str =~ /\A\d+\z/
+  end
+
 end

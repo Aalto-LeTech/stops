@@ -148,3 +148,11 @@ $new-course-box-font-color: #24765C;
     max-height: 800px;
   }
 }
+
+.draggable-skill {
+  cursor: default;
+}
+
+.dragging-skill {
+  cursor: move;
+}

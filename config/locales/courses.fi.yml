@@ -86,6 +86,7 @@ fi:
           saving_skill_failed_heading: 'Tallennus epäonnistui'
           saving_skill_failed_message: 'Valmiutta ei pystytty tallentamaan virheen vuoksi. Ole hyvä ja yritä myöhemmin uudelleen.'
         competence_node:
+          move_skill: "Järjestä vetämällä"
           remove_skill: 'Poista osaamistavoite'
           edit_skill: 'Muokkaa osaamistavoitetta'
         modals:

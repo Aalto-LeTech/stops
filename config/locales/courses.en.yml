@@ -86,6 +86,7 @@ en:
           saving_skill_failed_heading: 'Saving failed'
           saving_skill_failed_message: 'The skill could not be saved due to an error. Please try again later.'
         competence_node:
+          move_skill: "Sort by dragging"
           remove_skill: 'Delete outcome'
           edit_skill: 'Edit outcome'
         modals:

@@ -49,14 +49,14 @@
   </div>
   <div class="modal-body">
     <p>
-      <!-- ko if: prereqToIds.length <= 0 -->
+      <!-- ko if: prereqTo.length <= 0 -->
         <span class="badge badge-success"><i class="icon-ok icon-white"></i></span>
         <span data-bind="text: $root.i18n['delete_skill_no_dependencies']"></span>
       <!-- /ko -->
-      <!-- ko if: prereqToIds.length > 0 -->
+      <!-- ko if: prereqTo.length > 0 -->
         <span class="badge badge-important">!</span>
         <span data-bind="text: $root.i18n['delete_skill_dependency_warning_pre']"></span>
-        <span data-bind="text: prereqToIds.length"></span>
+        <span data-bind="text: prereqTo.length"></span>
         <span data-bind="text: $root.i18n['delete_skill_dependency_warning_post']"></span>
       <!-- /ko -->
     </p>

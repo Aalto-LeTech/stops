@@ -26,7 +26,11 @@
           <i class="icon-pencil" data-bind="click: clickEdit" title="<%=t '.edit_skill' %>"></i>
           <i class="icon-trash" data-bind="click: clickDelete, clickBubble: false" title="<%=t '.remove_skill' %>"></i>
         </div>
-         <span class="skill-description" 
+        <!-- ko foreach: dynamicIcons -->
+          <span class="skill-icon" data-bind="css: 'skill-icon-' + $data"></span>
+        <!-- /ko -->
+        
+        <span class="skill-description" 
               data-bind="text: isLoading() ? '<%= t :saving %>' : localizedDescription"></span>
       </div>
      <!-- /ko -->

@@ -4,7 +4,7 @@ class Curriculums::CompetenceNodesController < CurriculumsController
     nodes_json = []
     
     if params[:ids]
-      nodes = CompetenceNode.joins(:skills).where('skills.id' => params[:ids]).uniq
+      nodes = CompetenceNode.joins(:skills).where('skills.id' => params[:ids]).includes(:skills => [:skill_descriptions, :prereq_to]).uniq
 
       nodes_json = nodes.map do |node|
         if node.type == 'Competence'
@@ -12,12 +12,13 @@ class Curriculums::CompetenceNodesController < CurriculumsController
             :only => [:id],
             :include => [
               {:skills => {
-                  :only => [:id],
-                  :include => [
+                  :only => [:id, :icon],
+                  :include => {
                     :skill_descriptions => {
                       :only => [:id, :locale, :description]
-                    }
-                  ]
+                    },
+                    :prereq_to => {:only => [:id, :requirement, :icon]}
+                  }
               }},
               {:competence_descriptions => {
                   :only => [:id, :locale, :name, :description]
@@ -30,12 +31,13 @@ class Curriculums::CompetenceNodesController < CurriculumsController
             :only => [:id, :course_code],
             :include => [
               {:skills => {
-                  :only => [:id],
-                  :include => [
+                  :only => [:id, :icon],
+                  :include => {
                     :skill_descriptions => {
                       :only => [:id, :locale, :description]
-                    }
-                  ]
+                    },
+                    :prereq_to => {:only => [:id, :requirement, :icon]}
+                  }
               }},
               {:course_descriptions => {
                   :only => [:id, :locale, :name]

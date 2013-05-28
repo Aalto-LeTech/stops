@@ -64,7 +64,6 @@ ActiveRecord::Schema.define(:version => 20130527092520) do
     t.text     "changing_topic"
     t.string   "period"
     t.text     "comments"
-    t.string   "color"
   end
 
   add_index "competence_nodes", ["abstract_course_id", "curriculum_id"], :name => "index_competence_nodes_on_abstract_course_id_and_curriculum_id"
@@ -203,7 +202,10 @@ ActiveRecord::Schema.define(:version => 20130527092520) do
     t.integer "level"
     t.float   "credits"
     t.integer "competence_node_id", :null => false
+    t.string  "icon"
   end
+
+  add_index "skills", ["competence_node_id"], :name => "index_skills_on_competence_node_id"
 
   create_table "study_plan_competences", :force => true do |t|
     t.integer "study_plan_id",                              :null => false

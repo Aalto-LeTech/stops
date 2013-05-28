@@ -92,6 +92,23 @@
     padding: 0px 2px;
     cursor: pointer;
   }
+  
+  .skill-icon {
+    display: inline-block;
+    font-size: large;
+  }
+  .skill-icon-skill:before {
+    color: #008;
+    content: "\2692";
+  }
+  .skill-icon-knowledge:before {
+    content: "\2605";
+    color: #880;
+  }
+  .skill-icon-identity:before {
+    content: "\2665";
+    color: #c44;
+  }
 }
 
 .loading {

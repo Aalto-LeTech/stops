@@ -8,6 +8,7 @@
       constructor: (@editor, node, data) ->
         @node = node
         @id = ko.observable(false)
+        @icon = false
         @descriptions = ko.observableArray()
         @localizedDescription = ko.observable('untitled')
         @selected = ko.observable(false)
@@ -15,19 +16,24 @@
         @isLoading = ko.observable(false)
         @isBeingDeleted = ko.observable(false)
         
+        @dynamicIcons = ko.observableArray()  # Icons to show. Array of icon name strings.
+        #@prereqToColors = {}  # skill_id => 'color'
+        
         # Mapping: skill_id => prereq requirement type (false, 0, or 1)
         @prereqIds = {}
-        @prereqToIds = []    # Array of ids of skills which depend on this
+        @prereqTo = []    # Array of Skills
+        #@prereqToCount = 0
         
         this.update(data) if data
 
         # This should be after the Skill data is loaded so that id is set
         @prereqType = ko.computed () =>
-          console.log("Recalculating prereqType for skill id: #{@id()}")
+          #console.log("Recalculating prereqType for skill id: #{@id()}")
           @editor._currentPrereqIds()[@id()]
       
       update: (data) ->
         @id(data['id'])
+        @icon = data['icon']
         @descriptions.removeAll()
         
         missingLocales = {}
@@ -44,16 +50,34 @@
         # Add descriptions for missing locales
         for locale, value of missingLocales
           @descriptions.push(new LocalizedDescription(@editor, {locale: locale}))
-          
-
+        
         if data['skill_prereqs']
           for prereq in data['skill_prereqs']
             @prereqIds[prereq['prereq_id']] = prereq['requirement']
 
-        if data['skill_prereq_to']
-          for prereq in data['skill_prereq_to']
-            @prereqToIds.push(prereq['requirement'])
+        if data['prereq_to']
+          for prereq in data['prereq_to']
+            @prereqTo.push {id: prereq.id, icon: prereq.icon}
+          
+        this.updateIcon()
+      
+      updateIcon: ->
+        icons = {}
         
+        if @localizedDescription
+          name = @localizedDescription()
+        else
+          name = @id
+        
+        for skill in @prereqTo
+          continue unless skill.icon
+          icons[skill.icon] = true
+        
+        icons[@icon] = true if @icon
+        
+        unique_icons = _.keys(icons)
+        @dynamicIcons(unique_icons)
+      
 
       dispose: () ->
         # Make sure computed prereqType doesn't leak memory
@@ -93,7 +117,11 @@
       conditionallyRemoveFromPrereqs: (skill) ->
         prereqNodes = @editor._currentPrereqNodes()
         prereqFound = false
-        for skill in prereqNodes[skill.node.id].skills()
+        
+        prereqNode = prereqNodes[skill.node.id]
+        return unless prereqNode
+        
+        for skill in prereqNode.skills()
           value = @prereqIds[skill.id()]
           if value == 1 || value == 0
             prereqFound = true
@@ -219,13 +247,18 @@
         # If this is already a prereq, remove it
         if targetSkill.prereqIds[@id()] == requirement
           targetSkill.removePrereq(this)
+          
+          targetId = targetSkill.id()
+          @prereqTo = _.reject @prereqTo, (element) -> element.id == targetId
           #@prereqType(false)
-
         
         else # If this is not a prereq, add it
           targetSkill.addPrereq(this, requirement)
+          
+          @prereqTo.push(targetSkill) if requirement == 1
           #@prereqType(requirement)
 
+        this.updateIcon()
 
       clickEdit: () ->
         if not @isLoading() && not @isBeingDeleted()

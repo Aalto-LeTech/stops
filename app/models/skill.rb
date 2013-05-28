@@ -39,7 +39,7 @@ class Skill < ActiveRecord::Base
   has_many :prereq_to, 
            :through     => :skill_prereq_to, 
            :source      => :skill, 
-           :order       => 'position', 
+           #:order       => 'position', 
            :conditions  => "requirement = #{STRICT_PREREQ}"
 
   belongs_to :competence_node

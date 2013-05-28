@@ -61,7 +61,7 @@ class Curriculums::CoursesController < CurriculumsController
   #     }
   #   }
   def show
-    @course = ScopedCourse.find(params[:id])
+    @course = ScopedCourse.includes(:skills => [:skill_descriptions, :skill_prereqs, :prereq_to]).find(params[:id])
     @profile = Profile.find(params[:profile_id]) if params[:profile_id]
 
     respond_to do |format|
@@ -70,13 +70,13 @@ class Curriculums::CoursesController < CurriculumsController
         :only => [:id, :course_code],
         :include => {
             :skills => {
-              :only => [:id],
+              :only => [:id, :icon],
               :include => {
                 :skill_descriptions => {
                   :only => [:id, :locale, :description]
                 },
                 :skill_prereqs => {:only => [:prereq_id, :requirement]},
-                :skill_prereq_to => {:only => [:prereq_id, :requirement]}
+                :prereq_to => {:only => [:id, :requirement, :icon]}
               }
             },
             :course_descriptions => {

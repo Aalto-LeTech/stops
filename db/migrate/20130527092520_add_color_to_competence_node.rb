@@ -1,5 +1,6 @@
 class AddColorToCompetenceNode < ActiveRecord::Migration
   def change
-    add_column :competence_nodes, :color, :string
+    add_column :skills, :icon, :string
+    add_index "skills", ["competence_node_id"]
   end
 end

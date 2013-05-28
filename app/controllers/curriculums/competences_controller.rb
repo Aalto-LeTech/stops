@@ -2,7 +2,7 @@ require 'eco'
 
 class Curriculums::CompetencesController < CurriculumsController
 
-  before_filter :load_competence, :except => [:index, :new, :create]
+  before_filter :load_competence, :except => [:index, :show, :new, :create]
 
   authorize_resource :only => [:matrix]
 
@@ -31,6 +31,9 @@ class Curriculums::CompetencesController < CurriculumsController
 
   # curriculums/1/competences/1
   def show
+    @competence = Competence.includes(:skills => [:skill_descriptions, :skill_prereqs, :prereq_to]).find(params[:competence_id] || params[:id])
+    load_curriculum
+    
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @competence }
@@ -39,7 +42,7 @@ class Curriculums::CompetencesController < CurriculumsController
         :only => [:id],
         :include => {
             :skills => {
-              :only => [:id],
+              :only => [:id, :icon],
               :include => {
                 :skill_descriptions => {
                   :only => [:id, :locale, :description]

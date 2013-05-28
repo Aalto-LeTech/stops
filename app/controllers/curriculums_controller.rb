@@ -203,7 +203,7 @@ class CurriculumsController < ApplicationController
         node_ids << node_id if not node_id == excluded_node_id
       end
       
-      # Search from course names or codes
+      # Search from competence names
       nodes = CompetenceDescription.where(['name ILIKE ?', "%#{params[:q]}%"])
                                .joins(:competence)
                                .select(:competence_id).uniq
@@ -213,7 +213,7 @@ class CurriculumsController < ApplicationController
       end
     end
 
-    nodes = CompetenceNode.find node_ids
+    nodes = CompetenceNode.includes(:skills => [:skill_descriptions, :skill_prereqs, :prereq_to]).find(node_ids)
 
     # Prepare CompetenceNode JSONs separately, because ScopedCourse and Competence need
     # different options for JSON generation.
@@ -221,20 +221,21 @@ class CurriculumsController < ApplicationController
       if node.type == 'Competence'
         node.as_json(
           :only => [:id],
-          :include => [
-            {:skills => {
-                :only => [:id],
+          :include => {
+            :skills => {
+                :only => [:id, :icon],
                 :include => {
                   :skill_descriptions => {
                     :only => [:id, :locale, :description]
                   },
-                  :skill_prereqs => {:only => [:prereq_id, :requirement]}
+                  :skill_prereqs => {:only => [:prereq_id, :requirement]},
+                  :prereq_to => {:only => [:id, :requirement, :icon]}
                 }
-            }},
-            {:competence_descriptions => {
+            },
+            :competence_descriptions => {
                 :only => [:id, :locale, :name]
-            }}
-          ]
+            }
+          }
         )
       else 
         # Must be a ScopedCourse
@@ -242,12 +243,13 @@ class CurriculumsController < ApplicationController
           :only => [:id, :course_code],
           :include => {
             :skills => {
-                :only => [:id],
+                :only => [:id, :icon],
                 :include => {
                   :skill_descriptions => {
                     :only => [:id, :locale, :description]
                   },
-                  :skill_prereqs => {:only => [:prereq_id, :requirement]}
+                  :skill_prereqs => {:only => [:prereq_id, :requirement]},
+                  :prereq_to => {:only => [:id, :requirement, :icon]}
                 }
             },
             :course_descriptions => {

@@ -6,7 +6,7 @@ fi:
   competence_description_label: "Kuvaus"
 
   # Show
-  competence_skills_heading: "Tuottaa valmiudet"
+  competence_skills_heading: "Osaamistavoitteet"
   competence_instructions: ""
   competence_courses_heading: "Kurssit"
   competence_edit_link: "Muokkaa kompetenssia"
@@ -30,13 +30,13 @@ fi:
       edit:
         heading: "Muokkaa kompetenssia"
         title: 'Muokkaa'
-        new_outcome: "Uusi valmius"
-        create_outcome_heading: "Luo uusi valmius"
-        create_outcome_help_text: "Syötä valmiuden kuvaus kaikilla pyydetyillä kielillä."
+        new_outcome: "Uusi osaamistavoite"
+        create_outcome_heading: "Luo uusi osaamistavoite"
+        create_outcome_help_text: "Syötä osaamistavoitteen kuvaus kaikilla pyydetyillä kielillä."
         create_outcome_error_heading: "Virhe"
-        create_outcome_error_failed_to_load_skill_box: "Uuden valmiuden syöttämiseen vaadittavaa lomaketta ei pystytty lataamaan."
-        create_outcome_save_failed: "Valmiuden tallentaminen epäonnistui."
-        create_outcome_validation_error: "Valmiuden kuvaus tulee antaa kaikilla pyydetyillä kielillä!"
+        create_outcome_error_failed_to_load_skill_box: "Uuden osaamistavoitteen syöttämiseen vaadittavaa lomaketta ei pystytty lataamaan."
+        create_outcome_save_failed: "Osaamistavoitteen tallentaminen epäonnistui."
+        create_outcome_validation_error: "Osaamistavoitteen kuvaus tulee antaa kaikilla pyydetyillä kielillä!"
         create_outcome_saving: "Tallennetaan..."
       edit_prereqs:
         edit_course_heading: 'Muokkaa kompetenssia'
@@ -48,7 +48,7 @@ fi:
         edit_skill: 'Muokkaa osaamistavoitetta'
         supportingPrereqButton: 'Tukeva'
         strictPrereqButton: 'Välttämätön'
-        help_text: 'Täällä voit muokata valitun kompetenssin valmiuksien esitietoja. Valitse oikealta valmius ja hae sitten vasemmalta valmiuksia, joita voit lisätä esitiedoksi tai poistaa. Mikäli haku tyhjennetään, näytetään tuloksissa vain nykyiset esitiedot. '
+        help_text: 'Täällä voit muokata kompetenssin esitietoja. Valitse ensin oikealta jokin kompetenssin osaamistavoite. Hae sitten vasemmalta muiden kurssien osaamistavoitteita ja merkitse niitä tukeviksi tai välttämättömiksi esitiedoiksi. Mikäli haku tyhjennetään, näytetään tuloksissa kaikki tämänhetkiset esitiedot.'
       graph:
         title: 'Kurssiverkko'
       new:
@@ -67,4 +67,4 @@ fi:
   competence_courses_to_remove: "Seuraavat kurssit poistetaan opintosuunnitelmastasi:"
 
   # Contributing outcomes
-  contributors_heading: "Kurssit, jotka tuottavat valmiuden %{competence}"
+  contributors_heading: "Kurssit, jotka tuottavat kompetenssin %{competence}"

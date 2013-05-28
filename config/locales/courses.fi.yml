@@ -5,9 +5,9 @@ fi:
   my_courses_heading: "Omat kurssit"
   my_courses_no_profile_hint: "Valitse ensin Profiilit-osiosta itseäsi kiinnostavat profiilit"
 
-  course_Provides: "Tarjoaa valmiudet"
-  course_provides: "Tarjoaa valmiudet"
-  course_paths_hint: "Klikkaa valmiuksia nähdäksesi opintopolut valmiudesta osaamisprofiiliin"
+  course_Provides: "Osaamistavoitteet"
+  course_provides: "Osaamistavoitteet"
+  course_paths_hint: "Klikkaa osaamistavoitteita nähdäksesi opintopolut kurssista kompetenssiin"
   course_prereqs: "Esitiedot"
   course_prereqs_reqursive: "Kaikki esitiedot ja esitietojen esitiedot"
   course_prereq_to: "on esitietona kursseille"
@@ -48,9 +48,9 @@ fi:
       edit_prereqs:
         title: 'Aseta esitiedot'
         edit_course_heading: 'Edit course'
-        help_text: 'Täällä voit muokata valitun kurssin valmiuksien esitietoja. Valitse oikealta valmius ja hae sitten vasemmalta valmiuksia, joita voit lisätä esitiedoksi tai poistaa. Mikäli haku tyhjennetään, näytetään tuloksissa vain nykyiset esitiedot. '
+        help_text: 'Täällä voit muokata valitun kurssin esitietoja. Valitse ensin oikealta jokin kurssin osaamistavoite. Hae sitten vasemmalta muiden kurssien osaamistavoitteita ja merkitse niitä tukeviksi tai välttämättömiksi esitiedoksi. Mikäli haku tyhjennetään, näytetään tuloksissa kaikki tämänhetkiset esitiedot.'
       edit_as_a_prereq:
-         help_text: "Täällä voit muokata valitun kurssin valmiuksia esitietona muille valmiuksille. Hae ensin oikealla olevalla hakukentällä valmiuksia, joille jokin vasemman puolen valmius voisi olla esitietona ja valitse sitten hakutuloksista sopiva valmius. Vasemmalla olevien valmiuksien 'Tukeva' ja 'Välttämätön' -painikkeilla valmiuden voi asettaa esitiedoksi tai poistaa."
+         help_text: "Täällä voit merkitä, miten kurssi toimii esitietona tuleville kursseille tai kompetensseille. Hae vasemmalle jonkin jatkokurssin tai kompetenssin osaamistavoitteet ja valitse yksi, jolle haluat asettaa esitietoja. Merkitse sitten vasemmalta kurssin osaamistavoitteita tukeviksi tai välttämättömiksi esitiedoiksi."
       skill_editor:
         prereqs_heading: 'Esitiedot'
         outcomes_heading: 'Osaamistavoitteet'
@@ -61,14 +61,14 @@ fi:
         strictPrereqButton: 'Välttämätön'
         search_box_placeholder: 'Haku'
         # Confirm skill deletion modal
-        deletion_confirmation_question: "Oletko varma, että haluat poistaa valmiuden"
-        delete_skill: "Poista valmius"
+        deletion_confirmation_question: "Haluatko varmasti poistaa osaamistavoitteen"
+        delete_skill: "Poista osaamistavoite"
         load_failed_heading: "Lataus epäonnistui!"
         prereq_change_failed_heading: "Virhe"
         prereq_change_failed_message: "Esitietovaatimuksen muuttaminen epäonnistui"
         searchable_column:
           prereqs_column_heading: 'Esitiedot'
-          as_a_prereq_column_heading: 'Esitietona seuraaville valmiuksille'
+          as_a_prereq_column_heading: 'Esitietona seuraaville osaamistavoitteille'
           search_box_placeholder: 'Haku'
           # Failure messages
           search_failure_message: "Tietoja ei pystytty lataamaan. Ole hyvä ja kokeile myöhemmin uudestaan."
@@ -81,18 +81,18 @@ fi:
           # during runtime with JavaScript. 
           # e.g., 'Virheestä johtuen valmiutta "Osaa laskea 1+1=2" ei pystytty poistamaan.'
           deletion_failed_heading: "Poisto epäonnistui"
-          deletion_failed_message_1: 'Virheestä johtuen valmiutta'
+          deletion_failed_message_1: 'Virheestä johtuen osaamistavoitetta'
           deletion_failed_message_2: 'ei pystytty poistamaan.'
           saving_skill_failed_heading: 'Tallennus epäonnistui'
-          saving_skill_failed_message: 'Valmiutta ei pystytty tallentamaan virheen vuoksi. Ole hyvä ja yritä myöhemmin uudelleen.'
+          saving_skill_failed_message: 'Osaamistavoitetta ei pystytty tallentamaan virheen vuoksi. Ole hyvä ja yritä myöhemmin uudelleen.'
         competence_node:
           move_skill: "Järjestä vetämällä"
           remove_skill: 'Poista osaamistavoite'
           edit_skill: 'Muokkaa osaamistavoitetta'
         modals:
           # Confirm skill deletion modal
-          deletion_confirmation_question: "Oletko varma, että haluat poistaa valmiuden"
-          delete_skill: "Poista valmius"
+          deletion_confirmation_question: "Haluatko varmasti poistaa osaamistavoitteen"
+          delete_skill: "Poista osaamistavoite"
         comments:
           leave_new_comment: "Jätä uusi kommentti"
         skill_editor_i18n_strings:

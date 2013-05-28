@@ -9,7 +9,7 @@ fi:
       index:
         heading: "Kompetenssivalinnat"
       boxed_competence_list:
-        provided_skills_heading: "Tuottaa seuraavat valmiudet"
+        provided_skills_heading: "Osaamistavoitteet"
 
   plan_heading: "Oma opintosuunnitelma"
   plan_empty_instructions: "Valitse opinto-oppaasta itseäsi kiinnostavat profiilit"

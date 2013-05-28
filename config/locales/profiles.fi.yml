@@ -17,7 +17,7 @@ fi:
 
   # plan/profiles index
   profiles_heading: "Osaamiskokonaisuudet"
-  profile_skills: "Tuottaa valmiudet"
+  profile_skills: "Osaamistavoitteet"
   profile_prereqs: "Esitiedot"
   profile_strict_prereqs: "Koostuu kursseista"
   profile_supporting_prereqs: "Tukevat esitiedot"

@@ -73,7 +73,7 @@
 
         if data['prereq_to']
           for prereq in data['prereq_to']
-            @prereqTo.push {id: prereq.id, icon: prereq.icon}
+            @prereqTo.push {id: (-> prereq.id), icon: prereq.icon}  # TODO: check this
           
         this.updateIcon()
       
@@ -278,7 +278,7 @@
           targetSkill.removePrereq(this)
           
           targetId = targetSkill.id()
-          @prereqTo = _.reject @prereqTo, (element) -> element.id == targetId
+          @prereqTo = _.reject @prereqTo, (element) -> element.id() == targetId
           #@prereqType(false)
         
         else # If this is not a prereq, add it

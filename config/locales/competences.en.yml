@@ -23,7 +23,7 @@ en:
     competences:
       edit_tab: 'Competence information'
       prereqs_tab: 'Learning outcomes'
-      graph_tab: 'Gourse graph'
+      graph_tab: 'Course graph'
       show:
         graph_link: 'Show course graph'
       edit:

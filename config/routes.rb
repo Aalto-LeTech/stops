@@ -69,6 +69,7 @@ Ops::Application.routes.draw do
           get 'edit_as_a_prereq'
           get 'comments'
           post 'create_comment'
+          get 'graph'
         end
       end
 

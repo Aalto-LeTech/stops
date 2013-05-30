@@ -209,5 +209,10 @@ class Curriculums::CoursesController < CurriculumsController
     end
   end
 
+  def graph
+    @scoped_course = ScopedCourse.find(params[:id])
+
+    render :action => 'graph', :layout => 'wide'
+  end
   
 end

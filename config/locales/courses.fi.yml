@@ -30,6 +30,7 @@ fi:
       prereqs_tab: 'Osaamistavoitteet'
       as_a_prereq_tab: 'Esitietona muille'
       comments_tab: 'Kommentit'
+      graph_tab: 'Kurssiverkko'
       creation_form:
         # New course creation form
         course_code: "Kurssikoodi"

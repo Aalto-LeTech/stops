@@ -198,10 +198,10 @@ ActiveRecord::Schema.define(:version => 20130527112659) do
   add_index "skill_prereqs", ["skill_id"], :name => "index_skill_prereqs_on_skill_id"
 
   create_table "skills", :force => true do |t|
-    t.integer "position",           :default => 0, :null => false
+    t.integer "position",           :null => false
     t.integer "level"
     t.float   "credits"
-    t.integer "competence_node_id",                :null => false
+    t.integer "competence_node_id", :null => false
     t.string  "icon"
   end
 

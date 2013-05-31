@@ -23,23 +23,22 @@
 
       constructor: (@editor, node, data) ->
         @node = node
-        @id = ko.observable(false)
         @icon = false
-        @descriptions = ko.observableArray()
-        @localizedDescription = ko.observable('untitled')
-        @selected = ko.observable(false)
-        #@highlighted = ko.observable(false)
-        @isLoading = ko.observable(false)
-        @isBeingDeleted = ko.observable(false)
-        
-        @dynamicIcons = ko.observableArray()  # Icons to show. Array of icon name strings.
-        #@prereqToColors = {}  # skill_id => 'color'
-        
-        # Mapping: skill_id => prereq requirement type (false, 0, or 1)
-        @prereqIds = {}
+        @prereqIds = {}   # Mapping: skill_id => prereq requirement type (false, 0, or 1)
         @prereqTo = []    # Array of Skills
+        #@prereqToColors = {}  # skill_id => 'color'
         #@prereqToCount = 0
         
+        # Observable state
+        @id                   = ko.observable(false)
+        @selected             = ko.observable(false)
+        @isLoading            = ko.observable(false)
+        @isBeingDeleted       = ko.observable(false)
+        @descriptions         = ko.observableArray()
+        @dynamicIcons         = ko.observableArray()  # Icons to show. Array of icon name strings.
+        @localizedDescription = ko.observable('untitled')
+        #@highlighted = ko.observable(false)
+      
         this.update(data) if data
 
         # This should be after the Skill data is loaded so that id is set

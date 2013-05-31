@@ -82,11 +82,9 @@ class ScopedCourse < CompetenceNode
     # has skills(:id)
   end
 
+  # Old accessor for localized name
   def name(locale)
-    description = CourseDescription.where(
-                    :abstract_course_id => self.abstract_course_id, 
-                    :locale => locale.to_s
-                  ).first
+    description = course_descriptions.where(:locale => locale).first
     description ? description.name : course_code
   end
 

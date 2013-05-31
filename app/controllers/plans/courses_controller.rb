@@ -9,12 +9,12 @@ class Plans::CoursesController < PlansController
   # GET /courses.xml
   def index
     @competences = @user.competences
-    @user_courses = @user.user_courses.joins(<<-SQL
-        INNER JOIN competence_nodes ON competence_nodes.id = user_courses.scoped_course_id 
-        LEFT OUTER JOIN course_instances ON course_instances.id = user_courses.course_instance_id 
+    @user_courses = @user.study_plan_courses.joins(<<-SQL
+        INNER JOIN competence_nodes ON competence_nodes.id = study_plan_courses.scoped_course_id 
+        LEFT OUTER JOIN course_instances ON course_instances.id = study_plan_courses.course_instance_id 
         LEFT OUTER JOIN periods ON periods.id = course_instances.period_id
       SQL
-    ).order("begins_at, code")
+    ).order("begins_at, course_code")
 
     respond_to do |format|
       format.html # index.html.erb

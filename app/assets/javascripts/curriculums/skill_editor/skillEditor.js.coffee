@@ -53,9 +53,6 @@ ErrorViewModel        = O4.skillEditor.ErrorViewModel
 
         # Actual observable results to be shown 
         @visibleNodes = ko.computed () =>
-
-          #console.log("Recomputing visible search result nodes")
-
           if @searchString().length == 0
             return _.values(@_currentPrereqNodes())
           else

@@ -3,20 +3,35 @@ quentin:
   id:                        1
   login:                     quentin
   email:                     quentin@example.com
-  password_salt:                      356a192b7913b04c54574d18c28d46e6395428ab # SHA1('0')
+  first_study_period:        one
+  password_salt:             356a192b7913b04c54574d18c28d46e6395428ab # SHA1('0')
   crypted_password:          672cf34fb6800937987ce584544a6c976079f09a # 'monkey'
   created_at:                <%= 5.days.ago.to_s :db  %>
   persistence_token:         77de68daecd823babbb58edb1c8e14d7106e83bb
-      
+
 aaron:
   id:                        2
   login:                     aaron
   email:                     aaron@example.com
-  password_salt:                      da4b9237bacccdf19c0760cab7aec4a8359010b0 # SHA1('1')
+  first_study_period:        one
+  password_salt:             da4b9237bacccdf19c0760cab7aec4a8359010b0 # SHA1('1')
   crypted_password:          8dc93fbfd1501e5f0a0d7c9955da6c23848feccc # 'monkey'
   created_at:                <%= 1.days.ago.to_s :db %>
   persistence_token:         77deaadaecd823babbcc8edb1c8e14d7106e11bb
 
+
+# See Authlogic documentation for more information on how to generate the required fields
+# URL: http://rdoc.info/github/binarylogic/authlogic/Authlogic/TestCase
+admin:
+  login:                    admin
+  admin:                    true
+  studentnumber:            11111Q
+  first_study_period:       one
+  name:                     Administrator
+  email:                    admin@example.com
+  password_salt:            <%= salt = Authlogic::Random.hex_token %>
+  crypted_password:         <%= Authlogic::CryptoProviders::Sha512.encrypt("admin" + salt) %>
+  persistence_token:        <%= Authlogic::Random.hex_token %>
 
 # old_password_holder:
 #   id:                        3

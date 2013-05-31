@@ -1,0 +1,19 @@
+one:
+  number:     0
+  begins_at:  2013-09-01
+  ends_at:    2013-10-31
+
+two:
+  number:     1
+  begins_at:  2013-11-01
+  ends_at:    2013-12-31
+
+three:
+  number:     2
+  begins_at:  2014-01-01
+  ends_at:    2014-02-28
+
+four:
+  number:     3
+  begins_at:  2014-03-01
+  ends_at:    2014-05-31

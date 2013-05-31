@@ -29,7 +29,7 @@
 <% unless @curriculum.competences.empty? %>
   <ul class="unstyled">
     <% @curriculum.competences.each_with_index do |competence, i| %>
-      <li><%= link_to competence.localized_description.name, [@curriculum, competence] %></li>
+      <li><%= link_to competence.localized_name, [@curriculum, competence] %></li>
     <% end %>
   </ul>
 <% end %>

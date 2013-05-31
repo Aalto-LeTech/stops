@@ -40,16 +40,22 @@ ErrorViewModel        = O4.skillEditor.ErrorViewModel
         
         @editingAsAPrereq = if opts then !!opts['editAsAPrereq'] else false
         @editingCompetence = if opts then !!opts['editCompetence'] else false
-        @searchString = ko.observable('')
-        @searchResults = ko.observableArray()
-        @isLoading = ko.observable(false)
-        @skillBeingDeleted = ko.observable(false)
-        @loadFailed = ko.observable(false)
+        
+        # Observable state
+        @node                 = ko.observable()
+        @isLoading            = ko.observable(false)
+        @loadFailed           = ko.observable(false)
+        @searchString         = ko.observable('')
+        @searchResults        = ko.observableArray()
+        @skillBeingDeleted    = ko.observable(false)
+        @targetNodeIsLoading  = ko.observable(true)
         @targetNodeLoadFailed = ko.observable(false)
+        @currentlyEditedSkill = ko.observable()       # Skill under editing
         # Internal lookup table to check if a CompetenceNode has skills as prerequirement
-        @_currentPrereqNodes = ko.observable({})
+        @_currentPrereqNodes  = ko.observable({})
         # Internal lookup table from which skill prereq states are computed automatically
-        @_currentPrereqIds = ko.observable({})
+        @_currentPrereqIds    = ko.observable({})
+        @showDeletionConfirmationModal = ko.observable(false)
 
         # Actual observable results to be shown 
         @visibleNodes = ko.computed () =>
@@ -58,21 +64,16 @@ ErrorViewModel        = O4.skillEditor.ErrorViewModel
           else
             return @searchResults()  
         
-        @modalDiv = $('#modal-edit-skill')
-        @showDeletionConfirmationModal = ko.observable(false)
-        @currentlyEditedSkill = ko.observable()    # Skill under editing
+        # Load and initialize some static data
+        $targetNode           = $('#target-node')
+        @nodeId               = $targetNode.data('node-id')
+        @nodeUrl              = $targetNode.data('url')
+        @modalDiv             = $('#modal-edit-skill')
+        @requiredLocales      = @modalDiv.data('locales').split(',')
+        @curriculumUrl        = @modalDiv.data('curriculum-url')
+        window.currentLocale  = @modalDiv.data('current-locale')
         
-        window.currentLocale = @modalDiv.data('current-locale')
-        @requiredLocales = @modalDiv.data('locales').split(',')
-      
-        @curriculumUrl = @modalDiv.data('curriculum-url')
-        $targetNode = $('#target-node')
-        @nodeUrl = $targetNode.data('url')
-        @nodeId = $targetNode.data('node-id')
-        @targetNodeIsLoading = ko.observable(true)
-      
-        @node = ko.observable()
-      
+        
         @skillErrorViewModel = new ErrorViewModel
         if @editingCompetence
           hintHidingKey = 'hide_edit_competence_prereqs_help'
@@ -105,7 +106,6 @@ ErrorViewModel        = O4.skillEditor.ErrorViewModel
         @currentlyEditedSkill(skill)
         @_currentPrereqIds(skill.prereqIds) # Shares underlying object with the skill
         @updateCurrentPrereqNodes()
-        # @updatePrereqHighlights()
 
 
       updateCurrentPrereqNodes: () ->
@@ -150,7 +150,6 @@ ErrorViewModel        = O4.skillEditor.ErrorViewModel
 
 
         promise.fail (jqXHR, textStatus, error) =>
-          # TODO What to do when request fails?
           @isLoading(false)
           @loadFailed(true)
 
@@ -171,7 +170,6 @@ ErrorViewModel        = O4.skillEditor.ErrorViewModel
           @loadFailed(false)
           this.parseSearchResults(data)
         promise.fail () => 
-          # TODO Should show error
           @isLoading(false) 
           @loadFailed(true)
       
@@ -192,8 +190,7 @@ ErrorViewModel        = O4.skillEditor.ErrorViewModel
 
         # Finally, trigger the mutation event
         @searchResults.valueHasMutated()
-        
-        #this.updatePrereqHighlights()
+      
       
       # TODO Dead code?
       updatePrereqHighlights: () ->

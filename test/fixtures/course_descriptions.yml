@@ -1,11 +1,11 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
 one:
-  abstract_course: sillyCourse
+  scoped_course: courseOnSilliness
   locale: fi
   name: Höpötyskurssi hötömölöstä
 
 two:
-  abstract_course: equallySillyCourse
+  scoped_course: anotherSillyCourse
   locale: fi
   name: Käppyröiden perusteet

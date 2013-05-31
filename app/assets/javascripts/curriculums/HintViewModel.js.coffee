@@ -1,7 +1,7 @@
 @module 'O4', ->
   @module 'misc', ->
 
-    class @HintModelView
+    class @HintViewModel
       constructor: (@hidingKey, @$hintElement) ->
         isElementShown = $hintElement.is(':visible')
         @shown = ko.observable(isElementShown)

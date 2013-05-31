@@ -4,10 +4,10 @@
 #= require module_pattern
 #= require curriculums/skill_editor/knockout_bindings
 #= require curriculums/skill_editor/LocalizedDescription
-#= require curriculums/skill_editor/SkillModelView
-#= require curriculums/skill_editor/NodeModelView
-#= require curriculums/skill_editor/ErrorModelView
-#= require curriculums/HintModelView
+#= require curriculums/skill_editor/SkillViewModel
+#= require curriculums/skill_editor/NodeViewModel
+#= require curriculums/skill_editor/ErrorViewModel
+#= require curriculums/HintViewModel
 
 # Check that i18n strings have been loaded before this file
 if not O4.skillEditor.i18n
@@ -29,7 +29,7 @@ O4.skillEditor.errorPopoverTemplate = """
 Node                  = O4.skillEditor.Node
 Skill                 = O4.skillEditor.Skill
 LocalizedDescription  = O4.skillEditor.LocalizedDescription
-ErrorModelView        = O4.skillEditor.ErrorModelView
+ErrorViewModel        = O4.skillEditor.ErrorViewModel
 
 @module 'O4', ->
   @module 'skillEditor', ->
@@ -76,14 +76,14 @@ ErrorModelView        = O4.skillEditor.ErrorModelView
       
         @node = ko.observable()
       
-        @skillErrorModelView = new ErrorModelView
+        @skillErrorViewModel = new ErrorViewModel
         if @editingCompetence
           hintHidingKey = 'hide_edit_competence_prereqs_help'
         else
           hintHidingKey = if @editingAsAPrereq
             'hide_edit_as_a_prereq_help' 
           else 'hide_edit_prereqs_help'
-        @hintModelView = new O4.misc.HintModelView hintHidingKey, $('#help-alert')
+        @hintViewModel = new O4.misc.HintViewModel hintHidingKey, $('#help-alert')
 
         ko.applyBindings(this)
         this.loadNode()

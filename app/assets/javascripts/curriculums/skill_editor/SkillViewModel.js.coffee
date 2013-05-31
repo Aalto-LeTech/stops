@@ -127,7 +127,7 @@
           @isLoading(false)
           errorHeading = O4.skillEditor.i18n['saving_skill_failed_heading']
           errorMessage = O4.skillEditor.i18n['saving_skill_failed_message']
-          @editor.skillErrorModelView.showErrorMessage(errorHeading, errorMessage)
+          @editor.skillErrorViewModel.showErrorMessage(errorHeading, errorMessage)
 
       saveUpdatedPosition: (newPosition) ->
         promise = $.ajax
@@ -328,7 +328,7 @@
 
           errorHeading = O4.skillEditor.i18n['deletion_failed_heading']
           errorMessage = O4.skillEditor.i18n['deletion_failed_message'](@localizedDescription())
-          @editor.skillErrorModelView.showErrorMessage(errorHeading, errorMessage)
+          @editor.skillErrorViewModel.showErrorMessage(errorHeading, errorMessage)
 
       generateDeletionConfirmationString: () ->
         O4.skillEditor.i18n['deletion_confirmation_question'] + " \"#{@localizedDescription()}\"?"

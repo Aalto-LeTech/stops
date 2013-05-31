@@ -1,7 +1,7 @@
 @module 'O4', ->
   @module 'skillEditor', ->
     
-    class @ErrorModelView
+    class @ErrorViewModel
       constructor: ->
         @shown   = ko.observable(false)
         @heading = ko.observable('')

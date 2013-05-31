@@ -192,16 +192,6 @@ ErrorViewModel        = O4.skillEditor.ErrorViewModel
         @searchResults.valueHasMutated()
       
       
-      # TODO Dead code?
-      updatePrereqHighlights: () ->
-        # Set highlights
-        targetSkill = @currentlyEditedSkill()
-        if targetSkill
-          for node in @visibleNodes()
-            for skill in node.skills()
-              skill.prereqType(targetSkill.prereqIds[skill.id()])
-      
-      
       clickClearSearch: () ->
         @searchString('')
         @searchResults.removeAll()

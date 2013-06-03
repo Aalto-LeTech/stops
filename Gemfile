@@ -28,10 +28,10 @@ group :assets do
   gem 'uglifier', '>= 1.0.3'
 
   gem 'eco'
-  gem 'jquery-ui-rails'
+  gem 'jquery-ui-rails', '~> 3.0'
 end
 
-gem 'jquery-rails'
+gem 'jquery-rails', '2.2.1'
 
 
 group :test do

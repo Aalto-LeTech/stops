@@ -2,7 +2,7 @@
 class Competence < CompetenceNode
 
   belongs_to :curriculum
-  
+
   belongs_to :parent_competence,
            :class_name => 'Competence'
 
@@ -15,10 +15,10 @@ class Competence < CompetenceNode
   has_many :competence_descriptions,
            :dependent   => :destroy,
            :order => 'locale'
-  
+
   has_one  :localized_description, :class_name => "CompetenceDescription", 
            :conditions => proc { "locale = '#{I18n.locale}'" }
-  
+
 
   has_many :skills_ordered,
            :class_name  => 'Skill',
@@ -28,8 +28,8 @@ class Competence < CompetenceNode
   # Prerequisite courses
   has_many :competence_courses, 
            :dependent   => :destroy
-           
-  
+       
+
   has_many :courses, 
            :through     => :competence_courses,
            :source      => :scoped_course

@@ -31,7 +31,7 @@ group :assets do
   gem 'jquery-ui-rails', '~> 3.0'
 end
 
-gem 'jquery-rails', '2.2.1'
+gem 'jquery-rails', '~> 2.1'
 
 
 group :test do
@@ -56,6 +56,7 @@ gem 'authlogic'
 gem 'cancan'
 gem 'fastercsv'
 gem 'acts_as_list'
+gem 'deep_cloneable', :git => 'git://github.com/moiristo/deep_cloneable.git'
 
 gem 'delayed_job_active_record', :git => 'git://github.com/collectiveidea/delayed_job_active_record.git'
 gem 'daemons'

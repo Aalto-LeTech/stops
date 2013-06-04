@@ -70,8 +70,16 @@ class Competence < CompetenceNode
 
   accepts_nested_attributes_for :competence_descriptions
 
-
-
+  
+  def duplicate
+    duplicate = self.dup :include => [:competence_descriptions, {:skills => [:skill_descriptions, :skill_prereqs]}]
+    
+    duplicate.competence_descriptions.each do |description|
+      description.name += ' (copy)'
+    end
+    
+    duplicate.save()
+  end
 
   def name(locale)
     description = competence_descriptions.where(:locale => locale.to_s).first

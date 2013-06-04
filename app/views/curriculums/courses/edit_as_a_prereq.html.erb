@@ -9,7 +9,7 @@
 
 <%= render 'tabs' %>
 
-<!-- ko with: hintModelView -->
+<!-- ko with: hintViewModel -->
   <div id='help-alert' class="alert alert-info <%= "hide" if @hide_help %>" data-bind="css: { hide: !shown() }">
     <button type="button" class="close" data-bind="click: hideHint">&times;</button>
     <%= t '.help_text' %>

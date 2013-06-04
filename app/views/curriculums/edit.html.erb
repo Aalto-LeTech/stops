@@ -41,7 +41,7 @@
 <% unless @curriculum.competences.empty?  %>
   <ul>
     <% @curriculum.competences.each do |competence| %>
-      <li><%= link_to t('.edit_competence_prefix') + ': ' + competence.localized_description.name, edit_prereqs_curriculum_competence_path(:curriculum_id => @curriculum, :id => competence) %></li>
+      <li><%= link_to t('.edit_competence_prefix') + ': ' + competence.localized_name, edit_prereqs_curriculum_competence_path(:curriculum_id => @curriculum, :id => competence) %></li>
     <% end %>
   </ul>
 <% else %>

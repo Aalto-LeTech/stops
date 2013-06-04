@@ -23,28 +23,26 @@
 
       constructor: (@editor, node, data) ->
         @node = node
-        @id = ko.observable(false)
         @icon = false
-        @descriptions = ko.observableArray()
-        @localizedDescription = ko.observable('untitled')
-        @selected = ko.observable(false)
-        #@highlighted = ko.observable(false)
-        @isLoading = ko.observable(false)
-        @isBeingDeleted = ko.observable(false)
-        
-        @dynamicIcons = ko.observableArray()  # Icons to show. Array of icon name strings.
-        #@prereqToColors = {}  # skill_id => 'color'
-        
-        # Mapping: skill_id => prereq requirement type (false, 0, or 1)
-        @prereqIds = {}
+        @prereqIds = {}   # Mapping: skill_id => prereq requirement type (false, 0, or 1)
         @prereqTo = []    # Array of Skills
+        #@prereqToColors = {}  # skill_id => 'color'
         #@prereqToCount = 0
         
+        # Observable state
+        @id                   = ko.observable(false)
+        @selected             = ko.observable(false)
+        @isLoading            = ko.observable(false)
+        @isBeingDeleted       = ko.observable(false)
+        @descriptions         = ko.observableArray()
+        @dynamicIcons         = ko.observableArray()  # Icons to show. Array of icon name strings.
+        @localizedDescription = ko.observable('untitled')
+        #@highlighted = ko.observable(false)
+      
         this.update(data) if data
 
         # This should be after the Skill data is loaded so that id is set
         @prereqType = ko.computed () =>
-          #console.log("Recalculating prereqType for skill id: #{@id()}")
           @editor._currentPrereqIds()[@id()]
       
       update: (data) ->
@@ -127,7 +125,7 @@
           @isLoading(false)
           errorHeading = O4.skillEditor.i18n['saving_skill_failed_heading']
           errorMessage = O4.skillEditor.i18n['saving_skill_failed_message']
-          @editor.skillErrorModelView.showErrorMessage(errorHeading, errorMessage)
+          @editor.skillErrorViewModel.showErrorMessage(errorHeading, errorMessage)
 
       saveUpdatedPosition: (newPosition) ->
         promise = $.ajax
@@ -137,10 +135,10 @@
             position: newPosition
 
         promise.done ->
-          #console.log("Skill: Successfully updated position")
+          # Do nothing
 
         promise.fail ->
-          #console.log("Skill: saving updated position failed")
+          # console.log("Skill: saving updated position failed")
 
       # Remove the node of the skill if the skill is the last prerequirement 
       conditionallyRemoveFromPrereqs: (skill) ->
@@ -168,7 +166,6 @@
         if not prereqNodes[skill.node.id]
           prereqNodes[skill.node.id] = skill.node
 
-        #console.log "AddPrereq: Calling valueHasMutated()"
         @editor._currentPrereqIds.valueHasMutated()
         @editor._currentPrereqNodes.valueHasMutated()
 
@@ -180,18 +177,14 @@
           data: {prereq_id: skill.id(), requirement: requirement} # competence_node_id: @node.id, prereq_competence_node_id: skill.node.id
 
         promise.done () ->
-          #console.log("AddPrereq: Succesfully added")
           skill.isLoading(false)
       
 
         promise.fail (jqXHR, textStatus, error) =>
-          #console.log("AddPrereq: Failed: #{textStatus}")
-
           # Roll back to the state before the action
           @prereqIds[skill.id()] = savedState
           @conditionallyRemoveFromPrereqs(skill)
 
-          #@editor.updatePrereqHighlights()
           @editor._currentPrereqIds.valueHasMutated()
           @editor._currentPrereqNodes.valueHasMutated()
 
@@ -216,16 +209,13 @@
           data: {prereq_id: skill.id()}
 
         promise.done () ->
-          #console.log("RemovePrereq: Succesfully removed")
           skill.isLoading(false)
         
 
         promise.fail (jqXHR, textStatus, error) =>
-          #console.log("RemovePrereq: Failed: #{textStatus}")
-
           # Return back to the state before the action
           @prereqIds[skill.id()] = savedState
-          #@editor.updatePrereqHighlights()
+
           @editor._currentPrereqNodes()[skill.node.id] = skill.node
           @editor._currentPrereqIds.valueHasMutated()
           @editor._currentPrereqNodes.valueHasMutated()
@@ -270,7 +260,6 @@
         targetSkill = @editor.currentlyEditedSkill()
         unless targetSkill
           # TODO: show a hint
-          #console.log("togglePrereq: Returning without doing anything since there is no currently edited skill")
           return
         
         # If this is already a prereq, remove it
@@ -279,18 +268,14 @@
           
           targetId = targetSkill.id()
           @prereqTo = _.reject @prereqTo, (element) -> element.id() == targetId
-          #@prereqType(false)
         
         else # If this is not a prereq, add it
           targetSkill.addPrereq(this, requirement)
           
           @prereqTo.push(targetSkill) if requirement == 1
-          #@prereqType(requirement)
 
         this.updateIcon()
 
-      afterBeingDraggedAndMoved: (details, event) ->
-        #console.log("This is a test")
 
       clickEdit: () ->
         if not @isLoading() && not @isBeingDeleted()
@@ -322,13 +307,12 @@
           @editor.skillBeingDeleted(false)
 
         promise.fail (jqXHR, textStatus, error) =>
-          #console.log("Skill deletion failed!")
           @editor.skillBeingDeleted(false)
           @isBeingDeleted(false)
 
           errorHeading = O4.skillEditor.i18n['deletion_failed_heading']
           errorMessage = O4.skillEditor.i18n['deletion_failed_message'](@localizedDescription())
-          @editor.skillErrorModelView.showErrorMessage(errorHeading, errorMessage)
+          @editor.skillErrorViewModel.showErrorMessage(errorHeading, errorMessage)
 
       generateDeletionConfirmationString: () ->
         O4.skillEditor.i18n['deletion_confirmation_question'] + " \"#{@localizedDescription()}\"?"

@@ -9,7 +9,7 @@
   <li<%= controller.action_name == 'graph' ? ' class="active"'.html_safe : '' %>><%= link_to t('curriculums.competences.graph_tab'), graph_curriculum_competence_path(:curriculum_id => @curriculum, :id => @competence) %></li>
 
   <% if controller.action_name == 'edit_prereqs' || controller.action_name == 'edit_as_a_prereq' %>
-    <!-- ko with: hintModelView -->
+    <!-- ko with: hintViewModel -->
       <li>
         <button class="btn btn-mini btn-info" 
                 type="button" 

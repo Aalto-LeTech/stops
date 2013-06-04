@@ -3,6 +3,7 @@ require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
 require 'minitest_backtrace_filter'
 require 'authenticated_test_helper'
+require 'authlogic/test_case'
 
 # Initialize FactoryGirl factories
 FactoryGirl.find_definitions

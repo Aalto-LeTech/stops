@@ -1,8 +1,8 @@
 require 'test_helper'
 
-class CourseInstancesControllerControllerTest < ActionController::TestCase
+class CourseInstancesControllerTest < ActionController::TestCase
   test "should get index" do
-    get :index
+    get :index, :locale => :fi
     assert_response :success
   end
 

@@ -11,7 +11,7 @@
   <li<%= controller.action_name == 'comments' ? ' class="active"'.html_safe : '' %>><%= link_to t('curriculums.courses.comments_tab'), comments_curriculum_course_path(:curriculum_id => @curriculum, :id => @scoped_course) %></li>
   
   <% if controller.action_name == 'edit_prereqs' || controller.action_name == 'edit_as_a_prereq' %>
-    <!-- ko with: hintModelView -->
+    <!-- ko with: hintViewModel -->
       <li>
         <button class="btn btn-mini btn-info" 
                 type="button" 

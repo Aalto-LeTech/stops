@@ -11,8 +11,8 @@
 
     <!-- Error alert box for deletion/edit-errors -->
     <div class="row-fluid hide" 
-      data-bind="css: { hide: skillErrorModelView.shown() === false }, 
-        with: skillErrorModelView">
+      data-bind="css: { hide: skillErrorViewModel.shown() === false }, 
+        with: skillErrorViewModel">
       <div class="alert alert-error span11">
         <button type="button" class="close" data-bind="click: clickClose">&times;</button>
         <strong data-bind="text: heading"></strong> <span data-bind="text: message"></span>

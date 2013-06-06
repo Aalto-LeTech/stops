@@ -3,7 +3,7 @@
 O4 (Opiskelijaa ohjaava opinto-opas) or STOPS (Software for target-oriented personal sylabus) is web-based tool that allows university staff to plan course contents and students to construct personal study plans.
 
 
-# Installing
+## Installing
 
 As root:
 ```bash
@@ -32,7 +32,7 @@ gem install bundler
 ```
 
 
-## Create database
+### Create database
 
 ```bash
 sudo -u postgres psql
@@ -41,9 +41,10 @@ sudo -u postgres psql
 ```sql
 CREATE USER rails PASSWORD 'password' CREATEDB;
 CREATE DATABASE o4 OWNER rails;
+```
 
 
-## Configure application
+### Configure application
 
 As normal user:
 ```bash

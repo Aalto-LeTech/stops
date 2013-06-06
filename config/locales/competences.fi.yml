@@ -59,6 +59,15 @@ fi:
         competence_name_in_sv: 'Nimi ruotsiksi:'
 
   # Add to plan
+  plans:
+    competences:
+      show:
+        remove_from_plan: "Poista opintosuunnitelmasta"
+        add_to_plan: "Lisää opintosuunnitelmaan"
+        skills: "Osaamistavoitteet"
+        strict_prereqs: "Koostuu kursseista"
+        course_passed: "Suoritettu"
+
   competence_add_heading: "Lisää %{profile} %{competence} opintosuunnitelmaan"
   competence_add_to_plan: "Lisää opintosuunnitelmaan"
   competence_remove_from_plan: "Poista %{profile} %{competence} opintosuunnitelmasta"

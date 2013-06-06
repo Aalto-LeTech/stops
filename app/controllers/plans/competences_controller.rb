@@ -16,7 +16,25 @@ class Plans::CompetencesController < PlansController
       set << id
     end
   end
-  
+
+  # GET /plans/1/competence/1
+  # GET /plans/1/competence/1.xml
+  def show
+    @competence = Competence.find(params[:id])
+
+    @included_courses = @user.courses
+    
+    @passed_courses = Hash.new
+    @user.passed_courses.each do |course|
+      @passed_courses[course.id] = course
+    end
+    
+    respond_to do |format|
+      format.html # show.html.erb
+      format.xml  { render :xml => @course }
+    end
+  end
+
   # Prepare to add competence to studyplan
   def new
     @competence = Competence.find(params[:id])

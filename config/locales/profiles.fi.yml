@@ -17,18 +17,13 @@ fi:
 
   # plan/profiles index
   profiles_heading: "Osaamiskokonaisuudet"
-  profile_skills: "Osaamistavoitteet"
   profile_prereqs: "Esitiedot"
-  profile_strict_prereqs: "Koostuu kursseista"
   profile_supporting_prereqs: "Tukevat esitiedot"
-  profile_add_to_plan: "Lisää opintosuunnitelmaan"
-  profile_remove_from_plan: "Poista opintosuunnitelmasta"
   profile_already_selected: "%{name} on jo opintosuunnitelmassa."
 
   profile_index_instructions: ""
   profile_show_instructions: ""
-  profile_course_passed: "Suoritettu"
-
+  
   # Remove profile from study plan
   profile_delete_heading: "Profiili %{name} poistetaan opintosuunnitelmasta"
   profile_delete_autodelete_courses: "Seuraavat kurssit poistetaan:"

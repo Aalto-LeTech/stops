@@ -95,16 +95,6 @@ class Competence < CompetenceNode
     description ? description.description : ''
   end
 
-  # Returns the sibling competences that have lower level value than this competence
-  def lower_siblings
-    profile.competences.where(["level < ?", level])
-  end
-
-  # Returns the sibling competences that have higher level value than this competence
-  def higher_siblings
-    profile.competences.where(["level > ?", level])
-  end
-
   # returns an array of arrays of courses
   def semesters
     # put all courses and their recursive prereqs in the Level
@@ -196,16 +186,6 @@ class Competence < CompetenceNode
     end
 
     result.sort_by {|course, skills| course.course_code}
-  end
-
-  # Returns a list of courses that are needed in addition to the courses in lower levels
-  def courses_cumulative
-    lower_courses = []
-    lower_siblings.each do |competence|
-      lower_courses.concat competence.courses_recursive
-    end
-
-    courses_recursive - lower_courses
   end
 
   def refresh_prereq_courses

@@ -4,6 +4,7 @@
        data-competence-id='<%= competence.id %>'
        data-competence-included='<%= @chosen_competences.include? competence.id %>'>
     <h2 style="display: inline-block"><%= competence.localized_name %></h2> <%# TODO Get rid of the style attribute %>
+    <%= link_to "Show Competence", studyplan_competence_path( competence ) %>
 
     <button 
       class="btn <%= @chosen_competences.include?(competence.id) ? 

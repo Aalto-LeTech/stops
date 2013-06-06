@@ -24,12 +24,22 @@
   </p>
 <% end %>
 
-<h2><%= t 'curriculums.competences_heading' %></h2>
 
-<% unless @curriculum.competences.empty? %>
+<% unless @competences.empty? %>
+  <h2><%= t 'curriculums.competences_heading' %></h2>
+  
   <ul class="unstyled">
-    <% @curriculum.competences.each_with_index do |competence, i| %>
-      <li><%= link_to competence.localized_name, [@curriculum, competence] %></li>
+    <% @competences.each do |competence| %>
+      <li>
+        <%= link_to competence.localized_name, [@curriculum, competence] %>
+        <% if competence.children %>
+          <ul>
+            <% competence.children.each do |competence| %>
+              <li><%= link_to competence.localized_name, [@curriculum, competence] %></li>
+            <% end %>
+          </ul>
+        <% end %>
+      </li>
     <% end %>
   </ul>
 <% end %>

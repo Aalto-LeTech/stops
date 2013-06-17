@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130527112659) do
+ActiveRecord::Schema.define(:version => 20130607093313) do
 
   create_table "abstract_courses", :force => true do |t|
     t.string "code"
@@ -198,10 +198,10 @@ ActiveRecord::Schema.define(:version => 20130527112659) do
   add_index "skill_prereqs", ["skill_id"], :name => "index_skill_prereqs_on_skill_id"
 
   create_table "skills", :force => true do |t|
-    t.integer "position",           :null => false
+    t.integer "position",           :default => 0, :null => false
     t.integer "level"
     t.float   "credits"
-    t.integer "competence_node_id", :null => false
+    t.integer "competence_node_id",                :null => false
     t.string  "icon"
   end
 
@@ -222,16 +222,16 @@ ActiveRecord::Schema.define(:version => 20130527112659) do
     t.integer "competence_ref_count", :default => 1,     :null => false
     t.integer "course_instance_id"
     t.boolean "manually_added",       :default => false
-    t.integer "grade"
   end
 
   add_index "study_plan_courses", ["study_plan_id", "scoped_course_id"], :name => "index_study_plan_courses_on_study_plan_id_and_scoped_course_id", :unique => true
   add_index "study_plan_courses", ["study_plan_id"], :name => "index_study_plan_courses_on_study_plan_id"
 
   create_table "study_plans", :force => true do |t|
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
     t.integer  "user_id"
+    t.integer  "curriculum_id", :null => false
   end
 
   create_table "temp_courses", :force => true do |t|
@@ -265,6 +265,15 @@ ActiveRecord::Schema.define(:version => 20130527112659) do
 
   add_index "temp_courses", ["curriculum_id"], :name => "index_temp_courses_on_curriculum_id"
 
+  create_table "user_courses", :force => true do |t|
+    t.integer "user_id",            :null => false
+    t.integer "abstract_course_id", :null => false
+    t.integer "course_instance_id"
+    t.integer "grade"
+  end
+
+  add_index "user_courses", ["user_id"], :name => "index_user_courses_on_user_id"
+
   create_table "users", :force => true do |t|
     t.string   "login"
     t.string   "studentnumber"
@@ -281,7 +290,6 @@ ActiveRecord::Schema.define(:version => 20130527112659) do
     t.datetime "current_login_at"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "curriculum_id"
     t.integer  "first_study_period_id"
     t.boolean  "staff",                                :default => false
     t.integer  "failed_login_count",                   :default => 0,     :null => false

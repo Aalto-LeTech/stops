@@ -29,7 +29,6 @@ class Plans::CoursesController < PlansController
     
     if params[:competence_id]
       @competence = Competence.find(params[:competence_id])
-      @profile = @competence.profile
     end
 
     respond_to do |format|

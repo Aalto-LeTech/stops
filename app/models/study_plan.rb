@@ -12,7 +12,7 @@ class StudyPlan < ActiveRecord::Base
         plan_id = study_plan.id
 
         existing_entry = StudyPlanCourse.where(:study_plan_id => plan_id, 
-                                               :scoped_course_id => course_id).first
+                                                 :scoped_course_id => course_id).first
 
         if not existing_entry.nil?
           # Increment reference counter
@@ -37,7 +37,7 @@ class StudyPlan < ActiveRecord::Base
         plan_id = study_plan.id
 
         existing_entry = StudyPlanCourse.where(:study_plan_id => plan_id, 
-                                               :scoped_course_id => course_id).first
+                                                 :scoped_course_id => course_id).first
 
         if not existing_entry.nil?
           # Decrement reference counter
@@ -57,6 +57,8 @@ class StudyPlan < ActiveRecord::Base
 
   belongs_to :user
 
+  belongs_to :curriculum
+
   has_many  :study_plan_courses,
             :dependent => :destroy
 
@@ -69,13 +71,6 @@ class StudyPlan < ActiveRecord::Base
             :extend => RefCountExtension,
             :dependent => :destroy
 
-  has_many  :passed_courses,
-            :through => :study_plan_courses,
-            :source => :scoped_course,
-            :uniq => true,
-            :conditions => "grade IS NOT NULL",
-            :dependent => :destroy
-
   has_many  :study_plan_manual_courses,
             :class_name => 'StudyPlanCourse',
             :dependent => :destroy,
@@ -85,9 +80,69 @@ class StudyPlan < ActiveRecord::Base
             :through => :study_plan_manual_courses,
             :source => :scoped_course,
             :dependent => :destroy,
-            :uniq => true # manually added courses
+            :uniq => true
 
   has_many :competences,
            :through => :study_plan_competences,
            :dependent => :destroy
- end
+
+  def add_competence(competence)
+    # Dont't do anything if the study plan already has this competence
+    return if has_competence?(competence)
+
+    competences << competence
+
+    # Calculate union of existing and new courses, without duplicates
+    courses_array = self.courses | competence.courses_recursive
+
+    #profile.courses_recursive.each do |course|
+      # courses_array << course.abstract_course unless courses_array.include? course.abstract_course
+      # courses_array << course unless courses_array.include? course.abstract_course
+    #end
+
+    self.courses = courses_array
+  end
+
+  # Removes the given competence and courses that are needed by it. Courses that are still needed by the remaining competences, are not removed. Also, manually added courses are not reomved.
+  def remove_competence(competence)
+    # Remove competence
+    competences.delete(competence)
+
+    self.courses = needed_courses(self.competences).to_a
+  end
+
+  def has_competence?(competence)
+    competences.include? competence
+  end
+
+  # Returns a list of courses than can be deleted if the given competence is dropped from the study plan
+  def deletable_courses(competence)
+    # Make an array of competences that the user has after deleting the given competence
+    remaining_competences = competences.clone
+    remaining_competences.delete(competence)
+    puts "#{competences.size} / #{remaining_competences.size}"
+
+    # Make a list of courses that are needed by the remaining competences
+    needed_courses = needed_courses(remaining_competences)
+
+    courses.to_set - needed_courses
+  end
+
+  # Returns a set of courses that are needed by the given competences
+  # competences: a collection of competence objects
+  def needed_courses(competences)
+    # Make a list of courses that are needed by remaining profiles
+    needed_courses = Set.new
+    competences.each do |competence|
+      needed_courses.merge(competence.courses_recursive)
+    end
+
+    # Add manually added courses to the list
+    needed_courses.merge(manual_courses)
+  end
+
+  def passed?(course)
+    passed_courses.include?(course.id)
+  end
+
+end

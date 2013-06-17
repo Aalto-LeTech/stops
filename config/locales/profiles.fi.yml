@@ -19,7 +19,6 @@ fi:
   profiles_heading: "Osaamiskokonaisuudet"
   profile_prereqs: "Esitiedot"
   profile_supporting_prereqs: "Tukevat esitiedot"
-  profile_already_selected: "%{name} on jo opintosuunnitelmassa."
 
   profile_index_instructions: ""
   profile_show_instructions: ""

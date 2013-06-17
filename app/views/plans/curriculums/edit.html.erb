@@ -1,6 +1,6 @@
 <h1><%=t :choose_curriculum_heading %></h1>
 
-<% if @user.curriculum %>
+<% if @user.study_plan and @user.study_plan.curriculum %>
   <div class="alert">
     <h4><%=t :change_curriculum_warning_heading %></h4>
     <%=t :change_curriculum_warning %>
@@ -12,7 +12,7 @@
     <div class="form-control-group">
       <div class="controls">
         <label class="radio">
-          <%= radio_button('user', 'curriculum', curriculum.id) %>
+          <%= radio_button('user_study_plan', 'curriculum', curriculum.id) %>
           <%= curriculum.name %>
         </label>
       </div>

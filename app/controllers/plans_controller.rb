@@ -19,12 +19,12 @@ class PlansController < ApplicationController
     #@curriculum = Curriculum.find(params[:curriculum_id])
     
     # If curriculum is not chosen, redirect
-    unless @user.curriculum
+    unless @user.study_plan and @user.study_plan.curriculum
       redirect_to edit_studyplan_curriculum_path
       return false
     end
     
-    @curriculum = @user.curriculum
+    @curriculum = @user.study_plan.curriculum
   end
   
   # Overview

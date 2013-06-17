@@ -24,9 +24,16 @@ class Plans::CurriculumsController < PlansController
 
   
   def update
-    
-    @user.curriculum_id = params[:user][:curriculum]
-    @user.save
+
+    curriculum_id = params[:user_study_plan][:curriculum]
+
+    if not @user.study_plan
+      @user.study_plan = StudyPlan.create :user_id => current_user.id, :curriculum_id => curriculum_id
+      @user.save
+    else
+      @user.study_plan.curriculum_id = curriculum_id
+      @user.study_plan.save
+    end
 
     redirect_back_or_default studyplan_curriculum_path
 #     respond_to do |format|

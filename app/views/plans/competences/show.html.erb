@@ -2,20 +2,20 @@
   <%= @competence.name(I18n.locale) %>
 </h1>
 
-<% competence_selected = @user.has_competence?(@competence) %>
+<% competence_selected = @user.study_plan.has_competence?(@competence) %>
 <div class="competence<%= competence_selected ? ' selected' : '' %>">
   <div class="buttons">
     <!-- Add / Remove -->
     <% if can? :choose, @competence %>
-      <% if @user.has_competence? @competence %>
+      <% if @user.study_plan.has_competence? @competence %>
         <%= link_to delete_studyplan_competence_path(:id => @competence.id), :title => t('.remove_from_plan') do %>
           <%= image_tag('remove.png', :alt => t('.remove_from_plan')) %>
-          <%=t '.remove_from_plan' %>
+          <%=t('.remove_from_plan')%>
         <% end %>
       <% else %>
         <%= link_to new_studyplan_competence_path(:id => @competence.id), :title => t('.add_to_plan') do %>
           <%= image_tag('add.png', :alt => t('.add_to_plan')) %>
-          <%=t '.add_to_plan' %>
+          <%=t('.add_to_plan')%>
         <% end %>
       <% end %>
     <% end %>
@@ -25,7 +25,7 @@
   <p><%= @competence.description(I18n.locale) %><p>
 
   <div class="competence-skills">
-    <h3><%=t '.skills' %></h3>
+    <h3><%=t('.skills')%></h3>
     <ul>
       <% @competence.skills.each do |skill| %>
         <li><%= skill.description(I18n.locale) %></li>
@@ -34,7 +34,7 @@
   </div>
 
   <div class="competence-courses">
-    <h3><%=t '.strict_prereqs' %></h3>
+    <h3><%=t('.strict_prereqs')%></h3>
 
     <table class="course-list">
       <% credits_counter = included_counter = passed_counter = 0 %>
@@ -91,7 +91,7 @@
   <div class="clear"></div>
 
   <!--
-  <% if @user.has_competence?(@competence) %>
+  <% if @user.study_plan.has_competence?(@competence) %>
     <%= link_to t(:competence_supporting_courses_link), supporting_studyplan_competence_path(:id => @competence.id) %>
   <% end %>
   -->

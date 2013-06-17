@@ -10,7 +10,7 @@ class CreateStudyPlans < ActiveRecord::Migration
 
     drop_table :user_courses
     drop_table :user_competences
-    
+
     create_table :study_plan_courses do |t|
       t.integer 'study_plan_id',                            :null => false
       t.integer "scoped_course_id",                         :null => false
@@ -25,7 +25,7 @@ class CreateStudyPlans < ActiveRecord::Migration
       t.integer "competence_id",                                :null => false
       t.integer 'included_scoped_course_ids', :default => '{}', :null => false, :array => true
     end
-    
+
     add_index "study_plan_courses", ["study_plan_id"],                      :name => "index_study_plan_courses_on_study_plan_id"
     add_index "study_plan_competences", ["study_plan_id"],                  :name => "index_study_plan_competences_on_study_plan_id"
     add_index "study_plan_courses", ["study_plan_id", "scoped_course_id"],  :name => "index_study_plan_courses_on_study_plan_id_and_scoped_course_id", :unique => true

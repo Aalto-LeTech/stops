@@ -32,7 +32,7 @@
     <% elsif @course %>
       <h1><%= link_to t(:plan_my_courses), studyplan_courses_path %></h1>
       <ul>
-        <% @user.courses.each do |course| %>
+        <% @user.study_plan.courses.each do |course| %>
           <li class="<%= course == @course ? 'selected' : '' %>"><%= link_to course.name(I18n.locale), studyplan_course_path(:id => course) %>
         <% end %>
       </ul>

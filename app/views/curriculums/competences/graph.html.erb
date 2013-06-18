@@ -1,14 +1,9 @@
 <% content_for :javascript do %>
-  <%= javascript_include_tag 'raphael-min' %>
-  <%= javascript_include_tag 'skillGraphView' %>
-  <%= javascript_include_tag 'graphCourse' %>
-  <%= javascript_include_tag 'graphSkill' %>
+  <%= javascript_include_tag 'graph/graphView' %>
 <% end %>
 <% content_for :title do %><%= @competence.localized_description.name %> - <%=t '.title' %><% end %>
 
 <%= render :partial => 'tabs' %>
-
-<!--%= link_to t(:Back), curriculum_competence_path(:curriculum_id => @curriculum.id, :id => @competence.id) %-->
 
 <div id="layers">
   <div id="svg"></div>

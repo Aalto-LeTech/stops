@@ -8,13 +8,13 @@
 
 <%# Left-side floating settings panel %>
 <div id="schedule-controls-container" class="leftNavi schedule-controls">
-  <h2><%= t :schedule_controls %></h2>
+  <h2><%= t('.schedule_controls') %></h2>
   <div class="control-block">
-    <h3><%= t :schedule_preferences %></h3>
+    <h3><%= t('.schedule_preferences') %></h3>
 
     <div class="control-group" id="schedule-automatic-arrangement">
       <label for="schedule-automatic-arrangement-input">
-        <%= t :schedule_automatic_arrangement_checkbox %>
+        <%= t('.schedule_automatic_arrangement_checkbox') %>
       </label>  
       <div class="controls">
         <input id="schedule-automatic-arrangement-input" type="checkbox" /> 
@@ -24,7 +24,7 @@
 
     <div class="control-group" id="schedule-draw-req-graphs">
       <label for="schedule-draw-req-graphs-input">
-        <%= t :schedule_draw_course_graphs_checkbox %>
+        <%= t('.schedule_draw_course_graphs_checkbox') %>
       </label>
       <div class="controls">
         <input id="schedule-draw-req-graphs-input" type="checkbox" /> 
@@ -34,7 +34,7 @@
 
     <div class="control-group" id="schedule-course-lock">
       <label for="schedule-course-lock-input">
-        <%= t :schedule_course_lock_checkbox %>
+        <%= t('.schedule_course_lock_checkbox') %>
       </label>
       <div class="controls">
         <input id="schedule-course-lock-input" type="checkbox" disabled="disabled" /> 
@@ -42,28 +42,28 @@
       </div>
     </div>
 
-    <button id="save-button"><%= t :schedule_save_button %></button>
+    <button id="save-button"><%= t('.schedule_save_button') %></button>
   </div> 
 
   <div id="course-desc-block" class="control-block hidden">
-    <h3><%= t :schedule_controls_selected_course %></h3>
+    <h3><%= t('.schedule_controls_selected_course') %></h3>
     <p id="course-id">
       <span id="course-code" class="control-course-code"></span>
       <span id="course-name" class="control-course-name"></span>
     </p>
     <p>
-    <span id="course-points"></span> <%= t :schedule_credits %>
+    <span id="course-points"></span> <%= t('.schedule_credits') %>
     </p>
 
   </div> 
 
 </div>
-  
+
 <div class="content">
-  <h1><%=t :plan_heading %></h1>
+  <h1><%=t('.heading')%></h1>
 
   <% if @user.courses.empty? && @user.competences.empty? %>
-    <p><%= link_to t(:plan_empty_instructions), studyplan_profiles_path %></p>
+    <p><%= link_to t('.empty_instructions'), studyplan_profiles_path %></p>
   <% end %>
 
   <p id="status"></p>
@@ -80,8 +80,8 @@
         <div class="period-credits"></div>
       </div>
     <% end %>
-    
-    
+
+
     <% @user_courses.each do |user_course| %>
       <% next unless user_course %>
       

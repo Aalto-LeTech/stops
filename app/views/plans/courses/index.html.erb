@@ -1,10 +1,12 @@
-<h1><%=t :my_courses_heading %></h1>
+<h1><%=t('.heading')%></h1>
 
 <% if @competences.empty? %>
   <p><%= link_to t(:my_courses_no_profile_hint), studyplan_profiles_path %></p>
 <% end %>
 
-<% unless @user_courses.empty? %>
+<% if @user_courses.empty? %>
+  <p><%= t('.no_courses') %></p>
+<% else %>
   <table class="plans-own-courses">
     <thead>
       <tr>

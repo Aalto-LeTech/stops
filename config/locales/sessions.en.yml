@@ -1,15 +1,17 @@
+# encoding: utf-8
 en:
   sessions:
+    logout: "LogoutXXX"
     logout_message: "You have been logged out."
     
     login:
-      title: 'Login'
+      title: "Login"
+      button: "Login"
       traditional_hint: "Login using a local account"
       shibboleth_hint: "Log in using the authentication service of your home university (WebLogin)"
-      studentnumber_label: "Username"
+      studentnumber_label: "Student ID"
       password_label: "Password"
       remember_label: "Remember me"
-      login_button: "Login"
       register: "Register"
       shibboleth_button: "Aalto weblogin"
   

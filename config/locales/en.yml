@@ -1,27 +1,37 @@
+# encoding: utf-8
 # Sample localization file for English. Add more files in this directory for other locales.
 # See http://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 en:
-  program_name: "O4"
   navi_plan: "My study plan"
   navi_curriculums: "All Curriculums"
-  navi_profiles: "Profiilit"
+  navi_profiles: "Profiles"
   navi_courses: "Courses"
 
   navi_my_plan: "My Study Plan"
   navi_browse_curriculums: "Browse study guides"
 
-  frontpageTab: "Frontpage"
-  myPlanDropdown: "Study plan"
-  myPlanTabCurriculum: "My Curriculum"
-  myPlanTabCompetences: "Competence election"
-  myPlanTabProfiles: "Profiles"
-  myPlanTabAllCourses: "Courses"
-  myPlanTabMyCourses: "My courses"
-  myPlanTabSchedule: "Schedule"
-  myPlanTabRecord: "Record"
-  myPlanThisPeriod: "Current period"
-  curriculumsTab: "Study guides"
+  header:
+    program_name: "The Smart Study Guide"
+    frontpageTab: "Frontpage"
+    curriculumsTab: "Study guides"
+    myPlanDropdown: "Study plan"
+    myPlanTabCurriculum: "My Curriculum"
+    myPlanTabCompetences: "Competence election"
+    myPlanTabAllCourses: "Courses"
+    myPlanTabMyCourses: "My courses"
+    myPlanTabSchedule: "Schedule"
+    myPlanTabRecord: "Record"
+    myPlanThisPeriod: "Current period"
+    login: "Kirjaudu"
+    logout: "Kirjaudu ulos"
+
+  frontpage:
+    index:
+      not_logged_in_heading: "Log In"
+
+    dashboard:
+      heading: "Dashboard"
 
   example_schedule: "Example schedule"
 
@@ -40,6 +50,7 @@ en:
   Course_code: "Code"
   course_code: "code"
   admin_toolbox_heading: "Administration"
+
 
   #########################
   # General status messages
@@ -65,9 +76,11 @@ en:
       short: "%d %b %H:%M"
       long: "%a %Y-%m-%d %H:%M:%S"
 
+
   #######################
   # Language translations
   #######################
+
   language_in_en: "in English"
   language_in_sv: "in Swedish"
   language_in_fi: "in Finnish"

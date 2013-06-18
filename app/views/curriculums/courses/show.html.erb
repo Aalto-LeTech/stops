@@ -24,7 +24,7 @@
     </tbody>
   </table>
 <% else %>
-  <h2><%=t :course_provides %></h2>
+  <h2><%=t('.course_provides')%></h2>
   <table class="course-skill-dependencies">
     <thead>
       <td>Prerequisites</td>
@@ -48,7 +48,7 @@
 
 
 
-<h2><%=t :course_path_heading %></h2>
+<h2><%=t('.course_path_heading')%></h2>
 
 <%= link_to graph_curriculum_course_path(:curriculum_id => @curriculum.id, :id => @course.id) do %>
   <%= image_tag 'visualization-button.png' %><br />

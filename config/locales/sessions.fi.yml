@@ -1,19 +1,20 @@
 # encoding: utf-8
 fi:
   sessions:
+    logout: "Kirjaudu ulosXXX"
     logout_message: "Olet kirjautunut ulos."
     
     login:
-      title: 'Kirjautuminen'
+      title: "Kirjautuminen"
+      button: "Kirjaudu"
       traditional_hint: "Kirjaudu O4-tunnuksella"
       shibboleth_hint: "Kirjaudu kotiyliopiston tunnuksella (WebLogin)"
-      studentnumber_label: "Käyttäjätunnus"
+      studentnumber_label: "Opiskelijanumero"
       password_label: "Salasana"
       remember_label: "Muista minut"
-      login_button: "Kirjaudu"
       register: "Luo testitunnus"
       shibboleth_button: "Aalto weblogin"
-    
+
     new:
       heading: "Kirjaudu sisään"
 

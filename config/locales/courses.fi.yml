@@ -5,9 +5,6 @@ fi:
   my_courses_heading: "Omat kurssit"
   my_courses_no_profile_hint: "Valitse ensin Profiilit-osiosta itseäsi kiinnostavat profiilit"
 
-  course_Provides: "Osaamistavoitteet"
-  course_provides: "Osaamistavoitteet"
-  course_paths_hint: "Klikkaa osaamistavoitteita nähdäksesi opintopolut kurssista kompetenssiin"
   course_prereqs: "Esitiedot"
   course_prereqs_reqursive: "Kaikki esitiedot ja esitietojen esitiedot"
   course_prereq_to: "on esitietona kursseille"
@@ -15,7 +12,6 @@ fi:
   course_no_prereqs: "Ei esitietoja"
   course_no_future: "Ei jatkokursseja"
   course_strict_prereq_of: "on välttämätön esitieto kursseille"
-  course_path_heading: "Yhteys muihin kursseihin"
   course_add_to_plan: "Lisää opintosuunnitelmaan"
 
   strict_prereq_char: 'X'
@@ -24,6 +20,16 @@ fi:
   course_create_link: 'Luo kurssi'
   course_new_heading: 'Luo kurssi'
 
+  plans:
+    courses:
+      index:
+        heading: "Omat kurssit"
+        no_courses: "Ei kursseja"
+      show:
+        course_paths_hint: "Klikkaa osaamistavoitteita nähdäksesi opintopolut kurssista kompetenssiin"
+        course_provides: "Osaamistavoitteet"
+        course_path_heading: "Yhteys muihin kursseihin"
+
   curriculums:
     courses:
       edit_tab: 'Tiedot'
@@ -31,6 +37,9 @@ fi:
       as_a_prereq_tab: 'Esitietona muille'
       comments_tab: 'Kommentit'
       graph_tab: 'Kurssiverkko'
+      show:
+        course_provides: "Osaamistavoitteet"
+        course_path_heading: "Yhteys muihin kursseihin"
       creation_form:
         # New course creation form
         course_code: "Kurssikoodi"

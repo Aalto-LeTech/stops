@@ -1,12 +1,10 @@
+# encoding: utf-8
 en:
   courses_heading: "Courses"
 
   my_courses_heading: "My courses"
   my_courses_no_profile_hint: "Choose profiles first"
 
-  course_Provides: "Provides skills"
-  course_provides: "Provides skills"
-  course_paths_hint: "Click skills to see the study path"
   course_prereqs: "Prerequisites"
   course_prereqs_reqursive: "All prerequisites and their prerequisites"
   course_prereq_to: "is a prerequisite to"
@@ -14,7 +12,6 @@ en:
   course_no_prereqs: "No prerequisites"
   course_no_future: "None"
   course_strict_prereq_of: "is prerequisite of"
-  course_path_heading: "Relation to other courses"
   course_add_to_plan: "Add to study plan"
 
   strict_prereq_char: 'X'
@@ -23,6 +20,16 @@ en:
   course_create_link: 'Create course'
   course_new_heading: 'Create course'
 
+  plans:
+    courses:
+      index:
+        heading: "My Courses"
+        no_courses: "No courses"
+      show:
+        course_paths_hint: "Click skills to see the study path"
+        course_provides: "Provides skills"
+        course_path_heading: "Relation to other courses"
+
   curriculums:
     courses:
       edit_tab: 'Course information'
@@ -30,6 +37,9 @@ en:
       as_a_prereq_tab: 'Prerequirement to'
       comments_tab: 'Comments'
       graph_tab: 'Course graph'
+      show:
+        course_provides: "Provides skills"
+        course_path_heading: "Relation to other courses"
       creation_form:
         # New course creation form
         course_code: "Course code"

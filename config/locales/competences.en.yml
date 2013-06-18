@@ -1,3 +1,4 @@
+# encoding: utf-8
 en:
   competence_create_link: "Luo uusi osaamiskokonaisuus"
   competence_level_label: "Level"
@@ -77,5 +78,3 @@ en:
 
   # Contributing outcomes
   contributors_heading: "Courses contributing to %{competence}"
-
-

@@ -14,7 +14,7 @@ module ApplicationHelper
   end
 
   class ActionView::Helpers::FormBuilder
-    
+
     # Usage:
     # form_for(@user) do |f|
     #   <%= f.hint :name %>

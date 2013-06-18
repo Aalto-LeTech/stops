@@ -1,8 +1,8 @@
-<%= content_for(:title) do %><%=t '.title' %><% end %>
+<%= content_for(:title) do %><%=t('.title')%><% end %>
 
 <% if defined?(SHIB_PATH) %>
   <div class="sessions-login-method shibboleth-login">
-    <p class="hint"><%=t '.shibboleth_hint' %></p>
+    <p class="hint"><%=t('.shibboleth_hint')%></p>
 
     <%= link_to t('.shibboleth_button'), SHIB_PATH + shibboleth_session_url(:protocol => 'https'), :class => 'btn btn-primary btn-large' %>
   </div>
@@ -39,7 +39,7 @@
     
     <div class="control-group">
       <div class="controls">
-        <%= f.submit t('.login_button'), :class => 'btn' %>
+        <%= f.submit t('.button'), :class => 'btn' %>
       </div>
     </div>
         

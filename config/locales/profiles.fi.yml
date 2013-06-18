@@ -19,9 +19,10 @@ fi:
   profiles_heading: "Osaamiskokonaisuudet"
   profile_prereqs: "Esitiedot"
   profile_supporting_prereqs: "Tukevat esitiedot"
+  profile_already_selected: "%{name} on jo opintosuunnitelmassasi."
 
-  profile_index_instructions: ""
-  profile_show_instructions: ""
+  profile_index_instructions: "Valitse kompetensseja alhaalta"
+  profile_show_instructions: "Valitse kompetensseja"
   
   # Remove profile from study plan
   profile_delete_heading: "Profiili %{name} poistetaan opintosuunnitelmasta"

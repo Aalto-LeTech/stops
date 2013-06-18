@@ -14,7 +14,7 @@
   <div class="leftNavi">
 
     <% if @profile %>
-      <h1><%= link_to t(:myPlanTabProfiles), studyplan_profiles_path %></h1>
+      <h1><%= link_to t('myPlanTabProfiles'), studyplan_profiles_path %></h1>
       <ul>
         <% @curriculum.profiles.each do |profile| %>
           <li class="<%= profile == @profile ? 'selected' : '' %>"><%= link_to profile.name(I18n.locale), studyplan_profile_path(:id => profile.id) %></li>
@@ -30,7 +30,7 @@
         <% end %>
       </ul>
     <% elsif @course %>
-      <h1><%= link_to t(:plan_my_courses), studyplan_courses_path %></h1>
+      <h1><%= link_to t('myPlanTabMyCourses'), studyplan_courses_path %></h1>
       <ul>
         <% @user.study_plan.courses.each do |course| %>
           <li class="<%= course == @course ? 'selected' : '' %>"><%= link_to course.name(I18n.locale), studyplan_course_path(:id => course) %>

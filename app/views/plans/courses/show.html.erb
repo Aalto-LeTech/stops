@@ -22,7 +22,7 @@
   <!-- Study paths from course skills to profile skills -->
   <table id="course-profile-graph" class="course-profile-graph" data-competence-id="<%= @competence.id %>">
     <thead>
-      <td><%=t :course_Provides %></td>
+      <td><%=t('.course_provides')%></td>
       <td></td>
     </thead>
 
@@ -33,12 +33,12 @@
             <%= link_to skill.description(I18n.locale), competencepath_skill_path(:id => skill.id, :competence_id => @competence.id), { :class => 'skill click-hint', 'data-skill-id' => skill.id } %>
           <% end %>
         </td>
-        <td id="skill-future"><p class="hint"><%=t :course_paths_hint %></p></td>
+        <td id="skill-future"><p class="hint"><%=t('.course_paths_hint')%></p></td>
       </tr>
     </tbody>
   </table>
 <% else %>
-  <h2><%=t :course_provides %></h2>
+  <h2><%=t('.course_provides')%></h2>
   <table class="course-skill-dependencies">
     <thead>
       <td>Prerequisites</td>
@@ -67,7 +67,7 @@
 
 
 
-<h2><%=t :course_path_heading %></h2>
+<h2><%=t('.course_path_heading)%></h2>
 
 <table class="course-path">
   <thead>

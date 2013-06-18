@@ -1,6 +1,6 @@
 <% @curriculum.competences.each do |competence| %>
   <!-- ko with: competencesById['<%= competence.id %>'] -->
-  <div class="rounded-box" 
+  <div class="rounded-box <%= @chosen_competences.include? competence.id ? 'selected' : '' %>" 
        data-competence-id='<%= competence.id %>'
        data-competence-included='<%= @chosen_competences.include? competence.id %>'>
 
@@ -9,7 +9,7 @@
     </h2>
 
     <p>
-      <%= t '.provided_skills_heading' %>
+      <%= t('.provided_skills_heading')%>
       <ul>
         <% competence.skills.each do |skill| %>
           <li><%= skill.localized_description.description %></li>

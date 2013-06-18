@@ -1,16 +1,11 @@
-<h1><%=t('.heading')%></h1>
+<h2><%=t('.heading')%></h2>
 
-<% if @competences.empty? %>
-  <p><%= link_to t(:my_courses_no_profile_hint), studyplan_profiles_path %></p>
-<% end %>
+<h3><%=t('.passed_courses_heading')%></h3>
 
-
-<h2><%=t('.passed_courses_heading')%></h2>
-
-<% if @user_courses.empty? %>
+<% if @user.user_courses.empty? %>
   <p><%= t('.no_courses') %></p>
 <% else %>
-  <table class="plans-own-courses">
+  <table>
     <thead>
       <tr>
         <th><%= t('.course_code') %></th>
@@ -21,7 +16,7 @@
       </tr>
     </thead>
     <tbody>
-      <% @user_courses.each do |user_course| %>
+      <% @user.user_courses.each do |user_course| %>
         <tr <%= "class='course-completed'" if user_course.grade %>>
           <td><%= link_to user_course.scoped_course.course_code, studyplan_course_url(:id => user_course.scoped_course.id) %></td>
           <td><%= link_to user_course.scoped_course.name(I18n.locale), studyplan_course_url(:id => user_course.scoped_course.id) %></td>
@@ -39,12 +34,12 @@
 <% end %>
 
 
-<h2><%=t('.chosen_courses_heading')%></h2>
+<h3><%=t('.chosen_courses_heading')%></h3>
 
 <% if @user.study_plan.courses.empty? %>
   <p><%= t('.no_courses') %></p>
 <% else %>
-  <table class="plans-own-courses">
+  <table>
     <thead>
       <tr>
         <th><%= t('.course_code') %></th>
@@ -53,7 +48,7 @@
       </tr>
     </thead>
     <tbody>
-      <% @user.study_plan.courses.each do |course| %>
+      <% @vi_courses.each do |course| %>
         <tr>
           <td><%= link_to course.course_code, studyplan_course_url(:id => course.id) %></td>
           <td><%= link_to course.name(I18n.locale), studyplan_course_url(:id => course.id) %></td>

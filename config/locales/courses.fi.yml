@@ -20,16 +20,6 @@ fi:
   course_create_link: 'Luo kurssi'
   course_new_heading: 'Luo kurssi'
 
-  plans:
-    courses:
-      index:
-        heading: "Omat kurssit"
-        no_courses: "Ei kursseja"
-      show:
-        course_paths_hint: "Klikkaa osaamistavoitteita nähdäksesi opintopolut kurssista kompetenssiin"
-        course_provides: "Osaamistavoitteet"
-        course_path_heading: "Yhteys muihin kursseihin"
-
   curriculums:
     courses:
       edit_tab: 'Tiedot'

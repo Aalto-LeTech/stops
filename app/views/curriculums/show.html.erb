@@ -6,8 +6,8 @@
 
   <div class="admin-tools well">
     <ul class="nav nav-list">
-      <li class="nav-header"><%= t :admin_toolbox_heading %></li>
-      <li><%= link_to t(:curriculum_edit_link), edit_curriculum_path(:id => @curriculum) %></li>
+      <li class="nav-header"><%= t('admin_toolbox_heading')%></li>
+      <li><%= link_to t('.curriculum_edit_link'), edit_curriculum_path(:id => @curriculum) %></li>
       <!--li><%= link_to t(:curriculum_cycles_link), cycles_curriculum_path(:id => @curriculum) %></li-->
       <!--li><%= link_to t('.list_outcomes'), outcomes_curriculum_path(:id => @curriculum) %></li-->
       <li><%= link_to t('.edit_roles'), new_curriculum_role_path(:curriculum_id => @curriculum) %></li>
@@ -19,12 +19,12 @@
   <p>
     <%= link_to edit_curriculum_path(:id => @curriculum), { :class => 'btn' } do %>
       <i class="icon-edit"></i>
-      <%= t(:curriculum_edit_link) %>
+      <%= t('.curriculum_edit_link') %>
     <% end %>
   </p>
 <% end %>
 
-<h2><%= t 'curriculums.competences_heading' %></h2>
+<h2><%= t('curriculums.competences_heading')%></h2>
 
 <% unless @curriculum.competences.empty? %>
   <ul class="unstyled">
@@ -35,7 +35,7 @@
 <% end %>
 
 
-<h2><%= t 'curriculums.courses_heading' %></h2>
+<h2><%= t('curriculums.courses_heading')%></h2>
 
 <% unless @curriculum.courses.empty? %>
   <table id="curriculum-courses" class='table table-striped table-condensed table-bordered'>

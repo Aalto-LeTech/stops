@@ -341,7 +341,7 @@ function courseBeingDragged(event, ui) {
   }
 }
 
-function courseDragStopped(event, ui) {
+function courseDragStopped(event, ui) {  // FIXME???
   if (!ui.helper.data('dropped')) {
     // Animate draggable back to its original position
     ui.helper.animate(ui.originalPosition, { 

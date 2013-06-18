@@ -58,17 +58,6 @@ en:
         competence_name_in_en: 'Name in English:'
         competence_name_in_sv: 'Name in Swdish:'
 
-  # Add to plan
-  plans:
-    competences:
-      show:
-        remove_from_plan: "Remove from plan"
-        add_to_plan: "Add to plan"
-        skills: "Provides"
-        strict_prereqs: "Mandatory prerequisites"
-        course_passed: "Passed"
-        competence_already_selected: "%{name} is already included in your study plan."
-
   competence_add_heading: "Add %{competence} to study plan"
   competence_add_to_plan: "Add to studyplan"
   competence_remove_from_plan: "Remove %{competence} from studyplan"

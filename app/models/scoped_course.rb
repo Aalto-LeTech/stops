@@ -3,22 +3,22 @@ class ScopedCourse < CompetenceNode
 
   belongs_to :abstract_course
   accepts_nested_attributes_for :abstract_course
-  
+
 
   # Localized descriptions
   has_many :course_descriptions, :dependent => :destroy
   accepts_nested_attributes_for :course_descriptions
-  
+
   has_one :localized_description, :class_name => "CourseDescription", 
            :conditions => proc { "locale = '#{I18n.locale}'" }
-  
-  
+
+
   #has_many :skills, :order => 'position', :dependent => :destroy #, :foreign_key => 'course_code', :primary_key => 'code'
   #has_many :course_skills, :dependent => :destroy
   # has_many :skills, 
   #          :order     => 'position', 
   #          :dependent => :destroy #, :foreign_key => 'course_code', :primary_key => 'code'
-  
+
   has_many :skill_descriptions, 
            :through => :skills
 
@@ -27,7 +27,7 @@ class ScopedCourse < CompetenceNode
            :class_name  => "SkillDescription",
            :source      => :localized_description
 
-  
+
   # Prerequisite courses of this course
   has_many :course_prereqs, 
            :dependent => :destroy
@@ -45,7 +45,7 @@ class ScopedCourse < CompetenceNode
   has_many :strict_prereqs, 
            :through     => :strict_prerequirement_skills, 
            :source      => :competence_node
-  
+
   has_many :supporting_prereqs, 
            :through     => :course_prereqs, 
            :source      => :prereq, 
@@ -56,7 +56,7 @@ class ScopedCourse < CompetenceNode
   has_many :course_prereq_to, 
            :class_name  => 'CoursePrereq', 
            :foreign_key => :scoped_prereq_id
-  
+
   has_many :prereq_to, 
            :through     => :course_prereq_to, 
            :source      => :course, 
@@ -67,16 +67,16 @@ class ScopedCourse < CompetenceNode
   has_many :periods,
            :through     => :abstract_course,
            :conditions  => proc { ["periods.ends_at > ?", Date.today] }
-  
+
   has_many :comments, :as => :commentable, :dependent => :destroy, :order => 'created_at'
-  
+
   #attr_accessible :alternatives, :assignments, :changing_topic, :code, :contact, :content, :credits, :department, :grading_scale, :grading_details, :graduate_course, :instructors, :language, :materials, :name_en, :name_fi, :name_sv, :other, :outcomes, :period, :prerequisites, :replaces
-    
+
   define_index do
     indexes course_code
     indexes localized_description(:name), :as => :course_name
     indexes skill_descriptions.description, :as => :skill_descriptions
-    
+
     has :id, :as => :scoped_course_id
     has :abstract_course_id
     # has skills(:id)
@@ -88,7 +88,7 @@ class ScopedCourse < CompetenceNode
     description ? description.name : course_code
   end
 
-  alias_method :description, :name  
+  alias_method :description, :name
 
   # Returns the name of the course in the current locale or fallback
   # message if localized course name could not be found.
@@ -132,14 +132,14 @@ class ScopedCourse < CompetenceNode
   def update_comments(hash)
     write_attribute(:comments, hash.to_json)
   end
-  
+
   def comment(field)
     @comments = JSON.parse(read_attribute(:comments) || '{}') unless defined?(@comments)
-    
+
     @comments[field]
   end
-  
-  
+
+
   # Returns -1 if the is a prereq of other, +1 if this is a prereq to other, otherwise 0.
   def <=>(other)
     if strict_prereqs.exists?(other)

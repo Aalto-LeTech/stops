@@ -1,15 +1,15 @@
 <div class="row-fluid">
   <div class="span8">
 
-    <h1><%=t :curriculums_heading %></h1>
+    <h1><%=t('.heading')%></h1>
 
     <!--%= render 'remove_confirmation_modal' %-->
 
     <table id="curriculums-table" class="table">
       <thead>
         <tr>
-          <th><%= t '.curriculum' %></th>
-          <th><%= t '.years' %></th>
+          <th><%=t('.curriculum')%></th>
+          <th><%=t('.years')%></th>
         </tr>
       </thead>
       <tbody>
@@ -30,7 +30,7 @@
     </table>
 
     <% if can? :create, Curriculum %>
-      <p><%= link_to t(:curriculum_new), new_curriculum_path, :class => 'btn btn-primary' %></p>
+      <p><%= link_to t('.curriculum_new'), new_curriculum_path, :class => 'btn btn-primary' %></p>
     <% end %>
 
   </div>

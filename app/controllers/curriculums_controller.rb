@@ -141,19 +141,20 @@ class CurriculumsController < ApplicationController
   def prereqs
     @curriculum = Curriculum.find(params[:id])
 
-    prereqs = CoursePrereq.where(:requirement => STRICT_PREREQ)
-                .joins(<<-SQL
-                    INNER JOIN competence_nodes AS course ON course.id = course_prereqs.scoped_course_id 
-                    INNER JOIN competence_nodes AS prereq ON prereq.id = course_prereqs.scoped_prereq_id
-                  SQL
-                ).where("course.curriculum_id = ?", @curriculum)
-                .select(<<-SQL
-                    course.course_code AS course_code, 
-                    prereq.course_code AS prereq_code, 
-                    course.id AS course_id, 
-                    prereq.id AS prereq_id
-                  SQL
-                )
+    prereqs = []
+#    CoursePrereq.where(:requirement => STRICT_PREREQ)
+#                .joins(<<-SQL
+#                    INNER JOIN competence_nodes AS course ON course.id = course_prereqs.scoped_course_id 
+#                    INNER JOIN competence_nodes AS prereq ON prereq.id = course_prereqs.scoped_prereq_id
+#                  SQL
+#                ).where("course.curriculum_id = ?", @curriculum)
+#                .select(<<-SQL
+#                    course.course_code AS course_code, 
+#                    prereq.course_code AS prereq_code, 
+#                    course.id AS course_id, 
+#                    prereq.id AS prereq_id
+#                  SQL
+#                )
 
     respond_to do |format|
       format.html { render :text => prereqs.to_json }

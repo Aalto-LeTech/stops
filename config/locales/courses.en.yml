@@ -20,16 +20,6 @@ en:
   course_create_link: 'Create course'
   course_new_heading: 'Create course'
 
-  plans:
-    courses:
-      index:
-        heading: "My Courses"
-        no_courses: "No courses"
-      show:
-        course_paths_hint: "Click skills to see the study path"
-        course_provides: "Provides skills"
-        course_path_heading: "Relation to other courses"
-
   curriculums:
     courses:
       edit_tab: 'Course information'

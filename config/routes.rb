@@ -34,7 +34,7 @@ Ops::Application.routes.draw do
     resources :curriculums, :constraints => { :id => /\w+/ } do
       member do
         get 'cycles'
-        #get 'prereqs'
+        get 'prereqs'
         get 'graph'
         get 'outcomes'
         get 'search_skills'

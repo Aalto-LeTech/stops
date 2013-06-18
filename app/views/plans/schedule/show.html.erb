@@ -62,12 +62,11 @@
 <div class="content">
   <h1><%=t('.heading')%></h1>
 
-  <% if @user.courses.empty? && @user.competences.empty? %>
+  <% if @user.study_plan.courses.empty? && @user.study_plan.competences.empty? %>
     <p><%= link_to t('.empty_instructions'), studyplan_profiles_path %></p>
   <% end %>
 
   <p id="status"></p>
-
 
   <div class="plan" id="plan" data-prereqs-path="<%= prereqs_curriculum_path(@curriculum.id) %>"
     data-instances-path="<%= course_instances_path %>" 
@@ -84,14 +83,18 @@
 
     <% @user_courses.each do |user_course| %>
       <% next unless user_course %>
-      
-      <div class="course" id="course-<%= user_course.scoped_course.course_code %>" 
+
+      <div class="course" id="course-<%= user_course.scoped_course.course_code %>"
         data-id="<%= user_course.id %>"
-        data-code="<%= user_course.scoped_course.course_code %>" 
-        data-name="<%= user_course.scoped_course.abstract_course.course_descriptions_with_locale.empty? ? '' : user_course.scoped_course.abstract_course.course_descriptions_with_locale[0].name %>"
-        data-credits="<%= user_course.scoped_course.credits || '0' %>" 
-        data-passed="<%= user_course.passed? ? 'true' : 'false' %>" 
+        data-code="<%= user_course.scoped_course.course_code %>"
+        data-name="<%= user_course.scoped_course.name(I18n.locale) %>"
+        data-credits="<%= user_course.scoped_course.credits || '0' %>"
         data-period="<%= user_course.course_instance_id ? user_course.course_instance.period_id : '' %>" ><%= user_course.scoped_course.course_code + ' ' + user_course.scoped_course.name(I18n.locale) %></div>
+      <!--
+        data-passed="<%= #user_course.passed? ? 'true' : 'false'
+        %>"
+      -->
+
     <% end %>
   </div>
 

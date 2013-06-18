@@ -1,25 +1,5 @@
 # encoding: utf-8
 fi:
-  # Index
-  curriculums_heading: "Opinto-oppaat"
-  curriculum_new: "Lisää opinto-opas"
-  new_curriculum_heading: "Lisää opinto-opas"
-
-  # Show
-  curriculum_edit_link: "Muokkaa opinto-opasta"
-  curriculum_cycles_link: "Tarkista syklit"
-
-  curriculum_start_year: "Voimassaolo alkaa"
-  curriculum_end_year: "Voimassaolo päättyy"
-  curriculum_prereqs_csv: "Esitietomatriisi"
-  curriculum_profiles_csv: "Profiilimatriisi"
-
-  curriculum_start_year_hint: "esim. 2010"
-  curriculum_end_year_hint: "esim. 2011"
-  curriculum_name: "Nimi"
-  curriculum_name_hint: "esim. Rakennustekniikka 2012-2013"
-
-  # show
   curriculums:
     # Strings shared between views
     curriculum_courses: "Opinto-ohjelman kurssit"
@@ -29,16 +9,27 @@ fi:
     localized_course_name_not_available: "ei suomenkielistä kurssinimeä"
     show_help: "Näytä ohje"
     index:
+      heading: "Opinto-oppaat"
       curriculum: "Opinto-opas"
       years: "Käytössä vuosina"
+      curriculum_new: "Lisää opinto-opas"
     remove_confirmation_modal:
       heading: "Vahvista poisto"
       message: "Oletko varma, että haluat poistaa seuraavan opetusohjelman?"
       curriculum: "Opetusohjelma"
     new:
+      heading: "Lisää opinto-opas"
+      curriculum_name: "Nimi"
+      curriculum_name_hint: "esim. Rakennustekniikka 2012-2013"
+      curriculum_start_year: "Voimassaolo alkaa"
+      curriculum_start_year_hint: "esim. 2010"
+      curriculum_end_year: "Voimassaolo päättyy"
+      curriculum_end_year_hint: "esim. 2011"
       confirm_create: "Lisää"
     show:
       # Admin tools
+      curriculum_edit_link: "Muokkaa opinto-opasta"
+      curriculum_cycles_link: "Tarkista syklit"
       admin_heading: "Hallinta"
       list_outcomes: "Listaa osaamistavoitteet"
       edit_roles: "Lisää opettajia"
@@ -50,6 +41,7 @@ fi:
       additional_tools_heading: "Lisätoiminnot"
       import_csv_link: "Tuo tiedot CSV-tiedostosta"
       change_name: "Nimeä uudelleen"
+      curriculum_cycles_link: "Tarkista syklit"
       course_create_link: 'Luo kurssi'
       competence_create_link: 'Luo uusi kompetenssi'
       course_code: "Koodi"
@@ -62,6 +54,8 @@ fi:
       edit_competence_prefix: "Muokkaa kompetenssia"
       no_competence_name: "nimetön kompetenssi"
     import_csv:
+      curriculum_prereqs_csv: "Esitietomatriisi"
+      curriculum_profiles_csv: "Profiilimatriisi"
       courses_csv: 'Kurssitiedot'
     new_course_form_container:
       # Create new course form

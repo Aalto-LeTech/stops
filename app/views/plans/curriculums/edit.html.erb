@@ -1,9 +1,9 @@
-<h1><%=t :choose_curriculum_heading %></h1>
+<h1><%= t('.heading') %></h1>
 
 <% if @user.study_plan and @user.study_plan.curriculum %>
   <div class="alert">
-    <h4><%=t :change_curriculum_warning_heading %></h4>
-    <%=t :change_curriculum_warning %>
+    <h4><%= t('.warning_heading') %></h4>
+    <%= t('.warning') %>
   </div>
 <% end %>
 

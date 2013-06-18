@@ -6,6 +6,16 @@ en:
       overview: "Overview"
       courses: "My courses"
 
+    curriculums:
+      show:
+        heading: "Current curriculum"
+        curriculum_currently_in_use_is: "Study guide currently in use:"
+        change_curriculum: "Change curriculum..."
+      edit:
+        heading: "Choose curriculum"
+        warning_heading: "Warning"
+        warning: "Some currently selected courses or profiles may not be available in other curriculums."
+
     competences:
       add_to_plan: "Add to plan"
       remove_from_plan: "Remove from plan"
@@ -16,31 +26,37 @@ en:
       boxed_competence_list:
         provided_skills_heading: "Provides the following skills"
 
-    dashboard:
-      heading: "My DB Study Plan"
+    courses:
+      index:
+        heading: "My Courses"
+        passed_courses_heading: "Passed"
+        chosen_courses_heading: "Chosen"
+        no_courses: "No courses"
+        course_code: "Code"
+        course_name: "Name"
+        course_extent: "Extent"
+        course_period: "Period"
+        course_grade: "Grade"
+      show:
+        course_paths_hint: "Click skills to see the study path"
+        course_provides: "Provides skills"
+        course_path_heading: "Relation to other courses"
 
-  current_curriculum_heading: "Current curriculum"
-  current_curriculum: "You are currently using the %{name} study guide"
-  choose_curriculum_heading: "Choose curriculum"
-  change_curriculum: "Change curriculum..."
-  change_curriculum_warning_heading: "Warning"
-  change_curriculum_warning: "Some currently selected courses or profiles may not be available in other curriculums."
+    schedule:
+      show:
+        schedule_controls: "Schedule controls"
+        schedule_preferences: "Preferences"
+        schedule_automatic_arrangement_checkbox: "Move courses to satisfy prerequirements"
+        schedule_draw_course_graphs_checkbox: "Draw prerequirement graphs"
+        schedule_course_lock_checkbox: "Lock course on its current position"
+        schedule_save_button: "Save schedule"
+        schedule_controls_selected_course: "Selected course"
+        schedule_credits: 
+          one: "credits"
+          other: "credits"
 
-  schedule:
-    show:
-      schedule_controls: "Schedule controls"
-      schedule_preferences: "Preferences"
-      schedule_automatic_arrangement_checkbox: "Move courses to satisfy prerequirements"
-      schedule_draw_course_graphs_checkbox: "Draw prerequirement graphs"
-      schedule_course_lock_checkbox: "Lock course on its current position"
-      schedule_save_button: "Save schedule"
-      schedule_controls_selected_course: "Selected course"
-      schedule_credits: 
-        one: "credits"
-        other: "credits"
-
-      heading: "My study plan"
-      empty_instructions: "Please explore the study guide and choose competences that you find interesting"
+        heading: "My study plan"
+        empty_instructions: "Please explore the study guide and choose competences that you find interesting"
 
   schedule_popover_help_title: "What does this do?"
   schedule_automatic_arrangement_help: "When this option is enabled, courses are automatically arranged according to their prerequirements."

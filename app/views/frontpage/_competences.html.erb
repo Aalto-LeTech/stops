@@ -1,0 +1,11 @@
+<h2><%= t('.heading')%></h2>
+
+<ul>
+<% @user.study_plan.competences.each do |competence| %>
+  <li>
+    <%= link_to competence.localized_name, studyplan_competence_path( competence ) %>
+  </li>
+<% end %>
+</ul>
+
+<p><%= link_to t('.edit'), studyplan_competences_path %></p>

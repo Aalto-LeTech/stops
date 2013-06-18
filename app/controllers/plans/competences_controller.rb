@@ -2,6 +2,8 @@ require 'set'
 
 class Plans::CompetencesController < PlansController
 
+  include CompetencesHelper
+
   #before_filter :login_required
   before_filter :load_plan
   before_filter :load_curriculum
@@ -12,9 +14,7 @@ class Plans::CompetencesController < PlansController
   end
 
   def index
-    @chosen_competences = @user.study_plan.competence_ids.inject(Set.new) do |set, id|
-      set << id
-    end
+    @chosen_competences = get_chosen_competences
   end
 
   # GET /plans/1/competence/1

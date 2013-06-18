@@ -14,10 +14,7 @@ class Plans::ScheduleController < PlansController
     @curriculum = Curriculum.first # FIXME: @user.curriculum
     
 
-    @user_courses = @user.user_courses.includes :scoped_course => 
-    [
-      { :abstract_course => :course_descriptions_with_locale }
-    ]
+    @user_courses = @user.study_plan.study_plan_courses
     #@courses = Course.semesters(@user.courses) 
     
     #@credits = UserCourse.sum('credits', :include => :abstract_course, :conditions => ['user_id=?', @user.id])

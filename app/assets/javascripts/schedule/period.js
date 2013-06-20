@@ -230,6 +230,9 @@ Period.prototype.freeSlot = function(slot, length) {
 function isCourseAccepted(draggable) {
   var course = draggable.data('object');   
   var period = $(this).data('object');
+  
+  return true;
+  // FIXME
   if (period.laterOrEqual(planView.currentPeriod) && period.courseAvailable(course)) {
     return true;
   } else {
@@ -238,32 +241,32 @@ function isCourseAccepted(draggable) {
 }
 
 
-/**
- * Handles course drop events.
- */
- function courseDropped(event, ui) {
-  var period = $(this).data('object');
-  var course = ui.draggable.data('object');
+  /**
+   * Handles course drop events.
+   */
+  function courseDropped(event, ui) {
+    var period = $(this).data('object');
+    var course = ui.draggable.data('object');
 
-  // Draggable needs to know that drop succeeded
-  ui.draggable.data('dropped', true);
-  
-  // Find the course instance
-  course.setPeriod(period);
-  if (period.courseInstances[course.getCode()]) {
-    course.element.removeClass('noinstance');
-  } else {
-    // If there is no instance on that period, show warning
-    course.element.addClass('noinstance');
-  }
-  
-  if (planView.settings.satisfyReqsAutomatically) {
-    // Move prereqs before the course
-    course.satisfyPrereqs();
+    // Draggable needs to know that drop succeeded
+    ui.draggable.data('dropped', true);
     
-    // Move postreqs after the course
-    course.satisfyPostreqs();
+    // Find the course instance
+    course.setPeriod(period);
+    if (period.courseInstances[course.getCode()]) {
+      course.element.removeClass('noinstance');
+    } else {
+      // If there is no instance on that period, show warning
+      course.element.addClass('noinstance');
+    }
+    
+    if (planView.settings.satisfyReqsAutomatically) {
+      // Move prereqs before the course
+      course.satisfyPrereqs();
+      
+      // Move postreqs after the course
+      course.satisfyPostreqs();
+    }
   }
-}
 
 })();

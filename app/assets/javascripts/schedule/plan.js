@@ -200,8 +200,8 @@ $.extend(window.planView, {
     $('.course').each(function(i, element){
       course = $(element).data('object');
 
-      if (course.changed && course.courseInstance) {
-        periods[course.id] = course.courseInstance.id;
+      if (course.changed && course.period) {
+        periods[course.id] = course.period.id;
       }
     });
 

@@ -20,14 +20,12 @@ class Plans::ScheduleController < PlansController
   def update
     # TODO: authentication
 
-    puts "DBG::params: #{params}"
-
-    if params and params[:periods]
-      params[:periods].each do |user_course_id, instance_id|
-        user_course = UserCourse.find(user_course_id)
+    if params[:periods]
+      params[:periods].each do |user_course_id, period_id|
+        user_course = StudyPlanCourse.where(:id => user_course_id).first
         next unless user_course
 
-        user_course.course_instance_id = instance_id
+        user_course.period_id = period_id
         user_course.save
       end
     end

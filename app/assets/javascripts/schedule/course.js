@@ -600,6 +600,11 @@ Course.calcPathString = function(courseNode, prereqNode) {
   var fX, fY, tX, tY, coursePos, prereqPos;
   coursePos = courseNode.position();
   prereqPos = prereqNode.position();
+  
+  if (!coursePos || !prereqPos) {
+    return '';
+  }
+  
   fX = coursePos.left + courseNode.outerWidth(true) / 2.0;
   fY = coursePos.top;
   tX = prereqPos.left + prereqNode.outerWidth(true) / 2.0;

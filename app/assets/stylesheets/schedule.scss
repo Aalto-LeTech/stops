@@ -1,0 +1,191 @@
+@import "general_mixins";
+
+.plan {
+  position: relative;
+  width: 100%;
+  /* height: 1400px; */
+  border: 1px solid gray;
+  /*background: #f2f2f2;*/
+  text-align: right;
+  /* Text selection is disabled, so also disable
+   * the text selection cursor. */
+  cursor: default;
+}
+
+/*
+.plan .courses {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  border-right: 1px solid green;
+}
+*/
+
+.plan div.period h2 {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  font-size: 100%;
+  color: gray;
+  margin: 0px;
+  padding: 0px;
+  z-index: 1;
+}
+
+.plan div.period {
+  width: 100%;
+  height: 58px;
+  /*background: #f0f0f0;*/
+  border-top: 1px solid #a0a0a0;
+  /*border-bottom: 1px solid gray;*/
+  padding: 0px;
+  margin: 0px;
+  
+
+
+  /* Striped warning background */
+  $warning_stripe: rgba(255, 0, 0, 0.55);
+  &.warning {
+    background-image: -webkit-linear-gradient(-45deg, 
+      $warning_stripe 25%,
+      transparent 25%, 
+      transparent 50%, 
+      $warning_stripe 50%,
+      $warning_stripe 75%,
+      transparent 75%,
+      transparent);
+    background-image: -moz-linear-gradient(-45deg,
+      $warning_stripe 25%,
+      transparent 25%, 
+      transparent 50%, 
+      $warning_stripe 50%,
+      $warning_stripe 75%,
+      transparent 75%,
+      transparent);
+    background-image: -ms-linear-gradient(-45deg,
+      $warning_stripe 25%,
+      transparent 25%, 
+      transparent 50%, 
+      $warning_stripe 50%,
+      $warning_stripe 75%,
+      transparent 75%,
+      transparent);
+    background-image: -o-linear-gradient(-45deg,
+      $warning_stripe 25%,
+      transparent 25%, 
+      transparent 50%, 
+      $warning_stripe 50%,
+      $warning_stripe 75%,
+      transparent 75%,
+      transparent);
+
+    -webkit-background-size: 50px 50px;
+       -moz-background-size: 50px 50px;
+         -o-background-size: 50px 50px;
+            background-size: 50px 50px; 
+  }
+}
+
+.plan div.period.receiver {
+  background-color: #e0ffe0;
+}
+
+.plan div.period.old-period {
+  background-color: #FF7A7A;
+}
+
+
+.plan div.course {
+  position: absolute;
+  top:        5px;
+  left:       5px;
+  
+  color:      #444;
+  background: #f0f0f0;
+  border:     1px solid #888;
+  @include border-radius(4px);
+
+  font-size:  small;
+  padding:    3px 15px 3px 3px;
+  margin:     0px;
+  
+  cursor:     move;
+  width:      90px;
+  height:     42px;
+  text-align: left;
+  /* z-index: 2; */
+
+  /* Needed to have "overflow: hidden" and correct padding at the same time */
+  .course-text-wrapper {
+    width:          100%;
+    height:         100%;
+    margin:         0;
+    padding:        0;
+    border:         0;
+    overflow:       hidden;
+    text-overflow:  ellipsis;
+  }
+
+  &.locked {
+    cursor: not-allowed;
+  }
+
+  img.course-locked {
+    position: absolute;
+    top:      2px;
+    right:    2px;
+    width:    10px;
+
+  }
+}
+
+
+.plan .course.selected {
+  color: white;
+  border: 2px solid #0000ff;
+  background: #8080e0;
+  z-index: 1; /* Make sure selected course is on top of other courses */
+}
+
+.plan .unsatisfied-postreq {
+  background: #e0e0ff url('../images/course-up.png') !important;
+}
+
+.plan .unsatisfied-prereq {
+  background: #e0e0ff url('../images/course-down.png') !important;
+}
+
+.plan .noinstance {
+  background: #e0e0ff url('../images/course-noinstance.png') !important;
+}
+
+.plan div.course.prereq-of, .plan div.course.prereq-to {
+  color: black;
+  background: #e0e0ff;
+  border: 1px solid green;
+}
+
+.plan div.course.prereq-of {
+  border-bottom: 5px solid blue;
+}
+
+.plan div.course.prereq-to {
+  border-top: 5px solid blue;
+}
+
+.plan .in-progress {
+  background: white !important;
+}
+
+
+
+/* Left control elements */
+
+.schedule-controls-fixed {
+  position: fixed;
+  top: 0px;
+
+}

@@ -5,6 +5,12 @@
   </script>
 <% end %>
 
+<% # "Course locked" icon that will be cloned using JS. Do not include
+   # id on the element, because that will also be copied!
+   %>
+<div id="cloneable-imgs" class="hide">
+  <%= image_tag "glyphicons_203_lock.png", :class => "course-locked" %>
+</div>
 
 <%# Left-side floating settings panel %>
 <div id="schedule-controls-container" class="leftNavi schedule-controls">
@@ -37,7 +43,7 @@
         <%= t('.schedule_course_lock_checkbox') %>
       </label>
       <div class="controls">
-        <input id="schedule-course-lock-input" type="checkbox" disabled="disabled" /> 
+        <input id="schedule-course-lock-input" type="checkbox" disabled="true" /> 
         <%= image_tag("glyphicons_195_circle_info.png", :size => "16x16" ) %>
       </div>
     </div>
@@ -58,7 +64,10 @@
       <%= t('.course_prereqs') %>
       <span id="course-prereqs"></span>
     </p>
+    <h4><%= t :schedule_course_prereqs_title %></h4>
+    <p id="course-prereqs-list">
 
+    </p>
   </div> 
 
 </div>
@@ -75,12 +84,15 @@
   <div class="plan" id="plan" data-prereqs-path="<%= prereqs_curriculum_path(@curriculum.id) %>"
     data-instances-path="<%= course_instances_path %>" 
     schedule-path="<%= studyplan_schedule_path %>">
-    <%# <div id="svg"></div> %>
+    <% # <div id="svg"></div>
+    %>
     <% @periods.each do |period| %>
-      <div class="period period-<%= period.number %>" data-id="<%= period.id %>" 
-          id="period-<%= period.id %>">
-        <div class="period-name"><%= period.name(I18n.locale) %></div>
-        <div class="period-credits"></div>
+      <div class="period period-<%= period.number %>" 
+        data-id="<%= period.id %>" 
+        data-current-period="<%= period == @current_period ? "true" : "false" %>"
+        id="period-<%= period.id %>">
+          <div class="period-name"><%= period.name(I18n.locale) %></div>
+          <div class="period-credits"></div>
       </div>
     <% end %>
 
@@ -93,12 +105,16 @@
         data-code="<%= user_course.scoped_course.course_code %>"
         data-name="<%= user_course.scoped_course.name(I18n.locale) %>"
         data-credits="<%= user_course.scoped_course.credits || '0' %>"
-        data-period="<%= user_course.course_instance_id ? user_course.course_instance.period_id : '' %>" ><%= user_course.scoped_course.course_code + ' ' + user_course.scoped_course.name(I18n.locale) %></div>
+        data-period="<%= user_course.course_instance_id ? user_course.course_instance.period_id : '' %>" >
+        <%= user_course.scoped_course.course_code + ' ' + user_course.scoped_course.name(I18n.locale) %>
+        <div class="course-text-wrapper">
+          <%= user_course.scoped_course.code + ' ' + user_course.scoped_course.name(I18n.locale) %>
+        </div>
+      </div>
       <!--
         data-passed="<%= #user_course.passed? ? 'true' : 'false'
         %>"
       -->
-
     <% end %>
   </div>
 

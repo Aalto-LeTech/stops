@@ -59,6 +59,30 @@ en:
         heading: "My study plan"
         empty_instructions: "Please explore the study guide and choose competences that you find interesting"
 
+  plan_heading: "My study plan"
+  plan_empty_instructions: "Please explore the study guide and choose profiles that you find interesting"
+  plan_my_courses: "My courses"
+  
+  current_curriculum_heading: "Current curriculum"
+  current_curriculum: "You are currently using the %{name} study guide"
+  choose_curriculum_heading: "Choose curriculum"
+  change_curriculum: "Change curriculum..."
+  change_curriculum_warning: "Warning: Some currently selected courses or profiles may not be available in other curriculums."
+  
+  schedule_controls: "Schedule controls"
+  schedule_preferences: "Preferences"
+  schedule_controls_selected_course: "Selected course"
+  schedule_credits: 
+    one: "credits"
+    other: "credits"
+  schedule_courses_total: "Total courses"
+  schedule_course_prereqs_title: "Immediate prerequirements of selected course"
+  schedule_course_no_prereqs: "No prerequirements"
+  schedule_automatic_arrangement_checkbox: "Move courses to satisfy prerequirements"
+  schedule_save_button: "Save schedule"
+  schedule_course_lock_checkbox: "Lock course on its current position"
+  schedule_draw_course_graphs_checkbox: "Draw prerequirement graphs"
+
   schedule_popover_help_title: "What does this do?"
   schedule_automatic_arrangement_help: "When this option is enabled, courses are automatically arranged according to their prerequirements."
   schedule_course_lock_help: "When this option is enabled, the selected course won't move from the current position."

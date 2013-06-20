@@ -10,8 +10,9 @@ class Plans::ScheduleController < PlansController
   
   
   def show
-    @periods = @user.relevant_periods
-    @curriculum = Curriculum.first # FIXME: @user.curriculum
+    @periods        = @user.relevant_periods
+    @current_period = Period.current
+    @curriculum     = Curriculum.first # FIXME: @user.curriculum
     
 
     @user_courses = @user.study_plan.study_plan_courses

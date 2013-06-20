@@ -92,13 +92,10 @@ class StudyPlan < ActiveRecord::Base
 
     competences << competence
 
+    # FIXME: This breaks if prerequisites include Competences
+    
     # Calculate union of existing and new courses, without duplicates
     courses_array = self.courses | competence.courses_recursive
-
-    #profile.courses_recursive.each do |course|
-      # courses_array << course.abstract_course unless courses_array.include? course.abstract_course
-      # courses_array << course unless courses_array.include? course.abstract_course
-    #end
 
     self.courses = courses_array
   end

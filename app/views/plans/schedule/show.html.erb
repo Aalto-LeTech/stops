@@ -5,14 +5,13 @@
   </script>
 <% end %>
 
-<% # "Course locked" icon that will be cloned using JS. Do not include
-   # id on the element, because that will also be copied!
-   %>
+<% # "Course locked" icon that will be cloned using JS. Do not include id on the element, because that will also be copied!
+%>
 <div id="cloneable-imgs" class="hide">
   <%= image_tag "glyphicons_203_lock.png", :class => "course-locked" %>
 </div>
 
-<%# Left-side floating settings panel %>
+<!-- Left-side floating settings panel -->
 <div id="schedule-controls-container" class="leftNavi schedule-controls">
   <h2><%= t('.schedule_controls') %></h2>
   <div class="control-block">
@@ -75,8 +74,10 @@
 <div class="content">
   <h1><%=t('.heading')%></h1>
 
-  <% if @user.study_plan.courses.empty? && @user.study_plan.competences.empty? %>
-    <p><%= link_to t('.empty_instructions'), studyplan_profiles_path %></p>
+  <% if @study_plan.courses.empty? && @study_plan.competences.empty? %>
+    <div class="alert">
+      <%= link_to t('.empty_instructions'), studyplan_competences_path %>
+    </div>
   <% end %>
 
   <p id="status"></p>

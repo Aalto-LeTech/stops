@@ -4,7 +4,7 @@ function Course(element) {
   element.data('object', this);     // Add a reference from element to this
   this.element = element;           // jQuery element
 
-  this.instances      = {};         // Available course instances
+  this.instances      = {};         // Available course instances FIXME C20130619
   this.periods        = [];         // Periods on which this course is arranged
   this.prereqs        = {};         // Prerequisite courses. courseCode => course object
   this.prereqTo       = {};         // Courses for which this course is a prereq. courseCode => course object
@@ -179,17 +179,23 @@ Course.prototype.postponeTo = function(period) {
  * Moves this to the given period or the closest possible earlier period
  */
 Course.prototype.advanceTo = function(period) {
-  while (period) {
-    if (period.courseAvailable(this)) {
-      this.setPeriod(period);
-      return;
-    }
+  this.setPeriod(period);
 
-    period = period.getPreviousPeriod();
-  }
-
-  // No period could be found.
-  this.period = false;
+  /*
+   * C20130619: Courses can now be planned to be put in periods regardless of course instances
+   * 
+   *   while (period) {
+   *     if (period.courseAvailable(this)) {
+   *       this.setPeriod(period);
+   *       return;
+   *     }
+   * 
+   *     period = period.getPreviousPeriod();
+   *   }
+   * 
+   *   // No period could be found.
+   *   this.period = false;
+   */
 };
 
 /**

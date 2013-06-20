@@ -132,6 +132,7 @@ Period.prototype.removeCourse = function(course) {
 
 /**
  * Returns true if the given course has an instance available on this period.
+ * FIXME C20130619
  */
 Period.prototype.courseAvailable = function(course) {
   if (this.courseInstances[course.getCode()]) {

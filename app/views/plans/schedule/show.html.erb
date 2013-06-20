@@ -85,26 +85,23 @@
     <% end %>
 
 
-    <% @user_courses.each do |user_course| %>
-      <% next unless user_course %>
+    <% @study_plan_courses.each do |study_plan_course| %>
+      <% next unless study_plan_course %>
 
-      <div class="course" id="course-<%= user_course.scoped_course.course_code %>"
-        data-id="<%= user_course.id %>"
-        data-code="<%= user_course.scoped_course.course_code %>"
-        data-name="<%= user_course.scoped_course.name(I18n.locale) %>"
-        data-credits="<%= user_course.scoped_course.credits || '0' %>"
-        data-period="<%= user_course.course_instance_id ? user_course.course_instance.period_id : '' %>" ><%= user_course.scoped_course.course_code + ' ' + user_course.scoped_course.name(I18n.locale) %></div>
-      <!--
-        data-passed="<%= #user_course.passed? ? 'true' : 'false'
-        %>"
-      -->
+      <div class="course" id="course-<%= study_plan_course.scoped_course.course_code %>"
+        data-id="<%= study_plan_course.id %>"
+        data-code="<%= study_plan_course.scoped_course.course_code %>"
+        data-name="<%= study_plan_course.scoped_course.name(I18n.locale) %>"
+        data-credits="<%= study_plan_course.scoped_course.credits || '0' %>"
+        data-period="<%= study_plan_course.course_instance_id ? study_plan_course.course_instance.period_id : '' %>" ><%= study_plan_course.scoped_course.course_code + ' ' + study_plan_course.scoped_course.name(I18n.locale) %>
+      </div>
 
     <% end %>
   </div>
 
   <table>
     <tr>
-      <td>Courses:</td><td><%= @user_courses.size %></td>
+      <td>Courses:</td><td><%= @study_plan_courses.size %></td>
     </tr>
   </table>
 </div>

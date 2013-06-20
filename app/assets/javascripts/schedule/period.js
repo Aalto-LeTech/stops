@@ -8,6 +8,7 @@ function Period(element) {
   
   this.courses = {};               // Courses that have been put to this period
   this.courseInstances = {};       // Courses that are available on this period. courseCode => courseInstance
+                                   // FIXME: Courses can now be added regardless of available instances
   this.slots = [];                 // Slots for parallel courses
   
   this.previousPeriod = false;     // Reference to previous sibling
@@ -202,9 +203,11 @@ Period.prototype.freeSlot = function(slot, length) {
 function isCourseAccepted(draggable) {
   var course = draggable.data('object');   
   var period = $(this).data('object');
-  if (period.courseAvailable(course)) {
-    return true;
-  } else return false; 
+  // C20130619: Simplification
+  return true;
+  //  if (period.courseAvailable(course)) {
+  //    return true;
+  //  } else return false; 
 }
 
 

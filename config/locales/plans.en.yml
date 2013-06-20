@@ -54,6 +54,7 @@ en:
         schedule_credits: 
           one: "credits"
           other: "credits"
+        course_prereqs: "Prerequirements:"
 
         heading: "My study plan"
         empty_instructions: "Please explore the study guide and choose competences that you find interesting"

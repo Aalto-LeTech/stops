@@ -3,7 +3,7 @@ var Course = (function() {
 function Course(element) {
   element.data('object', this);     // Add a reference from element to this
   this.element = element;           // jQuery element
-  
+
   this.instances      = {};         // Available course instances
   this.periods        = [];         // Periods on which this course is arranged
   this.prereqs        = {};         // Prerequisite courses. courseCode => course object
@@ -15,15 +15,15 @@ function Course(element) {
   this.length         = 1;
   this.locked         = false;      // Is the course immovable?
   this.changed        = true;
-  
-  this.id       = element.data('id');    // Database id of the UserCourse
-  this.course_code     = element.data('code');
-  this.name     = element.data('name');
-  this.credits  = parseFloat(element.data('credits'));
-  this.passed   = element.data('passed') == 'true';
-  
+
+  this.id           = element.data('id');    // Database id of the UserCourse
+  this.course_code  = element.data('code');
+  this.name         = element.data('name');
+  this.credits      = parseFloat(element.data('credits'));
+  this.passed       = element.data('passed') == 'true';
+
   element.click(courseClicked);
-  
+
   element.draggable({
     containment: 'parent',
     distance:     5,
@@ -88,7 +88,7 @@ Course.prototype.setPeriod = function(period) {
   if (this.period) {
     this.period.removeCourse(this);
   }
-  
+
   // Update length
   this.courseInstance = this.instances[period.getId()];
   if (this.courseInstance) {
@@ -96,11 +96,11 @@ Course.prototype.setPeriod = function(period) {
   } else {
     this.length = 1;
   }
-  
+
   // Add course to the new period
   this.period = period;
   period.addCourse(this, false);
-  
+
   // Move the div
   var period_div_pos = period.element.position();
   //course.css('left', period_div_pos.left + freeSlot * 100);
@@ -120,11 +120,11 @@ Course.prototype.satisfyPrereqs = function() {
   if (!this.period) {
     return;
   }
-  
+
   // Move prereqs before this course
   for (var array_index in this.prereqs) {
     var other = this.prereqs[array_index];
-    
+
     if (this.period.earlierThan(other.period)) {
       other.advanceTo(this.period.getPreviousPeriod());
       other.satisfyPrereqs();
@@ -140,11 +140,11 @@ Course.prototype.satisfyPostreqs = function() {
   if (!this.period) {
     return;
   }
-  
+
   // Postpone postreqs that are earlier than this
   for (var array_index in this.prereqTo) {
     var other = this.prereqTo[array_index];
-    
+
     if (this.period.laterOrEqual(other.period)) {
       other.postponeTo(this.period.getNextPeriod());
       other.satisfyPostreqs();
@@ -156,18 +156,23 @@ Course.prototype.satisfyPostreqs = function() {
  * Moves this course to the first available period starting from the given period.
  */
 Course.prototype.postponeTo = function(period) {
-  while (period) {
-    if (period.courseAvailable(this)) {
-      //this.period = period;
-      this.setPeriod(period);
-      return;
-    }
+  this.setPeriod(period);
 
-    period = period.getNextPeriod();
-  }
-  
-  // No period could be found.
-  this.period = false;
+  /*
+   * C20130619: Courses can now be planned to be put in periods regardless of course instances
+   *
+   *   while (period) {
+   *     if (period.courseAvailable(this)) {
+   *       this.setPeriod(period);
+   *       return;
+   *     }
+   * 
+   *     period = period.getNextPeriod();
+   *   }
+   * 
+   *   // No period could be found.
+   *   this.period = false;
+   */
 };
 
 /**
@@ -182,7 +187,7 @@ Course.prototype.advanceTo = function(period) {
 
     period = period.getPreviousPeriod();
   }
-  
+
   // No period could be found.
   this.period = false;
 };
@@ -197,12 +202,12 @@ Course.prototype.postponeAfterPrereqs = function() {
   for (var array_index in this.prereqs) {
     var course = this.prereqs[array_index];
     var period = course.getPeriod();
-    
+
     if (period && (!latest || course.getPeriod().laterThan(latest.getPeriod()))) {
       latest = course;
     }
   }
-  
+
   if (latest) {
     this.postponeTo(latest.getPeriod().getNextPeriod());
   }
@@ -218,12 +223,12 @@ Course.prototype.drawPrereqPaths = function() {
     preCourse = this.prereqs[preCourse];
 
     var prereqElem = $(planView.escapeSelector('course-' + preCourse.course_code));
-  
+
     // TODO: heights and widths not in use
     var prereqPos     = prereqElem.position();
     var prereqWidth   = prereqElem.outerWidth(true); 
     var prereqHeight  = prereqElem.outerHeight(false) + prereqElem.margin().top;
-  
+
     var courseElemPosition  = this.element.position();
     var courseElemWidth     = this.element.outerWidth(true); 
 
@@ -239,7 +244,7 @@ Course.prototype.clearPrereqPaths =  function() {
     for (var i = 0; i < selectedCourse.prereqPaths.length; i++) {
        selectedCourse.prereqPaths[i].path.remove();
     }
-  
+
     selectedCourse.prereqPaths = [];
   }
 };
@@ -263,39 +268,56 @@ Course.prototype.unlock = function() {
 
 function courseClicked() {
   var course = $(this).data('object');
-  
+
   // Clear prerequirement graphs
   course.clearPrereqPaths();
 
   // Reset hilights
   $('.course').removeClass('prereq-of').removeClass('prereq-to').removeClass('selected');
   $('.period').removeClass('receiver');
-   
+ 
   // Hilight selected course
   $(this).addClass('selected');
+
+  // computing an appropriate prereqs string
+  var prereqsz = 0;
+  var prereqs_string, course_name_list_string = '';
+  for (var array_index in course.prereqs) {
+    prereq_course = course.prereqs[array_index]
+    if (prereq_course) {
+      prereqsz++;
+      course_name_list_string += prereq_course.name + ', '
+    }
+  }
+  if (prereqsz == 0) {
+    prereqs_string = '-';
+  } else {
+    prereqs_string = String(prereqsz) + course_name_list_string;
+  }
 
   // Show short course details on the controls pane
   var $courseDesc = $('#course-desc-block');
   $("#course-code").text(course.course_code); 
   $("#course-name").text(course.name);
-  $("#course-points").text(course.credits);
+  $("#course-credits").text(course.credits);
+  $("#course-prereqs").text( prereqs_string );
   $courseDesc.removeClass("hidden"); // TODO animate
   var $courseLockInput = $("#schedule-course-lock-input");
   $courseLockInput.removeAttr("disabled");
   $courseLockInput.prop("checked", course.locked);
 
-  
-  
+
+
   // Hilight prereqs
   for (var array_index in course.prereqs) {
     course.prereqs[array_index].element.addClass('prereq-of');
   }
-  
+
   // Hilight courses for which this is a prereq
   for (var array_index in course.prereqTo) {
     course.prereqTo[array_index].element.addClass('prereq-to');
   }
-  
+
   // Hilight the periods that have this course
   for (var array_index in course.periods) {
     course.periods[array_index].element.addClass("receiver");
@@ -315,11 +337,11 @@ function courseDragStarted(event, ui) {
 
   // Dragging started, reset drop detection
   ui.helper.data('dropped', false);
-  
+
   // Hilight the periods that have this course
   var $element = ui.helper;
   var periods = $element.data('object').periods;
-  
+
   for (var array_index in periods) {
     periods[array_index].element.addClass("receiver");
   }
@@ -348,7 +370,7 @@ function courseDragStopped(event, ui) {  // FIXME???
       duration: 500,
       step: function(now, fx) {
         var $courseElem = $(this),
-            course = $courseElem.data('object');
+          course = $courseElem.data('object');
 
         // Update graphs too
         for (var i = 0; i < course.prereqPaths.length; i++) {

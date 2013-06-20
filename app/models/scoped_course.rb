@@ -10,7 +10,7 @@ class ScopedCourse < CompetenceNode
   accepts_nested_attributes_for :course_descriptions
 
   has_one :localized_description, :class_name => "CourseDescription", 
-           :conditions => proc { "locale = '#{I18n.locale}'" }
+          :conditions => proc { "locale = '#{I18n.locale}'" }
 
 
   #has_many :skills, :order => 'position', :dependent => :destroy #, :foreign_key => 'course_code', :primary_key => 'code'
@@ -216,6 +216,12 @@ class ScopedCourse < CompetenceNode
     strict_prereqs.each do |prereq|
       prereq.collect_prereqs(courses)
     end
+  end
+
+  # Updates the prerequirement course cache.
+  # The cache is a table behinde the 'prereqs' variable that provides easy access to all the prerequirement courses which provide at least one competence that is a prerequirement for this course.
+  def update_course_prereqs_cache
+    self.prereqs = self.prereqs_recursive
   end
 
 end

@@ -61,7 +61,10 @@ gem 'deep_cloneable', :git => 'git://github.com/moiristo/deep_cloneable.git'
 gem 'delayed_job_active_record', :git => 'git://github.com/collectiveidea/delayed_job_active_record.git'
 gem 'daemons'
 
-
+# development
+group :development do
+  gem "rails-erd"  # entity relationship diagrams
+end
 
 # Bundle gems for the local environment. Make sure to
 # put test-only gems in this group so their generators

@@ -54,6 +54,7 @@ fi:
         schedule_credit: 
           one: "opintopiste"
           other: "opintopistettä"
+        course_prereqs: "Esitietokurssit:"
 
         heading: "Oma opintosuunnitelma"
         empty_instructions: "Valitse opinto-oppaasta itseäsi kiinnostavat kompetenssit"

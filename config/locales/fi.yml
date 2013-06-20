@@ -26,40 +26,6 @@ fi:
     login: "Kirjaudu"
     logout: "Kirjaudu ulos"
 
-  frontpage:
-    index:
-      not_logged_in_heading: "Kirjaudu sisään"
-
-    dashboard:
-      heading: "Ohjauskeskus"
-      welcome: "Hei %{name}! Tämä on sinun ohjauskeskuksesi."
-
-    plans:
-      heading: "Opintosuunnitelma"
-
-    curriculums:
-      heading: "Opinto-opas"
-      curriculum_currently_in_use_is: "Tällä hetkellä käytössäsi oleva opinto-opas:"
-      change_curriculum: "Vaihda opinto-opasta..."
-
-    competences:
-      heading: "Kompetenssivalinnat"
-      edit: "Muokkaa kompetenssivalintoja..."
-
-    courses:
-      heading: "Kurssit"
-      passed_courses_heading: "Suoritetut"
-      chosen_courses_heading: "Valitut"
-      no_courses: "Ei kursseja"
-      course_code: "Koodi"
-      course_name: "Nimi"
-      course_extent: "Laajuus"
-      course_period: "Opintojakso"
-      course_grade: "Arvosana"
-
-    schedule:
-      heading: "Kalenteri"
-
   example_schedule: "Mallilukujärjestys"
 
   cr: "op"

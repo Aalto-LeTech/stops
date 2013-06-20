@@ -2,13 +2,12 @@ class Plans::CoursesController < PlansController
   
   #before_filter :login_required
   before_filter :load_plan
-  before_filter :load_curriculum
   
   
   # GET /courses
   # GET /courses.xml
   def index
-    @competences = @user.study_plan.competences
+    @competences = @study_plan.competences
     @user_courses = @user.user_courses
 #    @user_courses = @user.study_plan_courses.joins(<<-SQL
 #        INNER JOIN competence_nodes ON competence_nodes.id = study_plan_courses.scoped_course_id 
@@ -65,6 +64,7 @@ class Plans::CoursesController < PlansController
   def create
     course = ScopedCourse.find(params[:course_id])
 
+    # FIXME: user StudyPlan instead of User
     # Dont't do anything if user has already selected this profile
     if @user.courses.exists?(course)
       redirect_to studyplan_profiles_path, :flash => {:error => 'Course was already in the study plan'}

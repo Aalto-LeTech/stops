@@ -1,0 +1,39 @@
+en:
+  frontpage:
+    index:
+      not_logged_in_heading: "Log In"
+
+    student_dashboard:
+      heading: "Dashboard"
+      welcome: "Hello %{name}! This is your dashboard."
+    
+    staff_dashboard:
+      heading: "Dashboard"
+
+    plans:
+      heading: "My Study Plan"
+
+    curriculums:
+      heading: "Current curriculum"
+      curriculum_currently_in_use_is: "Study guide currently in use:"
+      change_curriculum: "Change curriculum..."
+
+    competences:
+      heading: "Competence election"
+      edit: "Edit competences..."
+
+    courses:
+      heading: "My Courses"
+      passed_courses_heading: "Passed"
+      chosen_courses_heading: "Chosen"
+      no_courses: "No courses"
+      course_code: "Code"
+      course_name: "Name"
+      course_extent: "Extent"
+      course_period: "Period"
+      course_grade: "Grade"
+
+    schedule:
+      heading: "Schedule"
+      edit_schedule: "Edit schedule"
+      

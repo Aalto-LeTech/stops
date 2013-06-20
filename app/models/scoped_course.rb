@@ -9,17 +9,17 @@ class ScopedCourse < CompetenceNode
   has_many :course_descriptions, :dependent => :destroy
   accepts_nested_attributes_for :course_descriptions
 
-  has_one :localized_description, :class_name => "CourseDescription", 
+  has_one :localized_description, :class_name => "CourseDescription",
           :conditions => proc { "locale = '#{I18n.locale}'" }
 
 
   #has_many :skills, :order => 'position', :dependent => :destroy #, :foreign_key => 'course_code', :primary_key => 'code'
   #has_many :course_skills, :dependent => :destroy
-  # has_many :skills, 
-  #          :order     => 'position', 
+  # has_many :skills,
+  #          :order     => 'position',
   #          :dependent => :destroy #, :foreign_key => 'course_code', :primary_key => 'code'
 
-  has_many :skill_descriptions, 
+  has_many :skill_descriptions,
            :through => :skills
 
   has_many :localized_skill_descriptions,
@@ -29,38 +29,38 @@ class ScopedCourse < CompetenceNode
 
 
   # Prerequisite courses of this course
-  has_many :course_prereqs, 
+  has_many :course_prereqs,
            :dependent => :destroy
 
-  has_many :strict_prerequirement_skills, 
+  has_many :strict_prerequirement_skills,
            :through     => :skills,
-           :source      => :strict_prereqs 
+           :source      => :strict_prereqs
 
   # Prerequisite courses of this course
-  has_many :prereqs, 
-           :through => :course_prereqs, 
-           :source  => :prereq, 
+  has_many :prereqs,
+           :through => :course_prereqs,
+           :source  => :prereq,
            :order   => 'requirement DESC, course_code'
 
-  has_many :strict_prereqs, 
-           :through     => :strict_prerequirement_skills, 
+  has_many :strict_prereqs,
+           :through     => :strict_prerequirement_skills,
            :source      => :competence_node
 
-  has_many :supporting_prereqs, 
-           :through     => :course_prereqs, 
-           :source      => :prereq, 
-           :order       => 'requirement DESC, course_code', 
+  has_many :supporting_prereqs,
+           :through     => :course_prereqs,
+           :source      => :prereq,
+           :order       => 'requirement DESC, course_code',
            :conditions  => "requirement = #{SUPPORTING_PREREQ}"
 
   # Courses for which this is a prerequisite
-  has_many :course_prereq_to, 
-           :class_name  => 'CoursePrereq', 
+  has_many :course_prereq_to,
+           :class_name  => 'CoursePrereq',
            :foreign_key => :scoped_prereq_id
 
-  has_many :prereq_to, 
-           :through     => :course_prereq_to, 
-           :source      => :course, 
-           :order       => 'course_code', 
+  has_many :prereq_to,
+           :through     => :course_prereq_to,
+           :source      => :course,
+           :order       => 'course_code',
            :conditions  => "requirement = #{STRICT_PREREQ}"
 
   # Only the periods that have not yet ended or started.
@@ -94,7 +94,7 @@ class ScopedCourse < CompetenceNode
   # message if localized course name could not be found.
   def name_or(fallback_message="<No name set for the locale>")
     desc = localized_description
-    desc ? desc.name : fallback_message 
+    desc ? desc.name : fallback_message
   end
 
   def localized_name_exists?
@@ -110,7 +110,7 @@ class ScopedCourse < CompetenceNode
     name = localized_name
     if not name
       descriptions = course_descriptions
-      locale_to_desc = descriptions.inject({}) do |hash, desc| 
+      locale_to_desc = descriptions.inject({}) do |hash, desc|
         hash[desc.locale] = desc
         hash
       end
@@ -203,7 +203,7 @@ class ScopedCourse < CompetenceNode
     courses.values
   end
 
-  # Adds a course and its prereqs recursively to the given courses collection. 
+  # Adds a course and its prereqs recursively to the given courses collection.
   # If a course belongs to a prereq cycle, it is added to the cycles collection.
   def collect_prereqs(courses)
     # Do not follow branches that have already been handled

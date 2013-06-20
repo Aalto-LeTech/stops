@@ -50,9 +50,9 @@
     <tbody>
       <% @vi_courses.each do |course| %>
         <tr>
-          <td><%= course.course_code %></td>
-          <td><%= link_to course.name(I18n.locale), studyplan_course_url(:id => course.id) %></td>
-          <td><%= course.credits %></td>
+          <td><%= course.scoped_course.abstract_course ? course.scoped_course.abstract_course.code : '???-?????' %></td>
+          <td><%= link_to course.scoped_course.name(I18n.locale), studyplan_course_url(:id => course.id) %></td>
+          <td><%= course.scoped_course.credits %></td>
         </tr>
       <% end %>
     </tbody>

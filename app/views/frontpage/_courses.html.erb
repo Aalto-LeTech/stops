@@ -18,7 +18,7 @@
     <tbody>
       <% @user.user_courses.each do |user_course| %>
         <tr <%= "class='course-completed'" if user_course.grade %>>
-          <td><%= link_to user_course.scoped_course.course_code, studyplan_course_url(:id => user_course.scoped_course.id) %></td>
+          <td><%= user_course.scoped_course.course_code %></td>
           <td><%= link_to user_course.scoped_course.name(I18n.locale), studyplan_course_url(:id => user_course.scoped_course.id) %></td>
           <td><%= user_course.scoped_course.credits %></td>
           <td>
@@ -50,7 +50,7 @@
     <tbody>
       <% @current_courses.each do |course| %>
         <tr>
-          <td><%= link_to course.course_code, studyplan_course_url(:id => course.id) %></td>
+          <td><%= course.course_code %></td>
           <td><%= link_to course.name(I18n.locale), studyplan_course_url(:id => course.id) %></td>
           <td><%= course.credits %></td>
         </tr>

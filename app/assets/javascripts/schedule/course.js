@@ -4,7 +4,7 @@ function Course(element) {
   element.data('object', this);     // Add a reference from element to this
   this.element = element;           // jQuery element
 
-  this.instances      = {};         // Available course instances
+  this.instances      = {};         // Available course instances FIXME C20130619
   this.periods        = [];         // Periods on which this course is arranged
   this.prereqs        = {};         // Prerequisite courses. courseCode => course object
   this.prereqTo       = {};         // Courses for which this course is a prereq. courseCode => course object

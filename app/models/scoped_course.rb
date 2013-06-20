@@ -40,7 +40,7 @@ class ScopedCourse < CompetenceNode
   has_many :prereqs, 
            :through => :course_prereqs, 
            :source  => :prereq, 
-           :order   => 'requirement DESC, code'
+           :order   => 'requirement DESC, course_code'
 
   has_many :strict_prereqs, 
            :through     => :strict_prerequirement_skills, 
@@ -49,7 +49,7 @@ class ScopedCourse < CompetenceNode
   has_many :supporting_prereqs, 
            :through     => :course_prereqs, 
            :source      => :prereq, 
-           :order       => 'requirement DESC, code', 
+           :order       => 'requirement DESC, course_code', 
            :conditions  => "requirement = #{SUPPORTING_PREREQ}"
 
   # Courses for which this is a prerequisite
@@ -60,7 +60,7 @@ class ScopedCourse < CompetenceNode
   has_many :prereq_to, 
            :through     => :course_prereq_to, 
            :source      => :course, 
-           :order       => 'code', 
+           :order       => 'course_code', 
            :conditions  => "requirement = #{STRICT_PREREQ}"
 
   # Only the periods that have not yet ended or started.
@@ -222,6 +222,7 @@ class ScopedCourse < CompetenceNode
   # The cache is a table behinde the 'prereqs' variable that provides easy access to all the prerequirement courses which provide at least one competence that is a prerequirement for this course.
   def update_course_prereqs_cache
     self.prereqs = self.prereqs_recursive
+    self.save
   end
 
 end

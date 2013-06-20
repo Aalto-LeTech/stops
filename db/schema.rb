@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130607093313) do
+ActiveRecord::Schema.define(:version => 20130620064359) do
 
   create_table "abstract_courses", :force => true do |t|
     t.string "code"
@@ -220,7 +220,6 @@ ActiveRecord::Schema.define(:version => 20130607093313) do
     t.integer "study_plan_id",                           :null => false
     t.integer "scoped_course_id",                        :null => false
     t.integer "competence_ref_count", :default => 1,     :null => false
-    t.integer "course_instance_id"
     t.boolean "manually_added",       :default => false
   end
 

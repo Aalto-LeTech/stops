@@ -99,7 +99,9 @@
     <% @study_plan_courses.each do |study_plan_course| %>
       <% next unless study_plan_course %>
 
-      <div class="course" id="course-<%= study_plan_course.scoped_course.course_code %>"
+      <div
+        class="course"
+        id="course-<%= study_plan_course.scoped_course.course_code %>"
         data-id="<%= study_plan_course.id %>"
         data-code="<%= study_plan_course.scoped_course.course_code %>"
         data-name="<%= study_plan_course.scoped_course.name(I18n.locale) %>"

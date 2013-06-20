@@ -3,8 +3,8 @@ class StudyPlanCompetence < ActiveRecord::Base
   belongs_to :study_plan
   belongs_to :competence
 
-  after_validation :add_course_dependency_ids, :on => :create
-  before_destroy :remove_course_dependencies_from_study_plan
+  #after_validation :add_course_dependency_ids, :on => :create
+  #before_destroy :remove_course_dependencies_from_study_plan
 
   def add_course_dependency_ids
     # Fetch the course ids that are needed by the skills of this competence

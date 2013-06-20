@@ -1,21 +1,24 @@
 (function() {
 
 function Period(element) {
-  element.data('object', this);    // Add a reference from element to this
-  this.element = element;          // Add a reference from this to element
+  element.data('object', this);     // Add a reference from element to this
+  this.element          = element;  // Add a reference from this to element
   
-  this.credits_element = this.element.find('.period-credits');
+  this.credits_element  = this.element.find('.period-credits');
   
   this.courses = {};               // Courses that have been put to this period
   this.courseInstances = {};       // Courses that are available on this period. courseCode => courseInstance
                                    // FIXME: Courses can now be added regardless of available instances
   this.slots = [];                 // Slots for parallel courses
+  this.slots            = [];       // Slots for parallel courses
   
-  this.previousPeriod = false;     // Reference to previous sibling
-  this.nextPeriod = false;         // Reference to next sibling
-  this.sequenceNumber;             // Sequence number to allow easy comparison of periods
+  this.previousPeriod   = false;    // Reference to previous sibling
+  this.nextPeriod       = false;    // Reference to next sibling
+  this.sequenceNumber;              // Sequence number to allow easy comparison of periods
+  this.isCurrentPeriod  = element.data("current-period") === true;
+  if (this.isCurrentPeriod) this.currentPeriod = this;
   
-  this.id = element.data('id');    // Database id of this period
+  this.id = element.data('id');     // Database id of this period
   
   element.droppable({
     drop: courseDropped,
@@ -53,16 +56,35 @@ Period.prototype.laterOrEqual = function(other) {
 /**
  * Sets the link from this period to the previous. This period is automatically added as the successor to the previous period.
  */
-Period.prototype.setPreviousPeriod = function(period) {
-  this.previousPeriod = period;
+Period.prototype.setPreviousPeriod = function(previousPeriod) {
+  this.previousPeriod = previousPeriod;
   
-  if (period) {
-    period.nextPeriod = this;
+  if (previousPeriod) {
+    previousPeriod.nextPeriod = this;
+
+    if (this.isCurrentPeriod) {
+      /* Propagate current period to previous periods */
+      var period = previousPeriod;
+      while (period) {
+        period.currentPeriod = this;
+        period = period.getPreviousPeriod();
+      }
+    } else if (previousPeriod.currentPeriod) {
+      /* Propagate current period to next periods */
+      this.currentPeriod = previousPeriod.currentPeriod;
+    }
   }
 }
 
 Period.prototype.getPreviousPeriod = function() {
   return this.previousPeriod;
+}
+
+Period.prototype.getPreviousPeriodUntilCurrent = function() {
+  if (this.previousPeriod.laterOrEqual(this.currentPeriod))
+    return this.previousPeriod;
+  else
+    return null;
 }
 
 /**
@@ -78,6 +100,10 @@ Period.prototype.setNextPeriod = function(period) {
 
 Period.prototype.getNextPeriod = function() {
   return this.nextPeriod;
+}
+
+Period.prototype.getCurrentPeriod = function() {
+  return this.currentPeriod;
 }
 
 /**
@@ -204,43 +230,43 @@ Period.prototype.freeSlot = function(slot, length) {
 function isCourseAccepted(draggable) {
   var course = draggable.data('object');   
   var period = $(this).data('object');
-  // C20130619: Simplification
+  
   return true;
-  //  if (period.courseAvailable(course)) {
-  //    return true;
-  //  } else return false; 
-}
-
-
-/**
- * Handles course drop events.
- */
- function courseDropped(event, ui) {
-  var period = $(this).data('object');
-  var course = ui.draggable.data('object');
-
-  // Draggable needs to know that drop succeeded
-  ui.draggable.data('dropped', true);
-  
-  // Reset all hilights
-  $('.period').removeClass('receiver');
-  
-  // Find the course instance
-  course.setPeriod(period);
-  if (period.courseInstances[course.getCode()]) {
-    course.element.removeClass('noinstance');
+  // FIXME
+  if (period.laterOrEqual(planView.currentPeriod) && period.courseAvailable(course)) {
+    return true;
   } else {
-    // If there is no instance on that period, show warning
-    course.element.addClass('noinstance');
-  }
-  
-  if (planView.settings.satisfyReqsAutomatically) {
-    // Move prereqs before the course
-    course.satisfyPrereqs();
-    
-    // Move postreqs after the course
-    course.satisfyPostreqs();
+    return false;
   }
 }
+
+
+  /**
+   * Handles course drop events.
+   */
+  function courseDropped(event, ui) {
+    var period = $(this).data('object');
+    var course = ui.draggable.data('object');
+
+    // Draggable needs to know that drop succeeded
+    ui.draggable.data('dropped', true);
+    
+    // Find the course instance
+    course.setPeriod(period);
+    if (period.courseInstances[course.getCode()]) {
+      course.element.removeClass('noinstance');
+    } else {
+      // If there is no instance on that period, show warning
+      course.element.addClass('noinstance');
+    }
+    
+    if (planView.settings.satisfyReqsAutomatically) {
+      // Move prereqs before the course
+      course.satisfyPrereqs();
+      
+      // Move postreqs after the course
+      course.satisfyPostreqs();
+    }
+  }
 
 })();

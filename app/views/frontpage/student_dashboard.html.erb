@@ -1,0 +1,39 @@
+<h1><%= t('.heading') %></h1>
+
+<p><%= t('.welcome', :name => @user.name) %></p>
+
+<% if @study_plan %>
+  <div class="row-fluid">
+    <div class="span4">
+      <%= render :partial => 'plans' %>
+    </div>
+    <div class="span4">
+      <%= render :partial => 'schedule' %>
+    </div>
+  </div>
+
+  <div class="row-fluid">
+    <div class="span4">
+    </div>
+    <div class="span4">
+      <%= render :partial => 'competences' %>
+    </div>
+  </div>
+
+  <div class="row-fluid">
+    <div class="span4">
+    </div>
+    <div class="span4">
+      <%= render :partial => 'courses' %>
+    </div>
+  </div>
+
+  <div class="row-fluid">
+    <div class="span4">
+    </div>
+    <div class="span4">
+      <%= render :partial => 'curriculums' %>
+    </div>
+  </div>
+
+<% end %>

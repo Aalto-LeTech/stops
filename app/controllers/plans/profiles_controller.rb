@@ -1,13 +1,8 @@
+# FIXME: this controller is obsolete
 class Plans::ProfilesController < PlansController
   
   #before_filter :login_required
   before_filter :load_plan
-  before_filter :load_curriculum
-  
-  
-  def load_plan
-    @user = current_user
-  end
   
   # GET /plans/1/profiles
   # GET /plans/1//profiles.xml

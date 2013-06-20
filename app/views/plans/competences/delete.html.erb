@@ -1,4 +1,4 @@
-<h1><%=t :competence_remove_from_plan, :profile => @competence.profile.name(I18n.locale), :competence => @competence.name(I18n.locale) %></h1>
+<h1><%=t :competence_remove_from_plan, :competence => @competence.name(I18n.locale) %></h1>
 
 <p><%=t :competence_courses_to_remove %></p>
 
@@ -24,5 +24,5 @@
 <%= form_tag studyplan_competence_path, :method => :delete do %>
   <p><%= submit_tag t(:Ok) %></p>
   
-  <p><%= link_to t(:Cancel), studyplan_profile_path(:id => @competence.profile.id) %></p>
+  <p><%= link_to t(:Cancel), studyplan_competence_path(:id => @competence.id) %></p>
 <% end %>

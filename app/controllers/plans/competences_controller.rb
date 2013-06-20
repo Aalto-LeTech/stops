@@ -6,15 +6,9 @@ class Plans::CompetencesController < PlansController
 
   #before_filter :login_required
   before_filter :load_plan
-  before_filter :load_curriculum
-
-
-  def load_plan
-    @user = current_user
-  end
 
   def index
-    @chosen_competences = get_chosen_competences
+    @chosen_competence_ids = @study_plan.competence_ids.to_set
   end
 
   # GET /plans/1/competence/1
@@ -22,7 +16,7 @@ class Plans::CompetencesController < PlansController
   def show
     @competence = Competence.find(params[:id])
 
-    @included_courses = @user.study_plan.courses
+    @included_courses = @study_plan.courses
 
     @passed_courses = Hash.new
     @user.user_courses.each do |course|
@@ -41,12 +35,12 @@ class Plans::CompetencesController < PlansController
     authorize! :choose, @competence
 
     # If competence is aleady in the plan, don't do anything
-    if @user.study_plan.has_competence?(@competence)
+    if @study_plan.has_competence?(@competence)
       redirect_to studyplan_profiles_path, :flash => {:error => t(:profile_already_selected, :name => @competence.name(I18n.locale))}
       return
     end
 
-    user_courses = @user.study_plan.courses
+    user_courses = @study_plan.courses
     @new_courses = @competence.courses_recursive - user_courses # difference
     @existing_courses = user_courses & @competence.strict_prereqs # intersection
   end
@@ -59,12 +53,12 @@ class Plans::CompetencesController < PlansController
     authorize! :choose, competence
 
     # Dont't do anything if user has already selected this competence
-    if @user.study_plan.has_competence?(params[:competence_id])
+    if @study_plan.has_competence?(params[:competence_id])
       redirect_to studyplan_competence_path( competence ), :flash => {:error => t('.competence_already_selected', :name => @competence.name(I18n.locale))}
     end
 
     # Add competence to study plan
-    @user.study_plan.add_competence(competence)
+    @study_plan.add_competence(competence)
 
     redirect_to studyplan_competence_path( competence )
   end
@@ -74,7 +68,7 @@ class Plans::CompetencesController < PlansController
 
     # TODO: authorize! :edit, @user
 
-    @courses = @user.study_plan.deletable_courses(@competence)
+    @courses = @study_plan.deletable_courses(@competence)
   end
 
   # Removes a profile from the study plan
@@ -85,7 +79,7 @@ class Plans::CompetencesController < PlansController
 
     # TODO: authorize
 
-    @user.study_plan.remove_competence(@competence)
+    @study_plan.remove_competence(@competence)
 
     respond_to do |format|
       format.html { redirect_to studyplan_competence_path(@competence) }
@@ -124,8 +118,8 @@ class Plans::CompetencesController < PlansController
     if is_non_negative_integer params[:id]
       id = params[:id].to_i
       competence = Competence.find id
-      if competence && @user.study_plan.curriculum_id == competence.curriculum_id
-        @user.study_plan.competences << competence
+      if competence && @study_plan.curriculum_id == competence.curriculum_id
+        @study_plan.competences << competence
 
         render :nothing => true
       else
@@ -141,10 +135,10 @@ class Plans::CompetencesController < PlansController
   def remove_competence_from_plan
     if is_non_negative_integer params[:id]
       id = params[:id].to_i
-      competence = @user.study_plan.competences.find id
+      competence = @study_plan.competences.find id
 
       if competence
-        @user.study_plan.competences.delete competence
+        @study_plan.competences.delete competence
 
         render :nothing => true
       else

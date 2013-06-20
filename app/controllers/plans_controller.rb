@@ -8,24 +8,21 @@ class PlansController < ApplicationController
   layout 'plan'
   
   def load_plan
-    if params[:plan_id]
-      @user = User.find_by_studentnumber(params[:plan_id])
-    else
-      @user = current_user
-    end
-  end
-  
-  def load_curriculum
-    #@curriculum = Curriculum.find(params[:curriculum_id])
+    @user = current_user
     
-    # If curriculum is not chosen, redirect
-    unless @user.study_plan and @user.study_plan.curriculum
-      redirect_to edit_studyplan_curriculum_path
-      return false
+    if params[:studyplan_id]
+      @study_plan = StudyPlan.find(params[:studyplan_id])
+    else
+      @study_plan = @user.study_plan
+      unless @study_plan
+        redirect_to edit_studyplan_curriculum_path
+        return false
+      end
     end
     
     @curriculum = @user.study_plan.curriculum
   end
+
   
   # Overview
   def show

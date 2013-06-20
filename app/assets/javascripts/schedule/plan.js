@@ -7,6 +7,7 @@
 var planView = window.planView = window.planView || {};
 $.extend(window.planView, {
   periods: {},                         // Period objects, period_id => period object
+  currentPeriod: false,                // Current period object
   firstPeriod: false,
   settings: {
     satisfyReqsAutomatically: true,
@@ -53,7 +54,16 @@ $.extend(window.planView, {
     /* Add checkbox change listeners */
 
     $automaticArrangement.find("input").change(function(evt) {
-      planView.settings.satisfyReqsAutomatically = $(this).prop("checked");
+      var shouldAutomaticallyArrange = $(this).prop("checked");
+      planView.settings.satisfyReqsAutomatically = shouldAutomaticallyArrange;
+      if (shouldAutomaticallyArrange) {
+        /* Reset 'unschedulable' values so scheduling is possible in every case */
+        $(".course").each(function(i) {
+          $(this).data("object").unschedulable = false;
+        });
+        /* Schedule */
+        planView.autoplan();
+      }
     });
 
     $drawPrereqGraphs.find("input").change(function(evt) {
@@ -165,10 +175,18 @@ $.extend(window.planView, {
 
       // Put course after its prereqs (those that have been attached)
       course.postponeAfterPrereqs();
+      
+      /* Sanity check */
+      if (!course.getPeriod() && course.locked) {
+        console.log("SANITY CHECK FAILED: Course is locked, but doesn't have a period!");
+      }
 
       // If course is still unattached, put it on the first period
-      if (!course.getPeriod()) {
-        course.postponeTo(planView.firstPeriod);
+      var period = course.getPeriod();
+      if ( !period && !course.unschedulable 
+           || period && period.earlierThan(period.getCurrentPeriod())
+         ) {
+        course.postponeTo(planView.firstPeriod.getCurrentPeriod().getNextPeriod());
       }
 
       course.satisfyPostreqs();        // Move forward those courses that depend (recursively) on the newly added course
@@ -182,8 +200,8 @@ $.extend(window.planView, {
     $('.course').each(function(i, element){
       course = $(element).data('object');
 
-      if (course.changed && course.courseInstance) {
-        periods[course.id] = course.courseInstance.id;
+      if (course.changed && course.period) {
+        periods[course.id] = course.period.id;
       }
     });
 
@@ -223,12 +241,16 @@ $(document).ready(function(){
     new Course($(element));
   });
 
+
+  /* Make text in the plan div unselectable (to make UI less annoying). */
+  $("#plan").disableSelection();
+
   // Create a Period object for each period element
   var previousPeriod;
   var periodCounter = 0;
   $('.period').each(function(i, element){
     var period = new Period($(element));
-    planView.addPeriod(period)
+    planView.addPeriod(period);
 
     if (!previousPeriod) {
       planView.firstPeriod = period;
@@ -241,6 +263,10 @@ $(document).ready(function(){
     periodCounter++;
   });
 
+  // Set current period
+  var currentPeriodId     = $('.period[data-current-period="true"]', "#plan").data("id");
+  planView.currentPeriod  = planView.periods[currentPeriodId];
+  
   // Attach event listeners
   $("#save-button").click(planView.save);
 

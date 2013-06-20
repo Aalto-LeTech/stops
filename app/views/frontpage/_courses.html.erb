@@ -36,7 +36,7 @@
 
 <h3><%=t('.chosen_courses_heading')%></h3>
 
-<% if @user.study_plan.courses.empty? %>
+<% if @study_plan.courses.empty? %>
   <p><%= t('.no_courses') %></p>
 <% else %>
   <table>
@@ -48,7 +48,7 @@
       </tr>
     </thead>
     <tbody>
-      <% @vi_courses.each do |course| %>
+      <% @current_courses.each do |course| %>
         <tr>
           <td><%= course.scoped_course.abstract_course ? course.scoped_course.abstract_course.code : '???-?????' %></td>
           <td><%= link_to course.scoped_course.name(I18n.locale), studyplan_course_url(:id => course.id) %></td>

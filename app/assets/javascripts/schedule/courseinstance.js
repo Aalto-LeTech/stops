@@ -2,7 +2,7 @@ function CourseInstance(course, period, length, id) {
   this.course = course;
   this.period = period;
   this.length = length;
-  this.id = id;
+  this.id 	  = id;
 };
 
 CourseInstance.prototype.getId = function() {

@@ -47,7 +47,7 @@ class GraphView
   loadCourses: (data) ->
     for row in data
       rawData = row.scoped_course
-      course = new GraphCourse(rawData.id, rawData.course_code, rawData.translated_name)
+      course = new GraphCourse(rawData.id, rawData.course_code, rawData.translated_name, 'course')
       @coursesById[rawData.id] = course
 
 
@@ -58,7 +58,7 @@ class GraphView
     for row in data
       rawData = row.competence
 
-      course = new GraphCourse(rawData.id, '', rawData.translated_name);
+      course = new GraphCourse(rawData.id, '', rawData.translated_name, 'competence');
       @coursesById[rawData.id] = course
       course.setCompetence(true)
 

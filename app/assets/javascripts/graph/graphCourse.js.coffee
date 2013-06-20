@@ -16,7 +16,7 @@ class @GraphLevel
     @height = 0
 
     for course in @courses
-      @height += course.getElementHeight() + @courseMargin   # TODO: add course.getElementHeight()
+      @height += course.getElementHeight() + @courseMargin
 
     return @height
   
@@ -71,24 +71,19 @@ class @GraphLevel
 
     # Distribute evenly
     #step = (@maxHeight - @height) / (@courses.length - 1)
-    # FIXME: @maxHeight is not defined
+    # FIXME: maxHeight is a bad name
     y = @maxHeight / 2.0 - @height / 2
-    #y = @height / 2
 
     for course in @courses
       course.y = y
-      y += course.getElement().height() + @courseMargin
+      y += course.getElementHeight() + @courseMargin
 
   
 
 class @GraphCourse
   
-  constructor: (id, code, name) ->
+  constructor: (@id, @course_code, @name, @type) ->
     @element = false
-    @id = id
-    @course_code = code
-    @name = name
-    @isCompetence = false
     @cyclic = false
 
     @level = 0
@@ -103,8 +98,13 @@ class @GraphCourse
     @visible = false
     @visited = false
 
+
   getElementHeight: ->
-    return this.getElement().height()
+    if @type == 'virtual'
+      return @courseMargin 
+    else
+      return this.getElement().height()
+
 
   addSkill: (skill) ->
     @skills.push(skill)
@@ -124,9 +124,11 @@ class @GraphCourse
   # Returns a div.
   #
   getElement: (view) ->
+    return if @type == 'virtual'
     return @element if (@element)
 
-    cssClass = if @isCompetence then ' competence' else ''
+    cssClass = ''
+    cssClass += ' competence' if @type == 'competence'
     
     if (@cyclic)
       cssClass += ' cyclic'

@@ -57,6 +57,7 @@ class User < ActiveRecord::Base
 
   # Returns the periods between the beginning of the user's studies and the expected graduation
   def relevant_periods
+    Period.current.find_next_periods(35) unless self.first_study_period
     self.first_study_period.find_next_periods(35) # 5 periods * 7 years
   end
 

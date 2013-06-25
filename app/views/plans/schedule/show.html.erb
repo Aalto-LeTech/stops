@@ -11,114 +11,108 @@
   <%= image_tag "glyphicons_203_lock.png", :class => "course-locked" %>
 </div>
 
-<!-- Left-side floating settings panel -->
-<div id="schedule-controls-container" class="leftNavi schedule-controls">
-  <h2><%= t('.schedule_controls') %></h2>
-  <div class="control-block">
-    <h3><%= t('.schedule_preferences') %></h3>
+<div class="row-fluid">
+  <div class="span2">
+    <div id="schedule-controls-container">
+      <h2><%= t('.schedule_controls') %></h2>
+      <div class="control-block">
+        <h3><%= t('.schedule_preferences') %></h3>
 
-    <div class="control-group" id="schedule-automatic-arrangement">
-      <label for="schedule-automatic-arrangement-input">
-        <%= t('.schedule_automatic_arrangement_checkbox') %>
-      </label>  
-      <div class="controls">
-        <input id="schedule-automatic-arrangement-input" type="checkbox" /> 
-        <%= image_tag("glyphicons_195_circle_info.png", :size => "16x16" ) %>
-      </div>
-    </div>
-
-    <div class="control-group" id="schedule-draw-req-graphs">
-      <label for="schedule-draw-req-graphs-input">
-        <%= t('.schedule_draw_course_graphs_checkbox') %>
-      </label>
-      <div class="controls">
-        <input id="schedule-draw-req-graphs-input" type="checkbox" /> 
-        <%= image_tag("glyphicons_195_circle_info.png", :size => "16x16" ) %>
-      </div>
-    </div>
-
-    <div class="control-group" id="schedule-course-lock">
-      <label for="schedule-course-lock-input">
-        <%= t('.schedule_course_lock_checkbox') %>
-      </label>
-      <div class="controls">
-        <input id="schedule-course-lock-input" type="checkbox" disabled="true" /> 
-        <%= image_tag("glyphicons_195_circle_info.png", :size => "16x16" ) %>
-      </div>
-    </div>
-
-    <button id="save-button"><%= t('.schedule_save_button') %></button>
-  </div> 
-
-  <div id="course-desc-block" class="control-block hidden">
-    <h3><%= t('.schedule_controls_selected_course') %></h3>
-    <p id="course-id">
-      <span id="course-code" class="control-course-code"></span>
-      <span id="course-name" class="control-course-name"></span>
-    </p>
-    <p>
-      <span id="course-credits"></span> <%= t('.schedule_credits') %>
-    </p>
-    <p>
-      <%= t('.course_prereqs') %>
-      <span id="course-prereqs"></span>
-    </p>
-    <h4><%= t :schedule_course_prereqs_title %></h4>
-    <p id="course-prereqs-list">
-
-    </p>
-  </div> 
-
-</div>
-
-<div class="content">
-  <h1><%=t('.heading')%></h1>
-
-  <% if @study_plan.courses.empty? && @study_plan.competences.empty? %>
-    <div class="alert">
-      <%= link_to t('.empty_instructions'), studyplan_competences_path %>
-    </div>
-  <% end %>
-
-  <p id="status"></p>
-
-  <div class="plan" id="plan" data-prereqs-path="<%= prereqs_curriculum_path(@curriculum.id) %>"
-    data-instances-path="<%= course_instances_path %>" 
-    schedule-path="<%= studyplan_schedule_path %>">
-    <% # <div id="svg"></div>
-    %>
-    <% @periods.each do |period| %>
-      <div class="period period-<%= period.number %>" 
-        data-id="<%= period.id %>" 
-        data-current-period="<%= period == @current_period ? "true" : "false" %>"
-        id="period-<%= period.id %>">
-          <div class="period-name"><%= period.name(I18n.locale) %></div>
-          <div class="period-credits"></div>
-      </div>
-    <% end %>
-
-    <% @study_plan_courses.each do |study_plan_course| %>
-      <% next unless study_plan_course %>
-
-      <div
-        class="course"
-        id="course-<%= study_plan_course.scoped_course.course_code %>"
-        data-id="<%= study_plan_course.id %>"
-        data-code="<%= study_plan_course.scoped_course.course_code %>"
-        data-name="<%= study_plan_course.scoped_course.name(I18n.locale) %>"
-        data-credits="<%= study_plan_course.scoped_course.credits || '0' %>"
-        data-period="<%= study_plan_course.course_instance_id ? study_plan_course.course_instance.period_id : '' %>" >
-        <div class="course-text-wrapper">
-          <%= study_plan_course.scoped_course.course_code + ' ' + study_plan_course.scoped_course.name(I18n.locale) %>
+        <div class="control-group" id="schedule-automatic-arrangement">
+          <label for="schedule-automatic-arrangement-input">
+            <%= t('.schedule_automatic_arrangement_checkbox') %>
+          </label>  
+          <div class="controls">
+            <input id="schedule-automatic-arrangement-input" type="checkbox" /> 
+            <%= image_tag("glyphicons_195_circle_info.png", :size => "16x16" ) %>
+          </div>
         </div>
-      </div>
 
-    <% end %>
+        <div class="control-group" id="schedule-draw-req-graphs">
+          <label for="schedule-draw-req-graphs-input">
+            <%= t('.schedule_draw_course_graphs_checkbox') %>
+          </label>
+          <div class="controls">
+            <input id="schedule-draw-req-graphs-input" type="checkbox" /> 
+            <%= image_tag("glyphicons_195_circle_info.png", :size => "16x16" ) %>
+          </div>
+        </div>
+
+        <div class="control-group" id="schedule-course-lock">
+          <label for="schedule-course-lock-input">
+            <%= t('.schedule_course_lock_checkbox') %>
+          </label>
+          <div class="controls">
+            <input id="schedule-course-lock-input" type="checkbox" disabled="true" /> 
+            <%= image_tag("glyphicons_195_circle_info.png", :size => "16x16" ) %>
+          </div>
+        </div>
+
+        <button id="save-button"><%= t('.schedule_save_button') %></button>
+      </div> 
+
+      <div id="course-desc-block" class="control-block hidden">
+        <h3><%= t('.schedule_controls_selected_course') %></h3>
+        <p id="course-id">
+          <span id="course-code" class="control-course-code"></span>
+          <span id="course-name" class="control-course-name"></span>
+        </p>
+        <p>
+          <span id="course-credits"></span> <%= t('.schedule_credits') %>
+        </p>
+        <p>
+          <%= t('.course_prereqs') %>
+          <span id="course-prereqs"></span>
+        </p>
+        <h4><%= t :schedule_course_prereqs_title %></h4>
+        <p id="course-prereqs-list">
+
+        </p>
+      </div>
+    </div>
   </div>
 
-  <table>
-    <tr>
-      <td>Courses:</td><td><%= @study_plan_courses.size %></td>
-    </tr>
-  </table>
+  <div class="span10">
+    <h1><%=t('.heading')%></h1>
+
+    <% if @study_plan.courses.empty? && @study_plan.competences.empty? %>
+      <div class="alert">
+        <%= link_to t('.empty_instructions'), studyplan_competences_path %>
+      </div>
+    <% end %>
+
+    <p id="status"></p>
+
+    <div class="plan" id="plan"
+      data-studyplan-path="<%= plan_path(@study_plan.id) %>"
+      data-prereqs-path="<%= prereqs_curriculum_path(@curriculum.id) %>"
+      data-instances-path="<%= course_instances_path %>" 
+      schedule-path="<%= studyplan_schedule_path %>">
+      <% # <div id="svg"></div>
+      %>
+      
+      <!-- ko foreach: periods -->
+        <div class="period">
+          <div class="period-name" data-bind="text: name"></div>
+          <div class="period-credits" data-bind="text: credits"></div>
+        </div>
+      <!-- /ko -->
+
+      <!-- ko foreach: courses -->
+        <div class="course" data-bind="jqDraggable: x">
+          <div class="course-text-wrapper">
+            <span data-bind="text: course_code">
+            <span data-bind="text: name"></span>
+          </div>
+        </div>
+      <!-- /ko -->
+    </div>
+
+    <table>
+      <tr>
+        <td>Courses:</td><td><%= @study_plan_courses.size %></td>
+      </tr>
+    </table>
+  </div>
+
 </div>

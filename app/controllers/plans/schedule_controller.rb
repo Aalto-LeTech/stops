@@ -32,7 +32,7 @@ class Plans::ScheduleController < PlansController
 
 #     respond_to do |format|
 #       format.js { render :head => :ok }
-#     end
+#     end@periods
     render :text => 'ok'
   end
 

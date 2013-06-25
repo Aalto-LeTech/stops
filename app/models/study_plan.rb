@@ -86,6 +86,18 @@ class StudyPlan < ActiveRecord::Base
            :through => :study_plan_competences,
            :dependent => :destroy
 
+  
+  def as_json(options={})
+    super(options.merge({
+      :only => [:curriculum_id],
+      :include => {
+        :study_plan_courses => {
+          :only => [:scoped_course_id, :period_id]
+        }
+      },
+    }))
+  end
+
   def add_competence(competence)
     # Dont't do anything if the study plan already has this competence
     return if has_competence?(competence)

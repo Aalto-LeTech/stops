@@ -1,6 +1,6 @@
 
 
-a dashboard sketch / draft / specsheet:
+a dashboard sketch / draft / specssheet:
 
 ##########################################################################################################################
 # O4 Study Planner                                  D A S H B O A R D                                 [1 Teemu Teekkari] #  [1] clicking launches a dropdown from which one can
@@ -12,7 +12,7 @@ a dashboard sketch / draft / specsheet:
 #   --------------------------------------------------          ------------------------------------------------------   #
 #                                                                                                                        #  [3] clicking goes to the competence viewer / elector
 #                                     features:                                                                          #
-#                                       - listing of courses                                                             #  [4] clicking goes to the Courses view
+#                                       - listing of scheduled courses                                                   #  [4] clicking goes to the Courses view
 #                                       - courses with postreqs highlighted                                              #      - browsing of selected courses
 #                                       - color indication if more than 15 credits scheduled for the period              #      - selection of "extra" courses
 #                                                                                                                        #      - course competence web explorer
@@ -55,7 +55,7 @@ scenarios & required features
 scenarios
   student
     with no previous studies and no experience with the system
-      can learn to make use of the system efficiently                                                           [s:intro]                               [f:actioncenter] [f:welcome]
+      wants to learn to make use of the system efficiently                                                      [s:intro]                               [f:basic_usability] [f:actioncenter] [f:welcome]
       wants to explore the curriculums he/she could study by                                                    [s:explore_curriculums]                 [f:explore_curriculums]
       wants to choose the curriculum he/she wants to study by                                                   [s:select_curriculum]                   [f:reselect_curriculum]
       wants to explore his/her study goal / competence possibilities                                            [s:explore_goals]                       [f:explore_goals]
@@ -84,13 +84,25 @@ scenarios
 required features
   table
     #name                       #description                                                                    #related scenarios
+    [f:basic_usability]         the user is able to                                                             [s:intro]
+                                  - change application language: FI / EN
+                                  - (other settings...)
+                                  - logout
+
     [f:overview]                the dashboard describes the users current situation                             [s:current_todo] [s:overview]
                                   1. near term
-                                    courses scheduled for the current and the following period
+                                    - lists courses scheduled for the current and the following period
+                                    - if at the start of a period the system reminds the user of the need
+                                      to register for upcoming courses
+                                    - highlights important courses (courses that have post requirements)
+                                    - warns the user if the period is overscheduled (>15 ECTS)
                                   2. long term
-                                    progress in achieving selected competences
-                                    courses passed so far
-                                    study progress related statistics
+                                    - progress and estimate dates of achieving selected competences
+                                    - courses passed so far
+                                    - study progress related statistics
+                                  3. warnings & other info
+                                    - informs about selected but unscheduled courses
+                                    - (perhaps something else...)
 
     [f:actioncenter]            the dashboard provides access to the functionality provided by the system       [s:intro] [s:overview]
                                   1. curriculum selection       /fi/studyplan/curriculum
@@ -139,7 +151,7 @@ related theory
         the foundation of system specification in XP
           story-based planning
   user-centered design
-    facts
+    the basic core
       1. Suunnittelun lähtökohtana käyttäjiin, tehtäviin ja käyttöympäristöön liittyvä ymmärrys
       2. Käyttäjät mukana suunnittelun ja tuotekehityksen eri vaiheissa
       3. Suunnittelua ohjaa käyttäjälähtöinen arviointi

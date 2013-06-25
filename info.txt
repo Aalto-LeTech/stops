@@ -1,0 +1,183 @@
+
+
+a dashboard sketch / draft / specsheet:
+
+##########################################################################################################################
+# O4 Study Planner                                  D A S H B O A R D                                 [1 Teemu Teekkari] #  [1] clicking launches a dropdown from which one can
+#------------------------------------------------------------------------------------------------------------------------#       - change application language: FI / EN
+#                                                                                                                        #       - logout
+#                                                   [2 Your Schedule]                                                    #       - possibly modify other settings
+#                                                   -----------------                                                    #
+#                      Current Period                                           Next Period                              #  [2] clicking goes to the schedule editor
+#   --------------------------------------------------          ------------------------------------------------------   #
+#                                                                                                                        #  [3] clicking goes to the competence viewer / elector
+#                                     features:                                                                          #
+#                                       - listing of courses                                                             #  [4] clicking goes to the Courses view
+#                                       - courses with postreqs highlighted                                              #      - browsing of selected courses
+#                                       - color indication if more than 15 credits scheduled for the period              #      - selection of "extra" courses
+#                                                                                                                        #      - course competence web explorer
+#                                                                                                                        #
+#                                                                                                                        #
+#   --------------------------------------------------          ------------------------------------------------------   #  general features:
+#                                                      [2 Edit]                                                          #
+#                                                                                                                        #    - mouse hover should provide added information
+#  [3 Competences]                                            [4 Courses]                                                #        also instructions etc.
+#  ---------------                                            ---------                                                  #
+#                                                                                                                        #
+#   - list of selected competences                             1. selected but unscheduled !                             #
+#   - date of achieving each according to schedule               ...                                                     #
+#   - current progress                                                                                                   #
+#                                                              2. currently important                                    #
+#   [3 Edit your competence selection]                           ...                                                     #
+#                                                                                                                        #
+#                                                              3. near future                                            #
+#                                                                ...                                                     #
+#                                                                                                                        #
+#                                                              [4 More]                                                  #
+#                                                                1. farther in the future                                #
+#                                                                2. important but poorly passed                          #
+#                                                                3. poorly passed                                        #
+#                                                                4. already passed                                       #
+#                                                                                                                        #
+#                                                                                                                        #
+#                                                                                                                        #
+#                                                                                                                        #
+#                                                                                                                        #
+#                                                                                                                        #
+#                                                                                                                        #
+#                                                                                                                        #
+##########################################################################################################################
+
+
+
+scenarios & required features
+
+scenarios
+  student
+    with no previous studies and no experience with the system
+      can learn to make use of the system efficiently                                                           [s:intro]                               [f:actioncenter] [f:welcome]
+      wants to explore the curriculums he/she could study by                                                    [s:explore_curriculums]                 [f:explore_curriculums]
+      wants to choose the curriculum he/she wants to study by                                                   [s:select_curriculum]                   [f:reselect_curriculum]
+      wants to explore his/her study goal / competence possibilities                                            [s:explore_goals]                       [f:explore_goals]
+      wants to select his/her study goals / competences                                                         [s:select_goals]                        [f:reselect_goals]
+      wants to explore courses and compare them                                                                 [s:explore_courses]                     [f:explore_courses]
+      wants to manually select (extra) courses                                                                  [s:select_courses]                      [f:reselect_courses]
+      wants to explore the interdependencies of competences and courses                                         [s:explore_dependencies]                [f:explore_dependencies]
+      wants to schedule his/her starting studies                                                                [s:schedule_courses]                    [f:schedule_courses]
+    with previous studies
+      but no experience with the system
+        wants to explore which curriculums are inline with his/her past studies                                 [s:explore_curriculum_fit]              [f:explore_curriculums]
+        wants to explore how other study goals / competences are inline with his/her past studies               [s:explore_goal_fit]                    [f:explore_goals]
+        wants to save his/her already realized course execution schedule                                        [s:schedule_past_courses]               [f:schedule_courses]
+      and usage of the system
+        wants to check the upcoming periods courses-todo-list in order to register for the courses              [s:current_todo]                        [f:overview]
+        wants to get a clear understanding of the state, progress and direction of his/her studies              [s:overview]                            [f:overview] [f:actioncenter]
+        wants to reselect the curriculum he/she is studying by                                                  [s:reselect_curriculum]                 [f:reselect_curriculum]
+        wants to reselect his/her study goals / competences                                                     [s:reselect_goals]                      [f:reselect_goals]
+        wants to reselect his/her (extra) course selections                                                     [s:reselect_courses]                    [f:reselect_courses]
+        wants to reschedule his/her studies                                                                     [s:reschedule_courses]                  [f:schedule_courses]
+  staff
+    (not covered here)
+  admin
+    (not covered here)
+
+required features
+  table
+    #name                       #description                                                                    #related scenarios
+    [f:overview]                the dashboard describes the users current situation                             [s:current_todo] [s:overview]
+                                  1. near term
+                                    courses scheduled for the current and the following period
+                                  2. long term
+                                    progress in achieving selected competences
+                                    courses passed so far
+                                    study progress related statistics
+
+    [f:actioncenter]            the dashboard provides access to the functionality provided by the system       [s:intro] [s:overview]
+                                  1. curriculum selection       /fi/studyplan/curriculum
+                                  2. competence selection       /fi/studyplan/competences
+                                  3. manual course selection    /fi/studyplan/courses
+                                  4. course scheduling          /fi/studyplan/schedule
+                                  5...
+                                  X. overview                   /fi
+
+    [f:welcome]                 if the user has no study plan (or it is empty) instructions are given           [s:intro]
+                                when the user loads the dashboard
+                                  instructions
+                                    1. choose a curriculum
+                                    2. select wanted competences (study goals)
+                                    3. schedule needed courses
+                                    4. enjoy the dashboard
+
+    [f:explore_curriculums]     the user is able to explore curriculums and their fit                           [s:explore_curriculums] [s:explore_curriculum_fit]
+    [f:reselect_curriculum]     the user is able to (re)select a curriculum                                     [s:select_curriculum] [s:reselect_curriculum]
+
+    [f:explore_goals]           the user is able to explore competences / goals and their fit                   [s:explore_goals] [s:explore_goal_fit]
+    [f:reselect_goals]          the user is able to (re)select competences / goals                              [s:select_goals] [s:reselect_goals]
+
+    [f:explore_courses]         the user is able to explore and compare courses                                 [s:explore_courses]
+    [f:reselect_courses]        the user is able to (re)select (extra) courses                                  [s:select_courses] [s:reselect_courses]
+
+    [f:schedule_courses]        the user is able to handily (re)schedule his/her past and future courses        [s:schedule_courses] [s:schedule_past_courses] [s:reschedule_courses]
+                                into periods (courses scheduled into the past are regarded as passed)
+
+    [f:explore_dependencies]    the user is able to explore course/competence interdependency network           [s:explore_dependencies]
+                                structure
+
+related theory
+  requirements engineering
+    scenarios
+      are
+        descriptions of example interaction sessions
+        useful for adding detail to an outline requirements description
+        close to XP's stories
+        diverse: varying scenario formats and levels of detail provide different (important) information/remarks
+    user stories
+      reflect features
+      are
+        read, discussed and ranked (by effort) by the team
+          the effort estimates reflect the time needed for delivery
+        the foundation of system specification in XP
+          story-based planning
+  user-centered design
+    facts
+      1. Suunnittelun lähtökohtana käyttäjiin, tehtäviin ja käyttöympäristöön liittyvä ymmärrys
+      2. Käyttäjät mukana suunnittelun ja tuotekehityksen eri vaiheissa
+      3. Suunnittelua ohjaa käyttäjälähtöinen arviointi
+      4. Iteratiivinen prosessi
+      5. Suunnittelun kohteena käyttäjäkokemus
+      6. Monitieteellinen / -alainen suunnittelutiimi
+    usability
+      1. opittavuus (käyttö helposti opittavissa jo ekalla kokeilukerralla)
+      2. tehokkuus (tuottavuus korkeaa, kun tuotetta on opittu käyttämään)
+      3. muistettavuus (ohjelmaan helppo palata ja käyttää, vaikka taukoa käytössä)
+      4. virheettömyys (vähän virheitä, jos virhe tapahtuu siitä pystyy palautumaan nopeasti)
+      5. tyytyväisyys (mukava käyttää, subjektiivinen kokemus)
+      Nielsen: OTMVT
+    Eight Golden Rules of Interface Design
+      1. Strive for consistency
+      2. Enable frequent users to use shortcuts
+      3. Offer informative feedback
+      4. Design dialog to yield closure
+      5. Offer simple error handling
+      6. Permit easy reversal of actions
+      7. Support internal locus of control
+      8. Reduce short-term memory load
+    käyttäjäkeskeisen suunnittelun prosessikuvaus (ISO 9241-210: Human-centred design process for interactive systems):
+      1. Tunnistetaan tarve käyttäjäkeskeiselle suunnittelulle
+      2. Käyttökontekstin ymmärtäminen ja määrittäminen
+      3. Käyttäjä- ja organisatoristen vaatimusten määrittäminen
+      4. Suunnitteluratkaisujen tuottaminen
+      5. Suunnitteluratkaisujen arviointi vaatimuksia vasten
+      6.
+        joko) Järjestelmä täyttää määritellyt vaatimukset
+        tai) Palataan takaisin kohtaan 2, 3 tai 4
+  quality
+	  ISO 9126 quality characteristics
+		  functionality
+		  reliability
+		  usability
+		  efficiency
+		  maintainability
+		  portability
+	  stakeholders have different viewpoints
+		  customer, user, programmer, project manager, tester, maintainer

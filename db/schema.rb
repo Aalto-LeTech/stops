@@ -220,8 +220,8 @@ ActiveRecord::Schema.define(:version => 20130620064359) do
     t.integer "study_plan_id",                           :null => false
     t.integer "scoped_course_id",                        :null => false
     t.integer "competence_ref_count", :default => 1,     :null => false
-    t.integer "course_instance_id"
     t.boolean "manually_added",       :default => false
+    t.integer "course_instance_id"
     t.integer "period_id"
   end
 

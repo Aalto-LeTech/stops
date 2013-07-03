@@ -2,40 +2,27 @@ class @Course
 
   constructor: (data) ->
     this.loadJson(data || {})
+    @draggedCourse = ko.observable()
     
-    @x = ko.observable(0)
-    @y = ko.observable(0)
+    @position = ko.observable({x: 0, y: 0, height: 1})
     
+    @instancesByPeriodId = {}           # Available course instances. periodId => CourseInstance
+    @instanceCount = 0                  # TODO
 #     this.instances      = {};         # Available course instances FIXME C20130619
 #     this.periods        = [];         # Periods on which this course is arranged
-#     this.prereqs        = {};         # Prerequisite courses. courseCode => course object
-#     this.prereqTo       = {};         # Courses for which this course is a prereq. courseCode => course object
+    this.prereqs        = {}            # Prerequisite courses. courseId => Course
+    this.prereqTo       = {}            # Courses for which this course is a prereq. courseId => Course object
 #     this.prereqPaths    = [];         # Raphael paths to prerequirement courses
-#     this.period         = false;      # Period 
-#     this.courseInstance = false;      # Selected courseinstance
-#     this.slot           = false;      # Slot number that this course occupies
-#     this.length         = 1;
-#     this.locked         = false;      # Is the course immovable?
-#     this.unschedulable          = false;      # true if period allocation algorithm cannot find suitable period
-#     this.prereqsUnsatisfiableIn = {};         # Set of periods where prereqs of the course cannot be satisfied. From period.id => period */
-#     this.changed        = true;
+    @period         = undefined         # Scheduled Period 
+    @courseInstance = undefined         # Scheduled CourseInstance
+    @slot           = undefined         # Slot number that this course occupies
+    @length         = 1                 # Length in periods
+    @locked         = false             # Is the course immovable?
+    @unschedulable  = false;            # true if period allocation algorithm cannot find suitable period
+#     this.prereqsUnsatisfiableIn = {}; # Set of periods where prereqs of the course cannot be satisfied. From period.id => Period
+    @changed        = false             # Tracks whether changes need to be saved
 # 
-#     this.id           = element.data('id');    # Database id of the UserCourse
-#     this.course_code  = element.data('code');
-#     this.name         = element.data('name');
-#     this.credits      = parseFloat(element.data('credits'));
-#     this.passed       = element.data('passed') == 'true';
-# 
-#     element.click(courseClicked);
-# 
-#     element.draggable({
-#       containment: 'parent',
-#       distance:     5,
-#       start:        courseDragStarted,
-#       drag:         courseBeingDragged,
-#       stop:         courseDragStopped,
-#       revert:       "false"
-#     });
+#     this.passed       = false         # TODO
 # 
 #     # Click handler registration must come after initializing draggable or otherwise 
 #     # clicks will not be prevented correctly after drags. */
@@ -45,79 +32,65 @@ class @Course
     @id = data['id']
     @course_code = data['course_code'] || ''
     @name = data['localized_name'] || ''
-
-# 
-#   getCode: () ->
-#     return this.course_code;
-#   };
-# 
-#   getLength: () ->
-#     return this.length;
-#   };
-# 
-#   getCredits: () ->
-#     return this.credits;
-#   };
-# 
+    @credits = data['credits'] || 0
+    @grade = undefined  # TODO
+  
+  toJson: ->
+    json = { scoped_course_id: @id }
+    json['period_id'] = @period.id if @period?
+    return json
+  
+  
 #   isPassed: () ->
 #     return this.passed;
 #   };
-# 
-#   setSlot: (slot) {
-#     this.slot = slot;
-#     this.element.css('left', slot * 115);
-#   };
-# 
-#   getSlot: () ->
-#     return this.slot;
-#   };
-# 
-#   getPrereqs: () ->
-#     return this.prereqs;
-#   };
-# 
-#   # Adds a prerequisite course. This course is automatically added to the "prerequisite to" list of the other course.
-#   addPrereq: (other) ->
-#     this.prereqs[other.course_code] = other;
-#     other.prereqTo[this.course_code] = this;
-#   };
-# 
-#   # Adds an instance of this course to the given period. 
+
+
+  # Adds a prerequisite course. This course is automatically added to the "prerequisite to" list of the other course.
+  addPrereq: (other) ->
+    this.prereqs[other.id] = other
+    other.prereqTo[this.id] = this
+
+
+  # Adds an instance of this course to the given period. 
 #   addCourseInstance: (courseInstance) ->
-#     period = courseInstance.getPeriod();
+#     period = courseInstance.getPeriod()
 #     this.instances[period.getId()] = courseInstance;
 #     this.periods.push(period);
-#   };
-# 
-#   # Moves this course to the given period
-#   setPeriod: (period) ->
-#     # Remove course from previous period. Note: length must not be updated before freeing the old slots.
-#     if (this.period) {
-#       this.period.removeCourse(this);
-#     }
-# 
-#     # Update length
-#     this.courseInstance = this.instances[period.getId()];
-#     if (this.courseInstance) {
-#       this.length = this.courseInstance.length;
-#     } else {
-#       this.length = 1;
-#     }
-# 
-#     # Add course to the new period
-#     this.period = period;
-#     period.addCourse(this, false);
-# 
-#     # Move the div
-#     period_div_pos = period.element.position();
-#     #course.css('left', period_div_pos.left + freeSlot * 100);
-#     this.element.css('top', period_div_pos.top + 3);
-#     this.element.css('height', this.length * 42 + (this.length - 1) * 15);
-#     this.element.removeClass("hide");
-# 
-#     console.log("setPeriod: called on course: " + this.code + " " + this.name);
-# 
-#     # Update possible prerequirement graph paths of the current course and any of the paths of its postrequirement courses.
+
+
+  # Moves the course to the given period, to a free slot. Does not update DOM.
+  # Updates @period and @slot
+  setPeriod: (period) ->
+    # Remove course from previous period. Note: length must not be updated before freeing the old slots.
+    @period.removeCourse(this) if (@period)
+
+    # Update length
+    @courseInstance = @instancesByPeriodId[period.id]
+    
+    if (@courseInstance)
+      @length = @courseInstance.length
+    else
+      @length = 1
+
+    # Add course to the new period
+    @period = period
+    @slot = period.addCourse(this)
+
+
+  # Updates the DOM elements to match model
+  updatePosition: ->
+    # Move the div
+    #period_div_pos = @period.getPosition()
+
+    pos = @position()
+    pos.x = @slot * 115 + 3
+    pos.y = @period.position().y + 3
+    pos.height = @length * 42
+    
+    @position.valueHasMutated()
+    
+    # Update possible prerequirement graph paths of the current course and any of the paths of its postrequirement courses.
 #     this.updatePrereqPaths();
 #     $.each this.prereqTo, (key, postReqCourse) ->
 #       postReqCourse.updatePrereqPaths();
@@ -134,9 +107,9 @@ class @Course
 #   };
 # 
 #   # Mark the course as unschedulable by the automatic scheduling algorithm
-#   # (i.e., there were no available periods with course instances late enough
-#   # to satisfy prerequirements).
-#   markUnschedulable: () ->
+#   # (i.e., there were no available periods with course instances late enough to satisfy prerequirements)
+  markUnschedulable: () ->
+    @unschedulable = true
 #     if (!this.locked) {
 #       # Remove period
 #       if (this.period) {
@@ -145,17 +118,13 @@ class @Course
 #         this.period = false;
 #       }
 # 
-#       this.unschedulable = true;
+#       
 # 
 #       console.log("markUnschedulable: Marked unschedulable course " + this.code + " " + this.name);
 # 
 #       # Remove course element from view
 #       this.element.addClass("hide");
 #     }
-#   };
-# 
-#   getPeriod: (period) ->
-#     return this.period;
 #   };
 # 
 #   checkPrereqSatisfiabilityInPeriod: (period) ->
@@ -247,17 +216,17 @@ class @Course
 #     }
 #   };
 # 
-#   # Moves forward all courses that require this course
-#   satisfyPostreqs: () ->
-#     # Quit recursion if this course is part of an unsolvable chain
-#     if (!this.period) {
+  # Moves forward all courses that require this course
+  satisfyPostreqs: () ->
+    # Quit recursion if this course is part of an unsolvable chain
+    unless @period?
 #       # Mark the rest of the postrequirements as unschedulable since we weren't able to schedule the current course.
 #       this.markPostreqsUnschedulable();
-#       return;
-#     }
-# 
-#     # Determine to which period postrerequirements should be postponed */
-#     targetPeriod;
+      this.markUnshedulable()
+      return
+
+
+    # Determine to which period postrerequirements should be postponed */
 #     if (this.locked) {
 #       # Since the current course is locked, the course might be before
 #       # its prerequirements, so we need to find out the latest period of
@@ -277,83 +246,84 @@ class @Course
 #       # Move postrequirements right after the current course */
 #       targetPeriod = this.getPeriod().getNextPeriod();
 #     }
-#     
-#     # Postpone postreqs that are earlier than this
-#     for (array_index in this.prereqTo) {
-#       other = this.prereqTo[array_index];
-#       
-#       if (!targetPeriod || this.period.laterOrEqual(other.period)) {
-#         if (!other.locked) other.postponeTo(targetPeriod);
-#         other.satisfyPostreqs();
-#       }
-#     }
-#   };
-# 
-#   # Moves this course to the first available period starting from the given period.
-#   postponeTo: (period) ->
-# 
-#     this.setPeriod(period);
-# 
-#     if (!this.unschedulable) {
-#       while (period) {
-#         if (period.courseAvailable(this)) {
-#           this.setPeriod(period);
-#           return;
-#         }
-# 
-#         period = period.getNextPeriod();
-#       }
-#       
-#       # No period could be found.
-#       this.markPostreqsUnschedulable(); # Also marks period as false
-#       console.log("Unschedulable: " + this.code + " " + this.name + ": Could not postpone to wanted period!");
-#     }
-# 
-#   };
-# 
-#   # Moves this to the given period or the closest possible earlier period
-#   advanceTo: (period) ->
-#     while (period) {
-#       if (period.courseAvailable(this)) {
-#         this.setPeriod(period);
-#         return;
-#       }
-# 
-#       period = period.getPreviousPeriodUntilCurrent();
-#     }
-# 
-#     # No period could be found.
-#     this.clearPeriodAndHide();
-#   };
-# 
-#   # Moves the course forward after its prereqs (those that have been located on a period).
-#   # If no prereqs are found, course remains on the current period.
-#   postponeAfterPrereqs: () ->
-#     # Only move if the course has not been locked into its current period
-#     if (!this.locked) {
-#       # Find the latest of the prereqs
-#       latest = false;
-#       for (array_index in this.prereqs) {
-#         course = this.prereqs[array_index];
-#         period = course.getPeriod();
-#         
-#         if (period && (!latest || period.laterThan(latest))) {
-#           latest = period;
-#         }
-#       }
-#       
-#       if (latest) {
-#         targetPeriod  = latest.getNextPeriod(),
-#             currentPeriod = latest.getCurrentPeriod();
-#         if (targetPeriod && targetPeriod.earlierOrEqual(currentPeriod)) {
-#           # We must make sure that courses are scheduled only after the current ongoing period! */
-#           targetPeriod = currentPeriod.getNextPeriod();
-#         }
-#         this.postponeTo(targetPeriod);
-#       }
-#     }
-#   };
-# 
+    
+    targetPeriod = @period.nextPeriod
+    
+    # Postpone postreqs that are earlier than this
+    for other in @prereqTo
+      if this.period.laterOrEqual(other.period)
+      #if (!targetPeriod || this.period.laterOrEqual(other.period)) {
+        other.postponeTo(targetPeriod) unless other.locked
+        other.satisfyPostreqs()
+
+
+  # Moves this course to the first available period starting from the given period.
+  postponeTo: (period) ->
+    #this.setPeriod(period);
+
+    # If no instances are known for this course, put it on the requested period
+    if (this.instanceCount < 1)
+      this.setPeriod(period)
+      this.markUnschedulable()
+      return
+
+    #if (!this.unschedulable) {
+    while (period)
+      if (period.courseAvailable(this))
+        this.setPeriod(period)
+        return
+      
+      period = period.getNextPeriod()
+    
+    # No period could be found. Put it on the requested period
+    this.setPeriod(period)
+    this.markUnschedulable()
+    
+    #  this.markPostreqsUnschedulable(); # Also marks period as false
+    #  console.log("Unschedulable: " + this.code + " " + this.name + ": Could not postpone to wanted period!");
+    #}
+
+  # Moves this to the given period or the closest possible earlier period
+  advanceTo: (period) ->
+    while (period)
+      if (period.courseAvailable(this))
+        this.setPeriod(period)
+        return
+
+      period = period.getPreviousPeriodUntilCurrent()
+    
+    # No period could be found. Put it on the requested period
+    this.setPeriod(period)
+    # TODO: add warning
+    
+    # No period could be found.
+    #this.clearPeriodAndHide();
+
+
+  # Moves the course forward after its prereqs (those that have been put on a period).
+  # If no prereqs are found, course remains unmodified.
+  postponeAfterPrereqs: () ->
+    # Only move if the course has not been locked into its current period
+    return if this.locked
+  
+    # Find the latest of the prereqs
+    latestPeriod = false
+    for prereq in this.prereqs
+      period = prereq.getPeriod()
+      latestPeriod = period if period? && (!latestPeriod || period.laterThan(latestPeriod))
+
+    return unless latestPeriod
+
+    # Put course on the next period after latest prereq
+    targetPeriod = latestPeriod.getNextPeriod() || latestPeriod
+    
+    # Don't schedule courses before current period
+    if (targetPeriod && targetPeriod.earlierThan(Period::currentPeriod))
+      targetPeriod = Period::currentPeriod
+    
+    this.postponeTo(targetPeriod)
+  
+  
 #   # Mark all (except locked courses) postrequirements and their postrequirements as unschedulable. */
 #   markPostreqsUnschedulable: () ->
 #     to_be_processed = $.map this.prereqTo, (course) ->
@@ -423,8 +393,8 @@ class @Course
 #     this.element.find("img.course-locked").detach();
 # 
 # 
-#   # Course event listeners
-#   courseClicked: () ->
+  # Course event listeners
+  courseClicked: () ->
 #     course = $(this).data('object');
 # 
 #     # Clear prerequirement graphs
@@ -508,7 +478,7 @@ class @Course
 #   }
 # 
 # 
-#   courseDragStarted: (event, ui) ->
+  dragStarted: (event, ui) ->
 #     $element = ui.helper;
 # 
 #     if (!$element.hasClass("selected")) {

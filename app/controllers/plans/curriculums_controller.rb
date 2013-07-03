@@ -17,11 +17,7 @@ class Plans::CurriculumsController < PlansController
     @curriculums = Curriculum.order(:start_year)
   end
 
-  def cancel_edit
-    redirect_back_or_default studyplan_curriculum_path
-  end
 
-  
   def update
     @user = current_user
     curriculum_id = params[:user_study_plan][:curriculum]

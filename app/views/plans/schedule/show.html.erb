@@ -48,17 +48,17 @@
           </div>
         </div>
 
-        <button id="save-button"><%= t('.schedule_save_button') %></button>
+        <button id="save-button" data-bind="click: save"><%= t('.schedule_save_button') %></button>
       </div> 
 
-      <div id="course-desc-block" class="control-block hidden">
+      <div id="course-desc-block" class="control-block hidden" data-bind="with: selectedCourse">
         <h3><%= t('.schedule_controls_selected_course') %></h3>
         <p id="course-id">
-          <span id="course-code" class="control-course-code"></span>
-          <span id="course-name" class="control-course-name"></span>
+          <span class="control-course-code" data-bind="course_code"></span>
+          <span class="control-course-name" data-bind="name"></span>
         </p>
         <p>
-          <span id="course-credits"></span> <%= t('.schedule_credits') %>
+          <span id="course-credits" data-bind="credits"></span> <%= t('.schedule_credits') %>
         </p>
         <p>
           <%= t('.course_prereqs') %>
@@ -66,7 +66,7 @@
         </p>
         <h4><%= t :schedule_course_prereqs_title %></h4>
         <p id="course-prereqs-list">
-
+        
         </p>
       </div>
     </div>
@@ -85,34 +85,29 @@
 
     <div class="plan" id="plan"
       data-studyplan-path="<%= plan_path(@study_plan.id) %>"
+      >
+      <!--
+      data-schedule-path="<%= studyplan_schedule_path %>"
       data-prereqs-path="<%= prereqs_curriculum_path(@curriculum.id) %>"
       data-instances-path="<%= course_instances_path %>" 
-      schedule-path="<%= studyplan_schedule_path %>">
+      -->
       <% # <div id="svg"></div>
       %>
       
       <!-- ko foreach: periods -->
-        <div class="period">
+        <div class="period" data-bind="droppable: droppedCourse, position: position">
           <div class="period-name" data-bind="text: name"></div>
-          <div class="period-credits" data-bind="text: credits"></div>
+          <div class="period-credits"><span data-bind="text: credits"></span> op</div>
         </div>
       <!-- /ko -->
 
       <!-- ko foreach: courses -->
-        <div class="course" data-bind="jqDraggable: x">
-          <div class="course-text-wrapper">
-            <span data-bind="text: course_code">
-            <span data-bind="text: name"></span>
-          </div>
+        <div class="course" data-bind="draggable: {start: dragStarted}, position: position, click: courseClicked">
+          <span data-bind="text: course_code"></span>
+          <span data-bind="text: name"></span>
         </div>
       <!-- /ko -->
     </div>
-
-    <table>
-      <tr>
-        <td>Courses:</td><td><%= @study_plan_courses.size %></td>
-      </tr>
-    </table>
   </div>
 
 </div>

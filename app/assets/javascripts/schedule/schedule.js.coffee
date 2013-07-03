@@ -3,84 +3,79 @@
 #= require schedule/plan
 #= require schedule/period
 #= require schedule/course
+#= require schedule/courseinstance
 
-# require schedule/courseinstance
-
-ko.bindingHandlers.drag = {
+# Custom KnockOut binding for the jQuery UI draggable
+# usage: data-bind="draggable: {start: dragStartHandler, stop: dragStopHandler}"
+ko.bindingHandlers.draggable = {
   init: (element, valueAccessor, allBindingsAccessor, viewModel) ->
-    dragElement = $(element)
+    startCallback = valueAccessor().start
+    stopCallback = valueAccessor().stop
+    
     dragOptions = {
-      helper: -> return dragElement.clone().addClass('ui-dragon')
-      revert: true
-      revertDuration: 0
-      start: ->
-        _hasBeenDropped = false
-        _dragged = ko.utils.unwrapObservable(valueAccessor().value)
-
-        if ($.isFunction(valueAccessor().value)) {
-          valueAccessor().value(undefined)
-          dragElement.draggable('option', 'revertDuration', 500)
-        } else if (valueAccessor().array) {
-          _draggedIndex = valueAccessor().array.indexOf(_dragged)
-          valueAccessor().array.splice(_draggedIndex, 1)
-        }
-
-      stop: ->
-        if (!_hasBeenDropped) {
-          if ($.isFunction(valueAccessor().value)) {
-            valueAccessor().value(_dragged);
-          } else if (valueAccessor().array) {
-            valueAccessor().array.splice(_draggedIndex, 0, _dragged);
-          }
-        }
-
+      containment: 'parent'
+      distance: 5
       cursor: 'default'
-    } # dragOptions
+    }
+    
+    dragOptions['start'] = (-> startCallback.call(viewModel)) if startCallback
+    dragOptions['stop'] = (-> stopCallback.call(viewModel)) if stopCallback
 
-    dragElement.draggable(dragOptions).disableSelection()
-
-
-  update: (element, valueAccessor, allBindingsAccessor, viewModel) ->
-    dragElement = $(element);
-    #disabled = !!ko.utils.unwrapObservable(valueAccessor().disabled)
-    #dragElement.draggable('option', 'disabled', disabled)
+    $(element).draggable(dragOptions).disableSelection()
 }
 
-ko.bindingHandlers.drop = {
+# Custom KnockOut binding for the jQuery UI droppable
+# usage:  data-bind="droppable: droppedObject"
+ko.bindingHandlers.droppable = {
   init: (element, valueAccessor, allBindingsAccessor, viewModel) ->
-    dropElement = $(element);
     dropOptions = {
       tolerance: 'pointer',
       drop: (event, ui) ->
-        _hasBeenDropped = true
-        valueAccessor().value(_dragged)
-        ui.draggable.draggable('option', 'revertDuration', 0)
+        dragObject = ko.dataFor(ui.draggable.get(0))
+        valueAccessor()(dragObject)
     }
 
-    dropElement.droppable(dropOptions);
-
-
-  update: (element, valueAccessor, allBindingsAccessor, viewModel) ->
-    dropElement = $(element);
-    #disabled = !!ko.utils.unwrapObservable(valueAccessor().disabled);
-    #dropElement.droppable('option', 'disabled', disabled); didn't work. jQueryUI bug?
-    #dropElement.droppable('option', 'accept', disabled ? '.nothing' : '*');
+    $(element).droppable(dropOptions)
 }
 
-# ko.bindingHandlers.jqDraggable = {
-#   init: (element, valueAccessor, allBindingsAccessor, viewModel) ->
-#     obj = valueAccessor()
-#     $elem = $(element)
-#     element.dataObj = obj
-# 
-#     $elem.draggable
-#       stop: (event, ui) ->
-#         this.dataObj.x(ui.position.left)
-#         this.dataObj.x(ui.position.top)
-# }
-                
+# Custom KnockOut binding that makes it possible to move DOM objects.
+# usage:
+# @position = ko.observable({x: 0, y: 0, width: 0, height: 0})
+# data-bind="position: position"
+# The hash is updated with actual values when the view is first rendered.
+# Position can be changed like so:
+# pos = @position()
+# pos.x = 10
+# @position.valueHasMutated()
+#
+ko.bindingHandlers.position = {
+  init: (element, valueAccessor, bindingHandlers, viewModel) ->
+    pos = $(element).position()
+    value = ko.utils.unwrapObservable(valueAccessor())
+    value.x = pos.left if value.x?
+    value.y = pos.top if value.y?
+    value.width = pos.width if value.width?
+    value.height = pos.height if value.height?
+    
+  update: (element, valueAccessor, bindingHandlers, viewModel) ->
+    value = ko.utils.unwrapObservable(valueAccessor())
+    el = $(element)
+    
+    options = {}
+    options['left'] = value.x if value.x?
+    options['top'] = value.y if value.y?
+    options['width'] = value.width if value.width?
+    options['height'] = value.height if value.height?
+    
+    el.animate(options, 150)
+}
+
+
 jQuery ->
-  planView = new PlanView()
+  $plan = $('#plan')
+  planUrl = $plan.data('studyplan-path')
+  #prereqsPath   = $plan.data('prereqs-path')   # '/' + locale + '/curriculums/' + curriculum_id + '/prereqs'
+  #instancesPath = $plan.data('instances-path') # '/' + locale + '/course_instances'
   
   # Make schedule controls always visible (i.e., sticky)
   $scheduleControls     = $("#schedule-controls-container")
@@ -92,29 +87,13 @@ jQuery ->
       $scheduleControls.addClass("schedule-controls-fixed")
     else
       $scheduleControls.removeClass("schedule-controls-fixed")
-
-
-#   # Create a Course object for each course element
-#   $('.course').each (i, element) ->
-#     new Course($(element))
-# 
-# 
+  
+  
+  planView = new PlanView(planUrl)
+  planView.loadPlan()
+  
 #   # Make text in the plan div unselectable (to make UI less annoying).
 #   $("#plan").disableSelection()
-# 
-#   # Create a Period object for each period element
-#   periodCounter = 0
-#   $('.period').each (i, element) ->
-#     period = new Period($(element));
-#     planView.addPeriod(period);
-# 
-#     planView.firstPeriod = period unless previousPeriod
-# 
-#     period.setSequenceNumber(periodCounter)
-#     period.setPreviousPeriod(previousPeriod)
-# 
-#     previousPeriod = period
-#     periodCounter++
 # 
 # 
 #   # Set current period
@@ -126,29 +105,10 @@ jQuery ->
 # 
 # 
 #   # Get course prereqs by ajax
-  $plan = $('#plan')
-  prereqsPath   = $plan.data('prereqs-path')   # '/' + locale + '/curriculums/' + curriculum_id + '/prereqs'
-  instancesPath = $plan.data('instances-path') # '/' + locale + '/course_instances'
-  planUrl = $plan.data('studyplan-path')
-# 
   
-  $.ajax
-    url: planUrl,
-    dataType: 'json',
-    success: $.proxy(planView.loadPlan, planView)
+  
+  
 
-#   $.ajax
-#     url: prereqsPath,
-#     dataType: 'json',
-#     success: planView.loadPrereqs,
-#     async: false
-# 
-#   $.ajax
-#     url: instancesPath,
-#     dataType: 'json',
-#     success: planView.loadCourseInstances,
-#     async: false
-# 
 #   # Init Raphael
 #   planView.initializeRaphael()
 # 

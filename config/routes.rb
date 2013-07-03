@@ -105,19 +105,15 @@ Ops::Application.routes.draw do
         end
       end
 
-      resources :courses, :controller => 'plans/courses', :except => [:edit, :update]  # ScopedCourses, courses that i have selected
-      resource :schedule, :controller => 'plans/schedule', :only => [:show, :update]
-      resource :record, :controller => 'plans/record', :only => [:show]
+      resources :courses, :controller => 'plans/courses', :except => [:edit, :update]  # ScopedCourses, courses that user has selected
+      resource :schedule, :controller => 'plans/schedule', :only => [:show]
 
-      resource :curriculum, :controller => 'plans/curriculums', :only => [:show, :edit, :update] do
-        get 'cancel_edit'
-      end
+      resource :curriculum, :controller => 'plans/curriculums', :only => [:show, :edit, :update]
     end
 
     # Any plan (specify student ID)
-    resources :plans, :constraints => { :id => /\w+/ }, :only => [:show] do
+    resources :plans, :constraints => { :id => /\w+/ }, :only => [:show, :update] do
       resources :profiles, :controller => 'plans/profiles', :except => [:edit, :update]
-
       resources :courses, :controller => 'plans/courses', :except => [:edit, :update]
       resource :schedule, :controller => 'plans/schedule', :only => [:show, :edit]
       resource :record, :controller => 'plans/record', :only => [:show]

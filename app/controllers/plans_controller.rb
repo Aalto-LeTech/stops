@@ -43,11 +43,13 @@ class PlansController < ApplicationController
   #       {"id":25,"number":4,"localized_name":"2009 II syksy"},
   #       {"id":26,"number":0,"localized_name":"2010 III kevat"},
   #       ...
-  #     ]
+  #     ],
+  #     "current_period": 25
   #   }
   def show
     authorize! :read, @study_plan
     
+    # FIXME: move relevant_periods to StudyPlan
     periods = @user.relevant_periods.includes(:localized_description).as_json(:only => [:id, :number], :methods => [:localized_name], :root => false)
     scoped_courses = @study_plan.courses.includes(:localized_description).as_json(:only => [:id, :course_code, :credits], :methods => :localized_name, :root => false)
  
@@ -55,10 +57,39 @@ class PlansController < ApplicationController
       format.json { render json: {
           study_plan: @study_plan,
           courses: scoped_courses,
-          periods: periods
+          periods: periods,
+          current_period_id: Period.current.id,
         }.to_json(root: false)
       }
     end
+  end
+  
+  # Expects parameter study_plan_courses with a JSON string:
+  # [
+  #   { "scoped_course_id": 71, "period_id": 30 },
+  #   { "scoped_course_id": 25, "period_id": 32 },
+  #   ...
+  # ]
+  def update
+    authorize! :update, @study_plan
+    # TODO: authentication
+
+    @study_plan.update_from_json(params[:study_plan_courses]) if params[:study_plan_courses]
+    
+#     if params[:periods]
+#       params[:periods].each do |user_course_id, period_id|
+#         user_course = StudyPlanCourse.where(:id => user_course_id).first
+#         next unless user_course
+# 
+#         user_course.period_id = period_id
+#         user_course.save
+#       end
+#     end
+
+    respond_to do |format|
+      format.js { render :json => {:status => :ok} }
+    end
+    
   end
   
 end

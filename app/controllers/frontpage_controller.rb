@@ -22,9 +22,9 @@ class FrontpageController < ApplicationController
 
         @unscheduled_courses = @study_plan.unscheduled_courses
         @scheduled_courses = @study_plan.scheduled_courses
-        @passed_courses = @user.get_passed_courses
-        @current_courses = @study_plan.study_plan_courses.where( :period_id => @current_period.id )
-        @upcoming_courses = @study_plan.study_plan_courses.where( :period_id => @upcoming_period.id )
+        @passed_courses = @user.passed_courses
+        @current_courses = @study_plan.study_plan_courses.where( :period_id => @current_period.id ).sort { |a, b| a.course_code <=> b.course_code }
+        @upcoming_courses = @study_plan.study_plan_courses.where( :period_id => @upcoming_period.id ).sort { |a, b| a.course_code <=> b.course_code }
 
         render :action => 'student_dashboard'
       else

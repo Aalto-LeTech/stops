@@ -29,6 +29,9 @@ en:
     courses:
       index:
         heading: "Courses"
+        unscheduled_courses_heading: "Unscheduled"
+        scheduled_courses_heading: "Scheduled"
+        passed_courses_heading: "Passed"
       show:
         course_paths_hint: "Click skills to see the study path"
         course_provides: "Provides skills"

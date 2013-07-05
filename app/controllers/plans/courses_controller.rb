@@ -8,13 +8,13 @@ class Plans::CoursesController < PlansController
   # GET /courses.xml
   def index
     @competences = @study_plan.competences
-    @unscheduled_courses = []
-    @scheduled_courses = @study_plan.courses
-    @passed_courses = @user.get_passed_courses
+    @unscheduled_courses = @study_plan.unscheduled_courses
+    @scheduled_courses = @study_plan.scheduled_courses
+    @passed_courses = @user.passed_courses
 
     respond_to do |format|
       format.html # index.html.erb
-      format.xml  { render :xml => @user_courses }
+      format.xml  { render :xml => [ @unscheduled_courses, @scheduled_courses, @passed_courses ] }
     end
   end
 

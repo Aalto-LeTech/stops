@@ -7,7 +7,7 @@
 
 <% else %>
   <% list_periods = defined?(list_periods) ? list_periods : courses.first.period_name( I18n.locale ).nil? ? false : true %>
-  <% list_grades = defined?(list_grades) ? list_grades : courses.first.class == UserCourse ? true : false %>
+  <% list_grades = defined?(list_grades) ? list_grades : ( courses.first.class == UserCourse ? true : false ) %>
 
   <% if defined?(short) && short == true %>
     <div class="scrollbarred short-period-course-listing">

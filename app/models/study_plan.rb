@@ -140,12 +140,12 @@ class StudyPlan < ActiveRecord::Base
 
   # Returns the study plan courses that are scheduled
   def scheduled_courses
-    study_plan_courses.where( 'period_id IS NOT NULL' )
+    study_plan_courses.where( 'period_id IS NOT NULL' ).order( 'period_id' )
   end
 
   # Returns the study plan courses that are unscheduled
   def unscheduled_courses
-    study_plan_courses.where( 'period_id IS NULL' )
+    study_plan_courses.where( 'period_id IS NULL' ).sort { |a, b| a.course_code <=> b.course_code }
   end
 
   # Returns the periods that contain scheduled courses

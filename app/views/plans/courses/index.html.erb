@@ -5,6 +5,11 @@
 <% end %>
 
 
+<%= render :partial => 'frontpage/course_listing', :locals => { :heading => t('.unscheduled_courses_heading'), :courses => @unscheduled_courses, :list_periods => false } %>
+
+<%= render :partial => 'frontpage/course_listing', :locals => { :heading => t('.scheduled_courses_heading'), :courses => @scheduled_courses, :list_periods => true } %>
+
+<%= render :partial => 'frontpage/course_listing', :locals => { :heading => t('.passed_courses_heading'), :courses => @passed_courses, :list_periods => true } %>
 
 
 

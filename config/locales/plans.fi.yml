@@ -29,6 +29,9 @@ fi:
     courses:
       index:
         heading: "Kurssit"
+        unscheduled_courses_heading: "Aikatauluttamattomat"
+        scheduled_courses_heading: "Aikataulutetut"
+        passed_courses_heading: "Suoritetut"
       show:
         course_paths_hint: "Klikkaa osaamistavoitteita nähdäksesi opintopolut kurssista kompetenssiin"
         course_provides: "Osaamistavoitteet"

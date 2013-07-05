@@ -80,7 +80,7 @@ class User < ActiveRecord::Base
   end
 
   # Returns passed courses
-  def get_passed_courses
+  def passed_courses
     return self.user_courses.where( 'grade > ?', 0 ).sort { |a, b| a.end_date <=> b.end_date }
   end
 

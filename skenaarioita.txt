@@ -37,6 +37,6 @@ Hän valitsee kompetenssit ja ylimääräiset suoritetut kurssit suunnitelmaan j
 
 
 
-= Tuutor tarkastaa opiskelijan opintosuunnitelman =
+= Tutori tarkastaa opiskelijan opintosuunnitelman =
 
-Tuutor kirjautuu O4:ään ja näkee listan omista tuutoroitavistaan. Hän klikkaa tuutoroitavaa ja saa tämän kurssilista periodeittain. Listassa näkyy varoitus, jos pakollisia kursseja puuttuu tai vaadittu opintopistemäärä ei täyty. Tuutor klikkaa 'Hyväksy suunnitelma'-nappulaa. Ruudulla näkyy myös opiskelijan sähköpostiosoite, jotta Tuutor voi lähettää opiskelijalle sähköpostia.
+Tutori kirjautuu O4:ään ja näkee listan omista tuutoroitavistaan. Hän klikkaa tuutoroitavaa ja saa tämän kurssilistan periodeittain. Listassa näkyy varoitus, jos pakollisia kursseja puuttuu tai vaadittu opintopistemäärä ei täyty. Tutori klikkaa 'Hyväksy suunnitelma'-nappulaa. Ruudulla näkyy myös opiskelijan sähköpostiosoite, jotta Tutori voi lähettää opiskelijalle sähköpostia.

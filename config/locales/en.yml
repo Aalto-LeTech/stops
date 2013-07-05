@@ -13,16 +13,11 @@ en:
 
   header:
     program_name: "The Smart Study Guide"
-    frontpageTab: "Frontpage"
-    curriculumsTab: "Study guides"
-    myPlanDropdown: "Study plan"
-    myPlanTabCurriculum: "My Curriculum"
-    myPlanTabCompetences: "Competence election"
-    myPlanTabAllCourses: "Courses"
-    myPlanTabMyCourses: "My courses"
-    myPlanTabSchedule: "Schedule"
-    myPlanTabRecord: "Record"
-    myPlanThisPeriod: "Current period"
+    dashboard: "Dashboard"
+    curriculum: "Curriculum"
+    competences: "Competences"
+    courses: "Courses"
+    schedule: "Schedule"
     login: "Kirjaudu"
     logout: "Kirjaudu ulos"
 

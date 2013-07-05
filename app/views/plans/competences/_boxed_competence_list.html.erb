@@ -1,8 +1,10 @@
 <% @curriculum.competences.each do |competence| %>
   <!-- ko with: competencesById['<%= competence.id %>'] -->
-  <div class="rounded-box <%= @chosen_competence_ids.include? competence.id ? 'selected' : '' %>" 
+  <div class="rounded-box <%= @chosen_competence_ids.include?( competence.id ) ? 'chosen' : '' %>" >
+      <!--
        data-competence-id='<%= competence.id %>'
-       data-competence-included='<%= @chosen_competence_ids.include? competence.id %>'>
+       data-competence-included='<%= @chosen_competence_ids.include?( competence.id ) %>'
+      -->
 
     <h2>
       <%= link_to competence.localized_name, studyplan_competence_path( competence ) %>

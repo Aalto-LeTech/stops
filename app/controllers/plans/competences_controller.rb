@@ -25,7 +25,7 @@ class Plans::CompetencesController < PlansController
 
     respond_to do |format|
       format.html # show.html.erb
-      format.xml  { render :xml => @course }
+      format.xml  { render :xml => @competence }
     end
   end
 

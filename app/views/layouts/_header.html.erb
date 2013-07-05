@@ -9,27 +9,12 @@
       </div>
     </a>
     <ul class="nav">
-      <%= nav_link_to t('header.frontpageTab'), frontpage_path %>
-      <%= nav_link_to t('header.curriculumsTab'), curriculums_path %>
+      <%= nav_link_to t('header.dashboard'), frontpage_path %>
       <% if logged_in? %>
-        <li class="dropdown">
-          <a class="dropdown-toggle" id="dLabel" role="button" data-toggle="dropdown" data-target="" href="#">
-            <%= t('header.myPlanDropdown') %>
-            <b class="caret"></b>
-          </a>
-            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-              <li><%= link_to t('header.myPlanTabCurriculum'), studyplan_curriculum_path %></li>
-              <li><%= link_to t('header.myPlanTabCompetences'), studyplan_competences_path %></li>
-              <% if false # Temporarily disabled %>
-                <li><%= link_to t('header.myPlanTabAllCourses'), studyplan_courses_path %></li>
-              <% end %>
-              <!--li><%= link_to t('header.myPlanTabMyCourses'),  studyplan_courses_path %></li-->
-              <% if false # Temporarily disabled %>
-                <li><%= link_to t('header.myPlanTabSchedule'), studyplan_schedule_path %></li>
-              <% end %>
-              <!--li><%= link_to t('header.myPlanTabRecord'), studyplan_record_path %></li-->
-            </ul>
-        </li>
+        <%= nav_link_to t('header.curriculum'), studyplan_curriculum_path %>
+        <%= nav_link_to t('header.competences'), studyplan_competences_path %>
+        <%= nav_link_to t('header.courses'), studyplan_courses_path %>
+        <%= nav_link_to t('header.schedule'), studyplan_schedule_path %>
       <% end %>
     </ul>
 

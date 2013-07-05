@@ -18,7 +18,7 @@ class CourseInstance < ActiveRecord::Base
 
 
   def dbg_name
-    return "%s %s" % [ abstract_course.code, period.name('en') ]
+    "%s %s" % [ abstract_course.code, period.name('en') ]
   end
 
   def end_date

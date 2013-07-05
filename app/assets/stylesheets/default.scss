@@ -706,28 +706,33 @@ div.current-user {
   overflow: hidden;
   font-size: 0.8125em;
   padding: 1em 0em 1em 1em;
-}
 
-.leftNavi a {
-  color: #404040;
-  text-decoration: none;
-}
+  a {
+    color: #404040;
+    text-decoration: none;
+  }
 
-.leftNavi a:hover {
-  text-decoration: underline;
-}
+  a:hover {
+    text-decoration: underline;
+  }
 
-.leftNavi h2 {
-  font-size: 100%;
-}
+  h2 {
+    font-size: 100%;
+  }
 
-.leftNavi .selected {
-  font-weight: bold;
-}
+  .chosen {
+    a {
+      color: green !important;
+    }
+  }
 
-.leftNavi .selected a {
-  text-decoration: underline !important;
-  color: blue !important;
+  .selected {
+    font-weight: bold;
+    a {
+      text-decoration: underline !important;
+      color: blue !important;
+    }
+  }
 }
 
 /*************************
@@ -817,6 +822,23 @@ div.current-user {
   border-top: 1px solid #e0e0e0;
   color: gray;
   font-size: small;
+}
+
+div.chosen {
+  border: 3px solid #202060;
+  background: #eeeeff;
+}
+
+div.selected {
+  border: 5px solid #303090;
+  background: #e1e1ff;
+}
+
+li.passed {
+  font-style: italic;
+  a {
+    color: green !important;
+  }
 }
 
 
@@ -1052,11 +1074,6 @@ div.competence {
 
 div.competence > p {
   margin: 0px 0px 1em 0px;
-}
-
-div.competence.selected {
-  border: 5px solid #303090;
-  background: #e1e1ff;
 }
 
 div.competence .buttons {

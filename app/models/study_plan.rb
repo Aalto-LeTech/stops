@@ -138,6 +138,11 @@ class StudyPlan < ActiveRecord::Base
     needed_courses.merge(manual_courses)
   end
 
+  # Returns whether the given course is included in the study plan or not
+  def includes?( abstract_course )
+    study_plan_courses.where( 'scoped_course.abstract_course = ?', abstract_course ).count > 0
+  end
+
   # Returns the study plan courses that are scheduled
   def scheduled_courses
     study_plan_courses.where( 'period_id IS NOT NULL' ).order( 'period_id' )
@@ -155,7 +160,7 @@ class StudyPlan < ActiveRecord::Base
 
   # Returns the courses scheduled to start in the given period
   def courses_scheduled_to_period( period )
-    scheduled_courses.where( period_id: period.id )
+    study_plan_courses.where( period_id: period.id ).sort { |a, b| a.course_code <=> b.course_code }
   end
 
   # Returns an ordered array of periods with scheduled courses (see code)
@@ -197,7 +202,7 @@ class StudyPlan < ActiveRecord::Base
         data:    hash[ period ]
       }
     end
-    return array.sort { |a, b| a[:period].begins_at <=> b[:period].begins_at }
+    array.sort { |a, b| a[:period].begins_at <=> b[:period].begins_at }
   end
 
 end

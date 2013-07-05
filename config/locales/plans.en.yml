@@ -23,8 +23,11 @@ en:
       removing_from_plan: "Removing..."
       index:
         heading: "Competence election"
+        competences: "Competences"
       boxed_competence_list:
         provided_skills_heading: "Provides the following skills"
+      show:
+        competences: "Competences"
 
     courses:
       index:
@@ -33,9 +36,14 @@ en:
         scheduled_courses_heading: "Scheduled"
         passed_courses_heading: "Passed"
       show:
-        course_paths_hint: "Click skills to see the study path"
-        course_provides: "Provides skills"
-        course_path_heading: "Relation to other courses"
+        study_plan: "Your Study Plan"
+        study_plan_courses: "Plan's Courses"
+        competence_courses: "Competence's Courses"
+        prerequisites: "Prerequisites"
+        provides: "Provides skills"
+        needed_by: "Needed by"
+        paths_hint: "Click skills to see the study path"
+        path_heading: "Relation to other courses"
 
     schedule:
       show:
@@ -79,7 +87,7 @@ en:
   plan_heading: "My study plan"
   plan_empty_instructions: "Please explore the study guide and choose profiles that you find interesting"
   plan_my_courses: "My courses"
-  
+
   current_curriculum_heading: "Current curriculum"
   current_curriculum: "You are currently using the %{name} study guide"
   choose_curriculum_heading: "Choose curriculum"

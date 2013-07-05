@@ -13,16 +13,11 @@ fi:
 
   header:
     program_name: "Opiskelijaa ohjaava opinto-opas"
-    frontpageTab: "Etusivu"
-    curriculumsTab: "Opinto-oppaat"
-    myPlanDropdown: "Suunnitelma"
-    myPlanTabCurriculum: "Oma opinto-opas"
-    myPlanTabCompetences: "Kompetenssivalinnat"
-    myPlanTabAllCourses: "Kurssit"
-    myPlanTabMyCourses: "Omat kurssit"
-    myPlanTabSchedule: "Aikataulu"
-    myPlanTabRecord: "Suoritukset"
-    myPlanThisPeriod: "Kuluva periodi"
+    dashboard: "Ohjauskeskus"
+    curriculum: "Opinto-opas"
+    competences: "Kompetenssit"
+    courses: "Kurssit"
+    schedule: "Aikataulu"
     login: "Kirjaudu"
     logout: "Kirjaudu ulos"
 

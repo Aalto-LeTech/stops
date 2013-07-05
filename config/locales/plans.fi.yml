@@ -23,8 +23,11 @@ fi:
       removing_from_plan: "Poistetaan..."
       index:
         heading: "Kompetenssivalinnat"
+        competences: "Kompetenssit"
       boxed_competence_list:
         provided_skills_heading: "Osaamistavoitteet"
+      show:
+        competences: "Kompetenssit"
 
     courses:
       index:
@@ -33,9 +36,14 @@ fi:
         scheduled_courses_heading: "Aikataulutetut"
         passed_courses_heading: "Suoritetut"
       show:
-        course_paths_hint: "Klikkaa osaamistavoitteita nähdäksesi opintopolut kurssista kompetenssiin"
-        course_provides: "Osaamistavoitteet"
-        course_path_heading: "Yhteys muihin kursseihin"
+        study_plan: "Opintosuunnitelmasi"
+        study_plan_courses: "Suunnitelman kurssit"
+        competence_courses: "Kompetenssin kurssit"
+        prerequisites: "Esitietovaatimukset"
+        provides: "Osaamistavoitteet"
+        needed_by: "Mahdollistaa"
+        paths_hint: "Klikkaa osaamistavoitteita nähdäksesi opintopolut kurssista kompetenssiin"
+        path_heading: "Yhteys muihin kursseihin"
 
     schedule:
       show:

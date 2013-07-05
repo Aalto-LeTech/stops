@@ -62,26 +62,26 @@ class User < ActiveRecord::Base
 
   # Returns the matching user course
   def get_user_course( abstract_course )
-    return self.user_courses.where( abstract_course: abstract_course ).first
+    self.user_courses.where( abstract_course: abstract_course ).first
   end
 
   # Returns the grade for the given course
   def get_grade( abstract_course )
     user_course = self.get_user_course( abstract_course )
-    return user_course.nil? ? nil : user_course.grade
+    user_course.nil? ? nil : user_course.grade
   end
 
   # Returns true if the user has passed (grade > 0) the given course and false
   # otherwise
   def passed?( abstract_course )
-    return self.user_courses.where(
-      'abstract_course_id = ? AND grade > ?', abstract_course.id, 0
-    ).first != nil
+    abstract_course.nil? ? false : ( self.user_courses.where(
+        'abstract_course_id = ? AND grade > ?', abstract_course.id, 0
+        ).first != nil )
   end
 
   # Returns passed courses
   def passed_courses
-    return self.user_courses.where( 'grade > ?', 0 ).sort { |a, b| a.end_date <=> b.end_date }
+    self.user_courses.where( 'grade > ?', 0 ).sort { |a, b| a.end_date <=> b.end_date }
   end
 
 end

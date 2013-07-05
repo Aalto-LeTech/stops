@@ -1,0 +1,73 @@
+<!-- plans/periods/show -->
+
+<% if defined?( @pd_this ) %>
+  <h1>
+    <%= t('.heading', name: @pd_this[:period].name(I18n.locale) )  %>
+  </h1>
+
+  <p class="muted">
+    <%= t('.datespan') %>: <%= @pd_this[:period].begins_at %> - <%= @pd_this[:period].ends_at %>
+    <br/>
+    <% if @pd_prev == nil %>
+      <%= t('.no_prev') %>
+    <% else %>
+      <%= t('.prev') %>:
+      <%= link_to @pd_prev[:period].name(I18n.locale), studyplan_period_url( :id => @pd_prev[:period].id ) %>
+    <% end %>
+    <br/>
+    <% if @pd_next == nil %>
+      <%= t('.no_next') %>
+    <% else %>
+      <%= t('.next') %>:
+      <%= link_to @pd_next[:period].name(I18n.locale), studyplan_period_url( :id => @pd_next[:period].id ) %>
+    <% end %>
+  </p>
+
+  <p>
+    <%= t('.description') %>
+  </p>
+
+
+  <h2>
+    <%= t('.courses') %>
+  </h2>
+
+
+  <h3>
+    <%= t('.courses_starting') %>
+  </h3>
+
+  <%= render :partial => 'frontpage/course_listing', :locals => { :courses => @pd_this[:data][:starting_courses], :list_periods => false } %>
+
+
+  <h3>
+    <%= t('.courses_continuing') %>
+  </h3>
+
+  <%= render :partial => 'frontpage/course_listing', :locals => { :courses => @pd_this[:data][:continuing_courses], :list_periods => false } %>
+
+
+  <h3>
+    <%= t('.courses_ending') %>
+  </h3>
+
+  <%= render :partial => 'frontpage/course_listing', :locals => { :courses => @pd_this[:data][:ending_courses], :list_periods => false } %>
+
+
+<% elsif defined?( @period ) %>
+  <h1>
+    <%= t('.heading', name: @period.name(I18n.locale) )  %>
+  </h1>
+
+  <p>
+    <%= t('.unscheduled_period')  %>
+  </p>
+
+<% else %>
+  <p>
+    <%= t('.invalid_period')  %>
+  </p>
+<% end %>
+
+
+

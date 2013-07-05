@@ -1,0 +1,41 @@
+<!-- plans/periods/index -->
+
+<h1>
+  <%= t('.heading') %>
+</h1>
+
+<% if @period_data.empty? %>
+  <%= t('.no_periods') %>
+
+<% else %>
+  <p>
+    <%= t('.description') %>
+  </p>
+
+  <table class="period-list">
+    <thead>
+      <tr>
+        <th><%= t('.period_name') %></th>
+        <th><%= t('.period_start') %></th>
+        <th><%= t('.period_end') %></th>
+        <th><%= t('.period_courses') %></th>
+        <th><%= t('.period_credits') %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @period_data.each do |period_data| %>
+        <tr>
+          <td><%= link_to period_data[:period].name(I18n.locale), studyplan_period_url( :id => period_data[:period].id ) %></td>
+          <td><%= period_data[:period].begins_at %></td>
+          <td><%= period_data[:period].ends_at %></td>
+          <td><%= "%d (= %d + %d - %d)" % [ period_data[:data][:total_courses], period_data[:data][:continuing_courses].size, period_data[:data][:starting_courses].size, period_data[:data][:ending_courses].size ] %></td>
+          <td><%= period_data[:data][:total_load] %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+
+
+
+

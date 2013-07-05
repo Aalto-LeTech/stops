@@ -34,7 +34,7 @@ class Dbggr
 
   # lists all abstract courses
   def list_abstract_courses
-    AbstractCourse.all.each do |abstract_course|
+    AbstractCourse.find_each do |abstract_course|
       puts "  " + abstract_course_to_s( abstract_course )
     end
   end
@@ -42,7 +42,7 @@ class Dbggr
 
   # lists all scoped courses
   def list_scoped_courses
-    ScopedCourse.all.each do |scoped_course|
+    ScopedCourse.find_each do |scoped_course|
       ac    = scoped_course.abstract_course
       acbcc = AbstractCourse.where( code: scoped_course.course_code ).first
       s = "  [%03d] % 40s  : " % [ scoped_course.id, scoped_course.name(@locale)[0,40] ]
@@ -58,7 +58,7 @@ class Dbggr
   # lists all scoped courses with their abstract course code
   # and their prereq course names
   def list_course_prereqs
-    ScopedCourse.all.each do |scoped_course|
+    ScopedCourse.find_each do |scoped_course|
       puts "Scoped: #{scoped_course.localized_description.name}"
       if scoped_course.abstract_course
         puts "Abstract: #{scoped_course.abstract_course.code}"
@@ -80,7 +80,7 @@ class Dbggr
 
   # perform custom fixes related to scoped courses
   def fix_scoped_courses
-    ScopedCourse.all.each do |scoped_course|
+    ScopedCourse.find_each do |scoped_course|
       puts 'SC[%03d]' % [ scoped_course.id ]
       acbcc = AbstractCourse.where( code: scoped_course.course_code ).first
       if acbcc.nil?
@@ -94,7 +94,7 @@ class Dbggr
 
   # lists all course instances
   def list_course_instances
-    CourseInstance.all.each do |course_instance|
+    CourseInstance.find_each do |course_instance|
       puts "  [%03d] % 15s % 4s-%d % 15s" % [ course_instance.id, course_instance.abstract_course.code, course_instance.period.symbol, course_instance.length, course_instance.period.name(@locale) ]
     end
   end
@@ -102,7 +102,7 @@ class Dbggr
 
   # lists all user courses
   def list_user_courses
-    UserCourse.all.each do |user_course|
+    UserCourse.find_each do |user_course|
       puts "  [%03d] % 25s  %d" % [ user_course.id, user_course.course_instance.dbg_name, user_course.grade ]
     end
   end
@@ -110,7 +110,7 @@ class Dbggr
 
   # lists all periods
   def list_periods
-    Period.all.each do |period|
+    Period.find_each do |period|
       puts "  [%03d] % 3d % 4s % 4s [%s - %s] % 15s" % [ period.id, period.number, period.symbol, period.to_roman_numeral, period.begins_at, period.ends_at, period.name(@locale) ]
     end
   end
@@ -285,7 +285,7 @@ class Dbggr
     exit
 
 
-    StudyPlanCourse.all.each do |study_plan_course|
+    StudyPlanCourse.find_each do |study_plan_course|
       puts "Scoped: #{study_plan_course.localized_description.name}"
       if study_plan_course.abstract_course
         puts "Abstract: #{study_plan_course.abstract_course.code}"
@@ -299,7 +299,7 @@ class Dbggr
     exit
 
 
-    User.all.each do |user|
+    User.find_each do |user|
       puts "User: #{user.studentnumber}"
       if user.user_courses.size > 0
         puts "UserCourses:"

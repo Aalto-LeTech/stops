@@ -86,6 +86,39 @@ class StudyPlan < ActiveRecord::Base
            :through => :study_plan_competences,
            :dependent => :destroy
 
+  
+  def as_json(options={})
+    super(options.merge({
+      :only => [:curriculum_id],
+      :include => {
+        :study_plan_courses => {
+          :only => [:scoped_course_id, :period_id]
+        }
+      },
+    }))
+  end
+
+  
+  def update_from_json(json)
+    new_plan = JSON.parse(json)
+
+    new_period_ids = {}  # scoped_course_id => period_id
+    new_plan.each do |plan_course|
+      scoped_course_id = plan_course['scoped_course_id']
+      period_id = plan_course['period_id']
+      
+      new_period_ids[scoped_course_id] = period_id
+    end
+    
+    self.study_plan_courses.each do |studyplan_course|
+      new_period_id = new_period_ids[studyplan_course.scoped_course_id]
+      if studyplan_course.period_id != new_period_id
+        studyplan_course.period_id = new_period_id
+        studyplan_course.save
+      end
+    end
+  end
+  
   def add_competence(competence)
     # Dont't do anything if the study plan already has this competence
     return if has_competence?(competence)

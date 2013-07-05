@@ -29,8 +29,7 @@ class Period < ActiveRecord::Base
   end
   
   def localized_name
-    desc = localized_description
-    desc.name
+    localized_description.nil? ? "" : localized_description.name 
   end
 
   def symbol

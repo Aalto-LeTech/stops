@@ -82,8 +82,9 @@ class ScopedCourse < CompetenceNode
 
   #attr_accessible :alternatives, :assignments, :changing_topic, :code, :contact, :content, :credits, :department, :grading_scale, :grading_details, :graduate_course, :instructors, :language, :materials, :name_en, :name_fi, :name_sv, :other, :outcomes, :period, :prerequisites, :replaces
 
+  # Define Sphinx index
   define_index do
-    #indexes course_code  FIXME? What does this line do?
+    indexes course_code
     indexes localized_description(:name), :as => :course_name
     indexes skill_descriptions.description, :as => :skill_descriptions
 
@@ -238,8 +239,10 @@ class ScopedCourse < CompetenceNode
   end
 
   # Returns the length of instance in given period or nil if unknown
-  def length( period )
-    abstract_course.nil? ? nil : abstract_course.length( period )
+  def length
+    # FIXME
+    #abstract_course.nil? ? nil : abstract_course.length( period )
+    1
   end
 
 end

@@ -17,10 +17,7 @@ class UserCourse < ActiveRecord::Base
 
   belongs_to :user
   belongs_to :course_instance
-
-  has_one :abstract_course,
-          :through => :course_instance
-
+  belongs_to :abstract_course
 
   def course_code
     abstract_course.code
@@ -42,8 +39,8 @@ class UserCourse < ActiveRecord::Base
     course_instance.end_date
   end
 
-  def period_name( locale )
-    course_instance.period_name( locale )
+  def localized_period_name
+    course_instance.localized_period_name
   end
 
 end

@@ -98,22 +98,35 @@ class StudyPlan < ActiveRecord::Base
     }))
   end
 
-  
   def update_from_json(json)
     new_plan = JSON.parse(json)
 
-    new_period_ids = {}  # scoped_course_id => period_id
+    # Index information by scoped_course_id
+    new_courses = {}   # scoped_course_id => {scoped_course_id: 1, period_id: 2, course_instance_id: 3, grade: 4, credits: 5}
     new_plan.each do |plan_course|
       scoped_course_id = plan_course['scoped_course_id']
-      period_id = plan_course['period_id']
-      
-      new_period_ids[scoped_course_id] = period_id
+      new_courses[scoped_course_id] = plan_course
     end
     
     self.study_plan_courses.each do |studyplan_course|
-      new_period_id = new_period_ids[studyplan_course.scoped_course_id]
-      if studyplan_course.period_id != new_period_id
+      new_course = new_courses[studyplan_course.scoped_course_id]
+      
+      new_period_id = new_course['period_id']
+      new_course_instance_id = new_course['course_instance_id']
+      new_grade = new_course['grade']
+      new_credits = new_course['credits']
+      
+      changed =
+          studyplan_course.period_id != new_period_id || 
+          studyplan_course.course_instance_id != new_course_instance_id ||
+          studyplan_course.grade != new_grade ||
+          studyplan_course.credits != new_credits
+      
+      if changed
         studyplan_course.period_id = new_period_id
+        studyplan_course.course_instance_id = new_course_instance_id
+        studyplan_course.grade = new_grade
+        studyplan_course.credits = new_credits
         studyplan_course.save
       end
     end

@@ -24,6 +24,7 @@ fi:
   example_schedule: "Mallilukujärjestys"
 
   cr: "op"
+  Cr: "Op"
   Ok: "OK"
   Upload: "Tallenna"
   Create: "Luo"

@@ -61,6 +61,8 @@ fi:
 
         heading: "Oma opintosuunnitelma"
         empty_instructions: "Valitse opinto-oppaasta itseäsi kiinnostavat kompetenssit"
+        Credits: "Opintopisteet"
+        Grade: "Arvosana"
 
     periods:
       index:

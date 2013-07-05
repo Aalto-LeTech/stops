@@ -1,6 +1,20 @@
 # Teaching period
 class Period < ActiveRecord::Base
 
+  #  create_table "periods", :force => true do |t|
+  #    t.integer "number",    :null => false
+  #    t.date    "begins_at"
+  #    t.date    "ends_at"
+  #  end
+
+  # members
+  #  - number
+  #  - begins_at
+  #  - ends_at
+  #  - name               via period_descriptions
+  #  - course_instances
+
+
   has_many :period_descriptions, :dependent => :destroy
 
   has_many :course_instances
@@ -9,6 +23,16 @@ class Period < ActiveRecord::Base
   def name(locale)
     name = PeriodDescription.where(:period_id => self.id, :locale => locale.to_s).first
     name ? name.name : ''
+  end
+
+  def symbol
+    name = PeriodDescription.where(:period_id => self.id, :locale => 'en').first
+    if name.nil?
+      return ''
+    else
+      symbol = name.name.split(' ')[1]
+      return symbol == 'summer' ? 'S' : symbol
+    end
   end
 
   # Finds the next period following this period

@@ -28,15 +28,7 @@ fi:
 
     courses:
       index:
-        heading: "Omat kurssit"
-        passed_courses_heading: "Suoritetut"
-        chosen_courses_heading: "Valitut"
-        no_courses: "Ei kursseja"
-        course_code: "Koodi"
-        course_name: "Nimi"
-        course_extent: "Laajuus"
-        course_period: "Opintojakso"
-        course_grade: "Arvosana"
+        heading: "Kurssit"
       show:
         course_paths_hint: "Klikkaa osaamistavoitteita nähdäksesi opintopolut kurssista kompetenssiin"
         course_provides: "Osaamistavoitteet"
@@ -58,6 +50,31 @@ fi:
 
         heading: "Oma opintosuunnitelma"
         empty_instructions: "Valitse opinto-oppaasta itseäsi kiinnostavat kompetenssit"
+
+    periods:
+      index:
+        heading: "Opintojaksot"
+        no_periods: "Et ole vielä aikatauluttanut kursseja millekään opintojaksolle."
+        description: "Alla on listattuna opintojaksot, joille olet aikatauluttanut opintoja."
+        period_name: "Opintojakso"
+        period_start: "Alkupvm."
+        period_end: "Loppupvm."
+        period_courses: "Kurssimäärä"
+        period_credits: "Opintokuorma"
+      show:
+        heading: "Opintojakso %{name}"
+        description: "Alla on kuvaus suunnittelemastasi opintojaksosta."
+        datespan: "Aikaväli"
+        no_prev: "Ei suunniteltuja edeltäviä opintojaksoja."
+        no_next: "Ei suunniteltuja seuraavia opintojaksoja."
+        prev: "Edeltävä suunniteltu opintojakso"
+        next: "Seuraava suunniteltu opintojakso"
+        courses: "Kurssit"
+        courses_starting: "Alkavat"
+        courses_continuing: "Jatkuvat"
+        courses_ending: "Päättyvät"
+        unscheduled_period: "Et ole vielä suunnitellut mitään tälle opintojaksolle."
+        invalid_period: "Hakemaasi opintojaksoa ei löydy."
 
   plan_heading: "Oma opintosuunnitelma"
   plan_empty_instructions: "Valitse ensin opinto-oppaasta kompetensseja"

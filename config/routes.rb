@@ -107,6 +107,7 @@ Ops::Application.routes.draw do
 
       resources :courses, :controller => 'plans/courses', :except => [:edit, :update]  # ScopedCourses, courses that i have selected
       resource :schedule, :controller => 'plans/schedule', :only => [:show, :update]
+      resources :periods, :controller => 'plans/periods', :only => [:index, :show]
       resource :record, :controller => 'plans/record', :only => [:show]
 
       resource :curriculum, :controller => 'plans/curriculums', :only => [:show, :edit, :update] do

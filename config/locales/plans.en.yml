@@ -28,15 +28,7 @@ en:
 
     courses:
       index:
-        heading: "My Courses"
-        passed_courses_heading: "Passed"
-        chosen_courses_heading: "Chosen"
-        no_courses: "No courses"
-        course_code: "Code"
-        course_name: "Name"
-        course_extent: "Extent"
-        course_period: "Period"
-        course_grade: "Grade"
+        heading: "Courses"
       show:
         course_paths_hint: "Click skills to see the study path"
         course_provides: "Provides skills"
@@ -58,6 +50,28 @@ en:
 
         heading: "My study plan"
         empty_instructions: "Please explore the study guide and choose competences that you find interesting"
+
+    periods:
+      index:
+        heading: "Periods"
+        no_periods: "You haven't scheduled any courses to a period yet."
+        description: "Below is a list of the periods in which you've scheduled studies."
+        period_name: "Period"
+        period_start: "Start"
+        period_end: "End"
+        period_courses: "Courses"
+        period_credits: "Study load"
+      show:
+        heading: "Period %{name}"
+        description: "Below is a description of the planned period."
+        datespan: "Date span"
+        no_prev: "No preceding planned periods."
+        no_next: "No following planned periods."
+        prev: "Preceding scheduled period"
+        next: "Following scheduled period"
+        courses: "Courses"
+        unscheduled_period: "You haven't planned anything yet for this period."
+        invalid_period: "Such a period cannot be found."
 
   plan_heading: "My study plan"
   plan_empty_instructions: "Please explore the study guide and choose profiles that you find interesting"

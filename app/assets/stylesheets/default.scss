@@ -228,13 +228,12 @@ table.basic-table {
   line-height:      1.3em;
   border-collapse:  separate;
   margin:           1.1em 1.1em 1.1em 0;
+  color: red;
 
   thead {
     background-color: whitesmoke;
 
     tr {
-
-
       th {
         padding:      10px 8px;
         border-style: solid;
@@ -1083,25 +1082,36 @@ div.competence .competence-skills, div.competence .competence-courses {
   margin: 0px 10px 10px 0px;
 }
 
+
 /*********************
-  Generic course list
+  Generic course & period lists
  *********************/
+
+table.course-list, table.period-list {
+
+  text-align: left;
+
+  th, td {
+    padding-right: 1em;
+  }
+
+  tr {
+    .total {
+      font-size: large;
+      font-weight: bold;
+
+      td {
+        padding-top: 1em;
+      }
+    }
+  }
+}
 
 table.course-list {
   font-size: small;
-}
-
-table.course-list td {
-  padding-right: 1em;
-}
-
-table.course-list tr.total {
-  font-size: large;
-  font-weight: bold;
-}
-
-table.course-list tr.total td {
-  padding-top: 1em;
+  tr.total {
+    font-size: normal;
+  }
 }
 
 
@@ -1120,6 +1130,7 @@ table.course-list tr.total td {
   margin: .5em 0em;
   font-size: small;
 }
+
 
 /*********************
   Sessions

@@ -17,7 +17,7 @@ class User < ActiveRecord::Base
                   :password,
                   :password_confirmation,
                   :remember_me,
-                  :curriculum_id
+                  :curriculum_id   # FIXME to be removed?
 
   # Plan
   has_one :study_plan, :dependent => :destroy
@@ -58,6 +58,30 @@ class User < ActiveRecord::Base
   # Returns the periods between the beginning of the user's studies and the expected graduation
   def relevant_periods
     self.first_study_period.find_next_periods(35) # 5 periods * 7 years
+  end
+
+  # Returns the matching user course
+  def get_user_course( abstract_course )
+    return self.user_courses.where( abstract_course: abstract_course ).first
+  end
+
+  # Returns the grade for the given course
+  def get_grade( abstract_course )
+    user_course = self.get_user_course( abstract_course )
+    return user_course.nil? ? nil : user_course.grade
+  end
+
+  # Returns true if the user has passed (grade > 0) the given course and false
+  # otherwise
+  def passed?( abstract_course )
+    return self.user_courses.where(
+      'abstract_course_id = ? AND grade > ?', abstract_course.id, 0
+    ).first != nil
+  end
+
+  # Returns passed courses
+  def get_passed_courses
+    return self.user_courses.where( 'grade > ?', 0 ).sort { |a, b| a.end_date <=> b.end_date }
   end
 
 end

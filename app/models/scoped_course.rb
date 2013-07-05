@@ -1,6 +1,16 @@
 # Course as a part of a curriculum, e.g. Programming 101 as described in the 2011 study guide
 class ScopedCourse < CompetenceNode
 
+  # members
+  #  - abstract_course
+  #  - course_descriptions    -> description, name
+  #  - localized_description  -> localized_name
+  #  - course_prereqs
+  #  - prereqs
+  #  - supporting_prereqs
+  #  - periods  (future)
+
+
   belongs_to :abstract_course
   accepts_nested_attributes_for :abstract_course
 
@@ -73,7 +83,7 @@ class ScopedCourse < CompetenceNode
   #attr_accessible :alternatives, :assignments, :changing_topic, :code, :contact, :content, :credits, :department, :grading_scale, :grading_details, :graduate_course, :instructors, :language, :materials, :name_en, :name_fi, :name_sv, :other, :outcomes, :period, :prerequisites, :replaces
 
   define_index do
-    indexes course_code
+    #indexes course_code  FIXME? What does this line do?
     indexes localized_description(:name), :as => :course_name
     indexes skill_descriptions.description, :as => :skill_descriptions
 
@@ -222,9 +232,14 @@ class ScopedCourse < CompetenceNode
   # The cache is a table behinde the 'prereqs' variable that provides easy access to all the prerequirement courses which provide at least one competence that is a prerequirement for this course.
   def update_course_prereqs_cache
     # FIXME this does not set the requirement attribute to STRICT_PREREQ
-    
+
     self.prereqs = self.prereqs_recursive
     self.save
+  end
+
+  # Returns the length of instance in given period or nil if unknown
+  def length( period )
+    abstract_course.nil? ? nil : abstract_course.length( period )
   end
 
 end

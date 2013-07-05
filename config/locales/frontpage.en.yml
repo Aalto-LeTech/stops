@@ -9,6 +9,7 @@ en:
     
     staff_dashboard:
       heading: "Dashboard"
+      welcome: "Welcome %{name}! This is your dashboard."
 
     plans:
       heading: "My Study Plan"
@@ -24,8 +25,11 @@ en:
 
     courses:
       heading: "My Courses"
+      unscheduled_courses_heading: "Unscheduled"
+      scheduled_courses_heading: "Scheduled"
       passed_courses_heading: "Passed"
-      chosen_courses_heading: "Chosen"
+
+    course_listing:
       no_courses: "No courses"
       course_code: "Code"
       course_name: "Name"
@@ -36,4 +40,6 @@ en:
     schedule:
       heading: "Schedule"
       edit_schedule: "Edit schedule"
-      
+      current_courses_heading: "In The Current Period"
+      upcoming_courses_heading: "In The Upcoming Period"
+

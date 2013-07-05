@@ -5,61 +5,12 @@
 <% end %>
 
 
-<h2><%=t('.passed_courses_heading')%></h2>
+<%= render :partial => 'frontpage/course_listing', :locals => { :heading => t('.unscheduled_courses_heading'), :courses => @unscheduled_courses, :list_periods => false } %>
 
-<% if @user_courses.empty? %>
-  <p><%= t('.no_courses') %></p>
-<% else %>
-  <table class="plans-own-courses">
-    <thead>
-      <tr>
-        <th><%= t('.course_code') %></th>
-        <th><%= t('.course_name') %></th>
-        <th><%= t('.course_extent') %></th>
-        <th><%= t('.course_period') %></th>
-        <th><%= t('.course_grade') %></th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @user_courses.each do |user_course| %>
-        <tr <%= "class='course-completed'" if user_course.grade %>>
-          <td><%= link_to user_course.scoped_course.course_code, studyplan_course_url(:id => user_course.scoped_course.id) %></td>
-          <td><%= link_to user_course.scoped_course.name(I18n.locale), studyplan_course_url(:id => user_course.scoped_course.id) %></td>
-          <td><%= user_course.scoped_course.credits %></td>
-          <td>
-            <% if user_course.course_instance %>
-              <%= user_course.course_instance.period.name(I18n.locale) %>
-            <% end %>
-          </td>
-          <td <%= "class='course-grade'" if user_course.grade %>><%= user_course.grade %></td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-<% end %>
+<%= render :partial => 'frontpage/course_listing', :locals => { :heading => t('.scheduled_courses_heading'), :courses => @scheduled_courses, :list_periods => true } %>
+
+<%= render :partial => 'frontpage/course_listing', :locals => { :heading => t('.passed_courses_heading'), :courses => @passed_courses, :list_periods => true } %>
 
 
-<h2><%=t('.chosen_courses_heading')%></h2>
 
-<% if @user.study_plan.courses.empty? %>
-  <p><%= t('.no_courses') %></p>
-<% else %>
-  <table class="plans-own-courses">
-    <thead>
-      <tr>
-        <th><%= t('.course_code') %></th>
-        <th><%= t('.course_name') %></th>
-        <th><%= t('.course_extent') %></th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @user.study_plan.courses.each do |course| %>
-        <tr>
-          <td><%= link_to course.course_code, studyplan_course_url(:id => course.id) %></td>
-          <td><%= link_to course.name(I18n.locale), studyplan_course_url(:id => course.id) %></td>
-          <td><%= course.credits %></td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-<% end %>
+

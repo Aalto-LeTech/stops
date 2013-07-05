@@ -1,6 +1,6 @@
 
 
-a dashboard sketch / draft / specsheet:
+a dashboard sketch/draft:
 
 ##########################################################################################################################
 # O4 Study Planner                                  D A S H B O A R D                                 [1 Teemu Teekkari] #  [1] clicking launches a dropdown from which one can
@@ -12,7 +12,7 @@ a dashboard sketch / draft / specsheet:
 #   --------------------------------------------------          ------------------------------------------------------   #
 #                                                                                                                        #  [3] clicking goes to the competence viewer / elector
 #                                     features:                                                                          #
-#                                       - listing of courses                                                             #  [4] clicking goes to the Courses view
+#                                       - listing of scheduled courses                                                   #  [4] clicking goes to the Courses view
 #                                       - courses with postreqs highlighted                                              #      - browsing of selected courses
 #                                       - color indication if more than 15 credits scheduled for the period              #      - selection of "extra" courses
 #                                                                                                                        #      - course competence web explorer
@@ -22,7 +22,7 @@ a dashboard sketch / draft / specsheet:
 #                                                      [2 Edit]                                                          #
 #                                                                                                                        #    - mouse hover should provide added information
 #  [3 Competences]                                            [4 Courses]                                                #        also instructions etc.
-#  ---------------                                            ---------                                                  #
+#  ---------------                                            -----------                                                #
 #                                                                                                                        #
 #   - list of selected competences                             1. selected but unscheduled !                             #
 #   - date of achieving each according to schedule               ...                                                     #
@@ -50,32 +50,32 @@ a dashboard sketch / draft / specsheet:
 
 
 
-scenarios & required features
+user stories & required features
 
-scenarios
+user stories
   student
     with no previous studies and no experience with the system
-      can learn to make use of the system efficiently                                                           [s:intro]                               [f:actioncenter] [f:welcome]
-      wants to explore the curriculums he/she could study by                                                    [s:explore_curriculums]                 [f:explore_curriculums]
-      wants to choose the curriculum he/she wants to study by                                                   [s:select_curriculum]                   [f:reselect_curriculum]
-      wants to explore his/her study goal / competence possibilities                                            [s:explore_goals]                       [f:explore_goals]
-      wants to select his/her study goals / competences                                                         [s:select_goals]                        [f:reselect_goals]
-      wants to explore courses and compare them                                                                 [s:explore_courses]                     [f:explore_courses]
-      wants to manually select (extra) courses                                                                  [s:select_courses]                      [f:reselect_courses]
-      wants to explore the interdependencies of competences and courses                                         [s:explore_dependencies]                [f:explore_dependencies]
-      wants to schedule his/her starting studies                                                                [s:schedule_courses]                    [f:schedule_courses]
+      wants to learn to make use of the system efficiently                                                   6  [s:intro]                               [f:basic_usability] [f:actioncenter] [f:welcome]
+      wants to explore the curriculums he/she could study by                                                 5  [s:explore_curriculums]                 [f:explore_curriculums]
+      wants to choose the curriculum he/she wants to study by                                                1  [s:select_curriculum]                   [f:reselect_curriculum]
+      wants to explore his/her study goal / competence possibilities                                         5  [s:explore_goals]                       [f:explore_goals]
+      wants to select his/her study goals / competences                                                      1  [s:select_goals]                        [f:reselect_goals]
+      wants to explore courses and compare them                                                              5  [s:explore_courses]                     [f:explore_courses]
+      wants to manually select (extra) courses                                                               2  [s:select_courses]                      [f:reselect_courses]
+      wants to explore the interdependencies of competences and courses                                      5  [s:explore_dependencies]                [f:explore_dependencies]
+      wants to schedule his/her starting studies                                                             1  [s:schedule_courses]                    [f:schedule_courses]
     with previous studies
       but no experience with the system
-        wants to explore which curriculums are inline with his/her past studies                                 [s:explore_curriculum_fit]              [f:explore_curriculums]
-        wants to explore how other study goals / competences are inline with his/her past studies               [s:explore_goal_fit]                    [f:explore_goals]
-        wants to save his/her already realized course execution schedule                                        [s:schedule_past_courses]               [f:schedule_courses]
+        wants to explore which curriculums are inline with his/her past studies                              4  [s:explore_curriculum_fit]              [f:explore_curriculums]
+        wants to explore how other study goals / competences are inline with his/her past studies            4  [s:explore_goal_fit]                    [f:explore_goals]
+        wants to save his/her already realized course execution schedule                                     1  [s:schedule_past_courses]               [f:schedule_courses]
       and usage of the system
-        wants to check the upcoming periods courses-todo-list in order to register for the courses              [s:current_todo]                        [f:overview]
-        wants to get a clear understanding of the state, progress and direction of his/her studies              [s:overview]                            [f:overview] [f:actioncenter]
-        wants to reselect the curriculum he/she is studying by                                                  [s:reselect_curriculum]                 [f:reselect_curriculum]
-        wants to reselect his/her study goals / competences                                                     [s:reselect_goals]                      [f:reselect_goals]
-        wants to reselect his/her (extra) course selections                                                     [s:reselect_courses]                    [f:reselect_courses]
-        wants to reschedule his/her studies                                                                     [s:reschedule_courses]                  [f:schedule_courses]
+        wants to check the upcoming periods courses-todo-list in order to register for the courses           1  [s:current_todo]                        [f:overview]
+        wants to get a clear understanding of the state, progress and direction of his/her studies           3  [s:overview]                            [f:overview] [f:actioncenter]
+        wants to reselect the curriculum he/she is studying by                                               1  [s:reselect_curriculum]                 [f:reselect_curriculum]
+        wants to reselect his/her study goals / competences                                                  1  [s:reselect_goals]                      [f:reselect_goals]
+        wants to reselect his/her (extra) course selections                                                  1  [s:reselect_courses]                    [f:reselect_courses]
+        wants to reschedule his/her studies                                                                  1  [s:reschedule_courses]                  [f:schedule_courses]
   staff
     (not covered here)
   admin
@@ -84,13 +84,25 @@ scenarios
 required features
   table
     #name                       #description                                                                    #related scenarios
+    [f:basic_usability]         the user is able to                                                             [s:intro]
+                                  - change application language: FI / EN
+                                  - (other settings...)
+                                  - logout
+
     [f:overview]                the dashboard describes the users current situation                             [s:current_todo] [s:overview]
                                   1. near term
-                                    courses scheduled for the current and the following period
+                                    - lists courses scheduled for the current and the following period
+                                    - if at the start of a period the system reminds the user of the need
+                                      to register for upcoming courses
+                                    - highlights important courses (courses that have post requirements)
+                                    - warns the user if the period is overscheduled (>15 ECTS)
                                   2. long term
-                                    progress in achieving selected competences
-                                    courses passed so far
-                                    study progress related statistics
+                                    - progress and estimate dates of achieving selected competences
+                                    - courses passed so far
+                                    - study progress related statistics
+                                  3. warnings & other info
+                                    - informs about selected but unscheduled courses
+                                    - (perhaps something else...)
 
     [f:actioncenter]            the dashboard provides access to the functionality provided by the system       [s:intro] [s:overview]
                                   1. curriculum selection       /fi/studyplan/curriculum
@@ -139,7 +151,7 @@ related theory
         the foundation of system specification in XP
           story-based planning
   user-centered design
-    facts
+    the basic core
       1. Suunnittelun lähtökohtana käyttäjiin, tehtäviin ja käyttöympäristöön liittyvä ymmärrys
       2. Käyttäjät mukana suunnittelun ja tuotekehityksen eri vaiheissa
       3. Suunnittelua ohjaa käyttäjälähtöinen arviointi

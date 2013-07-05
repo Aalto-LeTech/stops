@@ -67,14 +67,14 @@
 
 
 
-<h2><%=t('.course_path_heading)%></h2>
+<h2><%=t('.course_path_heading')%></h2>
 
 <table class="course-path">
   <thead>
     <tr>
-      <th><%=t :course_strict_prereqs %></th>
+      <th><%=t(:course_strict_prereqs)%></th>
       <th></th>
-      <th><%= @course.name(I18n.locale) %> <%=t :course_strict_prereq_of %></th>
+      <th><%= @course.name(I18n.locale) %> <%=t(:course_strict_prereq_of)%></th>
     </tr>
   </thead>
   <tbody>
@@ -89,7 +89,7 @@
       <td class="future">
         <!-- List of courses which depend on this course -->
         <% if @course.prereq_to.empty? %>
-          <%=t :course_no_future %>
+          <%=t(:course_no_future)%>
         <% else %>
           <ul>
             <% @course.prereq_to.each do |course| %>
@@ -106,6 +106,6 @@
 </table>
 
 
-<h2><%=t :course_prereqs_reqursive %></h2>
+<h2><%=t(:course_prereqs_reqursive)%></h2>
 
 <%= render :partial => '/courses/prereqs_reqursive' %>

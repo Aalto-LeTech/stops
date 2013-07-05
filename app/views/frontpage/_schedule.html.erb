@@ -1,3 +1,35 @@
 <h2><%= t('.heading') %></h2>
 
+<div class="row-fluid">
+
+  <div class="span4">
+
+    <h3><%=t('.current_courses_heading')%></h3>
+    <p class="muted">
+      <%= @current_period.name( I18n.locale ) %>
+      <span class="mini">
+        (<%= @current_period.begins_at %> - <%= @current_period.ends_at %>)
+      </span>
+    </p>
+
+    <%= render :partial => 'course_listing', :locals => { :courses => @current_courses, :short => true, :list_periods => false } %>
+
+  </div>
+
+  <div class="span4">
+
+    <h3><%=t('.upcoming_courses_heading')%></h3>
+    <p class="muted">
+      <%= @upcoming_period.name( I18n.locale ) %>
+      <span class="mini">
+        (<%= @upcoming_period.begins_at %> - <%= @upcoming_period.ends_at %>)
+      </span>
+    </p>
+
+    <%= render :partial => 'course_listing', :locals => { :courses => @upcoming_courses, :short => true, :list_periods => false } %>
+
+  </div>
+
+</div>
+
 <p><%= link_to t('.edit_schedule'), studyplan_schedule_path %></p>

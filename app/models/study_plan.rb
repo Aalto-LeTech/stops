@@ -171,8 +171,66 @@ class StudyPlan < ActiveRecord::Base
     needed_courses.merge(manual_courses)
   end
 
-  def passed?(course)
-    passed_courses.include?(course.id)
+  # Returns the study plan courses that are scheduled
+  def scheduled_courses
+    study_plan_courses.where( 'period_id IS NOT NULL' ).order( 'period_id' )
+  end
+
+  # Returns the study plan courses that are unscheduled
+  def unscheduled_courses
+    study_plan_courses.where( 'period_id IS NULL' ).sort { |a, b| a.course_code <=> b.course_code }
+  end
+
+  # Returns the periods that contain scheduled courses
+  def scheduled_periods
+    Period.where( id: ( scheduled_courses.map { |course| course.period_id } ).uniq ).order( begins_at )
+  end
+
+  # Returns the courses scheduled to start in the given period
+  def courses_scheduled_to_period( period )
+    scheduled_courses.where( period_id: period.id )
+  end
+
+  # Returns an ordered array of periods with scheduled courses (see code)
+  def ordered_array_of_periods_with_scheduled_courses
+    hash = {}
+    scheduled_courses.each do |study_plan_course|
+      # find the periods over which this course spans
+      period = study_plan_course.period  # start period
+      length = study_plan_course.length_or_one
+      periods = length > 1 ? period.find_next_periods( length - 1 ) << period : [ period ]
+      # add this course as 'ongoing' to these periods
+      periods.each_with_index do |period, i|
+        if hash.has_key?( period ) == false
+          hash[ period ] = {
+            starting_courses:    [],
+            continuing_courses:  [],
+            ending_courses:      [],
+            total_courses:       0,
+            total_load:          0
+          }
+        end
+        # cumulate data
+        hash_syms = []
+        hash_syms << ( i == periods.size - 1 ? :starting_courses : :continuing_courses )
+        hash_syms << :ending_courses if periods.size == 1 or i == periods.size - 2
+        #hash_sym = (i == 0 ? :starting_courses : (i == periods.size - 1 ? :ending_courses : :continuing_courses ) )
+        hash_syms.each do |hash_sym|
+          hash[ period ][ hash_sym ] << study_plan_course
+        end
+        hash[ period ][ :total_load ] += study_plan_course.credits / length
+        hash[ period ][ :total_courses ] += 1
+      end
+    end
+    # transform the hash into an ordered array (by period start date)
+    array = []
+    hash.keys.each do |period|
+      array << {
+        period:  period,
+        data:    hash[ period ]
+      }
+    end
+    return array.sort { |a, b| a[:period].begins_at <=> b[:period].begins_at }
   end
 
 end

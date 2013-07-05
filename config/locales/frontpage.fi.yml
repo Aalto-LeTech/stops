@@ -9,7 +9,7 @@ fi:
     
     staff_dashboard:
       heading: "Ohjauskeskus"
-      welcome: "Hei %{name}! Tämä on sinun ohjauskeskuksesi."
+      welcome: "Tervetuloa %{name}! Tämä on sinun ohjauskeskuksesi."
 
     plans:
       heading: "Opintosuunnitelma"
@@ -25,8 +25,11 @@ fi:
 
     courses:
       heading: "Kurssit"
+      unscheduled_courses_heading: "Aikatauluttamattomat"
+      scheduled_courses_heading: "Aikataulutetut"
       passed_courses_heading: "Suoritetut"
-      chosen_courses_heading: "Valitut"
+
+    course_listing:
       no_courses: "Ei kursseja"
       course_code: "Koodi"
       course_name: "Nimi"
@@ -37,3 +40,6 @@ fi:
     schedule:
       heading: "Kalenteri"
       edit_schedule: "Muokkaa kalenteria"
+      current_courses_heading: "Tässä periodissa"
+      upcoming_courses_heading: "Ensi periodissa"
+

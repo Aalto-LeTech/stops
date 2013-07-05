@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130620064359) do
+ActiveRecord::Schema.define(:version => 20130703111502) do
 
   create_table "abstract_courses", :force => true do |t|
     t.string "code"
@@ -67,6 +67,7 @@ ActiveRecord::Schema.define(:version => 20130620064359) do
   end
 
   add_index "competence_nodes", ["abstract_course_id", "curriculum_id"], :name => "index_competence_nodes_on_abstract_course_id_and_curriculum_id"
+  add_index "competence_nodes", ["type"], :name => "index_competence_nodes_on_type"
 
   create_table "course_descriptions", :force => true do |t|
     t.string  "locale"
@@ -86,6 +87,8 @@ ActiveRecord::Schema.define(:version => 20130620064359) do
     t.text    "comments"
   end
 
+  add_index "course_descriptions", ["scoped_course_id"], :name => "index_course_descriptions_on_scoped_course_id"
+
   create_table "course_instances", :force => true do |t|
     t.integer "abstract_course_id", :null => false
     t.integer "period_id",          :null => false
@@ -93,6 +96,7 @@ ActiveRecord::Schema.define(:version => 20130620064359) do
   end
 
   add_index "course_instances", ["abstract_course_id", "period_id"], :name => "index_course_instances_on_abstract_course_id_and_period_id", :unique => true
+  add_index "course_instances", ["abstract_course_id"], :name => "index_course_instances_on_abstract_course_id"
 
   create_table "course_prereqs_cache", :force => true do |t|
     t.integer "scoped_course_id", :null => false
@@ -151,6 +155,8 @@ ActiveRecord::Schema.define(:version => 20130620064359) do
     t.date    "begins_at"
     t.date    "ends_at"
   end
+
+  add_index "periods", ["begins_at"], :name => "index_periods_on_begins_at"
 
   create_table "roles", :force => true do |t|
     t.integer "user_id",   :null => false
@@ -234,6 +240,8 @@ ActiveRecord::Schema.define(:version => 20130620064359) do
     t.integer  "user_id"
     t.integer  "curriculum_id", :null => false
   end
+
+  add_index "study_plans", ["user_id"], :name => "index_study_plans_on_user_id"
 
   create_table "temp_courses", :force => true do |t|
     t.integer  "curriculum_id",   :null => false

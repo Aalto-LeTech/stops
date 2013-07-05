@@ -46,5 +46,11 @@ class Ability
       scoped_course.curriculum.has_admin?(user) || scoped_course.curriculum.has_teacher?(user)
     end
     
+    
+    # Studyplan
+    can [:read, :update], StudyPlan do |plan|
+      plan.user = user
+    end
+    
   end
 end

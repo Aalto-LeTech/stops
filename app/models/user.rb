@@ -57,6 +57,7 @@ class User < ActiveRecord::Base
 
   # Returns the periods between the beginning of the user's studies and the expected graduation
   def relevant_periods
+    Period.current.find_next_periods(35) unless self.first_study_period
     self.first_study_period.find_next_periods(35) # 5 periods * 7 years
   end
 
@@ -74,9 +75,9 @@ class User < ActiveRecord::Base
   # Returns true if the user has passed (grade > 0) the given course and false
   # otherwise
   def passed?( abstract_course )
-    abstract_course.nil? ? false : ( self.user_courses.where(
+    abstract_course.nil? ? false : self.user_courses.where(
         'abstract_course_id = ? AND grade > ?', abstract_course.id, 0
-        ).first != nil )
+        ).exists?
   end
 
   # Returns passed courses

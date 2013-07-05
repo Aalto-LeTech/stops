@@ -16,6 +16,9 @@ class Period < ActiveRecord::Base
 
 
   has_many :period_descriptions, :dependent => :destroy
+  
+  has_one :localized_description, :class_name => "PeriodDescription", 
+          :conditions => proc { "locale = '#{I18n.locale}'" }
 
   has_many :course_instances
 
@@ -23,6 +26,11 @@ class Period < ActiveRecord::Base
   def name(locale)
     name = PeriodDescription.where(:period_id => self.id, :locale => locale.to_s).first
     name ? name.name : ''
+  end
+  
+  def localized_name
+    desc = localized_description
+    desc.name
   end
 
   def symbol
@@ -37,7 +45,7 @@ class Period < ActiveRecord::Base
 
   # Finds the next period following this period
   def find_next_periods(limit=1)
-    Period.where(["begins_at > ?", self.ends_at]).order("begins_at").limit(limit)
+    Period.where(["begins_at >= ?", self.ends_at]).order("begins_at").limit(limit)
   end
 
   def to_roman_numeral
@@ -51,7 +59,7 @@ class Period < ActiveRecord::Base
 
   # Returns the period that was active at the given date
   def self.find_by_date(date)
-    self.where(["begins_at <= ? AND ends_at > ?", date, date]).first
+    Period.where(["begins_at <= ? AND ends_at > ?", date, date]).first
   end
 
 

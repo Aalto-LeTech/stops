@@ -1,0 +1,42 @@
+= Phuksi =
+
+Paavo on RAK-ohjelman phuksi, joka käyttää ensimmäistä kertaa O4:ää HOPSin tekemiseen.
+Hän kirjautuu sisään O4:ään ja saa listan tarjolla olevista kandiohjelmista.
+Paavo klikkaa RAK-kompetenssia ja näkee, mitä kursseja se sisältää.
+Hän klikkaa 'Lisää opintosuunnitelmaan'-nappulaa, jolloin kompetenssi ja sen sisältämät kurssit ilmestyvät suunnitelmaan.
+
+Paavo haluaa selailla valinnaisia kursseja. Hän klikkaa 'Valitse tukevia kursseja'.
+'Tukevat kurssit'-listassa Paavo klikkailee suunnitelmassa olevia kompetensseja ja kursseja saa listan kursseista, jotka tukevat tai syventävät kyseisiä taitoja. [Tämän pitää olla interaktiivinen näkymä.]
+
+Paavo haluaa lisätä suunnitelmaan kielten kursseja, jotka eivät ole kurssiverkossa. Hän klikaa 'Lisää kursseja'-nappulaa, pääsee kurssihakuun ja kirjoittaa 'Saksa'. Ruudulle ilmestyy lista kursseista, niiden ajankohdat ja laajuudet. Kurssi klikkaamalla näkee lisää yksityiskohtia. Paavo klikkaa yhtä kurssia ja siitä 'Lisää opintosuunnitelmaan'.
+
+Paavo siirtyy aikatauluttamaan kursseja. Hän klikkaa 'Kalenteri'-nappulaa.
+Kalenterissa kurssit ovat valmiiksi ryhmiteltynä esitietojärjestykseen. Paavo siirtelee kursseja raahaamalla periodilta toiselle. Jos esitiedot menevät väärään järjestykseen, näkyy jonkinlainen varoitus.
+Paavo klikkaa 'Tulosta'-nappulaa ja saa opintosuunnitelmansa tulosteena. Lopuksi Paavo painaa Tallenna-nappulaa.
+
+Paavon täytyy ilmoittautua kursseille Oodissa. Hän klikkaan Oodi-linkkiä ja klikkailee ilmoittautumiset sinne tulosteen perusteella.
+
+
+= Suunnitelman päivittäminen =
+
+Mauno on toisen vuoden opiskelija, joka päivittää opintosuunnitelman toisen vuoden syksynä. Osan suunnitelluista kursseista hän on skipannut, ja hän on lukenut muutaman ylimääräisen kurssin.
+Hän klikkaa 'Kalenteri'-nappulaa. Mauno vetää suorittamatta jääneet kurssit eteenpäin seuraavalle mahdolliselle toteutuskerralle. Suoritettuihin kursseihin hän täydentää arvosanat.
+
+
+= Maisteriohjelman valinta =
+
+Jaska on kolmannen vuoden opiskelija, joka käyttää O4:ää maisteriohjelman valitsemiseen.
+Hän klikkaa 'Kompetenssit'-nappulaa ja pääsee selailemaan tarjolla olevia kompetensseja. Kullekin kompetenssille näkyy, mitä siihen sisältyviä kursseja Jaska on jo suorittanut ja paljonko pitäisi vielä lukea. Jaska klikkaa yhdelle kompetenssille 'Lisää suunnitelmaan'.
+
+
+ 
+= Maisteriohjelman valinta, jos ei ole tehnyt aiemmin suunnitelmaan O4:llä =
+
+Aatu on neljännen vuoden opiskelija, joka ei ole tehnyt aiemmin opintosuunitelmaa O4:llä, mutta haluaa siirtyä käyttämään sitä.
+Hän valitsee kompetenssit ja ylimääräiset suoritetut kurssit suunnitelmaan ja siirtää ne aikataulunäkymässä oikeille periodeille.
+
+
+
+= Tuutor tarkastaa opiskelijan opintosuunnitelman =
+
+Tuutor kirjautuu O4:ään ja näkee listan omista tuutoroitavistaan. Hän klikkaa tuutoroitavaa ja saa tämän kurssilista periodeittain. Listassa näkyy varoitus, jos pakollisia kursseja puuttuu tai vaadittu opintopistemäärä ei täyty. Tuutor klikkaa 'Hyväksy suunnitelma'-nappulaa. Ruudulla näkyy myös opiskelijan sähköpostiosoite, jotta Tuutor voi lähettää opiskelijalle sähköpostia.

@@ -47,10 +47,10 @@ class ScopedCourse < CompetenceNode
            :source      => :strict_prereqs
 
   # Prerequisite courses of this course
-  has_many :prereqs,
-           :through => :course_prereqs,
-           :source  => :prereq,
-           :order   => 'requirement DESC, course_code'
+  has_many :prereqs, 
+           :through => :course_prereqs, 
+           :source  => :prereq
+           #:order   => 'requirement DESC, course_code'
 
   has_many :strict_prereqs,
            :through     => :strict_prerequirement_skills,

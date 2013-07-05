@@ -113,7 +113,8 @@ class @Period
   # @param course Course that occupies the slot.
   occupySlot: (slot, length, course) ->
     @slots[slot] = course
-    @credits(@credits() + course.credits)
+    
+    @credits(@credits() + course.credits())
     
     @nextPeriod.occupySlot(slot, length - 1, course) if length > 1 && @nextPeriod
 
@@ -123,9 +124,10 @@ class @Period
   # @param length How many periods to span
   freeSlot: (slot, length) ->
     course = @slots[slot]
-    @credits(@credits() - course.credits) if course
-    
     @slots[slot] = false
+    
+    # FIXME: this breaks if user changes credits before removing course
+    @credits(@credits() - course.credits()) if course
     
     @nextPeriod.freeSlot(slot, length - 1) if length > 1 && @nextPeriod
 

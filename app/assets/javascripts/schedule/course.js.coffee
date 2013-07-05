@@ -1,12 +1,14 @@
 class @Course
 
   constructor: (data) ->
-    this.loadJson(data || {})
-    
     @hilightSelected = ko.observable(false)
-    @hilightPrereq = ko.observable(false)
+    @hilightPrereq   = ko.observable(false)
     @hilightPrereqTo = ko.observable(false)
-    @orderWarning = ko.observable(false)
+    @orderWarning    = ko.observable(false)
+    
+    @locked         = false             # Is the course immovable?
+    @credits        = ko.observable()
+    @grade          = ko.observable()
     
     @position = ko.observable({x: 0, y: 0, height: 1})
     
@@ -20,21 +22,29 @@ class @Course
     @courseInstance = undefined         # Scheduled CourseInstance
     @slot           = undefined         # Slot number that this course occupies
     @length         = 1                 # Length in periods
-    @locked         = false             # Is the course immovable?
     @unschedulable  = false             # true if period allocation algorithm cannot find suitable period
     @changed        = false             # Tracks whether changes need to be saved
+    
+    this.loadJson(data || {})
 
 
   loadJson: (data) ->
     @id = data['id']
     @course_code = data['course_code'] || ''
     @name = data['localized_name'] || ''
-    @credits = data['credits'] || 0
-    @grade = undefined  # TODO
+    @credits(data['credits'] || 0)
+    @grade(data['grade'])
   
   toJson: ->
     json = { scoped_course_id: @id }
     json['period_id'] = @period.id if @period?
+    json['course_instance_id'] = @courseInstance.id if @courseInstance?
+    
+    grade = parseInt(@grade())
+    credits = parseInt(@credits())
+    json['grade'] = grade if grade > 0
+    json['credits'] = credits if cradits > 0
+    
     return json
   
 

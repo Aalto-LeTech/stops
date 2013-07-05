@@ -17,4 +17,3 @@
 //= require_tree ./templates/
 //= require o4-jquery-extensions
 //= require bootstrap
-//= require jquery.mCustomScrollbar.min

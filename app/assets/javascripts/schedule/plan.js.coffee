@@ -240,7 +240,7 @@ class @PlanView
   save: ->
     # {
     #   "study_plan_courses": [
-    #     {"period_id": 1, "scoped_course_id": 71},
+    #     {"period_id": 1, "course_instance_id": 45, "scoped_course_id": 71},
     #     {"period_id": 2, "scoped_course_id": 35},
     #     ...
     #   ]

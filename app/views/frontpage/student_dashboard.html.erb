@@ -10,7 +10,7 @@
 </p>
 
 
-<% if @study_plan %>
+<% if false && @study_plan %>
 
   <%= render :partial => 'schedule' %>
 
@@ -32,3 +32,12 @@
   </div>
 
 <% end %>
+
+<div id="plan" data-studyplan-path="<%= plan_path(@study_plan.id) %>">
+  <!-- ko foreach: courses -->
+    <div class="course">
+      <span data-bind="text: course_code"></span>
+      <span data-bind="text: name"></span>
+    </div>
+  <!-- /ko -->
+</div>

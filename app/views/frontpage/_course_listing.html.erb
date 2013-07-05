@@ -1,0 +1,56 @@
+<% if defined?(heading) %>
+  <h3><%= heading %></h3>
+<% end %>
+
+<% if courses.empty? %>
+  <%= t('.no_courses') %>
+
+<% else %>
+  <% list_periods = defined?(list_periods) ? list_periods : courses.first.period_name( I18n.locale ).nil? ? false : true %>
+  <% list_grades = defined?(list_grades) ? list_grades : courses.first.class == UserCourse ? true : false %>
+
+  <% if defined?(short) && short == true %>
+    <div class="scrollbarred short-period-course-listing">
+  <% else %>
+    <div>
+  <% end %>
+    <table class="course-list">
+      <thead>
+        <tr>
+          <th><%= t('.course_code') %></th>
+          <th><%= t('.course_name') %></th>
+          <th><%= t('.course_extent') %></th>
+          <% if list_periods %>
+            <th><%= t('.course_period') %></th>
+          <% end %>
+          <% if list_grades %>
+            <th><%= t('.course_grade') %></th>
+          <% end %>
+        </tr>
+      </thead>
+      <tbody>
+
+        <%= render :partial => 'frontpage/course_listing_list', :locals => { :courses => courses, :list_periods => list_periods, :list_grades => list_grades } %>
+
+        <% if courses.first.class == UserCourse %>
+          <% credits_sum = courses.inject(0) { |sum, course| sum + course.credits( @study_plan.curriculum ) } %>
+        <% else %>
+          <% credits_sum = courses.inject(0) { |sum, course| sum + course.credits } %>
+        <% end %>
+
+        <tr class="total">
+          <td></td>
+          <td></td>
+          <td><%= credits_sum %></td>
+          <% if list_periods %>
+            <td></td>
+          <% end %>
+          <% if list_grades %>
+            <td><%= sprintf( "%.1f", courses.inject(0) { |sum, course| sum + course.credits( @study_plan.curriculum ) * course.grade } * 1.0 / credits_sum ) %></td>
+          <% end %>
+        </tr>
+
+      </tbody>
+    </table>
+  </div>
+<% end %>

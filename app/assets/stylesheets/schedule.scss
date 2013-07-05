@@ -87,6 +87,8 @@
 
 .plan {
 
+  
+  
   div.period.old-period {
     background-color: #FF7A7A;
   }
@@ -111,7 +113,7 @@
     margin:     0px;
     
     cursor:     move;
-    width:      90px;
+    width:      114px;
     height:     42px;
     text-align: left;
     /* z-index: 2; */
@@ -128,6 +130,11 @@
       top:      2px;
       right:    2px;
       width:    10px;
+    }
+    
+    &.orderWarning {
+      background: #ffa0a0;
+      border-color: #800000;
     }
   }
 }

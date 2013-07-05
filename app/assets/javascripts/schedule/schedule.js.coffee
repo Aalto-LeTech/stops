@@ -4,6 +4,7 @@
 #= require schedule/period
 #= require schedule/course
 #= require schedule/courseinstance
+#= require schedule/scheduler
 
 # Custom KnockOut binding for the jQuery UI draggable
 # usage: data-bind="draggable: {start: dragStartHandler, stop: dragStopHandler}"
@@ -67,6 +68,9 @@ ko.bindingHandlers.position = {
     options['width'] = value.width if value.width?
     options['height'] = value.height if value.height?
     
+    #console.log options
+    # TODO: do not animate if nothing is changed
+    
     el.animate(options, 150)
 }
 
@@ -74,6 +78,8 @@ ko.bindingHandlers.position = {
 jQuery ->
   $plan = $('#plan')
   planUrl = $plan.data('studyplan-path')
+  $plan.disableSelection()  # Make text in the plan div unselectable (to make UI less annoying).
+
   #prereqsPath   = $plan.data('prereqs-path')   # '/' + locale + '/curriculums/' + curriculum_id + '/prereqs'
   #instancesPath = $plan.data('instances-path') # '/' + locale + '/course_instances'
   
@@ -90,33 +96,10 @@ jQuery ->
   
   
   planView = new PlanView(planUrl)
+  
+  # Event handlers
+  $(document).on 'mousedown', '.course', (event) ->
+    course = ko.dataFor(this)
+    planView.selectCourse(course)
+  
   planView.loadPlan()
-  
-#   # Make text in the plan div unselectable (to make UI less annoying).
-#   $("#plan").disableSelection()
-# 
-# 
-#   # Set current period
-#   currentPeriodId = $('.period[data-current-period="true"]', "#plan").data("id")
-#   planView.currentPeriod  = planView.periods[currentPeriodId]
-#   
-#   # Attach event listeners
-#   $("#save-button").click(planView.save)
-# 
-# 
-#   # Get course prereqs by ajax
-  
-  
-  
-
-#   # Init Raphael
-#   planView.initializeRaphael()
-# 
-#   # Put courses on their places
-#   planView.placeCourses()
-# 
-#   # Place new courses automatically
-#   planView.autoplan()
-# 
-#   # Init floating control panel
-#   planView.initializeFloatingSettingsPanel()

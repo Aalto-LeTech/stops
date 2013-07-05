@@ -35,8 +35,12 @@ class PlansController < ApplicationController
   #       ]
   #     },
   #     "courses": [
-  #       {"course_code":"MS-A0001","id":10,"localized_name":"Matriisilaskenta"},
-  #       {"course_code":"MS-A0101","id":11,"localized_name":"Differentiaalilaskenta"},
+  #       {"course_code":"MS-A0001", "id":10, "localized_name":"Matriisilaskenta", "prereq_ids": [11,15,...]},
+  #       {"course_code":"MS-A0101", "id":11, "localized_name":"Differentiaalilaskenta", "prereq_ids": [62,78,...]},
+  #       ...
+  #     ],
+  #     "course_instances": [
+  #       {"course_id": 10, periods: [25,26]},
   #       ...
   #     ],
   #     "periods": [
@@ -48,16 +52,25 @@ class PlansController < ApplicationController
   #   }
   def show
     authorize! :read, @study_plan
-    
     # FIXME: move relevant_periods to StudyPlan
-    periods = @user.relevant_periods.includes(:localized_description).as_json(:only => [:id, :number], :methods => [:localized_name], :root => false)
-    scoped_courses = @study_plan.courses.includes(:localized_description).as_json(:only => [:id, :course_code, :credits], :methods => :localized_name, :root => false)
+    
+    periods = @user.relevant_periods.includes(:localized_description)
+    scoped_courses = @study_plan.courses.includes([:localized_description, :prereqs])
+    
+    # Get course instances
+    abstract_course_ids = scoped_courses.map {|scoped_course| scoped_course.abstract_course_id }
+    course_instances = CourseInstance.where(:abstract_course_id => abstract_course_ids)
+    
+    periods_json = periods.as_json(:only => [:id, :number], :methods => [:localized_name], :root => false)
+    scoped_courses_json = scoped_courses.as_json(:only => [:id, :abstract_course_id, :course_code, :credits], :methods => [:localized_name, :prereq_ids], :root => false)
+    instances_json = course_instances.as_json(:only => [:abstract_course_id, :period_id, :length], :root => false)
  
     respond_to do |format|
       format.json { render json: {
           study_plan: @study_plan,
-          courses: scoped_courses,
-          periods: periods,
+          courses: scoped_courses_json,
+          periods: periods_json,
+          course_instances: instances_json,
           current_period_id: Period.current.id,
         }.to_json(root: false)
       }

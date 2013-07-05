@@ -39,8 +39,8 @@ class ScopedCourse < CompetenceNode
   # Prerequisite courses of this course
   has_many :prereqs, 
            :through => :course_prereqs, 
-           :source  => :prereq, 
-           :order   => 'requirement DESC, course_code'
+           :source  => :prereq
+           #:order   => 'requirement DESC, course_code'
 
   has_many :strict_prereqs, 
            :through     => :strict_prerequirement_skills, 
@@ -225,24 +225,6 @@ class ScopedCourse < CompetenceNode
     
     self.prereqs = self.prereqs_recursive
     self.save
-  end
-  
-  def self.create_random_instances
-    periods = Period.order(:begins_at).all
-    
-    AbstractCourse.find_each do |abstract_course|
-      
-      period_number = rand(4)
-      length = rand(2) + 1
-    
-      periods.each do |period|
-        if period.number == period_number
-          CourseInstance.create(:abstract_course_id => abstract_course.id, :period_id => period.id, :length => length)
-        end
-      end
-    
-    end
-    
   end
 
 end

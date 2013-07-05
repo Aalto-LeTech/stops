@@ -2,24 +2,23 @@ class @Period
 
   constructor: (data) ->
     @credits = ko.observable(0)
-    @courses = []
-    
     @droppedCourse = ko.observable()
+    @hilight = ko.observable(false)
+    @oldPeriod = ko.observable(false)
   
+    # TODO: specify event handler in the binding
     @droppedCourse.subscribe (course) =>
       course.setPeriod(this)
       course.updatePosition()
+      course.updateWarnings()
       
-    #@y = ko.observable()
     @position = ko.observable({y: 0})
     @coursesById = {}              # Courses that have been put to this period
-    @courseInstances = {}          # Courses that are available on this period. courseId => courseInstance
+    #@courseInstances = {}          # Courses that are available on this period. courseId => courseInstance
     @slots            = []         # Array index is slot (column) number. Value is Course occupying the slot or false
     @previousPeriod   = undefined  # Reference to previous sibling
     @nextPeriod       = undefined  # Reference to next sibling
     @sequenceNumber   = undefined  # Sequence number to allow easy testing of the order of periods
-    @isCurrentPeriod  = false
-#     this.currentPeriod = this if (this.isCurrentPeriod) 
 #     
 #     
 #     element.droppable
@@ -59,11 +58,7 @@ class @Period
   getNextPeriod: ->
     return this.nextPeriod
 
-#   # Adds a course to the list of courses that are arranged on this period.
-#   addCourseInstance: (courseInstance) ->
-#     this.courseInstances[courseInstance.getCourse().id] = courseInstance
-# 
-# 
+
   # Puts a course on this period.
   addCourse: (course, slot) ->
     @coursesById[course.id] = course
@@ -77,16 +72,14 @@ class @Period
     # Occupy slots
     this.occupySlot(slot, length, course)
     
-    # Update credits
-    this.updateCredits()
-    
     return slot
 
 
   updateCredits: ->
     credits = 0
-    for id, course of @coursesById
-      credits += course.credits
+    #for id, course of @coursesById
+    #  credits += course.credits
+    
     
     @credits(credits)
 
@@ -97,14 +90,6 @@ class @Period
     
     # Free slots
     this.freeSlot(course.slot, course.length)
-    
-    # Update credits
-    this.updateCredits()
-
-
-  # Returns true if the given course has an instance available on this period.
-  courseAvailable: (course) ->
-    return this.courseInstances[course.id]?
 
 
   findFreeSlot: (length) ->
@@ -128,6 +113,7 @@ class @Period
   # @param course Course that occupies the slot.
   occupySlot: (slot, length, course) ->
     @slots[slot] = course
+    @credits(@credits() + course.credits)
     
     @nextPeriod.occupySlot(slot, length - 1, course) if length > 1 && @nextPeriod
 
@@ -136,6 +122,9 @@ class @Period
   # @param slot The slot to be freed.
   # @param length How many periods to span
   freeSlot: (slot, length) ->
+    course = @slots[slot]
+    @credits(@credits() - course.credits) if course
+    
     @slots[slot] = false
     
     @nextPeriod.freeSlot(slot, length - 1) if length > 1 && @nextPeriod

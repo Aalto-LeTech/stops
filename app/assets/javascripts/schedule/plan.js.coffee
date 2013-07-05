@@ -1,28 +1,36 @@
 class @PlanView
+
+  @PERIOD_HEIGHT: 58
+  @COURSE_WIDTH: 120
+  @COURSE_MARGIN_X: 6
+  @COURSE_MARGIN_Y: 6
+  @COURSE_PADDING_Y: 3
   
   constructor: (@planUrl) ->
     @periods = []
     @periodsById = {}
     
     @courses = []
-    @coursesById = {}
+    @coursesById = {}                # scoped_course_id => Course
+    @coursesByAbstractCourseId = {}  # abstract_course_id => Course
     
     @selectedCourse = ko.observable()
+    #this.initializeRaphael()
     
-    # Period objects, period_id => period object
-#     @currentPeriod: false                # Current period object
-#     @firstPeriod: false
-#     @settings: {
-#       satisfyReqsAutomatically: true,
-#       drawPrerequirementGraphs: true
-#     }
-# 
-#   initializeRaphael: ->
-#     planDiv = $('#plan')
-#     this.paper = Raphael(document.getElementById('plan'), planDiv.width(), planDiv.height())
-# 
-#     # Align SVG canvas with the schedule table
-#     # and allow mouse events to pass through.
+    # TODO:
+    # old periods
+    # add warning if courses are in wrong order
+    # click background -> unselect courses
+    
+    
+  initializeRaphael: ->
+    #planDiv = $('#plan')
+    
+    #this.paper = Raphael(planDiv.get(0), planDiv.width(), planDiv.height())
+    #PlanView::paper = Raphael(document.getElementById('plan'), planDiv.width(), planDiv.height())
+
+    # Align SVG canvas with the schedule table
+    # and allow mouse events to pass through.
 #     $('#plan svg').css({ 
 #       "position": "absolute", 
 #       "pointer-events": "none",
@@ -32,9 +40,6 @@ class @PlanView
 # 
 # 
 #   initializeFloatingSettingsPanel: ->
-#     $automaticArrangement = $("#schedule-automatic-arrangement")
-#     $drawPrereqGraphs     = $("#schedule-draw-req-graphs")
-#     $courseLock           = $("#schedule-course-lock")
 # 
 #     $automaticArrangement.find("img").popover({
 #       title:    planView.translations['popover_help_title'],
@@ -87,17 +92,6 @@ class @PlanView
 #       else
 #         course.unlock()
 #     
-# 
-#   addPeriod: (period) ->
-#     this.periods[period.getId()] = period
-# 
-# 
-#   # Helper function for escaping css selectors
-#   escapeSelector: function(myid) { 
-#     return '#' + myid.replace(/(:|\.)/g,'\\$1');
-#   },
-# 
-# 
 
   loadPlan: () ->
     $.ajax
@@ -105,18 +99,17 @@ class @PlanView
       dataType: 'json',
       success: (data) => this.parsePlan(data)
 
+
   # Loads plan from JSON data
   parsePlan: (data) ->
     # Load periods
     current_period_id = data['current_period_id']
     
-    raw_periods = data['periods']
     periodCounter = 0
     previousPeriod = undefined
-    for raw_period in raw_periods
+    for raw_period in data['periods']
       period = new Period(raw_period)
       
-      period.isCurrentPeriod = true if period.id == current_period_id
       period.sequenceNumber = periodCounter
       period.previousPeriod = previousPeriod
       previousPeriod.nextPeriod = period if previousPeriod
@@ -128,14 +121,29 @@ class @PlanView
       periodCounter++
     
     Period::currentPeriod = @periodsById[current_period_id]
-      
+    
     # Load scoped courses
-    raw_courses = data['courses']
-    for raw_course in raw_courses
+    for raw_course in data['courses']
       course = new Course(raw_course)
       @courses.push(course)
       @coursesById[course.id] = course
+      @coursesByAbstractCourseId[raw_course['abstract_course_id']] = course
+      
+      for prereq_id in raw_course['prereq_ids']
+        prereq = @coursesById[prereq_id]
+        course.addPrereq(prereq) if prereq
     
+    # Load course instances
+    for raw_instance in data['course_instances']
+      course = @coursesByAbstractCourseId[raw_instance['abstract_course_id']]
+      period = @periodsById[raw_instance['period_id']]
+      length = raw_instance['length']
+      
+      continue unless course? && period?
+      course_instance = new CourseInstance(raw_instance['id'], course, period, length)
+      
+      course.addCourseInstance(course_instance)
+      
     
     ko.applyBindings(this)
     
@@ -155,70 +163,78 @@ class @PlanView
           course.setPeriod(period)
           course.updatePosition()
     
+    
+    # Automatically schedule new courses
+    schedule = new Scheduler(@courses)
+    schedule.scheduleUnscheduledCourses()
 
-#   #Loads prereqs from JSON data.
-#   loadPrereqs: (data) ->
-#     for (array_index in data)
-#       rawData = data[array_index].course_prereq
-# 
-#       # TODO: would be better to have a dictionary for storing Course objects
-# 
-#       # Find elements by course code
-#       $course = $(planView.escapeSelector('course-' + rawData.course_code))
-#       $prereq = $(planView.escapeSelector('course-' + rawData.prereq_code))
-# 
-#       # If either course is missing from DOM, skip
-#       continue if ($course.length < 1 || $prereq.length < 1)
-# 
-#       $course.data('object').addPrereq($prereq.data('object'))
-# 
-# 
-#   # Loads course instances from JSON data
-#   loadCourseInstances: (data) ->
-#     for (array_index in data)
-#       rawData = data[array_index].course_instance
-#       $course = $(planView.escapeSelector('course-' + rawData.course_code))
-#       $period = $('#period-' + rawData.period_id)
-# 
-#       continue if ($course.length < 1 || $period.length < 1)
-# 
-#       course = $course.data('object')
-#       period = $period.data('object')
-#       ci = new CourseInstance(course, period, rawData.length, rawData.id)
-#       period.addCourseInstance(ci)
-#       course.addCourseInstance(ci)
-# 
-# 
-#   # Places courses on periods according to the information provided in HTML
-#   placeCourses: ->
-#     $('.course').each (i, element) ->
-#       course = $(element).data('object')
-#       period_id = $(element).data('period')
-# 
-#       period = planView.periods[period_id]
-#       course.setPeriod(period) if (period)
-# 
-# 
-  # Automatically arranges courses that are not on any period
-  autoplan: ->
-    for course in @courses
-      continue if course.period?
-      
-      #course.period = Period::currentPeriod
-      
-      # Put course after its prereqs (those that have been attached)
-      course.postponeAfterPrereqs()
-      
-      # Sanity check 
-      #if (!course.getPeriod() && course.locked)
-      #  console.log("SANITY CHECK FAILED: Course is locked, but doesn't have a period!")
+    for courseId,period of schedule.schedule
+      course = @coursesById[courseId]
+      unless course
+        console.log "Unknown course #{courseId}"
+        continue
+    
+      course.setPeriod(period)
+      course.updatePosition()
 
-      # If course is still unattached, put it on the first period
-      #period = course.period
-      unless course.period   #(!period? && !course.unschedulable) || (period && period.earlierThan(period.getCurrentPeriod())
-        course.postponeTo(Period::currentPeriod)
+
+  unselectCourses: (data, event) ->
+    this.selectCourse()
+
+  selectCourse: (course) ->
+    selectedCourse = @selectedCourse()
+    
+    # Reset hilights
+    if selectedCourse
+      for period in selectedCourse.periods
+        period.hilight(false)
+    
+      selectedCourse.hilightSelected(false)
       
-      course.satisfyPostreqs()        # Move forward those courses that depend (recursively) on the newly added course
+      for id,other of selectedCourse.prereqTo
+        other.hilightPrereqTo(false)
+        
+      for id,other of selectedCourse.prereqs
+        other.hilightPrereq(false)
+    
+    # Select new course
+    @selectedCourse(course)
+    
+    return unless course
+    
+    # Hilight selected
+    course.hilightSelected(true)
+    
+    # Hilight prereqs
+    for id,other of course.prereqs
+      other.hilightPrereq(true)
+
+    # Hilight courses for which this is a prereq
+    for id,other of course.prereqTo
+      other.hilightPrereqTo(true)
+    
+    # Hilight the periods that have this course
+    for period in course.periods
+      period.hilight(true)
+      
+    
+#       if (period.laterOrEqual(planView.currentPeriod)) {
+#         period.element.addClass("receiver");
+# 
+#         if (period.id in course.prereqsUnsatisfiableIn) {
+#           period.element.addClass("warning");
+#         }
+#       } else {
+#         period.element.addClass("old-period");
+#       }
+#     }
+# 
+# 
+#     # Draw requirement graphs for selected course */
+#     if (planView.settings.drawPrerequirementGraphs) {
+#       course.drawPrereqPaths();
+#     }
+#   }
 
 
   save: ->

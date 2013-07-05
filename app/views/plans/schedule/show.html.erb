@@ -51,24 +51,27 @@
         <button id="save-button" data-bind="click: save"><%= t('.schedule_save_button') %></button>
       </div> 
 
-      <div id="course-desc-block" class="control-block hidden" data-bind="with: selectedCourse">
-        <h3><%= t('.schedule_controls_selected_course') %></h3>
-        <p id="course-id">
-          <span class="control-course-code" data-bind="course_code"></span>
-          <span class="control-course-name" data-bind="name"></span>
-        </p>
-        <p>
-          <span id="course-credits" data-bind="credits"></span> <%= t('.schedule_credits') %>
-        </p>
-        <p>
-          <%= t('.course_prereqs') %>
-          <span id="course-prereqs"></span>
-        </p>
-        <h4><%= t :schedule_course_prereqs_title %></h4>
-        <p id="course-prereqs-list">
-        
-        </p>
-      </div>
+      <!-- Selected course details -->
+      <!-- ko if: selectedCourse -->
+        <div id="course-desc-block" class="control-block well" data-bind="with: selectedCourse">
+          <h3><%= t('.schedule_controls_selected_course') %></h3>
+          <p id="course-id">
+            <span class="control-course-code" data-bind="text: course_code"></span>
+            <span class="control-course-name" data-bind="text: name"></span>
+          </p>
+          <p>
+            <span id="course-credits" data-bind="text: credits"></span> <%= t('.cr') %>
+          </p>
+          <p>
+            <%= t('.course_prereqs') %>
+            <span id="course-prereqs"></span>
+          </p>
+          <h4><%= t :schedule_course_prereqs_title %></h4>
+          <p id="course-prereqs-list">
+          
+          </p>
+        </div>
+      <!-- /ko -->
     </div>
   </div>
 
@@ -84,25 +87,23 @@
     <p id="status"></p>
 
     <div class="plan" id="plan"
-      data-studyplan-path="<%= plan_path(@study_plan.id) %>"
-      >
+      data-studyplan-path="<%= plan_path(@study_plan.id) %>">
       <!--
       data-schedule-path="<%= studyplan_schedule_path %>"
       data-prereqs-path="<%= prereqs_curriculum_path(@curriculum.id) %>"
       data-instances-path="<%= course_instances_path %>" 
       -->
-      <% # <div id="svg"></div>
-      %>
+      <div id="svg"></div>
       
       <!-- ko foreach: periods -->
-        <div class="period" data-bind="droppable: droppedCourse, position: position">
+        <div class="period" data-bind="droppable: droppedCourse, position: position, css: {'receiver': hilight, 'old-period': oldPeriod}">
           <div class="period-name" data-bind="text: name"></div>
           <div class="period-credits"><span data-bind="text: credits"></span> op</div>
         </div>
       <!-- /ko -->
 
       <!-- ko foreach: courses -->
-        <div class="course" data-bind="draggable: {start: dragStarted}, position: position, click: courseClicked">
+        <div class="course" data-bind="draggable: {}, position: position, css: {'selected': hilightSelected, 'prereq-of': hilightPrereq, 'prereq-to': hilightPrereqTo, 'orderWarning': orderWarning}">
           <span data-bind="text: course_code"></span>
           <span data-bind="text: name"></span>
         </div>

@@ -61,6 +61,8 @@ en:
 
         heading: "My study plan"
         empty_instructions: "Please explore the study guide and choose competences that you find interesting"
+        Credits: "Credits"
+        Grade: "Grade"
 
     periods:
       index:

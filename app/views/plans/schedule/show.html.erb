@@ -38,16 +38,6 @@
           </div>
         </div>
 
-        <div class="control-group" id="schedule-course-lock">
-          <label for="schedule-course-lock-input">
-            <%= t('.schedule_course_lock_checkbox') %>
-          </label>
-          <div class="controls">
-            <input id="schedule-course-lock-input" type="checkbox" disabled="true" /> 
-            <%= image_tag("glyphicons_195_circle_info.png", :size => "16x16" ) %>
-          </div>
-        </div>
-
         <button id="save-button" data-bind="click: save"><%= t('.schedule_save_button') %></button>
       </div> 
 
@@ -56,12 +46,35 @@
         <div id="course-desc-block" class="control-block well" data-bind="with: selectedCourse">
           <h3><%= t('.schedule_controls_selected_course') %></h3>
           <p id="course-id">
-            <span class="control-course-code" data-bind="text: course_code"></span>
-            <span class="control-course-name" data-bind="text: name"></span>
+            <span data-bind="text: course_code"></span>
+            <span data-bind="text: name"></span>
           </p>
+          
           <p>
-            <span id="course-credits" data-bind="text: credits"></span> <%= t('.cr') %>
+            <label>
+              <%=t '.Credits' %>:
+              <input type="textarea" data-bind="value: credits, valueUpdate: 'keyup'" />
+            </label>
+            <%= t('.cr') %>
           </p>
+          
+          <p>
+            <label>
+              <%=t '.Grade' %>:
+              <input type="textarea" data-bind="value: grade, valueUpdate: 'keyup'" /> <%= t('.cr') %>
+            </label>
+          </p>
+          
+          <div class="control-group" id="schedule-course-lock">
+            <label for="schedule-course-lock-input">
+              <%= t('.schedule_course_lock_checkbox') %>
+            </label>
+            <div class="controls">
+              <input id="schedule-course-lock-input" type="checkbox" disabled="true" /> 
+              <%= image_tag("glyphicons_195_circle_info.png", :size => "16x16" ) %>
+            </div>
+          </div>
+          
           <p>
             <%= t('.course_prereqs') %>
             <span id="course-prereqs"></span>

@@ -123,7 +123,6 @@ class @DashboardView
 
     # Show data by applying (rendering) Knockout bindings
     ko.applyBindings(this)
-    #$('.scrollbarred').mCustomScrollbar()
 
 
   unselectCourses: (data, event) ->

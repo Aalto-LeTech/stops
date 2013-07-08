@@ -1,13 +1,12 @@
 class @Course
 
   constructor: (data) ->
-    this.loadJson(data || {})
-
     @hilightSelected     = ko.observable(false)
     @hilightPrereq       = ko.observable(false)
     @hilightPrereqTo     = ko.observable(false)
     @orderWarning        = ko.observable(false)
 
+    @locked              = false             # Is the course immovable?
     @position            = ko.observable({x: 0, y: 0, height: 1})
 
     @instancesById       = {}                # instanceId => CourseInstance
@@ -21,23 +20,33 @@ class @Course
     @courseInstance      = undefined         # Scheduled CourseInstance
     @slot                = undefined         # Slot number that this course occupies
     @length              = 1                 # Length in periods
-    @locked              = false             # Is the course immovable?
     @unschedulable       = false             # true if period allocation algorithm cannot find suitable period
     @changed             = false             # Tracks whether changes need to be saved
 
+    @credits             = ko.observable()
+    @grade               = ko.observable()
     @passedInstance      = undefined
-    @grade               = undefined
+
+    this.loadJson(data || {})
 
 
   loadJson: (data) ->
     @id                  = data['id']
     @code                = data['course_code'] || ''
     @name                = data['localized_name'] || ''
-    @credits             = data['credits'] || 0
+    @credits( data['credits'] || 0 )
+
 
   toJson: ->
     json = { scoped_course_id: @id }
     json['period_id'] = @period.id if @period?
+    json['course_instance_id'] = @courseInstance.id if @courseInstance?
+
+    grade = parseInt(@grade())
+    credits = parseInt(@credits())
+    json['grade'] = grade if grade > 0
+    json['credits'] = credits if credits > 0
+
     return json
 
 
@@ -59,7 +68,7 @@ class @Course
   # Sets the course as passed with the given course instance and grade
   setAsPassed: ( instanceId, grade ) ->
     @passedInstance = @instancesById[instanceId]
-    @grade          = grade
+    @grade( grade )
 
 
   # Moves the course to the given period, to a free slot. Does not update DOM.
@@ -500,13 +509,13 @@ class @CourseTable
           else if k == 'n'
             f = course.name
           else if k == 'x'
-            f = course.credits
+            f = course.credits()
           else if k == 'p'
             f = course.period.name
           else if k == 'P'
             f = course.passedInstance.period.name
           else if k == 'g'
-            f = course.grade
+            f = course.grade()
           else
             f = 'UNDEFINED!'
           tr.push( '<td>' + f + '</td>' )

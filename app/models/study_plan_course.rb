@@ -20,15 +20,15 @@ class StudyPlanCourse < ActiveRecord::Base
 
   belongs_to :study_plan
   belongs_to :scoped_course
-  # belongs_to :course_instance  C20130619
+  belongs_to :course_instance
   belongs_to :period
 
   def course_code
     scoped_course.course_code
   end
 
-  def name(locale)
-    scoped_course.name(locale)
+  def localized_name
+    scoped_course.localized_name
   end
 
   def credits
@@ -42,8 +42,8 @@ class StudyPlanCourse < ActiveRecord::Base
   end
 
   # Returns the period name or nil
-  def period_name( locale )
-    period.nil? ? nil : period.name( locale )
+  def localized_period_name
+    period.nil? ? nil : period.localized_name
   end
 
 end

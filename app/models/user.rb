@@ -21,7 +21,7 @@ class User < ActiveRecord::Base
 
   # Plan
   has_one :study_plan, :dependent => :destroy
-  
+
   validates_presence_of :study_plan
   before_create { |user| user.build_study_plan }
 
@@ -80,9 +80,14 @@ class User < ActiveRecord::Base
         ).exists?
   end
 
+  # Returns passed courses and sorts them by course end date
+  def passed_courses_sorted
+    self.passed_courses.sort { |a, b| a.end_date <=> b.end_date }
+  end
+
   # Returns passed courses
   def passed_courses
-    self.user_courses.where( 'grade > ?', 0 ).sort { |a, b| a.end_date <=> b.end_date }
+    self.user_courses.where( 'grade > ?', 0 )
   end
 
 end

@@ -3,13 +3,22 @@ en:
     index:
       not_logged_in_heading: "Log In"
 
-    student_dashboard:
-      heading: "Dashboard"
-      welcome: "Hello %{name}! This is your dashboard."
-    
     staff_dashboard:
       heading: "Dashboard"
       welcome: "Welcome %{name}! This is your dashboard."
+
+    student_dashboard:
+      heading: "Dashboard"
+      welcome: "Hello %{name}! This is your dashboard."
+
+    schedule:
+      heading: "Schedule"
+
+    courses:
+      courses: "My Courses"
+
+    course_table:
+      no_courses: "No courses"
 
     plans:
       heading: "My Study Plan"
@@ -23,23 +32,13 @@ en:
       heading: "Competence election"
       edit: "Edit competences..."
 
-    courses:
-      heading: "My Courses"
-      unscheduled_courses_heading: "Unscheduled"
-      scheduled_courses_heading: "Scheduled"
-      passed_courses_heading: "Passed"
-
-    course_listing:
-      no_courses: "No courses"
-      course_code: "Code"
-      course_name: "Name"
-      course_extent: "Extent"
-      course_period: "Period"
-      course_grade: "Grade"
-
-    schedule:
-      heading: "Schedule"
-      edit_schedule: "Edit schedule"
-      current_courses_heading: "In The Current Period"
-      upcoming_courses_heading: "In The Upcoming Period"
-
+    unscheduled: "Unscheduled"
+    scheduled: "Scheduled"
+    passed: "Passed"
+    current: "In The Current Period"
+    upcoming: "In The Upcoming Period"
+    code: "Code"
+    name: "Name"
+    extent: "Extent"
+    period: "Period"
+    grade: "Grade"

@@ -1,5 +1,4 @@
 //= require bootstrap
-//= require mcustomscrollbar
 //= require default
 //= require curriculums
 //= require competences
@@ -11,3 +10,7 @@
 //= require schedule
 //= require periods
 //= require temp_courses
+
+/*
+  mcustomscrollbar
+*/

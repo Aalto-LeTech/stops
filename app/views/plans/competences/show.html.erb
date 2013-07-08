@@ -53,7 +53,7 @@
   <div class="competence-courses">
     <h3><%= t('.strict_prereqs') %></h3>
 
-    <table class="course-list">
+    <table class="course-table">
       <% credits_counter = included_counter = passed_counter = 0 %>
       <% @competence.courses_recursive.each do |course| %>
         <tr>

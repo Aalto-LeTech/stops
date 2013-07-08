@@ -10,16 +10,16 @@
 </p>
 
 
-<% if false && @study_plan %>
+<div id="plan" data-studyplan-path="<%= plan_path(@study_plan.id) %>">
 
-  <%= render :partial => 'schedule' %>
+  <%= render partial: 'schedule' %>
 
   <div class="row-fluid">
     <div class="span4">
-      <%= render :partial => 'competences' %>
+      <%= render partial: 'competences' %>
     </div>
     <div class="span4">
-      <%= render :partial => 'courses' %>
+      <%= render partial: 'courses' %>
     </div>
   </div>
 
@@ -31,13 +31,4 @@
     </div>
   </div>
 
-<% end %>
-
-<div id="plan" data-studyplan-path="<%= plan_path(@study_plan.id) %>">
-  <!-- ko foreach: courses -->
-    <div class="course">
-      <span data-bind="text: course_code"></span>
-      <span data-bind="text: name"></span>
-    </div>
-  <!-- /ko -->
 </div>

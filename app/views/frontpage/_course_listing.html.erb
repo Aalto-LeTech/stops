@@ -10,11 +10,11 @@
   <% list_grades = defined?(list_grades) ? list_grades : ( courses.first.class == UserCourse ? true : false ) %>
 
   <% if defined?(short) && short == true %>
-    <div class="scrollbarred short-period-course-listing">
+    <div class="scrollbarred short-course-table">
   <% else %>
     <div>
   <% end %>
-    <table class="course-list">
+    <table class="course-table">
       <thead>
         <tr>
           <th><%= t('.course_code') %></th>

@@ -1,0 +1,40 @@
+<% if defined?( courseTable ) %>
+  <div>
+    <span data-bind="html: <%= courseTable %>.preTable"></span>
+    <% if defined?( period ) %>
+      <p>
+        <span class="muted" data-bind="text: <%= period %>.name"></span>
+        <span class="muted mini">
+          (<span data-bind="text: <%= period %>.beginsAt"></span> -
+          <span data-bind="text: <%= period %>.endsAt"></span>)
+        </span>
+      </p>
+    <% end %>
+    <div data-bind="if: <%= courseTable %>.isEmpty">
+      <p>
+        <%= t('.no_courses') %>
+      </p>
+    </div>
+    <div data-bind="ifnot: <%= courseTable %>.isEmpty">
+      <div id="<%= 'short-scrollable-table' if defined?(short) && short == true %>">
+        <div class="scrollarea">
+          <table id="<%= courseTable %>" class="course-table">
+            <colgroup data-bind="html: <%= courseTable %>.colGroup()"></colgroup>
+            <thead>
+              <tr class="fixable" data-bind="foreach: <%= courseTable %>.ths">
+                <th><span class="fix" data-bind="text: $data"></span></th>
+              </tr>
+            </thead>
+            <tbody data-bind="foreach: <%= courseTable %>.trs">
+              <tr data-bind="html: $data"></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+<% else %>
+  <p class="alert">
+    COURSES_TABLE: NO 'courseTable' VARIABLE DEFINED!
+  </p>
+<% end %>

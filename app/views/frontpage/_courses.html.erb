@@ -1,21 +1,37 @@
-<h2><%=t('.heading')%></h2>
+<h2>
+  <%= link_to t('.heading'), studyplan_courses_path %>
+</h2>
 
-<div>
-  <%= render :partial => 'course_listing', :locals => { :heading => t('.unscheduled_courses_heading'), :courses => @unscheduled_courses, :short => true, :list_periods => false } %>
-</div>
+<%=
+  render(
+    partial: 'course_table',
+    locals: {
+      courseTable: 'unscheduledCoursesTable',
+      short: true
+    }
+  )
+%>
 
 <br/>
 
-<div>
-  <%= render :partial => 'course_listing', :locals => { :heading => t('.scheduled_courses_heading'), :courses => @scheduled_courses, :short => true, :list_periods => true } %>
-</div>
+<%=
+  render(
+    partial: 'course_table',
+    locals: {
+      courseTable: 'scheduledCoursesTable',
+      short: true
+    }
+  )
+%>
 
 <br/>
 
-<div>
-  <%= render :partial => 'course_listing', :locals => { :heading => t('.passed_courses_heading'), :courses => @passed_courses, :short => true } %>
-</div>
-
-
-
-
+<%=
+  render(
+    partial: 'course_table',
+    locals: {
+      courseTable: 'passedCoursesTable',
+      short: true
+    }
+  )
+%>

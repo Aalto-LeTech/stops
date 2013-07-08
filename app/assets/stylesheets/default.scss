@@ -885,7 +885,7 @@ li.passed {
   position: relative;
   left: 0px;
   top: 0px;
-  
+
   div.course {
     position: absolute;
     width: 500px;
@@ -924,20 +924,20 @@ li.passed {
     li.hilight {
       background: #c0c0ff;
     }
-    
+
     li.hilight-strong {
       background: #b0b0ff;
       text-decoration: underline;
     }
   }
-  
+
   div.competence {
     background: #e0ffe0;
   }
-  
+
   div.cyclic {
     background: #ffe0e0;
-  }  
+  }
 }
 
 
@@ -1101,10 +1101,10 @@ div.competence .competence-skills, div.competence .competence-courses {
 
 
 /*********************
-  Generic course & period lists
+  Generic course & period tables
  *********************/
 
-table.course-list, table.period-list {
+table.course-table, table.period-table {
 
   text-align: left;
 
@@ -1124,13 +1124,65 @@ table.course-list, table.period-list {
   }
 }
 
-table.course-list {
+table.course-table {
+
   font-size: small;
+
   tr.total {
     font-size: normal;
   }
+
+  col {
+    min-width: 5em;
+  }
+
+  col.code {
+    //background-color: #FEE;
+  }
+
+  col.name {
+    //background-color: #EFE;
+  }
+
+  col.extent {
+    //background-color: #EEF;
+  }
+
+  col.period {
+    //background-color: #FFE;
+  }
+
+  col.grade {
+    //background-color: #FEF;
+  }
 }
 
+/* short-scrollable-table
+ *
+ *   reference: http://jsfiddle.net/SubtleGradient/gjajp/
+ */
+
+#short-scrollable-table {
+
+  position: relative;
+  padding-top: 1.5em;
+
+  .fixable .fix {
+    position: absolute;
+  }
+
+  .scrollarea {
+    max-height: 20em;
+    overflow: auto;
+  }
+
+  thead .fix {
+    /*Move above the scroll area into the fake header*/
+    top: 0; /*Must absolutely position the top to avoid bugs in Firefox and IE6*/
+    height: 1.5em;
+    line-height: 1.5em;
+  }
+}
 
 .competence-supporting-courses .course {
   border: 1px solid #8080a0;
@@ -1160,7 +1212,7 @@ table.course-list {
     font-weight: bold;
     @include border-radius(20px);
   }
-  
+
   p {
     margin-bottom: 20px;
   }
@@ -1179,7 +1231,7 @@ div.comment {
     white-space: pre-wrap;
     line-height: 100%;
   }
-  
+
   .sender {
     font-size: small;
     color: gray;

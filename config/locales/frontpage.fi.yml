@@ -1,15 +1,24 @@
-fi: 
+fi:
   frontpage:
     index:
       not_logged_in_heading: "Kirjaudu sisään"
 
-    student_dashboard:
-      heading: "Ohjauskeskus"
-      welcome: "Hei %{name}! Tämä on sinun ohjauskeskuksesi."
-    
     staff_dashboard:
       heading: "Ohjauskeskus"
       welcome: "Tervetuloa %{name}! Tämä on sinun ohjauskeskuksesi."
+
+    student_dashboard:
+      heading: "Ohjauskeskus"
+      welcome: "Hei %{name}! Tämä on sinun ohjauskeskuksesi."
+
+    schedule:
+      heading: "Kalenteri"
+
+    courses:
+      heading: "Kurssit"
+
+    course_table:
+      no_courses: "Ei kursseja"
 
     plans:
       heading: "Opintosuunnitelma"
@@ -23,23 +32,13 @@ fi:
       heading: "Kompetenssivalinnat"
       edit: "Muokkaa kompetenssivalintoja..."
 
-    courses:
-      heading: "Kurssit"
-      unscheduled_courses_heading: "Aikatauluttamattomat"
-      scheduled_courses_heading: "Aikataulutetut"
-      passed_courses_heading: "Suoritetut"
-
-    course_listing:
-      no_courses: "Ei kursseja"
-      course_code: "Koodi"
-      course_name: "Nimi"
-      course_extent: "Laajuus"
-      course_period: "Opintojakso"
-      course_grade: "Arvosana"
-
-    schedule:
-      heading: "Kalenteri"
-      edit_schedule: "Muokkaa kalenteria"
-      current_courses_heading: "Tässä periodissa"
-      upcoming_courses_heading: "Ensi periodissa"
-
+    unscheduled: "Aikatauluttamattomat"
+    scheduled: "Aikataulutetut"
+    passed: "Suoritetut"
+    current: "Tässä periodissa"
+    upcoming: "Ensi periodissa"
+    code: "Koodi"
+    name: "Nimi"
+    extent: "Laajuus"
+    period: "Opintojakso"
+    grade: "Arvosana"

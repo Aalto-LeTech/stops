@@ -54,15 +54,16 @@ fi:
         schedule_course_lock_checkbox: "Lukitse kurssi nykyiselle paikalleen"
         schedule_save_button: "Tallenna suunnitelma"
         schedule_controls_selected_course: "Valittu kurssi"
-        schedule_credit: 
+        schedule_credit:
           one: "opintopiste"
           other: "opintopistettä"
         course_prereqs: "Esitietokurssit:"
 
         heading: "Oma opintosuunnitelma"
         empty_instructions: "Valitse opinto-oppaasta itseäsi kiinnostavat kompetenssit"
-        Credits: "Opintopisteet"
-        Grade: "Arvosana"
+        extent: "Laajuus"
+        grade: "Arvosana"
+        cr: "op"
 
     periods:
       index:
@@ -92,17 +93,17 @@ fi:
   plan_heading: "Oma opintosuunnitelma"
   plan_empty_instructions: "Valitse ensin opinto-oppaasta kompetensseja"
   plan_my_courses: "Omat kurssit"
-        
+
   current_curriculum_heading: "Opinto-opas"
   current_curriculum: "Käytät tällä hetkellä opinto-opasta %{name}"
   choose_curriculum_heading: "Valitse opinto-opas"
   change_curriculum: "Vaihda opinto-opasta..."
   change_curriculum_warning: "Varoitus: Kaikkia valittuja kursseja ja profiileja ei välttämättä ole tarjolla muissa opinto-oppaissa."
-  
+
   schedule_controls: "Suunnitelman hallinta"
   schedule_preferences: "Asetukset"
   schedule_controls_selected_course: "Valittu kurssi"
-  schedule_credit: 
+  schedule_credit:
     one: "opintopiste"
     other: "opintopistettä"
   schedule_courses_total: "Kursseja yhteensä"
@@ -112,7 +113,7 @@ fi:
   schedule_save_button: "Tallenna suunnitelma"
   schedule_course_lock_checkbox: "Lukitse kurssi nykyiselle paikalleen"
   schedule_draw_course_graphs_checkbox: "Piirrä esitietokaaret"
-  
+
   schedule_popover_help_title: "Mitä tämä tekee?"
   schedule_automatic_arrangement_help: "Tämä valinta järjestää kurssit automaattisesti sopivaan järjestykseen siirrettyäsi kursseja."
   schedule_course_lock_help: "Tämä valinta lukitsee valitun kurssin niin, ettei sitä voi liikuttaa nykyisestä sijainnistaan."

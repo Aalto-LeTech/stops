@@ -63,12 +63,14 @@ class @Course
     @instancesById[courseInstance.id] = courseInstance
     @instancesByPeriodId[period.id] = courseInstance
     @instanceCount++
+    #console.log "course[#{@id}]::addCInstance: #:#{@instanceCount} #{courseInstance}"
 
 
   # Sets the course as passed with the given course instance and grade
   setAsPassed: ( instanceId, grade ) ->
     @passedInstance = @instancesById[instanceId]
     @grade( grade )
+    #console.log "course[#{@id}]::setAsPassed: #{@passedInstance} (g:#{grade})"
 
 
   # Moves the course to the given period, to a free slot. Does not update DOM.
@@ -102,20 +104,20 @@ class @Course
     # Update possible prerequirement graph paths of the current course and any of the paths of its postrequirement courses.
     this.updatePrereqPaths()
 
-  # Update warnings
-  updateWarnings: ->
-    warning = false
 
-    for courseId,other of @prereqs
+  # Update warnings FIXME: updates the original source twice...
+  updateWarnings: ( depth ) ->
+    depth = (depth - 1) if depth? else 1
+
+    for id, other of @prereqs
       warning = true if other.period? && @period? && other.period.laterOrEqual(@period)
-      #other.updateWarnings()
+      other.updateWarnings( depth ) if depth > 0
 
-    for courseId,other of @prereqTo
+    for id, other of @prereqTo
       warning = true if other.period? && @period? && other.period.earlierOrEqual(@period)
-      #other.updateWarnings()
+      other.updateWarnings( depth ) if depth > 0
 
     @orderWarning(warning)
-
 
 
 #     $.each this.prereqTo, (key, postReqCourse) ->
@@ -444,11 +446,15 @@ class @Course
     return "M" + fX + "," + fY + "T" + tX + "," + tY;
 
 
+  toString: ->
+    "crs[#{@id}]:{ c:#{@code} p:#{@name} }"
+
+
 
 
 class @CourseTable
 
-  COLKEYS: [ 'c', 'n', 'x', 'p', 'g' ]
+  COLKEYS: [ 'c', 'n', 'x', 'p', 'P', 'g' ]
   COLNAMES: {
     'c': 'code'
     'n': 'name'

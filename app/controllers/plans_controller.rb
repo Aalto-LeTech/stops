@@ -27,28 +27,33 @@ class PlansController < ApplicationController
   # /plans/123.json returns the plan as JSON
   #   {
   #     "study_plan": {
-  #       "curriculum_id":3,
-  #       "study_plan_courses":[
-  #         {"period_id":null,"scoped_course_id":71},
-  #         {"period_id":null,"scoped_course_id":35},
+  #       "curriculum_id": 3,
+  #       "study_plan_courses": [
+  #         {"period_id": 42, "scoped_course_id": 41},
+  #         {"period_id": 44, "scoped_course_id": 60},
   #         ...
   #       ]
   #     },
   #     "courses": [
-  #       {"course_code":"MS-A0001", "id":10, "localized_name":"Matriisilaskenta", "prereq_ids": [11,15,...]},
-  #       {"course_code":"MS-A0101", "id":11, "localized_name":"Differentiaalilaskenta", "prereq_ids": [62,78,...]},
+  #       {"course_code":"MS-A0001", "id":10, "abstract_course_id": 10, "credits":  5, "localized_name":"Matriisilaskenta", "prereq_ids": [11,15,...]},
+  #       {"course_code":"MS-A0101", "id":11, "abstract_course_id": 11, "credits": 10, "localized_name":"Differentiaalilaskenta", "prereq_ids": [62,78,...]},
   #       ...
   #     ],
   #     "course_instances": [
-  #       {"course_id": 10, periods: [25,26]},
+  #       {"abstract_course_id": 10, "lenght": 2, "period_id": 4},
   #       ...
   #     ],
   #     "periods": [
-  #       {"id":25,"number":4,"localized_name":"2009 II syksy"},
-  #       {"id":26,"number":0,"localized_name":"2010 III kevat"},
+  #       {"id": 25, "number": 4, "localized_name": "2009 II syksy", "begins_at": "2009-11-01", "ends_at": "2009-12-31"},
+  #       {"id": 26, "number": 0, "localized_name": "2010 III kevat", "begins_at": "2010-01-01", "ends_at": "2010-02-28"},
   #       ...
   #     ],
-  #     "current_period": 25
+  #     "passed_courses": [
+  #       {"abstract_course_id": 179, "course_instance_id": 2711, "grade": 4, "id": 13}
+  #       {"abstract_course_id": 189, "course_instance_id": 2811, "grade": 5, "id": 14}
+  #       ...
+  #     ],
+  #     "current_period_id": 25
   #   }
   def show
     authorize! :read, @study_plan
@@ -74,7 +79,7 @@ class PlansController < ApplicationController
     )
 
     instances_json = course_instances.as_json(
-      only:     [:abstract_course_id, :period_id, :length],
+      only:     [:id, :abstract_course_id, :period_id, :length],
       root:     false
     )
 

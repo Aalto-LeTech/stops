@@ -54,15 +54,16 @@ en:
         schedule_course_lock_checkbox: "Lock course on its current position"
         schedule_save_button: "Save schedule"
         schedule_controls_selected_course: "Selected course"
-        schedule_credits: 
+        schedule_credits:
           one: "credits"
           other: "credits"
         course_prereqs: "Prerequirements:"
 
         heading: "My study plan"
         empty_instructions: "Please explore the study guide and choose competences that you find interesting"
-        Credits: "Credits"
-        Grade: "Grade"
+        extent: "Extent"
+        grade: "Grade"
+        cr: "cr"
 
     periods:
       index:
@@ -95,11 +96,11 @@ en:
   choose_curriculum_heading: "Choose curriculum"
   change_curriculum: "Change curriculum..."
   change_curriculum_warning: "Warning: Some currently selected courses or profiles may not be available in other curriculums."
-  
+
   schedule_controls: "Schedule controls"
   schedule_preferences: "Preferences"
   schedule_controls_selected_course: "Selected course"
-  schedule_credits: 
+  schedule_credits:
     one: "credits"
     other: "credits"
   schedule_courses_total: "Total courses"

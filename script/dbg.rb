@@ -147,7 +147,7 @@ class Dbggr
   end
 
 
-  # creates a few user courses
+  # returns the start date of the given period name
   def get_period( sin )
     period_to_date = {
       'I'    =>  '-09-01',
@@ -180,7 +180,7 @@ class Dbggr
 
     data.each do |dat|
       puts 'creating user course |%s|...' % [ dat ]
-    
+
       abstract_course = AbstractCourse.where( code: dat[:code] ).first
       if abstract_course.nil?
         raise 'nil abstract course!'
@@ -211,106 +211,22 @@ class Dbggr
 
   def dbg
     @user = User.where( :id => 2 ).first
-
+    #AbstractCourse.fix_abstract_courses
+    #UserCourse.delete_all
+    #CourseInstance.delete_all
+    #AbstractCourse.create_random_instances
+    #y @user
     #create_some_course_instances
     #print_course_class_total_item_counts
     #fix_scoped_courses
     #list_abstract_courses
     #list_scoped_courses
     #list_course_instances
-    list_user_courses
+    #list_user_courses
     #list_periods
     #create_some_user_courses
     #@user.user_courses.sort { |a, b| a.get_end_date <=> b.get_end_date }
     exit
-
-    #y u
-
-    @study_plan = @user.study_plan
-    #y @study_plan
-
-    #y @study_plan.courses.first
-    #y @study_plan.study_plan_courses.first
-
-    i = 0
-    @study_plan.courses.each do |course|
-      i += 1
-      if i < 10
-        next
-      elsif i < 16
-        puts "\n\n=> SC #{course.course_code} #{course.name(@locale)}\n\n"
-        # modify database entries in order to have the course regarded as passed
-    abstract_course
-        #y course
-        #y course.abstract_course
-        if course.abstract_course
-
-          #  create_table "user_courses", :force => true do |t|
-          #    t.integer "user_id",            :null => false
-          #    t.integer "abstract_course_id", :null => false
-          #    t.integer "course_instance_id"
-          #    t.integer "grade"
-          #  end
-          ucourse = UserCourse.create(
-            :user_id             =>  @user.id,
-            :abstract_course_id  =>  course.abstract_course.id,
-            :course_instance_id  =>  course_instance.id,
-            :grade               =>  1 + rand(5)
-          )
-          #ucourse = UserCourse( abstract_course = course.abstract_course )
-          y ucourse
-          #@user.user_courses.append( ucourse )
-        else
-          puts "NO ABSTRACT COURSE"
-        end
-      else
-        break
-      end
-    end
-
-    exit
-
-
-    p = Period.first
-
-    puts p.begins_at
-
-    while d > p.begins_at.class
-      puts d
-    end
-
-    y p
-
-
-    exit
-
-
-    StudyPlanCourse.find_each do |study_plan_course|
-      puts "Scoped: #{study_plan_course.localized_description.name}"
-      if study_plan_course.abstract_course
-        puts "Abstract: #{study_plan_course.abstract_course.code}"
-      else
-        puts "Abstract: NULL"
-      end
-      puts "\n\n"
-    end
-
-
-    exit
-
-
-    User.find_each do |user|
-      puts "User: #{user.studentnumber}"
-      if user.user_courses.size > 0
-        puts "UserCourses:"
-        user.user_courses.each do |user_course|
-          puts " - #{user_course.scoped_course.name}"
-        end
-      else
-        puts "UserCourses: NONE"
-      end
-      puts "\n\n"
-    end
   end
 end
 
@@ -319,7 +235,3 @@ end
 
 dbggr = Dbggr.new
 dbggr.dbg
-
-
-
-

@@ -21,9 +21,9 @@
         <div class="control-group" id="schedule-automatic-arrangement">
           <label for="schedule-automatic-arrangement-input">
             <%= t('.schedule_automatic_arrangement_checkbox') %>
-          </label>  
+          </label>
           <div class="controls">
-            <input id="schedule-automatic-arrangement-input" type="checkbox" /> 
+            <input id="schedule-automatic-arrangement-input" type="checkbox" />
             <%= image_tag("glyphicons_195_circle_info.png", :size => "16x16" ) %>
           </div>
         </div>
@@ -33,55 +33,55 @@
             <%= t('.schedule_draw_course_graphs_checkbox') %>
           </label>
           <div class="controls">
-            <input id="schedule-draw-req-graphs-input" type="checkbox" /> 
+            <input id="schedule-draw-req-graphs-input" type="checkbox" />
             <%= image_tag("glyphicons_195_circle_info.png", :size => "16x16" ) %>
           </div>
         </div>
 
         <button id="save-button" data-bind="click: save"><%= t('.schedule_save_button') %></button>
-      </div> 
+      </div>
 
       <!-- Selected course details -->
       <!-- ko if: selectedCourse -->
         <div id="course-desc-block" class="control-block well" data-bind="with: selectedCourse">
           <h3><%= t('.schedule_controls_selected_course') %></h3>
           <p id="course-id">
-            <span data-bind="text: course_code"></span>
+            <span data-bind="text: code"></span>
             <span data-bind="text: name"></span>
           </p>
-          
+
           <p>
             <label>
-              <%=t '.Credits' %>:
+              <%= t('.extent') %>:
               <input type="textarea" data-bind="value: credits, valueUpdate: 'keyup'" />
             </label>
             <%= t('.cr') %>
           </p>
-          
+
           <p>
             <label>
-              <%=t '.Grade' %>:
-              <input type="textarea" data-bind="value: grade, valueUpdate: 'keyup'" /> <%= t('.cr') %>
+              <%=t '.grade' %>:
+              <input type="textarea" data-bind="value: grade, valueUpdate: 'keyup'" />
             </label>
           </p>
-          
+
           <div class="control-group" id="schedule-course-lock">
             <label for="schedule-course-lock-input">
               <%= t('.schedule_course_lock_checkbox') %>
             </label>
             <div class="controls">
-              <input id="schedule-course-lock-input" type="checkbox" disabled="true" /> 
+              <input id="schedule-course-lock-input" type="checkbox" disabled="true" />
               <%= image_tag("glyphicons_195_circle_info.png", :size => "16x16" ) %>
             </div>
           </div>
-          
+
           <p>
             <%= t('.course_prereqs') %>
             <span id="course-prereqs"></span>
           </p>
           <h4><%= t :schedule_course_prereqs_title %></h4>
           <p id="course-prereqs-list">
-          
+
           </p>
         </div>
       <!-- /ko -->
@@ -104,10 +104,10 @@
       <!--
       data-schedule-path="<%= studyplan_schedule_path %>"
       data-prereqs-path="<%= prereqs_curriculum_path(@curriculum.id) %>"
-      data-instances-path="<%= course_instances_path %>" 
+      data-instances-path="<%= course_instances_path %>"
       -->
       <div id="svg"></div>
-      
+
       <!-- ko foreach: periods -->
         <div class="period" data-bind="droppable: droppedCourse, position: position, css: {'receiver': hilight, 'old-period': oldPeriod}">
           <div class="period-name" data-bind="text: name"></div>
@@ -117,7 +117,7 @@
 
       <!-- ko foreach: courses -->
         <div class="course" data-bind="draggable: {}, position: position, css: {'selected': hilightSelected, 'prereq-of': hilightPrereq, 'prereq-to': hilightPrereqTo, 'orderWarning': orderWarning}">
-          <span data-bind="text: course_code"></span>
+          <span data-bind="text: code"></span>
           <span data-bind="text: name"></span>
         </div>
       <!-- /ko -->

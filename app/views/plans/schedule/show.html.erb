@@ -12,7 +12,7 @@
 </div>
 
 <div class="row-fluid">
-  <div class="span2">
+  <div class="span3">
     <div id="schedule-controls-container">
       <h2><%= t('.schedule_controls') %></h2>
       <div class="control-block">
@@ -50,20 +50,28 @@
             <span data-bind="text: name"></span>
           </p>
 
-          <p>
-            <label>
-              <%= t('.extent') %>:
-              <input type="textarea" data-bind="value: credits, valueUpdate: 'keyup'" />
-            </label>
-            <%= t('.cr') %>
-          </p>
-
-          <p>
-            <label>
-              <%=t '.grade' %>:
-              <input type="textarea" data-bind="value: grade, valueUpdate: 'keyup'" />
-            </label>
-          </p>
+          <table>
+            <tr data-toggle="tooltip" title="<%= t('.extent_tooltip') %>">
+              <td>
+                <label>
+                  <%= t('.extent') %>:
+                </label>
+              </td>
+              <td>
+                <input class="input-mini" type="number" data-bind="value: credits, valueUpdate: 'keyup'" />
+              </td>
+            </tr>
+            <tr data-toggle="tooltip" title="<%= t('.grade_tooltip') %>">
+              <td>
+                <label>
+                  <%= t('.grade') %>:
+                </label>
+              </td>
+              <td>
+                <input class="input-mini" type="number" data-bind="value: grade, valueUpdate: 'keyup'" />
+              </td>
+            </tr>
+          </table>
 
           <div class="control-group" id="schedule-course-lock">
             <label for="schedule-course-lock-input">
@@ -88,7 +96,7 @@
     </div>
   </div>
 
-  <div class="span10">
+  <div class="span9">
     <h1><%=t('.heading')%></h1>
 
     <% if @study_plan.courses.empty? && @study_plan.competences.empty? %>
@@ -99,17 +107,12 @@
 
     <p id="status"></p>
 
-    <div class="plan" id="plan"
-      data-studyplan-path="<%= plan_path(@study_plan.id) %>">
-      <!--
-      data-schedule-path="<%= studyplan_schedule_path %>"
-      data-prereqs-path="<%= prereqs_curriculum_path(@curriculum.id) %>"
-      data-instances-path="<%= course_instances_path %>"
-      -->
+    <div class="plan" id="plan" data-studyplan-path="<%= plan_path(@study_plan.id) %>">
+
       <div id="svg"></div>
 
       <!-- ko foreach: periods -->
-        <div class="period" data-bind="droppable: droppedCourse, position: position, css: {'receiver': hilight, 'old-period': oldPeriod}">
+        <div class="period" data-bind="droppable: droppedCourse, position: position, css: {'receiver': hilight, 'old': isOld, 'now': isNow}">
           <div class="period-name" data-bind="text: name"></div>
           <div class="period-credits"><span data-bind="text: credits"></span> op</div>
         </div>
@@ -121,6 +124,7 @@
           <span data-bind="text: name"></span>
         </div>
       <!-- /ko -->
+
     </div>
   </div>
 

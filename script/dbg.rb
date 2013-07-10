@@ -211,6 +211,9 @@ class Dbggr
 
   def dbg
     @user = User.where( :id => 2 ).first
+    @user.first_study_period_id = 37
+    @user.save
+    #@user.admin
     #AbstractCourse.fix_abstract_courses
     #UserCourse.delete_all
     #CourseInstance.delete_all

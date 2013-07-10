@@ -4,7 +4,8 @@ class @Period
     @credits = ko.observable(0)
     @droppedCourse = ko.observable()
     @hilight = ko.observable(false)
-    @oldPeriod = ko.observable(false)
+    @isOld = ko.observable(false)
+    @isNow = ko.observable(false)
 
     # TODO: specify event handler in the binding
     @droppedCourse.subscribe (course) =>
@@ -75,15 +76,6 @@ class @Period
     this.occupySlot(slot, length, course)
 
     return slot
-
-
-  updateCredits: ->
-    credits = 0
-    #for id, course of @coursesById
-    #  credits += course.credits
-
-
-    @credits(credits)
 
 
   removeCourse: (course) ->

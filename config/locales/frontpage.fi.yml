@@ -42,3 +42,6 @@ fi:
     extent: "Laajuus"
     period: "Opintojakso"
     grade: "Arvosana"
+
+    foo: "Voohoo"
+    bar: "Parrka"

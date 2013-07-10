@@ -1,0 +1,17 @@
+/* Loads translated i18n strings used by dashboardView.js.coffee */
+(function() {
+  var i18n;
+
+  /* i18n strings */
+  i18n = {
+    current_locale:                 "<%= I18n.locale %>",
+    required_locales:               ["<%= REQUIRED_LOCALES.join('","').html_safe %>"],
+    foo:                            "<%= escape_javascript(t('frontpage.foo')) %>",
+    bar:                            "<%= escape_javascript(t('frontpage.bar')) %>"
+  };
+
+  /* Translations available at O4.dashBoard.i18n */
+  var O4 = window.O4 = window.O4 || {};
+  O4.dashBoard = O4.dashBoard || {};
+  O4.dashBoard.i18n = i18n;
+})();

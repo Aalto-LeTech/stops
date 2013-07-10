@@ -1,4 +1,7 @@
 <% content_for :javascript do %>
+  <script type="text/javascript">
+    <%= render "dashboard_i18n_strings.js" %>
+  </script>
   <%= javascript_include_tag 'dashboard' %>
 <% end %>
 
@@ -7,6 +10,8 @@
 
 <p>
   <%= t('.welcome', name: @user.name) %>
+  <span data-bind="text: $root.i18n.foo "></span>
+  <span data-bind="text: $root.i18n.bar "></span>
 </p>
 
 

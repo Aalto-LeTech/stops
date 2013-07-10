@@ -7,18 +7,18 @@ class StudyPlan < ActiveRecord::Base
 
       course_id = options[:id] || course.id
 
-      StudyPlan.transaction do 
+      StudyPlan.transaction do
         study_plan = proxy_association.owner
         plan_id = study_plan.id
 
-        existing_entry = StudyPlanCourse.where(:study_plan_id => plan_id, 
+        existing_entry = StudyPlanCourse.where(:study_plan_id => plan_id,
                                                  :scoped_course_id => course_id).first
 
         if not existing_entry.nil?
           # Increment reference counter
           existing_entry.competence_ref_count += 1
           existing_entry.save!
-        else 
+        else
           course = ScopedCourse.find(course_id) if not course
           proxy_association.concat course
         end
@@ -32,11 +32,11 @@ class StudyPlan < ActiveRecord::Base
 
       course_id = options[:id] || course.id
 
-      StudyPlan.transaction do 
+      StudyPlan.transaction do
         study_plan = proxy_association.owner
         plan_id = study_plan.id
 
-        existing_entry = StudyPlanCourse.where(:study_plan_id => plan_id, 
+        existing_entry = StudyPlanCourse.where(:study_plan_id => plan_id,
                                                  :scoped_course_id => course_id).first
 
         if not existing_entry.nil?
@@ -86,7 +86,7 @@ class StudyPlan < ActiveRecord::Base
            :through => :study_plan_competences,
            :dependent => :destroy
 
-  
+
   def as_json(options={})
     super(options.merge({
       :only => [:curriculum_id],
@@ -98,6 +98,7 @@ class StudyPlan < ActiveRecord::Base
     }))
   end
 
+  # updates the database according to the data received TODO: create user_courses
   def update_from_json(json)
     new_plan = JSON.parse(json)
 
@@ -107,21 +108,21 @@ class StudyPlan < ActiveRecord::Base
       scoped_course_id = plan_course['scoped_course_id']
       new_courses[scoped_course_id] = plan_course
     end
-    
+
     self.study_plan_courses.each do |studyplan_course|
       new_course = new_courses[studyplan_course.scoped_course_id]
-      
+
       new_period_id = new_course['period_id']
       new_course_instance_id = new_course['course_instance_id']
       new_grade = new_course['grade']
       new_credits = new_course['credits']
-      
+
       changed =
-          studyplan_course.period_id != new_period_id || 
+          studyplan_course.period_id != new_period_id ||
           studyplan_course.course_instance_id != new_course_instance_id ||
           studyplan_course.grade != new_grade ||
           studyplan_course.credits != new_credits
-      
+
       if changed
         studyplan_course.period_id = new_period_id
         studyplan_course.course_instance_id = new_course_instance_id
@@ -131,7 +132,7 @@ class StudyPlan < ActiveRecord::Base
       end
     end
   end
-  
+
   def add_competence(competence)
     # Dont't do anything if the study plan already has this competence
     return if has_competence?(competence)
@@ -139,7 +140,7 @@ class StudyPlan < ActiveRecord::Base
     competences << competence
 
     # FIXME: This breaks if prerequisites include Competences
-    
+
     # Calculate union of existing and new courses, without duplicates
     courses_array = self.courses | competence.courses_recursive
 

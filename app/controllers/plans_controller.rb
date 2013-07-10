@@ -88,6 +88,8 @@ class PlansController < ApplicationController
       root:     false
     )
 
+    # TODO: load competences
+
     respond_to do |format|
       format.json { render json: {
           study_plan: @study_plan,
@@ -96,7 +98,7 @@ class PlansController < ApplicationController
           course_instances: instances_json,
           passed_courses: passed_courses_json,
           current_period_id: Period.current.id,
-          translations: {
+          translations: { # TODO: move translations to
             code:         t('.frontpage.code'),
             name:         t('.frontpage.name'),
             extent:       t('.frontpage.extent'),

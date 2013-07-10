@@ -4,10 +4,10 @@
     <% if defined?( period ) %>
       <p>
         <span class="muted" data-bind="text: <%= period %>.name"></span>
-        <span class="muted mini">
+        <small class="muted">
           (<span data-bind="text: <%= period %>.beginsAt"></span> -
           <span data-bind="text: <%= period %>.endsAt"></span>)
-        </span>
+        </small>
       </p>
     <% end %>
     <div data-bind="if: <%= courseTable %>.isEmpty">

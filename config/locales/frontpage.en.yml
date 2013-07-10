@@ -42,3 +42,6 @@ en:
     extent: "Extent"
     period: "Period"
     grade: "Grade"
+
+    foo: "Fohoo"
+    bar: "Bharr"

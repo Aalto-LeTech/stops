@@ -12,13 +12,13 @@ ko.bindingHandlers.draggable = {
   init: (element, valueAccessor, allBindingsAccessor, viewModel) ->
     startCallback = valueAccessor().start
     stopCallback = valueAccessor().stop
-    
+
     dragOptions = {
       containment: 'parent'
       distance: 5
       cursor: 'default'
     }
-    
+
     dragOptions['start'] = (-> startCallback.call(viewModel)) if startCallback
     dragOptions['stop'] = (-> stopCallback.call(viewModel)) if stopCallback
 
@@ -57,20 +57,20 @@ ko.bindingHandlers.position = {
     value.y = pos.top if value.y?
     value.width = pos.width if value.width?
     value.height = pos.height if value.height?
-    
+
   update: (element, valueAccessor, bindingHandlers, viewModel) ->
     value = ko.utils.unwrapObservable(valueAccessor())
     el = $(element)
-    
+
     options = {}
     options['left'] = value.x if value.x?
     options['top'] = value.y if value.y?
     options['width'] = value.width if value.width?
     options['height'] = value.height if value.height?
-    
+
     #console.log options
     # TODO: do not animate if nothing is changed
-    
+
     el.animate(options, 150)
 }
 
@@ -82,24 +82,24 @@ jQuery ->
 
   #prereqsPath   = $plan.data('prereqs-path')   # '/' + locale + '/curriculums/' + curriculum_id + '/prereqs'
   #instancesPath = $plan.data('instances-path') # '/' + locale + '/course_instances'
-  
+
   # Make schedule controls always visible (i.e., sticky)
   $scheduleControls     = $("#schedule-controls-container")
   scheduleControlsOrig  = $scheduleControls.offset().top
-  
+
   $(window).scroll ->
     winY = $(this).scrollTop()
     if winY >= scheduleControlsOrig
       $scheduleControls.addClass("schedule-controls-fixed")
     else
       $scheduleControls.removeClass("schedule-controls-fixed")
-  
-  
+
+
   planView = new PlanView(planUrl)
-  
+
   # Event handlers
   $(document).on 'mousedown', '.course', (event) ->
     course = ko.dataFor(this)
     planView.selectCourse(course)
-  
+
   planView.loadPlan()

@@ -63,6 +63,8 @@ en:
         empty_instructions: "Please explore the study guide and choose competences that you find interesting"
         extent: "Extent"
         grade: "Grade"
+        extent_tooltip: "Here you can update the extent of the course (in ECTS credits)."
+        grade_tooltip: "Here you can update the grade you've received from the course (0-5)."
         cr: "cr"
 
     periods:

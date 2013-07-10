@@ -63,6 +63,8 @@ fi:
         empty_instructions: "Valitse opinto-oppaasta itseäsi kiinnostavat kompetenssit"
         extent: "Laajuus"
         grade: "Arvosana"
+        extent_tooltip: "Tähän voit päivittää kurssin laajuuden opintopisteinä."
+        grade_tooltip: "Tähän voit päivittää kurssista saamasi arvosanan (0-5)."
         cr: "op"
 
     periods:

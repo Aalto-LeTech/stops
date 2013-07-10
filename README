@@ -1,3 +1,25 @@
+== Todo
+
+1. dashboard
+  1. dashboard = scheduler
+  2. when no course selected, competences are shown at the bar
+  3. when a competence is selected, related courses are highlighted
+  4. when the plan is saved, user_course objects are created in
+  periodikeston default ennustus olemassaolevien instanssien mukaan
+2. studyplan/courses
+  1. index: valitut ja suoritetut kurssit (mahdollisuus valita sorttausperusteet)
+  2. search: kurssihaku (kato mallia skillEditor)
+3. smaller things
+  1. [DONE] replace the i18n hack with the other one
+  2. [DONE] fix the "extent" input field size and add tooltips
+  3. autoscroll to current period
+4. sprint review meeting 17.7.
+
+w #c09853 #a47e3c
+e #b94a48 #953b39
+i #3a87ad #2d6987
+s #468847 #356635
+
 == Welcome to Rails
 
 Rails is a web-application framework that includes everything needed to create

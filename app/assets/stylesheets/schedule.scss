@@ -37,38 +37,38 @@
   border-top: 1px solid #a0a0a0;
   padding: 0px;
   margin: 0px;
-  
+
   /* Striped warning background */
   $warning_stripe: rgba(255, 0, 0, 0.55);
   &.warning {
-    background-image: -webkit-linear-gradient(-45deg, 
+    background-image: -webkit-linear-gradient(-45deg,
       $warning_stripe 25%,
-      transparent 25%, 
-      transparent 50%, 
+      transparent 25%,
+      transparent 50%,
       $warning_stripe 50%,
       $warning_stripe 75%,
       transparent 75%,
       transparent);
     background-image: -moz-linear-gradient(-45deg,
       $warning_stripe 25%,
-      transparent 25%, 
-      transparent 50%, 
+      transparent 25%,
+      transparent 50%,
       $warning_stripe 50%,
       $warning_stripe 75%,
       transparent 75%,
       transparent);
     background-image: -ms-linear-gradient(-45deg,
       $warning_stripe 25%,
-      transparent 25%, 
-      transparent 50%, 
+      transparent 25%,
+      transparent 50%,
       $warning_stripe 50%,
       $warning_stripe 75%,
       transparent 75%,
       transparent);
     background-image: -o-linear-gradient(-45deg,
       $warning_stripe 25%,
-      transparent 25%, 
-      transparent 50%, 
+      transparent 25%,
+      transparent 50%,
       $warning_stripe 50%,
       $warning_stripe 75%,
       transparent 75%,
@@ -77,7 +77,7 @@
     -webkit-background-size: 50px 50px;
        -moz-background-size: 50px 50px;
          -o-background-size: 50px 50px;
-            background-size: 50px 50px; 
+            background-size: 50px 50px;
   }
 }
 
@@ -87,10 +87,14 @@
 
 .plan {
 
-  
-  
-  div.period.old-period {
-    background-color: #FF7A7A;
+
+
+  div.period.old {
+    background-color: #dddddd;
+  }
+
+  div.period.now {
+    background-color: #ddddff;
   }
 
 
@@ -102,7 +106,7 @@
     */
     top: 0px;
     left: 0px;
-    
+
     color:      #444;
     background: #f0f0f0;
     border:     1px solid #aaa;
@@ -111,7 +115,7 @@
     font-size:  small;
     padding:    3px 3px 3px 3px;
     margin:     0px;
-    
+
     cursor:     move;
     width:      114px;
     height:     42px;
@@ -120,7 +124,7 @@
 
     overflow:       hidden;
     text-overflow:  ellipsis;
-    
+
     &.locked {
       cursor: not-allowed;
     }
@@ -131,7 +135,7 @@
       right:    2px;
       width:    10px;
     }
-    
+
     &.orderWarning {
       background: #ffa0a0;
       border-color: #800000;
@@ -166,10 +170,12 @@
 }
 
 .plan div.course.prereq-of {
+  background: #00FF00;
   border-bottom: 5px solid blue;
 }
 
 .plan div.course.prereq-to {
+  background: #aaaa00;
   border-top: 5px solid blue;
 }
 

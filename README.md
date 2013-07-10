@@ -10,9 +10,9 @@
   1. index: valitut ja suoritetut kurssit (mahdollisuus valita sorttausperusteet)
   2. search: kurssihaku (kato mallia skillEditor)
 3. smaller things
-  1. [DONE] replace the i18n hack with the other one
+  1. [HALF] replace the i18n hack with the other one
   2. [DONE] fix the "extent" input field size and add tooltips
-  3. autoscroll to current period
+  3. [DONE] autoscroll to show some past & the current period while focusing on the near future
 4. sprint review meeting 17.7.
 
 w #c09853 #a47e3c

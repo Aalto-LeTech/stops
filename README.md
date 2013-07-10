@@ -11,9 +11,11 @@ Todo
   1. index: valitut ja suoritetut kurssit (mahdollisuus valita sorttausperusteet)
   2. search: kurssihaku (kato mallia skillEditor)
 3. smaller tasks
-  - [x] replace the i18n hack with the other one
-  - [x] fix the "extent" input field size and add tooltips
-  - [x] autoscroll to show some past & the current period while focusing on the near future
+    - [x] replace the i18n hack with the other one
+    - [x] fix the "extent" input field size and add tooltips
+    - [x] autoscroll to show some past & the current period while focusing on the near future
+    - [ ] refactor
+    - [ ] something else
 4. sprint review meeting 17.7.
 
 w #c09853 #a47e3c

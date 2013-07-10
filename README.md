@@ -1,22 +1,22 @@
 Todo
 ====
 
+- [x] replace the i18n hack with the other one
+- [x] fix the "extent" input field size and add tooltips
+- [x] autoscroll to show some past & the current period while focusing on the near future
+- [ ] refactor
+- [ ] something else
+
 1. dashboard
   1. dashboard = scheduler
   2. when no course selected, competences are shown at the bar
   3. when a competence is selected, related courses are highlighted
   4. when the plan is saved, user_course objects are created in
-  periodikeston default ennustus olemassaolevien instanssien mukaan
+  5. the period length of instance unrelated course objects is better guessed
 2. studyplan/courses
   1. index: valitut ja suoritetut kurssit (mahdollisuus valita sorttausperusteet)
   2. search: kurssihaku (kato mallia skillEditor)
-3. smaller tasks
-    - [x] replace the i18n hack with the other one
-    - [x] fix the "extent" input field size and add tooltips
-    - [x] autoscroll to show some past & the current period while focusing on the near future
-    - [ ] refactor
-    - [ ] something else
-4. sprint review meeting 17.7.
+3. sprint review meeting 17.7.
 
 w #c09853 #a47e3c
 e #b94a48 #953b39

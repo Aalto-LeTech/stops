@@ -1,4 +1,5 @@
-== Todo
+Todo
+====
 
 1. dashboard
   1. dashboard = scheduler
@@ -9,10 +10,10 @@
 2. studyplan/courses
   1. index: valitut ja suoritetut kurssit (mahdollisuus valita sorttausperusteet)
   2. search: kurssihaku (kato mallia skillEditor)
-3. smaller things
-  1. [HALF] replace the i18n hack with the other one
-  2. [DONE] fix the "extent" input field size and add tooltips
-  3. [DONE] autoscroll to show some past & the current period while focusing on the near future
+3. smaller tasks
+  [x] replace the i18n hack with the other one
+  [x] fix the "extent" input field size and add tooltips
+  [x] autoscroll to show some past & the current period while focusing on the near future
 4. sprint review meeting 17.7.
 
 w #c09853 #a47e3c

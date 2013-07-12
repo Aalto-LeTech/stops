@@ -15,7 +15,7 @@ en:
       heading: "Schedule"
 
     courses:
-      courses: "My Courses"
+      heading: "My Courses"
 
     course_table:
       no_courses: "No courses"

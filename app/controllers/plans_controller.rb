@@ -97,35 +97,25 @@ class PlansController < ApplicationController
           periods: periods_json,
           course_instances: instances_json,
           passed_courses: passed_courses_json,
-          current_period_id: Period.current.id,
-          translations: { # TODO: move translations to
-            code:         t('.frontpage.code'),
-            name:         t('.frontpage.name'),
-            extent:       t('.frontpage.extent'),
-            period:       t('.frontpage.period'),
-            grade:        t('.frontpage.grade'),
-            current:      t('.frontpage.current'),
-            upcoming:     t('.frontpage.upcoming'),
-            unscheduled:  t('.frontpage.unscheduled'),
-            scheduled:    t('.frontpage.scheduled'),
-            passed:       t('.frontpage.passed')
-          }
+          current_period_id: Period.current.id
         }.to_json( root: false )
       }
     end
   end
 
-  # Expects parameter study_plan_courses with a JSON string:
+  # Expects parameter plan_courses with a JSON string:
   # [
-  #   { "scoped_course_id": 71, "period_id": 30 },
-  #   { "scoped_course_id": 25, "period_id": 32 },
+  #   {"scoped_course_id": 71, "period_id": 1, "course_instance_id": 45},
+  #   {"scoped_course_id": 35, "period_id": 2},
+  #   {"scoped_course_id": 45, "period_id": 2, "credits": 3, "length": 1},
+  #   {"scoped_course_id": 60, "period_id": 3, "course_instance_id": 32, "credits": 8, "length": 2, "grade": 3},
   #   ...
   # ]
   def update
     authorize! :update, @study_plan
     # TODO: authentication
 
-    @study_plan.update_from_json(params[:study_plan_courses]) if params[:study_plan_courses]
+    @study_plan.update_from_json(params[:plan_courses]) if params[:plan_courses]
 
 #     if params[:periods]
 #       params[:periods].each do |user_course_id, period_id|

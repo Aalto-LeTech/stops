@@ -8,6 +8,7 @@ class StudyPlanCourse < ActiveRecord::Base
   #    t.boolean "manually_added",       :default => false
   #    t.integer "course_instance_id"
   #    t.integer "period_id"
+  #    t.float   "credits"
   #  end
 
   # members                  notes
@@ -16,6 +17,7 @@ class StudyPlanCourse < ActiveRecord::Base
   #  - manually_added
   #  - course_instance       field to be removed
   #  - period
+  #  - credits
 
 
   belongs_to :study_plan

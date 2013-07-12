@@ -4,7 +4,7 @@ class @Course
     @hilightSelected     = ko.observable(false)
     @hilightPrereq       = ko.observable(false)
     @hilightPrereqTo     = ko.observable(false)
-    @orderWarning        = ko.observable(false)
+    @misordered          = ko.observable(false)
 
     @locked              = false             # Is the course immovable?
     @position            = ko.observable({x: 0, y: 0, height: 1})
@@ -16,16 +16,21 @@ class @Course
     @prereqs             = {}                # Prerequisite courses. courseId => Course
     @prereqTo            = {}                # Courses for which this course is a prereq. courseId => Course object
     @prereqPaths         = []                # Raphael paths to prerequirement courses
-    @period              = undefined         # Scheduled Period
-    @courseInstance      = undefined         # Scheduled CourseInstance
+    @period              = undefined         # Scheduled period
+    @oPeriodId           = undefined         # Originally scheduled period
+    @courseInstance      = undefined         # Scheduled course instance
+    @oCourseInstanceId   = undefined         # Originally scheduled course instance
     @slot                = undefined         # Slot number that this course occupies
-    @length              = 1                 # Length in periods
+    @length              = undefined         # Length in periods
+    @oLength             = undefined         # Originally set length in periods
     @unschedulable       = false             # true if period allocation algorithm cannot find suitable period
     @changed             = false             # Tracks whether changes need to be saved
 
     @credits             = ko.observable()
+    @oCredits            = undefined
     @grade               = ko.observable()
-    @passedInstance      = undefined
+    @oGrade              = undefined
+    @passedInstance      = undefined  # FIXME, duplication to fix the courseInstance vs passedInstance duel?
 
     this.loadJson(data || {})
 
@@ -34,18 +39,50 @@ class @Course
     @id                  = data['id']
     @code                = data['course_code'] || ''
     @name                = data['localized_name'] || ''
-    @credits( data['credits'] || 0 )
+    @oCredits            = data['credits'] || 0
+    @credits(data['credits'] || 0)
+
+
+  hasChanged: ->
+    #console.log( "=> Was #{@name} changed?" )
+    #console.log( " - credits: #{@oCredits}  vs  #{@credits()}" )
+    return true if @oCredits != @credits()
+    #console.log( " - period: #{@oPeriodId}  vs  #{@period.id}" )
+    if @period?
+      return true if @oPeriodId != @period.id
+    else
+      return true if @oPeriodId != undefined
+    #console.log( " - instance: #{@oCourseInstanceId}  vs  #{@courseInstance}" )
+    if @courseInstance?
+      return true if @oCourseInstanceId != @courseInstance.id
+    else
+      return true if @oCourseInstanceId != undefined
+    #console.log( " - length: #{@oLength}  vs  #{@length}" )
+    return true if @oLength != @length
+    #console.log( " - grade: #{@oGrade}  vs  #{@grade()}" )
+    return true if @oGrade != @grade()
+    #console.log( "   NOT CHANGED!" )
+    return false
+
+
+  resetOriginals: ->
+    @oCredits = @credits()
+    if @period? then @oPeriodId = @period.id else @oPeriodId = undefined
+    if @courseInstance? then @oCourseInstanceId = @courseInstance.id else @oCourseInstanceId = undefined
+    @oLength = @length  # FIXME: make me changeable
+    @oGrade = @grade()
 
 
   toJson: ->
-    json = { scoped_course_id: @id }
-    json['period_id'] = @period.id if @period?
-    json['course_instance_id'] = @courseInstance.id if @courseInstance?
-
     grade = parseInt(@grade())
     credits = parseInt(@credits())
-    json['grade'] = grade if grade > 0
+
+    json = { scoped_course_id: @id }
     json['credits'] = credits if credits > 0
+    json['period_id'] = @period.id if @period?
+    json['course_instance_id'] = @courseInstance.id if @courseInstance?
+    json['length'] = @length if @length > 0  # FIXME: should study_plan_course model have one?
+    json['grade'] = grade if grade > 0
 
     return json
 
@@ -63,14 +100,20 @@ class @Course
     @instancesById[courseInstance.id] = courseInstance
     @instancesByPeriodId[period.id] = courseInstance
     @instanceCount++
-    #console.log "course[#{@id}]::addCInstance: #:#{@instanceCount} #{courseInstance}"
+    #console.log( "course[#{@id}]::addCInstance: #:#{@instanceCount} #{courseInstance}" )
 
 
   # Sets the course as passed with the given course instance and grade
-  setAsPassed: ( instanceId, grade ) ->
+  setAsPassed: (instanceId, grade) ->
     @passedInstance = @instancesById[instanceId]
-    @grade( grade )
-    #console.log "course[#{@id}]::setAsPassed: #{@passedInstance} (g:#{grade})"
+    unless @passedInstance
+      console.log( "ERROR: Unknown instance #{instanceId}" )
+      return
+    #console.log( "course[#{@id}]::setAsPassed: #{@passedInstance} (g:#{grade})" )
+    # Set course to where it was passed
+    @setPeriod(@passedInstance.period)
+    @updatePosition()
+    @grade(grade)
 
 
   # Moves the course to the given period, to a free slot. Does not update DOM.
@@ -79,13 +122,13 @@ class @Course
     # Remove course from previous period. Note: length must not be updated before freeing the old slots.
     @period.removeCourse(this) if (@period)
 
-    # Update length
+    # Update courseInstance & length
     @courseInstance = @instancesByPeriodId[period.id]
 
     if (@courseInstance)
       @length = @courseInstance.length
     else
-      @length = 1
+      @length = 1 # FIXME
 
     # Add course to the new period
     @period = period
@@ -106,18 +149,20 @@ class @Course
 
 
   # Update warnings FIXME: updates the original source twice...
-  updateWarnings: ( depth ) ->
-    depth = (depth - 1) if depth? else 1
+  updateReqWarnings: (depth) ->
+    if depth > 0 then depth = depth - 1 else depth = 1
+    #console.log( "Course[#{@id}]:uRW(#{depth}) #{@period.sequenceNumber}" )
 
     for id, other of @prereqs
-      warning = true if other.period? && @period? && other.period.laterOrEqual(@period)
-      other.updateWarnings( depth ) if depth > 0
+      misordered = true if other.period? && @period? && other.period.laterOrEqual(@period)
+      other.updateReqWarnings(depth) if depth > 0
 
     for id, other of @prereqTo
-      warning = true if other.period? && @period? && other.period.earlierOrEqual(@period)
-      other.updateWarnings( depth ) if depth > 0
+      misordered = true if other.period? && @period? && other.period.earlierOrEqual(@period)
+      other.updateReqWarnings(depth) if depth > 0
 
-    @orderWarning(warning)
+    #console.log( "Course[#{@id}].misordered: #{misordered}." )
+    @misordered(misordered)
 
 
 #     $.each this.prereqTo, (key, postReqCourse) ->
@@ -448,95 +493,3 @@ class @Course
 
   toString: ->
     "crs[#{@id}]:{ c:#{@code} p:#{@name} }"
-
-
-
-
-class @CourseTable
-
-  COLKEYS: [ 'c', 'n', 'x', 'p', 'P', 'g' ]
-  COLNAMES: {
-    'c': 'code'
-    'n': 'name'
-    'x': 'extent'
-    'p': 'period'
-    'P': 'period'
-    'g': 'grade'
-  }
-  COLHEADINGS: {}                         # loaded from json in runtime
-  TABLES: []
-
-  constructor: ( scols ) ->
-    # observables (actual HTML entities):
-    @isEmpty   = ko.observable(true)      # a boolean value to determine whether the table is empty
-    @preTable  = ko.observable()          # HTML to inject into the <span> element before the <table>
-    @colGroup  = ko.observable('')        # HTML to inject into the <table> element before the <thead>
-    @colGroup  = ko.observable('')        # HTML to inject into the <table> element before the <thead>
-    @ths       = ko.observableArray()     # text to inject into the <thead> <th> elements
-    @trs       = ko.observableArray()     # HTML to inject into the <tbody> <tr> elements
-
-    # other variables
-    @heading   = undefined                # possible heading text
-    @courses   = []                       # Course objects
-    @cols      = {}
-
-    for chcol in scols
-      @cols[chcol] = true
-
-    @TABLES.push( this )
-
-
-  push: ( course ) ->
-    @courses.push( course )
-
-
-  update: () ->
-    console.log( "update()" )
-
-    # HTML content for before the table
-    if @heading
-      @preTable( '<h3>' + @heading + '</h3>' )
-
-    # column headings
-    sColGroup = ''
-    for k in @COLKEYS
-      if @cols[k]
-        @ths.push( @COLHEADINGS[k] )
-        sColGroup += '<col class="' + @COLNAMES[k] + '">\n'
-    @colGroup( sColGroup )
-
-    # row data
-    for course in @courses
-      tr = []
-      for k in @COLKEYS
-        if @cols[k]
-          if k == 'c'
-            f = course.code
-          else if k == 'n'
-            f = course.name
-          else if k == 'x'
-            f = course.credits()
-          else if k == 'p'
-            f = course.period.name
-          else if k == 'P'
-            f = course.passedInstance.period.name
-          else if k == 'g'
-            f = course.grade()
-          else
-            f = 'UNDEFINED!'
-          tr.push( '<td>' + f + '</td>' )
-
-      @trs.push( tr.join('\n') )
-
-    if @courses.length > 0
-      @isEmpty( false )
-
-
-  updateAll: () ->
-    console.log( "updateAll()" )
-    for table in @TABLES
-      table.update()
-
-
-  readTranslations: ( translations ) ->
-    @COLHEADINGS[k] = translations[@COLNAMES[k]] for k in @COLKEYS

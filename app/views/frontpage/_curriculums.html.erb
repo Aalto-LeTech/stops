@@ -1,8 +1,0 @@
-<h2><%= t('.heading') %></h2>
-
-<p>
-  <%= t('.curriculum_currently_in_use_is') %>
-  <%= link_to @study_plan.curriculum.name, curriculum_url(:id => @study_plan.curriculum) %>
-</p>
-
-<p><%= link_to t('.change_curriculum'), edit_studyplan_curriculum_path %></p>

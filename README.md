@@ -4,19 +4,25 @@ Todo
 - [x] replace the i18n hack with the other one
 - [x] fix the "extent" input field size and add tooltips
 - [x] autoscroll to show some past & the current period while focusing on the near future
-- [ ] refactor
+- [x] starterd using rvm and added .ruby-version .ruby-gemset to the repo
+- [x] redirect to schedule instead of student dashboard
+- [X] dump dashboard
+- [X] new: highlight period total credits when the scheduled period is over or underbooked
+- [X] new: highlight passed courses
+- [X] new: highlight courses based on whether they are instance-bound or not
+- [X] new: highlight courses based on whether they are instance-bound or not
+- [X] new: rewrite of the plan save method series: error resistance, logging and support for user_course addition
+- [ ] new: better guessing for a course object's length in periods when it has no course instances at that period
+- [ ] fix: make the top bar float with the sidebar when scrolling the schedule grid
+- [ ] fix: tune sidebar course information
+- [ ] new: when a period is selected, display information about it
+- [ ] new: when no course selected, competences are shown at the bar
+- [ ] new: when a competence is selected, related courses are highlighted
+- [ ] new: studyplan/courses/index: selected and passed courses (user sortable by any field on the view)
+- [ ] new: studyplan/courses/index: course searching (see skillEditor)
 - [ ] something else
 
-1. dashboard
-  1. dashboard = scheduler
-  2. when no course selected, competences are shown at the bar
-  3. when a competence is selected, related courses are highlighted
-  4. when the plan is saved, user_course objects are created in
-  5. the period length of instance unrelated course objects is better guessed
-2. studyplan/courses
-  1. index: valitut ja suoritetut kurssit (mahdollisuus valita sorttausperusteet)
-  2. search: kurssihaku (kato mallia skillEditor)
-3. sprint review meeting 17.7.
+sprint review meeting 17.7.
 
 w #c09853 #a47e3c
 e #b94a48 #953b39

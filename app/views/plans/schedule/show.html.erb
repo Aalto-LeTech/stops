@@ -1,4 +1,7 @@
 <% content_for :javascript do %>
+  <script type="text/javascript">
+    <%= render "show_i18n_strings.js" %>
+  </script>
   <%= javascript_include_tag 'schedule/schedule' %>
   <script type="text/javascript">
     <%= render "metadata.js" %>
@@ -107,19 +110,24 @@
 
     <p id="status"></p>
 
+    <p>
+      <span data-bind="text: $root.i18n.foo "></span>
+      <span data-bind="text: $root.i18n.bar "></span>
+    </p>
+
     <div class="plan" id="plan" data-studyplan-path="<%= plan_path(@study_plan.id) %>">
 
       <div id="svg"></div>
 
       <!-- ko foreach: periods -->
         <div class="period" data-bind="droppable: droppedCourse, position: position, css: {'receiver': hilight, 'old': isOld, 'now': isNow}">
-          <div class="period-name" data-bind="text: name"></div>
-          <div class="period-credits"><span data-bind="text: credits"></span> op</div>
+          <div class="name" data-bind="text: name"></div>
+          <div class="credits"><span data-toggle="tooltip" title="<%= t('.period_credits_tooltip') %>" data-bind="text: credits, css: creditsStatus"></span> <%= t('.cr') %></div>
         </div>
       <!-- /ko -->
 
       <!-- ko foreach: courses -->
-        <div class="course" data-bind="draggable: {}, position: position, css: {'selected': hilightSelected, 'prereq-of': hilightPrereq, 'prereq-to': hilightPrereqTo, 'orderWarning': orderWarning}">
+        <div class="course" data-bind="draggable: {}, position: position, css: {'selected': hilightSelected, 'passed': grade, 'instanced': courseInstance, 'prereq-of': hilightPrereq, 'prereq-to': hilightPrereqTo, 'misordered': misordered}">
           <span data-bind="text: code"></span>
           <span data-bind="text: name"></span>
         </div>

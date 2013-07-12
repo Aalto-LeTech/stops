@@ -81,15 +81,17 @@ Ops::Application.routes.draw do
           put 'update_position'
         end
       end
-      
+
       resources :roles, :controller => 'curriculums/roles', :only => [:new, :index, :create, :destroy]
-      
+
       resources :temp_courses, :controller => 'curriculums/temp_courses'
     end
 
     # My Plan
+    # TODO: "Shallow" nesting is advised at http://guides.rubyonrails.org/routing.html#shallow-nesting,
+    #        should/could we refactor this?
     resource :studyplan, :controller => 'plans', :only => [:show] do
-      resources :profiles, :controller => 'plans/profiles', :only => [:index, :show]
+      resources :profiles, :controller => 'plans/profiles', :only => [:index, :show]  # FIXME: deprecated?
 
       resources :competences, :controller => 'plans/competences', :except => [:edit] do
         resources :courses, :controller => 'plans/courses', :only => [:show]  # ScopedCourses, courses that belong to the profile
@@ -134,7 +136,8 @@ Ops::Application.routes.draw do
   end
 
   resources :invitations, :only => [:show, :destroy], :id => /[^\/]+/
-  
+
+  #match '/:locale' => "plans/schedule#show", :as => :frontpage  # Added a redirect instead
   match '/:locale' => "frontpage#index", :as => :frontpage
   root :to => "application#redirect_by_locale"
 

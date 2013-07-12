@@ -98,37 +98,135 @@ class StudyPlan < ActiveRecord::Base
     }))
   end
 
-  # updates the database according to the data received TODO: create user_courses
-  def update_from_json(json)
-    new_plan = JSON.parse(json)
+  # Updates the database according to the data received
+  # Expects a JSON coded array of form:
+  # [
+  #   {"scoped_course_id": 71, "period_id": 1, "course_instance_id": 45},
+  #   {"scoped_course_id": 35, "period_id": 2},
+  #   {"scoped_course_id": 45, "period_id": 2, "credits": 3, "length": 1},
+  #   {"scoped_course_id": 60, "period_id": 3, "course_instance_id": 32, "credits": 8, "length": 2, "grade": 3},
+  #   ...
+  # ]
+  class UpdateException < Exception
+  end
 
-    # Index information by scoped_course_id
-    new_courses = {}   # scoped_course_id => {scoped_course_id: 1, period_id: 2, course_instance_id: 3, grade: 4, credits: 5}
-    new_plan.each do |plan_course|
+  def update_from_json(json)
+    plan_courses = JSON.parse(json)
+
+    return if plan_courses.length == 0
+
+    # Index information by scoped_course_id and collect them
+    new_courses = {}
+    scoped_course_ids = []
+    plan_courses.each do |plan_course|
       scoped_course_id = plan_course['scoped_course_id']
       new_courses[scoped_course_id] = plan_course
+      scoped_course_ids.push(scoped_course_id)
     end
 
-    self.study_plan_courses.each do |studyplan_course|
-      new_course = new_courses[studyplan_course.scoped_course_id]
+    puts "Received data by #{scoped_course_ids.length} ScopedCourse IDs: (#{scoped_course_ids})."
+    y new_courses
+
+    self.study_plan_courses.where(scoped_course_id: scoped_course_ids).each do |study_plan_course|
+      # Fetch the abstract_course_id
+      abstract_course_id = study_plan_course.scoped_course.abstract_course_id
+
+      # Load the data for this study_plan_course
+      new_course = new_courses[study_plan_course.scoped_course_id]
 
       new_period_id = new_course['period_id']
       new_course_instance_id = new_course['course_instance_id']
-      new_grade = new_course['grade']
       new_credits = new_course['credits']
+      new_length = new_course['length']
+      new_grade = new_course['grade']
 
-      changed =
-          studyplan_course.period_id != new_period_id ||
-          studyplan_course.course_instance_id != new_course_instance_id ||
-          studyplan_course.grade != new_grade ||
-          studyplan_course.credits != new_credits
+      begin
+        # Raise an error if lacking basic necessities
+        raise UpdateException.new, "No credits defined!" if not defined?(new_credits)
 
-      if changed
-        studyplan_course.period_id = new_period_id
-        studyplan_course.course_instance_id = new_course_instance_id
-        studyplan_course.grade = new_grade
-        studyplan_course.credits = new_credits
-        studyplan_course.save
+        # If a period_id was defined..
+        if defined?(new_period_id)
+          # .. but it's not valid..
+          if not Period.exists?(new_period_id)
+            # .. raise an error!
+            raise UpdateException.new, "Invalid period_id!"
+          end
+        end
+
+        # If a course_instance_id was defined
+        if defined?(new_course_instance_id)
+          # Is it valid?
+          course_instance = CourseInstance.find_by_id(new_course_instance_id)
+          if course_instance
+            # And does the requested course instance exist as such?
+            changed =
+              course_instance.abstract_course_id != abstract_course_id ||
+              course_instance.period_id != new_period_id ||
+              course_instance.length != new_length
+
+            if changed
+              raise UpdateException.new, "Planned course_instance differs from the one in the database!"
+            end
+          else
+            if new_course_instance_id == nil
+              s = 'nil'
+            else
+              s = new_course_instance_id.to_s
+            end
+            raise UpdateException.new, "Invalid course_instance_id #{s}!"
+          end
+        else
+          # With no course_instance_id given the user apparently insists that even
+          # though the database doesn't agree such an instance exists...
+          # We have two choices: either we create a new instance with the given specs
+          # or we leave it nil -- also to the possibly created user_course
+          raise UpdateException.new, "Procedure not implemented yet!"
+        end
+
+        # Save possible changes to the study_plan_course
+        changed =
+            study_plan_course.period_id != new_period_id ||
+            study_plan_course.course_instance_id != new_course_instance_id ||
+            study_plan_course.credits != new_credits
+
+        if changed
+          study_plan_course.period_id = new_period_id
+          study_plan_course.course_instance_id = new_course_instance_id
+          study_plan_course.credits = new_credits
+          study_plan_course.save
+        end
+
+        # If a grade was defined
+        if defined?(new_grade)
+          existing_user_course = self.user.user_courses.where(course_instance_id: new_course_instance_id).first
+          # And an existing user_course exists
+          if existing_user_course
+            # Save the possible changes to the user_course
+            changed =
+                existing_user_course.grade != new_grade ||
+                existing_user_course.credits != new_credits
+
+            if changed
+              existing_user_course.grade = new_grade
+              existing_user_course.credits = new_credits
+              existing_user_course.save
+            end
+          else
+            # If there is no existing user_course, create one
+            UserCourse.create(
+              user_id:             self.user_id,
+              abstract_course_id:  abstract_course_id,
+              course_instance_id:  new_course_instance_id,
+              grade:               new_grade,
+              credits:             new_credits
+            )
+          end
+        end
+
+        # No we're done! =)
+
+      rescue UpdateException => message
+        puts "ERROR '#{message}' when updating database from the plan_course: #{new_course}!"
       end
     end
   end

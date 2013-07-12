@@ -211,8 +211,8 @@ class Dbggr
 
   def dbg
     @user = User.where( :id => 2 ).first
-    @user.first_study_period_id = 37
-    @user.save
+    #@user.first_study_period_id = 37
+    #@user.save
     #@user.admin
     #AbstractCourse.fix_abstract_courses
     #UserCourse.delete_all
@@ -226,7 +226,7 @@ class Dbggr
     #list_scoped_courses
     #list_course_instances
     #list_user_courses
-    #list_periods
+    list_periods
     #create_some_user_courses
     #@user.user_courses.sort { |a, b| a.get_end_date <=> b.get_end_date }
     exit

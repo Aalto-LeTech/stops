@@ -1,5 +1,8 @@
 class @Period
 
+  UNDERBOOKED_LIMIT: 10  # determines the period credit total limits for css warning classes
+  OVERBOOKED_LIMIT:  20  #   see @creditsStatus
+
   constructor: (data) ->
     @credits = ko.observable(0)
     @droppedCourse = ko.observable()
@@ -11,22 +14,30 @@ class @Period
     @droppedCourse.subscribe (course) =>
       course.setPeriod(this)
       course.updatePosition()
-      course.updateWarnings()
+      course.updateReqWarnings()
 
-    @position = ko.observable({y: 0})
-    @coursesById = {}              # Courses that have been put to this period
-    #@courseInstances = {}          # Courses that are available on this period. courseId => courseInstance
-    @slots            = []         # Array index is slot (column) number. Value is Course occupying the slot or false
-    @previousPeriod   = undefined  # Reference to previous sibling
-    @nextPeriod       = undefined  # Reference to next sibling
-    @sequenceNumber   = undefined  # Sequence number to allow easy testing of the order of periods
+    @position         = ko.observable({y: 0}) # Course position
+    @courses          = []                    # Courses that have been put to this period
+    @coursesById      = {}                    # Courses that have been put to this period by id
+    #@courseInstances = {}                    # Courses that are available on this period. courseId => courseInstance
+    @slots            = []                    # Array index is slot (column) number. Value is Course occupying the slot or false
+    @previousPeriod   = undefined             # Reference to previous sibling
+    @nextPeriod       = undefined             # Reference to next sibling
+    @sequenceNumber   = undefined             # Sequence number to allow easy testing of the order of periods
 #
 #
 #     element.droppable
 #       drop: courseDropped,
 #       accept: isCourseAccepted
 #
-    this.loadJson(data || {})
+    @loadJson(data || {})
+
+    @creditsStatus = ko.computed =>
+      credits = @credits()
+      return 'underbooked' if credits < @UNDERBOOKED_LIMIT
+      return 'overbooked' if credits > @OVERBOOKED_LIMIT
+      return ''
+
 
   loadJson: (data) ->
     @id = data['id']
@@ -64,6 +75,7 @@ class @Period
 
   # Puts a course on this period.
   addCourse: (course, slot) ->
+    # Add course to the dict
     @coursesById[course.id] = course
 
     length = course.length  # Length in periods
@@ -78,8 +90,9 @@ class @Period
     return slot
 
 
+  # Removes a course from this period.
   removeCourse: (course) ->
-    # Remove course from the list
+    # Remove course from the dict
     delete @coursesById[course.id]
 
     # Free slots
@@ -119,7 +132,8 @@ class @Period
     @slots[slot] = false
 
     # FIXME: this breaks if user changes credits before removing course
-    @credits(@credits() - course.credits()) if course
+    if course
+      @credits(@credits() - course.credits()) if course
 
     @nextPeriod.freeSlot(slot, length - 1) if length > 1 && @nextPeriod
 

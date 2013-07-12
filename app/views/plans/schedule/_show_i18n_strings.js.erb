@@ -10,8 +10,6 @@
     bar:                            "<%= escape_javascript(t('frontpage.bar')) %>"
   };
 
-  /* Translations available at O4.dashBoard.i18n */
-  var O4 = window.O4 = window.O4 || {};
-  O4.dashBoard = O4.dashBoard || {};
-  O4.dashBoard.i18n = i18n;
+  /* Make translations available */
+  window.i18n = i18n;
 })();

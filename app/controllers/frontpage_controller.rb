@@ -27,7 +27,8 @@ class FrontpageController < ApplicationController
         #@current_courses = @study_plan.study_plan_courses.joins(:scoped_course).where( :period_id => @current_period.id ).order(:course_code)
         #@upcoming_courses = @study_plan.study_plan_courses.joins(:scoped_course).where( :period_id => @upcoming_period.id ).order(:course_code)
 
-        render :action => 'student_dashboard'
+        #render :action => 'student_dashboard'
+        redirect_to studyplan_schedule_path  # FIXME: is this the most correct way?
       else
         redirect_to edit_studyplan_curriculum_path
       end

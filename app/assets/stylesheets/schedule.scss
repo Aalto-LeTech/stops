@@ -6,95 +6,101 @@
   border: 1px solid gray;
   text-align: right;
   cursor: default; /* Text selection is disabled, so also disable the text selection cursor. */
-}
 
-/*
-.plan .courses {
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  z-index: 2;
-  width: 100%;
-  height: 100%;
-  border-right: 1px solid green;
-}
-*/
-
-.plan div.period h2 {
-  position: absolute;
-  top: 5px;
-  left: 5px;
-  font-size: 100%;
-  color: gray;
-  margin: 0px;
-  padding: 0px;
-  z-index: 1;
-}
-
-.plan div.period {
-  width: 100%;
-  height: 58px;
-  border-top: 1px solid #a0a0a0;
-  padding: 0px;
-  margin: 0px;
-
-  /* Striped warning background */
-  $warning_stripe: rgba(255, 0, 0, 0.55);
-  &.warning {
-    background-image: -webkit-linear-gradient(-45deg,
-      $warning_stripe 25%,
-      transparent 25%,
-      transparent 50%,
-      $warning_stripe 50%,
-      $warning_stripe 75%,
-      transparent 75%,
-      transparent);
-    background-image: -moz-linear-gradient(-45deg,
-      $warning_stripe 25%,
-      transparent 25%,
-      transparent 50%,
-      $warning_stripe 50%,
-      $warning_stripe 75%,
-      transparent 75%,
-      transparent);
-    background-image: -ms-linear-gradient(-45deg,
-      $warning_stripe 25%,
-      transparent 25%,
-      transparent 50%,
-      $warning_stripe 50%,
-      $warning_stripe 75%,
-      transparent 75%,
-      transparent);
-    background-image: -o-linear-gradient(-45deg,
-      $warning_stripe 25%,
-      transparent 25%,
-      transparent 50%,
-      $warning_stripe 50%,
-      $warning_stripe 75%,
-      transparent 75%,
-      transparent);
-
-    -webkit-background-size: 50px 50px;
-       -moz-background-size: 50px 50px;
-         -o-background-size: 50px 50px;
-            background-size: 50px 50px;
+  /*
+  .courses {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    border-right: 1px solid green;
   }
-}
+  */
 
-.plan div.period.receiver {
-  background-color: #e0ffe0;
-}
+  div.period {
+    width: 100%;
+    height: 58px;
+    border-top: 1px solid #a0a0a0;
+    padding: 0px;
+    margin: 0px;
 
-.plan {
+    h2 {  // FIXME: Deprecated?
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      font-size: 100%;
+      color: gray;
+      margin: 0px;
+      padding: 0px;
+      z-index: 1;
+    }
 
+    /* Striped warning background */
+    $warning_stripe: rgba(255, 0, 0, 0.55);
+    &.warning {
+      background-image: -webkit-linear-gradient(-45deg,
+        $warning_stripe 25%,
+        transparent 25%,
+        transparent 50%,
+        $warning_stripe 50%,
+        $warning_stripe 75%,
+        transparent 75%,
+        transparent);
+      background-image: -moz-linear-gradient(-45deg,
+        $warning_stripe 25%,
+        transparent 25%,
+        transparent 50%,
+        $warning_stripe 50%,
+        $warning_stripe 75%,
+        transparent 75%,
+        transparent);
+      background-image: -ms-linear-gradient(-45deg,
+        $warning_stripe 25%,
+        transparent 25%,
+        transparent 50%,
+        $warning_stripe 50%,
+        $warning_stripe 75%,
+        transparent 75%,
+        transparent);
+      background-image: -o-linear-gradient(-45deg,
+        $warning_stripe 25%,
+        transparent 25%,
+        transparent 50%,
+        $warning_stripe 50%,
+        $warning_stripe 75%,
+        transparent 75%,
+        transparent);
 
+      -webkit-background-size: 50px 50px;
+         -moz-background-size: 50px 50px;
+           -o-background-size: 50px 50px;
+              background-size: 50px 50px;
+    }
 
-  div.period.old {
-    background-color: #dddddd;
-  }
+    &.old {
+      background-color: #dddddd;
+    }
 
-  div.period.now {
-    background-color: #ddddff;
+    &.now {
+      background-color: #ddddff;
+    }
+
+    &.receiver {
+      background-color: #e0ffe0;
+    }
+
+    .credits span {
+
+      &.overbooked {
+        color: #aa1111;
+      }
+
+      &.underbooked {
+        color: #884444;
+      }
+    }
   }
 
 
@@ -108,7 +114,9 @@
     left: 0px;
 
     color:      #444;
-    background: #f0f0f0;
+    background: #ffeeee;
+    //background: #e0e0ff url('../images/course-noinstance.png') !important;
+    //background: #f0f0f0;
     border:     1px solid #aaa;
     @include border-radius(4px);
 
@@ -136,53 +144,61 @@
       width:    10px;
     }
 
-    &.orderWarning {
+    &.instanced {
+      background: #eeffee;
+    }
+
+    &.passed {
+      font-style: italic;
+      color: #666;
+      border-color: #66ff66;
+    }
+
+    &.prereq-of, &.prereq-to {
+      color: black;
+      background: #e0e0ff;
+      border: 2px solid black;
+    }
+
+    &.prereq-of {
+      background: #aaffaa;
+      border-bottom: 5px solid blue;
+    }
+
+    &.prereq-to {
+      background: #eeaaee;
+      border-top: 5px solid blue;
+    }
+
+    &.misordered {
       background: #ffa0a0;
       border-color: #800000;
     }
+
+    &.selected {
+      color: white;
+      border: 2px solid #0000ff;
+      background: #6060e0;
+      z-index: 1; /* Make sure selected course is on top of other courses */
+    }
   }
+
+  /*.unsatisfied-postreq {
+    background: #e0e0ff url('../images/course-up.png') !important;
+  }
+
+  .unsatisfied-prereq {
+    background: #e0e0ff url('../images/course-down.png') !important;
+  }
+
+  */
+
+  /*
+  .in-progress {
+    background: white !important;
+  }*/
+
 }
-
-
-.plan .course.selected {
-  color: white;
-  border: 2px solid #0000ff;
-  background: #8080e0;
-  z-index: 1; /* Make sure selected course is on top of other courses */
-}
-
-.plan .unsatisfied-postreq {
-  background: #e0e0ff url('../images/course-up.png') !important;
-}
-
-.plan .unsatisfied-prereq {
-  background: #e0e0ff url('../images/course-down.png') !important;
-}
-
-.plan .noinstance {
-  background: #e0e0ff url('../images/course-noinstance.png') !important;
-}
-
-.plan div.course.prereq-of, .plan div.course.prereq-to {
-  color: black;
-  background: #e0e0ff;
-  border: 1px solid green;
-}
-
-.plan div.course.prereq-of {
-  background: #00FF00;
-  border-bottom: 5px solid blue;
-}
-
-.plan div.course.prereq-to {
-  background: #aaaa00;
-  border-top: 5px solid blue;
-}
-
-.plan .in-progress {
-  background: white !important;
-}
-
 
 
 /* Left control elements */

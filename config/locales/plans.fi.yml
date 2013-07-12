@@ -66,6 +66,7 @@ fi:
         extent_tooltip: "Tähän voit päivittää kurssin laajuuden opintopisteinä."
         grade_tooltip: "Tähän voit päivittää kurssista saamasi arvosanan (0-5)."
         cr: "op"
+        period_credits_tooltip: "Opintojaksollesi sijoittamiesi kurssien opintopisteiden summa. Pyri olemaan realistinen ja tasaamaan opintojaksojesi opintokuormaa."
 
     periods:
       index:

@@ -11,8 +11,10 @@ class @Scheduler
     for course in @courses
       # Skip courses that are already scheduled
       if @schedule[course.id]
-        console.log "Skipping #{course.name}. Already scheduled."
+        #console.log "Skipping #{course.name}. Already scheduled."
         continue
+      else
+        console.log "Autoscheduling #{course.name}."
 
       # Put course after its prereqs (those that have been attached)
       this.postponeAfterPrereqs(course)

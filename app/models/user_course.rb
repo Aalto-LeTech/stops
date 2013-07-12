@@ -6,6 +6,7 @@ class UserCourse < ActiveRecord::Base
   #    t.integer "abstract_course_id", :null => false
   #    t.integer "course_instance_id"
   #    t.integer "grade"
+  #    t.float   "credits"
   #  end
 
   # members
@@ -13,6 +14,7 @@ class UserCourse < ActiveRecord::Base
   #  - abstract_course   via course_instance
   #  - course_instance
   #  - grade
+  #  - credits
 
 
   belongs_to :user
@@ -25,10 +27,6 @@ class UserCourse < ActiveRecord::Base
 
   def name( curriculum, locale )
     abstract_course.name( curriculum, locale )
-  end
-
-  def credits( curriculum )
-    abstract_course.credits( curriculum )
   end
 
   def passed?

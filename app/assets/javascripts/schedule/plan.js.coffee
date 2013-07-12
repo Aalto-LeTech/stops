@@ -174,6 +174,7 @@ class @PlanView
 
     ko.applyBindings(this)
 
+
     # Load study plan course data
     nSPC = 0
     rawPlan = data['study_plan']
@@ -237,7 +238,7 @@ class @PlanView
 
     # Get time elapsed since start to show current time usage
     endTime = new Date().getTime();
-    console.log("Parsing the data took #{endTime - startTime} milliseconds.")
+    console.log("Parsing & modelling the plan data took #{endTime - startTime} milliseconds.")
 
 
   unselectCourses: (data, event) ->

@@ -11,7 +11,8 @@ Todo
 - [X] new: highlight passed courses
 - [X] new: highlight courses based on whether they are instance-bound or not
 - [X] new: highlight courses based on whether they are instance-bound or not
-- [X] new: rewrite of the plan save method series: error resistance, logging and support for user_course addition
+- [X] fix: fixed some update errors and cleaned other odd stuff, added comments
+- [X] new: rewrite of the plan save method series: error resistance, efficiency, logging and support for user_course addition
 - [ ] new: better guessing for a course object's length in periods when it has no course instances at that period
 - [ ] fix: make the top bar float with the sidebar when scrolling the schedule grid
 - [ ] fix: tune sidebar course information
@@ -22,7 +23,7 @@ Todo
 - [ ] new: studyplan/courses/index: course searching (see skillEditor)
 - [ ] something else
 
-sprint review meeting 17.7.
+Next sprint review meeting 17.7.
 
 w #c09853 #a47e3c
 e #b94a48 #953b39

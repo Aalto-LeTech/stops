@@ -133,7 +133,7 @@ class @Period
 
     # FIXME: this breaks if user changes credits before removing course
     if course
-      @credits(@credits() - course.credits()) if course
+      @credits(@credits() - course.credits())
 
     @nextPeriod.freeSlot(slot, length - 1) if length > 1 && @nextPeriod
 

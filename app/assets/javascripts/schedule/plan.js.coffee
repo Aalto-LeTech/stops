@@ -315,7 +315,7 @@ class @PlanView
       if course.hasChanged()
         console.log( "Course #{course.name} was changed. Pushing to be saved." )
         plan_courses.push(course.toJson())
-        course.resetOriginals()
+        course.resetOriginals()  # FIXME: only if the PUT request was a success!
 
     if plan_courses.length == 0
       console.log( 'No plan_course was changed. No reason to put.' )

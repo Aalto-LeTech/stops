@@ -8,8 +8,8 @@ Todo
 - [x] redirect to schedule instead of student dashboard
 - [X] dump dashboard
 - [X] new: highlight period total credits when the scheduled period is over or underbooked
+- [x] starterd using rbenv and dumped rvm & .ruby-gemset
 - [X] new: highlight passed courses
-- [X] new: highlight courses based on whether they are instance-bound or not
 - [X] new: highlight courses based on whether they are instance-bound or not
 - [X] fix: fixed some update errors and cleaned other odd stuff, added comments
 - [X] new: rewrite of the plan save method series: error resistance, efficiency, logging and support for user_course addition
@@ -23,7 +23,7 @@ Todo
 - [ ] new: studyplan/courses/index: course searching (see skillEditor)
 - [ ] something else
 
-Next sprint review meeting 17.7.
+Next sprint review meeting scheduled for 17.7.
 
 w #c09853 #a47e3c
 e #b94a48 #953b39

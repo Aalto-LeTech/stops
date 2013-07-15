@@ -6,19 +6,24 @@ Todo
 - [x] autoscroll to show some past & the current period while focusing on the near future
 - [x] starterd using rvm and added .ruby-version .ruby-gemset to the repo
 - [x] redirect to schedule instead of student dashboard
-- [X] dump dashboard
-- [X] new: highlight period total credits when the scheduled period is over or underbooked
+- [x] dump dashboard
+- [x] new: highlight period total credits when the scheduled period is over or underbooked
 - [x] starterd using rbenv and dumped rvm & .ruby-gemset
-- [X] new: highlight passed courses
-- [X] new: highlight courses based on whether they are instance-bound or not
-- [X] fix: fixed some update errors and cleaned other odd stuff, added comments
-- [X] new: rewrite of the plan save method series: error resistance, efficiency, logging and support for user_course addition
-- [ ] new: better guessing for a course object's length in periods when it has no course instances at that period
-- [ ] fix: make the top bar float with the sidebar when scrolling the schedule grid
+- [x] new: highlight passed courses
+- [x] new: highlight courses based on whether they are instance-bound or not
+- [x] fix: fixed some update errors and cleaned other odd stuff, added comments
+- [x] new: rewrite of the plan save method series: error resistance, efficiency, logging and support for user_course addition
+- [x] fix: made scheduler keep a record of which courses were actually altered
+- [x] fix: optimized plan parsing by avoiding repeated repositioning of courses
+- [x] fix: make course.length a ko observable
+- [x] fix: redesign & write period's total credit count management
+- [x] new: better guessing for a course object's length in periods when it has no course instances at that period
+- [x] new: make the view model know which parts of the JSON sent for saving was accepted by the server
 - [ ] fix: tune sidebar course information
 - [ ] new: when a period is selected, display information about it
 - [ ] new: when no course selected, competences are shown at the bar
 - [ ] new: when a competence is selected, related courses are highlighted
+- [ ] fix: make the top bar float with the sidebar when scrolling the schedule grid
 - [ ] new: studyplan/courses/index: selected and passed courses (user sortable by any field on the view)
 - [ ] new: studyplan/courses/index: course searching (see skillEditor)
 - [ ] something else

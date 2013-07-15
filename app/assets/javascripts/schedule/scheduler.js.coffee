@@ -2,9 +2,11 @@ class @Scheduler
 
   constructor: (@courses) ->
     @schedule = {}   # courseId => period
+    @modified = {}   # courseId => isModified?
 
     for course in @courses
       @schedule[course.id] = course.period
+      @modified[course.id] = false
 
 
   scheduleUnscheduledCourses: ->
@@ -13,8 +15,8 @@ class @Scheduler
       if @schedule[course.id]
         #console.log "Skipping #{course.name}. Already scheduled."
         continue
-      else
-        console.log "Autoscheduling #{course.name}."
+
+      console.log "Autoscheduling #{course.name}."
 
       # Put course after its prereqs (those that have been attached)
       this.postponeAfterPrereqs(course)
@@ -56,22 +58,31 @@ class @Scheduler
 
     # If no instances are known for this course, put it on the requested period
     if (course.instanceCount < 1)
-      @schedule[course.id] = requestedPeriod
+      if @schedule[course.id] != requestedPeriod
+        @schedule[course.id] = requestedPeriod
+        # Mark course as modified
+        @modified[course.id] = true
       #this.markUnschedulable()
       return
 
     period = requestedPeriod
     while (period)
       if course.instancesByPeriodId[period.id]
-        @schedule[course.id] = period
         console.log "Move #{course.name} to #{period.name}"
+        if @schedule[course.id] != period
+          @schedule[course.id] = period
+          # Mark course as modified
+          @modified[course.id] = true
         return
 
       period = period.getNextPeriod()
 
     # No period could be found. Put it on the requested period
     console.log "No period found for #{course.name}. Putting on #{period.name}"
-    @schedule[course.id] = requestedPeriod
+    if @schedule[course.id] != requestedPeriod
+      @schedule[course.id] = requestedPeriod
+      # Mark course as modified
+      @modified[course.id] = true
     #this.markUnschedulable()
 
 
@@ -88,7 +99,7 @@ class @Scheduler
       return
 
     # Postpone postreqs that are earlier than this
-    for id,other of course.prereqTo
+    for id, other of course.prereqTo
       othersPeriod = @schedule[other.id]
       if !othersPeriod || period.laterOrEqual(othersPeriod)
         console.log "Postponing #{other.name} to #{targetPeriod.name} because it depends on #{course.name}"

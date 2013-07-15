@@ -4,7 +4,6 @@ class @Period
   OVERBOOKED_LIMIT:  20  #   see @creditsStatus
 
   constructor: (data) ->
-    @credits = ko.observable(0)
     @droppedCourse = ko.observable()
     @hilight = ko.observable(false)
     @isOld = ko.observable(false)
@@ -17,7 +16,7 @@ class @Period
       course.updateReqWarnings()
 
     @position         = ko.observable({y: 0}) # Course position
-    @courses          = []                    # Courses that have been put to this period
+    @courses          = ko.observableArray()  # Courses that have been put to this period
     @coursesById      = {}                    # Courses that have been put to this period by id
     #@courseInstances = {}                    # Courses that are available on this period. courseId => courseInstance
     @slots            = []                    # Array index is slot (column) number. Value is Course occupying the slot or false
@@ -32,6 +31,7 @@ class @Period
 #
     @loadJson(data || {})
 
+    @credits = ko.observable(0)
     @creditsStatus = ko.computed =>
       credits = @credits()
       return 'underbooked' if credits < @UNDERBOOKED_LIMIT
@@ -75,10 +75,12 @@ class @Period
 
   # Puts a course on this period.
   addCourse: (course, slot) ->
+    #console.log("p[#{@id}] add #{course}.")
     # Add course to the dict
     @coursesById[course.id] = course
+    @courses.push(course)
 
-    length = course.length  # Length in periods
+    length = course.length()  # Length in periods
 
     # Check that the slot is free. Find a free slot if it's occupied.
     if !slot || !this.isSlotFree(slot, length)
@@ -92,11 +94,13 @@ class @Period
 
   # Removes a course from this period.
   removeCourse: (course) ->
+    #console.log("p[#{@id}] rm #{course}.")
     # Remove course from the dict
     delete @coursesById[course.id]
+    @courses.splice(@courses.indexOf(course), 1)
 
     # Free slots
-    this.freeSlot(course.slot, course.length)
+    this.freeSlot(course.slot, course.length())
 
 
   findFreeSlot: (length) ->
@@ -120,7 +124,6 @@ class @Period
   # @param course Course that occupies the slot.
   occupySlot: (slot, length, course) ->
     @slots[slot] = course
-    @credits(@credits() + course.credits())
     @nextPeriod.occupySlot(slot, length - 1, course) if length > 1 && @nextPeriod
 
 
@@ -130,11 +133,6 @@ class @Period
   freeSlot: (slot, length) ->
     course = @slots[slot]
     @slots[slot] = false
-
-    # FIXME: this breaks if user changes credits before removing course
-    if course
-      @credits(@credits() - course.credits())
-
     @nextPeriod.freeSlot(slot, length - 1) if length > 1 && @nextPeriod
 
 
@@ -172,3 +170,7 @@ class @Period
 #
 #       # Move postreqs after the course
 #       course.satisfyPostreqs()
+
+
+  toString: ->
+    "p[#{@id}]:{ n:#{@name} }"

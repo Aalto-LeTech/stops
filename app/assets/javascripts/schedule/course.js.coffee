@@ -12,37 +12,44 @@ class @Course
     @instancesById       = {}                # instanceId => CourseInstance
     @instancesByPeriodId = {}                # periodId => CourseInstance
     @instanceCount       = 0
+    @avgInstanceLength   = 0
     @periods             = []                # Periods on which this course is arranged
     @prereqs             = {}                # Prerequisite courses. courseId => Course
     @prereqTo            = {}                # Courses for which this course is a prereq. courseId => Course object
     @prereqPaths         = []                # Raphael paths to prerequirement courses
     @period              = undefined         # Scheduled period
-    @oPeriodId           = undefined         # Originally scheduled period
     @courseInstance      = undefined         # Scheduled course instance
-    @oCourseInstanceId   = undefined         # Originally scheduled course instance
     @slot                = undefined         # Slot number that this course occupies
-    @length              = undefined         # Length in periods
-    @oLength             = undefined         # Originally set length in periods
+    @length              = ko.observable()   # Length in periods
     @unschedulable       = false             # true if period allocation algorithm cannot find suitable period
-    @changed             = false             # Tracks whether changes need to be saved
 
     @credits             = ko.observable()
-    @oCredits            = undefined
     @grade               = ko.observable()
-    @oGrade              = undefined
     @passedInstance      = undefined  # FIXME, duplication to fix the courseInstance vs passedInstance duel?
 
     this.loadJson(data || {})
 
+    @creditsPerP = ko.computed =>
+      console.log("c[#{@id}] credits update -> #{@credits()}/#{@length()}")
+      return @credits() / @length()
 
+    @creditsPerP.subscribe ((oldValue) ->
+      @deDistributeCredits(oldValue)
+    ), @, "beforeChange"
+
+    @creditsPerP.subscribe (newValue) =>
+      @distributeCredits()
+
+
+  # Reads some of the model's core attributes from the given JSON data object
   loadJson: (data) ->
     @id                  = data['id']
     @code                = data['course_code'] || ''
     @name                = data['localized_name'] || ''
-    @oCredits            = data['credits'] || 0
     @credits(data['credits'] || 0)
 
 
+  # Determines whether the model's core attributes have been changed.
   hasChanged: ->
     #console.log( "=> Was #{@name} changed?" )
     #console.log( " - credits: #{@oCredits}  vs  #{@credits()}" )
@@ -57,31 +64,34 @@ class @Course
       return true if @oCourseInstanceId != @courseInstance.id
     else
       return true if @oCourseInstanceId != undefined
-    #console.log( " - length: #{@oLength}  vs  #{@length}" )
-    return true if @oLength != @length
+    #console.log( " - length: #{@oLength}  vs  #{@length()}" )
+    return true if @oLength != @length()
     #console.log( " - grade: #{@oGrade}  vs  #{@grade()}" )
     return true if @oGrade != @grade()
     #console.log( "   NOT CHANGED!" )
     return false
 
 
+  # Resets the originals by which it is determined whether the model has been changed
   resetOriginals: ->
     @oCredits = @credits()
     if @period? then @oPeriodId = @period.id else @oPeriodId = undefined
     if @courseInstance? then @oCourseInstanceId = @courseInstance.id else @oCourseInstanceId = undefined
-    @oLength = @length  # FIXME: make me changeable
+    @oLength = @length()  # FIXME: make me changeable
     @oGrade = @grade()
 
 
+  # Serializes the model for sending it back to the database
   toJson: ->
-    grade = parseInt(@grade())
     credits = parseInt(@credits())
+    length = parseInt(@length())
+    grade = parseInt(@grade())
 
     json = { scoped_course_id: @id }
     json['credits'] = credits if credits > 0
     json['period_id'] = @period.id if @period?
     json['course_instance_id'] = @courseInstance.id if @courseInstance?
-    json['length'] = @length if @length > 0  # FIXME: should study_plan_course model have one?
+    json['length'] = length if length > 0  # FIXME: should study_plan_course model have one?
     json['grade'] = grade if grade > 0
 
     return json
@@ -100,6 +110,9 @@ class @Course
     @instancesById[courseInstance.id] = courseInstance
     @instancesByPeriodId[period.id] = courseInstance
     @instanceCount++
+    # Maintain an average of instance lengths which is used later to guess
+    # lengths of unknown instances
+    @avgInstanceLength = (@avgInstanceLength * (@instanceCount - 1) + courseInstance.length) / @instanceCount
     #console.log( "course[#{@id}]::addCInstance: #:#{@instanceCount} #{courseInstance}" )
 
 
@@ -110,38 +123,75 @@ class @Course
       console.log( "ERROR: Unknown instance #{instanceId}" )
       return
     #console.log( "course[#{@id}]::setAsPassed: #{@passedInstance} (g:#{grade})" )
-    # Set course to where it was passed
+    @grade(grade)
+    # Move course to where it was passed
     @setPeriod(@passedInstance.period)
     @updatePosition()
-    @grade(grade)
 
 
-  # Moves the course to the given period, to a free slot. Does not update DOM.
-  # Updates @period and @slot
+  # Distributes the course's credit weight on the periods it extends to
+  # Note: here we can't use the @creditsPerP function in this and the following
+  # function since these might be called from inside it!
+  distributeCredits: ->
+    console.log("c[#{@id}] dcr c/l:#{}) p:#{@period}")
+    return if not @period or not @length()
+    period = @period
+    i = @length() + 1
+    while i -= 1
+      console.log("c[#{@id}] dcr (#{@credits()}/#{@length()}) to #{period}")
+      period.credits(period.credits() + @credits() / @length())
+      period = period.nextPeriod
+
+  # Cancels the effect of the previous function
+  deDistributeCredits: (oldCPP) ->
+    console.log("c[#{@id}] ddcr c/l:#{@credits()}/#{@length()} p:#{@period}")
+    return if not @period or not @length()
+    if not oldCPP? then oldCPP = @creditsPerP()
+    return if not (oldCPP > 0)
+    period = @period
+    i = @length() + 1
+    while i -= 1
+      console.log("c[#{@id}] ddcr #{oldCPP} (x #{@length()}) from #{period}")
+      period.credits(period.credits() - oldCPP)
+      period = @period.nextPeriod
+
+
+  # Moves the course to the given period, to a free slot but does not update the DOM.
+  # Updates @period and @slot and distributes credits to the affected periods.
   setPeriod: (period) ->
+    #console.log("#{@code} period => #{period} ...")
     # Remove course from previous period. Note: length must not be updated before freeing the old slots.
-    @period.removeCourse(this) if (@period)
+    if @period
+      @deDistributeCredits()
+      @period.removeCourse(this)
+      # In order to not allow double dedistribution of credits at length change.
+      @period = undefined
 
     # Update courseInstance & length
     @courseInstance = @instancesByPeriodId[period.id]
 
     if (@courseInstance)
-      @length = @courseInstance.length
+      @length(@courseInstance.length)
     else
-      @length = 1 # FIXME
+      # A guess is used since no actual instance is available
+      @length(@avgInstanceLength)
+
+    # Update the period
+    @period = period
 
     # Add course to the new period
-    @period = period
+    @distributeCredits()
     @slot = period.addCourse(this)
 
 
   # Updates the DOM elements to match model
   updatePosition: ->
+    #console.log("#{@code} positioning...")
     # Move the div
     pos = @position()
     pos.x = @slot * (PlanView.COURSE_WIDTH + PlanView.COURSE_MARGIN_X) + PlanView.COURSE_MARGIN_X
     pos.y = @period.position().y + PlanView.COURSE_MARGIN_Y
-    pos.height = @length * PlanView.PERIOD_HEIGHT - 2 * (PlanView.COURSE_MARGIN_Y + PlanView.COURSE_PADDING_Y)
+    pos.height = @length() * PlanView.PERIOD_HEIGHT - 2 * (PlanView.COURSE_MARGIN_Y + PlanView.COURSE_PADDING_Y)
     @position.valueHasMutated()
 
     # Update possible prerequirement graph paths of the current course and any of the paths of its postrequirement courses.
@@ -492,4 +542,4 @@ class @Course
 
 
   toString: ->
-    "crs[#{@id}]:{ c:#{@code} p:#{@name} }"
+    "crs[#{@id}]:{ c:#{@code} n:#{@name} }"

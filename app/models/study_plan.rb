@@ -115,6 +115,9 @@ class StudyPlan < ActiveRecord::Base
 
     return if plan_courses.length == 0
 
+    # A scoped_course_id => accepted? dict which is returned by this function.
+    accepted = {}
+
     # Index information by scoped_course_id and collect them
     new_courses = {}
     scoped_course_ids = []
@@ -128,6 +131,10 @@ class StudyPlan < ActiveRecord::Base
     y new_courses
 
     self.study_plan_courses.where(scoped_course_id: scoped_course_ids).each do |study_plan_course|
+
+      # Initially, mark the update as rejected.
+      accepted[study_plan_course.scoped_course_id] = false
+
       # Fetch the abstract_course_id
       abstract_course_id = study_plan_course.scoped_course.abstract_course_id
 
@@ -223,12 +230,17 @@ class StudyPlan < ActiveRecord::Base
           end
         end
 
-        # No we're done! =)
+        # No we're done! =) Mark the course as accepted.
+        accepted[study_plan_course.scoped_course_id] = true
 
+      # On error, the plan_course is rejected.
       rescue UpdateException => message
         puts "ERROR '#{message}' when updating database from the plan_course: #{new_course}!"
       end
     end
+
+    # Return the dict of accepted plan_courses.
+    return accepted
   end
 
   def add_competence(competence)

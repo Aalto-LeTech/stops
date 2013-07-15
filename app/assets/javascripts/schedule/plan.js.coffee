@@ -26,6 +26,9 @@ class @PlanView
     @selectedCourse = ko.observable()
     #this.initializeRaphael()
 
+    @coursesToSave = [] # List of courses to be saved. Managed by @save()
+    @coursesRejected = [] # List of courses rejected on save by the server. Managed by @save()
+
     # TODO:
     # old periods
     # add warning if courses are in wrong order
@@ -112,9 +115,12 @@ class @PlanView
   # Loads plan from JSON data
   parsePlan: (data) ->
     startTime = new Date().getTime()
-    currentPeriodId = data['current_period_id']
+    console.log("Starts loading data...")
+
 
     # Load periods
+    currentPeriodId = data['current_period_id']
+
     periodCounter = 0
     previousPeriod = undefined
     for rawPeriod in data['periods']
@@ -130,7 +136,7 @@ class @PlanView
       previousPeriod = period
       periodCounter++
 
-    console.log( "Loaded #{periodCounter} periods." )
+    console.log("Loaded #{periodCounter} periods.")
 
     Period::currentPeriod = @periodsById[currentPeriodId]
 
@@ -140,6 +146,7 @@ class @PlanView
     while period.previousPeriod?
       period = period.previousPeriod
       period.isOld(true)
+
 
     # Load scoped courses
     for rawSC in data['courses']
@@ -152,27 +159,31 @@ class @PlanView
         prereq = @coursesById[prereqId]
         course.addPrereq(prereq) if prereq
 
-    console.log( "Loaded #{@courses.length} courses." )
+    console.log("Loaded #{@courses.length} courses.")
 
-    # Load competences TODO
+
+    # Load competences
+
+    # TODO
+
 
     # Load course instances
     nCI = 0
     for rawCI in data['course_instances']
-      course = @coursesByAbstractCourseId[rawCI['abstract_course_id']]
+
+      # It can be expected that many instances are irrelevant
       period = @periodsById[rawCI['period_id']]
+      continue unless period?
+
+      course = @coursesByAbstractCourseId[rawCI['abstract_course_id']]
+      continue unless course?
+
       length = rawCI['length']
-
-      continue unless course? && period?
       courseInstance = new CourseInstance(rawCI['id'], course, period, length)
-
       course.addCourseInstance(courseInstance)
       nCI++
 
-    console.log( "Loaded #{nCI}/#{data['course_instances'].length} course instances." )
-
-
-    ko.applyBindings(this)
+    console.log("Loaded #{nCI}/#{data['course_instances'].length} course instances.")
 
 
     # Load study plan course data
@@ -181,25 +192,22 @@ class @PlanView
     for rawSPC in rawPlan['study_plan_courses']
       course = @coursesById[rawSPC['scoped_course_id']]
       unless course
-        console.log "Unknown course #{rawSPC['scoped_course_id']}"
+        console.log("Unknown course #{rawSPC['scoped_course_id']}!")
         continue
 
       periodId = rawSPC['period_id']
       if periodId
         period = @periodsById[periodId]
+        if not period
+          console.log("Unknown period ID #{periodId}")
+          continue
 
-        if period
-          course.setPeriod(period)
-          course.updatePosition()
-
-          # Save original data
-          course.oPeriodId = period.id
-          course.oLength = course.length if course.length > 0
-          course.oCourseInstanceId = course.courseInstance.id if course.courseInstance?
-
+        # Only set the variable to avoid unnecessary repetition
+        course.period = period
       nSPC++
 
-    console.log( "Loaded #{nSPC}/#{rawPlan['study_plan_courses'].length} study plan courses." )
+    console.log("Loaded #{nSPC}/#{rawPlan['study_plan_courses'].length} study plan courses.")
+
 
     # Load passed courses
     nUC = 0
@@ -209,36 +217,85 @@ class @PlanView
         console.log "Unknown course #{rawUC['abstract_course_id']}"
         continue
 
-      course.setAsPassed(rawUC['course_instance_id'], rawUC['grade'])
-      course.oGrade = rawUC['grade']
+      # Only set the variables to avoid unnecessary repetition
+      course.passedInstance = course.instancesById[rawUC['course_instance_id']]
+      course.grade(rawUC['grade'])
       nUC++
 
-    console.log( "Loaded #{nUC}/#{data['passed_courses'].length} user courses." )
+    console.log("Loaded #{nUC}/#{data['passed_courses'].length} user courses.")
 
-    # Automatically schedule new courses
+
+    # Automatically schedule unscheduled courses
     schedule = new Scheduler(@courses)
     schedule.scheduleUnscheduledCourses()
 
-    for courseId, period of schedule.schedule
-      course = @coursesById[courseId]
-      unless course
-        console.log "Unknown course #{courseId}"
-        continue
+#    nAS = 0
+#    for courseId, isModified of schedule.modified
+#      # Only deal with modified courses
+#      continue if not isModified
+#      course = @coursesById[courseId]
+#      unless course
+#        console.log "Unknown course #{courseId}"
+#        continue
 
-      course.setPeriod(period)
-      course.updatePosition()
+#      # Only set the variable to avoid unnecessary repetition
+#      course.period = schedule.schedule[courseId]
+#      nAS++
+
+#    console.log("Automatically scheduled #{nAS}/#{@courses.length} courses.")
+
+
+    # apply ko bindings
+    console.log("Applying bindings...")
+    preBindTime = new Date().getTime()
+    ko.applyBindings(this)
+    postBindTime = new Date().getTime()
+
+
+    # Set periods, update positions and saves the 'originals'
+    # All done in the same loop (and rather complicatedly) to avoid repeating
+    # operations.
+    console.log("Setting the courses to the periods...")
+    for course in @courses
+      # If the course is passed, set accordingly
+      if course.passedInstance
+        course.period = undefined
+        course.setAsPassed(course.passedInstance.id, course.grade())
+        course.resetOriginals()
+      # Else if the course was moved by the scheduler
+      else if schedule.modified[course.id]
+        course.resetOriginals()
+        course.period = undefined
+        course.setPeriod(schedule.schedule[course.id])
+        course.updatePosition()
+      # If the course has a place to go to
+      else if course.period
+        period = course.period
+        course.period = undefined
+        course.setPeriod(period)
+        course.updatePosition()
+        course.resetOriginals()
+      # Hmmh...?
+      else
+        console.log("WARNING: A vagabond course: #{course}!")
+        course.resetOriginals()
+
 
     # Update course ordering related warnings
+    console.log("Updating course ordering warnings...")
     for course in @courses
       course.updateReqWarnings()
 
-    # Set the viewport position automatically to show the current period and the near future
-    topOffSet = $('div.period.now').offset().top
-    $(window).scrollTop( topOffSet - 2 * @constructor.PERIOD_HEIGHT )
 
-    # Get time elapsed since start to show current time usage
+    # Set the viewport position automatically to show the current period and the near future
+    console.log("Setting the viewport...")
+    topOffSet = $('div.period.now').offset().top
+    $(window).scrollTop(topOffSet - 2 * @constructor.PERIOD_HEIGHT)
+
+
+    # Log time used from start to bind and here
     endTime = new Date().getTime();
-    console.log("Parsing & modelling the plan data took #{endTime - startTime} milliseconds.")
+    console.log("Parsing & modelling the plan data took #{preBindTime - startTime} (preBind) + #{postBindTime - preBindTime} (bind) + #{endTime - postBindTime} (postBind) = #{endTime - startTime} (total) milliseconds.")
 
 
   unselectCourses: (data, event) ->
@@ -310,21 +367,34 @@ class @PlanView
     #     ...
     #   ]
     # }
-    plan_courses = []
+    @coursesRejected = []   # FIXME: Not used atm.
+    @coursesToSave = []     # courses
+    planCoursesToSave = []  # their JSON representation for sending
     for course in @courses
       if course.hasChanged()
-        console.log( "Course #{course.name} was changed. Pushing to be saved." )
-        plan_courses.push(course.toJson())
-        course.resetOriginals()  # FIXME: only if the PUT request was a success!
+        console.log("Course \"#{course.name}\" was changed. Pushing to be saved.")
+        @coursesToSave.push(course)
+        planCoursesToSave.push(course.toJson())
 
-    if plan_courses.length == 0
-      console.log( 'No plan_course was changed. No reason to put.' )
+    if @coursesToSave.length == 0
+      console.log('No plan_course was changed. No reason to put.')
       return
 
-    console.log( "A total of #{plan_courses.length} courses changed. Starting the put." )
+    console.log("A total of #{@coursesToSave.length} courses changed. Starting the put.")
 
     $.ajax
       url: @planUrl,
       type: 'put',
       dataType: 'json',
-      data: { 'plan_courses': JSON.stringify(plan_courses) }
+      data: { 'plan_courses': JSON.stringify(planCoursesToSave) },
+      success: (data) =>
+        if data['status'] == 'ok'
+          accepted = data['accepted']
+          if accepted?
+            for course in @coursesToSave
+              if accepted[course.id]
+                console.log("Course \"#{course.name}\" was successfully saved.")
+                course.resetOriginals()
+              else
+                console.log("ERROR: Course \"#{course.name}\" was rejected by the server! Saving failed!")
+                @coursesRejected.push(course)  # FIXME: Not used atm.

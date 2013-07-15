@@ -115,7 +115,9 @@ class PlansController < ApplicationController
     authorize! :update, @study_plan
     # TODO: authentication
 
-    @study_plan.update_from_json(params[:plan_courses]) if params[:plan_courses]
+    # Forward the data for the study_plan's update function which returns
+    # feedback to be sent back.
+    accepted = @study_plan.update_from_json(params[:plan_courses]) if params[:plan_courses]
 
 #     if params[:periods]
 #       params[:periods].each do |user_course_id, period_id|
@@ -128,7 +130,7 @@ class PlansController < ApplicationController
 #     end
 
     respond_to do |format|
-      format.js { render :json => {:status => :ok} }
+      format.js { render :json => {:status => :ok, :accepted => accepted} }
     end
 
   end

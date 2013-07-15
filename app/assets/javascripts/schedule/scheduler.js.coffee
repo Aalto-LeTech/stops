@@ -2,11 +2,11 @@ class @Scheduler
 
   constructor: (@courses) ->
     @schedule = {}   # courseId => period
-    @modified = {}   # courseId => isModified?
+    @moved = {}   # courseId => isMoved?
 
     for course in @courses
       @schedule[course.id] = course.period
-      @modified[course.id] = false
+      @moved[course.id] = false
 
 
   scheduleUnscheduledCourses: ->
@@ -60,8 +60,8 @@ class @Scheduler
     if (course.instanceCount < 1)
       if @schedule[course.id] != requestedPeriod
         @schedule[course.id] = requestedPeriod
-        # Mark course as modified
-        @modified[course.id] = true
+        # Mark course as moved
+        @moved[course.id] = true
       #this.markUnschedulable()
       return
 
@@ -71,8 +71,8 @@ class @Scheduler
         console.log "Move #{course.name} to #{period.name}"
         if @schedule[course.id] != period
           @schedule[course.id] = period
-          # Mark course as modified
-          @modified[course.id] = true
+          # Mark course as moved
+          @moved[course.id] = true
         return
 
       period = period.getNextPeriod()
@@ -81,8 +81,8 @@ class @Scheduler
     console.log "No period found for #{course.name}. Putting on #{period.name}"
     if @schedule[course.id] != requestedPeriod
       @schedule[course.id] = requestedPeriod
-      # Mark course as modified
-      @modified[course.id] = true
+      # Mark course as moved
+      @moved[course.id] = true
     #this.markUnschedulable()
 
 

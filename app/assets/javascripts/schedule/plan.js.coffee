@@ -225,24 +225,9 @@ class @PlanView
     console.log("Loaded #{nUC}/#{data['passed_courses'].length} user courses.")
 
 
-    # Automatically schedule unscheduled courses
+    # Automatically schedule unscheduled (new) courses
     schedule = new Scheduler(@courses)
     schedule.scheduleUnscheduledCourses()
-
-#    nAS = 0
-#    for courseId, isModified of schedule.modified
-#      # Only deal with modified courses
-#      continue if not isModified
-#      course = @coursesById[courseId]
-#      unless course
-#        console.log "Unknown course #{courseId}"
-#        continue
-
-#      # Only set the variable to avoid unnecessary repetition
-#      course.period = schedule.schedule[courseId]
-#      nAS++
-
-#    console.log("Automatically scheduled #{nAS}/#{@courses.length} courses.")
 
 
     # apply ko bindings
@@ -263,7 +248,7 @@ class @PlanView
         course.setAsPassed(course.passedInstance.id, course.grade())
         course.resetOriginals()
       # Else if the course was moved by the scheduler
-      else if schedule.modified[course.id]
+      else if schedule.moved[course.id]
         course.resetOriginals()
         course.period = undefined
         course.setPeriod(schedule.schedule[course.id])

@@ -19,11 +19,13 @@ Todo
 - [x] fix: redesign & write period's total credit count management
 - [x] new: better guessing for a course object's length in periods when it has no course instances at that period
 - [x] new: make the view model know which parts of the JSON sent for saving was accepted by the server
-- [ ] fix: tune sidebar course information
-- [ ] new: when a period is selected, display information about it
+- [x] fix: redesign sidebar layout
+- [x] new: add a prereq list
+- [/] new: when a period is selected, display information about it
 - [ ] new: when no course selected, competences are shown at the bar
 - [ ] new: when a competence is selected, related courses are highlighted
-- [ ] fix: make the top bar float with the sidebar when scrolling the schedule grid
+- [ ] fix: make the plan scroll and the top and side elements remain visible when scrolling the schedule grid
+- [ ] fix: redesign the "autoscroll to current period" feature
 - [ ] new: studyplan/courses/index: selected and passed courses (user sortable by any field on the view)
 - [ ] new: studyplan/courses/index: course searching (see skillEditor)
 - [ ] something else

@@ -91,6 +91,12 @@
       background-color: #e0ffe0;
     }
 
+    &.selected {
+      color: white;
+      border: 2px solid #0000ff;
+      background: #6060e0;
+    }
+
     .credits span {
 
       &.overbooked {
@@ -203,8 +209,23 @@
 
 /* Left control elements */
 
-.schedule-controls-fixed {
-  position: fixed;
-  top: 0px;
+
+#sidebar {
+
+  #controls {
+    margin-bottom: 2em;
+  }
+
+  .well h4 {
+    line-height: 2em;
+  }
 
 }
+
+
+/*
+.fixed {
+  position: fixed;
+  top: 0px;
+}
+*/

@@ -14,92 +14,131 @@
   <%= image_tag "glyphicons_203_lock.png", :class => "course-locked" %>
 </div>
 
+
 <div class="row-fluid">
-  <div class="span3">
-    <div id="schedule-controls-container">
-      <h2><%= t('.schedule_controls') %></h2>
-      <div class="control-block">
-        <h3><%= t('.schedule_preferences') %></h3>
-
-        <div class="control-group" id="schedule-automatic-arrangement">
-          <label for="schedule-automatic-arrangement-input">
-            <%= t('.schedule_automatic_arrangement_checkbox') %>
-          </label>
-          <div class="controls">
-            <input id="schedule-automatic-arrangement-input" type="checkbox" />
-            <%= image_tag("glyphicons_195_circle_info.png", :size => "16x16" ) %>
-          </div>
-        </div>
-
-        <div class="control-group" id="schedule-draw-req-graphs">
-          <label for="schedule-draw-req-graphs-input">
-            <%= t('.schedule_draw_course_graphs_checkbox') %>
-          </label>
-          <div class="controls">
-            <input id="schedule-draw-req-graphs-input" type="checkbox" />
-            <%= image_tag("glyphicons_195_circle_info.png", :size => "16x16" ) %>
-          </div>
-        </div>
-
-        <button id="save-button" data-bind="click: save"><%= t('.schedule_save_button') %></button>
+  <div class="span2" style="background:#AFA;">
+    <div class="row-fluid">
+      <div class="span6" style="background:#FCC;">
       </div>
-
-      <!-- Selected course details -->
-      <!-- ko if: selectedCourse -->
-        <div id="course-desc-block" class="control-block well" data-bind="with: selectedCourse">
-          <h3><%= t('.schedule_controls_selected_course') %></h3>
-          <p id="course-id">
-            <span data-bind="text: code"></span>
-            <span data-bind="text: name"></span>
-          </p>
-
-          <table>
-            <tr data-toggle="tooltip" title="<%= t('.extent_tooltip') %>">
-              <td>
-                <label>
-                  <%= t('.extent') %>:
-                </label>
-              </td>
-              <td>
-                <input class="input-mini" type="number" data-bind="value: credits, valueUpdate: 'keyup'" />
-              </td>
-            </tr>
-            <tr data-toggle="tooltip" title="<%= t('.grade_tooltip') %>">
-              <td>
-                <label>
-                  <%= t('.grade') %>:
-                </label>
-              </td>
-              <td>
-                <input class="input-mini" type="number" data-bind="value: grade, valueUpdate: 'keyup'" />
-              </td>
-            </tr>
-          </table>
-
-          <div class="control-group" id="schedule-course-lock">
-            <label for="schedule-course-lock-input">
-              <%= t('.schedule_course_lock_checkbox') %>
-            </label>
-            <div class="controls">
-              <input id="schedule-course-lock-input" type="checkbox" disabled="true" />
-              <%= image_tag("glyphicons_195_circle_info.png", :size => "16x16" ) %>
-            </div>
-          </div>
-
-          <p>
-            <%= t('.course_prereqs') %>
-            <span id="course-prereqs"></span>
-          </p>
-          <h4><%= t :schedule_course_prereqs_title %></h4>
-          <p id="course-prereqs-list">
-
-          </p>
-        </div>
-      <!-- /ko -->
+      <div class="span6" style="background:#CCF;">
+      </div>
     </div>
   </div>
+  <div class="span10" style="background:#AAF;">
+  </div>
+</div>
 
-  <div class="span9">
+<div class="row-fluid">
+
+  <div class="span2" id="sidebar">
+
+    <div id="controls">
+
+      <h2><%= t('.controls') %></h2>
+
+      <h3><%= t('.actions') %></h3>
+
+      <button id="save-button" data-bind="click: save"><%= t('.save_button') %></button>
+
+      <h3><%= t('.preferences') %></h3>
+
+      <div class="row-fluid">
+        <div class="span9">
+          <label for="automatic-arrangement-input">
+            <%= t('.automatic_arrangement_checkbox') %>
+          </label>
+        </div>
+        <div class="span3">
+          <input id="automatic-arrangement-input" type="checkbox" />
+          <%= image_tag("glyphicons_195_circle_info.png", :size => "16x16" ) %>
+        </div>
+      </div>
+
+      <div class="row-fluid">
+        <div class="span9">
+          <label for="draw-req-graphs-input">
+            <%= t('.draw_course_graphs_checkbox') %>
+          </label>
+        </div>
+        <div class="span3">
+          <input id="draw-req-graphs-input" type="checkbox" />
+          <%= image_tag("glyphicons_195_circle_info.png", :size => "16x16" ) %>
+        </div>
+      </div>
+
+    </div>
+
+    <!--
+    -->
+
+    <!-- Selected course details -->
+    <!-- ko if: selectedObjectType() == 'Course' -->
+      <div class="well" data-bind="with: selectedObject">
+
+        <h3>
+          <%= t('.selected_course') %>
+        </h3>
+
+        <p>
+          <span data-bind="text: code"></span>
+          <span data-bind="text: name"></span>
+        </p>
+
+        <div class="row-fluid">
+          <div class="span6" data-toggle="tooltip" title="<%= t('.extent_tooltip') %>">
+            <label for="credits-input">
+              <%= t('.extent') %>:
+            </label>
+          </div>
+          <div class="span6">
+            <input id="credits-input" class="input-mini" type="number" data-bind="value: credits, valueUpdate: 'keyup'" />
+          </div>
+        </div>
+
+        <div class="row-fluid">
+          <div class="span6" data-toggle="tooltip" title="<%= t('.grade_tooltip') %>">
+            <label for="grade-input">
+              <%= t('.grade') %>:
+            </label>
+          </div>
+          <div class="span6">
+            <input id="grade-input" class="input-mini" type="number" data-bind="value: grade, valueUpdate: 'keyup'" />
+          </div>
+        </div>
+
+        <div class="row-fluid">
+          <div class="span9">
+            <label for="course-lock-input">
+              <%= t('.course_lock_checkbox') %>
+            </label>
+          </div>
+          <div class="span3">
+            <input id="course-lock-input" type="checkbox" disabled="true" />
+            <%= image_tag("glyphicons_195_circle_info.png", :size => "16x16" ) %>
+          </div>
+        </div>
+
+        <h4><%= t('.prereqs') %></h4>
+
+        <span data-bind="ifnot: hasPrereqs()"><%= t('.no_prereqs') %></span>
+
+        <!-- ko if: hasPrereqs() -->
+          <ul data-bind="foreach: getPrereqs()">
+            <li>
+              <span data-bind="text: code"></span>
+              <span data-bind="text: name"></span>
+            </li>
+          </ul>
+        <!-- /ko -->
+
+      </div>  <!-- well -->
+    <!-- /ko -->
+
+  </div>  <!-- span3, sidebar -->
+
+
+  <div class="span10">
+
     <h1><%=t('.heading')%></h1>
 
     <% if @study_plan.courses.empty? && @study_plan.competences.empty? %>
@@ -120,7 +159,7 @@
       <div id="svg"></div>
 
       <!-- ko foreach: periods -->
-        <div class="period" data-bind="droppable: droppedCourse, position: position, css: {'receiver': hilight, 'old': isOld, 'now': isNow}">
+        <div class="period" data-bind="droppable: droppedCourse, position: position, css: {'selected': hilightSelected, 'receiver': hilight, 'old': isOld, 'now': isNow}">
           <div class="name" data-bind="text: name"></div>
           <div class="credits"><span data-toggle="tooltip" title="<%= t('.period_credits_tooltip') %>" data-bind="text: credits, css: creditsStatus"></span> <%= t('.cr') %></div>
         </div>
@@ -134,6 +173,7 @@
       <!-- /ko -->
 
     </div>
-  </div>
 
-</div>
+  </div>  <!-- span9 -->
+
+</div>  <!-- row-fluid -->

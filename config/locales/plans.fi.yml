@@ -47,17 +47,19 @@ fi:
 
     schedule:
       show:
-        schedule_controls: "Suunnitelman hallinta"
-        schedule_preferences: "Asetukset"
-        schedule_automatic_arrangement_checkbox: "Siirrä kursseja esitietojen mukaan"
-        schedule_draw_course_graphs_checkbox: "Piirrä esitietokaaret"
-        schedule_course_lock_checkbox: "Lukitse kurssi nykyiselle paikalleen"
-        schedule_save_button: "Tallenna suunnitelma"
-        schedule_controls_selected_course: "Valittu kurssi"
-        schedule_credit:
+        controls: "Suunnitelman hallinta"
+        actions: "Toiminnot"
+        preferences: "Asetukset"
+        automatic_arrangement_checkbox: "Siirrä kursseja esitietojen mukaan"
+        draw_course_graphs_checkbox: "Piirrä esitietokaaret"
+        course_lock_checkbox: "Lukitse kurssi nykyiselle paikalleen"
+        save_button: "Tallenna suunnitelma"
+        selected_course: "Valittu kurssi"
+        credit:
           one: "opintopiste"
           other: "opintopistettä"
-        course_prereqs: "Esitietokurssit:"
+        prereqs: "Esitietokurssit"
+        no_prereqs: "Kurssilla ei ole esitietokursseja"
 
         heading: "Oma opintosuunnitelma"
         empty_instructions: "Valitse opinto-oppaasta itseäsi kiinnostavat kompetenssit"
@@ -110,8 +112,6 @@ fi:
     one: "opintopiste"
     other: "opintopistettä"
   schedule_courses_total: "Kursseja yhteensä"
-  schedule_course_prereqs_title: "Kurssin välittömät esitietokurssit"
-  schedule_course_no_prereqs: "Kurssilla ei ole esitietokursseja"
   schedule_automatic_arrangement_checkbox: "Siirrä kursseja esitietojen mukaan"
   schedule_save_button: "Tallenna suunnitelma"
   schedule_course_lock_checkbox: "Lukitse kurssi nykyiselle paikalleen"

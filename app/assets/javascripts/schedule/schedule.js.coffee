@@ -84,22 +84,31 @@ jQuery ->
   #instancesPath = $plan.data('instances-path') # '/' + locale + '/course_instances'
 
   # Make schedule controls always visible (i.e., sticky)
-  $scheduleControls     = $("#schedule-controls-container")
-  scheduleControlsOrig  = $scheduleControls.offset().top
+  # FIXME:
+  # I suggest we simply put the plan into a scrollable div.
+  # This makes it all easier.
+  #  - All controls visible all the time
+  #  - Bootstrap rows and cols work properly. Much so when the viewport size varies.
+  #
+  #$sidebar     = $("#sidebar")
+  #sidebarOrig  = $sidebar.offset().top
 
-  $(window).scroll ->
-    winY = $(this).scrollTop()
-    if winY >= scheduleControlsOrig
-      $scheduleControls.addClass("schedule-controls-fixed")
-    else
-      $scheduleControls.removeClass("schedule-controls-fixed")
+  #$(window).scroll ->
+  #  winY = $(this).scrollTop()
+  #  if winY >= sidebarOrig
+  #    $sidebar.addClass("fixed")
+  #  else
+  #    $sidebar.removeClass("fixed")
 
 
   planView = new PlanView(planUrl)
 
   # Event handlers
-  $(document).on 'mousedown', '.course', (event) ->
-    course = ko.dataFor(this)
-    planView.selectCourse(course)
+  $(document)
+    .on 'mousedown', '.course, .period', (event) ->
+      object = ko.dataFor(this)
+      planView.selectObject(object) if event.which == 1
+    .on 'mouseup', '.well', (event) ->  # FIXME .well => everything else
+      planView.unselectObjects()
 
   planView.loadPlan()

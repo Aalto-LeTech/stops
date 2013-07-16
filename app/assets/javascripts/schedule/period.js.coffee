@@ -4,6 +4,8 @@ class @Period
   OVERBOOKED_LIMIT:  20  #   see @creditsStatus
 
   constructor: (data) ->
+    @hilightSelected = ko.observable(false)
+
     @droppedCourse = ko.observable()
     @hilight = ko.observable(false)
     @isOld = ko.observable(false)

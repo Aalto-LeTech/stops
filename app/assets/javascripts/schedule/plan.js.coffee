@@ -23,7 +23,8 @@ class @PlanView
     @coursesById = {}                # scoped_course_id => Course
     @coursesByAbstractCourseId = {}  # abstract_course_id => Course
 
-    @selectedCourse = ko.observable()
+    @selectedObject = ko.observable()
+    @selectedObjectType = ko.observable()
     #this.initializeRaphael()
 
     @coursesToSave = [] # List of courses to be saved. Managed by @save()
@@ -237,9 +238,9 @@ class @PlanView
     postBindTime = new Date().getTime()
 
 
-    # Set periods, update positions and saves the 'originals'
+    # Set periods, update positions and save the 'originals'
     # All done in the same loop (and rather complicatedly) to avoid repeating
-    # operations.
+    # operations (eg. resetting periods and/or positions).
     console.log("Setting the courses to the periods...")
     for course in @courses
       # If the course is passed, set accordingly
@@ -272,10 +273,11 @@ class @PlanView
       course.updateReqWarnings()
 
 
-    # Set the viewport position automatically to show the current period and the near future
-    console.log("Setting the viewport...")
-    topOffSet = $('div.period.now').offset().top
-    $(window).scrollTop(topOffSet - 2 * @constructor.PERIOD_HEIGHT)
+    # Autoscroll the viewport to show the current period and the near future
+    # FIXME: Don't move the viewport, but the scrollable div.
+    #console.log("Autoscrolling the viewport...")
+    #topOffSet = $('div.period.now').offset().top
+    #$(window).scrollTop(topOffSet - 2 * @constructor.PERIOD_HEIGHT)
 
 
     # Log time used from start to bind and here
@@ -283,44 +285,56 @@ class @PlanView
     console.log("Parsing & modelling the plan data took #{preBindTime - startTime} (preBind) + #{postBindTime - preBindTime} (bind) + #{endTime - postBindTime} (postBind) = #{endTime - startTime} (total) milliseconds.")
 
 
-  unselectCourses: (data, event) ->
-    this.selectCourse()
+  unselectObjects: (data, event) ->
+    @selectObject()
 
-  selectCourse: (course) ->
-    selectedCourse = @selectedCourse()
+  selectObject: (object) ->
+
+    # Deselect the old object
+    selectedObject = @selectedObject()
 
     # Reset hilights
-    if selectedCourse
-      for period in selectedCourse.periods
-        period.hilight(false)
+    if selectedObject
+      selectedObject.hilightSelected(false)
 
-      selectedCourse.hilightSelected(false)
+      if selectedObject instanceof Course
 
-      for id,other of selectedCourse.prereqTo
-        other.hilightPrereqTo(false)
+        for period in selectedObject.periods
+          period.hilight(false)
 
-      for id,other of selectedCourse.prereqs
-        other.hilightPrereq(false)
+        for id, other of selectedObject.prereqTo
+          other.hilightPrereqTo(false)
 
-    # Select new course
-    @selectedCourse(course)
+        for id, other of selectedObject.prereqs
+          other.hilightPrereq(false)
 
-    return unless course
+    console.log("Deselected [#{@selectedObjectType()}] #{selectedObject}")
+
+    # Select the new object
+    @selectedObjectType(undefined)
+    @selectedObject(undefined)
+    @selectedObjectType('Course') if object instanceof Course
+    @selectedObjectType('Period') if object instanceof Period
+    @selectedObject(object)
+    console.log("Selected [#{@selectedObjectType()}] #{object}")
+
+    return unless object
 
     # Hilight selected
-    course.hilightSelected(true)
+    object.hilightSelected(true)
 
-    # Hilight prereqs
-    for id,other of course.prereqs
-      other.hilightPrereq(true)
+    if object instanceof Course
+      # Hilight prereqs
+      for id, other of object.prereqs
+        other.hilightPrereq(true)
 
-    # Hilight courses for which this is a prereq
-    for id,other of course.prereqTo
-      other.hilightPrereqTo(true)
+      # Hilight courses for which this is a prereq
+      for id, other of object.prereqTo
+        other.hilightPrereqTo(true)
 
-    # Hilight the periods that have this course
-    for period in course.periods
-      period.hilight(true)
+      # Hilight the periods that have this course
+      for period in object.periods
+        period.hilight(true)
 
 
 #       if (period.laterOrEqual(planView.currentPeriod)) {

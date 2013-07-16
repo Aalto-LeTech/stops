@@ -47,17 +47,19 @@ en:
 
     schedule:
       show:
-        schedule_controls: "Schedule controls"
-        schedule_preferences: "Preferences"
-        schedule_automatic_arrangement_checkbox: "Move courses to satisfy prerequirements"
-        schedule_draw_course_graphs_checkbox: "Draw prerequirement graphs"
-        schedule_course_lock_checkbox: "Lock course on its current position"
-        schedule_save_button: "Save schedule"
-        schedule_controls_selected_course: "Selected course"
-        schedule_credits:
+        controls: "Schedule controls"
+        actions: "Actions"
+        preferences: "Preferences"
+        automatic_arrangement_checkbox: "Move courses to satisfy prerequirements"
+        draw_course_graphs_checkbox: "Draw prerequirement graphs"
+        course_lock_checkbox: "Lock course on its current position"
+        save_button: "Save schedule"
+        selected_course: "Selected course"
+        credits:
           one: "credits"
           other: "credits"
-        course_prereqs: "Prerequirements:"
+        prereqs: "Prerequirements"
+        no_prereqs: "No prerequirements"
 
         heading: "My study plan"
         empty_instructions: "Please explore the study guide and choose competences that you find interesting"
@@ -107,8 +109,6 @@ en:
     one: "credits"
     other: "credits"
   schedule_courses_total: "Total courses"
-  schedule_course_prereqs_title: "Immediate prerequirements of selected course"
-  schedule_course_no_prereqs: "No prerequirements"
   schedule_automatic_arrangement_checkbox: "Move courses to satisfy prerequirements"
   schedule_save_button: "Save schedule"
   schedule_course_lock_checkbox: "Lock course on its current position"

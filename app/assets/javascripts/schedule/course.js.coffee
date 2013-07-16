@@ -30,7 +30,7 @@ class @Course
     this.loadJson(data || {})
 
     @creditsPerP = ko.computed =>
-      console.log("c[#{@id}] credits update -> #{@credits()}/#{@length()}")
+      #console.log("c[#{@id}] credits update -> #{@credits()}/#{@length()}")
       return @credits() / @length()
 
     @creditsPerP.subscribe ((oldValue) ->
@@ -103,6 +103,24 @@ class @Course
     other.prereqTo[@id] = this
 
 
+  # Returns prerequisite courses as a list
+  hasPrereqs: ->
+    for id, course of @prereqs
+      return true
+    return false
+
+
+  # Returns prerequisite courses as a list
+  getPrereqs: ->
+    prereqs = []
+    for id, course of @prereqs
+      prereqs.push( course )
+
+    prereqs.sort (a, b) ->
+      return a.code.localeCompare(b.code)
+
+    return prereqs
+
   # Adds an instance of this course to the given period.
   addCourseInstance: (courseInstance) ->
     period = courseInstance.period
@@ -133,25 +151,25 @@ class @Course
   # Note: here we can't use the @creditsPerP function in this and the following
   # function since these might be called from inside it!
   distributeCredits: ->
-    console.log("c[#{@id}] dcr c/l:#{}) p:#{@period}")
+    #console.log("c[#{@id}] dcr c/l:#{}) p:#{@period}")
     return if not @period or not @length()
     period = @period
     i = @length() + 1
     while i -= 1
-      console.log("c[#{@id}] dcr (#{@credits()}/#{@length()}) to #{period}")
+      #console.log("c[#{@id}] dcr (#{@credits()}/#{@length()}) to #{period}")
       period.credits(period.credits() + @credits() / @length())
       period = period.nextPeriod
 
   # Cancels the effect of the previous function
   deDistributeCredits: (oldCPP) ->
-    console.log("c[#{@id}] ddcr c/l:#{@credits()}/#{@length()} p:#{@period}")
+    #console.log("c[#{@id}] ddcr c/l:#{@credits()}/#{@length()} p:#{@period}")
     return if not @period or not @length()
     if not oldCPP? then oldCPP = @creditsPerP()
     return if not (oldCPP > 0)
     period = @period
     i = @length() + 1
     while i -= 1
-      console.log("c[#{@id}] ddcr #{oldCPP} (x #{@length()}) from #{period}")
+      #console.log("c[#{@id}] ddcr #{oldCPP} (x #{@length()}) from #{period}")
       period.credits(period.credits() - oldCPP)
       period = @period.nextPeriod
 

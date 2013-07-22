@@ -1,4 +1,4 @@
 # Internatiolized description of ScopedCourse
 class CourseDescription < ActiveRecord::Base
-  belongs_to :scoped_course
+  belongs_to :abstract_course
 end

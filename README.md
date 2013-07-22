@@ -1,5 +1,46 @@
-Todo
-====
+Sprints
+=======
+
+Sprint 17.7 - 30.7
+------------------
+
+- [x] new: major restructuring
+  add study_plan_course.length (however get length returns scoped_course.length if nil)
+  add study_plan_course.custom
+  add study_plan.first_period_id and last_period_id
+  add study_plan_courses.abstract_course_id
+  add course_description.abstract_course_id
+  rm  course_description.scoped_course_id and do related modification
+- [x] fix: clean redundant and deprecated code (eg. profile related code), refactor
+- [x] new: add study_plan.periods function and remove user.relevant_periods
+- [x] fix: rewrite course_description accessing related code
+- [x] new: refactor PlanView
+- [x] fix: highlight custom courses
+- [x] fix: fix the unselecting issue
+- [x] fix: switch from knockout 2.2.1 to 2.3.0
+- [/] fix: PlanView save logic (eg. permit the removal of user courses)
+- [ ] fix: fix and test the schedule related logic
+- [ ] new: when a competence is selected, display a progress bar
+- [ ] fix: make the plan scroll and the top and side elements remain visible when scrolling the schedule grid
+- [ ] fix: redesign the "autoscroll to current period" feature
+- [ ] new: add intro description into competence view in case no coms chosen
+- [ ] new: test the basic scheduler work flow with some scenarios with "fresh users"
+- [ ] new: add a
+- [ ] new: studyplan/courses/index: course searching (use Sphinx, see skillEditor)
+- [ ] new: allow NULL for course_description.scoped_course_id
+- [ ] new: studyplan/courses/index: allow creation of custom study_plan_courses (name, )
+- [ ] new: test the work flow with some scenarios
+- [ ] something else
+
+If excess time
+- [ ] fix the course_description.scoped_course_id problem
+- [ ] add a "fix course ordering" button into the PlanView
+- [ ] show the fit of available competences to the currently selected/completed studies
+- [ ] offer the possibility of creating alternate study_plans and even comparing them effectively
+
+
+Sprint 10.7 - 17.7.
+-------------------
 
 - [x] replace the i18n hack with the other one
 - [x] fix the "extent" input field size and add tooltips
@@ -21,16 +62,15 @@ Todo
 - [x] new: make the view model know which parts of the JSON sent for saving was accepted by the server
 - [x] fix: redesign sidebar layout
 - [x] new: add a prereq list
-- [/] new: when a period is selected, display information about it
-- [ ] new: when no course selected, competences are shown at the bar
-- [ ] new: when a competence is selected, related courses are highlighted
-- [ ] fix: make the plan scroll and the top and side elements remain visible when scrolling the schedule grid
-- [ ] fix: redesign the "autoscroll to current period" feature
-- [ ] new: studyplan/courses/index: selected and passed courses (user sortable by any field on the view)
-- [ ] new: studyplan/courses/index: course searching (see skillEditor)
-- [ ] something else
+- [x] new: when a period is selected, display information about it
+- [x] new: when nothing is selected, competences are shown at the bar
+- [x] new: when a competence is selected, related courses are highlighted
 
-Next sprint review meeting scheduled for 17.7.
+
+O4 koulutus tuutoreille 27.8. 16:00
+===================================
+Paikka: K215
+
 
 w #c09853 #a47e3c
 e #b94a48 #953b39

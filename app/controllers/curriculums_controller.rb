@@ -1,5 +1,6 @@
 class CurriculumsController < ApplicationController
 
+
   respond_to :html
   respond_to :json, :only => 'prereqs'
 
@@ -7,9 +8,11 @@ class CurriculumsController < ApplicationController
 
   #caches_page :prereqs
 
+
   def load_curriculum
     @curriculum = Curriculum.find(params[:curriculum_id])
   end
+
 
   # GET /curriculums
   # GET /curriculums.xml
@@ -23,13 +26,14 @@ class CurriculumsController < ApplicationController
     end
   end
 
+
   # GET /curriculums/1
   # GET /curriculums/1.xml
   def show
     load_curriculum_for_show_and_edit
 
     authorize! :read, @curriculum
-    
+
     @temp_courses = @curriculum.temp_courses
 
     respond_to do |format|
@@ -37,6 +41,7 @@ class CurriculumsController < ApplicationController
       format.xml  { render :xml => @curriculum }
     end
   end
+
 
   # GET /curriculums/new
   # GET /curriculums/new.xml
@@ -50,19 +55,22 @@ class CurriculumsController < ApplicationController
     end
   end
 
+
   # GET /curriculums/1/edit
   def edit
     load_curriculum_for_show_and_edit
     authorize! :update, @curriculum
-    
+
     @courses = ScopedCourse.where(:curriculum_id => @curriculum.id).joins(:course_descriptions).includes(:localized_description).where(:course_descriptions => { :locale => I18n.locale }).order('course_code, name')
   end
+
 
   # GET /curriculums/1/edit/import_csv
   def import_csv
     @curriculum = Curriculum.find(params[:id])
     authorize! :update, @curriculum
   end
+
 
   # POST /curriculums
   # POST /curriculums.xml
@@ -83,6 +91,7 @@ class CurriculumsController < ApplicationController
     end
   end
 
+
   # PUT /curriculums/1
   # PUT /curriculums/1.xml
   def update
@@ -93,11 +102,6 @@ class CurriculumsController < ApplicationController
       matrix = PrereqMatrix.new(params[:prereqs_csv], @curriculum, I18n.locale)
       matrix.process
       flash[:success] = "#{params[:prereqs_csv].original_filename} uploaded"
-      redirect_to edit_import_csv_curriculum_path(@curriculum)
-    elsif params[:profiles_csv]
-      matrix = ProfileMatrix.new(params[:profiles_csv], @curriculum, I18n.locale)
-      matrix.process
-      flash[:success] = "#{params[:profiles_csv].original_filename} uploaded"
       redirect_to edit_import_csv_curriculum_path(@curriculum)
     elsif params[:courses_csv]
       @curriculum.import_courses params[:courses_csv].read
@@ -116,6 +120,7 @@ class CurriculumsController < ApplicationController
     end
   end
 
+
   # DELETE /curriculums/1
   # DELETE /curriculums/1.xml
   def destroy
@@ -130,12 +135,6 @@ class CurriculumsController < ApplicationController
     end
   end
 
-  def cycles
-    @curriculum = Curriculum.find(params[:id])
-
-    @cycles = @curriculum.detect_cycles
-  end
-
 
   # Get all strict prereqs of all courses
   def prereqs
@@ -143,14 +142,14 @@ class CurriculumsController < ApplicationController
 
     prereqs = CoursePrereq.where(:requirement => STRICT_PREREQ)
                 .joins(<<-SQL
-                    INNER JOIN competence_nodes AS course ON course.id = course_prereqs_cache.scoped_course_id 
+                    INNER JOIN competence_nodes AS course ON course.id = course_prereqs_cache.scoped_course_id
                     INNER JOIN competence_nodes AS prereq ON prereq.id = course_prereqs_cache.scoped_prereq_id
                   SQL
                 ).where("course.curriculum_id = ?", @curriculum)
                 .select(<<-SQL
-                    course.course_code AS course_code, 
-                    prereq.course_code AS prereq_code, 
-                    course.id AS course_id, 
+                    course.course_code AS course_code,
+                    prereq.course_code AS prereq_code,
+                    course.id AS course_id,
                     prereq.id AS prereq_id
                   SQL
                 )
@@ -162,6 +161,7 @@ class CurriculumsController < ApplicationController
     end
   end
 
+
   def graph
     @curriculum = Curriculum.find(params[:id])
 
@@ -172,15 +172,17 @@ class CurriculumsController < ApplicationController
     render :action => 'graphviz', :locals => {:prereqs => prereqs}, :layout => false, :content_type => 'text/x-graphviz'
   end
 
+
   def outcomes
     @curriculum = Curriculum.find(params[:id])
   end
+
 
   def search_skills
     node_ids = []
     if params[:q] && params[:q].size > 1
       excluded_node_id = false
-      if params[:exclude] 
+      if params[:exclude]
         excluded_node_id = Integer(params[:exclude]) rescue false
       end
 
@@ -189,25 +191,25 @@ class CurriculumsController < ApplicationController
                                .joins(:skill)
                                .includes(:skill, :skill => :competence_node)
                                .select(:competence_node_id).uniq
-      skill_descriptions.each do |skill_desc| 
+      skill_descriptions.each do |skill_desc|
         node_id = skill_desc.skill.competence_node_id.to_i
         node_ids << node_id if not node_id == excluded_node_id
       end
-      
+
       # Search from course names or codes
       nodes = CourseDescription.where(['name ILIKE ? OR course_code ILIKE ?', "%#{params[:q]}%", "%#{params[:q]}%"])
                                .joins(:scoped_course)
                                .select(:scoped_course_id).uniq
-      nodes.each do |node| 
+      nodes.each do |node|
         node_id = node.scoped_course_id
         node_ids << node_id if not node_id == excluded_node_id
       end
-      
+
       # Search from competence names
       nodes = CompetenceDescription.where(['name ILIKE ?', "%#{params[:q]}%"])
                                .joins(:competence)
                                .select(:competence_id).uniq
-      nodes.each do |node| 
+      nodes.each do |node|
         node_id = node.competence_id
         node_ids << node_id if not node_id == excluded_node_id
       end
@@ -237,7 +239,7 @@ class CurriculumsController < ApplicationController
             }
           }
         )
-      else 
+      else
         # Must be a ScopedCourse
         node.as_json(
           :only => [:id, :course_code],
@@ -259,21 +261,21 @@ class CurriculumsController < ApplicationController
         )
       end
     end
-    
+
     respond_to do |format|
-      format.json do 
+      format.json do
         render :json => nodes_json
       end
     end
   end
-  
+
+
   private
 
   # Loads curriculum object with necessary associations eagerly loaded
   def load_curriculum_for_show_and_edit
     @curriculum = Curriculum.includes(
       :courses,
-      :profiles,
       :courses => [:abstract_course, :periods, :localized_description, :strict_prereqs],
     ).find(params[:id])
   end

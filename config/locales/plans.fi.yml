@@ -31,10 +31,7 @@ fi:
 
     courses:
       index:
-        heading: "Kurssit"
-        unscheduled_courses_heading: "Aikatauluttamattomat"
-        scheduled_courses_heading: "Aikataulutetut"
-        passed_courses_heading: "Suoritetut"
+        heading: "Kurssihaku"
       show:
         study_plan: "Opintosuunnitelmasi"
         study_plan_courses: "Suunnitelman kurssit"
@@ -47,19 +44,21 @@ fi:
 
     schedule:
       show:
+        curriculum: "Opinto-opas"
         controls: "Suunnitelman hallinta"
         actions: "Toiminnot"
-        preferences: "Asetukset"
-        automatic_arrangement_checkbox: "Siirrä kursseja esitietojen mukaan"
-        draw_course_graphs_checkbox: "Piirrä esitietokaaret"
-        course_lock_checkbox: "Lukitse kurssi nykyiselle paikalleen"
         save_button: "Tallenna suunnitelma"
         selected_course: "Valittu kurssi"
-        credit:
+        credits:
           one: "opintopiste"
           other: "opintopistettä"
         prereqs: "Esitietokurssit"
         no_prereqs: "Kurssilla ei ole esitietokursseja"
+        selected_period: "Valittu opintojakso"
+        no_scheduled_courses: "Ei aikataulutettuja kursseja"
+        scheduled_courses: "Aikataulutetut kurssit"
+        competences: "Kompetenssit"
+        no_chosen_competences: "Ei valittuja kompetensseja"
 
         heading: "Oma opintosuunnitelma"
         empty_instructions: "Valitse opinto-oppaasta itseäsi kiinnostavat kompetenssit"
@@ -67,7 +66,6 @@ fi:
         grade: "Arvosana"
         extent_tooltip: "Tähän voit päivittää kurssin laajuuden opintopisteinä."
         grade_tooltip: "Tähän voit päivittää kurssista saamasi arvosanan (0-5)."
-        cr: "op"
         period_credits_tooltip: "Opintojaksollesi sijoittamiesi kurssien opintopisteiden summa. Pyri olemaan realistinen ja tasaamaan opintojaksojesi opintokuormaa."
 
     periods:
@@ -94,29 +92,3 @@ fi:
         courses_ending: "Päättyvät"
         unscheduled_period: "Et ole vielä suunnitellut mitään tälle opintojaksolle."
         invalid_period: "Hakemaasi opintojaksoa ei löydy."
-
-  plan_heading: "Oma opintosuunnitelma"
-  plan_empty_instructions: "Valitse ensin opinto-oppaasta kompetensseja"
-  plan_my_courses: "Omat kurssit"
-
-  current_curriculum_heading: "Opinto-opas"
-  current_curriculum: "Käytät tällä hetkellä opinto-opasta %{name}"
-  choose_curriculum_heading: "Valitse opinto-opas"
-  change_curriculum: "Vaihda opinto-opasta..."
-  change_curriculum_warning: "Varoitus: Kaikkia valittuja kursseja ja profiileja ei välttämättä ole tarjolla muissa opinto-oppaissa."
-
-  schedule_controls: "Suunnitelman hallinta"
-  schedule_preferences: "Asetukset"
-  schedule_controls_selected_course: "Valittu kurssi"
-  schedule_credit:
-    one: "opintopiste"
-    other: "opintopistettä"
-  schedule_courses_total: "Kursseja yhteensä"
-  schedule_automatic_arrangement_checkbox: "Siirrä kursseja esitietojen mukaan"
-  schedule_save_button: "Tallenna suunnitelma"
-  schedule_course_lock_checkbox: "Lukitse kurssi nykyiselle paikalleen"
-  schedule_draw_course_graphs_checkbox: "Piirrä esitietokaaret"
-
-  schedule_popover_help_title: "Mitä tämä tekee?"
-  schedule_automatic_arrangement_help: "Tämä valinta järjestää kurssit automaattisesti sopivaan järjestykseen siirrettyäsi kursseja."
-  schedule_course_lock_help: "Tämä valinta lukitsee valitun kurssin niin, ettei sitä voi liikuttaa nykyisestä sijainnistaan."

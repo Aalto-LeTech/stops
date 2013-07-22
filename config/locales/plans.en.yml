@@ -31,10 +31,7 @@ en:
 
     courses:
       index:
-        heading: "Courses"
-        unscheduled_courses_heading: "Unscheduled"
-        scheduled_courses_heading: "Scheduled"
-        passed_courses_heading: "Passed"
+        heading: "Course search"
       show:
         study_plan: "Your Study Plan"
         study_plan_courses: "Plan's Courses"
@@ -47,19 +44,21 @@ en:
 
     schedule:
       show:
+        curriculum: "Curriculum"
         controls: "Schedule controls"
         actions: "Actions"
-        preferences: "Preferences"
-        automatic_arrangement_checkbox: "Move courses to satisfy prerequirements"
-        draw_course_graphs_checkbox: "Draw prerequirement graphs"
-        course_lock_checkbox: "Lock course on its current position"
         save_button: "Save schedule"
         selected_course: "Selected course"
         credits:
-          one: "credits"
+          one: "credit"
           other: "credits"
         prereqs: "Prerequirements"
         no_prereqs: "No prerequirements"
+        selected_period: "Selected period"
+        no_scheduled_courses: "No scheduled courses"
+        scheduled_courses: "Scheduled courses"
+        competences: "Competences"
+        no_chosen_competences: "No chosen competences"
 
         heading: "My study plan"
         empty_instructions: "Please explore the study guide and choose competences that you find interesting"
@@ -67,7 +66,6 @@ en:
         grade: "Grade"
         extent_tooltip: "Here you can update the extent of the course (in ECTS credits)."
         grade_tooltip: "Here you can update the grade you've received from the course (0-5)."
-        cr: "cr"
         period_credits_tooltip: "The sum of the credits of the courses you have scheduled for this period. Try to be realistic and balance the load between periods."
 
     periods:
@@ -89,31 +87,8 @@ en:
         prev: "Preceding scheduled period"
         next: "Following scheduled period"
         courses: "Courses"
+        courses_starting: "Starting"
+        courses_continuing: "Continuing"
+        courses_ending: "Ending"
         unscheduled_period: "You haven't planned anything yet for this period."
         invalid_period: "Such a period cannot be found."
-
-  plan_heading: "My study plan"
-  plan_empty_instructions: "Please explore the study guide and choose profiles that you find interesting"
-  plan_my_courses: "My courses"
-
-  current_curriculum_heading: "Current curriculum"
-  current_curriculum: "You are currently using the %{name} study guide"
-  choose_curriculum_heading: "Choose curriculum"
-  change_curriculum: "Change curriculum..."
-  change_curriculum_warning: "Warning: Some currently selected courses or profiles may not be available in other curriculums."
-
-  schedule_controls: "Schedule controls"
-  schedule_preferences: "Preferences"
-  schedule_controls_selected_course: "Selected course"
-  schedule_credits:
-    one: "credits"
-    other: "credits"
-  schedule_courses_total: "Total courses"
-  schedule_automatic_arrangement_checkbox: "Move courses to satisfy prerequirements"
-  schedule_save_button: "Save schedule"
-  schedule_course_lock_checkbox: "Lock course on its current position"
-  schedule_draw_course_graphs_checkbox: "Draw prerequirement graphs"
-
-  schedule_popover_help_title: "What does this do?"
-  schedule_automatic_arrangement_help: "When this option is enabled, courses are automatically arranged according to their prerequirements."
-  schedule_course_lock_help: "When this option is enabled, the selected course won't move from the current position."

@@ -5,7 +5,6 @@
 fi:
   navi_plan: "Oma opintosuunnitelma"
   navi_curriculums: "Kaikki opinto-oppaat"
-  navi_profiles: "Profiilit"
   navi_courses: "Kurssit"
 
   navi_my_plan: "Oma opintosuunnitelma"
@@ -39,7 +38,7 @@ fi:
   Course_code: "Kurssikoodi"
   course_code: "kurssikoodi"
   admin_toolbox_heading: "Admin"
-  
+
 
   #########################
   # General status messages
@@ -102,11 +101,3 @@ fi:
       taken: "on varattu"
       too_short: "on liian lyhyt"
       confirmation: "ei täsmää"
-
-
-  ###############
-  # General terms
-  ###############
-
-  competence: "Kompetenssi"
-  scoped_course: "Kurssi"

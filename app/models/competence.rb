@@ -1,8 +1,11 @@
 # Competence, e.g. Steel structures, level 1
 class Competence < CompetenceNode
 
+
   belongs_to :curriculum
 
+
+  # Parent
   belongs_to :parent_competence,
            :class_name => 'Competence'
 
@@ -12,53 +15,58 @@ class Competence < CompetenceNode
            :foreign_key => :parent_competence_id,
            :class_name  => 'Competence'
 
+
+  # Descriptions
   has_many :competence_descriptions,
            :dependent   => :destroy,
            :order => 'locale'
 
-  has_one  :localized_description, :class_name => "CompetenceDescription", 
+  accepts_nested_attributes_for :competence_descriptions
+
+  has_one  :localized_description, :class_name => "CompetenceDescription",
            :conditions => proc { "locale = '#{I18n.locale}'" }
 
 
+  # Skills
   has_many :skills_ordered,
            :class_name  => 'Skill',
            :foreign_key => :competence_node_id,
            :order       => 'position'
 
-  # Prerequisite courses
-  has_many :competence_courses, 
-           :dependent   => :destroy
-       
 
-  has_many :courses, 
+  # Competence courses
+  has_many :competence_courses,
+           :dependent   => :destroy
+
+  has_many :courses,
            :through     => :competence_courses,
            :source      => :scoped_course
-           #:order       => 'code'
 
+
+  # Prerequisite courses
   has_many :strict_prerequirement_skills,
            :through     => :skills,
            :source      => :strict_prereqs
-           #:order       => 'code',
 
   has_many :strict_prereqs,
            :through     => :strict_prerequirement_skills,
            :source      => :competence_node,
            :uniq        => true
 
-  has_many :supporting_prereqs, 
+  has_many :supporting_prereqs,
            :through     => :competence_courses,
            :source      => :scoped_course,
            :conditions  => "requirement = #{SUPPORTING_PREREQ}"
-           #:order       => 'code', 
+
 
   # Study plans in which the competence is included
-
   has_many :study_plan_competences
 
   has_many :study_plans_included_in,
            :class_name  => 'StudyPlan',
            :through     => :study_plan_competences,
            :source      => :study_plan
+
 
   # Users that have included this competence in their study plan and therefore
   # plan to study it.
@@ -68,64 +76,34 @@ class Competence < CompetenceNode
            :source      => :user
 
 
-  accepts_nested_attributes_for :competence_descriptions
-
-  
   def duplicate
     duplicate = self.dup :include => [:competence_descriptions, {:skills => [:skill_descriptions, :skill_prereqs]}]
-    
+
     duplicate.competence_descriptions.each do |description|
       description.name += ' (copy)'
     end
-    
+
     duplicate.save()
   end
 
+
+  def localized_name
+    localized_description.nil? ? "" : localized_description.name
+  end
+
+
   def name(locale)
+    throw
     description = competence_descriptions.where(:locale => locale.to_s).first
     description ? description.name : ''
   end
 
-  def localized_name
-    localized_description.nil? ? "" : localized_description.name 
-  end
 
   def description(locale)
+    throw
     description = competence_descriptions.where(:locale => locale.to_s).first
     description ? description.description : ''
   end
-
-  # returns an array of arrays of courses
-  def semesters
-    # put all courses and their recursive prereqs in the Level
-    levels = Array.new
-    level = self.courses_recursive
-
-    begin
-      # Create a list of courses that depend on some course on this level
-      future_courses = Hash.new
-      level.each do |course|
-        course.prereq_to.each do |future_course|
-          future_courses[future_course.id] = future_course
-        end
-      end
-
-      # Move future courses to the next level
-      next_level = Array.new
-      level.each_with_index do |course, index|
-        if future_courses.has_key?(course.id)
-          level[index] = nil    # Remove from this level
-          next_level << course   # Add to the next level
-        end
-      end
-
-      levels << level
-      level = next_level
-    end while level.size > 0
-
-    return levels
-  end
-
 
 
   # Returns all courses and their prereqs, recursively
@@ -138,6 +116,7 @@ class Competence < CompetenceNode
 
     courses.values
   end
+
 
   # Adds a course and its prereqs recursively to the given courses collection. If a course belongs to a prereq cycle, it is added to the cycles collection.
   def add_course(courses, course)
@@ -152,6 +131,13 @@ class Competence < CompetenceNode
       self.add_course(courses, prereq)
     end
   end
+
+
+  # Returns all courses' ids, recursively
+  def course_ids_recursive
+      courses_recursive.map { |course| course.id }
+  end
+
 
   # Returns a hash {course => [skills]}
   def contributing_skills
@@ -188,6 +174,7 @@ class Competence < CompetenceNode
     result.sort_by {|course, skills| course.course_code}
   end
 
+
   def refresh_prereq_courses
     prereq_courses = {}  # bag of courses, [course_id]
 
@@ -216,7 +203,7 @@ class Competence < CompetenceNode
   end
 
 
-private 
+private
 
   def validate_parent_competence_not_a_self_reference
     if self.parent_competence == self

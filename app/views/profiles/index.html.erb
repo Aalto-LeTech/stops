@@ -1,7 +1,0 @@
-<h1><%=t :profiles_heading %></h1>
-
-<ul>
-  <% @profiles.each do |profile| %>
-    <li><%= link_to profile.name(I18n.locale), profile_url(:id => profile.id) %></li>
-  <% end %>
-</ul>

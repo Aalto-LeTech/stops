@@ -8,8 +8,8 @@ class CourseInstance < ActiveRecord::Base
   #  end
 
   # members
-  #  - abstract_course
-  #  - period
+  #  -> abstract_course
+  #  -> period
   #  - lenght
 
 
@@ -17,17 +17,12 @@ class CourseInstance < ActiveRecord::Base
   belongs_to :period
 
 
-  def dbg_name
-    "%s %s" % [ abstract_course.code, period.name('en') ]
-  end
+  has_many :user_courses
+
 
   def end_date
     prd = length > 1 ? period.find_next_periods( length - 1 ).last : period
     prd.ends_at
-  end
-
-  def period_name( locale )
-    period.name( locale )
   end
 
 end

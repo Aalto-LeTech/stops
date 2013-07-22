@@ -1,4 +1,13 @@
+# Update exception class for the update_from_json method
+class UpdateException < Exception
+end
+
+
 class StudyPlan < ActiveRecord::Base
+
+
+  DEFAULT_STUDY_PLAN_TIME_IN_YEARS = 5
+
 
   module RefCountExtension
     def add_or_increment_ref_count(*args)
@@ -55,14 +64,61 @@ class StudyPlan < ActiveRecord::Base
     end
   end
 
-  belongs_to :user
 
+  #  create_table "study_plans", :force => true do |t|
+  #    t.datetime "created_at",      :null => false
+  #    t.datetime "updated_at",      :null => false
+  #    t.integer  "user_id"
+  #    t.integer  "curriculum_id",   :null => false
+  #    t.integer  "first_period_id"
+  #    t.integer  "last_period_id"
+  #  end
+
+  # members
+  #  -> user
+  #  -> curriculum
+  #  -> first_period
+  #  -> last_period
+  #  <- study_plan_courses
+  #  <- study_plan_competences
+  #  <- competences (study_plan_courses -> scoped_courses)
+  #  <- courses (study_plan_courses -> scoped_courses)
+  #  <- study_plan_manual_courses
+  #  <- manual_courses (study_plan_manual_courses -> scoped_courses)
+  #  - created_at
+  #  - updated_at
+
+
+  # User & Curriculum
+  belongs_to :user
   belongs_to :curriculum
 
-  has_many  :study_plan_courses,
+
+  # Periods
+  belongs_to :first_period, :class_name => 'Period'
+  belongs_to :last_period, :class_name => 'Period'
+
+
+  #has_one :first_period, :class_name => 'Period',
+  #        :primary_key => :first_period_id,
+  #        :foreign_key => :id
+
+  #has_one :last_period, :class_name => 'Period',
+  #        :primary_key => :last_period_id,
+  #        :foreign_key => :id
+
+
+  # Competences
+  has_many  :study_plan_competences,
             :dependent => :destroy
 
-  has_many  :study_plan_competences,
+  has_many :competences,
+           :through => :study_plan_competences,
+           :dependent => :destroy
+
+
+  # Courses
+  has_many  :study_plan_courses,
             :dependent => :destroy
 
   has_many  :courses,
@@ -82,21 +138,72 @@ class StudyPlan < ActiveRecord::Base
             :dependent => :destroy,
             :uniq => true
 
-  has_many :competences,
-           :through => :study_plan_competences,
-           :dependent => :destroy
 
-
-  def as_json(options={})
-    super(options.merge({
-      :only => [:curriculum_id],
-      :include => {
-        :study_plan_courses => {
-          :only => [:scoped_course_id, :period_id]
-        }
-      },
-    }))
+  # Returns the period of the earliest scheduled study plan course
+  def period_of_earliest_study_plan_course
+    study_plan_courses.includes(:period).order('periods.begins_at ASC').first.period
   end
+
+
+  # Returns the period of the latest scheduled study plan course
+  def period_of_latest_study_plan_course
+    study_plan_courses.includes(:period).order('periods.begins_at DESC').first.period
+  end
+
+
+  # Resets the first period.
+  # By default, the "first period" is set as the current period unless
+  #   - the plan already contains courses for preceding periods, or
+  #   - the user has passed courses in preceding periods
+  # in which case the period is set as the earliest of those
+  def reset_first_period
+    the_period_of_earliest_study_plan_course = period_of_earliest_study_plan_course
+    the_period_of_earliest_user_course = user.period_of_earliest_user_course
+    if not the_period_of_earliest_study_plan_course.nil? and not the_period_of_earliest_user_course.nil?
+      period = the_period_of_earliest_study_plan_course.begins_at < the_period_of_earliest_user_course.begins_at ? the_period_of_earliest_study_plan_course : the_period_of_earliest_user_course
+    elsif not the_period_of_earliest_study_plan_course.nil?
+      period = the_period_of_earliest_study_plan_course
+    elsif not the_period_of_earliest_user_course.nil?
+      period = the_period_of_earliest_user_course
+    else
+      period = Period.current
+    end
+    self.first_period = period
+    self.save
+  end
+
+
+  # Resets the last period.
+  # The algorithm works pretty much opposite to its counterpart, the
+  # reset_first_period.
+  def reset_last_period
+    period = nil
+    the_period_of_latest_study_plan_course = period_of_latest_study_plan_course
+    the_period_of_latest_user_course = user.period_of_latest_user_course
+    if not the_period_of_latest_study_plan_course.nil? and not the_period_of_latest_user_course.nil?
+      period = the_period_of_latest_study_plan_course.begins_at > the_period_of_latest_user_course.begins_at ? the_period_of_latest_study_plan_course : the_period_of_latest_user_course
+    elsif not the_period_of_latest_study_plan_course.nil?
+      period = the_period_of_latest_study_plan_course
+    elsif not the_period_of_latest_user_course.nil?
+      period = the_period_of_latest_user_course
+    end
+    if period.nil? or period.ends_at - first_period.begins_at < 365*DEFAULT_STUDY_PLAN_TIME_IN_YEARS
+      # In any case, the time difference between the first and the last is set
+      # as at least five years, by default
+      period = Period.find_by_date(first_period.begins_at - 1 + 365*DEFAULT_STUDY_PLAN_TIME_IN_YEARS)
+    end
+    self.last_period = period
+    self.save
+  end
+
+
+  # Returns the periods included into the study plan
+  def periods
+    reset_first_period if first_period.nil?
+    reset_last_period if last_period.nil?
+    Period.range(first_period, last_period)
+  end
+
 
   # Updates the database according to the data received
   # Expects a JSON coded array of form:
@@ -107,9 +214,6 @@ class StudyPlan < ActiveRecord::Base
   #   {"scoped_course_id": 60, "period_id": 3, "course_instance_id": 32, "credits": 8, "length": 2, "grade": 3},
   #   ...
   # ]
-  class UpdateException < Exception
-  end
-
   def update_from_json(json)
     plan_courses = JSON.parse(json)
 
@@ -130,82 +234,70 @@ class StudyPlan < ActiveRecord::Base
     puts "Received data by #{scoped_course_ids.length} ScopedCourse IDs: (#{scoped_course_ids})."
     y new_courses
 
-    self.study_plan_courses.where(scoped_course_id: scoped_course_ids).each do |study_plan_course|
+    self.study_plan_courses.where(scoped_course_id: scoped_course_ids).includes(:scoped_course).each do |study_plan_course|
 
-      # Initially, mark the update as rejected.
-      accepted[study_plan_course.scoped_course_id] = false
-
-      # Fetch the abstract_course_id
+      # Fetch the related abstract and scoped_course information
+      scoped_course = study_plan_course.scoped_course
+      scoped_course_id = study_plan_course.scoped_course_id
       abstract_course_id = study_plan_course.scoped_course.abstract_course_id
 
+      # Initially, mark the update as rejected.
+      accepted[scoped_course_id] = false
+
       # Load the data for this study_plan_course
-      new_course = new_courses[study_plan_course.scoped_course_id]
+      new_course = new_courses[scoped_course_id]
 
       new_period_id = new_course['period_id']
-      new_course_instance_id = new_course['course_instance_id']
       new_credits = new_course['credits']
       new_length = new_course['length']
       new_grade = new_course['grade']
+      new_course_instance_id = nil
+      new_custom = false
 
       begin
         # Raise an error if lacking basic necessities
-        raise UpdateException.new, "No credits defined!" if not defined?(new_credits)
+        raise UpdateException.new, "No period_id defined!" if new_period_id.nil?
+        raise UpdateException.new, "No credits defined!" if new_credits.nil?
+        raise UpdateException.new, "No length defined!" if new_length.nil?
 
-        # If a period_id was defined..
-        if defined?(new_period_id)
-          # .. but it's not valid..
-          if not Period.exists?(new_period_id)
-            # .. raise an error!
-            raise UpdateException.new, "Invalid period_id!"
-          end
-        end
+        # Fetch the available course instance if available
+        course_instance = CourseInstance.where(abstract_course_id: abstract_course_id, period_id: new_period_id).first
 
-        # If a course_instance_id was defined
-        if defined?(new_course_instance_id)
-          # Is it valid?
-          course_instance = CourseInstance.find_by_id(new_course_instance_id)
-          if course_instance
-            # And does the requested course instance exist as such?
-            changed =
-              course_instance.abstract_course_id != abstract_course_id ||
-              course_instance.period_id != new_period_id ||
-              course_instance.length != new_length
-
-            if changed
-              raise UpdateException.new, "Planned course_instance differs from the one in the database!"
-            end
-          else
-            if new_course_instance_id == nil
-              s = 'nil'
-            else
-              s = new_course_instance_id.to_s
-            end
-            raise UpdateException.new, "Invalid course_instance_id #{s}!"
-          end
+        # Determine whether the course should be regarded as customized
+        if course_instance.nil?
+          new_custom = true
         else
-          # With no course_instance_id given the user apparently insists that even
-          # though the database doesn't agree such an instance exists...
-          # We have two choices: either we create a new instance with the given specs
-          # or we leave it nil -- also to the possibly created user_course
-          raise UpdateException.new, "Procedure not implemented yet!"
+          new_custom =
+            course_instance.length != new_length ||
+            scoped_course.credits != new_credits
+          new_course_instance_id = course_instance.id
         end
 
         # Save possible changes to the study_plan_course
         changed =
             study_plan_course.period_id != new_period_id ||
             study_plan_course.course_instance_id != new_course_instance_id ||
-            study_plan_course.credits != new_credits
+            study_plan_course.credits != new_credits ||
+            study_plan_course.length != new_length ||
+            study_plan_course.custom != new_custom
 
         if changed
           study_plan_course.period_id = new_period_id
           study_plan_course.course_instance_id = new_course_instance_id
           study_plan_course.credits = new_credits
+          study_plan_course.length = new_length
+          study_plan_course.custom = new_custom
           study_plan_course.save
         end
 
+        # TODO: destroy user courses when the grade is removed
         # If a grade was defined
-        if defined?(new_grade)
-          existing_user_course = self.user.user_courses.where(course_instance_id: new_course_instance_id).first
+        if not new_grade.nil? and new_grade > 0
+          if not new_course_instance_id.nil?
+            existing_user_course = self.user.user_courses.where(course_instance_id: new_course_instance_id).first
+          else
+            existing_user_course = self.user.user_courses.where(abstract_course_id: abstract_course_id).first
+          end
           # And an existing user_course exists
           if existing_user_course
             # Save the possible changes to the user_course
@@ -231,7 +323,7 @@ class StudyPlan < ActiveRecord::Base
         end
 
         # No we're done! =) Mark the course as accepted.
-        accepted[study_plan_course.scoped_course_id] = true
+        accepted[scoped_course_id] = true
 
       # On error, the plan_course is rejected.
       rescue UpdateException => message
@@ -242,6 +334,7 @@ class StudyPlan < ActiveRecord::Base
     # Return the dict of accepted plan_courses.
     return accepted
   end
+
 
   def add_competence(competence)
     # Dont't do anything if the study plan already has this competence
@@ -257,6 +350,7 @@ class StudyPlan < ActiveRecord::Base
     self.courses = courses_array
   end
 
+
   # Removes the given competence and courses that are needed by it. Courses that are still needed by the remaining competences, are not removed. Also, manually added courses are not reomved.
   def remove_competence(competence)
     # Remove competence
@@ -265,9 +359,11 @@ class StudyPlan < ActiveRecord::Base
     self.courses = needed_courses(self.competences).to_a
   end
 
+
   def has_competence?(competence)
     competences.include? competence
   end
+
 
   # Returns a list of courses than can be deleted if the given competence is dropped from the study plan
   def deletable_courses(competence)
@@ -282,6 +378,7 @@ class StudyPlan < ActiveRecord::Base
     courses.to_set - needed_courses
   end
 
+
   # Returns a set of courses that are needed by the given competences
   # competences: a collection of competence objects
   def needed_courses(competences)
@@ -295,38 +392,14 @@ class StudyPlan < ActiveRecord::Base
     needed_courses.merge(manual_courses)
   end
 
-  # Returns whether the given course is included in the study plan or not
-  def includes?( abstract_course )
-    study_plan_courses.where( 'scoped_course.abstract_course = ?', abstract_course ).count > 0
-  end
-
-  # Returns the study plan courses that are scheduled
-  def scheduled_courses
-    study_plan_courses.where( 'period_id IS NOT NULL' ).order( 'period_id' )
-  end
-
-  # Returns the study plan courses that are unscheduled
-  def unscheduled_courses
-    study_plan_courses.where( 'period_id IS NULL' ).sort { |a, b| a.course_code <=> b.course_code }
-  end
-
-  # Returns the periods that contain scheduled courses
-  def scheduled_periods
-    Period.where( id: ( scheduled_courses.map { |course| course.period_id } ).uniq ).order( begins_at )
-  end
-
-  # Returns the courses scheduled to start in the given period
-  def courses_scheduled_to_period( period )
-    study_plan_courses.where( period_id: period.id ).sort { |a, b| a.course_code <=> b.course_code }
-  end
 
   # Returns an ordered array of periods with scheduled courses (see code)
   def ordered_array_of_periods_with_scheduled_courses
     hash = {}
-    scheduled_courses.each do |study_plan_course|
+    study_plan_courses.where( 'period_id IS NOT NULL' ).order( 'period_id' ).each do |study_plan_course|
       # find the periods over which this course spans
       period = study_plan_course.period  # start period
-      length = study_plan_course.length_or_one
+      length = study_plan_course.length
       periods = length > 1 ? period.find_next_periods( length - 1 ) << period : [ period ]
       # add this course as 'ongoing' to these periods
       periods.each_with_index do |period, i|

@@ -26,10 +26,6 @@ Ops::Application.routes.draw do
       end
     end
 
-    resources :profiles, :only => [:destroy] do
-      resources :competences
-    end
-
     # View study guides of other years
     resources :curriculums, :constraints => { :id => /\w+/ } do
       member do
@@ -39,10 +35,6 @@ Ops::Application.routes.draw do
         get 'outcomes'
         get 'search_skills'
         match 'edit/import_csv', :controller => 'curriculums', :action => :import_csv, :via => [:post, :get]
-      end
-
-      resources :profiles, :controller => 'curriculums/profiles' do
-        resources :courses, :controller => 'curriculums/courses', :only => [:show]  # ScopedCourses, courses that belong to the profile
       end
 
       resources :competence_nodes, :controller => 'curriculums/competence_nodes' do
@@ -91,10 +83,9 @@ Ops::Application.routes.draw do
     # TODO: "Shallow" nesting is advised at http://guides.rubyonrails.org/routing.html#shallow-nesting,
     #        should/could we refactor this?
     resource :studyplan, :controller => 'plans', :only => [:show] do
-      resources :profiles, :controller => 'plans/profiles', :only => [:index, :show]  # FIXME: deprecated?
 
       resources :competences, :controller => 'plans/competences', :except => [:edit] do
-        resources :courses, :controller => 'plans/courses', :only => [:show]  # ScopedCourses, courses that belong to the profile
+        resources :courses, :controller => 'plans/courses', :only => [:show]  # ScopedCourses, courses that belong to the competence
 
         member do
           get 'supporting'
@@ -115,23 +106,10 @@ Ops::Application.routes.draw do
 
     # Any plan (specify student ID)
     resources :plans, :constraints => { :id => /\w+/ }, :only => [:show, :update] do
-      resources :profiles, :controller => 'plans/profiles', :except => [:edit, :update]
       resources :courses, :controller => 'plans/courses', :except => [:edit, :update]
       resource :schedule, :controller => 'plans/schedule', :only => [:show, :edit]
       resource :record, :controller => 'plans/record', :only => [:show]
     end
-
-#     scope "/:curriculum_id" do
-#       resources :courses do  # scoped courses
-#         member do
-#           get 'graph'
-#         end
-#       end
-#
-#       resources :profiles do
-#         resources :courses, :controller => 'profiles/courses'
-#       end
-#     end
 
   end
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130705111012) do
+ActiveRecord::Schema.define(:version => 20130717132709) do
 
   create_table "abstract_courses", :force => true do |t|
     t.string "code"
@@ -71,8 +71,7 @@ ActiveRecord::Schema.define(:version => 20130705111012) do
 
   create_table "course_descriptions", :force => true do |t|
     t.string  "locale"
-    t.string  "name",             :null => false
-    t.integer "scoped_course_id", :null => false
+    t.string  "name",               :null => false
     t.string  "department"
     t.text    "grading_scale"
     t.text    "alternatives"
@@ -85,9 +84,8 @@ ActiveRecord::Schema.define(:version => 20130705111012) do
     t.text    "replaces"
     t.text    "other"
     t.text    "comments"
+    t.integer "abstract_course_id", :null => false
   end
-
-  add_index "course_descriptions", ["scoped_course_id"], :name => "index_course_descriptions_on_scoped_course_id"
 
   create_table "course_instances", :force => true do |t|
     t.integer "abstract_course_id", :null => false
@@ -230,16 +228,21 @@ ActiveRecord::Schema.define(:version => 20130705111012) do
     t.integer "course_instance_id"
     t.integer "period_id"
     t.float   "credits"
+    t.integer "length"
+    t.boolean "custom",               :default => false
+    t.integer "abstract_course_id"
   end
 
   add_index "study_plan_courses", ["study_plan_id", "scoped_course_id"], :name => "index_study_plan_courses_on_study_plan_id_and_scoped_course_id", :unique => true
   add_index "study_plan_courses", ["study_plan_id"], :name => "index_study_plan_courses_on_study_plan_id"
 
   create_table "study_plans", :force => true do |t|
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
     t.integer  "user_id"
-    t.integer  "curriculum_id", :null => false
+    t.integer  "curriculum_id",   :null => false
+    t.integer  "first_period_id"
+    t.integer  "last_period_id"
   end
 
   add_index "study_plans", ["user_id"], :name => "index_study_plans_on_user_id"

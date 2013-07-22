@@ -5,7 +5,6 @@
 en:
   navi_plan: "My study plan"
   navi_curriculums: "All Curriculums"
-  navi_profiles: "Profiles"
   navi_courses: "Courses"
 
   navi_my_plan: "My Study Plan"
@@ -93,11 +92,3 @@ en:
       taken: "has already been taken"
       too_short: "is too short"
       confirmation: "does not match"
-
-
-  ###############
-  # General terms
-  ###############
-
-  competence: "Competence"
-  scoped_course: "Course"

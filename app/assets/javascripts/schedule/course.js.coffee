@@ -1,5 +1,43 @@
 class @Course
 
+  ALL: []
+  BYSCOPEDID: {}
+  BYABSTRACTID: {}
+
+
+  createFromJson: (data, passedData) ->
+    # Load courses
+    for dat in data
+      course = new Course(dat)
+
+    # Load course prerequirements
+    for course in @ALL
+      for prereqId in course.prereqIds
+        prereq = @BYSCOPEDID[prereqId]
+        unless prereq
+          console.log("Unknown prereqId #{prereqId}!")
+          continue
+        course.addPrereq(prereq)
+
+    # Load passed courses
+    for dat in passedData
+      course = @BYABSTRACTID[dat['abstract_course_id']]
+      unless course
+        console.log("Unknown course #{dat['abstract_course_id']}!")
+        continue
+      # Save the period
+      periodId = dat['period_id']
+      if not periodId?
+        console.log("Course \"#{course.name}\" was probably passed on a custom instance since no periodId was given.")
+      else
+        course.period = Period::BYID[periodId]
+        unless course.period
+          console.log("Unknown periodId #{periodId}")
+      # Save other data
+      course.credits(dat['credits'])
+      course.grade(dat['grade'])
+
+
   constructor: (data) ->
     @hilightSelected     = ko.observable(false)
     @hilightPrereq       = ko.observable(false)
@@ -9,28 +47,28 @@ class @Course
     @locked              = false             # Is the course immovable?
     @position            = ko.observable({x: 0, y: 0, height: 1})
 
-    @instancesById       = {}                # instanceId => CourseInstance
     @instancesByPeriodId = {}                # periodId => CourseInstance
     @instanceCount       = 0
     @avgInstanceLength   = 0
     @periods             = []                # Periods on which this course is arranged
-    @prereqs             = {}                # Prerequisite courses. courseId => Course
-    @prereqTo            = {}                # Courses for which this course is a prereq. courseId => Course object
+    @prereqs             = {}                # Prerequisite courses. scopedId => Course
+    @prereqTo            = {}                # Courses for which this course is a prereq. scopedId => Course object
     @prereqPaths         = []                # Raphael paths to prerequirement courses
     @period              = undefined         # Scheduled period
-    @courseInstance      = undefined         # Scheduled course instance
     @slot                = undefined         # Slot number that this course occupies
     @length              = ko.observable()   # Length in periods
     @unschedulable       = false             # true if period allocation algorithm cannot find suitable period
 
     @credits             = ko.observable()
     @grade               = ko.observable()
-    @passedInstance      = undefined  # FIXME, duplication to fix the courseInstance vs passedInstance duel?
+    @courseInstance      = undefined
 
     this.loadJson(data || {})
 
     @creditsPerP = ko.computed =>
-      #console.log("c[#{@id}] credits update -> #{@credits()}/#{@length()}")
+      @credits(parseInt(@credits()))
+      @length(parseInt(@length()))
+      #console.log("c[#{@scopedId}] credits update -> #{@credits()}/#{@length()}")
       return @credits() / @length()
 
     @creditsPerP.subscribe ((oldValue) ->
@@ -40,13 +78,52 @@ class @Course
     @creditsPerP.subscribe (newValue) =>
       @distributeCredits()
 
+    @customized = ko.computed =>
+      #if @courseInstance then s = "#{@courseInstance.length}" else s = "?"
+      #console.log("customized: #{@code} : (#{@credits()} vs #{@scopedCredits}, #{@length()} vs #{s})")
+      return true if @credits() != @scopedCredits
+      if @courseInstance
+        return true if @length() != @courseInstance.length
+      return false
+#     if @courseInstance then s = "#{@courseInstance.length}" else s = "?"
+#     console.log("cust #{customized} <- #{@name} : (#{@credits()} vs #{@scopedCredits}, #{@length()} vs #{s})")
+
 
   # Reads some of the model's core attributes from the given JSON data object
   loadJson: (data) ->
-    @id                  = data['id']
-    @code                = data['course_code'] || ''
-    @name                = data['localized_name'] || ''
-    @credits(data['credits'] || 0)
+    @abstractId          = data['abstract_course']['id']
+    @code                = data['abstract_course']['code'] || ''
+    @name                = data['abstract_course']['localized_name'] || ''
+    @scopedId            = data['scoped_course']['id']
+    @scopedCredits       = data['scoped_course']['credits']
+    @prereqIds           = data['scoped_course']['prereq_ids'] || []
+    @credits(data['credits'] || @scopedCredits || 0)
+    @length(data['length'] || 1)
+
+    periodId = data['period_id']
+    if periodId != undefined
+      @period = Period::BYID[periodId]
+      console.log("Unknown period ID #{periodId}") unless @period
+
+    for dat in data['abstract_course']['course_instances']
+      period = Period::BYID[dat['period_id']]
+      # It can be expected that many instances are irrelevant
+      continue unless period?
+      courseInstance = new CourseInstance(period, dat['length'])
+      @periods.push(period)
+      @instancesByPeriodId[period.id] = courseInstance
+      @instanceCount++
+      # Maintain an average of instance lengths which is used later to guess
+      # lengths of unknown instances
+      @avgInstanceLength = (@avgInstanceLength * (@instanceCount - 1) + courseInstance.length) / @instanceCount
+      #console.log( "course[#{@scopedId}]::addCInstance: #:#{@instanceCount} #{courseInstance}" )
+
+    # Map the object
+    throw "ERROR: scopedId collision at #{@scopedId}!" if @BYSCOPEDID[@scopedId]?
+    @BYSCOPEDID[@scopedId] = this
+    throw "ERROR: abstractId collision at #{@abstractId}!" if @BYABSTRACTID[@abstractId]?
+    @BYABSTRACTID[@abstractId] = this
+    @ALL.push(this)
 
 
   # Determines whether the model's core attributes have been changed.
@@ -59,11 +136,6 @@ class @Course
       return true if @oPeriodId != @period.id
     else
       return true if @oPeriodId != undefined
-    #console.log( " - instance: #{@oCourseInstanceId}  vs  #{@courseInstance}" )
-    if @courseInstance?
-      return true if @oCourseInstanceId != @courseInstance.id
-    else
-      return true if @oCourseInstanceId != undefined
     #console.log( " - length: #{@oLength}  vs  #{@length()}" )
     return true if @oLength != @length()
     #console.log( " - grade: #{@oGrade}  vs  #{@grade()}" )
@@ -76,7 +148,6 @@ class @Course
   resetOriginals: ->
     @oCredits = @credits()
     if @period? then @oPeriodId = @period.id else @oPeriodId = undefined
-    if @courseInstance? then @oCourseInstanceId = @courseInstance.id else @oCourseInstanceId = undefined
     @oLength = @length()  # FIXME: make me changeable
     @oGrade = @grade()
 
@@ -87,10 +158,9 @@ class @Course
     length = parseInt(@length())
     grade = parseInt(@grade())
 
-    json = { scoped_course_id: @id }
+    json = { scoped_course_id: @scopedId }
     json['credits'] = credits if credits > 0
     json['period_id'] = @period.id if @period?
-    json['course_instance_id'] = @courseInstance.id if @courseInstance?
     json['length'] = length if length > 0  # FIXME: should study_plan_course model have one?
     json['grade'] = grade if grade > 0
 
@@ -99,13 +169,13 @@ class @Course
 
   # Adds a prerequisite course. This course is automatically added to the "prerequisite to" list of the other course.
   addPrereq: (other) ->
-    @prereqs[other.id]  = other
-    other.prereqTo[@id] = this
+    @prereqs[other.scopedId]  = other
+    other.prereqTo[@scopedId] = this
 
 
   # Returns prerequisite courses as a list
   hasPrereqs: ->
-    for id, course of @prereqs
+    for scopedId, course of @prereqs
       return true
     return false
 
@@ -113,7 +183,7 @@ class @Course
   # Returns prerequisite courses as a list
   getPrereqs: ->
     prereqs = []
-    for id, course of @prereqs
+    for scopedId, course of @prereqs
       prereqs.push( course )
 
     prereqs.sort (a, b) ->
@@ -121,55 +191,29 @@ class @Course
 
     return prereqs
 
-  # Adds an instance of this course to the given period.
-  addCourseInstance: (courseInstance) ->
-    period = courseInstance.period
-    @periods.push(period)
-    @instancesById[courseInstance.id] = courseInstance
-    @instancesByPeriodId[period.id] = courseInstance
-    @instanceCount++
-    # Maintain an average of instance lengths which is used later to guess
-    # lengths of unknown instances
-    @avgInstanceLength = (@avgInstanceLength * (@instanceCount - 1) + courseInstance.length) / @instanceCount
-    #console.log( "course[#{@id}]::addCInstance: #:#{@instanceCount} #{courseInstance}" )
-
-
-  # Sets the course as passed with the given course instance and grade
-  setAsPassed: (instanceId, grade) ->
-    @passedInstance = @instancesById[instanceId]
-    unless @passedInstance
-      console.log( "ERROR: Unknown instance #{instanceId}" )
-      return
-    #console.log( "course[#{@id}]::setAsPassed: #{@passedInstance} (g:#{grade})" )
-    @grade(grade)
-    # Move course to where it was passed
-    @setPeriod(@passedInstance.period)
-    @updatePosition()
-
 
   # Distributes the course's credit weight on the periods it extends to
-  # Note: here we can't use the @creditsPerP function in this and the following
-  # function since these might be called from inside it!
   distributeCredits: ->
-    #console.log("c[#{@id}] dcr c/l:#{}) p:#{@period}")
+    #console.log("c[#{@scopedId}] dcr c/l:#{}) p:#{@period}")
     return if not @period or not @length()
     period = @period
-    i = @length() + 1
-    while i -= 1
-      #console.log("c[#{@id}] dcr (#{@credits()}/#{@length()}) to #{period}")
-      period.credits(period.credits() + @credits() / @length())
+    remaining_extent = @length() + 1
+    while remaining_extent -= 1
+      #console.log("c[#{@scopedId}] dcr (#{@credits()}/#{@length()}) to #{period}")
+      period.credits(period.credits() + @creditsPerP())
       period = period.nextPeriod
+
 
   # Cancels the effect of the previous function
   deDistributeCredits: (oldCPP) ->
-    #console.log("c[#{@id}] ddcr c/l:#{@credits()}/#{@length()} p:#{@period}")
+    #console.log("c[#{@scopedId}] ddcr c/l:#{@credits()}/#{@length()} p:#{@period}")
     return if not @period or not @length()
     if not oldCPP? then oldCPP = @creditsPerP()
     return if not (oldCPP > 0)
     period = @period
-    i = @length() + 1
-    while i -= 1
-      #console.log("c[#{@id}] ddcr #{oldCPP} (x #{@length()}) from #{period}")
+    remaining_extent = @length() + 1
+    while remaining_extent -= 1
+      #console.log("c[#{@scopedId}] ddcr #{oldCPP} (x #{@length()}) from #{period}")
       period.credits(period.credits() - oldCPP)
       period = @period.nextPeriod
 
@@ -185,14 +229,11 @@ class @Course
       # In order to not allow double dedistribution of credits at length change.
       @period = undefined
 
-    # Update courseInstance & length
+    # Update the length
     @courseInstance = @instancesByPeriodId[period.id]
 
-    if (@courseInstance)
-      @length(@courseInstance.length)
-    else
-      # A guess is used since no actual instance is available
-      @length(@avgInstanceLength)
+    # The length is updated and with a guess if no actual instance is available
+    if @courseInstance then @length(@courseInstance.length) else @length(Math.round(@avgInstanceLength))
 
     # Update the period
     @period = period
@@ -212,181 +253,36 @@ class @Course
     pos.height = @length() * PlanView.PERIOD_HEIGHT - 2 * (PlanView.COURSE_MARGIN_Y + PlanView.COURSE_PADDING_Y)
     @position.valueHasMutated()
 
-    # Update possible prerequirement graph paths of the current course and any of the paths of its postrequirement courses.
-    this.updatePrereqPaths()
-
 
   # Update warnings FIXME: updates the original source twice...
   updateReqWarnings: (depth) ->
     if depth > 0 then depth = depth - 1 else depth = 1
-    #console.log( "Course[#{@id}]:uRW(#{depth}) #{@period.sequenceNumber}" )
+    #console.log( "Course[#{@scopedId}]:uRW(#{depth}) #{@period.sequenceNumber}" )
 
-    for id, other of @prereqs
+    for scopedId, other of @prereqs
       misordered = true if other.period? && @period? && other.period.laterOrEqual(@period)
       other.updateReqWarnings(depth) if depth > 0
 
-    for id, other of @prereqTo
+    for scopedId, other of @prereqTo
       misordered = true if other.period? && @period? && other.period.earlierOrEqual(@period)
       other.updateReqWarnings(depth) if depth > 0
 
-    #console.log( "Course[#{@id}].misordered: #{misordered}." )
+    #console.log( "Course[#{@scopedId}].misordered: #{misordered}." )
     @misordered(misordered)
 
 
-#     $.each this.prereqTo, (key, postReqCourse) ->
-#       postReqCourse.updatePrereqPaths();
-#
-#
-#   clearPeriodAndHide: () ->
-#     if (this.period) {
-#       this.period.removeCourse(this);
-#     }
-#     this.period = false;
-#
-#     this.clearPrereqPaths();
-#     this.element.addClass("hide");
-#   };
-#
-#   # Mark the course as unschedulable by the automatic scheduling algorithm
-#   # (i.e., there were no available periods with course instances late enough to satisfy prerequirements)
+  # Mark the course as unschedulable by the automatic scheduling algorithm
+  # (i.e., there were no available periods with course instances late enough to satisfy prerequirements)
   markUnschedulable: () ->
     @unschedulable = true
-#     if (!this.locked) {
-#       # Remove period
-#       if (this.period) {
-#         this.period.removeCourse(this);
-#         this.courseInstance = false;
-#         this.period = false;
-#       }
-#
-#
-#
-#       console.log("markUnschedulable: Marked unschedulable course " + this.code + " " + this.name);
-#
-#       # Remove course element from view
-#       this.element.addClass("hide");
-#     }
-#   };
-#
-#   checkPrereqSatisfiabilityInPeriod: (period) ->
-#     positions = {},               # Simulated current periods of courses
-#         coursesToBeChecked = [this];
-#
-#     # The course must be in the period that we want to check
-#     positions[this.id] = period;
-#
-#     _getPeriodOfCourse = (course) ->
-#       if (course.id in positions)
-#         return positions[course.id]
-#       else
-#         positions[course.id] = course.period
-#         return course.period
-#
-#
-#     # Simulate satisfyPrereqs()
-#     while (coursesToBeChecked.length != 0) {
-#       course = coursesToBeChecked.pop(),
-#           prereq_code,
-#           periodOfCourse = _getPeriodOfCourse(course);
-#
-#       console.log("POP: Popped " + course.code + " " + course.name + " from stack");
-#
-#       if (!periodOfCourse) {
-#         # Prereqs cannot be satisfied */
-#         this.prereqsUnsatisfiableIn[period.id] = period;
-#         return;
-#       }
-#
-#       for (prereq_code in this.prereqs) {
-#         # Get current simulated period values */
-#         prereq         = this.prereqs[prereq_code],
-#             periodOfPrereq = _getPeriodOfCourse(prereq);
-#
-#         console.log("PREREQ: Handling prereq course " + prereq.code + " " + prereq.name);
-#
-#         if (periodOfCourse.earlierThan(periodOfPrereq)) {
-#           # advanceTo(period) simulation */
-#           targetPeriod = periodOfCourse.getPreviousPeriod();
-#           while (targetPeriod) {
-#             if (targetPeriod.courseAvailable(course)) {
-#               break;
-#             }
-#
-#             targetPeriod = targetPeriod.getPreviousPeriod();
-#           }
-#
-#           positions[prereq.id] = targetPeriod;
-#           if (!targetPeriod) console.log("PREREQ COURSE UNSCHEDULABLE: No target period could be found!");
-#
-#           coursesToBeChecked.push(prereq);
-#           console.log("PUSH: Pushed " + prereq.code + " " + prereq.name + " into stack");
-#         }
-#       }
-#     }
-#
-#   };
-#
-#   checkPrereqSatisfiability: () ->
-#     course = this;
-#     $.each this.periods, (i, period) ->
-#       course.checkPrereqSatisfiabilityInPeriod(period) if (period.earlierThan(course.period))
-#
-#
-#   isSchedulableInPeriod: (period) ->
-#     if (period.id in this.prereqsUnsatisfiableIn)
-#       return false
-#     else
-#       return true
-#
-#
-#   # Moves all prereqs before this course.
-#   satisfyPrereqs: () ->
-#     # Quit recursion if this course is part of an unsolvable chain
-#     if (!this.period) {
-#       return;
-#     }
-#
-#     # Move prereqs before this course
-#     for (array_index in this.prereqs) {
-#       other = this.prereqs[array_index];
-#
-#       if (this.period.earlierThan(other.period)) {
-#         other.advanceTo(this.period.getPreviousPeriodUntilCurrent());
-#         other.satisfyPrereqs();
-#       }
-#     }
-#   };
-#
+
+
   # Recursively moves forward all courses that require this course
   satisfyPostreqs: () ->
     # Quit recursion if this course is part of an unsolvable chain
     unless @period?
-#       # Mark the rest of the postrequirements as unschedulable since we weren't able to schedule the current course.
-#       this.markPostreqsUnschedulable();
-      this.markUnshedulable()
+      markUnshedulable()
       return
-
-
-    # Determine to which period postrerequirements should be postponed */
-#     if (this.locked) {
-#       # Since the current course is locked, the course might be before
-#       # its prerequirements, so we need to find out the latest period of
-#       # the set of the current course and its prerequirements. */
-#       latest = this.getPeriod();
-#       for (array_index in this.prereqs) {
-#         course = this.prereqs[array_index];
-#         period = course.getPeriod();
-#
-#         if (period && (!latest || period.laterThan(latest))) {
-#           latest = period;
-#         }
-#       }
-#
-#       targetPeriod = latest.getNextPeriod();
-#     } else {
-#       # Move postrequirements right after the current course */
-#       targetPeriod = this.getPeriod().getNextPeriod();
-#     }
 
     targetPeriod = @period.nextPeriod
     unless targetPeriod?
@@ -394,10 +290,9 @@ class @Course
       return
 
     # Postpone postreqs that are earlier than this
-    for id,other of @prereqTo
-      if !other.period? || this.period.laterOrEqual(other.period)
-      #if (!targetPeriod || this.period.laterOrEqual(other.period)) {
-        console.log "#{other.name} depends on #{@name}. Postponing to #{targetPeriod}."
+    for scopedId, other of @prereqTo
+      if !other.period? || @period.laterOrEqual(other.period)
+        console.log("#{other.name} depends on #{@name}. Postponing to #{targetPeriod}.")
         other.postponeTo(targetPeriod) unless other.locked
         other.satisfyPostreqs()
 
@@ -407,55 +302,34 @@ class @Course
     #this.setPeriod(period);
 
     # If no instances are known for this course, put it on the requested period
-    if (this.instanceCount < 1)
-      this.setPeriod(requestedPeriod)
-      this.markUnschedulable()
+    if (@instanceCount < 1)
+      setPeriod(requestedPeriod)
+      markUnschedulable()
       return
 
     #if (!this.unschedulable) {
     period = requestedPeriod
     while (period)
       if @instancesByPeriodId[period.id]
-        this.setPeriod(period)
+        setPeriod(period)
         return
 
       period = period.getNextPeriod()
 
     # No period could be found. Put it on the requested period
-    this.setPeriod(requestedPeriod)
-    this.markUnschedulable()
-
-    #  this.markPostreqsUnschedulable(); # Also marks period as false
-    #  console.log("Unschedulable: " + this.code + " " + this.name + ": Could not postpone to wanted period!");
-    #}
-
-  # Moves this to the given period or the closest possible earlier period
-  advanceTo: (requestedPeriod) ->
-    period = requestedPeriod
-    while (period)
-      if @instancesByPeriodId[period.id]
-        this.setPeriod(period)
-        return
-
-      period = period.getPreviousPeriodUntilCurrent()
-
-    # No period could be found. Put it on the requested period
-    this.setPeriod(requestedPeriod)
-    # TODO: add warning
-
-    # No period could be found.
-    #this.clearPeriodAndHide();
+    setPeriod(requestedPeriod)
+    markUnschedulable()
 
 
   # Moves the course forward after its prereqs (those that have been put on a period).
   # If no prereqs are found, course remains unmodified.
   postponeAfterPrereqs: () ->
     # Only move if the course has not been locked into its current period
-    return if this.locked
+    return if @locked
 
     # Find the latest prereq
     latestPeriod = false
-    for id,prereq of this.prereqs
+    for scopedId, prereq of @prereqs
       period = prereq.getPeriod()
       latestPeriod = period if period? && (!latestPeriod || period.laterThan(latestPeriod))
 
@@ -468,96 +342,9 @@ class @Course
     if targetPeriod.earlierThan(Period::currentPeriod)
       targetPeriod = Period::currentPeriod
 
-    this.postponeTo(targetPeriod)
+    postponeTo(targetPeriod)
 
 
-#   # Mark all (except locked courses) postrequirements and their postrequirements as unschedulable. */
-#   markPostreqsUnschedulable: () ->
-#     to_be_processed = $.map this.prereqTo, (course) ->
-#       return course;
-#
-#     while(to_be_processed.length > 0) {
-#       postreq = to_be_processed.pop();
-#       postreq.markUnschedulable();
-#       $.each postreq.prereqTo, (key, course) ->
-#         to_be_processed.push(course);
-#
-#
-  drawPrereqPaths: () ->
-    for id,other of @prereqs
-      continue unless other.period
-
-      pathString = Course.calcPathString(this.position(), other.position())
-      newPath = PlanView::paper.path(pathString)
-      @prereqPaths.push({ path: newPath, course: other })
-
-
-
-  updatePrereqPaths: () ->
-    for node in @prereqPaths
-      path  = node.path
-      other = node.course
-      path.attr({ path: Course.calcPathString(this.position(), other.position()) })
-
-
-#   clearPrereqPaths: ->
-#     selectedCourseElem = $("#plan .selected");
-#     if (selectedCourseElem.length !== 0)
-#       selectedCourse = selectedCourseElem.data('object');
-#       for (i = 0; i < selectedCourse.prereqPaths.length; i++) {
-#         selectedCourse.prereqPaths[i].path.remove();
-#       }
-#
-#       selectedCourse.prereqPaths = [];
-#
-#
-#   lock: () ->
-#     this.locked = true;
-#     this.element.draggable("disable");
-#     this.element.addClass("locked");
-#     # Show lock icon on course div
-#     $img = $("img.course-locked", "#cloneable-imgs").clone();
-#     this.element.append($img);
-#
-#   unlock: () ->
-#     this.locked = false;
-#     this.element.draggable("enable");
-#     this.element.removeClass("locked");
-#     # Hide lock icon from course div */
-#     this.element.find("img.course-locked").detach();
-#
-#   courseBeingDragged: (event, ui) ->
-#     # Move prerequirement graphs
-#     elem = ui.helper,
-#         course = elem.data('object');
-#
-#     course.updatePrereqPaths();
-#   }
-#
-#   courseDragStopped: (event, ui) ->  # FIXME???
-#     if (!ui.helper.data('dropped'))
-#       # Animate draggable back to its original position
-#       ui.helper.animate(ui.originalPosition, {
-#         duration: 500,
-#         step: (now, fx) ->
-#           $courseElem = $(this),
-#             course = $courseElem.data('object');
-#
-#           # Update graphs too
-#           course.updatePrereqPaths();
-#       })
-#
-#
-#   # Calculates SVG path string between course node element and a prerequirement
-#   # element.
-  calcPathString: (coursePosition, otherPosition) ->
-    fX = coursePos.left + courseNode.outerWidth(true) / 2.0;
-    fY = coursePos.top;
-    tX = prereqPos.left + prereqNode.outerWidth(true) / 2.0;
-    tY = prereqPos.top + prereqNode.outerHeight(false) + prereqNode.margin().top;
-
-    return "M" + fX + "," + fY + "T" + tX + "," + tY;
-
-
+  # Renders the object into a string for debugging purposes
   toString: ->
-    "crs[#{@id}]:{ c:#{@code} n:#{@name} }"
+    "crs[#{@scopedId}]:{ c:#{@code} n:#{@name} }"

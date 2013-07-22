@@ -16,19 +16,6 @@
 
 
 <div class="row-fluid">
-  <div class="span2" style="background:#AFA;">
-    <div class="row-fluid">
-      <div class="span6" style="background:#FCC;">
-      </div>
-      <div class="span6" style="background:#CCF;">
-      </div>
-    </div>
-  </div>
-  <div class="span10" style="background:#AAF;">
-  </div>
-</div>
-
-<div class="row-fluid">
 
   <div class="span2" id="sidebar">
 
@@ -36,40 +23,18 @@
 
       <h2><%= t('.controls') %></h2>
 
+      <p>
+        <%= t('.curriculum') %>:
+        <%= @study_plan.curriculum.name %>
+        <%= @study_plan.curriculum.start_year %> -
+        <%= @study_plan.curriculum.end_year %>
+      </p>
+
       <h3><%= t('.actions') %></h3>
 
       <button id="save-button" data-bind="click: save"><%= t('.save_button') %></button>
 
-      <h3><%= t('.preferences') %></h3>
-
-      <div class="row-fluid">
-        <div class="span9">
-          <label for="automatic-arrangement-input">
-            <%= t('.automatic_arrangement_checkbox') %>
-          </label>
-        </div>
-        <div class="span3">
-          <input id="automatic-arrangement-input" type="checkbox" />
-          <%= image_tag("glyphicons_195_circle_info.png", :size => "16x16" ) %>
-        </div>
-      </div>
-
-      <div class="row-fluid">
-        <div class="span9">
-          <label for="draw-req-graphs-input">
-            <%= t('.draw_course_graphs_checkbox') %>
-          </label>
-        </div>
-        <div class="span3">
-          <input id="draw-req-graphs-input" type="checkbox" />
-          <%= image_tag("glyphicons_195_circle_info.png", :size => "16x16" ) %>
-        </div>
-      </div>
-
     </div>
-
-    <!--
-    -->
 
     <!-- Selected course details -->
     <!-- ko if: selectedObjectType() == 'Course' -->
@@ -106,18 +71,6 @@
           </div>
         </div>
 
-        <div class="row-fluid">
-          <div class="span9">
-            <label for="course-lock-input">
-              <%= t('.course_lock_checkbox') %>
-            </label>
-          </div>
-          <div class="span3">
-            <input id="course-lock-input" type="checkbox" disabled="true" />
-            <%= image_tag("glyphicons_195_circle_info.png", :size => "16x16" ) %>
-          </div>
-        </div>
-
         <h4><%= t('.prereqs') %></h4>
 
         <span data-bind="ifnot: hasPrereqs()"><%= t('.no_prereqs') %></span>
@@ -127,6 +80,64 @@
             <li>
               <span data-bind="text: code"></span>
               <span data-bind="text: name"></span>
+            </li>
+          </ul>
+        <!-- /ko -->
+
+      </div>  <!-- well -->
+    <!-- /ko -->
+
+    <!-- Selected period details -->
+    <!-- ko if: selectedObjectType() == 'Period' -->
+      <div class="well" data-bind="with: selectedObject">
+
+        <h3>
+          <%= t('.selected_period') %>
+        </h3>
+
+        <p>
+          <span data-bind="text: name"></span>
+        </p>
+        <p class="muted">
+          <span data-bind="text: beginsAt"></span>
+          -
+          <span data-bind="text: endsAt"></span>
+        </p>
+
+        <h4><%= t('.scheduled_courses') %></h4>
+
+        <!-- ko if: courses().length == 0 -->
+          <p><%= t('.no_scheduled_courses') %></p>
+        <!-- /ko -->
+        <!-- ko if: courses().length > 0 -->
+          <ul data-bind="foreach: courses">
+            <li>
+              <span data-bind="text: code"></span>
+              <span data-bind="text: name"></span>
+            </li>
+          </ul>
+        <!-- /ko -->
+
+      </div>  <!-- well -->
+    <!-- /ko -->
+
+    <!-- Competence details -->
+    <!-- ko if: selectedObjectType() == undefined || selectedObjectType() == 'Competence' -->
+      <div class="well">
+
+        <h3>
+          <%= t('.competences') %>
+        </h3>
+
+        <!-- ko if: competences.length == 0 -->
+          <p><%= t('.no_chosen_competences') %></p>
+        <!-- /ko -->
+        <!-- ko if: competences.length > 0 -->
+          <ul data-bind="foreach: competences">
+            <li>
+              <div class="competence-li" data-bind="css: {'selected': hilightSelected}">
+                <span data-bind="text: name"></span>
+              </div>
             </li>
           </ul>
         <!-- /ko -->
@@ -161,12 +172,12 @@
       <!-- ko foreach: periods -->
         <div class="period" data-bind="droppable: droppedCourse, position: position, css: {'selected': hilightSelected, 'receiver': hilight, 'old': isOld, 'now': isNow}">
           <div class="name" data-bind="text: name"></div>
-          <div class="credits"><span data-toggle="tooltip" title="<%= t('.period_credits_tooltip') %>" data-bind="text: credits, css: creditsStatus"></span> <%= t('.cr') %></div>
+          <div class="credits"><span data-toggle="tooltip" title="<%= t('.period_credits_tooltip') %>" data-bind="text: credits, css: creditsStatus"></span> <%= t('cr') %></div>
         </div>
       <!-- /ko -->
 
       <!-- ko foreach: courses -->
-        <div class="course" data-bind="draggable: {}, position: position, css: {'selected': hilightSelected, 'passed': grade, 'instanced': courseInstance, 'prereq-of': hilightPrereq, 'prereq-to': hilightPrereqTo, 'misordered': misordered}">
+        <div class="course" data-bind="draggable: {}, position: position, css: {'selected': hilightSelected, 'passed': grade, 'instanced': courseInstance, 'customized': customized, 'prereq-of': hilightPrereq, 'prereq-to': hilightPrereqTo, 'misordered': misordered}">
           <span data-bind="text: code"></span>
           <span data-bind="text: name"></span>
         </div>

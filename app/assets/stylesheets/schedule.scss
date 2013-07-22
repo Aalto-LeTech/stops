@@ -1,30 +1,29 @@
 @import "general_mixins";
 
+
+
+
+/* The plan */
+
+
 .plan {
   position: relative;
   width: 100%;
   border: 1px solid gray;
   text-align: right;
-  cursor: default; /* Text selection is disabled, so also disable the text selection cursor. */
 
-  /*
-  .courses {
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    z-index: 2;
-    width: 100%;
-    height: 100%;
-    border-right: 1px solid green;
-  }
-  */
+  /* Text selection is disabled, so also disable the text selection cursor. */
+  cursor: default;
+
 
   div.period {
+
     width: 100%;
     height: 58px;
     border-top: 1px solid #a0a0a0;
     padding: 0px;
     margin: 0px;
+    cursor: pointer;
 
     h2 {  // FIXME: Deprecated?
       position: absolute;
@@ -79,16 +78,16 @@
               background-size: 50px 50px;
     }
 
-    &.old {
-      background-color: #dddddd;
-    }
-
     &.now {
       background-color: #ddddff;
     }
 
     &.receiver {
       background-color: #e0ffe0;
+    }
+
+    &.old {
+      background-color: #dddddd;
     }
 
     &.selected {
@@ -112,18 +111,12 @@
 
   div.course {
     position: absolute;
-    /*
-    transition: top 1s;
-    transition: left 1s;
-    */
     top: 0px;
     left: 0px;
 
     color:      #444;
     background: #ffeeee;
-    //background: #e0e0ff url('../images/course-noinstance.png') !important;
-    //background: #f0f0f0;
-    border:     1px solid #aaa;
+    border:     1px solid #aaaaaa;
     @include border-radius(4px);
 
     font-size:  small;
@@ -154,15 +147,18 @@
       background: #eeffee;
     }
 
+    &.customized {
+      border: 2px solid #ffaaaa;
+    }
+
     &.passed {
       font-style: italic;
       color: #666;
-      border-color: #66ff66;
+      border: 1px solid #66ff66;
     }
 
     &.prereq-of, &.prereq-to {
       color: black;
-      background: #e0e0ff;
       border: 2px solid black;
     }
 
@@ -176,35 +172,26 @@
       border-top: 5px solid blue;
     }
 
+    &.customized {
+      border-right: 3px solid #ffaaaa;
+    }
+
     &.misordered {
-      background: #ffa0a0;
-      border-color: #800000;
+      background: #ffaaaa;
+      border: 1px solid #880000;
     }
 
     &.selected {
       color: white;
       border: 2px solid #0000ff;
-      background: #6060e0;
+      background: #6666ee;
       z-index: 1; /* Make sure selected course is on top of other courses */
     }
   }
 
-  /*.unsatisfied-postreq {
-    background: #e0e0ff url('../images/course-up.png') !important;
-  }
-
-  .unsatisfied-prereq {
-    background: #e0e0ff url('../images/course-down.png') !important;
-  }
-
-  */
-
-  /*
-  .in-progress {
-    background: white !important;
-  }*/
-
 }
+
+
 
 
 /* Left control elements */
@@ -220,12 +207,15 @@
     line-height: 2em;
   }
 
-}
+  div.competence-li {
 
+    cursor: pointer;
 
-/*
-.fixed {
-  position: fixed;
-  top: 0px;
+    &.selected {
+      color: #0000ff;
+      font-weight: bold;
+      border: none;
+      background: none;
+    }
+  }
 }
-*/

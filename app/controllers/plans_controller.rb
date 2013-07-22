@@ -25,79 +25,128 @@ class PlansController < ApplicationController
 
 
   # /plans/123.json returns the plan as JSON
-  #   {
-  #     "study_plan": {
-  #       "curriculum_id": 3,
-  #       "study_plan_courses": [
-  #         {"period_id": 42, "scoped_course_id": 41},
-  #         {"period_id": 44, "scoped_course_id": 60},
-  #         ...
+  # Data is given minimally, only to build a description of the plan with some
+  # abstraction.
+  #
+  # Example
+  #    {
+  #       "current_period_id" : 43,
+  #       "periods" : [
+  #          {
+  #             "ends_at" : "2012-08-31",
+  #             "begins_at" : "2012-06-01",
+  #             "id" : 38,
+  #             "localized_name" : "2012  kesä"
+  #          },
+  #          ...
+  #       ],
+  #       "courses" : [
+  #          {
+  #             "length" : null,
+  #             "scoped_course" : {
+  #                "prereq_ids" : [12, 13, ..., 99],
+  #                "credits" : 5,
+  #                "id" : 54
+  #             },
+  #             "abstract_course" : {
+  #                "course_instances" : [
+  #                   {
+  #                      "length" : 2,
+  #                      "period_id" : 4
+  #                   },
+  #                   ...
+  #                ],
+  #                "id" : 223,
+  #                "localized_name" : "Tulevaisuuden rakennukset",
+  #                "code" : "RAK-C3001"
+  #             },
+  #             "credits" : 5,
+  #             "period_id" : 44
+  #          }
+  #       ],
+  #       "competences" : [
+  #          {
+  #             "course_ids_recursive" : [45, 44, ..., 50],
+  #             "localized_name" : "Kandi: Taidolliset kompetenssit"
+  #          },
+  #          ...
+  #       ],
+  #       "user_courses" : [
+  #          {
+  #             "credits" : 5,
+  #             "abstract_course_id" : 228,
+  #             "grade" : 1,
+  #             "period_id" : 42
+  #          },
+  #          ...
   #       ]
-  #     },
-  #     "courses": [
-  #       {"course_code":"MS-A0001", "id":10, "abstract_course_id": 10, "credits":  5, "localized_name":"Matriisilaskenta", "prereq_ids": [11,15,...]},
-  #       {"course_code":"MS-A0101", "id":11, "abstract_course_id": 11, "credits": 10, "localized_name":"Differentiaalilaskenta", "prereq_ids": [62,78,...]},
-  #       ...
-  #     ],
-  #     "course_instances": [
-  #       {"abstract_course_id": 10, "lenght": 2, "period_id": 4},
-  #       ...
-  #     ],
-  #     "periods": [
-  #       {"id": 25, "number": 4, "localized_name": "2009 II syksy", "begins_at": "2009-11-01", "ends_at": "2009-12-31"},
-  #       {"id": 26, "number": 0, "localized_name": "2010 III kevat", "begins_at": "2010-01-01", "ends_at": "2010-02-28"},
-  #       ...
-  #     ],
-  #     "passed_courses": [
-  #       {"abstract_course_id": 179, "course_instance_id": 2711, "grade": 4, "id": 13}
-  #       {"abstract_course_id": 189, "course_instance_id": 2811, "grade": 5, "id": 14}
-  #       ...
-  #     ],
-  #     "current_period_id": 25
-  #   }
+  #    }
+  #
   def show
     authorize! :read, @study_plan
-    # FIXME: move relevant_periods to StudyPlan
 
-    periods = @user.relevant_periods.includes( :localized_description )
-    scoped_courses = @study_plan.courses.includes( [:localized_description, :prereqs] )
+    # Get periods, competences, user courses and study plan course data
+    periods = @study_plan.periods.includes(:localized_description)
+    competences = @study_plan.competences.includes([:localized_description, :courses])
+    user_courses = @user.user_courses.includes(:course_instance)
+    study_plan_courses = @study_plan.study_plan_courses.includes(
+      [
+        abstract_course: [:localized_description, :course_instances],
+        scoped_course: [:prereqs]
+      ]
+    )
 
-    # Get course instances
-    abstract_course_ids = scoped_courses.map { |scoped_course| scoped_course.abstract_course_id }
-    course_instances = CourseInstance.where( abstract_course_id: abstract_course_ids )
-
+    # JSONify the data
     periods_json = periods.as_json(
-      only:     [:id, :number, :begins_at, :ends_at],
-      methods:  [:localized_name],
-      root:     false
+      only: [:id, :begins_at, :ends_at],
+      methods: [:localized_name],
+      root: false
     )
 
-    scoped_courses_json = scoped_courses.as_json(
-      only:     [:id, :abstract_course_id, :course_code, :credits],
-      methods:  [:localized_name, :prereq_ids],
-      root:     false
+    # TODO: Replace courses_recursive with a more efficient solution
+    competences_json = competences.as_json(
+      only: [],
+      methods: [:localized_name, :course_ids_recursive],
+      root: false
     )
 
-    instances_json = course_instances.as_json(
-      only:     [:id, :abstract_course_id, :period_id, :length],
-      root:     false
+    user_courses_json = user_courses.as_json(
+      only: [:abstract_course_id, :grade, :credits],
+      methods: [:period_id],
+      root: false
     )
 
-    passed_courses_json = @user.passed_courses.as_json(
-      only:     [:id, :abstract_course_id, :course_instance_id, :grade],
-      root:     false
+    study_plan_courses_json = study_plan_courses.as_json(
+      only: [:period_id, :credits, :length],
+      include: [
+        {
+          abstract_course: {
+            only: [:id, :code],
+            methods: [:localized_name],
+            include: {
+              course_instances: {
+                only: [:period_id, :length]
+              }
+            }
+          }
+        },
+        {
+          scoped_course: {
+            only: [:id, :credits],
+            methods: [:prereq_ids]
+          }
+        }
+      ],
+      root: false
     )
 
-    # TODO: load competences
-
+    # Form and send the response
     respond_to do |format|
       format.json { render json: {
-          study_plan: @study_plan,
-          courses: scoped_courses_json,
           periods: periods_json,
-          course_instances: instances_json,
-          passed_courses: passed_courses_json,
-          current_period_id: Period.current.id
+          competences: competences_json,
+          user_courses: user_courses_json,
+          courses: study_plan_courses_json,
         }.to_json( root: false )
       }
     end

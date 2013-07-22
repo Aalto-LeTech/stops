@@ -1,5 +1,3 @@
-
-
 # Check that i18n strings have been loaded before this file
 if not i18n
   throw "plan view i18n strings have not been loaded!"
@@ -14,224 +12,53 @@ class @PlanView
   @COURSE_PADDING_Y: 3
 
   constructor: (@planUrl) ->
-    @i18n = i18n  # accessible from the view like this: <span data-bind="text: $root.i18n['qwerty'] "></span>
-
-    @periods = []
-    @periodsById = {}
-
-    @courses = []
-    @coursesById = {}                # scoped_course_id => Course
-    @coursesByAbstractCourseId = {}  # abstract_course_id => Course
+    # i18n string support. Accessible from the view like this:
+    #   <span data-bind="text: $root.i18n['qwerty'] "></span>
+    @i18n = i18n
 
     @selectedObject = ko.observable()
     @selectedObjectType = ko.observable()
-    #this.initializeRaphael()
 
-    @coursesToSave = [] # List of courses to be saved. Managed by @save()
-    @coursesRejected = [] # List of courses rejected on save by the server. Managed by @save()
+    # List of courses to be saved and rejected when tried to save.
+    # Both are used and managed at @save()
+    @coursesToSave = []
+    @coursesRejected = []
 
-    # TODO:
-    # old periods
-    # add warning if courses are in wrong order
-    # click background -> unselect courses
-
-
-  initializeRaphael: ->
-    #planDiv = $('#plan')
-
-    #this.paper = Raphael(planDiv.get(0), planDiv.width(), planDiv.height())
-    #PlanView::paper = Raphael(document.getElementById('plan'), planDiv.width(), planDiv.height())
-
-    # Align SVG canvas with the schedule table
-    # and allow mouse events to pass through.
-#     $('#plan svg').css({
-#       "position": "absolute",
-#       "pointer-events": "none",
-#       "z-index": "1",
-#       "left": "0px"             # Needed for Firefox
-#     })
-#
-#
-#   initializeFloatingSettingsPanel: ->
-#
-#     $automaticArrangement.find("img").popover({
-#       title:    planView.translations['popover_help_title'],
-#       content:  planView.translations['automatic_arrangement_help']
-#     })
-#
-#     $courseLock.find("img").popover({
-#       title:    planView.translations['popover_help_title'],
-#       content:  planView.translations['course_lock_help']
-#     })
-#
-#     # Initialize checkboxes according to default values
-#     $automaticArrangement.find("input").prop("checked", planView.settings.satisfyReqsAutomatically)
-#
-#     $drawPrereqGraphs.find("input").prop("checked", planView.settings.drawPrerequirementGraphs)
-#
-#     # Add checkbox change listeners
-#     $automaticArrangement.find("input").change (evt) ->
-#       shouldAutomaticallyArrange = $(this).prop("checked")
-#       planView.settings.satisfyReqsAutomatically = shouldAutomaticallyArrange
-#       if (shouldAutomaticallyArrange)
-#         # Reset 'unschedulable' values so scheduling is possible in every case
-#         $(".course").each (i) ->
-#           $(this).data("object").unschedulable = false
-#
-#         # Schedule
-#         planView.autoplan()
-#
-#
-#     $drawPrereqGraphs.find("input").change (evt) ->
-#       $selected = $("#plan .selected")
-#       if ($(this).prop("checked"))
-#         planView.settings.drawPrerequirementGraphs = true
-#         $selected.each (i) ->
-#           $(this).data("object").drawPrereqPaths()
-#       else
-#         planView.settings.drawPrerequirementGraphs = false
-#         $selected.each (i) ->
-#           $(this).data("object").clearPrereqPaths()
-#
-#
-#     $courseLock.find("input").change (evt) ->
-#       $checkbox       = $(this)
-#       $selectedCourse = $(".course.selected", "#plan")
-#       course          = $selectedCourse.data("object")
-#
-#       must_be_locked = $checkbox.prop("checked")
-#       if (must_be_locked)
-#         course.lock()
-#       else
-#         course.unlock()
-#
 
   loadPlan: () ->
     $.ajax
       url: @planUrl,
       dataType: 'json',
-      success: (data) => this.parsePlan(data)
+      success: (data) => this.loadJson(data)
 
 
-  # Loads plan from JSON data
-  parsePlan: (data) ->
+  # Loads the plan from JSON data
+  loadJson: (data) ->
     startTime = new Date().getTime()
     console.log("Starts loading data...")
 
-
     # Load periods
-    currentPeriodId = data['current_period_id']
+    Period::createFromJson(data['periods'])
+    console.log("Loaded #{Period::ALL.length} periods.")
 
-    periodCounter = 0
-    previousPeriod = undefined
-    for rawPeriod in data['periods']
-      period = new Period(rawPeriod)
-
-      period.sequenceNumber = periodCounter
-      period.previousPeriod = previousPeriod
-      previousPeriod.nextPeriod = period if previousPeriod
-
-      @periods.push(period)
-      @periodsById[period.id] = period
-
-      previousPeriod = period
-      periodCounter++
-
-    console.log("Loaded #{periodCounter} periods.")
-
-    Period::currentPeriod = @periodsById[currentPeriodId]
-
-    # Update period chronology (time) dependent flags
-    period = Period::currentPeriod
-    period.isNow(true)
-    while period.previousPeriod?
-      period = period.previousPeriod
-      period.isOld(true)
-
-
-    # Load scoped courses
-    for rawSC in data['courses']
-      course = new Course(rawSC)
-      @courses.push(course)
-      @coursesById[course.id] = course
-      @coursesByAbstractCourseId[rawSC['abstract_course_id']] = course
-
-      for prereqId in rawSC['prereq_ids']
-        prereq = @coursesById[prereqId]
-        course.addPrereq(prereq) if prereq
-
-    console.log("Loaded #{@courses.length} courses.")
-
+    # Load courses
+    Course::createFromJson(data['courses'], data['user_courses'])
+    console.log("Loaded #{Course::ALL.length} courses.")
 
     # Load competences
-
-    # TODO
-
-
-    # Load course instances
-    nCI = 0
-    for rawCI in data['course_instances']
-
-      # It can be expected that many instances are irrelevant
-      period = @periodsById[rawCI['period_id']]
-      continue unless period?
-
-      course = @coursesByAbstractCourseId[rawCI['abstract_course_id']]
-      continue unless course?
-
-      length = rawCI['length']
-      courseInstance = new CourseInstance(rawCI['id'], course, period, length)
-      course.addCourseInstance(courseInstance)
-      nCI++
-
-    console.log("Loaded #{nCI}/#{data['course_instances'].length} course instances.")
-
-
-    # Load study plan course data
-    nSPC = 0
-    rawPlan = data['study_plan']
-    for rawSPC in rawPlan['study_plan_courses']
-      course = @coursesById[rawSPC['scoped_course_id']]
-      unless course
-        console.log("Unknown course #{rawSPC['scoped_course_id']}!")
-        continue
-
-      periodId = rawSPC['period_id']
-      if periodId
-        period = @periodsById[periodId]
-        if not period
-          console.log("Unknown period ID #{periodId}")
-          continue
-
-        # Only set the variable to avoid unnecessary repetition
-        course.period = period
-      nSPC++
-
-    console.log("Loaded #{nSPC}/#{rawPlan['study_plan_courses'].length} study plan courses.")
-
-
-    # Load passed courses
-    nUC = 0
-    for rawUC in data['passed_courses']
-      course = @coursesByAbstractCourseId[rawUC['abstract_course_id']]
-      unless course
-        console.log "Unknown course #{rawUC['abstract_course_id']}"
-        continue
-
-      # Only set the variables to avoid unnecessary repetition
-      course.passedInstance = course.instancesById[rawUC['course_instance_id']]
-      course.grade(rawUC['grade'])
-      nUC++
-
-    console.log("Loaded #{nUC}/#{data['passed_courses'].length} user courses.")
-
+    Competence::createFromJson(data['competences'])
+    console.log("Loaded #{Competence::ALL.length} competences.")
 
     # Automatically schedule unscheduled (new) courses
-    schedule = new Scheduler(@courses)
+    schedule = new Scheduler(Course::ALL)
     schedule.scheduleUnscheduledCourses()
 
 
-    # apply ko bindings
+    # Only because bindings seem unable to refer to class vars
+    @periods = Period::ALL
+    @courses = Course::ALL
+    @competences = Competence::ALL
+    # Apply ko bindings
     console.log("Applying bindings...")
     preBindTime = new Date().getTime()
     ko.applyBindings(this)
@@ -239,22 +66,15 @@ class @PlanView
 
 
     # Set periods, update positions and save the 'originals'
-    # All done in the same loop (and rather complicatedly) to avoid repeating
-    # operations (eg. resetting periods and/or positions).
     console.log("Setting the courses to the periods...")
-    for course in @courses
-      # If the course is passed, set accordingly
-      if course.passedInstance
-        course.period = undefined
-        course.setAsPassed(course.passedInstance.id, course.grade())
-        course.resetOriginals()
-      # Else if the course was moved by the scheduler
-      else if schedule.moved[course.id]
+    for course in Course::ALL
+      # If the course was moved by the scheduler
+      if schedule.moved[course.scopedId]
         course.resetOriginals()
         course.period = undefined
-        course.setPeriod(schedule.schedule[course.id])
+        course.setPeriod(schedule.schedule[course.scopedId])
         course.updatePosition()
-      # If the course has a place to go to
+      # Else if the course has a place to go to
       else if course.period
         period = course.period
         course.period = undefined
@@ -266,19 +86,14 @@ class @PlanView
         console.log("WARNING: A vagabond course: #{course}!")
         course.resetOriginals()
 
-
-    # Update course ordering related warnings
-    console.log("Updating course ordering warnings...")
-    for course in @courses
+      # Update course ordering related warnings
       course.updateReqWarnings()
-
 
     # Autoscroll the viewport to show the current period and the near future
     # FIXME: Don't move the viewport, but the scrollable div.
     #console.log("Autoscrolling the viewport...")
     #topOffSet = $('div.period.now').offset().top
     #$(window).scrollTop(topOffSet - 2 * @constructor.PERIOD_HEIGHT)
-
 
     # Log time used from start to bind and here
     endTime = new Date().getTime();
@@ -302,21 +117,28 @@ class @PlanView
         for period in selectedObject.periods
           period.hilight(false)
 
-        for id, other of selectedObject.prereqTo
+        for scopedId, other of selectedObject.prereqTo
           other.hilightPrereqTo(false)
 
-        for id, other of selectedObject.prereqs
+        for scopedId, other of selectedObject.prereqs
           other.hilightPrereq(false)
 
-    console.log("Deselected [#{@selectedObjectType()}] #{selectedObject}")
+
+      else if selectedObject instanceof Competence
+
+        for prereq in selectedObject.prereqs
+          prereq.hilightPrereq(false)
+
 
     # Select the new object
+    #console.log("Deselected [#{@selectedObjectType()}] #{selectedObject}")
     @selectedObjectType(undefined)
     @selectedObject(undefined)
     @selectedObjectType('Course') if object instanceof Course
     @selectedObjectType('Period') if object instanceof Period
+    @selectedObjectType('Competence') if object instanceof Competence
     @selectedObject(object)
-    console.log("Selected [#{@selectedObjectType()}] #{object}")
+    #console.log("Selected [#{@selectedObjectType()}] #{object}")
 
     return unless object
 
@@ -325,35 +147,24 @@ class @PlanView
 
     if object instanceof Course
       # Hilight prereqs
-      for id, other of object.prereqs
+      for scopedId, other of object.prereqs
         other.hilightPrereq(true)
 
       # Hilight courses for which this is a prereq
-      for id, other of object.prereqTo
+      for scopedId, other of object.prereqTo
         other.hilightPrereqTo(true)
 
       # Hilight the periods that have this course
       for period in object.periods
         period.hilight(true)
 
+      if object.courseInstance then s = "#{object.courseInstance.length}" else s = "?"
+      console.log("customized: #{object.code} = #{object.customized()} : (#{object.credits()} vs #{object.scopedCredits}, #{object.length()} vs #{s})")
 
-#       if (period.laterOrEqual(planView.currentPeriod)) {
-#         period.element.addClass("receiver");
-#
-#         if (period.id in course.prereqsUnsatisfiableIn) {
-#           period.element.addClass("warning");
-#         }
-#       } else {
-#         period.element.addClass("old-period");
-#       }
-#     }
-#
-#
-#     # Draw requirement graphs for selected course */
-#     if (planView.settings.drawPrerequirementGraphs) {
-#       course.drawPrereqPaths();
-#     }
-#   }
+    else if object instanceof Competence
+
+      for prereq in object.prereqs
+        prereq.hilightPrereq(true)
 
 
   save: ->
@@ -366,10 +177,10 @@ class @PlanView
     #     ...
     #   ]
     # }
-    @coursesRejected = []   # FIXME: Not used atm.
+    @coursesRejected = []   # FIXME: Not used atm. Add a user notifier!
     @coursesToSave = []     # courses
     planCoursesToSave = []  # their JSON representation for sending
-    for course in @courses
+    for course in Course::ALL
       if course.hasChanged()
         console.log("Course \"#{course.name}\" was changed. Pushing to be saved.")
         @coursesToSave.push(course)
@@ -391,7 +202,7 @@ class @PlanView
           accepted = data['accepted']
           if accepted?
             for course in @coursesToSave
-              if accepted[course.id]
+              if accepted[course.scopedId]
                 console.log("Course \"#{course.name}\" was successfully saved.")
                 course.resetOriginals()
               else

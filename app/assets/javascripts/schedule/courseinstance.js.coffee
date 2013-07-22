@@ -1,5 +1,8 @@
 class @CourseInstance
-  constructor: (@id, @course, @period, @length) ->
 
+  constructor: (@period, @length) ->
+
+
+  # Renders the object into a string for debugging purposes
   toString: ->
-    "cInst[#{@id}]:{ c:#{@course.id} p:#{@period.id} l:#{@length} }"
+    "cInst:{ p:#{@period} l:#{@length} }"

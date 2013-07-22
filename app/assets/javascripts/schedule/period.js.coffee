@@ -1,15 +1,32 @@
 class @Period
 
+  ALL: []
+  BYID: {}
+  NOW: new Date().toISOString()
+  CURRENT: undefined
+
   UNDERBOOKED_LIMIT: 10  # determines the period credit total limits for css warning classes
-  OVERBOOKED_LIMIT:  20  #   see @creditsStatus
+  OVERBOOKED_LIMIT: 20   #   see @creditsStatus
+
+
+  createFromJson: (data) ->
+    periodCounter = 0
+    previousPeriod = undefined
+    for dat in data
+      period = new Period(dat)
+      # Save sequence information
+      period.sequenceNumber = periodCounter
+      period.previousPeriod = previousPeriod
+      previousPeriod.nextPeriod = period if previousPeriod
+      previousPeriod = period
+      periodCounter++
+
 
   constructor: (data) ->
     @hilightSelected = ko.observable(false)
 
     @droppedCourse = ko.observable()
     @hilight = ko.observable(false)
-    @isOld = ko.observable(false)
-    @isNow = ko.observable(false)
 
     # TODO: specify event handler in the binding
     @droppedCourse.subscribe (course) =>
@@ -19,18 +36,11 @@ class @Period
 
     @position         = ko.observable({y: 0}) # Course position
     @courses          = ko.observableArray()  # Courses that have been put to this period
-    @coursesById      = {}                    # Courses that have been put to this period by id
-    #@courseInstances = {}                    # Courses that are available on this period. courseId => courseInstance
     @slots            = []                    # Array index is slot (column) number. Value is Course occupying the slot or false
     @previousPeriod   = undefined             # Reference to previous sibling
     @nextPeriod       = undefined             # Reference to next sibling
     @sequenceNumber   = undefined             # Sequence number to allow easy testing of the order of periods
-#
-#
-#     element.droppable
-#       drop: courseDropped,
-#       accept: isCourseAccepted
-#
+
     @loadJson(data || {})
 
     @credits = ko.observable(0)
@@ -42,34 +52,47 @@ class @Period
 
 
   loadJson: (data) ->
+    # Load basic data
     @id = data['id']
     @name = data['localized_name'] || ''
-    @period_number = data['number']
     @beginsAt = data['begins_at']
     @endsAt = data['ends_at']
+
+    # Set time dependent flags
+    @isNow = false
+    if @endsAt < @NOW
+      @isOld = true
+    else
+      @isOld = false
+      if @beginsAt < @NOW
+        @isNow = true
+        @CURRENT = this
+
+    # Map the object
+    throw "ERROR: id collision at #{@id}!" if @BYID[@id]?
+    @BYID[@id] = this
+    @ALL.push(this)
 
 
   earlierThan: (other) ->
     return this.sequenceNumber < other.sequenceNumber
 
+
   earlierOrEqual: (other) ->
     return this.sequenceNumber <= other.sequenceNumber
+
 
   laterThan: (other) ->
     return this.sequenceNumber > other.sequenceNumber
 
+
   laterOrEqual: (other) ->
     return this.sequenceNumber >= other.sequenceNumber
-
-#   getPreviousPeriodUntilCurrent: ->
-#     if this.previousPeriod.laterOrEqual(this.currentPeriod)
-#       return this.previousPeriod
-#     else
-#       return null
 
 
   getPreviousPeriod: ->
     return this.previousPeriod
+
 
   getNextPeriod: ->
     return this.nextPeriod
@@ -78,8 +101,7 @@ class @Period
   # Puts a course on this period.
   addCourse: (course, slot) ->
     #console.log("p[#{@id}] add #{course}.")
-    # Add course to the dict
-    @coursesById[course.id] = course
+    # Add the course
     @courses.push(course)
 
     length = course.length()  # Length in periods
@@ -97,8 +119,7 @@ class @Period
   # Removes a course from this period.
   removeCourse: (course) ->
     #console.log("p[#{@id}] rm #{course}.")
-    # Remove course from the dict
-    delete @coursesById[course.id]
+    # Remove the course
     @courses.splice(@courses.indexOf(course), 1)
 
     # Free slots
@@ -138,41 +159,6 @@ class @Period
     @nextPeriod.freeSlot(slot, length - 1) if length > 1 && @nextPeriod
 
 
-#   #  Decides whether droppable should accept given draggable.
-#   isCourseAccepted(draggable) ->
-#     course = draggable.data('object')
-#     period = $(this).data('object')
-#
-#     return true
-#     # FIXME
-#
-#     return period.laterOrEqual(planView.currentPeriod) && period.courseAvailable(course)
-#
-#
-#   # Handles course drop events.
-#   courseDropped: (event, ui) ->
-#     period = $(this).data('object')
-#     course = ui.draggable.data('object')
-#
-#     # Draggable needs to know that drop succeeded
-#     ui.draggable.data('dropped', true)
-#
-#     # Find the course instance
-#     course.setPeriod(period)
-#     if period.courseInstances[course.getCode()]
-#       course.element.removeClass('noinstance')
-#     else
-#       # If there is no instance on that period, show warning
-#       course.element.addClass('noinstance')
-#
-#
-#     if (planView.settings.satisfyReqsAutomatically)
-#       # Move prereqs before the course
-#       course.satisfyPrereqs()
-#
-#       # Move postreqs after the course
-#       course.satisfyPostreqs()
-
-
+  # Renders the object into a string for debugging purposes
   toString: ->
     "p[#{@id}]:{ n:#{@name} }"

@@ -27,10 +27,19 @@ class Dbggr
   end
 
 
+  # lists all periods
+  def list_periods
+    Period.find_each do |period|
+      puts "  [%03d] % 3d % 4s % 4s [%s - %s] % 15s" % [ period.id, period.number, period.symbol, period.to_roman_numeral, period.begins_at, period.ends_at, period.name(@locale) ]
+    end
+  end
+
+
   # return abstract course info
   def abstract_course_to_s( abstract_course )
     return "[%03d] % 15s  : % 3d sc, % 3d ci, % 3d p" % [ abstract_course.id, abstract_course.code, abstract_course.scoped_courses.count, abstract_course.course_instances.count, abstract_course.periods.count ]
   end
+
 
   # lists all abstract courses
   def list_abstract_courses
@@ -104,14 +113,6 @@ class Dbggr
   def list_user_courses
     UserCourse.find_each do |user_course|
       puts "  [%03d] % 25s  %d" % [ user_course.id, user_course.course_instance.dbg_name, user_course.grade ]
-    end
-  end
-
-
-  # lists all periods
-  def list_periods
-    Period.find_each do |period|
-      puts "  [%03d] % 3d % 4s % 4s [%s - %s] % 15s" % [ period.id, period.number, period.symbol, period.to_roman_numeral, period.begins_at, period.ends_at, period.name(@locale) ]
     end
   end
 
@@ -209,8 +210,90 @@ class Dbggr
   end
 
 
+  # fixes custom problems
+  def fix
+    # fixes user_courses
+    # deletes entries with no grade
+    UserCourse.find_each do |user_course|
+      if not user_course.grade?
+        y user_course
+        user_course.destroy
+      end
+    end
+
+    return
+
+    # fixes study_plan_courses
+    StudyPlanCourse.find_each do |study_plan_courses|
+      scoped_course = study_plan_courses.scoped_course
+      study_plan_courses.abstract_course = scoped_course.abstract_course
+      study_plan_courses.save
+    end
+    y StudyPlanCourse.all
+  end
+
+
   def dbg
-    @user = User.where( :id => 2 ).first
+    @user = User.where( :id => 2 ).includes(:study_plan).first
+    @study_plan = @user.study_plan
+
+    #fix; exit
+
+    competences = @study_plan.competences.includes([:localized_description, :courses])
+    y competences.as_json(
+      only: [],
+      methods: [:localized_name, :course_ids_recursive],
+      root: false
+    )
+    exit
+
+    user_courses = @user.user_courses.includes(:course_instance)
+    y user_courses_json = user_courses.as_json(
+      only: [:abstract_course_id, :grade, :credits],
+      methods: [:period_id],
+      root: false
+    )
+    exit
+
+
+    study_plan_courses = @study_plan.study_plan_courses.includes(
+      [
+        abstract_course: [:localized_description, :course_instances],
+        scoped_course: [:prereqs]
+      ]
+    )
+
+    y study_plan_courses_json = study_plan_courses.as_json(
+      only: [:id, :period_id, :credits, :length],
+      include: [
+        {
+          abstract_course: {
+            only: [:code],
+            methods: [:localized_name],
+            include: {
+              course_instances: {
+                only: [:period_id, :length]
+              }
+            }
+          }
+        },
+        {
+          scoped_course: {
+            only: [:id, :credits],
+            methods: [:prereq_ids]
+          }
+        }
+      ],
+      root: false
+    )
+
+
+    #y @user.period_of_earliest_user_course
+    #y @user.period_of_latest_user_course
+    #y periods = @study_plan.periods
+    #y [@study_plan.last_period_id, @study_plan.first_period_id]
+    #y @study_plan.last_period.ends_at - @study_plan.first_period.begins_at
+    #y @user.study_plan.period_of_earliest_study_plan_course
     #@user.first_study_period_id = 37
     #@user.save
     #@user.admin
@@ -226,7 +309,7 @@ class Dbggr
     #list_scoped_courses
     #list_course_instances
     #list_user_courses
-    list_periods
+    #list_periods
     #create_some_user_courses
     #@user.user_courses.sort { |a, b| a.get_end_date <=> b.get_end_date }
     exit

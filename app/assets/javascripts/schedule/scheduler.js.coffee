@@ -1,18 +1,18 @@
 class @Scheduler
 
   constructor: (@courses) ->
-    @schedule = {}   # courseId => period
-    @moved = {}   # courseId => isMoved?
+    @schedule = {}  # scopedId => period
+    @moved = {}  # scopedId => isMoved?
 
     for course in @courses
-      @schedule[course.id] = course.period
-      @moved[course.id] = false
+      @schedule[course.scopedId] = course.period
+      @moved[course.scopedId] = false
 
 
   scheduleUnscheduledCourses: ->
     for course in @courses
       # Skip courses that are already scheduled
-      if @schedule[course.id]
+      if @schedule[course.scopedId]
         #console.log "Skipping #{course.name}. Already scheduled."
         continue
 
@@ -22,9 +22,9 @@ class @Scheduler
       this.postponeAfterPrereqs(course)
 
       # If course is still unattached, put it on the first period
-      unless @schedule[course.id]  #(!period? && !course.unschedulable) || (period && period.earlierThan(period.getCurrentPeriod())
+      unless @schedule[course.scopedId]  #(!period? && !course.unschedulable) || (period && period.earlierThan(period.getCurrentPeriod())
         console.log "#{course.name}. Still unattached. Postponing to current period."
-        this.postponeTo(course, Period::currentPeriod)
+        this.postponeTo(course, Period::CURRENT)
 
       # Move forward those courses that depend (recursively) on the newly added course
       this.satisfyPostreqs(course)
@@ -36,8 +36,8 @@ class @Scheduler
 
     # Find the latest prereq
     latestPeriod = false
-    for id,prereq of course.prereqs
-      period = @schedule[prereq.id]
+    for scopedId, prereq of course.prereqs
+      period = @schedule[prereq.scopedId]
       latestPeriod = period if period? && (!latestPeriod || period.laterThan(latestPeriod))
 
     return unless latestPeriod
@@ -46,8 +46,8 @@ class @Scheduler
     targetPeriod = latestPeriod.getNextPeriod() || latestPeriod
 
     # Don't schedule courses before current period
-    if targetPeriod.earlierThan(Period::currentPeriod)
-      targetPeriod = Period::currentPeriod
+    if targetPeriod.earlierThan(Period::CURRENT)
+      targetPeriod = Period::CURRENT
 
     console.log "Postponing #{course.name} to satisfy prereqs."
     this.postponeTo(course, targetPeriod)
@@ -58,37 +58,37 @@ class @Scheduler
 
     # If no instances are known for this course, put it on the requested period
     if (course.instanceCount < 1)
-      if @schedule[course.id] != requestedPeriod
-        @schedule[course.id] = requestedPeriod
+      if @schedule[course.scopedId] != requestedPeriod
+        @schedule[course.scopedId] = requestedPeriod
         # Mark course as moved
-        @moved[course.id] = true
+        @moved[course.scopedId] = true
       #this.markUnschedulable()
       return
 
     period = requestedPeriod
     while (period)
-      if course.instancesByPeriodId[period.id]
+      if course.instancesByPeriodId[period.scopedId]
         console.log "Move #{course.name} to #{period.name}"
-        if @schedule[course.id] != period
-          @schedule[course.id] = period
+        if @schedule[course.scopedId] != period
+          @schedule[course.scopedId] = period
           # Mark course as moved
-          @moved[course.id] = true
+          @moved[course.scopedId] = true
         return
 
       period = period.getNextPeriod()
 
     # No period could be found. Put it on the requested period
     console.log "No period found for #{course.name}. Putting on #{period.name}"
-    if @schedule[course.id] != requestedPeriod
-      @schedule[course.id] = requestedPeriod
+    if @schedule[course.scopedId] != requestedPeriod
+      @schedule[course.scopedId] = requestedPeriod
       # Mark course as moved
-      @moved[course.id] = true
+      @moved[course.scopedId] = true
     #this.markUnschedulable()
 
 
   satisfyPostreqs: (course) ->
     # Quit recursion if this course is part of an unsolvable chain
-    period = @schedule[course.id]
+    period = @schedule[course.scopedId]
     unless period
       return
 
@@ -99,8 +99,8 @@ class @Scheduler
       return
 
     # Postpone postreqs that are earlier than this
-    for id, other of course.prereqTo
-      othersPeriod = @schedule[other.id]
+    for scopedId, other of course.prereqTo
+      othersPeriod = @schedule[other.scopedId]
       if !othersPeriod || period.laterOrEqual(othersPeriod)
         console.log "Postponing #{other.name} to #{targetPeriod.name} because it depends on #{course.name}"
         this.postponeTo(other, targetPeriod) unless other.locked

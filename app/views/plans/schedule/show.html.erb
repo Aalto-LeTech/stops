@@ -134,9 +134,12 @@
         <!-- /ko -->
         <!-- ko if: competences.length > 0 -->
           <ul data-bind="foreach: competences">
-            <li>
-              <div class="competence-li" data-bind="css: {'selected': hilightSelected}">
+            <li class="competencex">
+              <div data-bind="css: {'selected': hilightSelected}">
                 <span data-bind="text: name"></span>
+              </div>
+              <div class="progress progress-striped" title="<%= t('.competence_progress_tooltip') %>">
+                <div class="bar" data-bind="style: {width: progressWidth()}"></div>
               </div>
             </li>
           </ul>
@@ -160,11 +163,6 @@
 
     <p id="status"></p>
 
-    <p>
-      <span data-bind="text: $root.i18n.foo "></span>
-      <span data-bind="text: $root.i18n.bar "></span>
-    </p>
-
     <div class="plan" id="plan" data-studyplan-path="<%= plan_path(@study_plan.id) %>">
 
       <div id="svg"></div>
@@ -172,12 +170,12 @@
       <!-- ko foreach: periods -->
         <div class="period" data-bind="droppable: droppedCourse, position: position, css: {'selected': hilightSelected, 'receiver': hilight, 'old': isOld, 'now': isNow}">
           <div class="name" data-bind="text: name"></div>
-          <div class="credits"><span data-toggle="tooltip" title="<%= t('.period_credits_tooltip') %>" data-bind="text: credits, css: creditsStatus"></span> <%= t('cr') %></div>
+          <div class="credits"><span data-toggle="tooltip" data-bind="text: credits, attr: {title: creditsTooltip}, css: creditsStatus"></span> <%= t('cr') %></div>
         </div>
       <!-- /ko -->
 
       <!-- ko foreach: courses -->
-        <div class="course" data-bind="draggable: {}, position: position, css: {'selected': hilightSelected, 'passed': grade, 'instanced': courseInstance, 'customized': customized, 'prereq-of': hilightPrereq, 'prereq-to': hilightPrereqTo, 'misordered': misordered}">
+        <div class="course" data-toggle="tooltip" data-bind="draggable: {}, position: position, attr: {title: tooltip}, css: {'selected': hilightSelected, 'passed': grade() > 0, 'instanced': courseInstance, 'customized': customized, 'prereq-of': hilightPrereq, 'prereq-to': hilightPrereqTo, 'misordered': misordered, 'misscheduled': misscheduled}">
           <span data-bind="text: code"></span>
           <span data-bind="text: name"></span>
         </div>

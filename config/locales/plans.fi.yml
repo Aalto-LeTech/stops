@@ -66,7 +66,17 @@ fi:
         grade: "Arvosana"
         extent_tooltip: "Tähän voit päivittää kurssin laajuuden opintopisteinä."
         grade_tooltip: "Tähän voit päivittää kurssista saamasi arvosanan (0-5)."
-        period_credits_tooltip: "Opintojaksollesi sijoittamiesi kurssien opintopisteiden summa. Pyri olemaan realistinen ja tasaamaan opintojaksojesi opintokuormaa."
+        competence_progress_tooltip: "Tämä kuvaa kompetenssin kurssivaatimusten tyydyttämisen edistymistä."
+      show_i18n_strings:
+        period_credits_tooltip_underbooked: "Opintojaksosi kurssien opintopisteiden summa on selvästi alle opintojaksoille suositellun 15 op. Arvioi onko mahdollista siirtää tähän opintoja muilta opintojaksoilta."
+        period_credits_tooltip_overbooked: "Opintojaksosi opintokuorma on selvästi suositeltua suurempi. Mieti onko kuorma varmasti realistinen ja olisiko kenties mahdollista tasata opintoja muille opintojaksoille."
+        period_credits_tooltip_neutral: "Opintojaksollesi sijoittamiesi kurssien opintopisteiden summa."
+        course_tooltip_intro: "Huomioita:"
+        course_tooltip_misordered: "kurssi on aikataulutettu vastoin esitietovaatimuksia"
+        course_tooltip_misscheduled: "kurssi on aikataulutettu menneisyyteen, vaikkei se ole suoritettu"
+        course_tooltip_uninstanced: "kurssi on aikataulutettu opintojaksolle, jona sitä ei tietokantamme mukaan järjestetä"
+        course_tooltip_customized: "kurssia ei esiinny tällä opintopistemäärällä ja/tai opintojaksokestolla tietokannassamme"
+        course_tooltip_passed: "kurssi katsotaan suoritetuksi, sillä sillä on nollaa korkeampi arvosana"
 
     periods:
       index:

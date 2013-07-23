@@ -5,8 +5,8 @@ class @Period
   NOW: new Date().toISOString()
   CURRENT: undefined
 
-  UNDERBOOKED_LIMIT: 10  # determines the period credit total limits for css warning classes
-  OVERBOOKED_LIMIT: 20   #   see @creditsStatus
+  UNDERBOOKED_LIMIT: 11  # determines the period credit total limits for css warning classes
+  OVERBOOKED_LIMIT: 19   #   see @creditsStatus
 
 
   createFromJson: (data) ->
@@ -43,12 +43,21 @@ class @Period
 
     @loadJson(data || {})
 
-    @credits = ko.observable(0)
-    @creditsStatus = ko.computed =>
-      credits = @credits()
-      return 'underbooked' if credits < @UNDERBOOKED_LIMIT
-      return 'overbooked' if credits > @OVERBOOKED_LIMIT
-      return ''
+    @credits          = ko.observable(0)
+    @creditsStatus    = undefined
+    @creditsTooltip     = undefined
+
+    @credits.subscribe (newValue) =>
+      #console.log("Foo! #{@id}")
+      credits = newValue
+      @creditsStatus = ''
+      @creditsTooltip = i18n.period_credits_tooltip_neutral
+      if credits < @UNDERBOOKED_LIMIT
+        @creditsStatus = 'underbooked'
+        @creditsTooltip = i18n.period_credits_tooltip_underbooked if credits > 0
+      else if credits > @OVERBOOKED_LIMIT
+        @creditsStatus = 'overbooked'
+        @creditsTooltip = i18n.period_credits_tooltip_overbooked
 
 
   loadJson: (data) ->

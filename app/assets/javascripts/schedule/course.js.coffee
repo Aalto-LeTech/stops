@@ -38,11 +38,40 @@ class @Course
       course.grade(dat['grade'])
 
 
+  # Updates the tooltip
+  updateTooltip: ->
+    tooltipNotes = ''
+    if @misordered()
+      tooltipNotes += '\n - ' + i18n.course_tooltip_misordered
+    if @misscheduled()
+      tooltipNotes += '\n - ' + i18n.course_tooltip_misscheduled
+    if not @courseInstance?
+      tooltipNotes += '\n - ' + i18n.course_tooltip_uninstanced
+    if @customized()
+      tooltipNotes += '\n - ' + i18n.course_tooltip_customized
+    if @grade() > 0
+      tooltipNotes += '\n - ' + i18n.course_tooltip_passed
+
+    if tooltipNotes.length > 0
+      tooltip = i18n.course_tooltip_intro + tooltipNotes
+    else
+      tooltip = ''
+
+    @tooltip(tooltip)
+
+
+  # Check the period & grade related flag "misscheduled"
+  updateMisscheduledFlag: ->
+    @misscheduled(not @period? or (@period.isOld and not @grade() > 0))
+    @updateTooltip()
+
+
   constructor: (data) ->
     @hilightSelected     = ko.observable(false)
     @hilightPrereq       = ko.observable(false)
     @hilightPrereqTo     = ko.observable(false)
     @misordered          = ko.observable(false)
+    @misscheduled        = ko.observable(false)
 
     @locked              = false             # Is the course immovable?
     @position            = ko.observable({x: 0, y: 0, height: 1})
@@ -59,34 +88,48 @@ class @Course
     @length              = ko.observable()   # Length in periods
     @unschedulable       = false             # true if period allocation algorithm cannot find suitable period
 
-    @credits             = ko.observable()
-    @grade               = ko.observable()
+    @credits             = ko.observable().extend({'integer'})
+    @grade               = ko.observable().extend({'integer'})
     @courseInstance      = undefined
+
+    @competences         = []                # Competences a prereq-to this is
+
+    @tooltip             = ko.observable('')
 
     this.loadJson(data || {})
 
+    @credits.subscribe (newValue) =>
+      #console.log("c[#{@scopedId}].credits.subs type:#{type(newValue)} (#{@credits()})")
+      for competence in @competences
+        competence.updatePrereqCredits( @scopedId, newValue )
+
     @creditsPerP = ko.computed =>
-      @credits(parseInt(@credits()))
-      @length(parseInt(@length()))
       #console.log("c[#{@scopedId}] credits update -> #{@credits()}/#{@length()}")
       return @credits() / @length()
 
     @creditsPerP.subscribe ((oldValue) ->
+      #console.log("c[#{@scopedId}].creditsPerP.subs before")
       @deDistributeCredits(oldValue)
     ), @, "beforeChange"
 
     @creditsPerP.subscribe (newValue) =>
+      #console.log("c[#{@scopedId}].creditsPerP.subs")
       @distributeCredits()
 
     @customized = ko.computed =>
-      #if @courseInstance then s = "#{@courseInstance.length}" else s = "?"
-      #console.log("customized: #{@code} : (#{@credits()} vs #{@scopedCredits}, #{@length()} vs #{s})")
-      return true if @credits() != @scopedCredits
-      if @courseInstance
-        return true if @length() != @courseInstance.length
-      return false
-#     if @courseInstance then s = "#{@courseInstance.length}" else s = "?"
-#     console.log("cust #{customized} <- #{@name} : (#{@credits()} vs #{@scopedCredits}, #{@length()} vs #{s})")
+      isCustomized = (@credits() != @scopedCredits) or (@courseInstance? and (@length() != @courseInstance.length))
+      #console.log("customized: #{@code} = #{isCustomized} : (#{@credits()} vs #{@scopedCredits}, #{@length()} vs #{@courseInstance?.length})")
+      return isCustomized
+
+    @customized.subscribe (newValue) =>
+      @updateTooltip()
+
+    @grade.subscribe (newValue) =>
+      for competence in @competences
+        competence.updatePrereqGrade( @scopedId, newValue )
+      # Check the period & grade related flag "misscheduled"
+      # NB: Also calls updateTooltip, so no need to call it here
+      @updateMisscheduledFlag()
 
 
   # Reads some of the model's core attributes from the given JSON data object
@@ -154,15 +197,20 @@ class @Course
 
   # Serializes the model for sending it back to the database
   toJson: ->
-    credits = parseInt(@credits())
-    length = parseInt(@length())
-    grade = parseInt(@grade())
+    credits = @credits()
+    length = @length()
+    grade = @grade()
 
     json = { scoped_course_id: @scopedId }
     json['credits'] = credits if credits > 0
     json['period_id'] = @period.id if @period?
     json['length'] = length if length > 0  # FIXME: should study_plan_course model have one?
     json['grade'] = grade if grade > 0
+
+    # In case a course's grade has been removed we flag the user course for
+    # destuction in the database
+    if @oGrade > 0 and not (grade > 0)
+      json['grade'] = -1
 
     return json
 
@@ -173,7 +221,7 @@ class @Course
     other.prereqTo[@scopedId] = this
 
 
-  # Returns prerequisite courses as a list
+  # Returns whether the course has prerequisite courses or not
   hasPrereqs: ->
     for scopedId, course of @prereqs
       return true
@@ -238,6 +286,10 @@ class @Course
     # Update the period
     @period = period
 
+    # Check the period & grade related flag "misscheduled"
+    # NB: Also calls updateTooltip, so no need to call it here
+    @updateMisscheduledFlag()
+
     # Add course to the new period
     @distributeCredits()
     @slot = period.addCourse(this)
@@ -269,6 +321,7 @@ class @Course
 
     #console.log( "Course[#{@scopedId}].misordered: #{misordered}." )
     @misordered(misordered)
+    @updateTooltip()
 
 
   # Mark the course as unschedulable by the automatic scheduling algorithm

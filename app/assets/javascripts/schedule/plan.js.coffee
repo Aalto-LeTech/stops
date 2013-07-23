@@ -19,6 +19,8 @@ class @PlanView
     @selectedObject = ko.observable()
     @selectedObjectType = ko.observable()
 
+    @progr = ko.observable('30%')
+
     # List of courses to be saved and rejected when tried to save.
     # Both are used and managed at @save()
     @coursesToSave = []
@@ -54,7 +56,30 @@ class @PlanView
     schedule.scheduleUnscheduledCourses()
 
 
-    # Only because bindings seem unable to refer to class vars
+    # Set periods and save the 'originals'
+    console.log("Setting the courses to the periods...")
+    for course in Course::ALL
+      # If the course was moved by the scheduler
+      if schedule.moved[course.scopedId]
+        course.resetOriginals()
+        course.period = undefined
+        course.setPeriod(schedule.schedule[course.scopedId])
+      # Else if the course has a place to go to
+      else if course.period
+        period = course.period
+        course.period = undefined
+        course.setPeriod(period)
+        course.resetOriginals()
+      # Hmmh...?
+      else
+        console.log("WARNING: A vagabond course: #{course}!")
+        course.resetOriginals()
+
+      # Update course ordering related warnings
+      course.updateReqWarnings()
+
+
+    # Only because ko bindings seem unable to refer to class vars
     @periods = Period::ALL
     @courses = Course::ALL
     @competences = Competence::ALL
@@ -65,29 +90,14 @@ class @PlanView
     postBindTime = new Date().getTime()
 
 
-    # Set periods, update positions and save the 'originals'
-    console.log("Setting the courses to the periods...")
+    # Update positions
     for course in Course::ALL
-      # If the course was moved by the scheduler
-      if schedule.moved[course.scopedId]
-        course.resetOriginals()
-        course.period = undefined
-        course.setPeriod(schedule.schedule[course.scopedId])
-        course.updatePosition()
-      # Else if the course has a place to go to
-      else if course.period
-        period = course.period
-        course.period = undefined
-        course.setPeriod(period)
-        course.updatePosition()
-        course.resetOriginals()
-      # Hmmh...?
-      else
-        console.log("WARNING: A vagabond course: #{course}!")
-        course.resetOriginals()
+      course.updatePosition() if course.period
 
-      # Update course ordering related warnings
-      course.updateReqWarnings()
+    # Initialize tooltips
+    #$('div.plan div.period div.credits span').tooltip(placement: 'left')
+    #$('div.plan div.course').tooltip(placement: 'bottom', delay: 1500)
+    #$('div.well div.progress').tooltip(placement: 'bottom', delay: 1000)
 
     # Autoscroll the viewport to show the current period and the near future
     # FIXME: Don't move the viewport, but the scrollable div.
@@ -102,6 +112,7 @@ class @PlanView
 
   unselectObjects: (data, event) ->
     @selectObject()
+
 
   selectObject: (object) ->
 
@@ -158,8 +169,7 @@ class @PlanView
       for period in object.periods
         period.hilight(true)
 
-      if object.courseInstance then s = "#{object.courseInstance.length}" else s = "?"
-      console.log("customized: #{object.code} = #{object.customized()} : (#{object.credits()} vs #{object.scopedCredits}, #{object.length()} vs #{s})")
+      #console.log("customized: #{object.code} = #{object.customized()} : (#{object.credits()} vs #{object.scopedCredits}, #{object.length()} vs #{object.courseInstance?.length})")
 
     else if object instanceof Competence
 

@@ -290,35 +290,39 @@ class StudyPlan < ActiveRecord::Base
           study_plan_course.save
         end
 
-        # TODO: destroy user courses when the grade is removed
         # If a grade was defined
-        if not new_grade.nil? and new_grade > 0
+        if not new_grade.nil?
           if not new_course_instance_id.nil?
             existing_user_course = self.user.user_courses.where(course_instance_id: new_course_instance_id).first
           else
             existing_user_course = self.user.user_courses.where(abstract_course_id: abstract_course_id).first
           end
-          # And an existing user_course exists
-          if existing_user_course
-            # Save the possible changes to the user_course
-            changed =
-                existing_user_course.grade != new_grade ||
-                existing_user_course.credits != new_credits
+          if new_grade > 0
+            # And an existing user_course exists
+            if existing_user_course
+              # Save the possible changes to the user_course
+              changed =
+                  existing_user_course.grade != new_grade ||
+                  existing_user_course.credits != new_credits
 
-            if changed
-              existing_user_course.grade = new_grade
-              existing_user_course.credits = new_credits
-              existing_user_course.save
+              if changed
+                existing_user_course.grade = new_grade
+                existing_user_course.credits = new_credits
+                existing_user_course.save
+              end
+            else
+              # If there is no existing user_course, create one
+              UserCourse.create(
+                user_id:             self.user_id,
+                abstract_course_id:  abstract_course_id,
+                course_instance_id:  new_course_instance_id,
+                grade:               new_grade,
+                credits:             new_credits
+              )
             end
-          else
-            # If there is no existing user_course, create one
-            UserCourse.create(
-              user_id:             self.user_id,
-              abstract_course_id:  abstract_course_id,
-              course_instance_id:  new_course_instance_id,
-              grade:               new_grade,
-              credits:             new_credits
-            )
+          elsif existing_user_course and new_grade == -1
+            # The user course is flagged for destruction
+            existing_user_course.destroy
           end
         end
 

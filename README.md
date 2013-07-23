@@ -18,9 +18,12 @@ Sprint 17.7 - 30.7
 - [x] fix: highlight custom courses
 - [x] fix: fix the unselecting issue
 - [x] fix: switch from knockout 2.2.1 to 2.3.0
-- [/] fix: PlanView save logic (eg. permit the removal of user courses)
-- [ ] fix: fix and test the schedule related logic
-- [ ] new: when a competence is selected, display a progress bar
+- [x] fix: PlanView save logic (eg. permit the removal of user courses)
+- [x] new: indication of unpassed courses scheduled into the past (misscheduled)
+- [x] fix: fix and test the schedule related logic
+- [x] new: when a competence is selected, display a progress bar
+- [x] new: added smart tooltips for period credits, competence progress and course divs
+- [ ] fix: don't show the grade field for courses scheduled to the future
 - [ ] fix: make the plan scroll and the top and side elements remain visible when scrolling the schedule grid
 - [ ] fix: redesign the "autoscroll to current period" feature
 - [ ] new: add intro description into competence view in case no coms chosen
@@ -31,6 +34,8 @@ Sprint 17.7 - 30.7
 - [ ] new: studyplan/courses/index: allow creation of custom study_plan_courses (name, )
 - [ ] new: test the work flow with some scenarios
 - [ ] something else
+- [ ] new: textual description of a course's state (eg: "The course is scheduled into the past!", "The current chronology of scheduled courses does not satisfy course prerequirement relations.")
+- [ ] new: modifying course lenght
 
 If excess time
 - [ ] fix the course_description.scoped_course_id problem

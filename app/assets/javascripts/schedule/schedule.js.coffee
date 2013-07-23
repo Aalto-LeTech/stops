@@ -1,4 +1,5 @@
 #= require knockout-2.3.0
+#= require knockoutxtra
 #= require schedule/plan
 #= require schedule/period
 #= require schedule/course
@@ -75,7 +76,7 @@ jQuery ->
 
   # Event handlers
   $(document)
-    .on 'mousedown', '.course, .period, .competence-li', (event) ->
+    .on 'mousedown', '.course, .period, .competencex', (event) ->
       object = ko.dataFor(this)
       planView.selectObject(object) if event.which == 1
       event.stopPropagation()

@@ -4,10 +4,17 @@
 
   /* i18n strings */
   i18n = {
-    current_locale:                 "<%= I18n.locale %>",
-    required_locales:               ["<%= REQUIRED_LOCALES.join('","').html_safe %>"],
-    foo:                            "<%= escape_javascript(t('frontpage.foo')) %>",
-    bar:                            "<%= escape_javascript(t('frontpage.bar')) %>"
+    current_locale:                       "<%= I18n.locale %>",
+    required_locales:                     ["<%= REQUIRED_LOCALES.join('","').html_safe %>"],
+    period_credits_tooltip_underbooked:   "<%= escape_javascript(t('.period_credits_tooltip_underbooked')) %>",
+    period_credits_tooltip_overbooked:    "<%= escape_javascript(t('.period_credits_tooltip_overbooked')) %>",
+    period_credits_tooltip_neutral:       "<%= escape_javascript(t('.period_credits_tooltip_neutral')) %>",
+    course_tooltip_intro:                 "<%= escape_javascript(t('.course_tooltip_intro')) %>",
+    course_tooltip_misordered:            "<%= escape_javascript(t('.course_tooltip_misordered')) %>",
+    course_tooltip_misscheduled:          "<%= escape_javascript(t('.course_tooltip_misscheduled')) %>",
+    course_tooltip_uninstanced:           "<%= escape_javascript(t('.course_tooltip_uninstanced')) %>",
+    course_tooltip_customized:            "<%= escape_javascript(t('.course_tooltip_customized')) %>",
+    course_tooltip_passed:                "<%= escape_javascript(t('.course_tooltip_passed')) %>",
   };
 
   /* Make translations available */

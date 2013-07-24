@@ -23,16 +23,18 @@ class @Period
 
 
   constructor: (data) ->
-    @hilightSelected = ko.observable(false)
-
+    @isSelected    = ko.observable(false)
+    @isReceiver    = ko.observable(false)
     @droppedCourse = ko.observable()
-    @hilight = ko.observable(false)
 
     # TODO: specify event handler in the binding
     @droppedCourse.subscribe (course) =>
       course.setPeriod(this)
       course.updatePosition()
       course.updateReqWarnings()
+      if course.isSelected()
+        course.grade(0) if not @isOld
+        PlanView.FIXME.selectedObject.valueHasMutated()
 
     @position         = ko.observable({y: 0}) # Course position
     @courses          = ko.observableArray()  # Courses that have been put to this period

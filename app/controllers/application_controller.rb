@@ -10,7 +10,7 @@ class ApplicationController < ActionController::Base
   before_filter :store_location
 
   # Redirect root to the correct localized root (i.e., /:locale).
-  # The reason this is done here instead of simply redirecting 
+  # The reason this is done here instead of simply redirecting
   # the route in routes.rb, is that I18n.locale is that at that
   # phase of processing I18n.locale is set to the default locale
   # and not to the user's locale found in the session.
@@ -72,10 +72,10 @@ class ApplicationController < ActionController::Base
     rescue => e
       logger.error e
     end
-    
+
     raise exception
   end
-  
+
   def current_session
     return @current_session if defined?(@current_session)
     @current_session = UserSession.find
@@ -94,11 +94,11 @@ class ApplicationController < ActionController::Base
   def require_login?
     login_required if params[:require_login] && !logged_in?
   end
-  
+
   # Before filter that ensures that user is authenticated
   def login_required
     return if current_user
-      
+
     redirect_to_login
     return false
   end
@@ -114,7 +114,7 @@ class ApplicationController < ActionController::Base
       redirect_to_login
     end
   end
-  
+
   def redirect_to_login
     respond_to do |format|
       format.html do
@@ -137,7 +137,7 @@ class ApplicationController < ActionController::Base
       end
     end
   end
-  
+
   def store_location
     session[:return_to] = request.fullpath
   end

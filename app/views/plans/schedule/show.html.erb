@@ -49,27 +49,34 @@
           <span data-bind="text: name"></span>
         </p>
 
-        <div class="row-fluid">
-          <div class="span6" data-toggle="tooltip" title="<%= t('.extent_tooltip') %>">
+        <p id="testhoverme">Testhoverme</p>
+        <p id="testblock">Testblock</p>
+
+        <div id="credits" class="row-fluid" data-toggle="tooltip" title="<%= t('.extent_tooltip') %>">
+          <div class="span6">
             <label for="credits-input">
               <%= t('.extent') %>:
             </label>
           </div>
           <div class="span6">
             <input id="credits-input" class="input-mini" type="number" data-bind="value: credits, valueUpdate: 'keyup'" />
+            <span id="credits-show" data-bind="text: credits"></span>
+            <%= t('cr') %>
           </div>
         </div>
 
-        <div class="row-fluid">
-          <div class="span6" data-toggle="tooltip" title="<%= t('.grade_tooltip') %>">
-            <label for="grade-input">
-              <%= t('.grade') %>:
-            </label>
+        <!-- ko if: period.isOld -->
+          <div class="row-fluid" data-toggle="tooltip" title="<%= t('.grade_tooltip') %>">
+            <div class="span6">
+              <label for="grade-input">
+                <%= t('.grade') %>:
+              </label>
+            </div>
+            <div class="span6">
+              <input id="grade-input" class="input-mini" type="number" data-bind="value: grade, valueUpdate: 'keyup'" />
+            </div>
           </div>
-          <div class="span6">
-            <input id="grade-input" class="input-mini" type="number" data-bind="value: grade, valueUpdate: 'keyup'" />
-          </div>
-        </div>
+        <!-- /ko -->
 
         <h4><%= t('.prereqs') %></h4>
 
@@ -135,7 +142,7 @@
         <!-- ko if: competences.length > 0 -->
           <ul data-bind="foreach: competences">
             <li class="competencex">
-              <div data-bind="css: {'selected': hilightSelected}">
+              <div data-bind="css: {'selected': isSelected}">
                 <span data-bind="text: name"></span>
               </div>
               <div class="progress progress-striped" title="<%= t('.competence_progress_tooltip') %>">
@@ -168,14 +175,14 @@
       <div id="svg"></div>
 
       <!-- ko foreach: periods -->
-        <div class="period" data-bind="droppable: droppedCourse, position: position, css: {'selected': hilightSelected, 'receiver': hilight, 'old': isOld, 'now': isNow}">
+        <div class="period" data-bind="droppable: droppedCourse, position: position, css: {'selected': isSelected, 'receiver': isReceiver, 'old': isOld, 'now': isNow}">
           <div class="name" data-bind="text: name"></div>
           <div class="credits"><span data-toggle="tooltip" data-bind="text: credits, attr: {title: creditsTooltip}, css: creditsStatus"></span> <%= t('cr') %></div>
         </div>
       <!-- /ko -->
 
       <!-- ko foreach: courses -->
-        <div class="course" data-toggle="tooltip" data-bind="draggable: {}, position: position, attr: {title: tooltip}, css: {'selected': hilightSelected, 'passed': grade() > 0, 'instanced': courseInstance, 'customized': customized, 'prereq-of': hilightPrereq, 'prereq-to': hilightPrereqTo, 'misordered': misordered, 'misscheduled': misscheduled}">
+        <div class="course" data-toggle="tooltip" data-bind="draggable: {}, position: position, attr: {title: tooltip}, css: {'selected': isSelected, 'passed': grade() > 0, 'instanced': courseInstance, 'customized': isCustomized, 'prereq-of': hilightPrereq, 'prereq-to': hilightPrereqTo, 'misordered': isMisordered, 'misscheduled': isMisscheduled}">
           <span data-bind="text: code"></span>
           <span data-bind="text: name"></span>
         </div>

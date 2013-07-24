@@ -2,7 +2,6 @@
 if not i18n
   throw "plan view i18n strings have not been loaded!"
 
-
 class @PlanView
 
   @PERIOD_HEIGHT: 58
@@ -10,6 +9,9 @@ class @PlanView
   @COURSE_MARGIN_X: 6
   @COURSE_MARGIN_Y: 6
   @COURSE_PADDING_Y: 3
+
+  @FIXME: 42
+
 
   constructor: (@planUrl) ->
     # i18n string support. Accessible from the view like this:
@@ -19,12 +21,24 @@ class @PlanView
     @selectedObject = ko.observable()
     @selectedObjectType = ko.observable()
 
-    @progr = ko.observable('30%')
+#    @showAsEditable = ko.observable(false)
 
     # List of courses to be saved and rejected when tried to save.
     # Both are used and managed at @save()
     @coursesToSave = []
     @coursesRejected = []
+
+    @constructor.FIXME = @
+
+
+#  doShowAsEditable: ->
+#    @showAsEditable(true)
+#    #console.log("showAsEditable -> #{@showAsEditable()}!")
+
+
+#  noShowAsEditable: ->
+#    @showAsEditable(false)
+#    #console.log("showAsEditable -> #{@showAsEditable()}!")
 
 
   loadPlan: () ->
@@ -121,12 +135,12 @@ class @PlanView
 
     # Reset hilights
     if selectedObject
-      selectedObject.hilightSelected(false)
+      selectedObject.isSelected(false)
 
       if selectedObject instanceof Course
 
         for period in selectedObject.periods
-          period.hilight(false)
+          period.isReceiver(false)
 
         for scopedId, other of selectedObject.prereqTo
           other.hilightPrereqTo(false)
@@ -154,7 +168,7 @@ class @PlanView
     return unless object
 
     # Hilight selected
-    object.hilightSelected(true)
+    object.isSelected(true)
 
     if object instanceof Course
       # Hilight prereqs
@@ -167,7 +181,7 @@ class @PlanView
 
       # Hilight the periods that have this course
       for period in object.periods
-        period.hilight(true)
+        period.isReceiver(true)
 
       #console.log("customized: #{object.code} = #{object.customized()} : (#{object.credits()} vs #{object.scopedCredits}, #{object.length()} vs #{object.courseInstance?.length})")
 

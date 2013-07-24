@@ -41,13 +41,13 @@ class @Course
   # Updates the tooltip
   updateTooltip: ->
     tooltipNotes = ''
-    if @misordered()
+    if @isMisordered()
       tooltipNotes += '\n - ' + i18n.course_tooltip_misordered
-    if @misscheduled()
+    if @isMisscheduled()
       tooltipNotes += '\n - ' + i18n.course_tooltip_misscheduled
     if not @courseInstance?
       tooltipNotes += '\n - ' + i18n.course_tooltip_uninstanced
-    if @customized()
+    if @isCustomized()
       tooltipNotes += '\n - ' + i18n.course_tooltip_customized
     if @grade() > 0
       tooltipNotes += '\n - ' + i18n.course_tooltip_passed
@@ -60,18 +60,18 @@ class @Course
     @tooltip(tooltip)
 
 
-  # Check the period & grade related flag "misscheduled"
+  # Check the period & grade related flag "isMisscheduled"
   updateMisscheduledFlag: ->
-    @misscheduled(not @period? or (@period.isOld and not @grade() > 0))
+    @isMisscheduled(not @period? or (@period.isOld and not @grade() > 0))
     @updateTooltip()
 
 
   constructor: (data) ->
-    @hilightSelected     = ko.observable(false)
+    @isSelected          = ko.observable(false)
     @hilightPrereq       = ko.observable(false)
     @hilightPrereqTo     = ko.observable(false)
-    @misordered          = ko.observable(false)
-    @misscheduled        = ko.observable(false)
+    @isMisordered        = ko.observable(false)
+    @isMisscheduled      = ko.observable(false)
 
     @locked              = false             # Is the course immovable?
     @position            = ko.observable({x: 0, y: 0, height: 1})
@@ -116,18 +116,18 @@ class @Course
       #console.log("c[#{@scopedId}].creditsPerP.subs")
       @distributeCredits()
 
-    @customized = ko.computed =>
+    @isCustomized = ko.computed =>
       isCustomized = (@credits() != @scopedCredits) or (@courseInstance? and (@length() != @courseInstance.length))
       #console.log("customized: #{@code} = #{isCustomized} : (#{@credits()} vs #{@scopedCredits}, #{@length()} vs #{@courseInstance?.length})")
       return isCustomized
 
-    @customized.subscribe (newValue) =>
+    @isCustomized.subscribe (newValue) =>
       @updateTooltip()
 
     @grade.subscribe (newValue) =>
       for competence in @competences
         competence.updatePrereqGrade( @scopedId, newValue )
-      # Check the period & grade related flag "misscheduled"
+      # Check the period & grade related flag "isMisscheduled"
       # NB: Also calls updateTooltip, so no need to call it here
       @updateMisscheduledFlag()
 
@@ -286,7 +286,7 @@ class @Course
     # Update the period
     @period = period
 
-    # Check the period & grade related flag "misscheduled"
+    # Check the period & grade related flag "isMisscheduled"
     # NB: Also calls updateTooltip, so no need to call it here
     @updateMisscheduledFlag()
 
@@ -312,15 +312,15 @@ class @Course
     #console.log( "Course[#{@scopedId}]:uRW(#{depth}) #{@period.sequenceNumber}" )
 
     for scopedId, other of @prereqs
-      misordered = true if other.period? && @period? && other.period.laterOrEqual(@period)
+      isMisordered = true if other.period? && @period? && other.period.laterOrEqual(@period)
       other.updateReqWarnings(depth) if depth > 0
 
     for scopedId, other of @prereqTo
-      misordered = true if other.period? && @period? && other.period.earlierOrEqual(@period)
+      isMisordered = true if other.period? && @period? && other.period.earlierOrEqual(@period)
       other.updateReqWarnings(depth) if depth > 0
 
-    #console.log( "Course[#{@scopedId}].misordered: #{misordered}." )
-    @misordered(misordered)
+    #console.log( "Course[#{@scopedId}].isMisordered: #{isMisordered}." )
+    @isMisordered(isMisordered)
     @updateTooltip()
 
 

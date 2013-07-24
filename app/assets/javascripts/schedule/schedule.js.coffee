@@ -84,5 +84,34 @@ jQuery ->
       event.stopPropagation()
     .on 'mousedown', 'body', (event) ->
       planView.unselectObjects()
+    .on 'mouseover', '#sidebar .well', (event) ->
+      object = ko.dataFor(this)
+      console.log("Mouse In: Well #{type(object)}!")
+      $('#credits-input').show()
+      $('#credits-show').hide()
+#      planView.doShowAsEditable()
+    .on 'mouseout', '#sidebar .well #credits', (event) ->
+      console.log("Mouse Out: Credits!")
+      $('#credits-input').hide()
+      $('#credits-show').show()
+#      planView.noShowAsEditable()
+#    .on 'mouseup', '.course', (event) ->
+#      planView.reselectObjects()
+
+#  $('#sidebar .well').hover(
+#    ->
+#      $('#credits-input').show()
+#      $('#credits-show').hide()
+#    ,
+#    ->
+#      $('#credits-input').hide()
+#      $('#credits-show').show()
+#  )
+
+#  $('#testblock').hide()
+
+#  $("#testhoverme").hover( ->
+#    $('#testblock').show()
+#  )
 
   planView.loadPlan()

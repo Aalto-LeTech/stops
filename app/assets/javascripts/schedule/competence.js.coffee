@@ -9,7 +9,7 @@ class @Competence
 
 
   constructor: (data) ->
-    @hilightSelected = ko.observable(false)
+    @isSelected = ko.observable(false)
 
     @prereqCredits = {}
     @prereqGrades = {}

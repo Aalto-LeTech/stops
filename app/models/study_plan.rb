@@ -6,7 +6,8 @@ end
 class StudyPlan < ActiveRecord::Base
 
 
-  DEFAULT_STUDY_PLAN_TIME_IN_YEARS = 5
+  INITIAL_STUDY_PLAN_TIME_IN_YEARS = 3
+  STUDY_PLAN_BUFFER_TIME_IN_YEARS = 1
 
 
   module RefCountExtension
@@ -141,13 +142,17 @@ class StudyPlan < ActiveRecord::Base
 
   # Returns the period of the earliest scheduled study plan course
   def period_of_earliest_study_plan_course
-    study_plan_courses.includes(:period).order('periods.begins_at ASC').first.period
+    earliest_study_plan_course = study_plan_courses.includes(:period).order('periods.begins_at ASC').first
+    earliest_study_plan_course.nil? ? nil : earliest_study_plan_course.period
   end
 
 
-  # Returns the period of the latest scheduled study plan course
-  def period_of_latest_study_plan_course
-    study_plan_courses.includes(:period).order('periods.begins_at DESC').first.period
+  # Returns the period where the latest scheduled study plan course ends
+  # NB: This is not necessarily the last period extended to by a course in the
+  # plan
+  def ending_period_of_latest_study_plan_course
+    latest_study_plan_course = study_plan_courses.includes(:period).order('periods.begins_at DESC').first
+    latest_study_plan_course.nil? ? nil : latest_study_plan_course.ending_period
   end
 
 
@@ -178,19 +183,27 @@ class StudyPlan < ActiveRecord::Base
   # reset_first_period.
   def reset_last_period
     period = nil
-    the_period_of_latest_study_plan_course = period_of_latest_study_plan_course
+    the_ending_period_of_latest_study_plan_course = ending_period_of_latest_study_plan_course
     the_period_of_latest_user_course = user.period_of_latest_user_course
-    if not the_period_of_latest_study_plan_course.nil? and not the_period_of_latest_user_course.nil?
-      period = the_period_of_latest_study_plan_course.begins_at > the_period_of_latest_user_course.begins_at ? the_period_of_latest_study_plan_course : the_period_of_latest_user_course
-    elsif not the_period_of_latest_study_plan_course.nil?
-      period = the_period_of_latest_study_plan_course
+    if not the_ending_period_of_latest_study_plan_course.nil? and not the_period_of_latest_user_course.nil?
+      period = the_ending_period_of_latest_study_plan_course.begins_at > the_period_of_latest_user_course.begins_at ? the_ending_period_of_latest_study_plan_course : the_period_of_latest_user_course
+    elsif not the_ending_period_of_latest_study_plan_course.nil?
+      period = the_ending_period_of_latest_study_plan_course
     elsif not the_period_of_latest_user_course.nil?
       period = the_period_of_latest_user_course
     end
-    if period.nil? or period.ends_at - first_period.begins_at < 365*DEFAULT_STUDY_PLAN_TIME_IN_YEARS
-      # In any case, the time difference between the first and the last is set
-      # as at least five years, by default
-      period = Period.find_by_date(first_period.begins_at - 1 + 365*DEFAULT_STUDY_PLAN_TIME_IN_YEARS)
+    if period.nil?
+      # If the user starts from a clean desk (no user nor study plan courses) an
+      # initial default is set
+      reset_first_period if first_period.nil?
+      period = Period.find_by_date(first_period.begins_at - 1 + 365*INITIAL_STUDY_PLAN_TIME_IN_YEARS)
+    else
+      # We set the last as the one going on after a buffer time after the start
+      # last starting course's last period
+      the_period = Period.find_by_date(period.begins_at - 1 + 365*STUDY_PLAN_BUFFER_TIME_IN_YEARS)
+      if the_period.nil?
+        period = period.find_following(4*STUDY_PLAN_BUFFER_TIME_IN_YEARS).last
+      end
     end
     self.last_period = period
     self.save
@@ -198,10 +211,13 @@ class StudyPlan < ActiveRecord::Base
 
 
   # Returns the periods included into the study plan
-  def periods
-    reset_first_period if first_period.nil?
-    reset_last_period if last_period.nil?
-    Period.range(first_period, last_period)
+  def periods(number_of_buffer_periods=0)
+    reset_first_period
+    reset_last_period
+    Period.range(
+      self.first_period.find_preceding(number_of_buffer_periods).last,
+      self.last_period.find_following(number_of_buffer_periods).last
+    )
   end
 
 
@@ -264,12 +280,12 @@ class StudyPlan < ActiveRecord::Base
         course_instance = CourseInstance.where(abstract_course_id: abstract_course_id, period_id: new_period_id).first
 
         # Determine whether the course should be regarded as customized
-        if course_instance.nil?
-          new_custom = true
+        new_custom = scoped_course.credits != new_credits
+
+        # Determine whether the course is instance bound
+        if course_instance.nil? or course_instance.length != new_length
+          new_course_instance_id = nil
         else
-          new_custom =
-            course_instance.length != new_length ||
-            scoped_course.credits != new_credits
           new_course_instance_id = course_instance.id
         end
 
@@ -303,11 +319,13 @@ class StudyPlan < ActiveRecord::Base
               # Save the possible changes to the user_course
               changed =
                   existing_user_course.grade != new_grade ||
-                  existing_user_course.credits != new_credits
+                  existing_user_course.credits != new_credits ||
+                  existing_user_course.course_instance_id != new_course_instance_id
 
               if changed
                 existing_user_course.grade = new_grade
                 existing_user_course.credits = new_credits
+                existing_user_course.course_instance_id = new_course_instance_id
                 existing_user_course.save
               end
             else
@@ -352,6 +370,12 @@ class StudyPlan < ActiveRecord::Base
     courses_array = self.courses | competence.courses_recursive
 
     self.courses = courses_array
+
+    # FIXME !!!
+    self.study_plan_courses.includes(:scoped_course).find_each do |study_plan_course|
+      study_plan_course.abstract_course = study_plan_course.scoped_course.abstract_course
+      study_plan_course.save
+    end
   end
 
 
@@ -404,7 +428,7 @@ class StudyPlan < ActiveRecord::Base
       # find the periods over which this course spans
       period = study_plan_course.period  # start period
       length = study_plan_course.length
-      periods = length > 1 ? period.find_next_periods( length - 1 ) << period : [ period ]
+      periods = length > 1 ? period.find_following( length - 1 ) << period : [ period ]
       # add this course as 'ongoing' to these periods
       periods.each_with_index do |period, i|
         if hash.has_key?( period ) == false

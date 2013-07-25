@@ -65,9 +65,11 @@ class @Scheduler
       #this.markUnschedulable()
       return
 
+    # Since there are instances available, look for the earliest one
     period = requestedPeriod
     while (period)
-      if course.instancesByPeriodId[period.scopedId]
+      # If there is an instance available now, move into it
+      if course.instancesByPeriodId[period.id]
         console.log "Move #{course.name} to #{period.name}"
         if @schedule[course.scopedId] != period
           @schedule[course.scopedId] = period
@@ -75,10 +77,11 @@ class @Scheduler
           @moved[course.scopedId] = true
         return
 
+      # Otherwise, look further
       period = period.getNextPeriod()
 
     # No period could be found. Put it on the requested period
-    console.log "No period found for #{course.name}. Putting on #{period.name}"
+    console.log "No period found for #{course.name}. Putting on #{requestedPeriod.name}."
     if @schedule[course.scopedId] != requestedPeriod
       @schedule[course.scopedId] = requestedPeriod
       # Mark course as moved

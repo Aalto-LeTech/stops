@@ -93,14 +93,14 @@ class Competence < CompetenceNode
 
 
   def name(locale)
-    throw
+    throw "Deprecated! use localized_name!"
     description = competence_descriptions.where(:locale => locale.to_s).first
     description ? description.name : ''
   end
 
 
   def description(locale)
-    throw
+    throw "Deprecated! use localized_name!"
     description = competence_descriptions.where(:locale => locale.to_s).first
     description ? description.description : ''
   end

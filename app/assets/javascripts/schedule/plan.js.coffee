@@ -9,9 +9,7 @@ class @PlanView
   @COURSE_MARGIN_X: 6
   @COURSE_MARGIN_Y: 6
   @COURSE_PADDING_Y: 3
-
-  @FIXME: 42
-
+  ISREADY: false
 
   constructor: (@planUrl) ->
     # i18n string support. Accessible from the view like this:
@@ -21,24 +19,35 @@ class @PlanView
     @selectedObject = ko.observable()
     @selectedObjectType = ko.observable()
 
-#    @showAsEditable = ko.observable(false)
+    @showAsEditable = false
+    #@showAsEditable = ko.observable(false)
 
     # List of courses to be saved and rejected when tried to save.
     # Both are used and managed at @save()
     @coursesToSave = []
     @coursesRejected = []
 
-    @constructor.FIXME = @
+
+  showAsEditableInit: ->
+    #dbg("showAsEditableInit()!")
+    @showAsEditable = false
+    $('#credits #in, #grade #in, #length #in').hide()
 
 
-#  doShowAsEditable: ->
-#    @showAsEditable(true)
-#    #console.log("showAsEditable -> #{@showAsEditable()}!")
+  doShowAsEditable: ->
+    if not @showAsEditable
+      @showAsEditable = true
+      #dbg("showAsEditable -> #{@showAsEditable}!")
+      $('#credits #out, #grade #out, #length #out').hide()
+      $('#credits #in, #grade #in, #length #in').show()
 
 
-#  noShowAsEditable: ->
-#    @showAsEditable(false)
-#    #console.log("showAsEditable -> #{@showAsEditable()}!")
+  noShowAsEditable: ->
+    if @showAsEditable
+      @showAsEditable = false
+      #dbg("showAsEditable -> #{@showAsEditable}!")
+      $('#credits #in, #grade #in, #length #in').hide()
+      $('#credits #out, #grade #out, #length #out').show()
 
 
   loadPlan: () ->
@@ -50,20 +59,26 @@ class @PlanView
 
   # Loads the plan from JSON data
   loadJson: (data) ->
+    #dbg("Data: #{JSON.stringify(data)}!")
     startTime = new Date().getTime()
-    console.log("Starts loading data...")
+    dbg("Starts loading data...")
+
+    # Init before knockout hides related elements
+    @showAsEditableInit()
 
     # Load periods
     Period::createFromJson(data['periods'])
-    console.log("Loaded #{Period::ALL.length} periods.")
+    dbg("Loaded #{Period::ALL.length} periods.")
 
     # Load courses
     Course::createFromJson(data['courses'], data['user_courses'])
-    console.log("Loaded #{Course::ALL.length} courses.")
+    dbg("Loaded #{Course::ALL.length} courses.")
 
     # Load competences
     Competence::createFromJson(data['competences'])
-    console.log("Loaded #{Competence::ALL.length} competences.")
+    dbg("Loaded #{Competence::ALL.length} competences.")
+
+    dbg("All data loaded. Current period: #{Period::CURRENT}. Starting the autoscheduling phase.")
 
     # Automatically schedule unscheduled (new) courses
     schedule = new Scheduler(Course::ALL)
@@ -71,13 +86,13 @@ class @PlanView
 
 
     # Set periods and save the 'originals'
-    console.log("Setting the courses to the periods...")
+    dbg("Setting the courses to the periods...")
     for course in Course::ALL
       # If the course was moved by the scheduler
       if schedule.moved[course.scopedId]
         course.resetOriginals()
         course.period = undefined
-        course.setPeriod(schedule.schedule[course.scopedId])
+        course.setPeriod(schedule.schedule[course.scopedId], true)
       # Else if the course has a place to go to
       else if course.period
         period = course.period
@@ -86,7 +101,7 @@ class @PlanView
         course.resetOriginals()
       # Hmmh...?
       else
-        console.log("WARNING: A vagabond course: #{course}!")
+        dbg("WARNING: A vagabond course: #{course}!")
         course.resetOriginals()
 
       # Update course ordering related warnings
@@ -98,7 +113,7 @@ class @PlanView
     @courses = Course::ALL
     @competences = Competence::ALL
     # Apply ko bindings
-    console.log("Applying bindings...")
+    dbg("Applying bindings...")
     preBindTime = new Date().getTime()
     ko.applyBindings(this)
     postBindTime = new Date().getTime()
@@ -108,6 +123,9 @@ class @PlanView
     for course in Course::ALL
       course.updatePosition() if course.period
 
+    # Flag the PlanView as ready
+    PlanView::ISREADY = true
+
     # Initialize tooltips
     #$('div.plan div.period div.credits span').tooltip(placement: 'left')
     #$('div.plan div.course').tooltip(placement: 'bottom', delay: 1500)
@@ -115,13 +133,13 @@ class @PlanView
 
     # Autoscroll the viewport to show the current period and the near future
     # FIXME: Don't move the viewport, but the scrollable div.
-    #console.log("Autoscrolling the viewport...")
+    #dbg("Autoscrolling the viewport...")
     #topOffSet = $('div.period.now').offset().top
     #$(window).scrollTop(topOffSet - 2 * @constructor.PERIOD_HEIGHT)
 
     # Log time used from start to bind and here
     endTime = new Date().getTime();
-    console.log("Parsing & modelling the plan data took #{preBindTime - startTime} (preBind) + #{postBindTime - preBindTime} (bind) + #{endTime - postBindTime} (postBind) = #{endTime - startTime} (total) milliseconds.")
+    dbg("Parsing & modelling the plan data took #{preBindTime - startTime} (preBind) + #{postBindTime - preBindTime} (bind) + #{endTime - postBindTime} (postBind) = #{endTime - startTime} (total) milliseconds.")
 
 
   unselectObjects: (data, event) ->
@@ -130,65 +148,28 @@ class @PlanView
 
   selectObject: (object) ->
 
+    dbg("PV::selectObject(#{object})")
+
     # Deselect the old object
     selectedObject = @selectedObject()
 
-    # Reset hilights
+    # Call the object's setSelected handler
     if selectedObject
-      selectedObject.isSelected(false)
-
-      if selectedObject instanceof Course
-
-        for period in selectedObject.periods
-          period.isReceiver(false)
-
-        for scopedId, other of selectedObject.prereqTo
-          other.hilightPrereqTo(false)
-
-        for scopedId, other of selectedObject.prereqs
-          other.hilightPrereq(false)
-
-
-      else if selectedObject instanceof Competence
-
-        for prereq in selectedObject.prereqs
-          prereq.hilightPrereq(false)
-
+      selectedObject.setSelected(false)
 
     # Select the new object
-    #console.log("Deselected [#{@selectedObjectType()}] #{selectedObject}")
+    # NB: undefined first to avoid ko autoupdate oddness
+    #dbg("Deselected [#{@selectedObjectType()}] #{selectedObject}")
     @selectedObjectType(undefined)
     @selectedObject(undefined)
     @selectedObjectType('Course') if object instanceof Course
     @selectedObjectType('Period') if object instanceof Period
     @selectedObjectType('Competence') if object instanceof Competence
     @selectedObject(object)
-    #console.log("Selected [#{@selectedObjectType()}] #{object}")
 
-    return unless object
-
-    # Hilight selected
-    object.isSelected(true)
-
-    if object instanceof Course
-      # Hilight prereqs
-      for scopedId, other of object.prereqs
-        other.hilightPrereq(true)
-
-      # Hilight courses for which this is a prereq
-      for scopedId, other of object.prereqTo
-        other.hilightPrereqTo(true)
-
-      # Hilight the periods that have this course
-      for period in object.periods
-        period.isReceiver(true)
-
-      #console.log("customized: #{object.code} = #{object.customized()} : (#{object.credits()} vs #{object.scopedCredits}, #{object.length()} vs #{object.courseInstance?.length})")
-
-    else if object instanceof Competence
-
-      for prereq in object.prereqs
-        prereq.hilightPrereq(true)
+    # Call the object's setSelected handler
+    if object
+      object.setSelected(true)
 
 
   save: ->
@@ -206,15 +187,15 @@ class @PlanView
     planCoursesToSave = []  # their JSON representation for sending
     for course in Course::ALL
       if course.hasChanged()
-        console.log("Course \"#{course.name}\" was changed. Pushing to be saved.")
+        dbg("Course \"#{course.name}\" was changed. Pushing to be saved.")
         @coursesToSave.push(course)
         planCoursesToSave.push(course.toJson())
 
     if @coursesToSave.length == 0
-      console.log('No plan_course was changed. No reason to put.')
+      dbg('No plan_course was changed. No reason to put.')
       return
 
-    console.log("A total of #{@coursesToSave.length} courses changed. Starting the put.")
+    dbg("A total of #{@coursesToSave.length} courses changed. Starting the put.")
 
     $.ajax
       url: @planUrl,
@@ -227,8 +208,8 @@ class @PlanView
           if accepted?
             for course in @coursesToSave
               if accepted[course.scopedId]
-                console.log("Course \"#{course.name}\" was successfully saved.")
+                dbg("Course \"#{course.name}\" was successfully saved.")
                 course.resetOriginals()
               else
-                console.log("ERROR: Course \"#{course.name}\" was rejected by the server! Saving failed!")
+                dbg("ERROR: Course \"#{course.name}\" was rejected by the server! Saving failed!")
                 @coursesRejected.push(course)  # FIXME: Not used atm.

@@ -1,4 +1,30 @@
 
+Useful psql commands:
+
+Study Plan Courses
+SELECT study_plan_courses.* FROM study_plan_courses WHERE study_plan_courses.study_plan_id = 82;
+DELETE FROM study_plan_courses WHERE study_plan_courses.study_plan_id = 82;
+
+User Courses
+SELECT user_courses.* FROM user_courses WHERE user_courses.user_id = 2;
+DELETE FROM user_courses WHERE user_courses.user_id = 2 AND user_courses.id = 24;
+DELETE FROM user_courses WHERE user_courses.user_id = 2
+
+Competences
+SELECT study_plan_competences.* FROM study_plan_competences WHERE study_plan_id = 82;
+DELETE FROM study_plan_competences WHERE study_plan_id = 82;
+
+Competence Nodes
+SELECT competence_nodes.* FROM competence_nodes INNER JOIN study_plan_competences ON competence_nodes.id = study_plan_competences.competence_id WHERE competence_nodes.type IN ('Competence') AND study_plan_competences.study_plan_id = 82;
+
+Scoped Courses
+SELECT competence_nodes.* FROM competence_nodes INNER JOIN study_plan_courses ON competence_nodes.id = study_plan_courses.scoped_course_id WHERE competence_nodes.type IN ('ScopedCourse') AND study_plan_courses.study_plan_id = 82;
+SELECT competence_nodes.id, competence_nodes.abstract_course_id, course_code, competence_nodes.credits FROM competence_nodes INNER JOIN study_plan_courses ON competence_nodes.id = study_plan_courses.scoped_course_id WHERE competence_nodes.type IN ('ScopedCourse') AND study_plan_courses.study_plan_id = 82;
+
+Study Plans
+SELECT study_plans.* FROM study_plans;
+DELETE FROM study_plans WHERE study_plans.user_id = 2;
+
 
 a dashboard sketch/draft:
 

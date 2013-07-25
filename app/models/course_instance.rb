@@ -21,7 +21,7 @@ class CourseInstance < ActiveRecord::Base
 
 
   def end_date
-    prd = length > 1 ? period.find_next_periods( length - 1 ).last : period
+    prd = length > 1 ? period.find_following( length - 1 ).last : period
     prd.ends_at
   end
 

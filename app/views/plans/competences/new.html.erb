@@ -1,4 +1,4 @@
-<h1><%=t :competence_add_heading, :competence => @competence.name(I18n.locale) %></h1>
+<h1><%=t :competence_add_heading, :competence => @competence.localized_name %></h1>
 
 <p><%=t :competence_courses_to_add %></p>
 
@@ -7,7 +7,7 @@
   <% @new_courses.each do |course| %>
     <tr>
       <td><%= course.course_code %></td>
-      <td><%= course.name(I18n.locale) %></td>
+      <td><%= course.localized_name %></td>
       <td><%= course.credits %></td>
     </tr>
     <% credits_counter += course.credits || 0 %>
@@ -26,10 +26,10 @@
 
   <table class="course-table">
     <% @existing_courses.each do |course| %>
-      <% credits_counter = 0 %>    
+      <% credits_counter = 0 %>
       <tr>
         <td><%= course.course_code %></td>
-        <td><%= course.name(I18n.locale) %></td>
+        <td><%= course.localized_name %></td>
         <td><%= course.credits %></td>
       </tr>
       <% credits_counter += course.credits || 0 %>
@@ -48,6 +48,6 @@
   <%= hidden_field_tag :competence_id, @competence.id %>
 
   <p><%= submit_tag t(:Ok) %></p>
-  
+
   <p><%= link_to t(:Cancel), studyplan_path %></p>
 <% end %>

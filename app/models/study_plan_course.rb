@@ -29,12 +29,11 @@ class StudyPlanCourse < ActiveRecord::Base
   #
   # To note:
   #  - period: when 'course_instance_id' isn't nil the 'period_id' should equal
-  #    the one of the 'course_instance'
+  #    the 'course_instance.period_id'
   #    Also, there can never be two course instances with the same abstract
   #    course in the same period
-  #  - credits, length, custom: when the course isn't customized (custom =
-  #    false), 'credits' & 'length' should equal the one's of its scoped course
-  #    and course instance
+  #  - credits, custom: when the course isn't customized (custom == false),
+  #    'credits' should equal the one's of its scoped course, and vice versa
 
 
   belongs_to :study_plan
@@ -83,6 +82,15 @@ class StudyPlanCourse < ActiveRecord::Base
   # Returns the period name or nil
   def localized_period_name
     localized_period_description.nil? ? "" : localized_period_description.name
+  end
+
+  # Returns the course's ending period
+  def ending_period
+    start_period = self.period
+    length = self.length
+    return nil if start_period.nil?
+    return start_period if length.nil? or length <= 1
+    return start_period.find_following(length).last
   end
 
 end

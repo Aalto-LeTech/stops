@@ -17,7 +17,7 @@
   <ul>
     <% @curriculum.competences.each do |competence| %>
       <li class="<%= @user.study_plan.has_competence?( competence ) ? 'chosen' : '' %>">
-        <%= link_to competence.name(I18n.locale), studyplan_competence_path(:id => competence) %>
+        <%= link_to competence.localized_name, studyplan_competence_path(:id => competence) %>
       </li>
     <% end %>
   </ul>

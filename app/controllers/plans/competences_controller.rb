@@ -36,7 +36,7 @@ class Plans::CompetencesController < PlansController
 
     # If competence is aleady in the plan, don't do anything
     if @study_plan.has_competence?(@competence)
-      redirect_to studyplan_profiles_path, :flash => {:error => t(:profile_already_selected, :name => @competence.name(I18n.locale))}
+      redirect_to studyplan_profiles_path, :flash => {:error => t(:profile_already_selected, :name => @competence.localized_name)}
       return
     end
 
@@ -54,7 +54,7 @@ class Plans::CompetencesController < PlansController
 
     # Dont't do anything if user has already selected this competence
     if @study_plan.has_competence?(params[:competence_id])
-      redirect_to studyplan_competence_path( competence ), :flash => {:error => t('.competence_already_selected', :name => @competence.name(I18n.locale))}
+      redirect_to studyplan_competence_path( competence ), :flash => {:error => t('.competence_already_selected', :name => @competence.localized_name)}
     end
 
     # Add competence to study plan
@@ -89,12 +89,12 @@ class Plans::CompetencesController < PlansController
 
   def supporting
     @competence = Competence.includes(
-                    :courses, 
-                    :courses => { 
+                    :courses,
+                    :courses => {
                       :skills => [
                         :supporting_prereqs,
                         { :supporting_prereqs => :competence_node }
-                      ] 
+                      ]
                     }).find(params[:id])
 
 

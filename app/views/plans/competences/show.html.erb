@@ -7,7 +7,7 @@
   <ul>
     <% @curriculum.competences.each do |competence| %>
       <li class="<%= @user.study_plan.has_competence?( competence ) ? 'chosen' : '' %> <%= competence == @competence ? 'selected' : '' %>">
-        <%= link_to competence.name(I18n.locale), studyplan_competence_path(:id => competence) %>
+        <%= link_to competence.localized_name, studyplan_competence_path(:id => competence) %>
       </li>
     <% end %>
   </ul>
@@ -16,7 +16,7 @@
 
 
 <h1>
-  <%= @competence.name(I18n.locale) %>
+  <%= @competence.localized_name %>
 </h1>
 
 <% competence_selected = @user.study_plan.has_competence?( @competence ) %>
@@ -38,8 +38,7 @@
     <% end %>
   </div>
 
-  <h2><%= @competence.name(I18n.locale) %></h2>
-  <p><%= @competence.description(I18n.locale) %><p>
+  <h2><%= @competence.localized_name %></h2>
 
   <div class="competence-skills">
     <h3><%=t('.skills')%></h3>
@@ -65,7 +64,7 @@
           end
           %>
           <td><%= link_to course.course_code, studyplan_competence_course_path(:competence_id => @competence.id, :id => course), :class => a_class %></td>
-          <td><%= link_to course.name(I18n.locale), studyplan_competence_course_path(:competence_id => @competence.id, :id => course), :class => a_class %></td>
+          <td><%= link_to course.localized_name, studyplan_competence_course_path(:competence_id => @competence.id, :id => course), :class => a_class %></td>
           <td><%= course.credits %></td>
           <td class="passed-info"><%= t('.course_passed') if @passed_courses.member? course.id %>
           <% credits_counter += course.credits || 0 %>

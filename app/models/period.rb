@@ -38,9 +38,15 @@ class Period < ActiveRecord::Base
   end
 
 
-  # Finds the next period following this period
-  def find_next_periods(limit=1)
-    Period.where(["begins_at >= ?", self.ends_at]).order("begins_at").limit(limit)
+  # Finds the preceding period(s)
+  def find_preceding(limit=1)
+    limit == 0 ? self : Period.where(["ends_at < ?", self.begins_at]).order("begins_at DESC").limit(limit)
+  end
+
+
+  # Finds the following period(s)
+  def find_following(limit=1)
+    limit == 0 ? self : Period.where(["begins_at >= ?", self.ends_at]).order("begins_at").limit(limit)
   end
 
 

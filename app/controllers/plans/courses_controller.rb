@@ -65,11 +65,13 @@ class Plans::CoursesController < PlansController
 
     # Add course to study plan
     StudyPlanCourse.create(
-      :study_plan_id     =>  @user.study_plan.id,
-      :scoped_course_id  =>  course.id,
-      :manually_added    =>  true
-#     :course_instance   =>  nil,                   # deprecated
-#     :period            =>  nil                    # not specified here
+      :study_plan_id       =>  @user.study_plan.id,
+      :abstract_course_id  =>  course.abstract_course_id,
+      :scoped_course_id    =>  course.id,
+      :credits             =>  course.credits,
+      :manually_added      =>  true
+#     :course_instance     =>  nil,                   # deprecated
+#     :period              =>  nil                    # not specified here
     )
 
     redirect_to studyplan_profiles_path, :flash => {:success => 'Course added to study plan'}

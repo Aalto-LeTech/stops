@@ -68,13 +68,15 @@ class User < ActiveRecord::Base
 
   # Returns the period of the earliest user course
   def period_of_earliest_user_course
-    user_courses.includes(:period).order('periods.begins_at ASC').first.period
+    earliest_user_course = user_courses.includes(:period).order('periods.begins_at ASC').first
+    earliest_user_course.nil? ? nil : earliest_user_course.period
   end
 
 
   # Returns the period of the latest user course
   def period_of_latest_user_course
-    user_courses.includes(:period).order('periods.begins_at DESC').first.period
+    latest_user_course = user_courses.includes(:period).order('periods.begins_at DESC').first
+    latest_user_course.nil? ? nil : latest_user_course.period
   end
 
 end

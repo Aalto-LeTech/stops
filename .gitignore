@@ -13,5 +13,3 @@ config/initializers/secret_token.rb
 config/*.sphinx.conf
 config/sphinx.yml
 Gemfile.lock
-**/.rms
-*~

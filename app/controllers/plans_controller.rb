@@ -33,48 +33,48 @@ class PlansController < ApplicationController
   #       "current_period_id" : 43,
   #       "periods" : [
   #          {
-  #             "ends_at" : "2012-08-31",
-  #             "begins_at" : "2012-06-01",
   #             "id" : 38,
-  #             "localized_name" : "2012  kesä"
+  #             "localized_name" : "2012  kesä",
+  #             "ends_at" : "2012-08-31",
+  #             "begins_at" : "2012-06-01"
   #          },
   #          ...
   #       ],
   #       "courses" : [
   #          {
+  #             "period_id" : 44,
+  #             "credits" : 5,
   #             "length" : null,
-  #             "scoped_course" : {
-  #                "prereq_ids" : [12, 13, ..., 99],
-  #                "credits" : 5,
-  #                "id" : 54
-  #             },
   #             "abstract_course" : {
+  #                "id" : 223,
+  #                "code" : "RAK-C3001",
+  #                "localized_name" : "Tulevaisuuden rakennukset",
   #                "course_instances" : [
   #                   {
   #                      "length" : 2,
   #                      "period_id" : 4
   #                   },
   #                   ...
-  #                ],
-  #                "id" : 223,
-  #                "localized_name" : "Tulevaisuuden rakennukset",
-  #                "code" : "RAK-C3001"
+  #                ]
   #             },
-  #             "credits" : 5,
-  #             "period_id" : 44
+  #             "scoped_course" : {
+  #                "id" : 54,
+  #                "credits" : 5,
+  #                "prereq_ids" : [12, 13, ..., 99]
+  #             }
   #          }
   #       ],
   #       "competences" : [
   #          {
-  #             "course_ids_recursive" : [45, 44, ..., 50],
-  #             "localized_name" : "Kandi: Taidolliset kompetenssit"
+  #             "localized_name" : "Kandi: Taidolliset kompetenssit",
+  #             "course_ids_recursive" : [45, 44, ..., 50]
   #          },
   #          ...
   #       ],
   #       "user_courses" : [
   #          {
-  #             "credits" : 5,
   #             "abstract_course_id" : 228,
+  #             "credits" : 5,
   #             "grade" : 1,
   #             "period_id" : 42
   #          },
@@ -86,7 +86,8 @@ class PlansController < ApplicationController
     authorize! :read, @study_plan
 
     # Get periods, competences, user courses and study plan course data
-    periods = @study_plan.periods.includes(:localized_description)
+    number_of_buffer_periods = 3 # FIXME should be more like 12
+    periods = @study_plan.periods(number_of_buffer_periods).includes(:localized_description)
     competences = @study_plan.competences.includes([:localized_description, :courses])
     user_courses = @user.user_courses.includes(:course_instance)
     study_plan_courses = @study_plan.study_plan_courses.includes(

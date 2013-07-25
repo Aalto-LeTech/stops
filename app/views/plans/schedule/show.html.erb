@@ -49,8 +49,20 @@
           <span data-bind="text: name"></span>
         </p>
 
-        <p id="testhoverme">Testhoverme</p>
-        <p id="testblock">Testblock</p>
+        <div id="length" class="row-fluid" data-toggle="tooltip" title="<%= t('.length_tooltip') %>">
+          <div class="span6">
+            <label for="length-input">
+              <%= t('.length') %>:
+            </label>
+          </div>
+          <div class="span6">
+            <span id="in">
+              <input id="length-input" class="input-mini" type="number" data-bind="value: length, valueUpdate: 'keyup'" />
+            </span>
+            <span id="out" data-bind="text: length"></span>
+            <%= t('.prd') %>
+          </div>
+        </div>
 
         <div id="credits" class="row-fluid" data-toggle="tooltip" title="<%= t('.extent_tooltip') %>">
           <div class="span6">
@@ -59,24 +71,27 @@
             </label>
           </div>
           <div class="span6">
-            <input id="credits-input" class="input-mini" type="number" data-bind="value: credits, valueUpdate: 'keyup'" />
-            <span id="credits-show" data-bind="text: credits"></span>
+            <span id="in">
+              <input id="credits-input" class="input-mini" type="number" data-bind="value: credits, valueUpdate: 'keyup'" />
+            </span>
+            <span id="out" data-bind="text: credits"></span>
             <%= t('cr') %>
           </div>
         </div>
 
-        <!-- ko if: period.isOld -->
-          <div class="row-fluid" data-toggle="tooltip" title="<%= t('.grade_tooltip') %>">
-            <div class="span6">
-              <label for="grade-input">
-                <%= t('.grade') %>:
-              </label>
-            </div>
-            <div class="span6">
-              <input id="grade-input" class="input-mini" type="number" data-bind="value: grade, valueUpdate: 'keyup'" />
-            </div>
+        <div id="grade" class="row-fluid" data-toggle="tooltip" title="<%= t('.grade_tooltip') %>">
+          <div class="span6">
+            <label for="grade-input">
+              <%= t('.grade') %>:
+            </label>
           </div>
-        <!-- /ko -->
+          <div class="span6">
+            <span id="in">
+              <input id="grade-input" class="input-mini" type="number" data-bind="value: grade, valueUpdate: 'keyup'" />
+            </span>
+            <span id="out" data-bind="text: grade"></span>
+          </div>
+        </div>
 
         <h4><%= t('.prereqs') %></h4>
 
@@ -177,12 +192,12 @@
       <!-- ko foreach: periods -->
         <div class="period" data-bind="droppable: droppedCourse, position: position, css: {'selected': isSelected, 'receiver': isReceiver, 'old': isOld, 'now': isNow}">
           <div class="name" data-bind="text: name"></div>
-          <div class="credits"><span data-toggle="tooltip" data-bind="text: credits, attr: {title: creditsTooltip}, css: creditsStatus"></span> <%= t('cr') %></div>
+          <div class="credits"><span data-toggle="tooltip" data-bind="numeric: credits, decimals: 2, attr: {title: creditsTooltip}, css: creditsStatus"></span> <%= t('cr') %></div>
         </div>
       <!-- /ko -->
 
       <!-- ko foreach: courses -->
-        <div class="course" data-toggle="tooltip" data-bind="draggable: {}, position: position, attr: {title: tooltip}, css: {'selected': isSelected, 'passed': grade() > 0, 'instanced': courseInstance, 'customized': isCustomized, 'prereq-of': hilightPrereq, 'prereq-to': hilightPrereqTo, 'misordered': isMisordered, 'misscheduled': isMisscheduled}">
+        <div class="course" data-toggle="tooltip" data-bind="draggable: {}, position: position, attr: {title: tooltip}, css: {'selected': isSelected, 'passed': grade() > 0, 'instanced': isInstanceBound, 'customized': isCustomized, 'prereq-of': hilightPrereq, 'prereq-to': hilightPrereqTo, 'misordered': isMisordered, 'misscheduled': isMisscheduled}">
           <span data-bind="text: code"></span>
           <span data-bind="text: name"></span>
         </div>

@@ -23,7 +23,12 @@ Sprint 17.7 - 30.7
 - [x] fix: fix and test the schedule related logic
 - [x] new: when a competence is selected, display a progress bar
 - [x] new: added smart tooltips for period credits, competence progress and course divs
-- [/] fix: don't show the grade field for courses scheduled to the future and autoremove their grades
+- [x] fix: don't show the grade field for courses scheduled to the future and autoremove their grades
+- [x] new: show the editable course fields only when hovering on the well
+- [x] new: make length customizable
+- [x] new: add extenders and customized binders to make everything work smoothly
+- [x] fix: fixed a few broken things in the new student workflow
+- [x] fix: fixed and fine tuned many things while testing PlanView (verry time consuming)
 - [ ] fix: make the plan scroll and the top and side elements remain visible when scrolling the schedule grid
 - [ ] fix: redesign the "autoscroll to current period" feature
 - [ ] new: add intro description into competence view in case no coms chosen

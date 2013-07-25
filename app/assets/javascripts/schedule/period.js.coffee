@@ -29,12 +29,11 @@ class @Period
 
     # TODO: specify event handler in the binding
     @droppedCourse.subscribe (course) =>
+      #dbg("#{@}::droppedCourse(#{course})!")
       course.setPeriod(this)
       course.updatePosition()
       course.updateReqWarnings()
-      if course.isSelected()
-        course.grade(0) if not @isOld
-        PlanView.FIXME.selectedObject.valueHasMutated()
+
 
     @position         = ko.observable({y: 0}) # Course position
     @courses          = ko.observableArray()  # Courses that have been put to this period
@@ -47,7 +46,7 @@ class @Period
 
     @credits          = ko.observable(0)
     @creditsStatus    = undefined
-    @creditsTooltip     = undefined
+    @creditsTooltip   = undefined
 
     @credits.subscribe (newValue) =>
       #console.log("Foo! #{@id}")
@@ -71,13 +70,14 @@ class @Period
 
     # Set time dependent flags
     @isNow = false
-    if @endsAt < @NOW
+    if @endsAt < Period::NOW
       @isOld = true
     else
       @isOld = false
-      if @beginsAt < @NOW
+      if @beginsAt < Period::NOW
+        #dbg("#{@}::loadJson(): Current period found: #{@beginsAt} - #{@endsAt} vs #{Period::NOW}!")
         @isNow = true
-        @CURRENT = this
+        Period::CURRENT = this
 
     # Map the object
     throw "ERROR: id collision at #{@id}!" if @BYID[@id]?
@@ -109,9 +109,14 @@ class @Period
     return this.nextPeriod
 
 
+  # The selected status change handler
+  setSelected: (isSelected) ->
+    @isSelected(isSelected)
+
+
   # Puts a course on this period.
   addCourse: (course, slot) ->
-    #console.log("p[#{@id}] add #{course}.")
+    #dbg("#{@}::add #{course} L:#{course.length()}.")
     # Add the course
     @courses.push(course)
 
@@ -129,7 +134,7 @@ class @Period
 
   # Removes a course from this period.
   removeCourse: (course) ->
-    #console.log("p[#{@id}] rm #{course}.")
+    #dbg("#{@}::rm #{course} L:#{course.length()}.")
     # Remove the course
     @courses.splice(@courses.indexOf(course), 1)
 

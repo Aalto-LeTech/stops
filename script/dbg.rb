@@ -239,12 +239,15 @@ class Dbggr
 
     #fix; exit
 
+    y Period.current.find_preceding_periods(3)
+    exit
+
     competences = @study_plan.competences.includes([:localized_description, :courses])
-    y competences.as_json(
-      only: [],
-      methods: [:localized_name, :course_ids_recursive],
-      root: false
-    )
+    competences.each do |competence|
+      y competence
+      y competence.courses_recursive
+    end
+
     exit
 
     user_courses = @user.user_courses.includes(:course_instance)

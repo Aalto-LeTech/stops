@@ -52,6 +52,15 @@ class @Competence
     @ALL.push(this)
 
 
+  # The selected status change handler
+  setSelected: (isSelected) ->
+    @isSelected(isSelected)
+
+    # Reset highlights
+    for prereq in @prereqs
+      prereq.hilightPrereq(isSelected)
+
+
   updatePrereqCredits: (scopedId, credits) ->
     diff = credits
     diff -= @prereqCredits[scopedId] if @prereqCredits[scopedId] > 0

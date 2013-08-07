@@ -31,17 +31,16 @@ class CurriculumsController < ApplicationController
   # GET /curriculums/1.xml
   def show
     load_curriculum_for_show_and_edit
-
     authorize! :read, @curriculum
-
-    @temp_courses = @curriculum.temp_courses
+    
+    #@temp_courses = @curriculum.temp_courses
+    @competences = Competence.where(:parent_competence_id => nil).includes([{:children => :localized_description}, :localized_description]).all
 
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @curriculum }
     end
   end
-
 
   # GET /curriculums/new
   # GET /curriculums/new.xml
@@ -54,12 +53,13 @@ class CurriculumsController < ApplicationController
       format.xml  { render :xml => @curriculum }
     end
   end
-
-
+  
   # GET /curriculums/1/edit
   def edit
     load_curriculum_for_show_and_edit
     authorize! :update, @curriculum
+    
+    @competences = Competence.where(:parent_competence_id => nil).includes([{:children => :localized_description}, :localized_description]).all
 
     @courses = ScopedCourse.where(:curriculum_id => @curriculum.id).joins(:course_descriptions).includes(:localized_description).where(:course_descriptions => { :locale => I18n.locale }).order('course_code, name')
   end
@@ -71,7 +71,7 @@ class CurriculumsController < ApplicationController
     authorize! :update, @curriculum
   end
 
-
+  
   # POST /curriculums
   # POST /curriculums.xml
   def create

@@ -14,11 +14,11 @@
 
   <% if @competence %>
 
-    <h1><%= link_to @competence.name(I18n.locale), studyplan_competence_path(:id => @competence) %></h1>
+    <h1><%= link_to @competence.localized_name, studyplan_competence_path(:id => @competence) %></h1>
     <h2><%= t('.competence_courses') %></h2>
     <ul>
       <% @competence.courses_recursive.each do |course| %>
-        <li class="<%= @user.study_plan.study_plan_courses.where( scoped_course_id: course.id ).exists? ? 'chosen' : '' %> <%= course == @course ? 'selected' : '' %>"><%= link_to course.name(I18n.locale), studyplan_competence_course_path(:competence_id => @competence.id, :id => course) %>
+        <li class="<%= @user.study_plan.study_plan_courses.where( scoped_course_id: course.id ).exists? ? 'chosen' : '' %> <%= course == @course ? 'selected' : '' %>"><%= link_to course.localized_name, studyplan_competence_course_path(:competence_id => @competence.id, :id => course) %>
       <% end %>
     </ul>
 
@@ -27,7 +27,7 @@
     <h2><%= link_to t('.study_plan_courses'), studyplan_courses_path %></h2>
     <ul>
       <% @user.study_plan.courses.each do |course| %>
-        <li class="<%= @user.passed?( course.abstract_course ) ? 'passed' : '' %> <%= course == @course ? 'selected' : '' %>"><%= link_to course.name(I18n.locale), studyplan_course_path(:id => course) %>
+        <li class="<%= @user.passed?( course.abstract_course ) ? 'passed' : '' %> <%= course == @course ? 'selected' : '' %>"><%= link_to course.localized_name, studyplan_course_path(:id => course) %>
       <% end %>
     </ul>
 
@@ -37,11 +37,15 @@
 
 
 <h1>
-  <%= @course.course_code %> <%= @course.name(I18n.locale) %>
+  <%= @course.course_code %> <%= @course.localized_name %>
+  
   <!-- Add / Remove -->
   <% if can? :choose, ScopedCourse %>
     <% unless @user.study_plan.courses.exists?(@course) %>
-      <%= link_to image_tag('add.png', :alt => t(:course_add_to_plan)), studyplan_courses_path(:course_id => @course.id), :title => t(:profile_add_to_plan), :method => :post %>
+      <%= link_to studyplan_courses_path(:course_id => @course.id), {:method => :post, :class => 'btn btn-default'} do %>
+        <i class="icon icon-plus"></i>
+        <%= t(:course_add_to_plan) %>
+      <% end %>
     <% end %>
   <% end %>
 </h1>
@@ -79,7 +83,7 @@
         <td id="skill-prereqs"></td>
         <td id="course-skills-column">
           <div class="course">
-            <%= @course.course_code + ' ' + @course.name(I18n.locale) %>
+            <%= @course.course_code + ' ' + @course.localized_name %>
             <% @course.skills.each do |skill| %>
               <%= link_to skill.description(I18n.locale), skill, { :class => 'skill', 'data-skill-id' => skill.id, 'data-user-id' => @user.id } %>
             <% end %>
@@ -102,7 +106,7 @@
     <tr>
       <th><%=t(:course_strict_prereqs)%></th>
       <th></th>
-      <th><%= @course.name(I18n.locale) %> <%=t(:course_strict_prereq_of)%></th>
+      <th><%= @course.localized_name %> <%=t(:course_strict_prereq_of)%></th>
     </tr>
   </thead>
   <tbody>
@@ -112,7 +116,7 @@
       </td>
       <td class="current">
         <%= @course.course_code %><br />
-        <%= @course.name(I18n.locale) %>
+        <%= @course.localized_name %>
       </td>
       <td class="future">
         <!-- List of courses which depend on this course -->
@@ -122,7 +126,7 @@
           <ul>
             <% @course.prereq_to.each do |course| %>
               <li>
-                <%= link_to course.course_code + ' ' + course.name(I18n.locale), {:id => course.id} %>
+                <%= link_to course.course_code + ' ' + course.localized_name, {:id => course.id} %>
               </li>
             <% end %>
           </ul>

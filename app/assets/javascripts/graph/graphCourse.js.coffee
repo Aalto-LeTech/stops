@@ -81,10 +81,12 @@ class @GraphLevel
   
 
 class @GraphCourse
+  minLevel: 0
+  maxLevel: 0
   
   constructor: (@id, @course_code, @name, @type, @view) ->
     @position = ko.observable({x: 0, y: 0})
-    @cyclic = false
+    @isCyclic = false
     @level = 0
 
     @element = undefined
@@ -100,7 +102,6 @@ class @GraphCourse
     @prereqStrength = {}    # course_id => float
 
     @visible = false
-    @visited = false
 
 
   getElementHeight: ->
@@ -155,20 +156,7 @@ class @GraphCourse
 
     return div
   
-  setCyclic: (new_value) ->
-    @cyclic = new_value
-
-  # Sets position of the element
-  setPosition: (x, y) ->
-    @x = x
-    @y = y
-    pos = @position()
-    pos.x = @x
-    pos.y = @y
-    @position.valueHasMutated()
-  
-  
-  # Updates the position of the element to match @x, @y
+  # Updates the position of the element in DOM to match @x, @y
   updatePosition: ->
     pos = @position()
     pos.x = @x
@@ -222,9 +210,9 @@ class @GraphCourse
   # direction: 'forward' or 'backward'
   # level: keeps track of recursion depth
   # callback: called with (course, level)
-  dfs: (direction, level, callback) ->
+  dfs: (direction, level, visiting, callback) ->
     # Visit
-    @visited = true
+    visiting[@id] = true
     callback(this, level) if callback
     
     # Visit neighbors
@@ -237,13 +225,11 @@ class @GraphCourse
     
     for neighbor in container
       # Detect cycles
-      if (neighbor.visited)
-        @setCyclic(true)
-        neighbor.setCyclic(true)
+      if visiting[neighbor.id]
+        @isCyclic = true
+        neighbor.isCyclic = true
         continue
       
-      neighbor.dfs(direction, nextLevel, callback)
-    
-    # Backtrack
-    @visited = false
+      neighbor.dfs(direction, nextLevel, visiting, callback)
 
+    visiting[@id] = false

@@ -48,7 +48,7 @@
   <% end %>
 </h1>
 
-<script type="text/html" id="courseTemplate"><div class="course" data-bind="position: position, css: {competence: isCompetence}">
+<script type="text/html" id="courseTemplate"><div class="course" data-bind="position: position, css: {competence: isCompetence, cyclic: isCyclic}">
   <h1 data-bind="text: name"></h1>
   
   <ul data-bind="foreach: skills">

@@ -23,8 +23,6 @@ class @GraphView
     
     @visibleCourses = []
     
-    @minLevel = 0
-    @maxLevel = 0
     @maxHeight = 0  # Height of the highest level $(document).height()
     @paper = undefined    # Raphael paper
 
@@ -119,19 +117,104 @@ class @GraphView
 
         course.prereqStrength[prereqId] = strength
   
-
-  resetVisitedCourses: ->
-    for id, course of @coursesById
-      course.visited = false
-
-  resetHilights: ->
-    # FIXME
-    $('#course-graph li').removeClass('hilight').removeClass('hilight-strong')
-    this.paper.clear()
-
   resetSkillHighlights: ->
     for id, skill of @skillsById
       skill.highlighted(false)
+  
+  # Initializes visualization
+  # available options:
+  # 'targetId': id or array of ids.
+  #              If set, only courses on the path between the source and the targets are shown.
+  #              If not set, all postreq courses are shown recursively.
+  
+  # 'postreqSkills': 'all': show all skills of visible postreq courses
+  #                  'recursive': follow links
+  visualize: (options) ->
+    options ||= {}
+    
+    # Read target ids
+    targetIds = {}         # id => boolean
+    if options['targetId']
+      if $.isArray(options['targetId'])
+        for targetId in options['targetId']
+          targetIds[targetId] = true
+      else
+        targetIds[options['targetId']] = true
+    else
+      targetIds = false
+    
+    # Load source course
+    sourceCourse = @coursesById[options['sourceId']]
+    unless sourceCourse
+      console.log "Course #{options['sourceId']} not found."
+      return
+
+
+    # Show postreq courses
+    this.showFuturePaths(sourceCourse, targetIds, options)
+    
+    # Show prereq courses
+    cycleDetector = {}
+    sourceCourse.dfs 'backward', 0, cycleDetector, (course, level) ->
+      course.visible = true
+      course.level = level if (level < course.level)
+      GraphCourse::minLevel = course.level if (course.level < GraphCourse::minLevel)
+      
+      if 'all' == options['prereqSkills']
+        for skill in course.skills
+          skill.visible = true
+      
+    # Show skills
+    for skill in sourceCourse.skills
+      skill.visible = true
+      
+      for postreq in skill.prereqTo
+        postreq.visible = true
+        if 'recursive' == options['postreqSkills']
+          skill.dfs 'forward', (s, depth) -> s.visible = true
+      
+      for prereq in skill.prereqs
+        prereq.visible = true
+        prereq.course.visible = true
+        
+        if 'recursive' == options['prereqSkills']
+          skill.dfs 'backward', (s, depth) -> s.visible = true
+
+    
+    this.initializeVisualization(sourceCourse)
+  
+  
+  # sets course.visible=true for courses that are on the path beween source and target courses
+  # source: Course object
+  # targets: hash courseId => true. If targets is not set, all courses are shown recursively
+  # options: if 'postreqSkills' == 'all' then all skills are shown
+  showFuturePaths: (sourceCourse, targetIds, options) ->
+    options ||= {}
+
+    dfs = (course, level) ->
+      if targetIds
+        onPath = targetIds[course.id]
+      else
+        onPath = true
+
+      # Visit neighbors
+      for neighbor in course.prereqTo
+        onPath = dfs(neighbor, level + 1) || onPath
+
+      course.level = level if (level > course.level)
+      GraphCourse::maxLevel = course.level if (course.level > GraphCourse::maxLevel)
+      
+      if onPath
+        course.visible = true
+      
+        if 'all' == options['postreqSkills']
+          for skill in course.skills
+            skill.visible = true
+      
+      return onPath
+      
+    dfs(sourceCourse, 0)
+  
   
   visualizeFullGraph: (courseId) ->
     startingCourse = @coursesById[courseId]
@@ -165,12 +248,12 @@ class @GraphView
     this.createLevels()
     ko.applyBindings(this)
     this.positionCourses(startingCourse)
-    @paper = Raphael(@raphaelElement, @maxLevel * @levelWidth, @maxHeight)
+    @paper = Raphael(@raphaelElement, @levels.length * @levelWidth, @maxHeight)
     #this.paper.setSize(@maxLevel * @levelWidth, @maxHeight);
 
   
   createLevels: ->
-    levelCount = @maxLevel - @minLevel + 1
+    levelCount = GraphCourse::maxLevel - GraphCourse::minLevel + 1
     @levels = Array(levelCount)
     
     for i in [0...levelCount]
@@ -180,14 +263,14 @@ class @GraphView
     for id, course of @coursesById
       continue unless course.visible
       
-      course.level -= @minLevel  # Normalize course level numbers so that they start from zero
+      course.level -= GraphCourse::minLevel  # Normalize course level numbers so that they start from zero
       
       @visibleCourses.push(course)
       level = this.levels[course.level]
       level.addCourse(course) if level
     
-    @maxLevel -= @minLevel
-    @minLevel = 0
+    GraphCourse::maxLevel -= GraphCourse::minLevel
+    GraphCourse::minLevel = 0
   
   
   # This is called by knockout after rendering a course or skill, so that we know the dimensions of the DOM element.
@@ -224,6 +307,49 @@ class @GraphView
     for id,course of @coursesById
       continue unless course.visible
       course.updatePosition()
+
+
+  hilightCourse: (course) ->
+    this.resetSkillHighlights()
+    @paper.clear()
+    
+    course.drawPrereqArcs()
+    course.drawPostreqArcs()
+    
+    for skill in course.skills
+      # Hilight all skills
+      skill.highlighted(true)
+      
+      # Hilight direct prereqs
+      for neighbor in skill.prereqs
+        neighbor.highlighted(true)
+      
+      # Hilight direct postreqs
+      for neighbor in skill.prereqTo
+        neighbor.highlighted(true)
+  
+  
+  hilightSkill: (skill) ->
+    this.resetSkillHighlights()
+    @paper.clear()
+  
+    skill.highlighted(true)
+    skill.drawPrereqArcs()
+    skill.drawPostreqArcs()
+    
+    for neighbor in skill.prereqs
+      neighbor.highlighted(true)
+    
+    for neighbor in skill.prereqTo
+      neighbor.highlighted(true)
+  
+#     skill.dfs 'backward', (s, depth) =>
+#       s.highlighted(true)
+#       s.drawPrereqArcs()
+#     
+#     skill.dfs 'forward', (s, depth) =>
+#       s.highlighted(true)
+#       s.drawPostreqArcs()
 
 
   createLine: (x1, y1, x2, y2, w, color) ->

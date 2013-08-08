@@ -1,23 +1,33 @@
-#= require knockout-2.2.1
+#= require knockout-2.3.0
 #= require raphael-min
 #= require graph/graphCourse
 #= require graph/graphSkill
 
-class GraphView
-  #svgNS: "http://www.w3.org/2000/svg",
-  
-  constructor: (@element) ->
-    @coursesById = {}    # id -> course object
-    @skillsById = {}     # id -> skill object
-  
-    coursesPath = @element.data('courses-path')
-    competencesPath = @element.data('competences-path')
-    skillsPath = @element.data('skills-path')
+
+# Custom KnockOut binding that makes it possible to move DOM objects.
+ko.bindingHandlers.position = {
+  update: (element, valueAccessor, bindingHandlers, viewModel) ->
+    value = ko.utils.unwrapObservable(valueAccessor())
     
-    @paper = Raphael(document.getElementById('svg'), 100, 100)
+    $(element).css
+      left: value.x
+      top: value.y
+}
+
+class @GraphView
+  levelWidth: 600
+  
+  constructor: (@raphaelElement) ->
+    @coursesById = {}    # id -> Course object
+    @skillsById = {}     # id -> Skill object
     
-    this.load(coursesPath, competencesPath, skillsPath)
-    this.initializeVisualization(element.data('course-id'))
+    @visibleCourses = []
+    
+    @minLevel = 0
+    @maxLevel = 0
+    @maxHeight = 0  # Height of the highest level $(document).height()
+    @paper = undefined    # Raphael paper
+
 
   load: (coursesPath, competencesPath, skillsPath) -> 
     $.ajax
@@ -47,9 +57,9 @@ class GraphView
   loadCourses: (data) ->
     for row in data
       rawData = row.scoped_course
-      course = new GraphCourse(rawData.id, rawData.course_code, rawData.translated_name, 'course')
+      course = new GraphCourse(rawData.id, rawData.course_code, rawData.translated_name, 'course', this)
       @coursesById[rawData.id] = course
-
+      course.isCompetence = false
 
   #
   # Loads competences from JSON data.
@@ -57,11 +67,9 @@ class GraphView
   loadCompetences: (data) ->
     for row in data
       rawData = row.competence
-
-      course = new GraphCourse(rawData.id, '', rawData.translated_name, 'competence');
+      course = new GraphCourse(rawData.id, '', rawData.translated_name, 'competence', this)
       @coursesById[rawData.id] = course
-      course.setCompetence(true)
-
+      course.isCompetence = true
 
   #
   # Loads skills from JSON data.
@@ -81,7 +89,7 @@ class GraphView
       
       # Create skill object
       localized_name = rawData.description_with_locale.skill_description.description
-      skill = new GraphSkill(rawData.id, localized_name)
+      skill = new GraphSkill(rawData.id, localized_name, this)
       @skillsById[rawData.id] = skill
 
       # Add skill to course
@@ -97,74 +105,111 @@ class GraphView
         
       for prereq_id in rawData.strict_prereq_ids
         prereq = @skillsById[prereq_id]
-        skill.addPrereq(prereq)  if (prereq)
+        skill.addPrereq(prereq) if (prereq)
+    
+    # Normalize prereq strengths
+    for id, course of @coursesById
+      for prereqId, strength of course.prereqStrength
+        prereq = @coursesById[prereqId]
+        possibleConnections = course.skills.length * prereq.skills.length
+        if possibleConnections > 0
+          strength /= course.skills.length * prereq.skills.length
+        else
+          strength = 0
+
+        course.prereqStrength[prereqId] = strength
   
 
-  resetVisitedSkills: ->
-    for id, skill of @skillsById
-      skill.visited = false
-  
   resetVisitedCourses: ->
     for id, course of @coursesById
       course.visited = false
 
   resetHilights: ->
+    # FIXME
     $('#course-graph li').removeClass('hilight').removeClass('hilight-strong')
     this.paper.clear()
+
+  resetSkillHighlights: ->
+    for id, skill of @skillsById
+      skill.highlighted(false)
   
-  
-  initializeVisualization: (courseId) ->
-    targetCourse = @coursesById[courseId]
-    return unless targetCourse
+  visualizeFullGraph: (courseId) ->
+    startingCourse = @coursesById[courseId]
+    unless startingCourse
+      console.log "Course #{courseId} not found."
+      return
     
     # Run through course graph with DFS to
-    # - find out which courses are visible
     # - assign courses to levels
-    minLevel = 0
-    maxLevel = 0
+    # - find out which courses are visible
+    minLvl = 0
+    maxLvl = 0
     
-    # TODO: make this cleaner
-    targetCourse.dfs 'backward', 0, (course, level) ->
+    startingCourse.dfs 'backward', 0, (course, level) ->
       course.visible = true
       course.level = level if (level < course.level)
-      minLevel = course.level if (course.level < minLevel)
+      minLvl = course.level if (course.level < minLvl)
     
-    targetCourse.dfs 'forward', 0, (course, level) ->
+    startingCourse.dfs 'forward', 0, (course, level) ->
       course.visible = true
       course.level = level if (level > course.level)
-      maxLevel = course.level if (course.level > maxLevel)
+      maxLvl = course.level if (course.level > maxLvl)
+      
+    @minLevel = minLvl
+    @maxLevel = maxLvl
     
+    this.initializeVisualization(startingCourse)
+  
+  
+  initializeVisualization: (startingCourse) ->
+    this.createLevels()
+    ko.applyBindings(this)
+    this.positionCourses(startingCourse)
+    @paper = Raphael(@raphaelElement, @maxLevel * @levelWidth, @maxHeight)
+    #this.paper.setSize(@maxLevel * @levelWidth, @maxHeight);
 
-    # Create levels
-    levelWidth = 600  # TODO: make this constant
-    levelCount = maxLevel - minLevel + 1
+  
+  createLevels: ->
+    levelCount = @maxLevel - @minLevel + 1
     @levels = Array(levelCount)
-    for i in [0...levelCount]
-      # TODO: check if correct number of levels is created
-      @levels[i] = new GraphLevel(i * levelWidth, levelWidth)
     
+    for i in [0...levelCount]
+      @levels[i] = new GraphLevel(i * @levelWidth, @levelWidth)
 
-    # Add courses to Levels and the view
+    # Add courses to Levels
     for id, course of @coursesById
       continue unless course.visible
       
-      course.level -= minLevel  # Normalize course level numbers so that they start from zero
+      course.level -= @minLevel  # Normalize course level numbers so that they start from zero
       
-      this.attachCourse(course)
+      @visibleCourses.push(course)
       level = this.levels[course.level]
       level.addCourse(course) if level
-
-
+    
+    @maxLevel -= @minLevel
+    @minLevel = 0
+  
+  
+  # This is called by knockout after rendering a course or skill, so that we know the dimensions of the DOM element.
+  updateElementDimensions: (elements) ->
+    for element in elements
+      object = ko.dataFor(element)
+      el = $(element)
+      object.element = el
+      object.width = el.width()
+      object.height = el.height()
+  
+  
+  positionCourses: (startingCourse) ->
     # Calculate level heights
-    maxHeight = $(document).height()
     for level in @levels
       height = level.updateHeight()
-      maxHeight = height if (height > maxHeight)
+      @maxHeight = height if height > @maxHeight
 
     for level in @levels
-      level.maxHeight = maxHeight
+      level.maxHeight = @maxHeight
 
-    targetCourse.y = (maxHeight + targetCourse.getElement(this).height()) / 2  # TODO: does this work?
+    startingCourse.y = (@maxHeight + startingCourse.getElement(this).height()) / 2  # TODO: does this work?
 
 
     # Set Y indices
@@ -179,12 +224,6 @@ class GraphView
     for id,course of @coursesById
       continue unless course.visible
       course.updatePosition()
-
-
-    # Update svg size
-    #this.paper.setSize($(document).width(), $(document).height());
-    this.paper.setSize(levelCount * levelWidth, maxHeight);
-
 
 
   createLine: (x1, y1, x2, y2, w, color) ->
@@ -209,7 +248,3 @@ class GraphView
     element = course.getElement(this)
     courseCanvas.append(element)
 
-
-jQuery ->
-  element = $('#course-graph');
-  graphView = new GraphView(element)

@@ -841,14 +841,22 @@ li.passed {
  ********************/
 
 #layers {
+  /*
   position: relative;
+  */
+}
+
+#svg {
+  /*
+  z-index: 1;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  */
 }
 
 #course-graph {
-  z-index: 2;
   position: relative;
-  left: 0px;
-  top: 0px;
 
   div.course {
     position: absolute;
@@ -902,14 +910,6 @@ li.passed {
   div.cyclic {
     background: #ffe0e0;
   }
-}
-
-
-#svg {
-  z-index: 1;
-  position: absolute;
-  left: 0px;
-  top: 0px;
 }
 
 

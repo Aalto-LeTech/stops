@@ -1,12 +1,19 @@
 class @GraphSkill
 
-  constructor: (@id, @description) ->
-    @element = false
+  constructor: (@id, @description, @view) ->
     @course = false
-    @visited = false
 
+    @element = undefined
+    @x = 0
+    @y = 0
+    @height = undefined
+    @width = undefined
+    
     @prereqs = []
     @prereqTo = []
+    
+    @highlighted = ko.observable(false)
+    @visible = false
     
 
   setCourse: (course) ->
@@ -18,61 +25,49 @@ class @GraphSkill
     prereq.prereqTo.push(this)
     
     @course.addPrereq(prereq.course)
-  
-
-  click: (event) ->
-    # Reset hilights and SVG
-    @view.resetHilights()
-    this.hilight()
-    @view.resetVisitedSkills()
-
-    return false
-  
-  hilight: ->
-    this.dfs 'backward', (skill, depth) =>
-      skill.element.addClass('hilight')
-      skill.visited = true
-
-      # Draw edges to backward neighbors
-      for neighbor in skill.prereqs
-        continue unless (neighbor.element && neighbor.course.visible)
-        from = skill.element.position()
-        to = neighbor.element.position()
-        
-        @view.createLine(
-          from.left + skill.course.x,
-          from.top + skill.course.y + skill.element.height() / 2,
-          to.left + neighbor.course.x + neighbor.element.width(),
-          to.top + neighbor.course.y + neighbor.element.height() / 2, 1, false)
     
-    @visited = false
-    
-    this.dfs 'forward', (skill, depth) =>
-      skill.element.addClass('hilight')
-      skill.visited = true
-
-      # Draw edges to forward neighbors
-      for neighbor in skill.prereqTo
-        continue unless (neighbor.element && neighbor.course.visible)
-        from = skill.element.position()
-        to = neighbor.element.position()
-        
-        @view.createLine(
-          from.left + skill.course.x + skill.element.width(),
-          from.top + skill.course.y + skill.element.height() / 2,
-          to.left + neighbor.course.x,
-          to.top + neighbor.course.y + neighbor.element.height() / 2, 1, false)
+    @course.prereqStrength[prereq.course.id] ||= 0.0
+    @course.prereqStrength[prereq.course.id] += 1.0
   
+  # Draw edges to backward neighbors
+  drawPrereqArcs: ->
+    for neighbor in @prereqs
+      continue unless (neighbor.element && neighbor.visible && neighbor.course.visible)
+      from = @element.position()
+      to = neighbor.element.position()
+      
+      @view.createLine(
+        from.left + @course.x,
+        from.top + @course.y + @element.height() / 2,
+        to.left + neighbor.course.x + neighbor.element.width(),
+        to.top + neighbor.course.y + neighbor.element.height() / 2,
+        1, false)
+
+  # Draw edges to forward neighbors
+  drawPostreqArcs: ->
+    for neighbor in @prereqTo
+      continue unless (neighbor.element && neighbor.visible && neighbor.course.visible)
+      from = @element.position()
+      to = neighbor.element.position()
+      
+      @view.createLine(
+        from.left + @course.x + @element.width(),
+        from.top + @course.y + @element.height() / 2,
+        to.left + neighbor.course.x,
+        to.top + neighbor.course.y + neighbor.element.height() / 2,
+        1, false)
   
   dfs: (direction, callback) ->
     # Run DFS
     stack = [this]
+    visited = {}
     depth = 0
     
     while (stack.length > 0)
       skill = stack.pop()
-      continue if (skill.visited || !skill.element)
+      continue if visited[skill.id]
 
+      visited[skill.id] = true
       callback(skill, depth)
 
       if (direction == 'forward')

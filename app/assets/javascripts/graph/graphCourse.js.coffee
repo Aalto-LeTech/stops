@@ -1,8 +1,8 @@
 class @GraphLevel
+  courseMargin: 20
 
   constructor: (@x, @width) ->
     @courses = []
-    @courseMargin = 20  # TODO: make this a constant
     @height = 0
 
   addCourse: (course) ->
@@ -82,18 +82,22 @@ class @GraphLevel
 
 class @GraphCourse
   
-  constructor: (@id, @course_code, @name, @type) ->
-    @element = false
+  constructor: (@id, @course_code, @name, @type, @view) ->
+    @position = ko.observable({x: 0, y: 0})
     @cyclic = false
-
     @level = 0
+
+    @element = undefined
     @x = 0
     @y = 0
+    @height = undefined
+    @width = undefined
 
     @skills = []
     @prereqs = []
     @prereqsById = {}
     @prereqTo = []
+    @prereqStrength = {}    # course_id => float
 
     @visible = false
     @visited = false
@@ -103,8 +107,7 @@ class @GraphCourse
     if @type == 'virtual'
       return @courseMargin 
     else
-      return this.getElement().height()
-
+      return @height
 
   addSkill: (skill) ->
     @skills.push(skill)
@@ -152,10 +155,6 @@ class @GraphCourse
 
     return div
   
-
-  setCompetence: (value) ->
-    @isCompetence = value
-  
   setCyclic: (new_value) ->
     @cyclic = new_value
 
@@ -163,33 +162,70 @@ class @GraphCourse
   setPosition: (x, y) ->
     @x = x
     @y = y
-    @element.css('left', @x)
-    @element.css('top', @y)
+    pos = @position()
+    pos.x = @x
+    pos.y = @y
+    @position.valueHasMutated()
+  
   
   # Updates the position of the element to match @x, @y
   updatePosition: ->
-    @element.css('left', @x)
-    @element.css('top', @y)
-  
-
-  click: ->
-    # Reset hilights and SVG
-    @view.resetHilights()
+    pos = @position()
+    pos.x = @x
+    pos.y = @y
+    @position.valueHasMutated()
     
-    for skill in @skills
-      skill.hilight()
+  
+  # Draw edges to backward neighbors
+  drawPrereqArcs: ->
+    for neighbor in @prereqs
+      continue unless (neighbor.element && neighbor.visible)
+      from = @element.position()
+      to = neighbor.element.position()
 
-    @view.resetVisitedSkills()
+      thickness = (@prereqStrength[neighbor.id] || 0) * 20
+      thickness = 1 if thickness < 1
+      thickness = 10 if thickness > 10
+      
+      x1 = from.left
+      y1 = from.top + 10
+      x2 = to.left + neighbor.element.width()
+      y2 = to.top + 10
+      
+      @view.paper.path("M"+x1+" "+y1+"L"+x2+" "+y2)
+        .attr('stroke', '#888')
+        .attr('stroke-width', thickness)
+
+
+  # Draw edges to forward neighbors
+  drawPostreqArcs: ->
+    for neighbor in @prereqTo
+      continue unless (neighbor.element && neighbor.visible)
+      from = @element.position()
+      to = neighbor.element.position()
+      
+      thickness = (neighbor.prereqStrength[@id] || 0) * 20
+      thickness = 1 if thickness < 1
+      thickness = 10 if thickness > 10
+
+      x1 = from.left + @element.width()
+      y1 = from.top + 10
+      x2 = to.left
+      y2 = to.top + 10
+      
+      @view.paper.path("M"+x1+" "+y1+"L"+x2+" "+y2)
+        .attr('stroke', '#888')
+        .attr('stroke-width', thickness)
   
 
   # Runs depth-first search in the course graph starting from this course.
   # direction: 'forward' or 'backward'
   # level: keeps track of recursion depth
-  # callback: is called with (course, level)
+  # callback: called with (course, level)
   dfs: (direction, level, callback) ->
     # Visit
     @visited = true
-    callback(this, level) if (callback)
+    callback(this, level) if callback
     
     # Visit neighbors
     if (direction == 'forward')

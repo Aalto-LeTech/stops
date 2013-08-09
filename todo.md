@@ -4,8 +4,26 @@ Sprints
 Sprint 09.7 - 16.8
 ------------------
 
+Acknowledgements
+  - the stylesheet system isn't perfect. I should reduce the number of seperate
+    stylesheets loaded in production mode.
+  - the javascript system is much clearer and better in my opinion.
+  - I'll rewrite the assets precompile in config/application.rb to include only
+    the assets really needed. I'll try to reduce the number of seperate files.
+    though I guess that even if each view would load a seperate css file it
+    wouldn't be the end of the world.
+  - I know that having many files renamed and moved and refactored so heavily
+    and at one go isn't easy to handle, especially when the previous system
+    worked just fine.
+  - Even as I acknowledge that this isn't perfect, I'm reassured that this is an
+    improvement. Binding assets with views in a very specific way helps
+    maintenance and learning / understanding the system. Specificity,
+    granularity & modularity is good -- especially for new developers /
+    maintainers etc.
+  - There are open questions and bugs I'd need to look after.
+
 - [ ] address questions arisen so far:
-- [ ]   is "/:locale/courses*" not used at all -- are the controller and views
+- [ ]   is "/:locale/courses*" not used at all? -- are the controller and views
         deprecated?
 - [ ]   how does "/:locale/skills*" work?
 - [ ]   curriculums/courses controller only responds to JSON. Should the views be erased?

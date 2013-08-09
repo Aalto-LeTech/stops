@@ -54,14 +54,14 @@ module Ops
         # verbose and explicit. As of now, it accepts only the following formats
         #   png, gif, css & js
         # files. Also, it adds js & css only from certain directories
-        #   core, layouts & views
+        #   core, layouts, libs & views
         # because only from these do we need asset files.
         # All thirdparty libraries etc. are injected into files like:
         #   core/core.js views/plans/schedule/show.js
         if File.basename(path) =~ /\.(png|gif)$/
           puts "     Adding: #{path}"
           true
-        elsif path =~ /^(core|layouts|views)\/.*\.(css|js)$/
+        elsif path =~ /^(core|layouts|libs|views)\/.*\.(css|js)$/
           puts "  Compiling: #{path}"
           true
         else

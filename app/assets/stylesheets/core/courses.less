@@ -1,0 +1,123 @@
+////////////////////////////////////////////////////////////////////////////////
+// core/courses.less
+//
+// Some Less spec for some of the views that handle courses.
+//
+
+
+
+
+.course-competence-graph
+{
+  td
+  {
+    vertical-align: middle;
+    background: none center no-repeat;
+
+    &.course-skills-column,
+    &.target-skill-column  // FIXME: Am I deprecated?
+    {
+      width: 200px;
+    }
+  }
+
+  .path td
+  {
+    background: url('../images/future-arrow.png') no-repeat right;
+    padding-right: 5px;
+  }
+
+  .skill.click-hint {
+    background: #f0f0ff url('../images/future-arrow.png') no-repeat right;
+  }
+
+  a
+  {
+    text-decoration: none;
+    color: black;
+  }
+}
+
+
+.course-skill-dependencies
+{
+  .course
+  {
+    border: 1px solid #8080a0;
+    background: #e0e0ff;
+    -moz-border-radius: 10px;
+    margin: 1em .5em;
+    padding: .2em .4em;
+  }
+
+  .competence
+  {
+    border: 1px solid #80a080;
+    background: #e0ffe0;
+    -moz-border-radius: 10px;
+    margin: 1em .5em;
+    padding: .2em .4em;
+  }
+  a.skill
+  {
+    text-decoration: none;
+    color: black;
+  }
+  .supporting
+  {
+    color: gray;
+  }
+}
+
+
+.course-competence-graph,
+.course-skill-dependencies
+{
+  .skill
+  {
+    display: block;
+    border: 1px solid #d0d0d0;
+    background: #f0f0ff;
+    padding: .2em .5em;
+    margin: .5em 0em;
+    font-size: small;
+  }
+  .dim
+  {
+    border: none !important;
+    background: #f0f0f0 !important;
+    color: gray !important;
+  }
+}
+
+
+table.course-path
+{
+  margin: 1em 0em;
+
+  td
+  {
+    &.prereqs, &.current
+    {
+      vertical-align: middle;
+      background: url('../images/future-arrow.png') no-repeat right;
+      padding-right: 30px;
+    }
+
+    &.current, &.future
+    {
+      padding-left: 20px;
+    }
+
+    &.current
+    {
+      font-size: larger;
+      font-weight: bold;
+    }
+  }
+}
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////

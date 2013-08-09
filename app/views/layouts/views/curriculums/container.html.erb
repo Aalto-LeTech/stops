@@ -1,0 +1,7 @@
+<% content_for(:stylesheets) do %>
+  <%= stylesheet_link_tag "layouts/container", :media => 'all' %>
+  <%= stylesheet_link_tag "views/curriculums/shared", :media => 'all' %>
+<% end %>
+
+
+<%= render partial: 'layouts/core/composer', locals: { layout: 'container', fixed_nav: false } %>

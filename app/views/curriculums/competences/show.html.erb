@@ -1,5 +1,4 @@
-<!-- curriculums/competences/show -->
-<h1><%= @competence.name(I18n.locale) %></h1>
+<h1><%= @competence.localized_name %></h1>
 
 <% if can? :update, @competence %>
   <div class="admin-tools well">
@@ -15,14 +14,11 @@
 <% end %>
 
 
-<p><%= @competence.description(I18n.locale) %></p>
-
-
 <h2><%=t :competence_skills_heading %></h2>
 
 <ul>
   <% @competence.skills.each do |skill| %>
-    <li><%= skill.description(I18n.locale) %></li>
+    <li><%= skill.localized_description %></li>
   <% end %>
 </ul>
 <!--td>< link_to t(:contributing_courses_link), curriculum_competence_skill_path(:curriculum_id => @curriculum.id, :competence_id => @competence.id, :id => skill.id) ></td-->
@@ -31,7 +27,7 @@
 <h2><%=t :competence_courses_heading %></h2>
 <ul>
   <% @competence.courses.each do |course| %>
-    <li><%= course.course_code %> <%= course.name(I18n.locale) %></li>
+    <li><%= course.course_code %> <%= course.localized_name %></li>
   <% end %>
 </ul>
 

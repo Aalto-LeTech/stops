@@ -1,7 +1,5 @@
 class FrontpageController < ApplicationController
 
-  layout 'frontpage'
-
   def index
     @user = current_user
     @curriculums = Curriculum.all(:order => 'start_year DESC')

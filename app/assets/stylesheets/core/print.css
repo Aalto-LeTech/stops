@@ -1,0 +1,32 @@
+body
+{
+  font-size: 9pt;
+}
+
+h1 a:visited, h1 a
+{
+  color: black;
+  text-decoration: none;
+}
+
+.back-link
+{
+  display: none;
+}
+
+#thenavbar,
+#theleftwrapper,
+#theleft,
+#thefooter
+{
+  display: none;
+}
+
+#thewrapper,
+#thecontainer,
+#themain
+{
+  margin: 0em;
+  padding: 0em;
+  border: none;
+}

@@ -80,8 +80,6 @@ Ops::Application.routes.draw do
     end
 
     # My Plan
-    # TODO: "Shallow" nesting is advised at http://guides.rubyonrails.org/routing.html#shallow-nesting,
-    #        should/could we refactor this?
     resource :studyplan, :controller => 'plans', :only => [:show] do
 
       resources :competences, :controller => 'plans/competences', :except => [:edit] do
@@ -100,7 +98,6 @@ Ops::Application.routes.draw do
 
       resources :courses, :controller => 'plans/courses', :except => [:edit, :update]  # ScopedCourses, courses that user has selected
       resource :schedule, :controller => 'plans/schedule', :only => [:show]
-      resources :periods, :controller => 'plans/periods', :only => [:index, :show]
       resource :curriculum, :controller => 'plans/curriculums', :only => [:show, :edit, :update]
     end
 

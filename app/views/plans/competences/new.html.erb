@@ -1,4 +1,11 @@
-<h1><%=t :competence_add_heading, :competence => @competence.localized_name %></h1>
+<% content_for(:stylesheets) do %>
+  <%= stylesheet_link_tag "views/plans/competences/shared", :media => 'all' %>
+<% end %>
+
+
+<h1>
+  <%=t :competence_add_heading, :competence => @competence.localized_name %>
+</h1>
 
 <p><%=t :competence_courses_to_add %></p>
 
@@ -49,5 +56,5 @@
 
   <p><%= submit_tag t(:Ok) %></p>
 
-  <p><%= link_to t(:Cancel), studyplan_path %></p>
+  <p><%= link_to t(:Cancel), studyplan_competences_path %></p>
 <% end %>

@@ -1,10 +1,17 @@
-<% content_for :javascript do %>
+
+
+<% content_for :javascripts do %>
   <%= javascript_include_tag 'raphael-min' %>
-  <%= javascript_include_tag 'skillGraphView' %>
-  <%= javascript_include_tag 'graphCourse' %>
-  <%= javascript_include_tag 'graphSkill' %>
+  <%= javascript_include_tag 'views/curriculums/skillGraphView' %>
+  <%= javascript_include_tag 'views/curriculums/graphCourse' %>
+  <%= javascript_include_tag 'views/curriculums/graphSkill' %>
 <% end %>
-<% content_for :title do %><%= @competence.localized_description.name %> - <%=t '.title' %><% end %>
+
+
+<% content_for :title do %>
+  <%= @competence.localized_name + ' - ' + t('.title') %>
+<% end %>
+
 
 <%= render :partial => 'tabs' %>
 
@@ -12,10 +19,10 @@
 
 <div id="layers">
   <div id="svg"></div>
-  <div id="course-graph" 
-    data-course-id="<%= @competence.id %>" 
-    data-courses-path="<%= curriculum_courses_path(:curriculum_id => @curriculum.id) %>" 
-    data-competences-path="<%= curriculum_competences_path(:curriculum_id => @curriculum.id) %>" 
+  <div id="course-graph"
+    data-course-id="<%= @competence.id %>"
+    data-courses-path="<%= curriculum_courses_path(:curriculum_id => @curriculum.id) %>"
+    data-competences-path="<%= curriculum_competences_path(:curriculum_id => @curriculum.id) %>"
     data-skills-path="<%= curriculum_skills_path(:curriculum_id => @curriculum.id) %>">
   </div>
 </div>

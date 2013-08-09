@@ -1,9 +1,10 @@
 class CoursesController < ApplicationController
-  
-  layout 'course'
-  
+
   before_filter :load_curriculum
-  
+
+  layout 'views/courses/browser'
+
+
   # GET /courses
   # GET /courses.xml
   def index
@@ -25,7 +26,7 @@ class CoursesController < ApplicationController
       format.xml  { render :xml => @course }
     end
   end
-  
+
   # GET /courses/1/graph
   def graph
     @course = ScopedCourse.find(params[:id])
@@ -56,7 +57,7 @@ class CoursesController < ApplicationController
       if @course.save
         format.html { redirect_to(@course, :notice => 'Course was successfully created.') }
         format.xml  { render :xml => @course, :status => :created, :location => @course }
-        
+
       else
         format.html { render :action => "new" }
         format.xml  { render :xml => @course.errors, :status => :unprocessable_entity }
@@ -91,10 +92,10 @@ class CoursesController < ApplicationController
       format.xml  { head :ok }
     end
   end
-  
-  
+
+
   def skill_dependencies
-    
+
   end
-  
+
 end

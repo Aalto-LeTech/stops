@@ -1,7 +1,4 @@
-# O4
 class SessionsController < ApplicationController
-  
-  layout 'single'
 
   skip_before_filter :store_location
 
@@ -15,45 +12,45 @@ class SessionsController < ApplicationController
 
   def create
     @user_session = UserSession.new(params[:user_session])
-    
+
     session[:logout_url] = nil
-    
+
     if @user_session.save
       # TODO: log username
       logger.info "Login successful" # "Logged in #{@user_session}"
       redirect_back_or_default frontpage_url
     else
       logger.info "Login failed. #{@user_session.errors.full_messages.join(',')}"
-      
+
       flash[:error] = "#{@user_session.errors.full_messages.join('. ')}"
       render :action => :new
     end
   end
-  
+
   def destroy
     return unless current_session
-    
+
     logout_url = session[:logout_url]
     current_session.destroy
     flash[:success] = I18n.t('sessions.logout_message')
-    
+
     if logout_url
       redirect_to(logout_url)
     else
       redirect_to(root_url)
     end
   end
-  
-  
+
+
   def shibboleth
     logger.error "SHIB_ATTRIBUTES is not set in config/initializers/settings.rb" unless defined?(SHIB_ATTRIBUTES)
-    
+
     shibinfo = {
-      :login => request.env[SHIB_ATTRIBUTES[:id]],
-      :studentnumber => (request.env[SHIB_ATTRIBUTES[:studentnumber]] || '').split(':').last,
-      :name => (request.env[SHIB_ATTRIBUTES[:firstname]] || '') + ' ' + request.env[SHIB_ATTRIBUTES[:lastname]],
-      :email => request.env[SHIB_ATTRIBUTES[:email]],
-      :affiliation => request.env[SHIB_ATTRIBUTES[:affiliation]]
+      login:           request.env[SHIB_ATTRIBUTES[:id]],
+      studentnumber:  (request.env[SHIB_ATTRIBUTES[:studentnumber]] || '').split(':').last,
+      name:           (request.env[SHIB_ATTRIBUTES[:firstname]] || '') + ' ' + request.env[SHIB_ATTRIBUTES[:lastname]],
+      email:           request.env[SHIB_ATTRIBUTES[:email]],
+      affiliation:     request.env[SHIB_ATTRIBUTES[:affiliation]]
     }
     logout_url = request.env[SHIB_ATTRIBUTES[:logout]]
 
@@ -66,10 +63,10 @@ class SessionsController < ApplicationController
 #       :organization => 'hut.fi'
 #     }
 #     logout_url= 'http://www.aalto.fi/'
-    
+
     shibboleth_login(shibinfo, logout_url)
   end
-  
+
 
   def shibboleth_login(shibinfo, logout_url)
     if shibinfo[:login].blank? && shibinfo[:studentnumber].blank?
@@ -78,7 +75,7 @@ class SessionsController < ApplicationController
       render :action => 'new'
       return
     end
-    
+
     # Find user by username (eppn)
     unless shibinfo[:login].blank?
       logger.debug "Trying to find by login #{shibinfo[:login]}"
@@ -95,7 +92,7 @@ class SessionsController < ApplicationController
     # Create new account or update an existing
     unless user
       logger.debug "User not found. Trying to create."
-      
+
       # New user
       user = User.new()
       user.login = shibinfo[:login]
@@ -113,13 +110,13 @@ class SessionsController < ApplicationController
       end
     else
       logger.debug "User found. Updating attributes."
-      
+
       # Update metadata
       user.login = shibinfo[:login]
       user.studentnumber = shibinfo[:studentnumber]
       user.name = shibinfo[:name]
       user.email = shibinfo[:email]
-      
+
       user.reset_persistence_token if user.persistence_token.blank?  # Authlogic won't work if persistence token is empty
     end
 
@@ -127,7 +124,7 @@ class SessionsController < ApplicationController
     if UserSession.create(user)
       session[:logout_url] = logout_url
       logger.info("Logged in #{user.login} (#{user.studentnumber}) (shibboleth)")
-      
+
       redirect_back_or_default root_url
     else
       logger.warn("Failed to create session for #{user.login} (#{user.studentnumber}) (shibboleth)")

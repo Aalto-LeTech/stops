@@ -1,25 +1,6 @@
-<!DOCTYPE html>
+<% content_for(:stylesheets) do %>
+  <%= stylesheet_link_tag 'layouts/browser', :media => 'all' %>
+<% end %>
 
-<html lang="<%= I18n.locale %>">
-<%= render :partial => 'layouts/head' %>
 
-<body>
-
-<%= render :partial => 'layouts/header' %>
-
-<div class="clear"></div>
-  
-<div class="page">
-  <!--div id="contextHelp">
-  </div-->
-
-  <div class="content">
-    <%= render :partial => 'layouts/messages' %>
-
-    <%= yield %>
-  </div>
-</div>
-
-<%= render :partial => 'layouts/javascript_includes' %>
-</body>
-</html>
+<%= render partial: 'layouts/core/composer', locals: { layout: 'browser', fixed_nav: true } %>

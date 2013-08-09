@@ -10,7 +10,7 @@ Ops::Application.configure do
   config.whiny_nils = true
 
   # Show full error reports and disable caching
-  config.consider_all_requests_local       = true
+  config.consider_all_requests_local = true
   #config.action_view.debug_rjs             = true
 
   config.action_controller.perform_caching = false
@@ -33,4 +33,10 @@ Ops::Application.configure do
 
   # Expands the lines which load the assets
   config.assets.debug = true
+
+  # Avoid using precompiled assets by misdirecting them
+  #  ref: http://stackoverflow.com/questions/8013478/how-to-avoid-precompiled-assets-being-served-in-development-mode
+  #config.assets.compile = true
+  #config.assets.prefix = "/assets_dev"
+  #config.serve_static_assets = false
 end

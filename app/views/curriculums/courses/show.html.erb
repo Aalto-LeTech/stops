@@ -1,12 +1,10 @@
-<% content_for :javascript do %>
-  <%= javascript_include_tag 'profileCourseView' %>
-<% end %>
+<h1>
+  <%= @course.course_code %> <%= @course.localized_name %>
+</h1>
 
-<h1><%= @course.course_code %> <%= @course.name(I18n.locale) %></h1>
-
-<% if @profile %>
-  <!-- Study paths from course skills to profile skills -->
-  <table id="course-profile-graph" class="course-profile-graph" data-profile-id="<%= @profile.id %>">
+<% if @competence %>
+  <!-- Study paths from course skills to competence skills -->
+  <table id="course-competence-graph" class="course-competence-graph" data-competence-id="<%= @competence.id %>">
     <thead>
       <td>Provides</td>
       <td>Needed by</td>
@@ -16,7 +14,7 @@
       <tr>
         <td class="course-skills-column">
           <% @course.skills.each do |skill| %>
-            <%= link_to skill.description(I18n.locale), profilepath_skill_path(:id => skill.id, :profile_id => @profile), { :class => 'skill', 'data-skill-id' => skill.id } %>
+            <%= link_to skill.localized_description, competencepath_skill_path(:id => skill.id, :competence_id => @competence), { :class => 'skill', 'data-skill-id' => skill.id } %>
           <% end %>
         </td>
         <td id="skill-future"></td>
@@ -37,7 +35,7 @@
         <td id="skill-prereqs"></td>
         <td id="course-skills-column">
           <% @course.skills.each do |skill| %>
-            <%= link_to skill.description(I18n.locale), skill, { :class => 'skill', 'data-skill-id' => skill.id } %>
+            <%= link_to skill.localized_description, skill, { :class => 'skill', 'data-skill-id' => skill.id } %>
           <% end %>
         </td>
         <td id="skill-future"></td>
@@ -60,7 +58,7 @@
     <tr>
       <th><%=t :course_strict_prereqs %></th>
       <th></th>
-      <th><%= @course.name(I18n.locale) %> <%=t :course_strict_prereq_of %></th>
+      <th><%= @course.localized_name %> <%=t :course_strict_prereq_of %></th>
     </tr>
   </thead>
   <tbody>
@@ -70,7 +68,7 @@
       </td>
       <td class="current">
         <%= @course.course_code %><br />
-        <%= @course.name(I18n.locale) %>
+        <%= @course.localized_name %>
       </td>
       <td class="future">
         <!-- List of courses which depend on this course -->
@@ -79,9 +77,9 @@
         <% else %>
           <ul>
             <% @course.prereq_to.each do |course| %>
-              <% if !@profile || @profile.courses.include?(course) %>
+              <% if !@competence || @competence.courses.include?(course) %>
                 <li>
-                  <%= link_to course.course_code + ' ' + course.name(I18n.locale), {:id => course.id} %>
+                  <%= link_to course.course_code + ' ' + course.localized_name, {:id => course.id} %>
                 </li>
               <% end %>
             <% end %>

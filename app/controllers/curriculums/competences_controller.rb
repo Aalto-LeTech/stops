@@ -12,7 +12,7 @@ class Curriculums::CompetencesController < CurriculumsController
     #@profile = @competence.profile
     load_curriculum
   end
-  
+
   def index
     load_curriculum
     # FIXME: there are no profiles any more.
@@ -22,7 +22,7 @@ class Curriculums::CompetencesController < CurriculumsController
 
     respond_to do |format|
       format.json { render :json => @competences.select(<<-SQL
-          competence_nodes.id, 
+          competence_nodes.id,
           competence_descriptions.name AS translated_name
         SQL
       ).to_json(:methods => :strict_prereq_ids) } # :skill_ids
@@ -33,7 +33,7 @@ class Curriculums::CompetencesController < CurriculumsController
   def show
     @competence = Competence.includes(:skills => [:skill_descriptions, :skill_prereqs, :prereq_to]).find(params[:competence_id] || params[:id])
     load_curriculum
-    
+
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @competence }
@@ -61,14 +61,14 @@ class Curriculums::CompetencesController < CurriculumsController
   # GET /competences/1/edit
   def edit
     authorize! :update, @curriculum
-    
+
     # Add missing translations
     existing_locales = @competence.competence_descriptions.map {|description| description.locale}
     (REQUIRED_LOCALES - existing_locales).map do |locale|
       existing_locales = @competence.competence_descriptions << CompetenceDescription.new(:competence => @competence, :locale => locale, :name => '')
     end
-    
-    render :action => :edit, :layout => 'wide'
+
+    render :action => :edit, :layout => 'views/curriculums/container'
   end
 
 
@@ -78,17 +78,17 @@ class Curriculums::CompetencesController < CurriculumsController
     authorize! :update, @curriculum
 
     @hide_help = cookies[:hide_edit_competence_prereqs_help] == 't' ? true : false
-    
+
     @competence_node_url = curriculum_competence_path(:curriculum_id => @curriculum, :competence_id => @competence)
-    
-    render :action => 'edit_prereqs', :layout => 'wide'
+
+    render :action => 'edit_prereqs', :layout => 'views/curriculums/container'
   end
-  
+
   # PUT /competences/1
   # PUT /competences/1.xml
   def update
     authorize! :update, @curriculum
-    
+
     respond_to do |format|
       if @competence.update_attributes(params[:competence])
         format.html { redirect_to edit_curriculum_path(@curriculum) }
@@ -97,23 +97,23 @@ class Curriculums::CompetencesController < CurriculumsController
       end
     end
   end
-  
+
   def new
     load_curriculum
-    @competence = Competence.new(:curriculum => @curriculum)    
-    
+    @competence = Competence.new(:curriculum => @curriculum)
+
     authorize! :update, @curriculum
-    
+
     REQUIRED_LOCALES.each do |locale|
       @competence.competence_descriptions << CompetenceDescription.new(:competence => @competence, :locale => locale)
     end
   end
-  
+
   def create
     load_curriculum
     @competence = Competence.new(params[:competence])
     authorize! :update, @curriculum
-    
+
     respond_to do |format|
       if @competence.save
         format.html { redirect_to(edit_curriculum_path(@curriculum), :notice => 'Competence was successfully created.') }
@@ -161,8 +161,6 @@ class Curriculums::CompetencesController < CurriculumsController
   def graph
     @competence = Competence.find(params[:id])
 
-    render :action => 'graph', :layout => 'wide'
+    render :action => 'graph', :layout => 'views/curriculums/container'
   end
 end
-
-

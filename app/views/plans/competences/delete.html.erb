@@ -1,4 +1,9 @@
-<h1><%=t :competence_remove_from_plan, :competence => @competence.name(I18n.locale) %></h1>
+<% content_for(:stylesheets) do %>
+  <%= stylesheet_link_tag "views/plans/competences/shared", :media => 'all' %>
+<% end %>
+
+
+<h1><%=t :competence_remove_from_plan, :competence => @competence.localized_name %></h1>
 
 <p><%=t :competence_courses_to_remove %></p>
 
@@ -7,7 +12,7 @@
   <% @courses.each do |course| %>
     <tr>
       <td><%= course.course_code %></td>
-      <td><%= course.name(I18n.locale) %></td>
+      <td><%= course.localized_name %></td>
       <td><%= course.credits %></td>
     </tr>
     <% credits_counter += course.credits || 0 %>
@@ -23,6 +28,6 @@
 
 <%= form_tag studyplan_competence_path, :method => :delete do %>
   <p><%= submit_tag t(:Ok) %></p>
-  
+
   <p><%= link_to t(:Cancel), studyplan_competence_path(:id => @competence.id) %></p>
 <% end %>

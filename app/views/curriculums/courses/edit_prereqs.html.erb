@@ -1,11 +1,18 @@
-<% content_for :title do %><%= @scoped_course.localized_description.name %> - <%=t '.title' %><% end %>
+<% content_for :stylesheets do %>
+  <%= stylesheet_link_tag 'views/curriculums/edit_prereqs' %>
+<% end %>
 
-<% content_for :javascript do %>
+<% content_for :title do %>
+  <%= @scoped_course.localized_name + ' - ' + t('.title') %>
+<% end %>
+
+<% content_for :javascripts do %>
   <script type="text/javascript">
     <%= render "curriculums/courses/skill_editor/skill_editor_i18n_strings.js" %>
   </script>
-  <%= javascript_include_tag 'curriculums/skillEditor_edit_prereqs_init.js' %>
+  <%= javascript_include_tag 'views/curriculums/skillEditor_edit_prereqs_init.js' %>
 <% end %>
+
 
 <%= render 'tabs' %>
 

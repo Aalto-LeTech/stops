@@ -7,8 +7,11 @@ class Plans::CompetencesController < PlansController
   #before_filter :login_required
   before_filter :load_plan
 
+
   def index
     @chosen_competence_ids = @study_plan.competence_ids.to_set
+
+    render :action => :index, :layout => 'browser'
   end
 
   # GET /plans/1/competence/1

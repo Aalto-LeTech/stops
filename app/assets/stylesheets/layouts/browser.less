@@ -1,0 +1,130 @@
+////////////////////////////////////////////////////////////////////////////////
+// layouts/browser.less
+//
+// The Less spec for the layout.
+//
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////
+// Import shared variables and definitions
+
+@import "core/core.less";
+
+
+////////////////////////////////////////////////////////////////////////////////
+// Scaffolding
+
+@layoutMaxWidth:  1400px;
+@sidebarWidth:    300px;
+@mainMaxWidth:    @layoutMaxWidth - @sidebarWidth;
+@sidebarGap:      2em;
+@sidebarMargin:   @sidebarWidth + @sidebarGap;
+
+
+@media screen and (max-width: 979px)
+{
+  #theleftwrapper
+  {
+    position: static;
+    width: auto;
+    height: 100%;
+  }
+  #themain
+  {
+    margin: auto;
+    width: auto;
+  }
+}
+
+@media screen and (min-width: 980px)
+{
+  #theleftwrapper
+  {
+    position: absolute;
+    width: @sidebarWidth;
+  }
+  #themain
+  {
+    margin: 0 0 0 @sidebarMargin;
+    max-width: @mainMaxWidth;
+  }
+  #thewrapper, #thecontainer, #themain
+  {
+    min-height: 400px;
+  }
+}
+
+#theleftwrapper
+{
+  z-index: 2;
+  overflow: auto;
+}
+
+#theleft
+{
+  padding: 1em;
+}
+
+#themain
+{
+  padding: 1em;
+}
+
+footer
+{
+  padding: 1em;
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+// Styling
+
+@linerColor: #DDD;
+
+
+#theleft
+{
+  font-size: 0.9em;
+
+  h2
+  {
+    font-size: 100%;
+  }
+
+  a
+  {
+    color: #404040;
+    text-decoration: none;
+
+    &:hover
+    {
+      text-decoration: underline;
+    }
+  }
+
+  .chosen
+  {
+    a
+    {
+      color: green !important;
+    }
+  }
+
+  .selected
+  {
+    font-weight: bold;
+
+    a
+    {
+      text-decoration: underline !important;
+      color: blue !important;
+    }
+  }
+}
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////

@@ -44,10 +44,9 @@ fi:
 
     schedule:
       show:
+        scheduling: "Aikataulutus"
         curriculum: "Opinto-opas"
-        controls: "Suunnitelman hallinta"
-        actions: "Toiminnot"
-        save_button: "Tallenna suunnitelma"
+        save: "Tallenna"
         selected_course: "Valittu kurssi"
         credits:
           one: "opintopiste"
@@ -60,8 +59,9 @@ fi:
         competences: "Kompetenssit"
         no_chosen_competences: "Ei valittuja kompetensseja"
 
-        heading: "Oma opintosuunnitelma"
         empty_instructions: "Valitse opinto-oppaasta itseäsi kiinnostavat kompetenssit"
+        code: "Koodi"
+        name: "Nimi"
         extent: "Laajuus"
         grade: "Arvosana"
         length: "Kesto"
@@ -70,6 +70,7 @@ fi:
         grade_tooltip: "Tähän voit päivittää kurssista saamasi arvosanan (0-5)."
         length_tooltip: "Tällä voit muokata kurssin kestoa opintojaksoissa, jos ko. opintojaksolla järjestettävän kurssin kesto eroaa nyt kuvatusta."
         competence_progress_tooltip: "Tämä kuvaa kompetenssin kurssivaatimusten tyydyttämisen edistymistä."
+
       show_i18n_strings:
         period_credits_tooltip_underbooked: "Opintojaksosi kurssien opintopisteiden summa on selvästi alle opintojaksoille suositellun 15 op. Arvioi olisiko järkevää siirtää tähän opintoja muilta opintojaksoilta."
         period_credits_tooltip_overbooked: "Opintojaksosi opintokuorma on selvästi suositeltua suurempi. Mieti onko kuorma varmasti realistinen ja olisiko kenties mahdollista tasata opintoja muille opintojaksoille."

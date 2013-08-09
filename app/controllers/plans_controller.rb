@@ -1,11 +1,9 @@
-# Study plan controller
 class PlansController < ApplicationController
 
   before_filter :authenticate_user
 
   before_filter :load_plan
 
-  layout 'plan'
 
   def load_plan
     @user = current_user
@@ -86,7 +84,7 @@ class PlansController < ApplicationController
     authorize! :read, @study_plan
 
     # Get periods, competences, user courses and study plan course data
-    number_of_buffer_periods = 3 # FIXME should be more like 12
+    number_of_buffer_periods = 15 # FIXME should be more like 15
     periods = @study_plan.periods(number_of_buffer_periods).includes(:localized_description)
     competences = @study_plan.competences.includes([:localized_description, :courses])
     user_courses = @user.user_courses.includes(:course_instance)
@@ -143,6 +141,7 @@ class PlansController < ApplicationController
 
     # Form and send the response
     respond_to do |format|
+      format.html { redirect_to studyplan_schedule_path }
       format.json { render json: {
           periods: periods_json,
           competences: competences_json,

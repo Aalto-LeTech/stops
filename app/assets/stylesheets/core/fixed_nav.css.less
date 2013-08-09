@@ -1,0 +1,32 @@
+////////////////////////////////////////////////////////////////////////////////
+// fixed_nav.css.less
+//
+// Just some tweaks for a nice world with a fixed top nav.
+//
+
+
+
+
+// Note: The height of the nav could be set here as a variable and used where
+// needed. Also note that currently the css from this file is imported directly
+// into the layout which should not be the case if we make use of less here.
+
+body
+{
+  padding-top: 40px;
+
+  @media screen and (max-width: 979px)
+  {
+    padding-top: 0px;
+
+    .navbar-fixed-top .navbar-inner, .navbar-fixed-bottom .navbar-inner
+    {
+      padding: 0px;
+    }
+  }
+}
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////

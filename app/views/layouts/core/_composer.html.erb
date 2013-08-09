@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="<%= I18n.locale %>">
+
+  <% content_for(:corestylesheets) do %>
+    <%= fixed_nav ? stylesheet_link_tag('core/fixed_nav', :media => 'all') : '' %>
+  <% end %>
+
+  <%= render partial: 'layouts/core/head' %>
+
+  <body>
+
+    <%= render partial: 'layouts/navs/top', locals: {fixed_nav: fixed_nav}  %>
+
+    <%= render partial: 'layouts/frames/' + layout  %>
+
+    <% if content_for?(:thebarebody) %>
+      <%= yield(:thebarebody) %>
+    <% else %>
+      <div id="thewrapper">
+        <% if content_for?(:thewrapper) %>
+          <%= yield(:thewrapper) %>
+        <% else %>
+          <div id="thecontainer">
+            <%= yield(:thecontainer) %>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+
+
+    <div id="javascripts">
+      <%= javascript_include_tag 'core/core' %>
+      <%= javascript_include_tag 'layouts/' + layout %>
+      <%= yield(:javascripts) %>
+    </div>
+
+  </body>
+
+</html>

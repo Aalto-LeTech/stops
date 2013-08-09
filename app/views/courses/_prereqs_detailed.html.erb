@@ -1,4 +1,6 @@
-<h2><%=t :course_prereqs %></h2>
+<h2>
+  <%= t(:course_prereqs) %>
+</h2>
 
 <% if @course.prereqs.empty? %>
   <p><%=t :course_no_prereqs %></p>
@@ -20,7 +22,7 @@
             <td></td>
           <% end %>
         </tr>
-      
+
         <tr class="prereq-course-name">
           <!-- Course name -->
           <td class="prereq-course-name">
@@ -28,12 +30,12 @@
           </td>
           <td colspan='<%= @course.skills.size %>'></td>
         </tr>
-        
+
         <% prereq_course.skills.each do |prereq_skill| %>
           <tr>
             <!-- Skill -->
             <td class="prereq-skill-description"><%= prereq_skill.description(I18n.locale) %></td>
-            
+
             <!-- Relations -->
             <% @course.skills.each do |skill| %>
               <td>
@@ -42,7 +44,7 @@
             <% end %>
           </tr>
         <% end %>
-        
+
       <% end %>
 
     </tbody>

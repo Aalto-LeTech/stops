@@ -10,20 +10,19 @@ fi:
   navi_my_plan: "Oma opintosuunnitelma"
   navi_browse_curriculums: "Selaa opinto-oppaita"
 
-  header:
-    program_name: "Opiskelijaa ohjaava opinto-opas"
-    dashboard: "Ohjauskeskus"
-    curriculum: "Opinto-opas"
-    competences: "Kompetenssit"
-    courses: "Kurssit"
-    schedule: "Aikataulu"
-    login: "Kirjaudu"
-    logout: "Kirjaudu ulos"
+  layouts:
+    navs:
+      top:
+        program_name: "Opiskelijaa ohjaava opinto-opas"
+        schedule: "Aikataulutus"
+        curriculum: "Opinto-opas"
+        competences: "Kompetenssit"
+        courses: "Kurssit"
+        login: "Kirjaudu"
+        logout: "Kirjaudu ulos"
 
   example_schedule: "Mallilukujärjestys"
 
-  cr: "op"
-  Cr: "Op"
   Ok: "OK"
   Upload: "Tallenna"
   Create: "Luo"
@@ -35,8 +34,6 @@ fi:
   Cancel: "Peruuta"
   Back: "Takaisin"
   Visualize: "Visualisoi"
-  Course_code: "Kurssikoodi"
-  course_code: "kurssikoodi"
   admin_toolbox_heading: "Admin"
 
 
@@ -101,3 +98,15 @@ fi:
       taken: "on varattu"
       too_short: "on liian lyhyt"
       confirmation: "ei täsmää"
+
+
+  ###########################
+  # App specific
+  ###########################
+
+  Course_code: "Kurssikoodi"
+  course_code: "kurssikoodi"
+  cr: "op"
+  Cr: "Op"
+  competence: "Kompetenssi"
+  scoped_course: "Kurssi"

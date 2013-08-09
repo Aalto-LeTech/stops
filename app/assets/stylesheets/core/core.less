@@ -1,0 +1,434 @@
+////////////////////////////////////////////////////////////////////////////////
+// core/core.less
+//
+// Defines the Less shared by (almost) every layout (and view) around the app.
+//
+
+
+////////////////////////////////////////////////////////////////////////////////
+// Intro
+//
+// This file imports Bootstrap's Less files and customizes/builds on top of it.
+// All the layouts of the app should import this file and tweak it as needed.
+// Note that neither this file nor any '.less' file should find their way into
+// the compiled assets. These shouldn't be referenced from any '.html(.erb)'
+// layout, view or partial. Only the '.css.less' files that use these should end
+// up as '.css' files in the final assets set and referenced from the '.html'
+// views.
+//
+// By having this hierarchy it is possible f. ex. to alter, say, the Bootstrap's
+// base font size from a single specific view
+// 'frontpage/index_for_the_blind.html' by simply redefining the variable there
+// and seeing how the new value influences all the elements that are affected by
+// the variable (These could include heading sizes, sidebar widths, text boxes
+// sizes etc.). This is possible, because the Bootstrap + all of our CSS the
+// view is rendered with is completely different from that of the other views
+// with no variable tweaking -- without any overriding of variable definitions..
+//
+// While developing new styling, one should tie all definitions to the things
+// they depend on so that, f. ex. when one decides to swap from using f.ex. the
+// color orange to the color blue, one could change a single variable instead of
+// hunting down every duplicate, shade and variant of the previously used orange
+// from the hard-coded style specification files.
+
+
+////////////////////////////////////////////////////////////////////////////////
+// Import Bootstrap
+
+// Import core Bootstrap.
+@import "twitter/bootstrap/bootstrap";
+
+// Import Bootstrap's responsive portion and overrides
+@import "twitter/bootstrap/responsive";
+
+
+////////////////////////////////////////////////////////////////////////////////
+// Scaffolding
+
+html, body
+{
+  height: 100%;
+}
+
+#thewrapper
+{
+  width: 100%;
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+// Bootstrap navbar tweaks
+
+@navBarColorA: #0072d6;
+@navBarColorB: #0057a3;
+
+.navbar
+{
+  ////////////////////////////////////////////////////////////////////////////////
+  // Brand
+
+  .brand
+  {
+    color: white;
+    text-shadow: 0 1px 0 #000;
+  }
+
+  .nav > li > a
+  {
+    color: #fff;
+    text-shadow: none;
+
+    &:hover
+    {
+      color: #fff;
+      text-decoration: underline;
+    }
+  }
+
+  .divider-vertical
+  {
+    border-right: 1px solid @navBarColorA;
+    border-left: 1px solid @navBarColorB;
+  }
+
+  .navbar-inner
+  {
+    background-color: #0065BD;
+    #gradient > .vertical(@navBarColorA, @navBarColorB);
+
+    // Display width dependent navbar tweaks
+    @media (max-width: 1200px)
+    {
+      // Hide the full-length program name when there isn't enough space to display it.
+      .program-name
+      {
+        display: none !important;
+      }
+    }
+  }
+
+  .lang-link
+  {
+    display: inline-block;
+
+    & + .lang-link
+    {
+      padding-left:   5px;
+      padding-right:  5px;
+    }
+
+    &:first-child
+    {
+      padding-right:  5px;
+    }
+
+    &:last-child
+    {
+      padding-left:   5px;
+      padding-right:  15px;
+    }
+  }
+
+  .navbar-link, .navbar-text
+  {
+    color:        #fff;
+  }
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+// Headings
+
+h1, h2, h3, h4
+{
+  font-family: sans-serif;
+  margin: 2em 0em .5em 0em;
+}
+
+h1
+{
+  font-size: 180%;
+}
+
+h2
+{
+  font-size: 120%;
+}
+
+h3
+{
+  font-size: 110%;
+}
+
+h4
+{
+  font-weigth: normal;
+  font-size: 100%;
+
+  &.colorful
+  {
+    color: #F06118;
+    border-bottom: 1px solid #704500;
+  }
+}
+
+h1 + h2, h1 + h3, h2 + h3
+{
+  margin-top: 1em;
+}
+
+h1:first-child, h2:first-child, h3:first-child, h4:first-child
+{
+  margin-top: 0px;
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+// Text classes
+
+.hint
+{
+  color: #a0a0a0;
+  font-size: small;
+  font-style: italic;
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+// Status modifiers
+
+div
+{
+  &.chosen
+  {
+    border: 3px solid #202060;
+    background: #eeeeff;
+  }
+
+  &.selected
+  {
+    border: 5px solid #303090;
+    background: #e1e1ff;
+  }
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+// General utility classes
+
+.clear
+{
+  clear: both;
+}
+
+.hide
+{
+  display: none;
+}
+
+.invisible
+{
+  visibility: hidden;
+}
+
+// Micro clearfix hack
+//   source: http://nicolasgallagher.com/micro-clearfix-hack/
+.clearfix
+{
+  @include clearfix;
+}
+
+.centered
+{
+  text-align: center;
+}
+
+.placeholder
+{
+  font-style:   italic;
+  color:        gray;
+  font-size:    0.9em;
+  font-family:  Arial, sans-serif;
+}
+
+.full-height
+{
+  height: 100%;
+}
+
+.scroll-vertical
+{
+  overflow-y: scroll;
+}
+
+.bottom-weight
+{
+  margin-bottom: 20px;
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+// Bootstrap style additions
+
+.popover.closable-popover {
+  // Better positiniong for popover close button
+  .close {
+    position: relative;
+    top:   5px;
+    right: 5px;
+  }
+
+  // Leave some space for close button
+  .popover-title {
+    padding-right: 30px;
+  }
+}
+
+.nav-tabs > li > .btn-mini {
+  /* Align mini button to the center */
+  margin: 8px 5px;
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+// Controls & Forms
+
+.form-control-group
+{
+  margin-bottom: 20px;
+}
+
+.form-label
+{
+  width:          140px;
+  float:          left;
+  padding-top:    5px;
+  margin-bottom:  5px;
+  text-align:     right;
+}
+
+.form-controls
+{
+  margin-left: 160px;
+}
+
+.field-lengthy
+{
+  width: 300px;
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+// Prereq graph
+
+.course-graph
+{
+  td
+  {
+    vertical-align: middle;
+    padding: .5em;
+    font-family: sans-serif;
+  }
+
+  .graph-current a
+  {
+    border: 2px solid #8080ff;
+    font-size: 100%;
+    font-weight: bold;
+  }
+
+  p
+  {
+    display: block;
+    border: 1px solid #d0d0d0;
+    background: #e0e0ff;
+    margin: .5em 0em;
+    padding: .2em .5em;
+    font-size: small;
+  }
+
+  a
+  {
+    text-decoration: none;
+    color: black;
+  }
+}
+
+#course-graph
+{
+  z-index: 2;
+  position: relative;
+  left: 0px;
+  top: 0px;
+
+  div.course {
+    position: absolute;
+    width: 500px;
+    font-size: 11px;
+    font-family: sans-serif;
+    border: 1px solid #8080a0;
+    background: #e0e0ff;
+    -moz-border-radius: 4px;
+    padding: 2px;
+    margin: 0px;
+    cursor: pointer;
+
+    h1 {
+      font-size: 10px;
+      padding: 0px;
+      margin: 0px;
+      line-height: 20px;
+    }
+
+    ul {
+      padding: 0px;
+      margin: 0px;
+      border-bottom: 1px solid #d0d0d0;
+      border-left: 1px solid #d0d0d0;
+      border-right: 1px solid #d0d0d0;
+    }
+
+    li {
+      display: block;
+      padding: 1px;
+      margin: 0px 0px;
+      border-top: 1px solid #d0d0d0;
+      background: #f0f0ff;
+    }
+
+    li.hilight {
+      background: #c0c0ff;
+    }
+
+    li.hilight-strong {
+      background: #b0b0ff;
+      text-decoration: underline;
+    }
+  }
+
+  div.competence {
+    background: #e0ffe0;
+  }
+
+  div.cyclic {
+    background: #ffe0e0;
+  }
+}
+
+#layers
+{
+  position: relative;
+}
+
+#svg
+{
+  z-index: 1;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+}
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////

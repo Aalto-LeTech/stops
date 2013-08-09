@@ -18,7 +18,7 @@
     <p><%=t '.leave_new_comment' %></p>
     <%= form_for @new_comment, :url => create_comment_curriculum_course_path(:curriculum_id => @curriculum, :id => @scoped_course) do |f| %>
       <p><%= f.text_area :comment, :rows => 4, :class => 'input-xxlarge' %></p>
-      
+
       <p><%= f.submit t(:Send), :class => 'btn btn-primary' %></p>
     <% end %>
 

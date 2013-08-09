@@ -1,3 +1,8 @@
+<% content_for(:stylesheets) do %>
+  <%= stylesheet_link_tag "views/plans/courses", :media => 'all' %>
+<% end %>
+
+
 <h1><%=t('.heading')%></h1>
 
 <% if @competences.empty? %>

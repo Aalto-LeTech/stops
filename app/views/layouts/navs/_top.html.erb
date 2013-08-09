@@ -1,0 +1,61 @@
+<div id="thenavbar" class="navbar<%= fixed_nav ? ' navbar-fixed-top' : '' %>">
+  <div class="navbar-inner">
+    <div class="container-fluid">
+
+      <a class="btn btn-navbar" data-target=".nav-collapse" data-toggle="collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </a>
+
+      <a class="brand" href="<%= frontpage_path %>">
+        <div>
+          <span>O<sup>4</sup></span>
+          <span class="program-name"><%= t('.program_name') %></span>
+        </div>
+      </a>
+
+      <div class="container-fluid nav-collapse">
+
+        <ul class="nav">
+          <% if logged_in? %>
+            <%= nav_link_to t('.schedule'), frontpage_path %>
+            <%= nav_link_to t('.curriculum'), studyplan_curriculum_path %>
+            <%= nav_link_to t('.competences'), studyplan_competences_path %>
+            <%= nav_link_to t('.courses'), studyplan_courses_path %>
+          <% end %>
+        </ul>
+
+        <ul class="nav pull-right">
+
+          <li>
+            <%= link_to 'FI', url_for(:locale => 'fi'), :class => 'lang-link' %>
+            <%= link_to 'EN', url_for(:locale => 'en'), :class => 'lang-link' %>
+          </li>
+
+          <li class="divider-vertical"></li>
+
+          <% if logged_in? %>
+            <li>
+              <p class="navbar-text">
+                <i class="icon-user"></i>
+                <%= current_user.name %>
+              </p>
+            </li>
+            <!--li><%= link_to 'My preferences', preferences_path %></li-->
+            <li>
+              <%= link_to t('.logout'), logout_path %>
+            </li>
+          <% else %>
+            <li>
+              <%= link_to t('.login'), login_url %>
+            </li>
+          <% end %>
+
+        </ul>
+
+      </div>
+
+    </div>
+  </div>
+</div>

@@ -68,7 +68,7 @@ class Curriculums::CompetencesController < CurriculumsController
       existing_locales = @competence.competence_descriptions << CompetenceDescription.new(:competence => @competence, :locale => locale, :name => '')
     end
 
-    render :action => :edit, :layout => 'views/curriculums/container'
+    render :action => 'edit', :layout => 'views/curriculums/container'
   end
 
 
@@ -107,6 +107,8 @@ class Curriculums::CompetencesController < CurriculumsController
     REQUIRED_LOCALES.each do |locale|
       @competence.competence_descriptions << CompetenceDescription.new(:competence => @competence, :locale => locale)
     end
+    
+    render :action => 'new', :layout => 'views/curriculums/browser'
   end
 
   def create

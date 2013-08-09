@@ -1,16 +1,19 @@
 <% content_for :javascript do %>
   <%= javascript_include_tag 'graph/graphView' %>
+  <%= javascript_include_tag 'curriculums/courseGraph' %>
 <% end %>
 <% content_for :title do %><%= @scoped_course.localized_description.name %> - <%=t '.title' %><% end %>
 
 <%= render :partial => 'tabs' %>
 
-<div id="layers">
-  <div id="svg"></div>
-  <div id="course-graph" 
-    data-course-id="<%= @scoped_course.id %>" 
+<div id="course-graph" 
     data-courses-path="<%= curriculum_courses_path(:curriculum_id => @curriculum.id) %>" 
     data-competences-path="<%= curriculum_competences_path(:curriculum_id => @curriculum.id) %>" 
-    data-skills-path="<%= curriculum_skills_path(:curriculum_id => @curriculum.id) %>">
-  </div>
+    data-skills-path="<%= curriculum_skills_path(:curriculum_id => @curriculum.id) %>"
+    data-source-id="<%= @scoped_course.id %>"
+    >
+    
+    <!-- ko template: { name: 'courseTemplate', foreach: visibleCourses, afterRender: updateElementDimensions } --><!-- /ko -->
 </div>
+
+<%= render :partial => 'courses/graph_templates' %>

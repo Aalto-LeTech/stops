@@ -63,10 +63,10 @@
       <% @curriculum.courses.each_with_index do |course, i| %>
         <tr>
           <td>
-            <%= course.course_code %>
+            <%= link_to course.course_code, curriculum_course_path(curriculum_id: @curriculum, id: course) %>
           </td>
           <td>
-            <%= course.localized_name_if_possible "<#{t('curriculums.course_name_not_available')}>" %>
+            <%= link_to course.localized_name_if_possible("<#{t('curriculums.course_name_not_available')}>"), curriculum_course_path(curriculum_id: @curriculum, id: course) %>
           </td>
           <td class="centered"><%= course.credits %></td>
           <td class="centered"><%= course.periods_as_roman_numerals.join(", ") %></td>

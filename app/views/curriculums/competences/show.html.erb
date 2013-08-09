@@ -1,5 +1,10 @@
 <!-- curriculums/competences/show -->
-<h1><%= @competence.name(I18n.locale) %></h1>
+<% content_for :javascript do %>
+  <%= javascript_include_tag 'graph/graphView' %>
+  <%= javascript_include_tag 'curriculums/courseGraph' %>
+<% end %>
+
+<h1><%= @competence.localized_name %></h1>
 
 <% if can? :update, @competence %>
   <div class="admin-tools well">
@@ -15,14 +20,14 @@
 <% end %>
 
 
-<p><%= @competence.description(I18n.locale) %></p>
+<p><%= @competence.localized_description.description %></p>
 
 
 <h2><%=t :competence_skills_heading %></h2>
 
 <ul>
   <% @competence.skills.each do |skill| %>
-    <li><%= skill.description(I18n.locale) %></li>
+    <li><%= skill.localized_description.description %></li>
   <% end %>
 </ul>
 <!--td>< link_to t(:contributing_courses_link), curriculum_competence_skill_path(:curriculum_id => @curriculum.id, :competence_id => @competence.id, :id => skill.id) ></td-->
@@ -31,16 +36,21 @@
 <h2><%=t :competence_courses_heading %></h2>
 <ul>
   <% @competence.courses.each do |course| %>
-    <li><%= course.course_code %> <%= course.name(I18n.locale) %></li>
+    <li><%= course.course_code %> <%= course.localized_name %></li>
   <% end %>
 </ul>
 
-<p>
-  <%= link_to graph_curriculum_competence_path(:curriculum_id => @curriculum.id, :id => @competence.id) do %>
-    <%= image_tag 'visualization-button.png' %><br />
-    <%= t('.graph_link') %>
-  <% end %>
-</p>
+<div id="course-graph" 
+    data-courses-path="<%= curriculum_courses_path(:curriculum_id => @curriculum.id) %>" 
+    data-competences-path="<%= curriculum_competences_path(:curriculum_id => @curriculum.id) %>" 
+    data-skills-path="<%= curriculum_skills_path(:curriculum_id => @curriculum.id) %>"
+    data-source-id="<%= @competence.id %>"
+    >
+    <!-- ko template: { name: 'courseTemplate', foreach: visibleCourses, afterRender: updateElementDimensions } --><!-- /ko -->
+</div>
 
+<%= render :partial => 'courses/graph_templates' %>
+
+<% # TODO: plain list of courses %>
 
 <p><%= link_to t(:Back), @curriculum %></p>

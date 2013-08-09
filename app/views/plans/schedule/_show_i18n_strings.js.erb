@@ -1,4 +1,4 @@
-/* Loads translated i18n strings used by dashboardView.js.coffee */
+/* Loads translated i18n strings used by schedule/show.js.coffee */
 (function() {
   var i18n;
 
@@ -18,6 +18,8 @@
     course_tooltip_passed:                "<%= escape_javascript(t('.course_tooltip_passed')) %>",
   };
 
-  /* Make translations available */
-  window.i18n = i18n;
+  /* Translations available at O4.schedule.i18n */
+  var O4 = window.O4 = window.O4 || {};
+  O4.schedule = O4.schedule || {};
+  O4.schedule.i18n = i18n;
 })();

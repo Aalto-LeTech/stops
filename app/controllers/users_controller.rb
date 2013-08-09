@@ -45,4 +45,47 @@ class UsersController < ApplicationController
       format.json { render :json => user_courses.to_json }
     end
   end
+
+  def search_users
+
+    users = nil
+    inquery = params[:inquery] if params[:inquery]
+
+    if inquery
+
+      users = User.search(
+        inquery,
+        star: true,
+        ranker: :proximity_bm25
+      )
+
+      if users.total_entries > 0
+
+        users = users.map do |user|
+          {
+            id:    user.id,
+            name:  user.name,
+            snum:  user.studentnumber
+          }
+        end
+
+      end
+
+    else
+      puts "ERROR: No query string given!"
+    end
+
+    response_json = {
+      :status   => :ok,
+      :inquery  => inquery,
+      :users    => users
+    }.to_json
+
+    respond_to do |format|
+      format.json do
+        render :json => response_json
+      end
+    end
+  end
+
 end

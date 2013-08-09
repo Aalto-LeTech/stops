@@ -1,0 +1,19 @@
+/* Loads translated i18n strings used by search/engine.js.coffee */
+(function() {
+  var i18n;
+
+  /* i18n strings */
+  i18n = {
+    current_locale:                       "<%= I18n.locale %>",
+    required_locales:                     ["<%= REQUIRED_LOCALES.join('","').html_safe %>"],
+    query_too_short:                      "<%= escape_javascript(t('search_engine.query_too_short')) %>",
+    no_results_found:                     "<%= escape_javascript(t('search_engine.no_results_found')) %>",
+    a_result_found:                       "<%= escape_javascript(t('search_engine.a_result_found')) %>",
+    x_results_found:                      "<%= escape_javascript(t('search_engine.x_results_found')) %>",
+  };
+
+  /* Translations available at O4.search.i18n */
+  var O4 = window.O4 = window.O4 || {};
+  O4.search = O4.search || {};
+  O4.search.i18n = i18n;
+})();

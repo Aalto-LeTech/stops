@@ -4,6 +4,9 @@
 
 
 <% content_for(:javascripts) do %>
+  <script type="text/javascript">
+    <%= render "search_engine_i18n_strings.js" %>
+  </script>
   <%= javascript_include_tag "views/plans/courses/index", :media => 'all' %>
 <% end %>
 
@@ -20,12 +23,14 @@
 
 <div class="search-results-container" data-courses-path="<%= search_courses_curriculum_path(@study_plan.curriculum_id) %>">
 
-  <!-- ko ifnot: results -->
-    <p><%= t('.no_results') %></p>
+  <!-- ko if: infomsg -->
+    <p data-bind="text: infomsg"></p>
   <!-- /ko -->
   <!-- ko foreach: results -->
-    <div class="result">
-      <div class="name" data-bind="text: name"></div>
+    <div class="row-fluid result">
+      <span class="span3 code" data-bind="text: code"></span>
+      <span class="span8 name" data-bind="text: name"></span>
+      <span class="span1 credits" data-bind="text: credits"></span>
     </div>
   <!-- /ko -->
 

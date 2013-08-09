@@ -276,46 +276,54 @@ class CurriculumsController < ApplicationController
 
 
   def search_courses
-    # before using this: http://pat.github.io/thinking-sphinx/quickstart.html
-    #   rake ts:index
-    #   rake ts:start
-    puts params.to_s
+
+    scoped_courses = []
     inquery = params[:inquery] if params[:inquery]
+
     if inquery
+
       curriculum_id = params[:id]
-      results = User.search(
+
+      puts "SEARCHING!"
+      scoped_courses = ScopedCourse.search(
         inquery,
-        star: true,
-        ranker: :proximity_bm25
+        star:    true,
+        ranker:  :proximity_bm25,
+        with:    {curriculum_id: curriculum_id}
       )
-      if results.total_entries > 0
-        puts "  Found %d results with \"%s\":" % [ results.total_entries, inquery ]
-        results.each_with_index do |r, i|
-          puts "    R[%d] %s" % [ i+1, r ]
-          puts "       name: %s" % [ r.name ]
-          puts "       snum: %s" % [ r.studentnumber ]
-          puts "      email: %s" % [ r.email ]
+
+      puts "Processing %d entries." % [ scoped_courses.total_entries ]
+      if scoped_courses.total_entries > 0
+
+        scoped_courses = scoped_courses.map do |scoped_course|
+          {
+            id:       scoped_course.id,
+            code:     scoped_course.course_code,
+            name:     scoped_course.localized_name,
+            credits:  scoped_course.credits,
+            path:     curriculum_course_path(scoped_course.id)
+          }
         end
       else
-        puts "  No matching results found with \"%s\"!" % [ inquery ]
+        scoped_courses = []
       end
-      puts ""
-#      results = ScopedCourse.search(
-#        inquery,
-#        star: true,
-#        ranker: :proximity_bm25,
-#        with: {curriculum_id: curriculum_id}
-#      )
-      results_json = results.as_json(
-        only: [:id, :name, :studentnumber],
-        root: false
-      )
+
     else
       puts "ERROR: No query string given!"
-      results = []
     end
+
+    puts "Jsonifying %s!" % [ scoped_courses ]
+    response_json = {
+      :status          => :ok,
+      :inquery         => inquery,
+      :scoped_courses  => scoped_courses
+    }.to_json
+    puts "Done!"
+
     respond_to do |format|
-      format.json { render :json => {status: :ok, inquery: inquery, results: results_json} } #
+      format.json do
+        render :json => response_json
+      end
     end
   end
 

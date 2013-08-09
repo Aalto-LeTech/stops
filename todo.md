@@ -23,7 +23,6 @@ Acknowledgements
   - There are open questions and bugs I'd need to look after.
 
 - [ ] fix: affxd sidebar issue
-- [ ] fix: affxd sidebar issue
 
 - [ ] address questions arisen so far:
 - [ ]   what about html views/plans/courses and its js plans/showCourse

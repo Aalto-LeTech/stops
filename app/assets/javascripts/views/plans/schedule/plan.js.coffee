@@ -1,5 +1,5 @@
 # Check that i18n strings have been loaded before this file
-if not i18n
+if not O4.schedule.i18n
   throw "plan view i18n strings have not been loaded!"
 
 class @PlanView
@@ -14,7 +14,7 @@ class @PlanView
   constructor: (@planUrl) ->
     # i18n string support. Accessible from the view like this:
     #   <span data-bind="text: $root.i18n['qwerty'] "></span>
-    @i18n = i18n
+    @i18n = O4.schedule.i18n
 
     @selectedObject = ko.observable()
     @selectedObjectType = ko.observable()
@@ -142,7 +142,7 @@ class @PlanView
     # instead of the default 'auto', which would cause irritable bouncing of the
     # plan div below it as the size of the former div changes.
     # The 'update' method is also called so that it can realize that the size of
-    # the div it is to 'side' has changed as periods have been injected into it. 
+    # the div it is to 'side' has changed as periods have been injected into it.
     affixedSidebar = affxd.Sidebar::get()
     affixedSidebar.staticHeight = 600
     affixedSidebar.update()

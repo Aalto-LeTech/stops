@@ -32,7 +32,6 @@ fi:
     courses:
       index:
         heading: "Kurssihaku"
-        no_results: "Ei hakutuloksia."
       show:
         study_plan: "Opintosuunnitelmasi"
         study_plan_courses: "Suunnitelman kurssit"

@@ -3,7 +3,7 @@ class Curriculums::CoursesController < CurriculumsController
   before_filter :load_curriculum
 
   respond_to :json
-
+  # html for only show, new & create
 
   # GET /courses
   # GET /courses.xml

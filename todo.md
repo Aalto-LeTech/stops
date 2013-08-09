@@ -26,8 +26,6 @@ Acknowledgements
 - [ ]   is "/:locale/courses*" not used at all? -- are the controller and views
         deprecated?
 - [ ]   how does "/:locale/skills*" work?
-- [ ]   curriculums/courses controller only responds to JSON. Should the views be erased?
-- [ ]   might there be other similar cases?
 - [ ]   some js files contained hard coded urls, should these be made .erb files
         with url helpers inserting data into them?
 - [ ]   more testing needed

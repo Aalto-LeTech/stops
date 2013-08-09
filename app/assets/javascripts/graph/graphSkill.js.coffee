@@ -30,9 +30,13 @@ class @GraphSkill
     @course.prereqStrength[prereq.course.id] += 1.0
   
   # Draw edges to backward neighbors
-  drawPrereqArcs: ->
+  drawPrereqArcs: (options) ->
+    options ||= {}
+  
     for neighbor in @prereqs
       continue unless (neighbor.element && neighbor.visible && neighbor.course.visible)
+      continue if options['maxLength'] && @course.level - neighbor.course.level > options['maxLength']
+      
       from = @element.position()
       to = neighbor.element.position()
       
@@ -44,9 +48,13 @@ class @GraphSkill
         1, false)
 
   # Draw edges to forward neighbors
-  drawPostreqArcs: ->
+  drawPostreqArcs: (options) ->
+    options ||= {}
+    
     for neighbor in @prereqTo
       continue unless (neighbor.element && neighbor.visible && neighbor.course.visible)
+      continue if options['maxLength'] && neighbor.course.level - @course.level > options['maxLength']
+      
       from = @element.position()
       to = neighbor.element.position()
       

@@ -317,8 +317,12 @@ class @GraphView
     course.drawPostreqArcs()
     
     for skill in course.skills
+      continue unless skill.visible
+      
       # Hilight all skills
       skill.highlighted(true)
+      #skill.drawPostreqArcs(maxLength: 1)
+      #skill.drawPrereqArcs(maxLength: 1)
       
       # Hilight direct prereqs
       for neighbor in skill.prereqs

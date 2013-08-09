@@ -19,7 +19,13 @@
       <tbody>
         <% @curriculums.each do |curriculum| %>
           <tr>
-            <td data-name="true"><%= link_to curriculum.name, curriculum_url(:id => curriculum) %></td>
+            <td data-name="true">
+              <% if can? :update, curriculum %>
+                <%= link_to curriculum.name, edit_curriculum_path(:id => curriculum) %>
+              <% else %>
+                <%= link_to curriculum.name, curriculum_path(:id => curriculum) %>
+              <% end %>
+            </td>
             <td><%= curriculum.start_year %>-<%= curriculum.end_year %></td>
             <!--
             <% if can? :destroy, curriculum %>

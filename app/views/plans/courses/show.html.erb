@@ -1,12 +1,16 @@
+<!-- plans/courses/show -->
+
 <% content_for(:stylesheets) do %>
   <%= stylesheet_link_tag "views/plans/courses", :media => 'all' %>
 <% end %>
 
-
 <% content_for(:javascripts) do %>
-  <%= javascript_include_tag 'views/plans/courses/pathCourse' %>
-  <%= javascript_include_tag 'views/plans/courses/pathViewer' %>
-  <%= javascript_include_tag 'views/plans/courses/pathView' %>
+  <%= javascript_include_tag 'libs/graph/graphView' %>
+  <%= javascript_include_tag 'plans/showCourse' %> - FIXMENOW
+<% end %>
+
+<% content_for :title do %>
+  <%= @course.course_code %> <%= @course.localized_name %>
 <% end %>
 
 
@@ -30,25 +34,57 @@
         <li class="<%= @user.passed?( course.abstract_course ) ? 'passed' : '' %> <%= course == @course ? 'selected' : '' %>"><%= link_to course.localized_name, studyplan_course_path(:id => course) %>
       <% end %>
     </ul>
-
   <% end %>
-
 <% end %>
-
 
 <h1>
   <%= @course.course_code %> <%= @course.localized_name %>
+<<<<<<< HEAD
+=======
+
+>>>>>>> ca3e5f45293aa0a7ae9adf5f9bbfe3f8c756574c
   <!-- Add / Remove -->
   <% if can? :choose, ScopedCourse %>
     <% unless @user.study_plan.courses.exists?(@course) %>
-      <%= link_to image_tag('add.png', :alt => t(:course_add_to_plan)), studyplan_courses_path(:course_id => @course.id), :title => t(:profile_add_to_plan), :method => :post %>
+      <%= link_to studyplan_courses_path(:course_id => @course.id), {:method => :post, :class => 'btn btn-default'} do %>
+        <i class="icon icon-plus"></i>
+        <%= t(:course_add_to_plan) %>
+      <% end %>
     <% end %>
   <% end %>
 </h1>
 
+<script type="text/html" id="courseTemplate"><div class="course" data-bind="position: position, css: {competence: isCompetence, cyclic: isCyclic}">
+  <h1 data-bind="text: name"></h1>
+
+  <ul data-bind="foreach: skills">
+    <!-- ko template: { name: 'skillTemplate', if: visible, afterRender: $root.updateElementDimensions } --><!-- /ko -->
+  </ul>
+</div></script>
+
+<script type="text/html" id="skillTemplate"><li class="skill" data-bind="text: description, css: {hilight: highlighted}"></li></script>
+
+
 <% if @competence %>
+<<<<<<< HEAD
   <!-- Study paths from course skills to competence skills -->
   <table id="course-competence-graph" class="course-competence-graph" data-competence-id="<%= @competence.id %>">
+=======
+  <div id="course-graph"
+    data-courses-path="<%= curriculum_courses_path(:curriculum_id => @curriculum.id) %>"
+    data-competences-path="<%= curriculum_competences_path(:curriculum_id => @curriculum.id) %>"
+    data-skills-path="<%= curriculum_skills_path(:curriculum_id => @curriculum.id) %>"
+    data-source-id="<%= @course.id %>"
+    data-target-id="<%= @competence.id %>"
+    >
+
+    <!-- ko template: { name: 'courseTemplate', foreach: visibleCourses, afterRender: updateElementDimensions } --><!-- /ko -->
+  </div>
+
+  <!-- Study paths from course skills to profile skills -->
+  <!--
+  <table id="course-profile-graph" class="course-profile-graph" data-competence-id="<%= @competence.id %>">
+>>>>>>> ca3e5f45293aa0a7ae9adf5f9bbfe3f8c756574c
     <thead>
       <td><%=t('.provides')%></td>
       <td></td>
@@ -65,6 +101,7 @@
       </tr>
     </tbody>
   </table>
+  -->
 <% else %>
   <h2><%=t('.provides')%></h2>
   <table class="course-skill-dependencies">
@@ -95,6 +132,7 @@
 
 
 
+<<<<<<< HEAD
 <h2><%=t('.path_heading')%></h2>
 
 <table class="course-path">
@@ -133,6 +171,8 @@
   </tbody>
 </table>
 
+=======
+>>>>>>> ca3e5f45293aa0a7ae9adf5f9bbfe3f8c756574c
 
 <h2><%=t(:course_prereqs_reqursive)%></h2>
 

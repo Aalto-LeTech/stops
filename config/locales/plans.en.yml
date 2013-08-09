@@ -40,7 +40,6 @@ en:
         provides: "Provides skills"
         needed_by: "Needed by"
         paths_hint: "Click skills to see the study path"
-        path_heading: "Relation to other courses"
 
     schedule:
       show:

@@ -1,18 +1,13 @@
-<% content_for :javascripts do %>
-  <%= javascript_include_tag 'raphael-min' %>
-  <%= javascript_include_tag 'views/curriculums/skillGraphView' %>
-  <%= javascript_include_tag 'views/curriculums/graphCourse' %>
-  <%= javascript_include_tag 'views/curriculums/graphSkill' %>
+<% content_for :javascript do %>
+  <%= javascript_include_tag 'libs/graph/graphView' %>
 <% end %>
-
 
 <% content_for :title do %>
   <%= @scoped_course.localized_name + ('.title') %>
 <% end %>
 
-<%= render :partial => 'tabs' %>
 
-<!--%= link_to t(:Back), curriculum_competence_path(:curriculum_id => @curriculum.id, :id => @competence.id) %-->
+<%= render :partial => 'tabs' %>
 
 <div id="layers">
   <div id="svg"></div>

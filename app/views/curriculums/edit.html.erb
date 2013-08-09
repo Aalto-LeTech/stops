@@ -27,7 +27,6 @@
     <% end %>
     <li><a href="/O4-ohje.pdf">Käyttöohje</a></li>
     <li><a href="/O4-Bloomin_taksonomia.pdf">Bloomin taksonomia</a></li>
-    <!--li><%= link_to t('.curriculum_cycles_link'), cycles_curriculum_path(:id => @curriculum) %></li-->
   </ul>
 </div>
 
@@ -42,16 +41,23 @@
   <p>
 <% end %>
 
-<% unless @curriculum.competences.empty?  %>
+<% if @competences.empty?  %>
+  <p><span class="placeholder"><%= t '.no_competences_placeholder' %></span></p>
+<% else %>
   <ul>
-    <% @curriculum.competences.each do |competence| %>
-      <li><%= link_to t('.edit_competence_prefix') + ': ' + competence.localized_name, edit_prereqs_curriculum_competence_path(:curriculum_id => @curriculum, :id => competence) %></li>
+    <% @competences.each do |competence| %>
+      <li>
+        <%= link_to competence.localized_name, edit_prereqs_curriculum_competence_path(:curriculum_id => @curriculum, :id => competence) %>
+        <% if competence.children %>
+          <ul>
+            <% competence.children.each do |competence| %>
+              <li><%= link_to competence.localized_name, edit_prereqs_curriculum_competence_path(:curriculum_id => @curriculum, :id => competence) %></li>
+            <% end %>
+          </ul>
+        <% end %>
+      </li>
     <% end %>
   </ul>
-<% else %>
-  <p>
-    <span class="placeholder"><%= t '.no_competences_placeholder' %></span>
-  </p>
 <% end %>
 
 
@@ -84,7 +90,7 @@
       <% @courses.each_with_index do |course, i| %>
         <tr>
           <td>
-            <%= link_to course.course_code, edit_curriculum_course_path(:curriculum_id => @curriculum, :id => course) %>
+            <%= link_to course.course_code, edit_prereqs_curriculum_course_path(:curriculum_id => @curriculum, :id => course) %>
           </td>
           <td>
             <%= link_to course.localized_name_if_possible("#{t('curriculums.course_name_not_available')}>"), edit_prereqs_curriculum_course_path(:curriculum_id => @curriculum, :id => course) %>

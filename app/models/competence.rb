@@ -8,6 +8,8 @@ class Competence < CompetenceNode
   # Parent
   belongs_to :parent_competence,
            :class_name => 'Competence'
+  
+  has_many :children, :class_name => 'Competence', :foreign_key => 'parent_competence_id'
 
   validate :validate_parent_competence_not_a_self_reference
 

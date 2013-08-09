@@ -40,7 +40,6 @@ fi:
         provides: "Osaamistavoitteet"
         needed_by: "Mahdollistaa"
         paths_hint: "Klikkaa osaamistavoitteita nähdäksesi opintopolut kurssista kompetenssiin"
-        path_heading: "Yhteys muihin kursseihin"
 
     schedule:
       show:

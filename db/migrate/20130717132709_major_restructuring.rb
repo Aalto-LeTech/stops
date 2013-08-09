@@ -1,6 +1,8 @@
 class MajorRestructuring < ActiveRecord::Migration
 
   def up
+    #AbstractCourse.fix_abstract_courses
+    
     add_column :study_plan_courses, :length, :integer
     add_column :study_plan_courses, :custom, :boolean, :default => false
     add_column :study_plans, :first_period_id, :integer

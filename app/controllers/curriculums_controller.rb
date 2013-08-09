@@ -4,7 +4,7 @@ class CurriculumsController < ApplicationController
   respond_to :html
   respond_to :json, :only => 'prereqs'
 
-  layout 'curriculum'
+  layout 'views/curriculums/browser'
 
   #caches_page :prereqs
 
@@ -61,7 +61,12 @@ class CurriculumsController < ApplicationController
     
     @competences = Competence.where(:parent_competence_id => nil).includes([{:children => :localized_description}, :localized_description]).all
 
-    @courses = ScopedCourse.where(:curriculum_id => @curriculum.id).joins(:course_descriptions).includes(:localized_description).where(:course_descriptions => { :locale => I18n.locale }).order('course_code, name')
+    @courses = ScopedCourse
+      .where(:curriculum_id => @curriculum.id)
+      .joins(:course_descriptions)
+      .where(:course_descriptions => { :locale => I18n.locale })
+      .includes(:localized_description)
+      .order('course_code, name')
   end
 
 

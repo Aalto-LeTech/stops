@@ -1,22 +1,27 @@
+<% content_for(:stylesheets) do %>
+  <%= stylesheet_link_tag "views/plans/competences/supporting", :media => 'all' %>
+<% end %>
+
+
 <h1><%=t :competence_supporting_courses_heading %></h1>
 
 <div class="competence-supporting-courses">
   <% @supporting_courses.each do |scoped_course, credits| %>
     <% next if @user.courses.include?(scoped_course) %>
-    
+
     <div class="course">
       <%= link_to studyplan_courses_path(:course_id => scoped_course.id), :title => t(:course_add_to_plan), :method => :post do
             image_tag('add.png', :alt => t(:course_add_to_plan))
           end %>
-      
-      
-      <%= scoped_course.course_code %> <%= scoped_course.name(I18n.locale) %> (<%= scoped_course.credits %> <%=t :cr %>)</p>
+
+
+      <%= scoped_course.course_code %> <%= scoped_course.localized_name %> (<%= scoped_course.credits %> <%=t :cr %>)</p>
 
       <% scoped_course.skills.each do |skill| %>
         <div class="skill"><%= skill.description(I18n.locale) %></div>
       <% end %>
     </div>
-    
+
   <% end %>
 </div>
 

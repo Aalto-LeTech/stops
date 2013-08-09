@@ -1,0 +1,26 @@
+<% content_for(:thewrapper) do %>
+
+  <!-- browser layout -->
+
+  <div id="theleftwrapper">
+    <div id="theleft">
+
+      <%= yield(:theleft) %>
+
+    </div>
+  </div>
+
+  <div id="thecontainer">
+    <div id="themain">
+
+      <%= render 'layouts/core/messages' %>
+      <%= yield %>
+
+    </div>
+  </div>
+
+  <footer id="thefooter">
+    <%= yield(:footer) %>
+  </footer>
+
+<% end %>

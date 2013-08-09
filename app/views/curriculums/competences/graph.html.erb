@@ -1,8 +1,12 @@
 <% content_for :javascript do %>
-  <%= javascript_include_tag 'graph/graphView' %>
-  <%= javascript_include_tag 'curriculums/courseGraph' %>
+  <%= javascript_include_tag 'libs/graph/graphView' %>
+  <%= javascript_include_tag 'views/curriculums/courseGraph' %>
 <% end %>
-<% content_for :title do %><%= @competence.localized_description.name %> - <%=t '.title' %><% end %>
+
+<% content_for :title do %>
+  <%= @competence.localized_name + ' - ' + t('.title') %>
+<% end %>
+
 
 <%= render :partial => 'tabs' %>
 

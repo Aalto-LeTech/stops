@@ -28,7 +28,8 @@ Ops::Application.configure do
   # config.cache_store = :mem_cache_store
 
   # Disable Rails's static asset server
-  # In production, Apache or nginx will already do this
+  # In production, Apache or nginx will already do this, but when testing the
+  # app in production mode locally, the flag needs to be set 'true'.
   config.serve_static_assets = false
 
   # Compress JavaScripts and CSS
@@ -39,7 +40,7 @@ Ops::Application.configure do
 
   # Generate digests for assets URLs
   config.assets.digest = true
-  
+
   # Enable serving of images, stylesheets, and javascripts from an asset server
   # config.action_controller.asset_host = "http://assets.example.com"
 

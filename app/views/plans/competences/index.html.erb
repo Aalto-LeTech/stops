@@ -1,17 +1,16 @@
-<!-- plans/competences/index -->
-
-
-<% content_for :javascript do %>
-  <script type="text/javascript">
-    <%= render "plans/competences/i18n_strings.js" %>
-  </script>
-  <!--
-    <%= javascript_include_tag 'plans/CompetenceElectionEditor.js' %>
-  -->
+<% content_for(:stylesheets) do %>
+  <%= stylesheet_link_tag "views/plans/competences/index", :media => 'all' %>
 <% end %>
 
 
-<% content_for :left_navi do %>
+<% content_for :javascripts do %>
+  <script type="text/javascript">
+    <%= render "plans/competences/i18n_strings.js" %>
+  </script>
+<% end %>
+
+
+<% content_for :theleft do %>
 
   <h1><%= link_to t('.competences'), studyplan_competences_path %></h1>
   <ul>
@@ -25,13 +24,9 @@
 <% end %>
 
 
-<div class="row-fluid">
+<div id='competence-list'>
+  <h1><%= t('.heading')%></h1>
 
-  <div id='competence-list' class="span8">
-    <h1><%= t('.heading')%></h1>
+  <%= render 'boxed_competence_list' %>
 
-
-    <%= render 'boxed_competence_list' %>
-
-  </div>
 </div>

@@ -149,7 +149,7 @@ class StudyPlan < ActiveRecord::Base
 
   # Returns the period where the latest scheduled study plan course ends
   # NB: This is not necessarily the last period extended to by a course in the
-  # plan
+  # plan FIXME
   def ending_period_of_latest_study_plan_course
     latest_study_plan_course = study_plan_courses.includes(:period).order('periods.begins_at DESC').first
     latest_study_plan_course.nil? ? nil : latest_study_plan_course.ending_period
@@ -197,12 +197,13 @@ class StudyPlan < ActiveRecord::Base
       # initial default is set
       reset_first_period if first_period.nil?
       period = Period.find_by_date(first_period.begins_at - 1 + 365*INITIAL_STUDY_PLAN_TIME_IN_YEARS)
+      # FIXME: shouldn't be done here, but in the scheduler / user of this function
     else
       # We set the last as the one going on after a buffer time after the start
-      # last starting course's last period
+      # of the last starting course's last period
       the_period = Period.find_by_date(period.begins_at - 1 + 365*STUDY_PLAN_BUFFER_TIME_IN_YEARS)
       if the_period.nil?
-        period = period.find_following(4*STUDY_PLAN_BUFFER_TIME_IN_YEARS).last
+        period = period.find_following(5*STUDY_PLAN_BUFFER_TIME_IN_YEARS).last
       end
     end
     self.last_period = period
@@ -211,6 +212,7 @@ class StudyPlan < ActiveRecord::Base
 
 
   # Returns the periods included into the study plan
+  # FIXME: This method tree is a bit hacky in smarisa's opinion
   def periods(number_of_buffer_periods=0)
     reset_first_period
     reset_last_period
@@ -279,15 +281,15 @@ class StudyPlan < ActiveRecord::Base
         # Fetch the available course instance if available
         course_instance = CourseInstance.where(abstract_course_id: abstract_course_id, period_id: new_period_id).first
 
-        # Determine whether the course should be regarded as customized
-        new_custom = scoped_course.credits != new_credits
-
-        # Determine whether the course is instance bound
+        # Determine whether the course should be regarded as 'instance bound'
         if course_instance.nil? or course_instance.length != new_length
           new_course_instance_id = nil
         else
           new_course_instance_id = course_instance.id
         end
+
+        # Determine whether the course should be regarded as customized
+        new_custom = scoped_course.credits != new_credits
 
         # Save possible changes to the study_plan_course
         changed =
@@ -418,49 +420,6 @@ class StudyPlan < ActiveRecord::Base
 
     # Add manually added courses to the list
     needed_courses.merge(manual_courses)
-  end
-
-
-  # Returns an ordered array of periods with scheduled courses (see code)
-  def ordered_array_of_periods_with_scheduled_courses
-    hash = {}
-    study_plan_courses.where( 'period_id IS NOT NULL' ).order( 'period_id' ).each do |study_plan_course|
-      # find the periods over which this course spans
-      period = study_plan_course.period  # start period
-      length = study_plan_course.length
-      periods = length > 1 ? period.find_following( length - 1 ) << period : [ period ]
-      # add this course as 'ongoing' to these periods
-      periods.each_with_index do |period, i|
-        if hash.has_key?( period ) == false
-          hash[ period ] = {
-            starting_courses:    [],
-            continuing_courses:  [],
-            ending_courses:      [],
-            total_courses:       0,
-            total_load:          0
-          }
-        end
-        # cumulate data
-        hash_syms = []
-        hash_syms << ( i == periods.size - 1 ? :starting_courses : :continuing_courses )
-        hash_syms << :ending_courses if periods.size == 1 or i == periods.size - 2
-        #hash_sym = (i == 0 ? :starting_courses : (i == periods.size - 1 ? :ending_courses : :continuing_courses ) )
-        hash_syms.each do |hash_sym|
-          hash[ period ][ hash_sym ] << study_plan_course
-        end
-        hash[ period ][ :total_load ] += study_plan_course.credits / length
-        hash[ period ][ :total_courses ] += 1
-      end
-    end
-    # transform the hash into an ordered array (by period start date)
-    array = []
-    hash.keys.each do |period|
-      array << {
-        period:  period,
-        data:    hash[ period ]
-      }
-    end
-    array.sort { |a, b| a[:period].begins_at <=> b[:period].begins_at }
   end
 
 end

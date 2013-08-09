@@ -1,7 +1,7 @@
 <!-- curriculums/competences/show -->
 <% content_for :javascript do %>
-  <%= javascript_include_tag 'graph/graphView' %>
-  <%= javascript_include_tag 'curriculums/courseGraph' %>
+  <%= javascript_include_tag 'libs/graph/graphView' %>
+  <%= javascript_include_tag 'views/curriculums/courseGraph' %>
 <% end %>
 
 <h1><%= @competence.localized_name %></h1>
@@ -21,7 +21,6 @@
 
 
 <p><%= @competence.localized_description.description %></p>
-
 
 <h2><%=t :competence_skills_heading %></h2>
 

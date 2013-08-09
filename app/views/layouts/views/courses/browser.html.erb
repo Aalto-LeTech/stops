@@ -1,0 +1,35 @@
+<% content_for(:stylesheets) do %>
+  <%= stylesheet_link_tag "layouts/browser", :media => 'all' %>
+<% end %>
+
+
+<% content_for(:theleft) do %>
+
+  <!-- views/courses/browser layout -->
+
+  <ul>
+    <li><%= link_to t(:navi_plan), plan_path %></li>
+    <li><%= link_to t(:navi_curriculums), curriculums_path %></li>
+  </ul>
+
+  <% if @curriculum %>
+    <h2><%= @curriculum.name %></h2>
+
+    <ul>
+      <li><%= link_to t(:navi_profiles), profiles_path %></li>
+      <li><%= link_to t(:navi_courses), courses_path %></li>
+
+      <!-- Courses belonging to the curriculum -->
+      <ul>
+        <% @curriculum.courses.each do |course| %>
+          <li class="<%= course == @course ? 'selected' : '' %>"><%= link_to course.name(I18n.locale), course_url(:id => course.id) %></li>
+        <% end %>
+      </ul>
+
+    </ul>
+  <% end %>
+
+<% end %>
+
+
+<%= render partial: 'layouts/core/composer', locals: { layout: 'browser', fixed_nav: true } %>

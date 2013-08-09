@@ -1,20 +1,23 @@
 <!-- plans/courses/show -->
-<% content_for :title do %><%= @course.course_code %> <%= @course.localized_name %><% end %>
 
-<% content_for :javascript do %>
-  <%= javascript_include_tag 'graph/graphView' %>
-  <%= javascript_include_tag 'plans/showCourse' %>
-  
-  <%
-    #javascript_include_tag 'profileCourseView'
-    #javascript_include_tag 'pathCourse'
-    #javascript_include_tag 'pathViewer'
-    #javascript_include_tag 'pathView'
-  %>
+<% content_for(:stylesheets) do %>
+  <%= stylesheet_link_tag "views/plans/courses", :media => 'all' %>
 <% end %>
 
-<% content_for :left_navi do %>
+<% content_for(:javascripts) do %>
+  <%= javascript_include_tag 'libs/graph/graphView' %>
+  <%= javascript_include_tag 'views/plans/courses/show' %>
+<% end %>
+
+<% content_for :title do %>
+  <%= @course.course_code %> <%= @course.localized_name %>
+<% end %>
+
+
+<% content_for(:theleft) do %>
+
   <% if @competence %>
+
     <h1><%= link_to @competence.localized_name, studyplan_competence_path(:id => @competence) %></h1>
     <h2><%= t('.competence_courses') %></h2>
     <ul>
@@ -36,7 +39,6 @@
 
 <h1>
   <%= @course.course_code %> <%= @course.localized_name %>
-  
   <!-- Add / Remove -->
   <% if can? :choose, ScopedCourse %>
     <% unless @user.study_plan.courses.exists?(@course) %>
@@ -52,14 +54,14 @@
 
 
 <% if @competence %>
-  <div id="course-graph" 
-    data-courses-path="<%= curriculum_courses_path(:curriculum_id => @curriculum.id) %>" 
-    data-competences-path="<%= curriculum_competences_path(:curriculum_id => @curriculum.id) %>" 
+  <div id="course-graph"
+    data-courses-path="<%= curriculum_courses_path(:curriculum_id => @curriculum.id) %>"
+    data-competences-path="<%= curriculum_competences_path(:curriculum_id => @curriculum.id) %>"
     data-skills-path="<%= curriculum_skills_path(:curriculum_id => @curriculum.id) %>"
     data-source-id="<%= @course.id %>"
-    data-target-id="<%= @competence.id %>" 
+    data-target-id="<%= @competence.id %>"
     >
-    
+
     <!-- ko template: { name: 'courseTemplate', foreach: visibleCourses, afterRender: updateElementDimensions } --><!-- /ko -->
   </div>
 
@@ -75,7 +77,7 @@
       <tr>
         <td class="course-skills-column">
           <% @course.skills.each do |skill| %>
-            <%= link_to skill.description(I18n.locale), competencepath_skill_path(:id => skill.id, :competence_id => @competence.id), { :class => 'skill click-hint', 'data-skill-id' => skill.id } %>
+            <%= link_to skill.localized_description, competencepath_skill_path(:id => skill.id, :competence_id => @competence.id), { :class => 'skill click-hint', 'data-skill-id' => skill.id } %>
           <% end %>
         </td>
         <td id="skill-future"><p class="hint"><%=t('.paths_hint')%></p></td>
@@ -107,11 +109,8 @@
       </tr>
     </tbody>
   </table>
-  
+
 <% end %>
-
-
-
 
 
 <h2><%=t(:course_prereqs_reqursive)%></h2>

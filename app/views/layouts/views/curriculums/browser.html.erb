@@ -1,0 +1,50 @@
+<% content_for(:stylesheets) do %>
+  <%= stylesheet_link_tag "layouts/browser", :media => 'all' %>
+  <%= stylesheet_link_tag "views/curriculums/shared", :media => 'all' %>
+<% end %>
+
+
+<% content_for(:theleft) do %>
+
+  <!-- views/curriculums/browser layout -->
+
+  <% if not @curriculum.nil? %>
+
+    <h1><%= link_to @curriculum.name, curriculum_path(:id => @curriculum) %></h1>
+
+    <% if @competence %>
+      <ul>
+        <% @curriculum.competences.each do |competence| %>
+          <li class="<%= competence == @competence ? 'selected' : '' %>"><%= link_to competence.localized_name, curriculum_competence_path(:curriculum_id => @curriculum, :id => competence) %></li>
+          <!-- Courses belonging to the competence -->
+          <% if false && competence == @competence %>
+            <ul>
+              <% competence.courses.each do |course| %>
+                <li class="<%= course == @course ? 'selected' : '' %>"><%= link_to course.localized_name, curriculum_competence_course_path(:curriculum_id => @curriculum, :competence_id => competence, :id => course) %></li>
+              <% end %>
+            </ul>
+          <% end %>
+        <% end %>
+      </ul>
+    <% elsif @course %>
+      <ul>
+        <% @curriculum.courses.each do |course| %>
+          <li class="<%= course == @course ? 'selected' : '' %>"><%= link_to course.localized_name, curriculum_course_path(:curriculum_id => @curriculum, :id => course) %></li>
+        <% end %>
+      </ul>
+    <% elsif @curriculum %>
+      <ul>
+        <% @curriculum.competences.each do |competence| %>
+          <li>
+            <%= link_to competence.localized_name, curriculum_competence_path(:curriculum_id => @curriculum, :id => competence) %>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+
+  <% end %>
+
+<% end %>
+
+
+<%= render partial: 'layouts/core/composer', locals: { layout: 'browser', fixed_nav: true } %>

@@ -1,3 +1,9 @@
-<h1><%=t('.not_logged_in_heading')%></h1>
+<% content_for(:stylesheets) do %>
+  <%= stylesheet_link_tag "views/frontpage/index", :media => 'all' %>
+<% end %>
 
-<%= render :partial => 'sessions/login' %>
+
+<div id="login-container">
+  <h1><%=t('.not_logged_in_heading')%></h1>
+  <%= render :partial => 'sessions/login' %>
+</div>

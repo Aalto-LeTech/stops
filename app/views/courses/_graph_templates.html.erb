@@ -1,0 +1,9 @@
+<script type="text/html" id="courseTemplate"><div class="course" data-bind="position: position, css: {competence: isCompetence, cyclic: isCyclic}">
+  <h1 data-bind="text: name"></h1>
+  
+  <ul data-bind="foreach: skills">
+    <!-- ko template: { name: 'skillTemplate', if: visible, afterRender: $root.updateElementDimensions } --><!-- /ko -->
+  </ul>
+</div></script>
+
+<script type="text/html" id="skillTemplate"><li class="skill" data-bind="text: description, css: {hilight: highlighted}"></li></script> 

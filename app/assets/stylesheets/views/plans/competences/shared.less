@@ -1,0 +1,81 @@
+////////////////////////////////////////////////////////////////////////////////
+// views/plans/competences/shared.less
+//
+// Some Less spec shared by the related views.
+//
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////
+// Shared styling
+
+div.competence
+{
+
+  h2
+  {
+    font-size: 150%;
+    margin-top: 0px;
+  }
+
+  li
+  {
+    margin-bottom: .5em;
+  }
+
+  .competence-skills, .competence-courses
+  {
+    font-size: small;
+    width: 40em;
+    margin: 0px 10px 10px 0px;
+  }
+}
+
+
+table
+{
+  &.course-table, &.period-table
+  {
+    text-align: left;
+
+    th, td
+    {
+      padding-right: 1em;
+    }
+
+    tr
+    {
+      .total
+      {
+        font-size: large;
+        font-weight: bold;
+
+        td
+        {
+          padding-top: 1em;
+        }
+      }
+    }
+  }
+
+  &.course-table
+  {
+    font-size: small;
+
+    tr.total
+    {
+      font-size: normal;
+    }
+
+    col
+    {
+      min-width: 5em;
+    }
+  }
+}
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////

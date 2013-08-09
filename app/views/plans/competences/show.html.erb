@@ -1,7 +1,9 @@
-<!-- plans/competences/show -->
+<% content_for(:stylesheets) do %>
+  <%= stylesheet_link_tag "views/plans/competences/shared", :media => 'all' %>
+<% end %>
 
 
-<% content_for :left_navi do %>
+<% content_for(:theleft) do %>
 
   <h1><%= link_to t('.competences'), studyplan_competences_path %></h1>
   <ul>
@@ -20,57 +22,71 @@
 </h1>
 
 <% competence_selected = @user.study_plan.has_competence?( @competence ) %>
-<div class="competence<%= competence_selected ? ' selected' : '' %>">
-  <div class="buttons">
+<div class="well competence<%= competence_selected ? ' selected' : '' %>">
+
+  <div class="btn btn-link pull-right">
     <!-- Add / Remove -->
     <% if can? :choose, @competence %>
       <% if @user.study_plan.has_competence?( @competence ) %>
         <%= link_to delete_studyplan_competence_path(:id => @competence.id), :title => t('.remove_from_plan') do %>
           <%= image_tag('remove.png', :alt => t('.remove_from_plan')) %>
-          <%=t('.remove_from_plan')%>
+          <%= t('.remove_from_plan') %>
         <% end %>
       <% else %>
         <%= link_to new_studyplan_competence_path(:id => @competence.id), :title => t('.add_to_plan') do %>
           <%= image_tag('add.png', :alt => t('.add_to_plan')) %>
-          <%=t('.add_to_plan')%>
+          <%=t ('.add_to_plan') %>
         <% end %>
       <% end %>
     <% end %>
   </div>
 
-  <h2><%= @competence.localized_name %></h2>
+  <h2>
+    <%= @competence.localized_name %>
+  </h2>
 
   <div class="competence-skills">
-    <h3><%=t('.skills')%></h3>
+    <h3>
+      <%= t('.skills') %>
+    </h3>
     <ul>
       <% @competence.skills.each do |skill| %>
-        <li><%= skill.description(I18n.locale) %></li>
+        <li>
+          <%= skill.localized_description %>
+        </li>
       <% end %>
     </ul>
   </div>
 
   <div class="competence-courses">
-    <h3><%= t('.strict_prereqs') %></h3>
+    <h3>
+      <%= t('.strict_prereqs') %>
+    </h3>
 
     <table class="course-table">
-      <% credits_counter = included_counter = passed_counter = 0 %>
-      <% @competence.courses_recursive.each do |course| %>
-        <tr>
-          <%
-          a_class = ''
-          if @included_courses.include?(course)
-            a_class = 'included'
-            included_counter += course.credits || 0
-          end
-          %>
-          <td><%= link_to course.course_code, studyplan_competence_course_path(:competence_id => @competence.id, :id => course), :class => a_class %></td>
-          <td><%= link_to course.localized_name, studyplan_competence_course_path(:competence_id => @competence.id, :id => course), :class => a_class %></td>
-          <td><%= course.credits %></td>
-          <td class="passed-info"><%= t('.course_passed') if @passed_courses.member? course.id %>
-          <% credits_counter += course.credits || 0 %>
-          <% passed_counter += course.credits if @passed_courses.member? course.id %> <%#if @user.passed?(course) %><!-- TODO: make this more efficient -->
-        </tr>
-      <% end %>
+      <tbody>
+        <% credits_counter = included_counter = passed_counter = 0 %>
+        <% @competence.courses_recursive.each do |course| %>
+          <tr>
+            <%
+              is_passed = (@passed_courses.member? course.id)
+              a_class = ''
+              if @included_courses.include?(course)
+                a_class = 'included'
+                included_counter += course.credits || 0
+              end
+            %>
+            <td><%= link_to course.course_code, studyplan_competence_course_path(:competence_id => @competence.id, :id => course), :class => a_class %></td>
+            <td><%= link_to course.localized_name, studyplan_competence_course_path(:competence_id => @competence.id, :id => course), :class => a_class %></td>
+            <td><%= course.credits %></td>
+            <td><%= t('.course_passed') if is_passed %>
+            <%
+              credits_counter += course.credits || 0
+              passed_counter += course.credits if is_passed
+            %>
+          </tr>
+        <% end %>
+      </tbody>
       <tfoot>
         <tr class="spacer">
           <td></td>
@@ -79,25 +95,25 @@
         </tr>
         <tr>
           <td></td>
-          <td><%=t :competence_credits_total %></td>
+          <td><%= t(:competence_credits_total) %></td>
           <td><%= credits_counter %> <%=t :cr %></td>
         </tr>
 
         <% unless competence_selected %>
           <tr>
             <td></td>
-            <td><%=t :competence_credits_shared %></td>
+            <td><%= t(:competence_credits_shared) %></td>
             <td><%= included_counter %>  <%=t :cr %></td>
           </tr>
           <tr>
             <td></td>
-            <td><%=t :competence_credits_passed %></td>
+            <td><%= t(:competence_credits_passed) %></td>
             <td><%= passed_counter %> <%=t :cr %></td>
           </tr>
           <tr class="total">
             <td></td>
-            <td><%=t :competence_credits_added %></td>
-            <td><%= "%.1f" % (credits_counter - included_counter) %> <%=t :cr %></td>
+            <td><%= t(:competence_credits_added) %></td>
+            <td><%= "%.1f" % (credits_counter - included_counter) %> <%= t(:cr) %></td>
           </tr>
         <% end %>
       </tfoot>

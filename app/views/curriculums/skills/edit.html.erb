@@ -1,5 +1,5 @@
-<% content_for :javascript do %>
-  <%= javascript_include_tag 'curriculum_skill_edit.js' %>
+<% content_for :javascripts do %>
+  <%= javascript_include_tag 'views/curriculums/skills/edit.js' %>
 <% end %>
 
 <div>
@@ -10,14 +10,14 @@
 
   <strong><%= t '.selected_skill' %></strong> <%= @skill.description_with_locale.description %>
 
-  <div id="metadata" style="display: none" 
+  <div id="metadata" style="display: none"
     data-skill-id="<%= @skill_id %>"
-    data-skill-search-url="<%= 
-      search_skills_and_courses_curriculum_skill_path(params[:locale], 
+    data-skill-search-url="<%=
+      search_skills_and_courses_curriculum_skill_path(params[:locale],
         params[:curriculum_id], params[:id]) %>"
-    data-skill-prereq-add-url="<%= add_prereq_curriculum_skill_path(params[:locale], 
+    data-skill-prereq-add-url="<%= add_prereq_curriculum_skill_path(params[:locale],
       params[:curriculum_id], @skill_id) %>"
-    data-skill-prereq-remove-url="<%= remove_prereq_curriculum_skill_path(params[:locale], 
+    data-skill-prereq-remove-url="<%= remove_prereq_curriculum_skill_path(params[:locale],
       params[:curriculum_id], @skill_id) %>"
     data-prereq-add-text="<%= t '.add_prereq_button' %>"
     data-prereq-adding-text="<%= t '.add_prereq_button_adding' %>"
@@ -40,7 +40,7 @@
 
   <h4 class="colorful"><%= t '.add_new_prereqs' %></h4>
 
-  <p><%= t '.search_courses_and_skills' %></p>  
+  <p><%= t '.search_courses_and_skills' %></p>
 
   <input id="skill-search-box"></input>
 
@@ -65,5 +65,5 @@
       </p>
   </div>
 
-     
+
 </div>

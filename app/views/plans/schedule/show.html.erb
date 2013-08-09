@@ -1,44 +1,45 @@
-<% content_for :javascript do %>
+<% content_for(:stylesheets) do %>
+  <%= stylesheet_link_tag "views/plans/schedule/show", :media => 'all' %>
+<% end %>
+
+
+<% content_for(:javascripts) do %>
   <script type="text/javascript">
     <%= render "show_i18n_strings.js" %>
   </script>
-  <%= javascript_include_tag 'schedule/schedule' %>
+  <%= javascript_include_tag 'views/plans/schedule/show' %>
   <script type="text/javascript">
     <%= render "metadata.js" %>
   </script>
 <% end %>
 
-<% # "Course locked" icon that will be cloned using JS. Do not include id on the element, because that will also be copied!
-%>
-<div id="cloneable-imgs" class="hide">
-  <%= image_tag "glyphicons_203_lock.png", :class => "course-locked" %>
-</div>
 
+<% content_for(:theleft) do %>
 
-<div class="row-fluid">
+  <div class="container-fluid">
 
-  <div class="span2" id="sidebar">
+    <% # "Course locked" icon that will be cloned using JS. Do not include id on the element, because that will also be copied!
+    %>
+    <div id="cloneable-imgs" class="hide">
+      <%= image_tag "glyphicons_203_lock.png", :class => "course-locked" %>
+    </div>
 
     <div id="controls">
-
-      <h2><%= t('.controls') %></h2>
-
+      <button id="save-button" class="btn pull-right" data-bind="click: save"><%= t('.save') %></button>
+      <h2>
+        <%= t('.scheduling') %>
+      </h2>
       <p>
         <%= t('.curriculum') %>:
         <%= @study_plan.curriculum.name %>
         <%= @study_plan.curriculum.start_year %> -
         <%= @study_plan.curriculum.end_year %>
       </p>
-
-      <h3><%= t('.actions') %></h3>
-
-      <button id="save-button" data-bind="click: save"><%= t('.save_button') %></button>
-
     </div>
 
     <!-- Selected course details -->
     <!-- ko if: selectedObjectType() == 'Course' -->
-      <div class="well" data-bind="with: selectedObject">
+      <div class="object-info well" data-bind="with: selectedObject">
 
         <h3>
           <%= t('.selected_course') %>
@@ -106,12 +107,12 @@
           </ul>
         <!-- /ko -->
 
-      </div>  <!-- well -->
+      </div>  <!-- object-info -->
     <!-- /ko -->
 
     <!-- Selected period details -->
     <!-- ko if: selectedObjectType() == 'Period' -->
-      <div class="well" data-bind="with: selectedObject">
+      <div class="object-info well" data-bind="with: selectedObject">
 
         <h3>
           <%= t('.selected_period') %>
@@ -126,26 +127,78 @@
           <span data-bind="text: endsAt"></span>
         </p>
 
-        <h4><%= t('.scheduled_courses') %></h4>
+        <span class="bar visible-desktop">
+          DESKTOP
+        </span>
+        <span class="bar visible-tablet">
+          TABLET
+        </span>
+        <span class="bar visible-phone">
+          PHONE
+        </span>
 
-        <!-- ko if: courses().length == 0 -->
-          <p><%= t('.no_scheduled_courses') %></p>
-        <!-- /ko -->
-        <!-- ko if: courses().length > 0 -->
-          <ul data-bind="foreach: courses">
-            <li>
-              <span data-bind="text: code"></span>
-              <span data-bind="text: name"></span>
-            </li>
-          </ul>
-        <!-- /ko -->
+        <div id="period-courses">
+          <h4><%= t('.scheduled_courses') %></h4>
 
-      </div>  <!-- well -->
+          <!-- ko if: affectingCourses.length == 0 -->
+            <p><%= t('.no_scheduled_courses') %></p>
+          <!-- /ko -->
+          <!-- ko if: affectingCourses.length > 0 -->
+          <table class="table table-condensed">
+            <thead>
+              <th>
+                <%= t('.code') %>
+              </th>
+              <th>
+                <%= t('.name') %>
+              </th>
+              <th>
+                <%= t('.extent') %>
+              </th>
+  <!--
+              <th>
+                <%= t('.length') %>
+              </th>
+              <th>
+                <%= t('.grade') %>
+              </th>
+  -->
+            </thead>
+            <tbody data-bind="foreach: affectingCourses">
+              <tr data-bind="css: {'old': period.isSelected() == false}">
+                <td data-bind="text: code">
+                </td>
+                <td data-bind="text: name">
+                </td>
+                <td data-bind="text: credits">
+                </td>
+  <!--
+                <td data-bind="text: length">
+                </td>
+                <td data-bind="text: grade">
+                </td>
+  -->
+              </tr>
+            </tbody>
+            <tr>
+              <td>
+              </td>
+              <td>
+              </td>
+              <td>
+                <span data-bind="numeric: credits, decimals: 1"></span>
+                <%= t('cr') %>
+              </td>
+            </tr>
+          </table>
+          <!-- /ko -->
+        </div>
+      </div>  <!-- object-info -->
     <!-- /ko -->
 
     <!-- Competence details -->
     <!-- ko if: selectedObjectType() == undefined || selectedObjectType() == 'Competence' -->
-      <div class="well">
+      <div class="object-info well">
 
         <h3>
           <%= t('.competences') %>
@@ -167,44 +220,51 @@
           </ul>
         <!-- /ko -->
 
-      </div>  <!-- well -->
+      </div>  <!-- object-info -->
     <!-- /ko -->
 
-  </div>  <!-- span3, sidebar -->
+  </div>
+
+<% end %>
 
 
-  <div class="span10">
+<!--
+<h1>
+  <%=t('.heading')%>
+</h1>
+-->
 
-    <h1><%=t('.heading')%></h1>
+<% if @study_plan.courses.empty? && @study_plan.competences.empty? %>
+  <div class="alert">
+    <%= link_to t('.empty_instructions'), studyplan_competences_path %>
+  </div>
+<% end %>
 
-    <% if @study_plan.courses.empty? && @study_plan.competences.empty? %>
-      <div class="alert">
-        <%= link_to t('.empty_instructions'), studyplan_competences_path %>
-      </div>
-    <% end %>
+<p id="status"></p>
 
-    <p id="status"></p>
+<div id="plan-container" data-studyplan-path="<%= plan_path(@study_plan.id) %>">
 
-    <div class="plan" id="plan" data-studyplan-path="<%= plan_path(@study_plan.id) %>">
+  <div id="svg"></div>
 
-      <div id="svg"></div>
-
-      <!-- ko foreach: periods -->
-        <div class="period" data-bind="droppable: droppedCourse, position: position, css: {'selected': isSelected, 'receiver': isReceiver, 'old': isOld, 'now': isNow}">
-          <div class="name" data-bind="text: name"></div>
-          <div class="credits"><span data-toggle="tooltip" data-bind="numeric: credits, decimals: 2, attr: {title: creditsTooltip}, css: creditsStatus"></span> <%= t('cr') %></div>
-        </div>
-      <!-- /ko -->
-
-      <!-- ko foreach: courses -->
-        <div class="course" data-toggle="tooltip" data-bind="draggable: {}, position: position, attr: {title: tooltip}, css: {'selected': isSelected, 'passed': grade() > 0, 'instanced': isInstanceBound, 'customized': isCustomized, 'prereq-of': hilightPrereq, 'prereq-to': hilightPrereqTo, 'misordered': isMisordered, 'misscheduled': isMisscheduled}">
-          <span data-bind="text: code"></span>
-          <span data-bind="text: name"></span>
-        </div>
-      <!-- /ko -->
-
+  <!-- ko foreach: periods -->
+    <div class="period" data-bind="
+        droppable: droppedCourse,
+        position: position,
+        css: { 'selected': isSelected,
+               'receiver': isReceiver,
+               'old': isOld,
+               'now': isNow }"
+    >
+      <div class="name" data-bind="text: name"></div>
+      <div class="credits"><span data-toggle="tooltip" data-bind="numeric: credits, decimals: 0, attr: {title: creditsTooltip}, css: creditsStatus"></span> <%= t('cr') %></div>
     </div>
+  <!-- /ko -->
 
-  </div>  <!-- span9 -->
+  <!-- ko foreach: courses -->
+    <div class="course" data-toggle="tooltip" data-bind="draggable: {}, position: position, attr: {title: tooltip}, css: {'selected': isSelected, 'passed': grade() > 0, 'instanced': isInstanceBound, 'customized': isCustomized, 'prereq-of': hilightPrereq, 'prereq-to': hilightPrereqTo, 'misordered': isMisordered, 'misscheduled': isMisscheduled}">
+      <span data-bind="text: code"></span>
+      <span data-bind="text: name"></span>
+    </div>
+  <!-- /ko -->
 
-</div>  <!-- row-fluid -->
+</div>

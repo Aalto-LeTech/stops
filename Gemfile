@@ -19,19 +19,20 @@ gem 'thinking-sphinx', '2.0.13'
 #gem 'mongrel', '>= 1.2.0.pre2'
 
 group :assets do
-  gem 'sass-rails',   '~> 3.2.3'
+  #gem 'sass-rails',   '~> 3.2.3'
   gem 'coffee-rails', '~> 3.2.1'
-
-  # See https://github.com/sstephenson/execjs#readme for more supported runtimes
-  gem 'therubyracer'
-
   gem 'uglifier', '>= 1.0.3'
 
-  gem 'eco'
+  # For Bootstrap & Less (incl. Sass)
+  gem 'therubyracer'             # See https://github.com/sstephenson/execjs#readme
+  gem 'jquery-rails', '~> 2.1'
   gem 'jquery-ui-rails', '~> 3.0'
-end
+  #gem 'less-rails'
+  #gem 'less-rails-bootstrap'
+  gem 'less-rails-bootstrap', git: 'git://github.com/metaskills/less-rails-bootstrap.git'
 
-gem 'jquery-rails', '~> 2.1'
+  gem 'eco'
+end
 
 
 group :test do

@@ -1,0 +1,14 @@
+<% content_for(:thebarebody) do %>
+
+  <!-- container layout -->
+
+  <div class="clear"></div>
+
+  <div id="thecontainer" class="container-fluid">
+
+    <%= render 'layouts/core/messages' %>
+    <%= yield %>
+
+  </div>
+
+<% end %>

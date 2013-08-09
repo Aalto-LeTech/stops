@@ -1,0 +1,165 @@
+////////////////////////////////////////////////////////////////////////////////
+// views/plans/curriculums/edit_prereqs.css.less
+//
+// Some Less spec for the related view.
+//
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////
+// View specific styling
+
+
+#thewrapper
+{
+  height: 100%;
+}
+
+.container-fluid
+{
+  height: 100%;
+}
+
+// 24px wide (progress.gif)
+.skill-editor-loading-icon
+{
+  img
+  {
+    position:     relative;
+    left:         50%;
+    margin-left:  -12px;
+  }
+}
+
+#modal-edit-skill
+{
+  top: 1%;
+  width: 1000px;
+  margin: 0px 0 0 -500px; /* original margin: -250px 0 0 -280px; */
+
+  .modal-body
+  {
+    max-height: 800px;
+  }
+}
+
+.draggable-skill
+{
+  cursor: default;
+}
+
+.dragging-skill
+{
+  cursor: move;
+}
+
+
+.course .skill,
+.competence .skill
+{
+  display: block;
+  border-top: 1px solid #d0d0d0;
+  background: #f0f0ff;
+  padding: .2em .5em;
+  margin: .5em 0em;
+  font-size: small;
+
+  &.selected
+  {
+    background: #a0a0ff;
+    border: 1px solid #8080ff;
+  }
+
+  .buttons > i
+  {
+    cursor: pointer;
+  }
+
+  .supportingPrereqButton,
+  .strictPrereqButton
+  {
+    background: #ddd;
+    border: 1px solid #888;
+    border-radius: 2px;
+    padding: 0px 2px;
+    cursor: pointer;
+  }
+
+  .skill-icon
+  {
+    display: inline-block;
+    font-size: large;
+  }
+
+  .skill-icon-skill:before
+  {
+    color: #008;
+    content: "\2692";
+  }
+
+  .skill-icon-knowledge:before
+  {
+    content: "\2605";
+    color: #db0;
+  }
+
+  .skill-icon-identity:before
+  {
+    content: "\263B";
+    color: #4c4;
+  }
+}
+
+/*
+ * smiley: 263B
+ * heart: 2665
+ */
+
+.loading
+{
+  opacity: 0.5;
+}
+
+.loading .skill,
+.loading.skill
+{
+  .supportingPrereqButton,
+  .strictPrereqButton
+  {
+    cursor: default;
+  }
+
+  .buttons > i
+  {
+    cursor: default;
+  }
+
+  .skill-description
+  {
+    color:        red;
+    font-weight:  bold;
+  }
+}
+
+.skill.supporting
+{
+  .supportingPrereqButton
+  {
+    background: #aaf;
+    border: 1px solid #88f;
+  }
+}
+.skill.strict
+{
+  .strictPrereqButton
+  {
+    background: #88f;
+    border: 1px solid #00f;
+  }
+}
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////

@@ -1,7 +1,7 @@
 class Curriculums::TempCoursesController < CurriculumsController
   before_filter :load_curriculum
   
-  layout 'wide'
+  layout 'views/curriculums/wide'
   
   # GET /temp_courses
   # GET /temp_courses.json

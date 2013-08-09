@@ -1,11 +1,15 @@
-<% content_for :title do %><%= @curriculum.name %> - <%=t '.title' %><% end %>
-<% content_for :javascript do %>
-  <%= javascript_include_tag "curriculums/curriculum" %>
+<% content_for :javascripts do %>
+  <%= javascript_include_tag "views/curriculums/edit" %>
 <% end %>
+
+<% content_for :title do %>
+  <%= @curriculum.name %> - <%=t '.title' %>
+<% end %>
+
 
 <div class="inline-heading-container">
   <h1 id="name-heading"><%= @curriculum.name %></h1>
-  
+
   <% if can? :update, @curriculum %>
     <a href="#edit-modal" data-toggle="modal" class="btn btn-warning btn-small vertical-fix">
       <i class="icon-pencil icon-white"></i><%= t '.change_name' %>
@@ -62,7 +66,7 @@
 
 <% if can? :update, @curriculum %>
   <p>
-    <%= link_to new_curriculum_course_path(I18n.locale, @curriculum), 
+    <%= link_to new_curriculum_course_path(I18n.locale, @curriculum),
       :class => "btn", :id => "new-course-button" do %>
       <i class="icon-plus"></i> <%= t('.course_create_link') %>
     <% end %>

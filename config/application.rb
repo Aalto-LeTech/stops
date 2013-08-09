@@ -2,9 +2,15 @@ require File.expand_path('../boot', __FILE__)
 
 require 'rails/all'
 
-# If you have a Gemfile, require the gems listed there, including any gems
-# you've limited to :test, :development, or :production.
-Bundler.require(:default, Rails.env) if defined?(Bundler)
+# If you precompile assets before deploying to production, use this line
+Bundler.require *Rails.groups(:assets => %w(development test))
+# If you want your assets lazily compiled in production, use this line
+# Bundler.require(:default, :assets, Rails.env)
+#   ref: http://guides.rubyonrails.org/asset_pipeline.html
+
+## If you have a Gemfile, require the gems listed there, including any gems
+## you've limited to :test, :development, or :production.
+#Bundler.require(:default, Rails.env) if defined?(Bundler)
 
 module Ops
   class Application < Rails::Application
@@ -42,21 +48,30 @@ module Ops
     # Enable the asset pipeline
     config.assets.enabled = true
 
-    config.assets.precompile += [
-      'curriculums/curriculum.js',
-      'curriculums/skillEditor_edit_prereqs_init.js',
-      'curriculums/skillEditor_edit_as_a_prereq_init.js',
-      'curriculums/skillEditor_edit_competence_prereqs_init.js',
-      'templates/_current_course_with_prereq_skills.js',
-      'plans/CompetenceElectionEditor.js',
-      'print.css',
-      'raphael-min.js',
-      'skillGraphView.js',
-      'graphCourse.js',
-      'graphSkill.js'
+    config.assets.precompile = [
+      Proc.new { |path|
+        # This Proc adds all the required assets for precompilation, it is
+        # verbose and explicit. As of now, it accepts only the following formats
+        #   png, gif, css & js
+        # files. Also, it adds js & css only from certain directories
+        #   core, layouts, libs & views
+        # because only from these do we need asset files.
+        # All thirdparty libraries etc. are injected into files like:
+        #   core/core.js views/plans/schedule/show.js
+        if File.basename(path) =~ /\.(png|gif)$/
+          puts "     Adding: #{path}"
+          true
+        elsif path =~ /^(core|layouts|libs|views)\/.*\.(css|js)$/
+          puts "  Compiling: #{path}"
+          true
+        else
+          puts "   Ignoring: #{path}"
+          false
+        end
+      }
     ]
-    
+
     # Version of your assets, change this if you want to expire all your assets
-    config.assets.version = '1.11'
+    config.assets.version = '1.12'
   end
 end

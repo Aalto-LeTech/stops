@@ -25,6 +25,10 @@ Study Plans
 SELECT study_plans.* FROM study_plans;
 DELETE FROM study_plans WHERE study_plans.user_id = 2;
 
+w #c09853 #a47e3c
+e #b94a48 #953b39
+i #3a87ad #2d6987
+s #468847 #356635
 
 a dashboard sketch/draft:
 

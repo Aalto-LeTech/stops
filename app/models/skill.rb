@@ -2,8 +2,9 @@ class Skill < ActiveRecord::Base
   has_many :skill_descriptions, :dependent => :destroy
 
   has_one :description_with_locale,
-          :class_name => "SkillDescription", 
+          :class_name => "SkillDescription",
           :conditions => proc { "skill_descriptions.locale = '#{I18n.locale}'" }
+
   alias :localized_description :description_with_locale
 
   has_many :skill_prereqs, :dependent => :destroy
@@ -16,36 +17,36 @@ class Skill < ActiveRecord::Base
            :conditions  => { :requirement => "#{SUPPORTING_PREREQ}" },
            :class_name  => 'SkillPrereq'
 
-  has_many :prereqs, 
-           :through   => :skill_prereqs, 
-           :source    => :prereq, 
+  has_many :prereqs,
+           :through   => :skill_prereqs,
+           :source    => :prereq,
            :order     => 'position'
 
-  has_many :strict_prereqs, 
-           :through     => :strict_skill_prereqs, 
+  has_many :strict_prereqs,
+           :through     => :strict_skill_prereqs,
            :source      => :prereq                 # TODO: :order => 'position',
 
-  has_many :supporting_prereqs, 
-           :through     => :supporting_skill_prereqs, 
-           :source      => :prereq, 
-           :order       => 'position' 
+  has_many :supporting_prereqs,
+           :through     => :supporting_skill_prereqs,
+           :source      => :prereq,
+           :order       => 'position'
 
   # Skills for which this is a prerequisite
-  has_many :skill_prereq_to, 
-           :class_name  => 'SkillPrereq', 
-           :foreign_key => :prereq_id, 
+  has_many :skill_prereq_to,
+           :class_name  => 'SkillPrereq',
+           :foreign_key => :prereq_id,
            :dependent   => :destroy
 
-  has_many :prereq_to, 
-           :through     => :skill_prereq_to, 
-           :source      => :skill, 
-           #:order       => 'position', 
+  has_many :prereq_to,
+           :through     => :skill_prereq_to,
+           :source      => :skill,
+           #:order       => 'position',
            :conditions  => "requirement = #{STRICT_PREREQ}"
 
   belongs_to :competence_node
 
   accepts_nested_attributes_for :skill_descriptions
-  
+
   before_create :assign_valid_position
   before_destroy :shift_skill_positions
 
@@ -63,9 +64,14 @@ class Skill < ActiveRecord::Base
       skill.save!
     end
   end
-  
+
+
+  def localized_description
+    description_with_locale.nil? ? "" : description_with_locale.description
+  end
 
   def description(locale)
+    throw "Deprecated! use localized_name!"
     description = SkillDescription.where(:skill_id => self.id, :locale => locale.to_s).first
     description ? description.description : ''
   end
@@ -106,7 +112,7 @@ class Skill < ActiveRecord::Base
   def dfs(paths, path, path_lengths, target_skill_ids, course_ids, visited)
     # If this skill belongs to a course that does not belong to the profile, kill this branch
     if (self.competence_node.type == 'ScopedCourse' && !course_ids.has_key?(self.competence_node_id)) || visited.has_key?(self.id)
-      puts "#{self.competence_node.name('fi')} not included"
+      puts "#{self.competence_node.localized_name} not included"
       return
     end
 

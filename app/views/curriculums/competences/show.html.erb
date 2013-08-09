@@ -1,5 +1,5 @@
 <!-- curriculums/competences/show -->
-<% content_for :javascript do %>
+<% content_for :javascripts do %>
   <%= javascript_include_tag 'libs/graph/graphView' %>
   <%= javascript_include_tag 'views/curriculums/courseGraph' %>
 <% end %>
@@ -26,7 +26,7 @@
 
 <ul>
   <% @competence.skills.each do |skill| %>
-    <li><%= skill.localized_description.description %></li>
+    <li><%= skill.localized_description %></li>
   <% end %>
 </ul>
 <!--td>< link_to t(:contributing_courses_link), curriculum_competence_skill_path(:curriculum_id => @curriculum.id, :competence_id => @competence.id, :id => skill.id) ></td-->

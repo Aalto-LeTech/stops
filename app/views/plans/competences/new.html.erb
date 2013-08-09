@@ -54,7 +54,8 @@
 <%= form_tag studyplan_competences_path do %>
   <%= hidden_field_tag :competence_id, @competence.id %>
 
-  <p><%= submit_tag t(:Ok) %></p>
-
-  <p><%= link_to t(:Cancel), studyplan_competences_path %></p>
+  <p>
+    <%= link_to t(:Cancel), studyplan_competences_path, :class => 'btn btn-default' %>
+    <%= submit_tag t(:Ok), :class => 'btn btn-primary' %>
+  </p>
 <% end %>

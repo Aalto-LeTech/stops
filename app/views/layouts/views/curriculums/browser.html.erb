@@ -9,10 +9,9 @@
   <!-- views/curriculums/browser layout -->
 
   <% if not @curriculum.nil? %>
-
-    <h1><%= link_to @curriculum.name, curriculum_path(:id => @curriculum) %></h1>
-
     <% if @competence %>
+      <h1><%= link_to @curriculum.name, curriculum_path(:id => @curriculum) %></h1>
+    
       <ul>
         <% @curriculum.competences.each do |competence| %>
           <li class="<%= competence == @competence ? 'selected' : '' %>"><%= link_to competence.localized_name, curriculum_competence_path(:curriculum_id => @curriculum, :id => competence) %></li>
@@ -27,17 +26,10 @@
         <% end %>
       </ul>
     <% elsif @course %>
+      <h1><%= link_to @curriculum.name, curriculum_path(:id => @curriculum) %></h1>
       <ul>
         <% @curriculum.courses.each do |course| %>
           <li class="<%= course == @course ? 'selected' : '' %>"><%= link_to course.localized_name, curriculum_course_path(:curriculum_id => @curriculum, :id => course) %></li>
-        <% end %>
-      </ul>
-    <% elsif @curriculum %>
-      <ul>
-        <% @curriculum.competences.each do |competence| %>
-          <li>
-            <%= link_to competence.localized_name, curriculum_competence_path(:curriculum_id => @curriculum, :id => competence) %>
-          </li>
         <% end %>
       </ul>
     <% end %>

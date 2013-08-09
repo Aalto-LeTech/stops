@@ -43,8 +43,8 @@ fi:
 
     schedule:
       show:
-        scheduling: "Aikataulutus"
         curriculum: "Opinto-opas"
+        scheduling: "Aikataulutus"
         save: "Tallenna"
         selected_course: "Valittu kurssi"
         credits:
@@ -64,7 +64,7 @@ fi:
         extent: "Laajuus"
         grade: "Arvosana"
         length: "Kesto"
-        prd: "oj"
+        prd: "periodia"
         extent_tooltip: "Tällä voit muokata kurssin opintopistearvoa (0-30 op)."
         grade_tooltip: "Tähän voit päivittää kurssista saamasi arvosanan (0-5)."
         length_tooltip: "Tällä voit muokata kurssin kestoa opintojaksoissa, jos ko. opintojaksolla järjestettävän kurssin kesto eroaa nyt kuvatusta."

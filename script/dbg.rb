@@ -237,6 +237,25 @@ class Dbggr
     @user = User.where( :id => 2 ).includes(:study_plan).first
     @study_plan = @user.study_plan
 
+    qs = [ '79770K', '00001', '00002', '00003', '79*', '0000.*', '*77*', '*00*' ]
+    qs.each do |q|
+      #puts "Searching with \"%s\"..." % [ q ]
+      results = User.search( q, star: true, ranker: :bm25 ) # proximity_bm25
+      if results.total_entries > 0
+        puts "  Found %d results with \"%s\":" % [ results.total_entries, q ]
+        results.each_with_index do |r, i|
+          puts "    R[%d] %s" % [ i+1, r ]
+          puts "       name: %s" % [ r.name ]
+          puts "       snum: %s" % [ r.studentnumber ]
+          puts "      email: %s" % [ r.email ]
+        end
+      else
+        puts "  No matching results found with \"%s\"!" % [ q ]
+      end
+      puts ""
+    end
+    exit
+
     #fix; exit
 
     y Period.current.find_preceding_periods(3)

@@ -32,7 +32,7 @@ class CurriculumsController < ApplicationController
   def show
     load_curriculum_for_show_and_edit
     authorize! :read, @curriculum
-    
+
     #@temp_courses = @curriculum.temp_courses
     @competences = Competence.where(:parent_competence_id => nil).includes([{:children => :localized_description}, :localized_description]).all
 
@@ -53,12 +53,12 @@ class CurriculumsController < ApplicationController
       format.xml  { render :xml => @curriculum }
     end
   end
-  
+
   # GET /curriculums/1/edit
   def edit
     load_curriculum_for_show_and_edit
     authorize! :update, @curriculum
-    
+
     @competences = Competence.where(:parent_competence_id => nil).includes([{:children => :localized_description}, :localized_description]).all
 
     @courses = ScopedCourse
@@ -78,7 +78,7 @@ class CurriculumsController < ApplicationController
     authorize! :update, @curriculum
   end
 
-  
+
   # POST /curriculums
   # POST /curriculums.xml
   def create
@@ -273,6 +273,51 @@ class CurriculumsController < ApplicationController
       format.json do
         render :json => nodes_json
       end
+    end
+  end
+
+
+  def search_courses
+    # before using this: http://pat.github.io/thinking-sphinx/quickstart.html
+    #   rake ts:index
+    #   rake ts:start
+    puts params.to_s
+    inquery = params[:inquery] if params[:inquery]
+    if inquery
+      curriculum_id = params[:id]
+      results = User.search(
+        inquery,
+        star: true,
+        ranker: :proximity_bm25
+      )
+      if results.total_entries > 0
+        puts "  Found %d results with \"%s\":" % [ results.total_entries, inquery ]
+        results.each_with_index do |r, i|
+          puts "    R[%d] %s" % [ i+1, r ]
+          puts "       name: %s" % [ r.name ]
+          puts "       snum: %s" % [ r.studentnumber ]
+          puts "      email: %s" % [ r.email ]
+        end
+      else
+        puts "  No matching results found with \"%s\"!" % [ inquery ]
+      end
+      puts ""
+#      results = ScopedCourse.search(
+#        inquery,
+#        star: true,
+#        ranker: :proximity_bm25,
+#        with: {curriculum_id: curriculum_id}
+#      )
+      results_json = results.as_json(
+        only: [:id, :name, :studentnumber],
+        root: false
+      )
+    else
+      puts "ERROR: No query string given!"
+      results = []
+    end
+    respond_to do |format|
+      format.json { render :json => {status: :ok, inquery: inquery, results: results_json} } #
     end
   end
 

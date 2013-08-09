@@ -23,6 +23,7 @@ Acknowledgements
   - There are open questions and bugs I'd need to look after.
 
 - [ ] address questions arisen so far:
+- [ ]   what about html views/plans/courses and its js plans/showCourse
 - [ ]   is "/:locale/courses*" not used at all? -- are the controller and views
         deprecated?
 - [ ]   how does "/:locale/skills*" work?

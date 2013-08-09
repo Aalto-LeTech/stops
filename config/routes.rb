@@ -34,6 +34,7 @@ Ops::Application.routes.draw do
         get 'graph'
         get 'outcomes'
         get 'search_skills'
+        get 'search_courses'
         match 'edit/import_csv', :controller => 'curriculums', :action => :import_csv, :via => [:post, :get]
       end
 

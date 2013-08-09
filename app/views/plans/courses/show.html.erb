@@ -6,9 +6,7 @@
 
 <% content_for(:javascripts) do %>
   <%= javascript_include_tag 'libs/graph/graphView' %>
-  <!--
-    <%= javascript_include_tag 'plans/showCourse' %> - FIXMENOW
-  -->
+  <%= javascript_include_tag 'views/plans/courses/show' %>
 <% end %>
 
 <% content_for :title do %>
@@ -54,15 +52,7 @@
   <% end %>
 </h1>
 
-<script type="text/html" id="courseTemplate"><div class="course" data-bind="position: position, css: {competence: isCompetence, cyclic: isCyclic}">
-  <h1 data-bind="text: name"></h1>
-
-  <ul data-bind="foreach: skills">
-    <!-- ko template: { name: 'skillTemplate', if: visible, afterRender: $root.updateElementDimensions } --><!-- /ko -->
-  </ul>
-</div></script>
-
-<script type="text/html" id="skillTemplate"><li class="skill" data-bind="text: description, css: {hilight: highlighted}"></li></script>
+<%= render :partial => 'courses/graph_templates' %>
 
 
 <% if @competence %>
@@ -104,5 +94,4 @@
 
 
 <h2><%= t(:course_prereqs_reqursive) %></h2>
-
 <%= render :partial => '/courses/prereqs_reqursive' %>

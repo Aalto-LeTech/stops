@@ -1,95 +1,25 @@
-<h1>
-  <%= @course.course_code %> <%= @course.localized_name %>
-</h1>
-
-<% if @competence %>
-  <!-- Study paths from course skills to competence skills -->
-  <table id="course-competence-graph" class="course-competence-graph" data-competence-id="<%= @competence.id %>">
-    <thead>
-      <td>Provides</td>
-      <td>Needed by</td>
-    </thead>
-
-    <tbody>
-      <tr>
-        <td class="course-skills-column">
-          <% @course.skills.each do |skill| %>
-            <%= link_to skill.localized_description, competencepath_skill_path(:id => skill.id, :competence_id => @competence), { :class => 'skill', 'data-skill-id' => skill.id } %>
-          <% end %>
-        </td>
-        <td id="skill-future"></td>
-      </tr>
-    </tbody>
-  </table>
-<% else %>
-  <h2><%=t('.course_provides')%></h2>
-  <table class="course-skill-dependencies">
-    <thead>
-      <td>Prerequisites</td>
-      <td>Provides</td>
-      <td>Needed by</td>
-    </thead>
-
-    <tbody>
-      <tr>
-        <td id="skill-prereqs"></td>
-        <td id="course-skills-column">
-          <% @course.skills.each do |skill| %>
-            <%= link_to skill.localized_description, skill, { :class => 'skill', 'data-skill-id' => skill.id } %>
-          <% end %>
-        </td>
-        <td id="skill-future"></td>
-      </tr>
-    </tbody>
-  </table>
+<% content_for :javascript do %>
+  <%= javascript_include_tag 'graph/graphView' %>
+  <%= javascript_include_tag 'curriculums/courseGraph' %>
 <% end %>
+<% content_for :title do %><%= @course.localized_name %><% end %>
 
-
+<h1><%= @course.course_code %> <%= @course.localized_name %></h1>
 
 <h2><%=t('.course_path_heading')%></h2>
 
-<%= link_to graph_curriculum_course_path(:curriculum_id => @curriculum.id, :id => @course.id) do %>
-  <%= image_tag 'visualization-button.png' %><br />
-  <%= t('.graph_link') %>
-<% end %>
+<!-- Course graph -->
+<div id="course-graph" 
+    data-courses-path="<%= curriculum_courses_path(:curriculum_id => @curriculum.id) %>" 
+    data-competences-path="<%= curriculum_competences_path(:curriculum_id => @curriculum.id) %>" 
+    data-skills-path="<%= curriculum_skills_path(:curriculum_id => @curriculum.id) %>"
+    data-source-id="<%= @course.id %>"
+    >
+    
+    <!-- ko template: { name: 'courseTemplate', foreach: visibleCourses, afterRender: updateElementDimensions } --><!-- /ko -->
+</div>
 
-<table class="course-path">
-  <thead>
-    <tr>
-      <th><%=t :course_strict_prereqs %></th>
-      <th></th>
-      <th><%= @course.localized_name %> <%=t :course_strict_prereq_of %></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td class="prereqs">
-        <%= render :partial => '/courses/prereqs' %>
-      </td>
-      <td class="current">
-        <%= @course.course_code %><br />
-        <%= @course.localized_name %>
-      </td>
-      <td class="future">
-        <!-- List of courses which depend on this course -->
-        <% if @course.prereq_to.empty? %>
-          <%=t :course_no_future %>
-        <% else %>
-          <ul>
-            <% @course.prereq_to.each do |course| %>
-              <% if !@competence || @competence.courses.include?(course) %>
-                <li>
-                  <%= link_to course.course_code + ' ' + course.localized_name, {:id => course.id} %>
-                </li>
-              <% end %>
-            <% end %>
-          </ul>
-        <% end %>
-
-      </td>
-    <tr>
-  </tbody>
-</table>
+<%= render :partial => 'courses/graph_templates' %>
 
 
 <h2><%=t :course_prereqs_reqursive %></h2>

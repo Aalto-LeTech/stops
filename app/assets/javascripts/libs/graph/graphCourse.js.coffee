@@ -165,9 +165,13 @@ class @GraphCourse
     
   
   # Draw edges to backward neighbors
-  drawPrereqArcs: ->
+  drawPrereqArcs: (options) ->
+    options ||= {}
+  
     for neighbor in @prereqs
       continue unless (neighbor.element && neighbor.visible)
+      continue if options['minLength'] && @level - neighbor.level < options['minLength']
+      
       from = @element.position()
       to = neighbor.element.position()
 
@@ -175,20 +179,25 @@ class @GraphCourse
       thickness = 1 if thickness < 1
       thickness = 10 if thickness > 10
       
-      x1 = from.left
-      y1 = from.top + 10
-      x2 = to.left + neighbor.element.width()
-      y2 = to.top + 10
+      x1 = to.left + neighbor.element.width()
+      y1 = to.top + 10
+      x2 = from.left
+      y2 = from.top + 10
       
-      @view.paper.path("M"+x1+" "+y1+"L"+x2+" "+y2)
-        .attr('stroke', '#888')
-        .attr('stroke-width', thickness)
+      @view.paper.path("M"+x1+" "+y1+"L"+x2+" "+y2).attr
+        'stroke': '#888'
+        'stroke-width': thickness
+        'arrow-end': 'block-wide'
 
 
   # Draw edges to forward neighbors
-  drawPostreqArcs: ->
+  drawPostreqArcs: (options) ->
+    options ||= {}
+  
     for neighbor in @prereqTo
       continue unless (neighbor.element && neighbor.visible)
+      continue if options['minLength'] && neighbor.level - @level < options['minLength']
+      
       from = @element.position()
       to = neighbor.element.position()
       
@@ -201,9 +210,11 @@ class @GraphCourse
       x2 = to.left
       y2 = to.top + 10
       
-      @view.paper.path("M"+x1+" "+y1+"L"+x2+" "+y2)
-        .attr('stroke', '#888')
-        .attr('stroke-width', thickness)
+      @view.paper.path("M"+x1+" "+y1+"L"+x2+" "+y2).attr
+        'stroke': '#888'
+        'stroke-width': thickness
+        'arrow-end': 'block-wide'
+        
   
 
   # Runs depth-first search in the course graph starting from this course.

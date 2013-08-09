@@ -1099,7 +1099,11 @@ table.course-table {
   col {
     min-width: 5em;
   }
-
+  
+  a.included {
+    color: gray;
+  }
+  
   col.code {
     //background-color: #FEE;
   }

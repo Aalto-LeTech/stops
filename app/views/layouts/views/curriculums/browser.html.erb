@@ -8,8 +8,8 @@
 
   <!-- views/curriculums/browser layout -->
 
-  <% if not @curriculum.nil? %>
-    <% if @competence %>
+  <% if @curriculum %>
+    <% if @competence && !@competence.new_record? %>
       <h1><%= link_to @curriculum.name, curriculum_path(:id => @curriculum) %></h1>
     
       <ul>

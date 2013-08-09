@@ -67,8 +67,6 @@ class CurriculumsController < ApplicationController
       .where(:course_descriptions => { :locale => I18n.locale })
       .includes(:localized_description)
       .order('course_code, name')
-    
-    render :action => 'edit', :layout => 'views/curriculums/container'
   end
 
 

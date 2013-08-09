@@ -78,7 +78,7 @@ fi:
           # Failure messages
           node_load_failure_message: "Muokattavan kurssin tietoja ei pystytty lataamaan. Ole hyvä ja kokeile myöhemmin uudestaan."
           # The following message is in two parts because its parameter must be embedded
-          # during runtime with JavaScript. 
+          # during runtime with JavaScript.
           # e.g., 'Virheestä johtuen valmiutta "Osaa laskea 1+1=2" ei pystytty poistamaan.'
           deletion_failed_heading: "Poisto epäonnistui"
           deletion_failed_message_1: 'Virheestä johtuen osaamistavoitetta'
@@ -145,3 +145,5 @@ fi:
         replaces_hint: ''
         other: 'Muita tietoja'
         other_hint: 'Kurssista voidaan ilmoittaa kurssin asema, kurssin taso, kurssin kotisivu, CEFR-taso (koskee kielikursseja) ja muita lisätietoja'
+      graph:
+        title: 'Kurssiverkko'

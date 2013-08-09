@@ -1,14 +1,14 @@
-#= require knockout-2.3.0
+#= require knockout
 #= require raphael-min
-#= require graph/graphCourse
-#= require graph/graphSkill
+#= require libs/graph/graphCourse
+#= require libs/graph/graphSkill
 
 
 # Custom KnockOut binding that makes it possible to move DOM objects.
 ko.bindingHandlers.position = {
   update: (element, valueAccessor, bindingHandlers, viewModel) ->
     value = ko.utils.unwrapObservable(valueAccessor())
-    
+
     $(element).css
       left: value.x
       top: value.y
@@ -16,18 +16,18 @@ ko.bindingHandlers.position = {
 
 class @GraphView
   levelWidth: 600
-  
+
   constructor: (@raphaelElement) ->
     @coursesById = {}    # id -> Course object
     @skillsById = {}     # id -> Skill object
-    
+
     @visibleCourses = []
-    
+
     @maxHeight = 0  # Height of the highest level $(document).height()
     @paper = undefined    # Raphael paper
 
 
-  load: (coursesPath, competencesPath, skillsPath) -> 
+  load: (coursesPath, competencesPath, skillsPath) ->
     $.ajax
       url: coursesPath,
       context: this,
@@ -48,7 +48,7 @@ class @GraphView
       dataType: 'json',
       success: this.loadSkills,
       async: false
-  
+
   #
   # Loads courses from JSON data.
   #
@@ -80,11 +80,11 @@ class @GraphView
       # Skip if skills belongs to a course that is not shown
       course = @coursesById[rawData.competence_node_id]
       continue unless course
-      
+
       # Skip skill if localized text is not available
       continue unless rawData.description_with_locale
       # TODO: load another locale instead
-      
+
       # Create skill object
       localized_name = rawData.description_with_locale.skill_description.description
       skill = new GraphSkill(rawData.id, localized_name, this)
@@ -93,18 +93,18 @@ class @GraphView
       # Add skill to course
       course.addSkill(skill)
       skill.setCourse(course)
-    
+
 
     # Set connections between skills
     for row in data
       rawData = row.skill
       skill = @skillsById[rawData.id]
       continue unless skill
-        
+
       for prereq_id in rawData.strict_prereq_ids
         prereq = @skillsById[prereq_id]
         skill.addPrereq(prereq) if (prereq)
-    
+
     # Normalize prereq strengths
     for id, course of @coursesById
       for prereqId, strength of course.prereqStrength
@@ -116,22 +116,22 @@ class @GraphView
           strength = 0
 
         course.prereqStrength[prereqId] = strength
-  
+
   resetSkillHighlights: ->
     for id, skill of @skillsById
       skill.highlighted(false)
-  
+
   # Initializes visualization
   # available options:
   # 'targetId': id or array of ids.
   #              If set, only courses on the path between the source and the targets are shown.
   #              If not set, all postreq courses are shown recursively.
-  
+
   # 'postreqSkills': 'all': show all skills of visible postreq courses
   #                  'recursive': follow links
   visualize: (options) ->
     options ||= {}
-    
+
     # Read target ids
     targetIds = {}         # id => boolean
     if options['targetId']
@@ -142,7 +142,7 @@ class @GraphView
         targetIds[options['targetId']] = true
     else
       targetIds = false
-    
+
     # Load source course
     sourceCourse = @coursesById[options['sourceId']]
     unless sourceCourse
@@ -152,38 +152,38 @@ class @GraphView
 
     # Show postreq courses
     this.showFuturePaths(sourceCourse, targetIds, options)
-    
+
     # Show prereq courses
     cycleDetector = {}
     sourceCourse.dfs 'backward', 0, cycleDetector, (course, level) ->
       course.visible = true
       course.level = level if (level < course.level)
       GraphCourse::minLevel = course.level if (course.level < GraphCourse::minLevel)
-      
+
       if 'all' == options['prereqSkills']
         for skill in course.skills
           skill.visible = true
-      
+
     # Show skills
     for skill in sourceCourse.skills
       skill.visible = true
-      
+
       for postreq in skill.prereqTo
         postreq.visible = true
         if 'recursive' == options['postreqSkills']
           skill.dfs 'forward', (s, depth) -> s.visible = true
-      
+
       for prereq in skill.prereqs
         prereq.visible = true
         prereq.course.visible = true
-        
+
         if 'recursive' == options['prereqSkills']
           skill.dfs 'backward', (s, depth) -> s.visible = true
 
-    
+
     this.initializeVisualization(sourceCourse)
-  
-  
+
+
   # sets course.visible=true for courses that are on the path beween source and target courses
   # source: Course object
   # targets: hash courseId => true. If targets is not set, all courses are shown recursively
@@ -203,47 +203,47 @@ class @GraphView
 
       course.level = level if (level > course.level)
       GraphCourse::maxLevel = course.level if (course.level > GraphCourse::maxLevel)
-      
+
       if onPath
         course.visible = true
-      
+
         if 'all' == options['postreqSkills']
           for skill in course.skills
             skill.visible = true
-      
+
       return onPath
-      
+
     dfs(sourceCourse, 0)
-  
-  
+
+
   visualizeFullGraph: (courseId) ->
     startingCourse = @coursesById[courseId]
     unless startingCourse
       console.log "Course #{courseId} not found."
       return
-    
+
     # Run through course graph with DFS to
     # - assign courses to levels
     # - find out which courses are visible
     minLvl = 0
     maxLvl = 0
-    
+
     startingCourse.dfs 'backward', 0, (course, level) ->
       course.visible = true
       course.level = level if (level < course.level)
       minLvl = course.level if (course.level < minLvl)
-    
+
     startingCourse.dfs 'forward', 0, (course, level) ->
       course.visible = true
       course.level = level if (level > course.level)
       maxLvl = course.level if (course.level > maxLvl)
-      
+
     @minLevel = minLvl
     @maxLevel = maxLvl
-    
+
     this.initializeVisualization(startingCourse)
-  
-  
+
+
   initializeVisualization: (startingCourse) ->
     this.createLevels()
     ko.applyBindings(this)
@@ -251,28 +251,28 @@ class @GraphView
     @paper = Raphael(@raphaelElement, @levels.length * @levelWidth, @maxHeight)
     #this.paper.setSize(@maxLevel * @levelWidth, @maxHeight);
 
-  
+
   createLevels: ->
     levelCount = GraphCourse::maxLevel - GraphCourse::minLevel + 1
     @levels = Array(levelCount)
-    
+
     for i in [0...levelCount]
       @levels[i] = new GraphLevel(i * @levelWidth, @levelWidth)
 
     # Add courses to Levels
     for id, course of @coursesById
       continue unless course.visible
-      
+
       course.level -= GraphCourse::minLevel  # Normalize course level numbers so that they start from zero
-      
+
       @visibleCourses.push(course)
       level = this.levels[course.level]
       level.addCourse(course) if level
-    
+
     GraphCourse::maxLevel -= GraphCourse::minLevel
     GraphCourse::minLevel = 0
-  
-  
+
+
   # This is called by knockout after rendering a course or skill, so that we know the dimensions of the DOM element.
   updateElementDimensions: (elements) ->
     for element in elements
@@ -281,8 +281,8 @@ class @GraphView
       object.element = el
       object.width = el.width()
       object.height = el.height()
-  
-  
+
+
   positionCourses: (startingCourse) ->
     # Calculate level heights
     for level in @levels
@@ -301,7 +301,7 @@ class @GraphView
 
     for i in [(@levels.length - 1)..0]
       @levels[i].setYindicesForward()
-    
+
 
     # Updating positions
     for id,course of @coursesById
@@ -312,41 +312,41 @@ class @GraphView
   hilightCourse: (course) ->
     this.resetSkillHighlights()
     @paper.clear()
-    
+
     course.drawPrereqArcs()
     course.drawPostreqArcs()
-    
+
     for skill in course.skills
       # Hilight all skills
       skill.highlighted(true)
-      
+
       # Hilight direct prereqs
       for neighbor in skill.prereqs
         neighbor.highlighted(true)
-      
+
       # Hilight direct postreqs
       for neighbor in skill.prereqTo
         neighbor.highlighted(true)
-  
-  
+
+
   hilightSkill: (skill) ->
     this.resetSkillHighlights()
     @paper.clear()
-  
+
     skill.highlighted(true)
     skill.drawPrereqArcs()
     skill.drawPostreqArcs()
-    
+
     for neighbor in skill.prereqs
       neighbor.highlighted(true)
-    
+
     for neighbor in skill.prereqTo
       neighbor.highlighted(true)
-  
+
 #     skill.dfs 'backward', (s, depth) =>
 #       s.highlighted(true)
 #       s.drawPrereqArcs()
-#     
+#
 #     skill.dfs 'forward', (s, depth) =>
 #       s.highlighted(true)
 #       s.drawPostreqArcs()
@@ -373,4 +373,3 @@ class @GraphView
     courseCanvas = $('#course-graph')
     element = course.getElement(this)
     courseCanvas.append(element)
-

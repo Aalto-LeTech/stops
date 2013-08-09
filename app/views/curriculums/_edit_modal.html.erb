@@ -14,17 +14,19 @@
     <div id="edit-modal-error-box" class="info error-info long-info hide">
     </div>
     <div id="edit-modal-loading" class="hide">
-      <%= image_tag 'progress.gif' %> 
+      <%= image_tag 'progress.gif' %>
       <div><%= t '.saving' %>...</div>
     </div>
-    <p>
-      <%= form_for @curriculum, :remote => true, :html => { :id => 'edit-modal-form' } do |f| %>
-        
-        <%= f.label :name, t('.name_label') %>
-        <%= f.text_field :name, :class => 'span11', :size => 40 %>
+    <div class="row-fluid">
+      <p>
+        <%= form_for @curriculum, :remote => true, :html => { :id => 'edit-modal-form' } do |f| %>
 
-      <% end %>
-    </p>
+          <%= f.label :name, t('.name_label') %>
+          <%= f.text_field :name, :class => 'span11', :size => 40 %>
+
+        <% end %>
+      </p>
+    </div>
   </div>
   <div class="modal-footer">
     <button type="button" data-dismiss="modal" class="btn"><%= t 'Cancel' %></button>

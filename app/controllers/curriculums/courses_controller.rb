@@ -3,7 +3,7 @@ class Curriculums::CoursesController < CurriculumsController
   before_filter :load_curriculum
 
   respond_to :json
-  # html for only show, new & create
+  # html for only index, show, new & create (as of 2013-08-09)
 
   # GET /courses
   # GET /courses.xml
@@ -29,7 +29,6 @@ class Curriculums::CoursesController < CurriculumsController
             course_descriptions.name AS translated_name
           SQL
         ).to_json(:methods => :strict_prereq_ids)
-
       end
     end
   end

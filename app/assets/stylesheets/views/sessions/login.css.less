@@ -8,6 +8,12 @@
 
 
 ////////////////////////////////////////////////////////////////////////////////
+// Imports
+
+@import "twitter/bootstrap/mixins.less";
+
+
+////////////////////////////////////////////////////////////////////////////////
 // View specific styling
 
 .shibboleth-login
@@ -17,7 +23,7 @@
   a {
     padding: 1em 2em;
     font-weight: bold;
-    @include border-radius(20px);
+    .border-radius(20px);
   }
 
   p {

@@ -42,15 +42,15 @@ class @Course
   updateTooltip: ->
     alarms = ['']
     notices = ['']
-    alarms.push(i18n.course_tooltip_misordered) if @isMisordered()
-    alarms.push(i18n.course_tooltip_misscheduled) if @isMisscheduled()
-    notices.push(i18n.course_tooltip_uninstanced) if not @isInstanceBound()
-    notices.push(i18n.course_tooltip_customized) if @isCustomized()
-    notices.push(i18n.course_tooltip_passed) if @grade() > 0
+    alarms.push(O4.schedule.i18n.course_tooltip_misordered) if @isMisordered()
+    alarms.push(O4.schedule.i18n.course_tooltip_misscheduled) if @isMisscheduled()
+    notices.push(O4.schedule.i18n.course_tooltip_uninstanced) if not @isInstanceBound()
+    notices.push(O4.schedule.i18n.course_tooltip_customized) if @isCustomized()
+    notices.push(O4.schedule.i18n.course_tooltip_passed) if @grade() > 0
 
     tooltip = ''
-    tooltip += i18n.course_tooltip_intro_alarm + alarms.join('\n - ') + '\n' if alarms.length > 1
-    tooltip += i18n.course_tooltip_intro_notice + notices.join('\n - ') + '\n' if notices.length > 1
+    tooltip += O4.schedule.i18n.course_tooltip_intro_alarm + alarms.join('\n - ') + '\n' if alarms.length > 1
+    tooltip += O4.schedule.i18n.course_tooltip_intro_notice + notices.join('\n - ') + '\n' if notices.length > 1
     @tooltip(tooltip)
 
 

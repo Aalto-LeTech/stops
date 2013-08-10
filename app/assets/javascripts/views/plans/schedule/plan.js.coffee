@@ -12,10 +12,6 @@ class @PlanView
   ISREADY: false
 
   constructor: (@planUrl) ->
-    # i18n string support. Accessible from the view like this:
-    #   <span data-bind="text: $root.i18n['qwerty'] "></span>
-    @i18n = O4.schedule.i18n
-
     @selectedObject = ko.observable()
     @selectedObjectType = ko.observable()
 

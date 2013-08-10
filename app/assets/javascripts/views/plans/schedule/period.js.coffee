@@ -53,13 +53,13 @@ class @Period
       #console.log("Foo! #{@id}")
       credits = newValue
       @creditsStatus = ''
-      @creditsTooltip = i18n.period_credits_tooltip_neutral
+      @creditsTooltip = O4.schedule.i18n.period_credits_tooltip_neutral
       if credits < @UNDERBOOKED_LIMIT
         @creditsStatus = 'underbooked'
-        @creditsTooltip = i18n.period_credits_tooltip_underbooked if credits > 0
+        @creditsTooltip = O4.schedule.i18n.period_credits_tooltip_underbooked if credits > 0
       else if credits > @OVERBOOKED_LIMIT
         @creditsStatus = 'overbooked'
-        @creditsTooltip = i18n.period_credits_tooltip_overbooked
+        @creditsTooltip = O4.schedule.i18n.period_credits_tooltip_overbooked
 
 
   loadJson: (data) ->

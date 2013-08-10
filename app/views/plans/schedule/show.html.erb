@@ -2,15 +2,11 @@
   <%= stylesheet_link_tag "views/plans/schedule/show", :media => 'all' %>
 <% end %>
 
-
 <% content_for(:javascripts) do %>
   <script type="text/javascript">
     <%= render "show_i18n_strings.js" %>
   </script>
   <%= javascript_include_tag 'views/plans/schedule/show' %>
-  <script type="text/javascript">
-    <%= render "metadata.js" %>
-  </script>
 <% end %>
 
 

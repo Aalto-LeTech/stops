@@ -223,13 +223,6 @@
 
 <% end %>
 
-
-<!--
-<h1>
-  <%=t('.heading')%>
-</h1>
--->
-
 <% if @study_plan.courses.empty? && @study_plan.competences.empty? %>
   <div class="alert">
     <%= link_to t('.empty_instructions'), studyplan_competences_path %>
@@ -258,6 +251,7 @@
 
   <!-- ko foreach: courses -->
     <div class="course" data-toggle="tooltip" data-bind="draggable: {}, position: position, attr: {title: tooltip}, css: {'selected': isSelected, 'passed': grade() > 0, 'instanced': isInstanceBound, 'customized': isCustomized, 'prereq-of': hilightPrereq, 'prereq-to': hilightPrereqTo, 'misordered': isMisordered, 'misscheduled': isMisscheduled}">
+      <!-- <div class="arrow prereq-arrow">&#x2b07;</div> -->
       <span data-bind="text: code"></span>
       <span data-bind="text: name"></span>
     </div>

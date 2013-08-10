@@ -102,7 +102,7 @@
 
     &.selected {
       color: white;
-      border: 2px solid #0000ff;
+      border: 1px solid #0000ff;
       background: #6060e0;
     }
 
@@ -125,13 +125,13 @@
     top: 0px;
     left: 0px;
 
-    color:      #444;
+    color:      #666;
     background: #ffeeee;
-    border:     1px solid #aaaaaa;
+    border:     1px solid #ccc;
     .border-radius(4px);
 
     font-size:  small;
-    padding:    3px 3px 3px 3px;
+    padding:    2px 3px;
     margin:     0px;
 
     cursor:     move;
@@ -155,7 +155,7 @@
     }
 
     &.instanced {
-      background: #eeffee;
+      background-color: #eee;
     }
 
     &.customized {
@@ -165,22 +165,42 @@
     &.passed {
       font-style: italic;
       color: #666;
-      border: 1px solid #66ff66;
+      border: 1px solid #ccc;
     }
 
     &.prereq-of, &.prereq-to {
       color: black;
-      border: 2px solid black;
+      border: 1px solid black;
     }
 
     &.prereq-of {
-      background: #aaffaa;
-      border-bottom: 5px solid blue;
+      background-color: #ccf;
+      border-bottom: 5px solid #00c;
     }
 
     &.prereq-to {
-      background: #eeaaee;
-      border-top: 5px solid blue;
+      background-color: #ccf;
+      border-top: 5px solid #00c;
+    }
+    
+    .arrow {
+      display: none;
+      position: relative;
+      float: left;
+      /*margin-left: 45px;*/
+      left: 45px;
+      
+      font-size: 200%;
+      font-weight: bold;
+      color: blue;
+    }
+    &.prereq-to .prereq-arrow {
+      display: block;
+      top: -30px;
+    }
+    &.prereq-of .prereq-arrow {
+      display: block;
+      bottom: 0px;
     }
 
     &.customized {
@@ -189,13 +209,13 @@
 
     &.misordered, &.misscheduled {
       background: #ffaaaa;
-      border: 1px solid #880000;
+      /*border: 1px solid #880000;*/
     }
-
+    
     &.selected {
       color: white;
-      border: 2px solid #0000ff;
-      background: #6666ee;
+      border: 1px solid #0000ff;
+      background: #5555dd;
       z-index: 1; // Make sure selected course is on top of other courses
     }
   }

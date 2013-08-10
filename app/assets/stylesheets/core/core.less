@@ -197,6 +197,10 @@ h1:first-child, h2:first-child, h3:first-child, h4:first-child
 ////////////////////////////////////////////////////////////////////////////////
 // Status modifiers
 
+/*
+ * FIXME: these cause side effects because .selected is used in many different context.
+ * These must be moved under more specific selectors.
+ */
 div
 {
   &.chosen

@@ -17,8 +17,8 @@ gem 'pg_search'
 # For the Thinking Sphinx search engine
 # sudo apt-get install sphinxsearch
 # sudo apt-get install libmysqlclient-dev
-gem 'mysql2',          '0.3.12b4' #b5 ?
-gem 'thinking-sphinx', '3.0.0'
+# gem 'mysql2',          '0.3.12b4' #b5 ?
+#gem 'thinking-sphinx', '3.0.0'
 
 # Use unicorn as the web server
 # gem 'unicorn'

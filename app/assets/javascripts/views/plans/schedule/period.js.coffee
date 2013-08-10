@@ -30,7 +30,10 @@ class @Period
     # TODO: specify event handler in the binding
     @droppedCourse.subscribe (course) =>
       #dbg.lg("#{@}::droppedCourse(#{course})!")
+      console.log "Period: setPeriod"
       course.setPeriod(this)
+      
+      console.log "Period: updatePosition"
       course.updatePosition()
       course.updateReqWarnings()
 

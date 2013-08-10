@@ -406,13 +406,13 @@ class @Course
 
   # Updates the DOM elements to match model
   updatePosition: ->
-    #dbg.lg("#{@}::updatePosition()!")
-    # Move the div
+        # Move the div
     pos = @position()
     pos.x = @slot * (PlanView.COURSE_WIDTH + PlanView.COURSE_MARGIN_X) + PlanView.COURSE_MARGIN_X
     pos.y = @period.position().y + PlanView.COURSE_MARGIN_Y
     pos.height = @length() * PlanView.PERIOD_HEIGHT - 2 * (PlanView.COURSE_MARGIN_Y + PlanView.COURSE_PADDING_Y)
-    #dbg.lg("updatePosition(): #{pos.x} #{pos.y}") if @code == "MS-A0101"
+    
+    pos.updated = false     # This hack is needed to distinguish from unnecesary updates triggered by other bindings
     @position.valueHasMutated()
 
 

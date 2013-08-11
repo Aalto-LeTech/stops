@@ -73,7 +73,9 @@ class AbstractCourse < ActiveRecord::Base
 
     AbstractCourse.find_each do |abstract_course|
       period_number = rand(4)
+      period_number += 1 if period_number >= 2  # Don't put courses on summer
       length = rand(2) + 1
+      length = 1 if period_number == 1 || period_number == 4  # Length of the last periods can only be 1
 
       periods.each do |period|
         if period.number == period_number

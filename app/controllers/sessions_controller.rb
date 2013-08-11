@@ -16,9 +16,9 @@ class SessionsController < ApplicationController
     session[:logout_url] = nil
 
     if @user_session.save
-      # TODO: log username
-      logger.info "Login successful" # "Logged in #{@user_session}"
-      redirect_back_or_default frontpage_url
+      user = current_user
+      logger.info("Logged in #{user.login} (#{user.studentnumber}) (password)")
+      redirect_default(user)
     else
       logger.info "Login failed. #{@user_session.errors.full_messages.join(',')}"
 
@@ -125,11 +125,30 @@ class SessionsController < ApplicationController
       session[:logout_url] = logout_url
       logger.info("Logged in #{user.login} (#{user.studentnumber}) (shibboleth)")
 
-      redirect_back_or_default root_url
+      redirect_default(user)
     else
       logger.warn("Failed to create session for #{user.login} (#{user.studentnumber}) (shibboleth)")
       flash[:error] = 'Shibboleth login failed.'
       render :action => 'new'
     end
   end
+  
+  def redirect_default(user)
+    
+    if user.staff?
+      redirect_back_or_default root_url
+    else
+      if user.study_plan
+        if user.study_plan.competences.empty?
+          redirect_to studyplan_competences_path
+        else
+          redirect_to studyplan_schedule_path
+        end
+      else
+        redirect_to edit_studyplan_curriculum_path
+      end
+    end
+  end
+  
+  
 end

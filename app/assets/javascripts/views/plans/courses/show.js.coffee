@@ -1,3 +1,5 @@
+#= require libs/graph/graphView
+
 jQuery ->
   element = $('#course-graph')
   coursesPath = element.data('courses-path')

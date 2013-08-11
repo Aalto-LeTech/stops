@@ -1,8 +1,10 @@
-<% content_for(:stylesheets) do %>
+<% content_for(:stylesheets) do -%>
   <%= stylesheet_link_tag "views/plans/competences/shared", :media => 'all' %>
-<% end %>
-
-<% content_for(:theleft) do %>
+<% end -%>
+<% content_for(:javascripts) do -%>
+  <%= javascript_include_tag 'views/plans/courses/show' %>
+<% end -%>
+<% content_for(:theleft) do -%>
 
   <h1><%= link_to t('.competences'), studyplan_competences_path %></h1>
   <ul>
@@ -13,7 +15,7 @@
     <% end %>
   </ul>
 
-<% end %>
+<% end -%>
 
 <% competence_selected = @user.study_plan.has_competence?( @competence ) %>
 
@@ -126,4 +128,16 @@
     <% end %>
     -->
   </div>
+</div>
+
+<%= render :partial => 'courses/graph_templates' %>
+
+<div id="course-graph"
+  data-courses-path="<%= curriculum_courses_path(:curriculum_id => @curriculum.id) %>"
+  data-competences-path="<%= curriculum_competences_path(:curriculum_id => @curriculum.id) %>"
+  data-skills-path="<%= curriculum_skills_path(:curriculum_id => @curriculum.id) %>"
+  data-source-id="<%= @competence.id %>"
+  >
+
+  <!-- ko template: { name: 'courseTemplate', foreach: visibleCourses, afterRender: updateElementDimensions } --><!-- /ko -->
 </div>

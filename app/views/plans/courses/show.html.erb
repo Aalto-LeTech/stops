@@ -1,20 +1,14 @@
 <!-- plans/courses/show -->
-
-<% content_for(:stylesheets) do %>
+<% content_for(:stylesheets) do -%>
   <%= stylesheet_link_tag "views/plans/courses", :media => 'all' %>
-<% end %>
-
-<% content_for(:javascripts) do %>
-  <%= javascript_include_tag 'libs/graph/graphView' %>
+<% end -%>
+<% content_for(:javascripts) do -%>
   <%= javascript_include_tag 'views/plans/courses/show' %>
-<% end %>
-
-<% content_for :title do %>
+<% end -%>
+<% content_for :title do -%>
   <%= @course.course_code %> <%= @course.localized_name %>
-<% end %>
-
-
-<% content_for(:theleft) do %>
+<% end -%>
+<% content_for(:theleft) do -%>
 
   <% if @competence %>
 
@@ -36,7 +30,7 @@
     </ul>
   <% end %>
 
-<% end %>
+<% end -%>
 
 <h1>
   <%= @course.course_code %> <%= @course.localized_name %>

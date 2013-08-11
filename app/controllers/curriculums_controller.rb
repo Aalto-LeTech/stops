@@ -202,13 +202,14 @@ class CurriculumsController < ApplicationController
       end
 
       # Search from course names or codes
-      nodes = CourseDescription.where(['name ILIKE ? OR course_code ILIKE ?', "%#{params[:q]}%", "%#{params[:q]}%"])
-                               .joins(:scoped_course)
-                               .select(:scoped_course_id).uniq
-      nodes.each do |node|
-        node_id = node.scoped_course_id
-        node_ids << node_id if not node_id == excluded_node_id
-      end
+      # FIXME: CourseDescription now belongs to AbstractCourse instead of ScopedCourse
+#       nodes = CourseDescription.where(['name ILIKE ? OR course_code ILIKE ?', "%#{params[:q]}%", "%#{params[:q]}%"])
+#                                .joins(:scoped_course)
+#                                .select(:scoped_course_id).uniq
+#       nodes.each do |node|
+#         node_id = node.scoped_course_id
+#         node_ids << node_id if not node_id == excluded_node_id
+#       end
 
       # Search from competence names
       nodes = CompetenceDescription.where(['name ILIKE ?', "%#{params[:q]}%"])

@@ -12,14 +12,21 @@ class @Period
   createFromJson: (data) ->
     periodCounter = 0
     previousPeriod = undefined
-    for dat in data
-      period = new Period(dat)
-      # Save sequence information
+    
+    for raw_period in data
+      period = new Period(raw_period)
       period.sequenceNumber = periodCounter
       period.previousPeriod = previousPeriod
       previousPeriod.nextPeriod = period if previousPeriod
       previousPeriod = period
       periodCounter++
+      
+      console.log "Warning: period id collision at #{@id}!" if @BYID[period.id]
+      @BYID[period.id] = period
+      @ALL.push(period)
+    
+    # Make sure we always have current period. (This is relevant is studyplan begins in future.)
+    Period::CURRENT ||= @ALL[0]
 
 
   constructor: (data) ->
@@ -79,15 +86,8 @@ class @Period
     else
       @isOld = false
       if @beginsAt < Period::NOW
-        #dbg.lg("#{@}::loadJson(): Current period found: #{@beginsAt} - #{@endsAt} vs #{Period::NOW}!")
         @isNow = true
         Period::CURRENT = this
-
-    # Map the object
-    throw "ERROR: id collision at #{@id}!" if @BYID[@id]?
-    @BYID[@id] = this
-    @ALL.push(this)
-
 
   earlierThan: (other) ->
     return this.sequenceNumber < other.sequenceNumber

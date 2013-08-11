@@ -84,8 +84,7 @@ class PlansController < ApplicationController
     authorize! :read, @study_plan
 
     # Get periods, competences, user courses and study plan course data
-    number_of_buffer_periods = 15 # FIXME should be more like 15
-    periods = @study_plan.periods(number_of_buffer_periods).includes(:localized_description)
+    periods = @study_plan.periods.includes(:localized_description)
     competences = @study_plan.competences.includes([:localized_description, :courses])
     user_courses = @user.user_courses.includes(:course_instance)
     study_plan_courses = @study_plan.study_plan_courses.includes(

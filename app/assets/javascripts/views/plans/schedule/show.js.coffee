@@ -12,8 +12,6 @@
 
 
 jQuery ->
-  dbg.lg("jQuery Start!")
-
   $plan = $('#plan-container')
   planUrl = $plan.data('studyplan-path')
 

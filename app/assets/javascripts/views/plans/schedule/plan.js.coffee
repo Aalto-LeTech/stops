@@ -131,8 +131,8 @@ class @PlanView
 
     # Autoscroll the viewport to show the current period and the near future
     dbg.lg("Autoscrolling the viewport...")
-    topOffSet = $('div.period.now').offset().top
-    $(window).scrollTop(topOffSet - 2 * @constructor.PERIOD_HEIGHT)
+    topOffSet = $('div.period.now').offset()
+    $(window).scrollTop(topOffSet.top - 2 * @constructor.PERIOD_HEIGHT) if topOffSet
 
     # Reconfigure the affixed sidebars height in static mode to a static value
     # instead of the default 'auto', which would cause irritable bouncing of the

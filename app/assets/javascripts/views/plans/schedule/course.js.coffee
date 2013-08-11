@@ -4,83 +4,6 @@ class @Course
   BYSCOPEDID: {}
   BYABSTRACTID: {}
 
-
-  createFromJson: (data, passedData) ->
-    # Load courses
-    for dat in data
-      course = new Course(dat)
-
-    # Load course prerequirements
-    for course in @ALL
-      for prereqId in course.prereqIds
-        prereq = @BYSCOPEDID[prereqId]
-        unless prereq
-          dbg.lg("Unknown prereqId #{prereqId}!")
-          continue
-        course.addPrereq(prereq)
-
-    # Load passed courses
-    for dat in passedData
-      course = @BYABSTRACTID[dat['abstract_course_id']]
-      unless course
-        dbg.lg("Unknown course #{dat['abstract_course_id']}!")
-        continue
-      # Save the period
-      periodId = dat['period_id']
-      if not periodId?
-        dbg.lg("Course \"#{course.name}\" was probably passed on a custom instance since no periodId was given.")
-      else
-        course.period = Period::BYID[periodId]
-        unless course.period
-          dbg.lg("Unknown periodId #{periodId}")
-      # Save other data
-      course.credits(dat['credits'])
-      course.grade(dat['grade'])
-
-
-  # Updates the tooltip
-  updateTooltip: ->
-    alarms = ['']
-    notices = ['']
-    alarms.push(O4.schedule.i18n.course_tooltip_misordered) if @isMisordered()
-    alarms.push(O4.schedule.i18n.course_tooltip_misscheduled) if @isMisscheduled()
-    notices.push(O4.schedule.i18n.course_tooltip_uninstanced) if not @isInstanceBound()
-    notices.push(O4.schedule.i18n.course_tooltip_customized) if @isCustomized()
-    notices.push(O4.schedule.i18n.course_tooltip_passed) if @grade() > 0
-
-    tooltip = ''
-    tooltip += O4.schedule.i18n.course_tooltip_intro_alarm + alarms.join('\n - ') + '\n' if alarms.length > 1
-    tooltip += O4.schedule.i18n.course_tooltip_intro_notice + notices.join('\n - ') + '\n' if notices.length > 1
-    @tooltip(tooltip)
-
-
-  # Returns the period in which this course ends
-  getEndPeriod: ->
-    remaining_distance = @length()
-    period = @period
-    while period and remaining_distance -= 1
-      period = period.nextPeriod
-    #dbg.lg("#{@}::getEndPeriod(#{@period}) -> #{period}")
-    return period
-
-
-  # Check the period & grade related flag "isMisscheduled"
-  updateMisscheduledFlag: ->
-    endPeriod = @getEndPeriod()
-    @isMisscheduled(not endPeriod? or ((endPeriod.isOld and not @grade() > 0) or ((not endPeriod.isOld) and @grade() > 0)))
-    @updateTooltip()
-
-
-  # Update the grade display
-  updateGradeDisplay: ->
-    if @period.isOld
-      $('.well #grade').show()
-      #$('.well #grade').slideDown(500)
-    else
-      $('.well #grade').hide()
-      #$('.well #grade').slideUp(500)
-
-
   constructor: (data) ->
     @isSelected          = ko.observable(false)
     @hilightPrereq       = ko.observable(false)
@@ -180,6 +103,81 @@ class @Course
       # Check the period & grade related flag "isMisscheduled"
       # NB: Also calls updateTooltip, so no need to call it here
       @updateMisscheduledFlag()
+
+  createFromJson: (data, passedData) ->
+    # Load courses
+    for dat in data
+      course = new Course(dat)
+
+    # Load course prerequirements
+    for course in @ALL
+      for prereqId in course.prereqIds
+        prereq = @BYSCOPEDID[prereqId]
+        unless prereq
+          dbg.lg("Unknown prereqId #{prereqId}!")
+          continue
+        course.addPrereq(prereq)
+
+    # Load passed courses
+    for dat in passedData
+      course = @BYABSTRACTID[dat['abstract_course_id']]
+      unless course
+        dbg.lg("Unknown course #{dat['abstract_course_id']}!")
+        continue
+      # Save the period
+      periodId = dat['period_id']
+      if not periodId?
+        dbg.lg("Course \"#{course.name}\" was probably passed on a custom instance since no periodId was given.")
+      else
+        course.period = Period::BYID[periodId]
+        unless course.period
+          dbg.lg("Unknown periodId #{periodId}")
+      # Save other data
+      course.credits(dat['credits'])
+      course.grade(dat['grade'])
+
+
+  # Updates the tooltip
+  updateTooltip: ->
+    alarms = ['']
+    notices = ['']
+    alarms.push(O4.schedule.i18n.course_tooltip_misordered) if @isMisordered()
+    alarms.push(O4.schedule.i18n.course_tooltip_misscheduled) if @isMisscheduled()
+    notices.push(O4.schedule.i18n.course_tooltip_uninstanced) if not @isInstanceBound()
+    notices.push(O4.schedule.i18n.course_tooltip_customized) if @isCustomized()
+    notices.push(O4.schedule.i18n.course_tooltip_passed) if @grade() > 0
+
+    tooltip = ''
+    tooltip += O4.schedule.i18n.course_tooltip_intro_alarm + alarms.join('\n - ') + '\n' if alarms.length > 1
+    tooltip += O4.schedule.i18n.course_tooltip_intro_notice + notices.join('\n - ') + '\n' if notices.length > 1
+    @tooltip(tooltip)
+
+
+  # Returns the period in which this course ends
+  getEndPeriod: ->
+    remaining_distance = @length()
+    period = @period
+    while period and remaining_distance -= 1
+      period = period.nextPeriod
+    #dbg.lg("#{@}::getEndPeriod(#{@period}) -> #{period}")
+    return period
+
+
+  # Check the period & grade related flag "isMisscheduled"
+  updateMisscheduledFlag: ->
+    endPeriod = @getEndPeriod()
+    @isMisscheduled(not endPeriod? or ((endPeriod.isOld and not @grade() > 0) or ((not endPeriod.isOld) and @grade() > 0)))
+    @updateTooltip()
+
+
+  # Update the grade display
+  updateGradeDisplay: ->
+    if @period.isOld
+      $('.well #grade').show()
+      #$('.well #grade').slideDown(500)
+    else
+      $('.well #grade').hide()
+      #$('.well #grade').slideUp(500)
 
 
   # Reads some of the model's core attributes from the given JSON data object

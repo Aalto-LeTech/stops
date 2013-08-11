@@ -2,7 +2,7 @@ class @Scheduler
 
   constructor: (@courses) ->
     @schedule = {}  # scopedId => period
-    @moved = {}  # scopedId => isMoved?
+    @moved = {}     # scopedId => boolean (isMoved?)
 
     for course in @courses
       @schedule[course.scopedId] = course.period
@@ -16,14 +16,14 @@ class @Scheduler
         #console.log "Skipping #{course.name}. Already scheduled."
         continue
 
-      console.log "Autoscheduling #{course.name}."
+      #console.log "Autoscheduling #{course.name}."
 
       # Put course after its prereqs (those that have been attached)
       this.postponeAfterPrereqs(course)
 
       # If course is still unattached, put it on the first period
       unless @schedule[course.scopedId]  #(!period? && !course.unschedulable) || (period && period.earlierThan(period.getCurrentPeriod())
-        console.log "#{course.name}. Still unattached. Postponing to current period."
+        #console.log "#{course.name}. Still unattached. Postponing to current period."
         this.postponeTo(course, Period::CURRENT)
 
       # Move forward those courses that depend (recursively) on the newly added course
@@ -49,7 +49,7 @@ class @Scheduler
     if targetPeriod.earlierThan(Period::CURRENT)
       targetPeriod = Period::CURRENT
 
-    console.log "Postponing #{course.name} to satisfy prereqs."
+    #console.log "Postponing #{course.name} to satisfy prereqs."
     this.postponeTo(course, targetPeriod)
 
 
@@ -70,7 +70,7 @@ class @Scheduler
     while (period)
       # If there is an instance available now, move into it
       if course.instancesByPeriodId[period.id]
-        console.log "Move #{course.name} to #{period.name}"
+        #console.log "Move #{course.name} to #{period.name}"
         if @schedule[course.scopedId] != period
           @schedule[course.scopedId] = period
           # Mark course as moved
@@ -81,7 +81,7 @@ class @Scheduler
       period = period.getNextPeriod()
 
     # No period could be found. Put it on the requested period
-    console.log "No period found for #{course.name}. Putting on #{requestedPeriod.name}."
+    #console.log "No period found for #{course.name}. Putting on #{requestedPeriod.name}."
     if @schedule[course.scopedId] != requestedPeriod
       @schedule[course.scopedId] = requestedPeriod
       # Mark course as moved
@@ -105,6 +105,6 @@ class @Scheduler
     for scopedId, other of course.prereqTo
       othersPeriod = @schedule[other.scopedId]
       if !othersPeriod || period.laterOrEqual(othersPeriod)
-        console.log "Postponing #{other.name} to #{targetPeriod.name} because it depends on #{course.name}"
+        #console.log "Postponing #{other.name} to #{targetPeriod.name} because it depends on #{course.name}"
         this.postponeTo(other, targetPeriod) unless other.locked
         this.satisfyPostreqs(other)

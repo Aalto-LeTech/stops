@@ -98,15 +98,8 @@ class StudyPlan < ActiveRecord::Base
   # Periods
   belongs_to :first_period, :class_name => 'Period'
   belongs_to :last_period, :class_name => 'Period'
-
-
-  #has_one :first_period, :class_name => 'Period',
-  #        :primary_key => :first_period_id,
-  #        :foreign_key => :id
-
-  #has_one :last_period, :class_name => 'Period',
-  #        :primary_key => :last_period_id,
-  #        :foreign_key => :id
+  validates :first_period, presence: true
+  validates :last_period, presence: true
 
 
   # Competences
@@ -211,15 +204,18 @@ class StudyPlan < ActiveRecord::Base
   end
 
 
-  # Returns the periods included into the study plan
-  # FIXME: This method tree is a bit hacky in smarisa's opinion
-  def periods(number_of_buffer_periods=0)
-    reset_first_period
-    reset_last_period
-    Period.range(
-      self.first_period.find_preceding(number_of_buffer_periods).last,
-      self.last_period.find_following(number_of_buffer_periods).last
-    )
+  # Returns the periods included in the study plan
+  def periods(options = {})
+    #reset_first_period
+    #reset_last_period
+    
+    #number_of_buffer_periods=0
+    
+#     Period.range(
+#       self.first_period.find_preceding(number_of_buffer_periods).last,
+#       self.last_period.find_following(number_of_buffer_periods).last
+#     )
+    Period.range(self.first_period, self.last_period)
   end
 
 

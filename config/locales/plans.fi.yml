@@ -32,6 +32,7 @@ fi:
     courses:
       index:
         heading: "Kurssihaku"
+        to_course_page: "Kurssisivulle"
       show:
         study_plan: "Opintosuunnitelmasi"
         study_plan_courses: "Suunnitelman kurssit"
@@ -81,28 +82,3 @@ fi:
         course_tooltip_uninstanced: "kurssi on aikataulutettu opintojaksolle, jona sitä ei tietokantamme mukaan järjestetä tai kurssi järjestetään, mutta se eroaa kestoltaan"
         course_tooltip_customized: "kurssin tietoja on muokattu; se ei esiinny kuvatulla opintopistemäärällä tietokannassamme"
         course_tooltip_passed: "kurssi katsotaan suoritetuksi, sillä sille on asetettu nollaa korkeampi arvosana"
-
-    periods:
-      index:
-        heading: "Opintojaksot"
-        no_periods: "Et ole vielä aikatauluttanut kursseja millekään opintojaksolle."
-        description: "Alla on listattuna opintojaksot, joille olet aikatauluttanut opintoja."
-        period_name: "Opintojakso"
-        period_start: "Alkupvm."
-        period_end: "Loppupvm."
-        period_courses: "Kurssimäärä"
-        period_credits: "Opintokuorma"
-      show:
-        heading: "Opintojakso %{name}"
-        description: "Alla on kuvaus suunnittelemastasi opintojaksosta."
-        datespan: "Aikaväli"
-        no_prev: "Ei suunniteltuja edeltäviä opintojaksoja."
-        no_next: "Ei suunniteltuja seuraavia opintojaksoja."
-        prev: "Edeltävä suunniteltu opintojakso"
-        next: "Seuraava suunniteltu opintojakso"
-        courses: "Kurssit"
-        courses_starting: "Alkavat"
-        courses_continuing: "Jatkuvat"
-        courses_ending: "Päättyvät"
-        unscheduled_period: "Et ole vielä suunnitellut mitään tälle opintojaksolle."
-        invalid_period: "Hakemaasi opintojaksoa ei löydy."

@@ -28,9 +28,11 @@
   <!-- /ko -->
   <!-- ko foreach: results -->
     <div class="row-fluid result">
-      <span class="span3 code" data-bind="text: code"></span>
-      <span class="span8 name" data-bind="text: name"></span>
-      <span class="span1 credits" data-bind="text: credits"></span>
+      <a title="<%= t('.to_course_page') %>" data-bind="attr: { href: path }">
+        <span class="span3 code" data-bind="text: code"></span>
+        <span class="span8 name" data-bind="text: name"></span>
+        <span class="span1 credits" data-bind="text: credits"></span>
+      </a>
     </div>
   <!-- /ko -->
 

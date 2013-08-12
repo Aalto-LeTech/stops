@@ -302,7 +302,7 @@ class CurriculumsController < ApplicationController
             code:     scoped_course.course_code,
             name:     scoped_course.localized_name,
             credits:  scoped_course.credits,
-            path:     curriculum_course_path(scoped_course.id)
+            path:     studyplan_course_path(scoped_course.id)
           }
         end
       else

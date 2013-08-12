@@ -1,5 +1,5 @@
-#= require knockout
 #= require core/module_pattern
+#= require ./course
 
 # Check that i18n strings have been loaded before this file
 if not O4.search.i18n
@@ -11,30 +11,28 @@ if not O4.search.i18n
 
     class @Engine
 
-      constructor: (opts) ->
+      MIN_QUERY_LENGTH: 3
+
+      constructor: (viewModel, serverPath, opts) ->
         @i18n = O4.search.i18n
-
-        dbg.lg("Starting the search engine!")
-
-        resultsContainer = $('.search-results-container')
-        serverPath = resultsContainer.data('courses-path')
-
-        dbg.lg("db url: #{serverPath}.")
-
-        @model = if opts then opts.model else undefined
 
         # Observables
         @infomsg = ko.observable(@i18n.query_too_short)
         @inquery = ko.observable()
         @results = ko.observableArray()
+        @viewModel = viewModel
+
 
         @inquery.subscribe (newValue) =>
-          dbg.lg("q: #{newValue}")
+          #dbg.lg("q: #{newValue}")
 
-          if newValue.length < 3
+          @viewModel.onInqueryChange()
+
+          if newValue.length < @MIN_QUERY_LENGTH
             @infomsg(@i18n.query_too_short)
             if newValue.length > 0
-              @results([])
+              @results().length = 0
+              @results.valueHasMutated()
             return
 
           $.ajax
@@ -47,35 +45,23 @@ if not O4.search.i18n
             error: @onQueryError,
             async: true
 
-        ko.applyBindings(this)
 
-        # Event handlers
-        $(document)
-          .on 'mousedown', '.result', (event) ->
-            object = ko.dataFor(this)
-            dbg.lg(object.path)
-            $('#dbg').text(object.path)
-            event.stopPropagation()
-
-#        setInterval(
-#          =>
-#            #dbg.lg("update")
-#            $('#dbg').html(JSON.stringify(@results()))
-#          ,
-#          1000
-#        )
+        @results.subscribe (newValue) =>
+          @viewModel.onResultsChange()
 
 
       updateResults: (data) ->
         #dbg.lg("results: #{JSON.stringify(data)}!")
         onQueryError(data) unless data.status == 'ok'
         return if data.inquery != @inquery()
-        @results([])
-        if data.scoped_courses?
-          for scoped_course in data.scoped_courses
-            if scoped_course.link?
-              scoped_course.link = "<a href=\"#{scoped_course.link}\"></a>"
-            @results.push(scoped_course)
+        @results().length = 0
+
+        # Build objects from all the result data served and include them as
+        # results
+        Course::resetFromJson(data)
+        @results().push.apply(@results(), Course::ALL)
+
+        # Update the info message
         nresults = @results().length
         if nresults == 0
           @infomsg(@i18n.no_results_found)
@@ -83,6 +69,9 @@ if not O4.search.i18n
           @infomsg(@i18n.a_result_found)
         else
           @infomsg(nresults + ' ' + @i18n.x_results_found)
+
+        # Update the DOM
+        @results.valueHasMutated()
 
 
       onQueryError: (data) ->

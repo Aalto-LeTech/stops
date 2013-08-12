@@ -7,10 +7,8 @@ class Plans::CoursesController < PlansController
   # GET /courses
   # GET /courses.xml
   def index
-    @competences = @study_plan.competences
-
     respond_to do |format|
-      format.html # index.html.erb
+      format.html { render :action => 'index', :layout => 'browser' }
       format.xml  { render :xml => nil }
     end
   end

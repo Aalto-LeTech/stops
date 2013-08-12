@@ -22,7 +22,10 @@ Acknowledgements
     maintainers etc.
   - There are open questions and bugs I'd need to look after.
 
-- [ ] fix: affxd sidebar issue
+- [x] new: studyplan/courses/index: course searching (use Sphinx, see skillEditor)
+- [x] fix: affxd sidebar issue
+- [ ] new: don't load so much course info at course search, but fetch them only
+      when the user wants to see details
 
 - [ ] address questions arisen so far:
 - [ ]   what about html views/plans/courses and its js plans/showCourse
@@ -37,7 +40,6 @@ Acknowledgements
 - [ ] new: add intro description into competence view in case no coms chosen
 - [ ] new: test the basic scheduler work flow with some scenarios with "fresh users"
 - [ ] new: opt. no grade edit for unended courses
-- [ ] new: studyplan/courses/index: course searching (use Sphinx, see skillEditor)
 - [ ] new: allow NULL for course_description.scoped_course_id
 - [ ] new: studyplan/courses/index: allow creation of custom study_plan_courses (name, )
 - [ ] new: test the work flow with some scenarios

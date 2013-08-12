@@ -286,7 +286,7 @@ class CurriculumsController < ApplicationController
       curriculum_id = params[:id]
 
       puts "SEARCHING!"
-      scoped_courses = ScopedCourse.search(
+      scoped_courses = ScopedCourse.includes(:localized_skill_descriptions).search(
         inquery,
         star:    true,
         ranker:  :proximity_bm25,
@@ -302,6 +302,7 @@ class CurriculumsController < ApplicationController
             code:     scoped_course.course_code,
             name:     scoped_course.localized_name,
             credits:  scoped_course.credits,
+            skills:   scoped_course.skills.map { |skill| skill.localized_description },
             path:     studyplan_course_path(scoped_course.id)
           }
         end

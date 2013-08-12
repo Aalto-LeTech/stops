@@ -13,10 +13,6 @@
 
 <h1><%=t('.heading')%></h1>
 
-<% if @competences.empty? %>
-  <p><%= link_to t(:my_courses_no_profile_hint), studyplan_profiles_path %></p>
-<% end %>
-
 <div class="search-query">
   <input class="input-large search-query" type="text" data-bind="value: inquery, valueUpdate: 'keyup'" />
 </div>
@@ -39,7 +35,50 @@
 </div>
 
 <% content_for(:theleft) do %>
-  DBG
-  <div id="dbg">
+
+  <div class="well">
+
+    <!-- ko if: engine.results().length == 0 -->
+        <%= t('.instructions') %>
+    <!-- /ko -->
+
+    <!-- ko if: engine.results().length > 0 -->
+
+      <!-- ko ifnot: selected -->
+          <%= t('.hover_for_more_information') %>
+      <!-- /ko -->
+
+      <!-- ko with: selected -->
+
+        <h1>
+          <a title="<%= t('.to_course_page') %>" data-bind="attr: { href: path }">
+            <%= t('.course') %>
+            <span class="code" data-bind="text: code"></span>
+          </a>
+        </h1>
+
+        <h2>
+          <a title="<%= t('.to_course_page') %>" data-bind="attr: { href: path }">
+            <span class="name" data-bind="text: name"></span>
+            (<span class="credits" data-bind="text: credits"></span> <%= t('cr') %>)
+          </a>
+        </h2>
+
+        <!-- ko if: skills.length > 0 -->
+          <h2>
+            <%= t('.skills') %>
+          </h2>
+          <ul>
+            <!-- ko foreach: skills -->
+              <li data-bind="text: name"></li>
+            <!-- /ko -->
+          </ul>
+        <!-- /ko -->
+
+      <!-- /ko -->
+
+    <!-- /ko -->
+
   </div>
+
 <% end %>

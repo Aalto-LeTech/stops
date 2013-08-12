@@ -63,33 +63,36 @@ ko.extenders.numeric = function(target, params) {
 //
 
 ko.extenders.integer = function(target, params) {
-    // create a writeable computed observable to intercept writes to our observable
-    var result = ko.computed({
-        read: target,  // always return the original observables value on read
-        write: function(newValue) {
-            var current = target(),
-                newValueAsInt = isNaN(newValue) ? 0 : ((newValue == '') ? 0 : parseInt(newValue));
+  // create a writeable computed observable to intercept writes to our observable
+  var result = ko.computed(
+  {
+    read: target,  // always return the original observables value on read
+    write: function(newValue)
+    {
+      var current = target(),
+        newValueAsInt = isNaN(newValue) ? 0 : ((newValue == '') ? 0 : parseInt(newValue));
 
-            // dbg.lg("integer: " + newValueAsInt + " (" + params.toString() + ")");
+      // dbg.lg("integer: " + newValueAsInt + " (" + params.toString() + ")");
 
-            if ((params) && (params.hasOwnProperty('min')) && (newValueAsInt < params['min'])) {
-              newValueAsInt = params['min'];
-            } else if ((params) && (params.hasOwnProperty('max')) && (newValueAsInt > params['max'])) {
-              newValueAsInt = params['max'];
-            }
+      if ((params) && (params.hasOwnProperty('min')) && (newValueAsInt < params['min'])) {
+        newValueAsInt = params['min'];
+      } else if ((params) && (params.hasOwnProperty('max')) && (newValueAsInt > params['max'])) {
+        newValueAsInt = params['max'];
+      }
 
-            // only write if it changed
-            if (newValueAsInt !== current) {
-                target(newValueAsInt);
-            }
-        }
-    });
+      // only write if it changed
+      if (newValueAsInt !== current)
+      {
+        target(newValueAsInt);
+      }
+    }
+  });
 
-    // initialize with current value
-    result(target());
+  // initialize with current value
+  result(target());
 
-    // return the new computed observable
-    return result;
+  // return the new computed observable
+  return result;
 };
 
 
@@ -110,11 +113,11 @@ ko.bindingHandlers.numeric = {
   update: function(element, valueAccessor, allBindingsAccessor) {
     // First get the latest data that we're bound to
     var value = ko.unwrap(valueAccessor()),
-        allBindings = allBindingsAccessor(),
-        // Get the specified parameters (or defaults)
-        decimals = allBindings.decimals >= 0 ? allBindings.decimals : 9,
-        // Format the value as specified
-        text = value.toFixed(decimals);
+      allBindings = allBindingsAccessor(),
+      // Get the specified parameters (or defaults)
+      decimals = allBindings.decimals >= 0 ? allBindings.decimals : 9,
+      // Format the value as specified
+      text = value.toFixed(decimals);
 
     // Update the DOM
     ko.bindingHandlers.text.update(element, function() { return text; });
@@ -125,12 +128,36 @@ ko.bindingHandlers.numeric = {
 ////////////////////////////////////////////////////////////////////////////////
 // Knockout binding handler: Hover
 //
+// Toggles an observable boolean while hovering.
+// NOT WELL TESTED
+
+ko.bindingHandlers.hover = {
+  init: function(element, valueAccessor)
+  {
+    ko.utils.registerEventHandler(element, "mouseover", function() {
+      var value = valueAccessor();
+      console.log("Hover -> 1");
+      value(true);
+    });
+    ko.utils.registerEventHandler(element, "mouseout", function() {
+      var value = valueAccessor();
+      console.log("Hover -> 0");
+      value(false);
+    });
+    console.log("Inited!");
+  }
+};
+
+
+////////////////////////////////////////////////////////////////////////////////
+// Knockout binding handler: Class Hover
+//
 // Toggles the given CSS classes on while hovering
 //
 // From: http://stackoverflow.com/questions/9226792/knockoutjs-bind-mouseover-or-jquery
-//
+// NOT WELL TESTED
 
-ko.bindingHandlers.hoverToggle = {
+ko.bindingHandlers.hoverClass = {
     update: function(element, valueAccessor) {
        var css = valueAccessor();
 
@@ -146,6 +173,7 @@ ko.bindingHandlers.hoverToggle = {
 
 
 ////////////////////////////////////////////////////////////////////////////////
+// NOT WELL TESTED
 // For reference only:
 
 ko.bindingHandlers.hoverVisible = {
@@ -174,6 +202,7 @@ ko.bindingHandlers.hoverVisible = {
 //
 // From: http://knockoutjs.com/documentation/custom-bindings.html
 //
+// NOT WELL TESTED
 
 ko.bindingHandlers.slideVisible = {
     update: function(element, valueAccessor, allBindingsAccessor) {
@@ -191,6 +220,33 @@ ko.bindingHandlers.slideVisible = {
         else
             $(element).slideUp(duration);
     }
+};
+
+
+
+////////////////////////////////////////////////////////////////////////////////
+// Knockout binding handler: Fade Visible
+//
+// Makes elements fade into and out of existence according to the value of an
+// observable
+//
+// From: http://knockoutjs.com/examples/animatedTransitions.html
+//
+
+ko.bindingHandlers.fadeVisible = {
+  init: function(element, valueAccessor) {
+    // Initially set the element to be instantly visible/hidden depending on the value
+    var value = valueAccessor();
+    $(element).toggle(ko.utils.unwrapObservable(value)); // Use "unwrapObservable" so we can handle values that may or may not be observable
+  },
+  update: function(element, valueAccessor, allBindingsAccessor) {
+    // Whenever the value subsequently changes, slowly fade the element in or out
+    var value = valueAccessor(),
+      allBindings = allBindingsAccessor(),
+      // Get the specified parameters (or defaults)
+      duration = allBindings.duration > 0 ? allBindings.duration : 400;
+    ko.utils.unwrapObservable(value) ? $(element).fadeIn(duration) : $(element).fadeOut(duration);
+  }
 };
 
 

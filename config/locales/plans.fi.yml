@@ -32,7 +32,12 @@ fi:
     courses:
       index:
         heading: "Kurssihaku"
+        instructions: "Tästä näkymästä voit hakea kursseja ja lisätä niitä opintosuunnitelmaasi. Hakukone listaa antamallesi hakuavaimelle kursseja, joiden kurssikoodi, nimi sekä osaamistavoitteet sopivat parhaiten hakuavaimeesi."
+        hover_for_more_information: "Kohdista hiiri hakutuloksen päälle, niin saat siitä lisätietoa."
         to_course_page: "Kurssisivulle"
+        course: "Kurssi"
+        extent: "Laajuus"
+        skills: "Osaamistavoitteet"
       show:
         study_plan: "Opintosuunnitelmasi"
         study_plan_courses: "Suunnitelman kurssit"

@@ -33,11 +33,13 @@ var affxd = (function()
     this.status          = undefined;
 
     // Option related variables
-    this.fixedTopElement = undefined;
-    this.minShowHeight = 0;
-    this.topMargin = 0;
-    this.toStaticWidth = 0;
-    this.staticHeight = 'auto';
+    this.fixedTopElement   = undefined;
+    this.minShowHeight     = 0;
+    this.topMargin         = 0;
+    this.toStaticWidth     = 0;
+    this.staticHeight      = 'auto';
+    this.minCheckInterval  = undefined;
+    this.unlimitedByMain   = false;
 
     if (options != undefined)
     {
@@ -51,6 +53,10 @@ var affxd = (function()
         this.toStaticWidth = options.toStaticWidth;
       if (options.hasOwnProperty('staticHeight'))
         this.staticHeight = options.staticHeight;
+      if (options.hasOwnProperty('minCheckInterval'))
+        this.minCheckInterval = options.minCheckInterval;
+      if (options.hasOwnProperty('unlimitedByMain'))
+        this.unlimitedByMain = options.unlimitedByMain;
     }
 
     AffixedSidebar.instances.push(this);
@@ -83,8 +89,11 @@ var affxd = (function()
     var winScrollTop = $(window).scrollTop() + fixedTopElementHeight;
     var mainElementTop = this.mainElement.offset().top;
     var upperLimit = mainElementTop;
-    var lowerLimit = mainElementTop + this.mainElement.height();
+    var lowerLimit = (this.unlimitedByMain) ? 99999 : mainElementTop + this.mainElement.height();
     var newTop, newHeight;
+
+    //console.log("upper: " + upperLimit + ".");
+    //console.log("lower: " + lowerLimit + ".");
 
     if (winScrollTop < upperLimit)
     {
@@ -133,6 +142,7 @@ var affxd = (function()
     this.update();
 
     var _this = this;
+
     // Bind the update function to the window resize event
     $(window).resize(
       function ()
@@ -140,6 +150,7 @@ var affxd = (function()
         _this.update();
       }
     );
+
     // Bind the update function to the window scroll event
     $(window).scroll(
       function ()
@@ -147,6 +158,16 @@ var affxd = (function()
         _this.update();
       }
     );
+
+    // If a min check interval was specified, start the check loop
+    if (this.minCheckInterval > 0)
+      setInterval(
+        function ()
+        {
+          _this.update();
+        },
+        this.minCheckInterval
+      );
   }
 
 

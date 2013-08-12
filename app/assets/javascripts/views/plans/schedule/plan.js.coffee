@@ -121,7 +121,8 @@ class @PlanView
     # Flag the PlanView as ready
     PlanView::ISREADY = true
 
-    # Set the initial viewport at the current period
+    # Select the current period by default. Also sets the viewport to show it
+    # if it's outside of the current viewport area.
     @selectObject(Period::CURRENT)
 
     # Initialize tooltips
@@ -195,7 +196,7 @@ class @PlanView
       objectTopLimit = objectTop + objectHeight * 0.25
       objectBottomLimit = objectTop + objectHeight * 0.75
 
-      dbg.lg("topOffSet: #{objectTop} - #{objectBottom} vs #{viewPortTop} - #{viewPortBottom}.")
+      #dbg.lg("topOffSet: #{objectTop} - #{objectBottom} vs #{viewPortTop} - #{viewPortBottom}.")
 
       # If 3/4ths of the object cannot be seen, we recenter the viewport
       if objectBottomLimit > viewPortBottom

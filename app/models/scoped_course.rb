@@ -95,20 +95,6 @@ class ScopedCourse < CompetenceNode
            :order => 'created_at'
 
 
-  # In the new version of TS, the index lives in app/indices/scoped_course_index.rb
-  #
-  ## Define Sphinx index
-  #define_index do
-  #  indexes course_code
-  #  indexes localized_description(:name), :as => :course_name
-  #  indexes skill_descriptions.description, :as => :skill_descriptions
-
-  #  has :id, :as => :scoped_course_id
-  #  has :abstract_course_id
-  #  # has skills(:id)
-  #end
-
-
   # Old accessor for localized name  # FIXME: should this be removed?
   def name(locale)
     description = course_descriptions.where(:locale => locale).first

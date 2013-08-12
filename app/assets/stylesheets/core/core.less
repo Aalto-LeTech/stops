@@ -8,8 +8,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 // Intro
 //
-// This file imports Bootstrap's Less files and customizes/builds on top of it.
-// All the layouts of the app should import this file and tweak it as needed.
+// This file imports Bootstrap's Less files and customizes/builds on top of em.
+// All the views of the app should import this file and tweak it as needed.
 // Note that neither this file nor any '.less' file should find their way into
 // the compiled assets. These shouldn't be referenced from any '.html(.erb)'
 // layout, view or partial. Only the '.css.less' files that use these should end
@@ -21,9 +21,10 @@
 // 'frontpage/index_for_the_blind.html' by simply redefining the variable there
 // and seeing how the new value influences all the elements that are affected by
 // the variable (These could include heading sizes, sidebar widths, text boxes
-// sizes etc.). This is possible, because the Bootstrap + all of our CSS the
-// view is rendered with is completely different from that of the other views
-// with no variable tweaking -- without any overriding of variable definitions..
+// sizes etc.). This happens because the Bootstrap + all of our CSS the view is
+// rendered with is recomputed with the new variable values resulting in a
+// different Bootstrap from that of the other views without any addittional
+// variable tweaking -- without any overriding of variable definitions..
 //
 // While developing new styling, one should tie all definitions to the things
 // they depend on so that, f. ex. when one decides to swap from using f.ex. the
@@ -274,21 +275,25 @@ div
 ////////////////////////////////////////////////////////////////////////////////
 // Bootstrap style additions
 
-.popover.closable-popover {
+.popover.closable-popover
+{
   // Better positiniong for popover close button
-  .close {
+  .close
+  {
     position: relative;
     top:   5px;
     right: 5px;
   }
 
   // Leave some space for close button
-  .popover-title {
+  .popover-title
+  {
     padding-right: 30px;
   }
 }
 
-.nav-tabs > li > .btn-mini {
+.nav-tabs > li > .btn-mini
+{
   /* Align mini button to the center */
   margin: 8px 5px;
 }

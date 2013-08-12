@@ -2,7 +2,15 @@
 // affxd V1.1 (c) smarisa 2013-08-05
 //
 // Usage:
-//   var affixedSidebar = new affxd.Sidebar( '#theaffix', '#thecontainer', 100, '#fixedNavbar' );
+//   var affixedSidebar = new affxd.Sidebar(
+//     '#theleftwrapper',
+//     '#thecontainer',
+//     {
+//       minShowHeight: 80,
+//       topMargin:     40,
+//       toStaticWidth: 964
+//     }
+//   );
 //   affixedSidebar.run();
 //
 ////////////////////////////////////////////////////////////////////////////////

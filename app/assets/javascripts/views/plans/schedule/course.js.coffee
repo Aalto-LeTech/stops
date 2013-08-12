@@ -46,14 +46,16 @@ class @Course
     # change procedures as well.
     @length.subscribe ((oldValue) ->
       if @period and PlanView::ISREADY
-        @period.removeCourse(this)
+        @periodTmp = @period
+        @setPeriod(undefined)
     ), @, "beforeChange"
 
     # See prev. comment
     @length.subscribe (newValue) =>
-      dbg.lg("#{@}.length(#{newValue})")
-      if @period and PlanView::ISREADY
-        @slot = @period.addCourse(this)
+      #dbg.lg("#{@}.length(#{newValue})")
+      if @periodTmp and PlanView::ISREADY
+        @setPeriod(@periodTmp)
+        #@slot = @period.addCourse(this)
         @updatePosition()
 
     # On credit change
@@ -139,6 +141,7 @@ class @Course
 
   # Updates the tooltip
   updateTooltip: ->
+    #dbg.lg("#{@}::updateTooltip()...")
     alarms = ['']
     notices = ['']
     alarms.push(O4.schedule.i18n.course_tooltip_misordered) if @isMisordered()
@@ -172,6 +175,7 @@ class @Course
 
   # Update the grade display
   updateGradeDisplay: ->
+    return unless @period?
     if @period.isOld
       $('.well #grade').show()
       #$('.well #grade').slideDown(500)
@@ -353,12 +357,12 @@ class @Course
       @period = undefined
 
     # Get the available course instance
-    courseInstance = @instancesByPeriodId[period.id]
+    courseInstance = @instancesByPeriodId[period.id] if period
 
     # The length is updated only if the  previous length is specified
     if doOverwriteLength
       # If an instance is available, its length is used
-      if courseInstance
+      if courseInstance?
         @length(courseInstance.length)
       # Otherwise, an average of instance lengths is used
       else if @avgInstanceLength
@@ -379,15 +383,16 @@ class @Course
     @period = period
 
     # Update the affected periods array
-    prd = @period
-    len = @length() + 1
-    while prd and len -= 1
-      @affectedPeriods.push(prd)
-      prd.addAffectingCourse(this)
-      prd = prd.nextPeriod
+    if @period
+      prd = @period
+      len = @length() + 1
+      while prd and len -= 1
+        @affectedPeriods.push(prd)
+        prd.addAffectingCourse(this)
+        prd = prd.nextPeriod
 
     # Autoreset grades for courses scheduled into the future
-    if not @period.isOld
+    if @period? and not @period.isOld
       @grade(0)
 
     # Update the grade display
@@ -399,7 +404,8 @@ class @Course
 
     # Add course to the new period
     @distributeCredits()
-    @slot = @period.addCourse(this)
+    @slot = @period?.addCourse(this)
+    dbg.lg("slot: #{@slot}.")
 
 
   # Updates the DOM elements to match model
@@ -409,7 +415,7 @@ class @Course
     pos.x = @slot * (PlanView.COURSE_WIDTH + PlanView.COURSE_MARGIN_X) + PlanView.COURSE_MARGIN_X
     pos.y = @period.position().y + PlanView.COURSE_MARGIN_Y
     pos.height = @length() * PlanView.PERIOD_HEIGHT - 2 * (PlanView.COURSE_MARGIN_Y + PlanView.COURSE_PADDING_Y)
-    
+
     pos.updated = false     # This hack is needed to distinguish from unnecesary updates triggered by other bindings
     @position.valueHasMutated()
 

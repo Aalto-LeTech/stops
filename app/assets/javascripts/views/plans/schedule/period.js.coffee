@@ -12,7 +12,7 @@ class @Period
   createFromJson: (data) ->
     periodCounter = 0
     previousPeriod = undefined
-    
+
     for raw_period in data
       period = new Period(raw_period)
       period.sequenceNumber = periodCounter
@@ -20,12 +20,13 @@ class @Period
       previousPeriod.nextPeriod = period if previousPeriod
       previousPeriod = period
       periodCounter++
-      
+
       console.log "Warning: period id collision at #{@id}!" if @BYID[period.id]
       @BYID[period.id] = period
       @ALL.push(period)
-    
-    # Make sure we always have current period. (This is relevant is studyplan begins in future.)
+
+    # Make sure we always have current period. (This is relevant if the
+    # studyplan begins in the future.)
     Period::CURRENT ||= @ALL[0]
 
 
@@ -37,10 +38,10 @@ class @Period
     # TODO: specify event handler in the binding
     @droppedCourse.subscribe (course) =>
       #dbg.lg("#{@}::droppedCourse(#{course})!")
-      console.log "Period: setPeriod"
+      #console.log "Period: setPeriod"
       course.setPeriod(this)
-      
-      console.log "Period: updatePosition"
+
+      #console.log "Period: updatePosition"
       course.updatePosition()
       course.updateReqWarnings()
 
@@ -54,7 +55,7 @@ class @Period
 
     @loadJson(data || {})
 
-    @affectingCourses = []                    # courses that extend to this period
+    @affectingCourses = []                    # Courses that extend to this period
     @credits          = ko.observable(0)
     @creditsStatus    = undefined
     @creditsTooltip   = undefined
@@ -124,23 +125,16 @@ class @Period
   # Gets the neighbour
   actOnCommand: (planView, keyCode) ->
     if keyCode == 38  # up
-      if @previousPeriod
-        planView.selectObject(@previousPeriod)
-        return true
+      period = @previousPeriod
     else if keyCode == 40  # down
-      if @nextPeriod
-        planView.selectObject(@nextPeriod)
-        return true
+      period = @nextPeriod
     else if keyCode == 33  # page up
       period = @getPreviousPeriod(5)
-      if period
-        planView.selectObject(period)
-        return true
     else if keyCode == 34  # page down
       period = @getNextPeriod(5)
-      if period
-        planView.selectObject(period)
-        return true
+    if period?
+      planView.selectObject(period)
+      return true
     return false
 
 

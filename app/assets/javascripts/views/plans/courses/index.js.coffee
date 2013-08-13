@@ -31,7 +31,7 @@ class @DelayedCaller
 
 class @View
 
-  HOVERDELAY: 800
+  HOVERDELAY: 300
   FADEDURATION: 300
 
   constructor: () ->

@@ -1,12 +1,15 @@
 class Skill < ActiveRecord::Base
+
+
+  # Localized descriptions
   has_many :skill_descriptions, :dependent => :destroy
 
-  has_one :description_with_locale,
+  has_one :localized_description,
           :class_name => "SkillDescription",
           :conditions => proc { "skill_descriptions.locale = '#{I18n.locale}'" }
 
-  alias :localized_description :description_with_locale
 
+  # Prereqs
   has_many :skill_prereqs, :dependent => :destroy
 
   has_many :strict_skill_prereqs,
@@ -66,15 +69,11 @@ class Skill < ActiveRecord::Base
   end
 
 
-  def localized_description
-    description_with_locale.nil? ? "" : description_with_locale.description
+  def localized_name
+    desc = localized_description
+    (desc && desc.name != "" ) ? desc.name : nil
   end
 
-  def description(locale)
-    throw "Deprecated! use localized_name!"
-    description = SkillDescription.where(:skill_id => self.id, :locale => locale.to_s).first
-    description ? description.description : ''
-  end
 
   def is_prereq_to?(skill_id)
     prereq_found = false

@@ -7,12 +7,12 @@
           <%= @course.course_code %>
         </span>
         <span class="skill-search-course-name">
-          <%= @course.course_description_with_locale.name %>
+          <%= @course.localized_name %>
         </span>
       </th>
     </tr>
 
-    <% @course.skill_descriptions_with_locale.each do |skill_desc| %>
+    <% @course.localized_skill_descriptions.each do |skill_desc| %>
       <tr id="search-skill-id-<%= skill_desc.skill_id %>" data-for-course="<%= course.id %>">
         <td><%= skill_desc.description %></td>
         <td class="skill-search-warning-image">
@@ -22,12 +22,12 @@
         </td>
         <td class="skill-search-button-cell">
           <% if @alreadyPrereq[skill_desc.skill_id.to_s] %>
-            <button class="button-base button-small skill-remove-prereq-button" 
+            <button class="button-base button-small skill-remove-prereq-button"
               data-skill-id="<%= skill_desc.skill_id %>"
               data-button-type="add-remove-prereq">
             <%= t 'add_prereq_button_remove', :scope => 'curriculums.skills.edit' %>
           <% else %>
-            <button class="button-base button-small skill-add-prereq-button" 
+            <button class="button-base button-small skill-add-prereq-button"
               data-skill-id="<%= skill_desc.skill_id %>"
               data-button-type="add-remove-prereq">
             <%= t 'add_prereq_button', :scope => 'curriculums.skills.edit' %>
@@ -36,5 +36,5 @@
         </td>
       </tr>
     <% end %>
-  <% end %>  
+  <% end %>
 </table>

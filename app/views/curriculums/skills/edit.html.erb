@@ -8,7 +8,7 @@
     <%= t '.help_text' %>
   </div>
 
-  <strong><%= t '.selected_skill' %></strong> <%= @skill.description_with_locale.description %>
+  <strong><%= t '.selected_skill' %></strong> <%= @skill.localized_description.description %>
 
   <div id="metadata" style="display: none"
     data-skill-id="<%= @skill_id %>"

@@ -286,15 +286,26 @@ class CurriculumsController < ApplicationController
       curriculum_id = params[:id]
 
       puts "SEARCHING!"
-      scoped_courses = ScopedCourse.includes(:localized_skill_descriptions).search(
+      scoped_courses = ScopedCourse.search(
         inquery,
         star:    true,
         ranker:  :proximity_bm25,
-        with:    {curriculum_id: curriculum_id}
+        with:    {curriculum_id: curriculum_id},
+        sql:
+        {
+          :include =>
+          [
+            :localized_description,
+            :prereqs => :localized_description,
+            :skills => :localized_description
+          ]
+        }
       )
 
       puts "Processing %d entries." % [ scoped_courses.total_entries ]
       if scoped_courses.total_entries > 0
+
+        #scoped_courses = ScopedCourse.includes(:localized_description, :skills => :localized_description).find(scoped_courses.map { |result| result.id } )
 
         scoped_courses = scoped_courses.map do |scoped_course|
           {
@@ -302,7 +313,8 @@ class CurriculumsController < ApplicationController
             code:     scoped_course.course_code,
             name:     scoped_course.localized_name,
             credits:  scoped_course.credits,
-            skills:   scoped_course.skills.map { |skill| skill.localized_description },
+            skills:   scoped_course.skills.map { |skill| skill.localized_description.description },
+            prereqs:  scoped_course.prereqs.map { |prereq| prereq.localized_name },
             path:     studyplan_course_path(scoped_course.id)
           }
         end
@@ -314,7 +326,7 @@ class CurriculumsController < ApplicationController
       puts "ERROR: No query string given!"
     end
 
-    puts "Jsonifying %s!" % [ scoped_courses ]
+    #puts "Jsonifying %s!" % [ scoped_courses ]
     response_json = {
       :status          => :ok,
       :inquery         => inquery,

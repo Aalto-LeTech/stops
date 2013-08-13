@@ -32,6 +32,7 @@ en:
     courses:
       index:
         heading: "Course search"
+        prereqs: "Prerequirements"
       show:
         study_plan: "Your Study Plan"
         study_plan_courses: "Plan's Courses"

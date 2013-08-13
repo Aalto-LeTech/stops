@@ -1,6 +1,6 @@
 <li id="skill-<%= skill.id %>">
   <%= link_to edit_curriculum_skill_path(params[:curriculum_id], skill), :class => "competence-skill-desc" do %>
-    <%= skill.description_with_locale.description %>
+    <%= skill.localized_description.description %>
   <% end %>
   <%= link_to t(:Edit), edit_skill_path(skill), 
     :class => "button-base skill-item-button button-small" %> 

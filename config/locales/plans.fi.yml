@@ -38,6 +38,7 @@ fi:
         course: "Kurssi"
         extent: "Laajuus"
         skills: "Osaamistavoitteet"
+        prereqs: "Esitietokurssit"
       show:
         study_plan: "Opintosuunnitelmasi"
         study_plan_courses: "Suunnitelman kurssit"

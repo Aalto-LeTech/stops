@@ -75,6 +75,17 @@
           </ul>
         <!-- /ko -->
 
+        <!-- ko if: prereqs.length > 0 -->
+          <h2>
+            <%= t('.prereqs') %>
+          </h2>
+          <ul>
+            <!-- ko foreach: prereqs -->
+              <li data-bind="text: name"></li>
+            <!-- /ko -->
+          </ul>
+        <!-- /ko -->
+
       <!-- /ko -->
 
     <!-- /ko -->

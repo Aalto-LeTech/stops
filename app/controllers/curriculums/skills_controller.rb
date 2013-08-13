@@ -7,16 +7,16 @@ class Curriculums::SkillsController < CurriculumsController
   def index
     # TODO: only load skills that belong to this curriculum
     @skills = Skill.joins(:competence_node)
-                .includes(:strict_prereqs, :description_with_locale) # :competence_node
+                .includes(:strict_prereqs, :localized_description) # :competence_node
                 #.where('competence_nodes.id' => @curriculum.course_ids)
 
     respond_to do |format|
       #format.html { render :text => @skills.to_json(:include => :strict_prereq_ids) }
       format.xml { render :xml => @skills }
-      format.json do 
+      format.json do
         render :json => @skills.to_json(
           :only => [:id, :competence_node_id],
-          :methods => [:strict_prereq_ids, :description_with_locale]
+          :methods => [:strict_prereq_ids, :localized_description]
         )
       end
     end
@@ -39,7 +39,7 @@ class Curriculums::SkillsController < CurriculumsController
 
   def new
     authorize! :update, @curriculum
-    
+
     @skill = Skill.new
     @skill.competence_node = Competence.find(params[:competence_id])
 
@@ -59,21 +59,21 @@ class Curriculums::SkillsController < CurriculumsController
 
     @skill = Skill.new(params[:skill])
     @skill.save!
-    
+
     respond_to do |format|
       format.js {
         render :json => @skill.to_json(:include => [:skill_descriptions])
       }
     end
   end
-  
+
   # PUT /curriculum/:curriculum_id/skills/:id
   def update
     authorize! :update, @curriculum
-    
+
     @skill = Skill.find(params[:id])
     @skill.update_attributes(params[:skill])
-    
+
     respond_to do |format|
       format.js {
         render :json => @skill.to_json(:include => [:skill_descriptions])
@@ -140,16 +140,16 @@ class Curriculums::SkillsController < CurriculumsController
       }
     end
   end
-  
+
   # POST /curriculums/:curriculum_id/skills/:id/add_prereq
   def add_prereq
     authorize! :update, @curriculum
 
     requirement_type = params[:requirement] || STRICT_PREREQ
-    
+
     # Reset
     SkillPrereq.where(:skill_id => params[:id], :prereq_id => params[:prereq_id]).delete_all
-    
+
     # Add new
     SkillPrereq.create :skill_id     => Integer(params[:id]),
                        :prereq_id    => Integer(params[:prereq_id]),
@@ -160,7 +160,7 @@ class Curriculums::SkillsController < CurriculumsController
     #prereq_skill = Skill.find(params[:prereq_id])
     #target_node = CompetenceNode.find(params[:competence_node_id])
     #prereq_node = CompetenceNode.find(params[:prereq_competence_node_id])
-    
+
     render :nothing => true
   end
 
@@ -175,7 +175,7 @@ class Curriculums::SkillsController < CurriculumsController
     @prereq.all.each do |prereq|
       prereq.destroy
     end
-    
+
     render :nothing => true
   end
 
@@ -198,11 +198,11 @@ class Curriculums::SkillsController < CurriculumsController
                             ],
                             :include => [
                               :localized_course_description,
-                              { :skills => [:prereq_to, :description_with_locale] }
+                              { :skills => [:prereq_to, :localized_description] }
                             ]
                           )
 
-        @skill = Skill.includes(:description_with_locale).find(params[:id].to_i)
+        @skill = Skill.includes(:localized_description).find(params[:id].to_i)
 
         # Render an eco template for each course (This is done to use the same template
         # for Javascript view updates)
@@ -215,7 +215,7 @@ class Curriculums::SkillsController < CurriculumsController
           skills = []
           course.skills.each do |skill|
             skill_locals = {
-              :description  => skill.description_with_locale.description,
+              :description  => skill.localized_description.description,
               :id           => skill.id,
               :is_prereq    => skill.is_prereq_to?(@skill.id)
             }
@@ -225,7 +225,7 @@ class Curriculums::SkillsController < CurriculumsController
             :render_whole_course  => true,
             :course_id            => course.id,
             :course_code          => course.course_code,
-            :course_name          => course.course_description_with_locale.name,
+            :course_name          => course.localized_name,
             :course_skills        => skills,
             :button_text          => t('add_prereq_button_remove', :scope => 'curriculums.skills.edit')
           }
@@ -243,12 +243,10 @@ class Curriculums::SkillsController < CurriculumsController
   # using AJAX.
   # GET /curriculum/:id/skills/:id/
   def search_skills_and_courses
-    # @courses = ScopedCourse.includes(:course_description_with_locale, :skill_descriptions).search_full_text params[:q]
-
     authorize! :update, Skill
 
     @courses = ScopedCourse.search params[:q],
-                  :include  => [:localized_description, :skill_descriptions_with_locale],
+                  :include  => [:localized_description, :localized_skill_descriptions],
                   :page     => params[:p] || 1, :per_page => 20
 
     # Validate skill_id!

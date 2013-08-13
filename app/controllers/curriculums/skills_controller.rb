@@ -16,7 +16,7 @@ class Curriculums::SkillsController < CurriculumsController
       format.json do
         render :json => @skills.to_json(
           :only => [:id, :competence_node_id],
-          :methods => [:strict_prereq_ids, :localized_description]
+          :methods => [:strict_prereq_ids, :localized_name]
         )
       end
     end
@@ -215,7 +215,7 @@ class Curriculums::SkillsController < CurriculumsController
           skills = []
           course.skills.each do |skill|
             skill_locals = {
-              :description  => skill.localized_description.description,
+              :description  => skill.localized_name,
               :id           => skill.id,
               :is_prereq    => skill.is_prereq_to?(@skill.id)
             }

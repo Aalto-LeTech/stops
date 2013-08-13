@@ -1,32 +1,9 @@
 #= require knockout
 #= require libs/search/engine
 #= require core/knockout-extensions
-
-class @DelayedCaller
-
-  constructor: (delay, call) ->
-    dbg.lg("DelayedCaller::constructor()...")
-    @delay    = delay
-    @call     = call
-    @tstamp   = undefined
-
-  immediate: (object) ->
-    @tstamp = undefined
-    @call(object)
-
-  delayed: (object, delay=@delay) ->
-    tstamp = new Date().getTime()
-    @tstamp = tstamp
-    setTimeout(
-      =>
-        if @tstamp == tstamp
-          @call(object)
-      ,
-      delay
-    )
-
-  cancel: ->
-    @tstamp = undefined
+#= require core/delayed
+#= require models/plan/plan
+#= require models/plan/course
 
 
 class @View
@@ -36,16 +13,18 @@ class @View
 
   constructor: () ->
     dbg.lg("Starting the search engine!")
-    resultsContainer = $('.search-results-container')
-    serverPath = resultsContainer.data('courses-path')
-    dbg.lg("db url: #{serverPath}.")
+    pathsContainer = $('#paths')
+    searchCoursesPath = pathsContainer.data('search-courses-path')
+    studyplanPath = pathsContainer.data('studyplan-path')
+    dbg.lg("db url: #{searchCoursesPath}.")
 
     @eWell      = $('#theleft .well')
     @doShowWell = ko.observable(true)
     @selected   = ko.observable()
     @sidebar    = affxd.Sidebar::get()
-    @engine     = new O4.search.Engine(@, serverPath)
+    @engine     = new O4.search.Engine(@, searchCoursesPath)
     @selector   = new DelayedCaller(@HOVERDELAY, (object) => @select(object))
+    @plan       = new Plan(studyplanPath)
 
     @doShowWell.subscribe (newValue) =>
       if newValue
@@ -59,13 +38,26 @@ class @View
     @selector.immediate()
 
 
-  onResultsChange: ->
-    # Clear selection
-    @selector.immediate()
+  parseResults: (data) ->
+    results = []
+    # Build objects from all the result data served and include them as
+    # results
+    if data.scoped_courses?
+      results = Course::createFromJson(data.scoped_courses)
+    n = 0
 
-    # The 'update' method must be called so that it can readjust for the
-    # changed size of the div it is to 'side'.
-    @sidebar.update()
+    # Additional binding
+    for result in results
+      course = @plan.coursesByScopedId[result.id]
+      continue if not course
+
+      result.period = course.period
+      result.grade  = course.grade
+      result.isIncluded(true)
+      result.isPassed(course.grade > 0)
+      n += 1
+    dbg.lg("Found #{n} matches!")
+    return results
 
 
   hoveringOn: (object, state=true) ->
@@ -83,15 +75,18 @@ class @View
 
 
   select: (object) ->
-    dbg.lg("view::select(#{@selected()} -> #{object})...")
+    #dbg.lg("view::select(#{@selected()} -> #{object})...")
     if object != @selected()
+      oldObj = @selected()
+      oldObj.isSelected(false) if oldObj
       if @doShowWell()
         @doShowWell(false)
         @selector.delayed(object, @FADEDURATION)
       else
         @selected(object)
+        object.isSelected(true) if object
         @doShowWell(true)
-    dbg.lg("view::select done...")
+    #dbg.lg("view::select done...")
 
 
 

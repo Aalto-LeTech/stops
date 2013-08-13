@@ -107,17 +107,13 @@ var skillGraphView = {
         continue;
       }
 
-// FIXME Should these two instances of "description_with_locale" be swapped with "localized_description"
       // Skip skill if localized text is not available
-      if (!rawData.description_with_locale) {
+      if (!rawData.localized_name) {
         continue;
       }
 
-      var localized_name = rawData.description_with_locale.skill_description.description;
-// /FIXME  also what is this: "description_with_locale.skill_description.description"
-
       // Create skill object
-      var skill = new GraphSkill(rawData.id, rawData.position, localized_name);
+      var skill = new GraphSkill(rawData.id, rawData.position, rawData.localized_name);
       this.skills[rawData.id] = skill;
 
       // Add skill to course

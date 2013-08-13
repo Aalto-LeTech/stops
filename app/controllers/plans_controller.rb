@@ -83,71 +83,111 @@ class PlansController < ApplicationController
   def show
     authorize! :read, @study_plan
 
-    # Get periods, competences, user courses and study plan course data
-    periods = @study_plan.periods.includes(:localized_description)
-    competences = @study_plan.competences.includes([:localized_description, :courses])
-    user_courses = @user.user_courses.includes(:course_instance)
-    study_plan_courses = @study_plan.study_plan_courses.includes(
-      [
-        abstract_course: [:localized_description, :course_instances],
-        scoped_course: [:prereqs]
-      ]
-    )
+    bundle = params[:bundle] if params[:bundle]
 
-    # JSONify the data
-    periods_json = periods.as_json(
-      only: [:id, :begins_at, :ends_at],
-      methods: [:localized_name],
-      root: false
-    )
+    if bundle == 'schedule'
 
-    # TODO: Replace courses_recursive with a more efficient solution
-    competences_json = competences.as_json(
-      only: [],
-      methods: [:localized_name, :course_ids_recursive],
-      root: false
-    )
+      # Get periods, competences, user courses and study plan course data
+      periods = @study_plan.periods.includes(:localized_description)
+      competences = @study_plan.competences.includes([:localized_description, :courses])
+      user_courses = @user.user_courses.includes(:course_instance)
+      study_plan_courses = @study_plan.study_plan_courses.includes(
+        [
+          abstract_course: [:localized_description, :course_instances],
+          scoped_course: [:prereqs]
+        ]
+      )
 
-    user_courses_json = user_courses.as_json(
-      only: [:abstract_course_id, :grade, :credits],
-      methods: [:period_id],
-      root: false
-    )
+      # JSONify the data
+      periods_json = periods.as_json(
+        only: [:id, :begins_at, :ends_at],
+        methods: [:localized_name],
+        root: false
+      )
 
-    study_plan_courses_json = study_plan_courses.as_json(
-      only: [:period_id, :credits, :length],
-      include: [
-        {
-          abstract_course: {
-            only: [:id, :code],
-            methods: [:localized_name],
-            include: {
-              course_instances: {
-                only: [:period_id, :length]
+      # TODO: Replace courses_recursive with a more efficient solution
+      competences_json = competences.as_json(
+        only: [],
+        methods: [:localized_name, :course_ids_recursive],
+        root: false
+      )
+
+      user_courses_json = user_courses.as_json(
+        only: [:abstract_course_id, :grade, :credits],
+        methods: [:period_id],
+        root: false
+      )
+
+      study_plan_courses_json = study_plan_courses.as_json(
+        only: [:period_id, :credits, :length],
+        include: [
+          {
+            abstract_course: {
+              only: [:id, :code],
+              methods: [:localized_name],
+              include: {
+                course_instances: {
+                  only: [:period_id, :length]
+                }
               }
             }
+          },
+          {
+            scoped_course: {
+              only: [:id, :credits],
+              methods: [:prereq_ids]
+            }
           }
-        },
-        {
-          scoped_course: {
-            only: [:id, :credits],
-            methods: [:prereq_ids]
-          }
-        }
-      ],
-      root: false
-    )
+        ],
+        root: false
+      )
+
+      response_data = {
+        periods: periods_json,
+        competences: competences_json,
+        user_courses: user_courses_json,
+        courses: study_plan_courses_json,
+      }
+
+    elsif bundle == 'courses_with_ids_grades_and_periods'
+
+      course_data = @study_plan.study_plan_courses.as_json(
+        only: [:id, :scoped_course_id, :abstract_course_id, :period_id],
+        root: false
+      )
+
+      grade_data = @user.user_courses.as_json(
+        only: [:abstract_course_id, :grade],
+        root: false
+      )
+
+      period_data = @study_plan.periods.includes(:localized_description).as_json(
+        only: [:id],
+        methods: [:localized_name],
+        root: false
+      )
+
+      response_data = {
+        courses: course_data,
+        grades: grade_data,
+        periods: period_data
+      }
+
+    else
+
+      throw 'Invalid bundle!'
+      #response_data = {
+      #  error: 'Invalid bundle!'
+      #}
+
+    end
+
+    response_json = response_data.to_json( root: false )
 
     # Form and send the response
     respond_to do |format|
       format.html { redirect_to studyplan_schedule_path }
-      format.json { render json: {
-          periods: periods_json,
-          competences: competences_json,
-          user_courses: user_courses_json,
-          courses: study_plan_courses_json,
-        }.to_json( root: false )
-      }
+      format.json { render json: response_json }
     end
   end
 

@@ -1,5 +1,4 @@
 #= require core/module_pattern
-#= require ./course
 
 # Check that i18n strings have been loaded before this file
 if not O4.search.i18n
@@ -46,20 +45,13 @@ if not O4.search.i18n
             async: true
 
 
-        @results.subscribe (newValue) =>
-          @viewModel.onResultsChange()
-
-
       updateResults: (data) ->
         #dbg.lg("results: #{JSON.stringify(data)}!")
         onQueryError(data) unless data.status == 'ok'
         return if data.inquery != @inquery()
-        @results().length = 0
 
-        # Build objects from all the result data served and include them as
-        # results
-        Course::resetFromJson(data)
-        @results().push.apply(@results(), Course::ALL)
+        # Have the viewModel handle building the final results array
+        @results( @viewModel.parseResults(data) )
 
         # Update the info message
         nresults = @results().length
@@ -69,9 +61,6 @@ if not O4.search.i18n
           @infomsg(@i18n.a_result_found)
         else
           @infomsg(nresults + ' ' + @i18n.x_results_found)
-
-        # Update the DOM
-        @results.valueHasMutated()
 
 
       onQueryError: (data) ->

@@ -151,4 +151,12 @@ class ApplicationController < ActionController::Base
     str =~ /\A\d+\z/
   end
 
+  # For Active Model Serializing
+  #  ref: http://railscasts.com/episodes/409-active-model-serializers?view=asciicast
+  def as_hash(target, options = {})
+    options[:scope] ||= self
+    options[:url_options] ||= url_options
+    target.active_model_serializer.new(target, options).as_json
+  end
+
 end

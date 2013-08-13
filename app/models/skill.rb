@@ -71,7 +71,7 @@ class Skill < ActiveRecord::Base
 
   def localized_name
     desc = localized_description
-    (desc && desc.name != "" ) ? desc.name : nil
+    (desc && desc.description != "" ) ? desc.description : nil
   end
 
 

@@ -8,7 +8,7 @@ class Competence < CompetenceNode
   # Parent
   belongs_to :parent_competence,
            :class_name => 'Competence'
-  
+
   has_many :children, :class_name => 'Competence', :foreign_key => 'parent_competence_id'
 
   validate :validate_parent_competence_not_a_self_reference
@@ -94,18 +94,18 @@ class Competence < CompetenceNode
   end
 
 
-  def name(locale)
-    throw "Deprecated! use localized_name!"
-    description = competence_descriptions.where(:locale => locale.to_s).first
-    description ? description.name : ''
-  end
+#  def name(locale)
+#    throw "Deprecated! use localized_name!"
+#    description = competence_descriptions.where(:locale => locale.to_s).first
+#    description ? description.name : ''
+#  end
 
 
-  def description(locale)
-    throw "Deprecated! use localized_name!"
-    description = competence_descriptions.where(:locale => locale.to_s).first
-    description ? description.description : ''
-  end
+#  def description(locale)
+#    throw "Deprecated! use localized_name!"
+#    description = competence_descriptions.where(:locale => locale.to_s).first
+#    description ? description.description : ''
+#  end
 
 
   # Returns all courses and their prereqs, recursively

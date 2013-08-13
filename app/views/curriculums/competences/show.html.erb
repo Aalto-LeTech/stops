@@ -19,13 +19,11 @@
 <% end %>
 
 
-<p><%= @competence.localized_description.description %></p>
-
 <h2><%=t :competence_skills_heading %></h2>
 
 <ul>
   <% @competence.skills.each do |skill| %>
-    <li><%= skill.localized_description %></li>
+    <li><%= skill.localized_name %></li>
   <% end %>
 </ul>
 <!--td>< link_to t(:contributing_courses_link), curriculum_competence_skill_path(:curriculum_id => @curriculum.id, :competence_id => @competence.id, :id => skill.id) ></td-->
@@ -38,9 +36,9 @@
   <% end %>
 </ul>
 
-<div id="course-graph" 
-    data-courses-path="<%= curriculum_courses_path(:curriculum_id => @curriculum.id) %>" 
-    data-competences-path="<%= curriculum_competences_path(:curriculum_id => @curriculum.id) %>" 
+<div id="course-graph"
+    data-courses-path="<%= curriculum_courses_path(:curriculum_id => @curriculum.id) %>"
+    data-competences-path="<%= curriculum_competences_path(:curriculum_id => @curriculum.id) %>"
     data-skills-path="<%= curriculum_skills_path(:curriculum_id => @curriculum.id) %>"
     data-source-id="<%= @competence.id %>"
     >

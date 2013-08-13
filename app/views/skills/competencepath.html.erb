@@ -17,7 +17,7 @@ app/views/skills/competencepath.html.erb
                     <td>
                       <div class="skill">
                         <%= skill.competence_node.course_code + ' ' + skill.competence_node.name(I18n.locale) %>:
-                        <%= skill.localized_description %>
+                        <%= skill.localized_name %>
                       </div>
                     </td>
                   <% end %>
@@ -27,7 +27,7 @@ app/views/skills/competencepath.html.erb
           </td>
           <td class="target-skill-column">
             <div class="skill">
-              <%= profile_skill.localized_description %>
+              <%= profile_skill.localized_name %>
             </div>
           </td>
         </tr>

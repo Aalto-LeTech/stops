@@ -278,8 +278,12 @@ class CurriculumsController < ApplicationController
 
   def search_courses
 
-    scoped_courses = []
     inquery = params[:inquery] if params[:inquery]
+
+    response_json = {
+      :status          => false,
+      :inquery         => inquery
+    }.to_json
 
     if inquery
 
@@ -303,36 +307,19 @@ class CurriculumsController < ApplicationController
       )
 
       puts "Processing %d entries." % [ scoped_courses.total_entries ]
-      if scoped_courses.total_entries > 0
 
-        #scoped_courses = ScopedCourse.includes(:localized_description, :skills => :localized_description).find(scoped_courses.map { |result| result.id } )
-
-        scoped_courses = scoped_courses.map do |scoped_course|
-          {
-            id:       scoped_course.id,
-            code:     scoped_course.course_code,
-            name:     scoped_course.localized_name,
-            credits:  scoped_course.credits,
-            skills:   scoped_course.skills.map { |skill| skill.localized_description.description },
-            prereqs:  scoped_course.prereqs.map { |prereq| prereq.localized_name },
-            path:     studyplan_course_path(scoped_course.id)
-          }
-        end
-      else
-        scoped_courses = []
-      end
+      response_json = {
+        :status          => :ok,
+        :inquery         => inquery,
+        :scoped_courses  => as_hash(scoped_courses)
+      }.to_json
 
     else
       puts "ERROR: No query string given!"
     end
 
-    #puts "Jsonifying %s!" % [ scoped_courses ]
-    response_json = {
-      :status          => :ok,
-      :inquery         => inquery,
-      :scoped_courses  => scoped_courses
-    }.to_json
-    puts "Done!"
+    #puts "=> Response:"
+    #y JSON.parse(response_json)
 
     respond_to do |format|
       format.json do

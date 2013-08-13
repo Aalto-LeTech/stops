@@ -9,13 +9,13 @@ jQuery ->
   graphView = new GraphView(element[0])
 
   graphView.load(coursesPath, competencesPath, skillsPath)
-  
+
   graphView.visualize
     'sourceId': element.data('source-id')
     'targetId': element.data('target-id')
     'prereqSkills': 'recursive'
     'postreqSkills': 'recursive'
-    
+
 
   # Event handlers
   $(document)

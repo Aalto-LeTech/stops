@@ -81,15 +81,12 @@ class @GraphView
       course = @coursesById[rawData.competence_node_id]
       continue unless course
 
-# FIXME Should these two instances of "description_with_locale" be swapped with "localized_description"
       # Skip skill if localized text is not available
-      continue unless rawData.description_with_locale
+      continue unless rawData.localized_name
       # TODO: load another locale instead
 
       # Create skill object
-      localized_name = rawData.description_with_locale.skill_description.description
-# /FIXME  also what is this: "description_with_locale.skill_description.description"
-      skill = new GraphSkill(rawData.id, localized_name, this)
+      skill = new GraphSkill(rawData.id, rawData.localized_name, this)
       @skillsById[rawData.id] = skill
 
       # Add skill to course

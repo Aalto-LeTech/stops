@@ -83,8 +83,14 @@ Ops::Application.routes.draw do
     # My Plan
     resource :studyplan, :controller => 'plans', :only => [:show] do
 
-      resources :competences, :controller => 'plans/competences', :except => [:edit] do
-        resources :courses, :controller => 'plans/courses', :only => [:show]  # ScopedCourses, courses that belong to the competence
+      resources :competences,
+        :controller => 'plans/competences',
+        :only => [:index, :show, :new, :delete, :create, :destroy] do
+
+        # ScopedCourses that belong to the competence
+        resources :courses,
+          :controller => 'plans/courses',
+          :only => [:show]
 
         member do
           get 'supporting'
@@ -97,14 +103,21 @@ Ops::Application.routes.draw do
         end
       end
 
-      resources :courses, :controller => 'plans/courses', :except => [:edit, :update]  # ScopedCourses, courses that user has selected
+      # The studyplan courses controller
+      resources :courses,
+        :controller => 'plans/courses',
+        :only => [:index, :show, :create]
+
+      # The studyplan schedule controller
       resource :schedule, :controller => 'plans/schedule', :only => [:show]
+
+      # The studyplan curriculum controller
       resource :curriculum, :controller => 'plans/curriculums', :only => [:show, :edit, :update]
     end
 
     # Any plan (specify student ID)
     resources :plans, :constraints => { :id => /\w+/ }, :only => [:show, :update] do
-      resources :courses, :controller => 'plans/courses', :except => [:edit, :update]
+      resources :courses, :controller => 'plans/courses', :only => [:index, :show, :create]  # :except => [:edit, :update]
       resource :schedule, :controller => 'plans/schedule', :only => [:show, :edit]
       resource :record, :controller => 'plans/record', :only => [:show]
     end

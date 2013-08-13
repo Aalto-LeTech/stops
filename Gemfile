@@ -71,6 +71,10 @@ gem 'deep_cloneable', :git => 'git://github.com/moiristo/deep_cloneable.git'
 gem 'delayed_job_active_record', :git => 'git://github.com/collectiveidea/delayed_job_active_record.git'
 gem 'daemons'
 
+# For model object serialization
+gem 'active_model_serializers'
+
+
 # development
 #group :development do
 #  gem "rails-erd"  # entity relationship diagrams

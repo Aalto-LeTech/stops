@@ -75,7 +75,7 @@
           <div class="course">
             <%= @course.course_code + ' ' + @course.localized_name %>
             <% @course.skills.each do |skill| %>
-              <%= link_to skill.localized_description, skill, { :class => 'skill', 'data-skill-id' => skill.id, 'data-user-id' => @user.id } %>
+              <%= link_to skill.localized_name, skill, { :class => 'skill', 'data-skill-id' => skill.id, 'data-user-id' => @user.id } %>
             <% end %>
           </div>
         </td>

@@ -4,8 +4,8 @@ class Plans::CoursesController < PlansController
   before_filter :load_plan
 
 
-  # GET /courses
-  # GET /courses.xml
+  # GET /studyplan/courses
+  # GET /studyplan/courses.xml
   def index
     respond_to do |format|
       format.html { render :action => 'index', :layout => 'browser' }
@@ -13,8 +13,8 @@ class Plans::CoursesController < PlansController
     end
   end
 
-  # GET /courses/1
-  # GET /courses/1.xml
+  # GET /studyplan/courses/1
+  # GET /studyplan/courses/1.xml
   def show
     @course = ScopedCourse.find(params[:id])
 
@@ -28,30 +28,29 @@ class Plans::CoursesController < PlansController
     end
   end
 
-  # GET /courses/1/graph
-  def graph
-    @course = Course.find(params[:id])
-  end
+#  # GET /courses/1/graph
+#  def graph
+#    @course = Course.find(params[:id])
+#  end
 
-  # GET /courses/new
-  # GET /courses/new.xml
-  def new
-    @course = Course.new
+#  # GET /courses/new
+#  # GET /courses/new.xml
+#  def new
+#    @course = Course.new
 
-    respond_to do |format|
-      format.html # new.html.erb
-      format.xml  { render :xml => @course }
-    end
-  end
+#    respond_to do |format|
+#      format.html # new.html.erb
+#      format.xml  { render :xml => @course }
+#    end
+#  end
 
-  # GET /courses/1/edit
-  def edit
-    @course = Course.find(params[:id])
-  end
+#  # GET /courses/1/edit
+#  def edit
+#    @course = Course.find(params[:id])
+#  end
 
   # Add course to study plan
-  # POST /courses
-  # POST /courses.xml
+  # POST /plans/:id/courses
   def create
     course = ScopedCourse.find(params[:course_id])
 
@@ -75,31 +74,50 @@ class Plans::CoursesController < PlansController
     redirect_to studyplan_profiles_path, :flash => {:success => 'Course added to study plan'}
   end
 
-  # PUT /courses/1
-  # PUT /courses/1.xml
-  def update
-    @course = Course.find(params[:id])
+#  # PUT /courses/1
+#  # PUT /courses/1.xml
+#  def update
+#    @course = Course.find(params[:id])
 
-    respond_to do |format|
-      if @course.update_attributes(params[:course])
-        format.html { redirect_to(@course, :notice => 'Course was successfully updated.') }
-        format.xml  { head :ok }
-      else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @course.errors, :status => :unprocessable_entity }
-      end
-    end
-  end
+#    respond_to do |format|
+#      if @course.update_attributes(params[:course])
+#        format.html { redirect_to(@course, :notice => 'Course was successfully updated.') }
+#        format.xml  { head :ok }
+#      else
+#        format.html { render :action => "edit" }
+#        format.xml  { render :xml => @course.errors, :status => :unprocessable_entity }
+#      end
+#    end
+#  end
 
-  # DELETE /courses/1
-  # DELETE /courses/1.xml
-  def destroy
-    @course = Course.find(params[:id])
-    @course.destroy
+#  # DELETE /courses/1
+#  # DELETE /courses/1.xml
+#  def destroy
+#    @course = Course.find(params[:id])
+#    @course.destroy
 
-    respond_to do |format|
-      format.html { redirect_to(courses_url) }
-      format.xml  { head :ok }
-    end
-  end
+#    respond_to do |format|
+#      format.html { redirect_to(courses_url) }
+#      format.xml  { head :ok }
+#    end
+#  end
+
+
+#  # Returns the ids of the scoped courses added into the study plan
+#  # GET /studyplan/courses/ids
+#  def ids
+#    authorize! :read, @study_plan
+
+#    # Get the ids
+#    courses = @study_plan.courses.as_json(
+#      only: [:id],
+#      root: false
+#    )
+
+#    # Form and send the response
+#    respond_to do |format|
+#      format.json { render json: courses }
+#    end
+#  end
+
 end

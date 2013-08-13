@@ -5,9 +5,9 @@
     <% if content_for?(:title) -%>
       <%=  yield(:title) %> -
     <% elsif @scoped_course && @scoped_course.localized_description %>
-      <%= @scoped_course.localized_description.name %> -
+      <%= @scoped_course.localized_name %> -
     <% elsif @competence && @competence.localized_description %>
-      <%= @competence.localized_description.name %> -
+      <%= @competence.localized_name %> -
     <% elsif @curriculum %>
       <%= @curriculum.name %> -
     <% end -%>

@@ -49,6 +49,7 @@ class @PlanView
   loadPlan: () ->
     $.ajax
       url: @planUrl,
+      data: { bundle: 'schedule' }
       dataType: 'json',
       success: (data) => this.loadJson(data)
 

@@ -95,21 +95,6 @@ class ScopedCourse < CompetenceNode
            :order => 'created_at'
 
 
-  # Old accessor for localized name  # FIXME: should this be removed?
-  def name(locale)
-    description = course_descriptions.where(:locale => locale).first
-    description ? description.name : course_code
-  end
-
-
-  # Returns the name of the course in the current locale or fallback
-  # message if localized course name could not be found.
-  def name_or(fallback_message="<No name set for the locale>")
-    desc = localized_description
-    desc ? desc.name : fallback_message
-  end
-
-
   def localized_name_exists?
     not localized_name.nil?
   end

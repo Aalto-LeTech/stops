@@ -1,8 +1,9 @@
 class ScopedCourseShortSerializer < ActiveModel::Serializer
   attributes :id,
-             :course_code,
+             :abstract_course_id,
+             #:course_code,
              :credits,
-             :localized_name,
+             #:localized_name,
              :studyplan_path
 
   def studyplan_path

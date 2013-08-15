@@ -10,7 +10,7 @@ class AbstractCourse < ActiveRecord::Base
   #  <- localized_description = course_descriptions (name, locale, ...)
   #  <- scoped_courses
   #  <- course_instances
-  #  <- study_plan_courses
+  #  <- plan_courses
   #  <- periods <- course_instances
 
 
@@ -22,7 +22,7 @@ class AbstractCourse < ActiveRecord::Base
   # Courses
   has_many :scoped_courses, :dependent => :destroy      # Courses in curriculums. e.g. "Course X-0.1010 according to the 2005 study guide"
   has_many :course_instances, :dependent => :destroy    # Course implementations, e.g. "Course X-0.1010 (spring 2011)"
-  has_many :study_plan_courses, :dependent => :destroy  # Courses planned by students in their personal study plans
+  has_many :plan_courses, :dependent => :destroy  # Courses planned by students in their personal study plans
 
 
   # Periods

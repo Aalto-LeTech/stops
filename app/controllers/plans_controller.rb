@@ -87,11 +87,11 @@ class PlansController < ApplicationController
 
     if bundle == 'schedule'
 
-      # Get periods, competences, user courses and study plan course data
+      # Get periods, competences, user courses and plan course data
       periods = @study_plan.periods.includes(:localized_description)
       competences = @study_plan.competences.includes([:localized_description, :courses])
       user_courses = @user.user_courses.includes(:course_instance)
-      study_plan_courses = @study_plan.study_plan_courses.includes(
+      plan_courses = @study_plan.plan_courses.includes(
         [
           abstract_course: [:localized_description, :course_instances],
           scoped_course: [:prereqs]
@@ -118,7 +118,7 @@ class PlansController < ApplicationController
         root: false
       )
 
-      study_plan_courses_data = study_plan_courses.as_json(
+      plan_courses_data = plan_courses.as_json(
         only: [:id, :period_id, :credits, :length],
         include: [
           {
@@ -146,12 +146,12 @@ class PlansController < ApplicationController
         periods: periods_data,
         competences: competences_data,
         user_courses: user_courses_data,
-        study_plan_courses: study_plan_courses_data,
+        plan_courses: plan_courses_data,
       }
 
     elsif bundle == 'courses_with_ids_grades_and_periods'
 
-      study_plan_course_data = @study_plan.study_plan_courses.as_json(
+      plan_course_data = @study_plan.plan_courses.as_json(
         only: [:id, :scoped_course_id, :abstract_course_id, :period_id],
         root: false
       )
@@ -168,7 +168,7 @@ class PlansController < ApplicationController
       )
 
       response_data = {
-        study_plan_courses: study_plan_course_data,
+        plan_courses: plan_course_data,
         grades: grade_data,
         periods: period_data
       }

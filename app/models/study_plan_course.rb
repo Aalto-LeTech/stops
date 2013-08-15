@@ -1,7 +1,7 @@
 # Join model that connects study plan to a course
-class StudyPlanCourse < ActiveRecord::Base
+class PlanCourse < ActiveRecord::Base
 
-  #  create_table "study_plan_courses", :force => true do |t|
+  #  create_table "plan_courses", :force => true do |t|
   #    t.integer "study_plan_id",                           :null => false
   #    t.integer "abstract_course_id"
   #    t.integer "scoped_course_id",                        :null => false

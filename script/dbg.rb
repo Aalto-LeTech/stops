@@ -8,7 +8,7 @@ class Dbggr
       ScopedCourse,
       CourseInstance,
       UserCourse,
-      StudyPlanCourse
+      PlanCourse
     ]
   end
 
@@ -18,7 +18,7 @@ class Dbggr
   #        ScopedCourse  69
   #      CourseInstance   0
   #          UserCourse   0
-  #     StudyPlanCourse  30
+  #     PlanCourse  30
   def print_course_class_total_item_counts
     puts "=> Course Class Total Item Counts"
     @course_classes.each do |course_class|
@@ -223,13 +223,13 @@ class Dbggr
 
     return
 
-    # fixes study_plan_courses
-    StudyPlanCourse.find_each do |study_plan_courses|
-      scoped_course = study_plan_courses.scoped_course
-      study_plan_courses.abstract_course = scoped_course.abstract_course
-      study_plan_courses.save
+    # fixes plan_courses
+    PlanCourse.find_each do |plan_courses|
+      scoped_course = plan_courses.scoped_course
+      plan_courses.abstract_course = scoped_course.abstract_course
+      plan_courses.save
     end
-    y StudyPlanCourse.all
+    y PlanCourse.all
   end
 
 
@@ -283,14 +283,14 @@ class Dbggr
     exit
 
 
-    study_plan_courses = @study_plan.study_plan_courses.includes(
+    plan_courses = @study_plan.plan_courses.includes(
       [
         abstract_course: [:localized_description, :course_instances],
         scoped_course: [:prereqs]
       ]
     )
 
-    y study_plan_courses_json = study_plan_courses.as_json(
+    y plan_courses_json = plan_courses.as_json(
       only: [:id, :period_id, :credits, :length],
       include: [
         {
@@ -320,7 +320,7 @@ class Dbggr
     #y periods = @study_plan.periods
     #y [@study_plan.last_period_id, @study_plan.first_period_id]
     #y @study_plan.last_period.ends_at - @study_plan.first_period.begins_at
-    #y @user.study_plan.period_of_earliest_study_plan_course
+    #y @user.study_plan.period_of_earliest_plan_course
     #@user.first_study_period_id = 37
     #@user.save
     #@user.admin

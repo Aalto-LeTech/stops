@@ -16,13 +16,13 @@
     <h2><%= t('.competence_courses') %></h2>
     <ul>
       <% @competence.courses_recursive.each do |course| %>
-        <li class="<%= @user.study_plan.study_plan_courses.where( scoped_course_id: course.id ).exists? ? 'chosen' : '' %> <%= course == @course ? 'selected' : '' %>"><%= link_to course.localized_name, studyplan_competence_course_path(:competence_id => @competence.id, :id => course) %>
+        <li class="<%= @user.study_plan.plan_courses.where( scoped_course_id: course.id ).exists? ? 'chosen' : '' %> <%= course == @course ? 'selected' : '' %>"><%= link_to course.localized_name, studyplan_competence_course_path(:competence_id => @competence.id, :id => course) %>
       <% end %>
     </ul>
 
   <% else %>
     <h1><%= link_to t('.study_plan'), studyplan_path %></h2>
-    <h2><%= link_to t('.study_plan_courses'), studyplan_courses_path %></h2>
+    <h2><%= link_to t('.plan_courses'), studyplan_courses_path %></h2>
     <ul>
       <% @user.study_plan.courses.each do |course| %>
         <li class="<%= @user.passed?( course.abstract_course ) ? 'passed' : '' %> <%= course == @course ? 'selected' : '' %>"><%= link_to course.localized_name, studyplan_course_path(:id => course) %>

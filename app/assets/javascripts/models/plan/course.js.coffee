@@ -41,14 +41,14 @@ class @Course
         course = createFromPreparedData( {'scid': scid, 'acid': acid, 'scoped_course': scopedCourseData} )
         courses.push(course) if course
 
-    if data.study_plan_courses
-      for studyPlanCourseData in data.study_plan_courses
-        acid = studyPlanCourseData.abstract_course_id
-        acid = studyPlanCourseData.abstract_course.id unless acid
-        scid = studyPlanCourseData.scoped_course_id
-        scid = studyPlanCourseData.scoped_course.id unless scid
-        pcid = studyPlanCourseData.id
-        course = createFromPreparedData( {'scid': scid, 'acid': acid, 'pcid': pcid, 'study_plan_course': studyPlanCourseData} )
+    if data.plan_courses
+      for planCourseData in data.plan_courses
+        acid = planCourseData.abstract_course_id
+        acid = planCourseData.abstract_course.id unless acid
+        scid = planCourseData.scoped_course_id
+        scid = planCourseData.scoped_course.id unless scid
+        pcid = planCourseData.id
+        course = createFromPreparedData( {'scid': scid, 'acid': acid, 'pcid': pcid, 'plan_course': planCourseData} )
         courses.push(course) if course
 
     if data.user_courses
@@ -58,7 +58,7 @@ class @Course
         scid = userCourseData.scoped_course_id
         scid = userCourseData.scoped_course.id unless scid
         ucid = userCourseData.id
-        course = createFromPreparedData( {'scid': scid, 'acid': acid, 'ucid': ucid, 'user_course': studyPlanCourseData} )
+        course = createFromPreparedData( {'scid': scid, 'acid': acid, 'ucid': ucid, 'user_course': planCourseData} )
         courses.push(course) if course
 
     dbg.lg("Course::createFromJson(): Loaded #{courses.length} courses.")
@@ -94,7 +94,7 @@ class @Course
 
     @scId    = data.abstract_course_id if data.abstract_course_id
     @abstractId    = data.abstract_course_id if data.abstract_course_id
-    @planCourseId  = data.study_plan_course_id if data.study_plan_course_id
+    @planCourseId  = data.plan_course_id if data.plan_course_id
     @userCourseId  = data.user_course_id if data.user_course_id
     @code          = data.course_code if data.course_code
     @name          = data.localized_name if data.localized_name

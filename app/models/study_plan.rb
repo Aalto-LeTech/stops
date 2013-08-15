@@ -21,7 +21,7 @@ class StudyPlan < ActiveRecord::Base
         study_plan = proxy_association.owner
         plan_id = study_plan.id
 
-        existing_entry = StudyPlanCourse.where(:study_plan_id => plan_id,
+        existing_entry = PlanCourse.where(:study_plan_id => plan_id,
                                                  :scoped_course_id => course_id).first
 
         if not existing_entry.nil?
@@ -46,7 +46,7 @@ class StudyPlan < ActiveRecord::Base
         study_plan = proxy_association.owner
         plan_id = study_plan.id
 
-        existing_entry = StudyPlanCourse.where(:study_plan_id => plan_id,
+        existing_entry = PlanCourse.where(:study_plan_id => plan_id,
                                                  :scoped_course_id => course_id).first
 
         if not existing_entry.nil?
@@ -80,10 +80,10 @@ class StudyPlan < ActiveRecord::Base
   #  -> curriculum
   #  -> first_period
   #  -> last_period
-  #  <- study_plan_courses
+  #  <- plan_courses
   #  <- study_plan_competences
-  #  <- competences (study_plan_courses -> scoped_courses)
-  #  <- courses (study_plan_courses -> scoped_courses)
+  #  <- competences (plan_courses -> scoped_courses)
+  #  <- courses (plan_courses -> scoped_courses)
   #  <- study_plan_manual_courses
   #  <- manual_courses (study_plan_manual_courses -> scoped_courses)
   #  - created_at
@@ -112,17 +112,17 @@ class StudyPlan < ActiveRecord::Base
 
 
   # Courses
-  has_many  :study_plan_courses,
+  has_many  :plan_courses,
             :dependent => :destroy
 
   has_many  :courses,
-            :through => :study_plan_courses,
+            :through => :plan_courses,
             :source => :scoped_course,
             :extend => RefCountExtension,
             :dependent => :destroy
 
   has_many  :study_plan_manual_courses,
-            :class_name => 'StudyPlanCourse',
+            :class_name => 'PlanCourse',
             :dependent => :destroy,
             :conditions => { :manually_added => true }
 
@@ -133,19 +133,19 @@ class StudyPlan < ActiveRecord::Base
             :uniq => true
 
 
-  # Returns the period of the earliest scheduled study plan course
-  def period_of_earliest_study_plan_course
-    earliest_study_plan_course = study_plan_courses.includes(:period).order('periods.begins_at ASC').first
-    earliest_study_plan_course.nil? ? nil : earliest_study_plan_course.period
+  # Returns the period of the earliest scheduled plan course
+  def period_of_earliest_plan_course
+    earliest_plan_course = plan_courses.includes(:period).order('periods.begins_at ASC').first
+    earliest_plan_course.nil? ? nil : earliest_plan_course.period
   end
 
 
-  # Returns the period where the latest scheduled study plan course ends
+  # Returns the period where the latest scheduled plan course ends
   # NB: This is not necessarily the last period extended to by a course in the
   # plan FIXME
-  def ending_period_of_latest_study_plan_course
-    latest_study_plan_course = study_plan_courses.includes(:period).order('periods.begins_at DESC').first
-    latest_study_plan_course.nil? ? nil : latest_study_plan_course.ending_period
+  def ending_period_of_latest_plan_course
+    latest_plan_course = plan_courses.includes(:period).order('periods.begins_at DESC').first
+    latest_plan_course.nil? ? nil : latest_plan_course.ending_period
   end
 
 
@@ -155,12 +155,12 @@ class StudyPlan < ActiveRecord::Base
   #   - the user has passed courses in preceding periods
   # in which case the period is set as the earliest of those
   def reset_first_period
-    the_period_of_earliest_study_plan_course = period_of_earliest_study_plan_course
+    the_period_of_earliest_plan_course = period_of_earliest_plan_course
     the_period_of_earliest_user_course = user.period_of_earliest_user_course
-    if not the_period_of_earliest_study_plan_course.nil? and not the_period_of_earliest_user_course.nil?
-      period = the_period_of_earliest_study_plan_course.begins_at < the_period_of_earliest_user_course.begins_at ? the_period_of_earliest_study_plan_course : the_period_of_earliest_user_course
-    elsif not the_period_of_earliest_study_plan_course.nil?
-      period = the_period_of_earliest_study_plan_course
+    if not the_period_of_earliest_plan_course.nil? and not the_period_of_earliest_user_course.nil?
+      period = the_period_of_earliest_plan_course.begins_at < the_period_of_earliest_user_course.begins_at ? the_period_of_earliest_plan_course : the_period_of_earliest_user_course
+    elsif not the_period_of_earliest_plan_course.nil?
+      period = the_period_of_earliest_plan_course
     elsif not the_period_of_earliest_user_course.nil?
       period = the_period_of_earliest_user_course
     else
@@ -176,17 +176,17 @@ class StudyPlan < ActiveRecord::Base
   # reset_first_period.
   def reset_last_period
     period = nil
-    the_ending_period_of_latest_study_plan_course = ending_period_of_latest_study_plan_course
+    the_ending_period_of_latest_plan_course = ending_period_of_latest_plan_course
     the_period_of_latest_user_course = user.period_of_latest_user_course
-    if not the_ending_period_of_latest_study_plan_course.nil? and not the_period_of_latest_user_course.nil?
-      period = the_ending_period_of_latest_study_plan_course.begins_at > the_period_of_latest_user_course.begins_at ? the_ending_period_of_latest_study_plan_course : the_period_of_latest_user_course
-    elsif not the_ending_period_of_latest_study_plan_course.nil?
-      period = the_ending_period_of_latest_study_plan_course
+    if not the_ending_period_of_latest_plan_course.nil? and not the_period_of_latest_user_course.nil?
+      period = the_ending_period_of_latest_plan_course.begins_at > the_period_of_latest_user_course.begins_at ? the_ending_period_of_latest_plan_course : the_period_of_latest_user_course
+    elsif not the_ending_period_of_latest_plan_course.nil?
+      period = the_ending_period_of_latest_plan_course
     elsif not the_period_of_latest_user_course.nil?
       period = the_period_of_latest_user_course
     end
     if period.nil?
-      # If the user starts from a clean desk (no user nor study plan courses) an
+      # If the user starts from a clean desk (no user nor plan courses) an
       # initial default is set
       reset_first_period if first_period.nil?
       period = Period.find_by_date(first_period.begins_at - 1 + 365*INITIAL_STUDY_PLAN_TIME_IN_YEARS)
@@ -247,21 +247,21 @@ class StudyPlan < ActiveRecord::Base
   # Removes courses from the plan according to the data received
   # Expects a JSON coded array of form:
   # [
-  #   {"study_plan_course_id": 71},
-  #   {"study_plan_course_id": 35},
+  #   {"plan_course_id": 71},
+  #   {"plan_course_id": 35},
   #   ...
   # ]
   def remove_courses_from_json(json)
-    study_plan_courses_to_remove = JSON.parse(json)
+    plan_courses_to_remove = JSON.parse(json)
 
     feedback = {}
 
-    study_plan_courses_to_remove.each do |study_plan_course|
-      status = self.remove_course(study_plan_course.id)
+    plan_courses_to_remove.each do |plan_course|
+      status = self.remove_course(plan_course.id)
       if status == :ok
-        feedback[study_plan_course.id] = true
+        feedback[plan_course.id] = true
       else
-        feedback[study_plan_course.id] = false
+        feedback[plan_course.id] = false
       end
     end
 
@@ -269,7 +269,7 @@ class StudyPlan < ActiveRecord::Base
   end
 
 
-  # Updates the plans study plan courses according to the data received
+  # Updates the plans plan courses according to the data received
   # Expects a JSON coded array of form:
   # [
   #   {"scoped_course_id": 71, "period_id": 1, "course_instance_id": 45},
@@ -280,9 +280,9 @@ class StudyPlan < ActiveRecord::Base
   # ]
   def update_courses_from_json(json)
 
-    study_plan_courses_to_update = JSON.parse(json)
+    plan_courses_to_update = JSON.parse(json)
 
-    return 'empty' if study_plan_courses_to_update.length == 0
+    return 'empty' if plan_courses_to_update.length == 0
 
     # A scoped_course_id => accepted? dict which is returned by this function.
     feedback = {}
@@ -290,28 +290,28 @@ class StudyPlan < ActiveRecord::Base
     # Index information by scoped_course_id and collect them
     new_course_data = {}
     scoped_course_ids = []
-    study_plan_courses_to_update.each do |study_plan_course_to_update|
-      scoped_course_id = study_plan_course_to_update['scoped_course_id']
-      new_course_data[scoped_course_id] = study_plan_course_to_update
+    plan_courses_to_update.each do |plan_course_to_update|
+      scoped_course_id = plan_course_to_update['scoped_course_id']
+      new_course_data[scoped_course_id] = plan_course_to_update
       scoped_course_ids.push(scoped_course_id)
     end
 
     puts "Received data by #{scoped_course_ids.length} ScopedCourse IDs: (#{scoped_course_ids})."
     y new_course_data
 
-    # TODO: add new study plan courses if not found
+    # TODO: add new plan courses if not found
 
-    self.study_plan_courses.where(scoped_course_id: scoped_course_ids).includes(:scoped_course).each do |study_plan_course|
+    self.plan_courses.where(scoped_course_id: scoped_course_ids).includes(:scoped_course).each do |plan_course|
 
       # Fetch the related abstract and scoped_course information
-      scoped_course = study_plan_course.scoped_course
-      scoped_course_id = study_plan_course.scoped_course_id
-      abstract_course_id = study_plan_course.scoped_course.abstract_course_id
+      scoped_course = plan_course.scoped_course
+      scoped_course_id = plan_course.scoped_course_id
+      abstract_course_id = plan_course.scoped_course.abstract_course_id
 
       # Initially, mark the update as rejected.
       feedback[scoped_course_id] = false
 
-      # Load the data for this study_plan_course
+      # Load the data for this plan_course
       new_course = new_course_data[scoped_course_id]
 
       new_period_id = new_course['period_id']
@@ -340,23 +340,23 @@ class StudyPlan < ActiveRecord::Base
         # Determine whether the course should be regarded as customized
         new_custom = scoped_course.credits != new_credits
 
-        # Save possible changes to the study_plan_course
+        # Save possible changes to the plan_course
         changed =
-            study_plan_course.period_id != new_period_id ||
-            study_plan_course.course_instance_id != new_course_instance_id ||
-            study_plan_course.length != new_length ||
-            study_plan_course.credits != new_credits ||
-            study_plan_course.grade != new_grade ||
-            study_plan_course.custom != new_custom
+            plan_course.period_id != new_period_id ||
+            plan_course.course_instance_id != new_course_instance_id ||
+            plan_course.length != new_length ||
+            plan_course.credits != new_credits ||
+            plan_course.grade != new_grade ||
+            plan_course.custom != new_custom
 
         if changed
-          study_plan_course.period_id = new_period_id
-          study_plan_course.course_instance_id = new_course_instance_id
-          study_plan_course.length = new_length
-          study_plan_course.credits = new_credits
-          study_plan_course.grade = new_grade
-          study_plan_course.custom = new_custom
-          study_plan_course.save
+          plan_course.period_id = new_period_id
+          plan_course.course_instance_id = new_course_instance_id
+          plan_course.length = new_length
+          plan_course.credits = new_credits
+          plan_course.grade = new_grade
+          plan_course.custom = new_custom
+          plan_course.save
         end
 
         # No we're done! =) Mark the course as accepted.
@@ -364,11 +364,11 @@ class StudyPlan < ActiveRecord::Base
 
       # On error, the plan_course is rejected.
       rescue UpdateException => message
-        puts "ERROR '#{message}' when updating the study plan course: #{new_course}!"
+        puts "ERROR '#{message}' when updating the plan course: #{new_course}!"
       end
     end
 
-    # Return the dict of accepted study_plan_courses_to_update.
+    # Return the dict of accepted plan_courses_to_update.
     return feedback
   end
 
@@ -390,12 +390,12 @@ class StudyPlan < ActiveRecord::Base
       feedback['scoped_courses_to_add'] = self.add_courses_from_json( json['scoped_courses_to_add'] )
     end
 
-    if json.has_key?('study_plan_courses_to_remove')
-      feedback['study_plan_courses_to_remove'] = self.remove_courses_from_json( json['study_plan_courses_to_remove'] )
+    if json.has_key?('plan_courses_to_remove')
+      feedback['plan_courses_to_remove'] = self.remove_courses_from_json( json['plan_courses_to_remove'] )
     end
 
-    if json.has_key?('study_plan_courses_to_update')
-      feedback['study_plan_courses_to_update'] = self.update_courses_from_json( json['study_plan_courses_to_update'] )
+    if json.has_key?('plan_courses_to_update')
+      feedback['plan_courses_to_update'] = self.update_courses_from_json( json['plan_courses_to_update'] )
     end
 
     if feedback.empty?
@@ -422,9 +422,9 @@ class StudyPlan < ActiveRecord::Base
     self.courses = courses_array
 
     # FIXME !!!
-    self.study_plan_courses.includes(:scoped_course).find_each do |study_plan_course|
-      study_plan_course.abstract_course = study_plan_course.scoped_course.abstract_course
-      study_plan_course.save
+    self.plan_courses.includes(:scoped_course).find_each do |plan_course|
+      plan_course.abstract_course = plan_course.scoped_course.abstract_course
+      plan_course.save
     end
   end
 
@@ -453,7 +453,7 @@ class StudyPlan < ActiveRecord::Base
     return :already_added if @user.study_plan.courses.exists?(course)
 
     # Add course to study plan
-    StudyPlanCourse.create(
+    PlanCourse.create(
       :study_plan_id       =>  @user.study_plan.id,
       :abstract_course_id  =>  course.abstract_course_id,
       :scoped_course_id    =>  course.id,
@@ -468,13 +468,13 @@ class StudyPlan < ActiveRecord::Base
   end
 
 
-  # Removes the study plan course from the study plan
-  def remove_course(study_plan_course_id)
-    study_plan_course = self.study_plan_courses.find(study_plan_course_id)
+  # Removes the plan course from the study plan
+  def remove_course(plan_course_id)
+    plan_course = self.plan_courses.find(plan_course_id)
 
-    return :not_found if not study_plan_course
+    return :not_found if not plan_course
 
-    study_plan_course.destroy
+    plan_course.destroy
 
     return :ok
   end

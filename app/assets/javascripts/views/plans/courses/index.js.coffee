@@ -137,7 +137,7 @@ class @View
         if @plan.anyUnsavedChanges()
           for course in @plan.scopedCoursesToAdd
             changed.push(Course::BYSCID[course.id])
-          for course in @plan.studyPlanCoursesToRemove
+          for course in @plan.planCoursesToRemove
             changed.push(Course::BYPLANCOURSEID[course.id])
       else
         courses = []

@@ -67,7 +67,7 @@ class @PlanView
     dbg.lg("Loaded #{Period::ALL.length} periods.")
 
     # Load courses
-    Course::createFromJson(data['study_plan_courses'], data['user_courses'])
+    Course::createFromJson(data['plan_courses'], data['user_courses'])
     dbg.lg("Loaded #{Course::ALL.length} courses.")
 
     # Load competences
@@ -259,12 +259,12 @@ class @PlanView
       type: 'put',
       dataType: 'json',
       async: false,
-      data: { 'json': {'study_plan_courses_to_update': JSON.stringify(planCoursesToSave)} },
+      data: { 'json': {'plan_courses_to_update': JSON.stringify(planCoursesToSave)} },
       success: (data) =>
         dbg.lg("data: #{data}")
         dbg.lg("data: #{JSON.stringify(data)}")
         if data['status'] == 'ok'
-          feedback = data['feedback']['study_plan_courses_to_update']
+          feedback = data['feedback']['plan_courses_to_update']
           if feedback
             for course in @coursesToSave
               if feedback[course.scopedId]

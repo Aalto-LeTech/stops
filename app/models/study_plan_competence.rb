@@ -13,7 +13,7 @@ class StudyPlanCompetence < ActiveRecord::Base
 
     study_plan = self.study_plan
 
-    # Add Courses to study plan courses
+    # Add Courses to plan courses
     courses.each do |course|
       study_plan.courses.add_or_increment_ref_count course
     end

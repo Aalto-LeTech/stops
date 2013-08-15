@@ -13,7 +13,7 @@ class @Plan
 
     # List of courses to be saved and rejected when tried to save.
     @scopedCoursesToAdd = []
-    @studyPlanCoursesToRemove = []
+    @planCoursesToRemove = []
     @hasUnsavedChanges = false
 
 
@@ -42,8 +42,8 @@ class @Plan
       dbg.lg("ERR: No period data!")
       failed = true
 
-    if not data.study_plan_courses?
-      dbg.lg("ERR: No study plan course data!")
+    if not data.plan_courses?
+      dbg.lg("ERR: No plan course data!")
       failed = true
 
     if not data.user_courses?
@@ -65,7 +65,7 @@ class @Plan
       @courses.push(course)
       @coursesByScopedId[course.scopedId] = course
       course.isIncluded(true)
-    dbg.lg("Loaded #{@courses.length} study plan courses.")
+    dbg.lg("Loaded #{@courses.length} plan courses.")
 
     ## Load grades
     #for grade in data.grades
@@ -119,18 +119,18 @@ class @Plan
   # Reset the coursesToSave array according to changes made since last save
   detectChanges: ->
     @scopedCoursesToAdd = []
-    @studyPlanCoursesToRemove = []
+    @planCoursesToRemove = []
     for course in Course::ALL
       if course.scopedId and course.isIncluded() and course.oIsIncluded == false
         dbg.lg("Pushing \"#{course.name}\" (#{course.scopedId}) for adding.")
         @scopedCoursesToAdd.push( { 'id': course.scopedId } )
       else if course.planCourseId and not course.isIncluded() and course.oIsIncluded
         dbg.lg("Pushing \"#{course.name}\" (#{course.planCourseId}) for removal.")
-        @studyPlanCoursesToRemove.push( { 'id': course.planCourseId } )
+        @planCoursesToRemove.push( { 'id': course.planCourseId } )
 
     @hasUnsavedChanges =
       @scopedCoursesToAdd.length > 0 or
-      @studyPlanCoursesToRemove.length > 0
+      @planCoursesToRemove.length > 0
 
     if not @hasUnsavedChanges
       dbg.lg('No course added nor removed.')
@@ -152,9 +152,9 @@ class @Plan
   #     {"scoped_course_id": 35},
   #     ...
   #   ]
-  #   "study_plan_courses_to_remove": [
-  #     {"study_plan_course_id": 10},
-  #     {"study_plan_course_id": 29},
+  #   "plan_courses_to_remove": [
+  #     {"plan_course_id": 10},
+  #     {"plan_course_id": 29},
   #     ...
   #   ]
   # }
@@ -166,11 +166,11 @@ class @Plan
 
     json = {
       'scoped_courses_to_add': JSON.stringify(@scopedCoursesToAdd),
-      'study_plan_courses_to_remove': JSON.stringify(@studyPlanCoursesToRemove)
+      'plan_courses_to_remove': JSON.stringify(@planCoursesToRemove)
     }
 
     la = @scopedCoursesToAdd.length
-    lr = @studyPlanCoursesToRemove.length
+    lr = @planCoursesToRemove.length
 
     dbg.lg("A total of #{la + lr} changes (#{la} added, #{lr} removed). Starting the put.")
 
@@ -192,7 +192,7 @@ class @Plan
                 else
                   dbg.lg("ERROR: The server refused to add course \"#{course.name}\"!")
               else
-                if feedback['study_plan_courses_to_remove'][course.planCourseId]
+                if feedback['plan_courses_to_remove'][course.planCourseId]
                   dbg.lg("Course \"#{course.name}\" was successfully removed.")
                   course.resetOriginals()
                 else

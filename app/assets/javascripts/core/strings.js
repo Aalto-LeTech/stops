@@ -1,0 +1,19 @@
+////////////////////////////////////////////////////////////////////////////////
+// strings.js
+//
+// Functions related to strings
+//
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////
+// Add a trimming function to the String class
+
+if (typeof(String.prototype.trim) === "undefined")
+{
+  String.prototype.trim = function()
+  {
+    return String(this).replace(/^\s+|\s+$/g, '');
+  };
+}

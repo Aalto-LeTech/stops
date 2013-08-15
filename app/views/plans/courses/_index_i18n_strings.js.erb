@@ -1,0 +1,34 @@
+/* Loads translated i18n strings used by plans/courses/index.js.coffee */
+(function() {
+  var i18n;
+
+  /* i18n strings */
+  i18n = {
+    current_locale:                       "<%= I18n.locale %>",
+    required_locales:                     ["<%= REQUIRED_LOCALES.join('","').html_safe %>"],
+
+    courses:                              "<%= escape_javascript(t('.courses')) %>",
+    changes:                              "<%= escape_javascript(t('.changes')) %>",
+    search:                               "<%= escape_javascript(t('.search')) %>",
+
+    courses_instructions:                 "<%= escape_javascript(t('.courses_instructions')) %>",
+    search_instructions:                  "<%= escape_javascript(t('.search_instructions')) %>",
+    changes_instructions:                 "<%= escape_javascript(t('.changes_instructions')) %>",
+
+    is_not_included_in_the_plan:          "<%= escape_javascript(t('.is_not_included_in_the_plan')) %>",
+    is_included_in_the_plan:              "<%= escape_javascript(t('.is_included_in_the_plan')) %>",
+    is_scheduled_to_period:               "<%= escape_javascript(t('.is_scheduled_to_period')) %>",
+    is_passed_with_grade:                 "<%= escape_javascript(t('.is_passed_with_grade')) %>",
+    in_period:                            "<%= escape_javascript(t('.in_period')) %>",
+    but_not_scheduled:                    "<%= escape_javascript(t('.but_not_scheduled')) %>",
+    but_not_included_into_the_plan:       "<%= escape_javascript(t('.but_not_included_into_the_plan')) %>",
+
+    added:                                "<%= escape_javascript(t('.added')) %>",
+    removed:                              "<%= escape_javascript(t('.removed')) %>",
+  };
+
+  /* Translations available at O4.view.i18n */
+  var O4 = window.O4 = window.O4 || {};
+  O4.view = O4.view || {};
+  O4.view.i18n = i18n;
+})();

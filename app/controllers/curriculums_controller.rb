@@ -278,23 +278,24 @@ class CurriculumsController < ApplicationController
 
   def search_courses
 
-    inquery = params[:inquery] if params[:inquery]
-
-    response_json = {
-      :status          => false,
-      :inquery         => inquery
-    }.to_json
+    inqueryID    = params[:inqueryID]   or nil
+    inquery      = params[:inquery]     or nil
+    do_star      = params[:star]        or true
+    max_matches  = params[:max_matches] or 20
 
     if inquery
 
       curriculum_id = params[:id]
 
-      puts "SEARCHING!"
+      puts "=> Search: [%s (%s)]..." % [ inquery, inquery.encoding.name ]
+
       scoped_courses = ScopedCourse.search(
         inquery,
-        star:    true,
-        ranker:  :proximity_bm25,
-        with:    {curriculum_id: curriculum_id},
+        star:         do_star,
+        ranker:       :proximity_bm25,
+        max_matches:  max_matches,
+        per_page:     max_matches,
+        with:         {curriculum_id: curriculum_id},
         sql:
         {
           :include =>
@@ -309,13 +310,20 @@ class CurriculumsController < ApplicationController
       puts "Processing %d entries." % [ scoped_courses.total_entries ]
 
       response_json = {
-        :status          => :ok,
-        :inquery         => inquery,
-        :scoped_courses  => as_hash(scoped_courses)
+        status:          'ok',
+        inqueryID:       inqueryID,
+        scoped_courses:  as_hash(scoped_courses)
       }.to_json
 
     else
+
       puts "ERROR: No query string given!"
+
+      response_json = {
+        status:     'error',
+        inqueryID:  inqueryID
+      }.to_json
+
     end
 
     #puts "=> Response:"

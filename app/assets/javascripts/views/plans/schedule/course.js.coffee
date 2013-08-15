@@ -256,23 +256,23 @@ class @Course
 
 
   # Serializes the model for sending it back to the database
-  toJson: ->
+  asHash: ->
     credits = @credits()
     length = @length()
     grade = @grade()
 
-    json = { scoped_course_id: @scopedId }
-    json['credits'] = credits if credits > 0
-    json['period_id'] = @period.id if @period?
-    json['length'] = length if length > 0
-    json['grade'] = grade if grade > 0
+    hash = { scoped_course_id: @scopedId }
+    hash['credits'] = credits if credits > 0
+    hash['period_id'] = @period.id if @period?
+    hash['length'] = length if length > 0
+    hash['grade'] = grade if grade > 0
 
     # In case a course's grade has been removed we flag the user course for
     # destuction in the database
     if @oGrade > 0 and not (grade > 0)
-      json['grade'] = -1
+      hash['grade'] = -1
 
-    return json
+    return hash
 
 
   # The selected status change handler

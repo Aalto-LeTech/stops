@@ -52,72 +52,16 @@ class Plans::CoursesController < PlansController
   # Add course to study plan
   # POST /plans/:id/courses
   def create
-    course = ScopedCourse.find(params[:course_id])
 
-    # Dont't do anything if user has already selected this course
-    if @user.study_plan.courses.exists?(course)
+    status = @plan.add_course(params[:course_id])
+
+    if status == :ok
+      redirect_to studyplan_profiles_path, :flash => {:success => 'Course added to study plan'}
+    elsif status == :already_added
       redirect_to studyplan_profiles_path, :flash => {:error => 'Course was already in the study plan'}
-      return
+    else
+      redirect_to studyplan_profiles_path, :flash => {:error => 'Adding the course failed!'}
     end
-
-    # Add course to study plan
-    StudyPlanCourse.create(
-      :study_plan_id       =>  @user.study_plan.id,
-      :abstract_course_id  =>  course.abstract_course_id,
-      :scoped_course_id    =>  course.id,
-      :credits             =>  course.credits,
-      :manually_added      =>  true
-#     :course_instance     =>  nil,                   # deprecated
-#     :period              =>  nil                    # not specified here
-    )
-
-    redirect_to studyplan_profiles_path, :flash => {:success => 'Course added to study plan'}
   end
-
-#  # PUT /courses/1
-#  # PUT /courses/1.xml
-#  def update
-#    @course = Course.find(params[:id])
-
-#    respond_to do |format|
-#      if @course.update_attributes(params[:course])
-#        format.html { redirect_to(@course, :notice => 'Course was successfully updated.') }
-#        format.xml  { head :ok }
-#      else
-#        format.html { render :action => "edit" }
-#        format.xml  { render :xml => @course.errors, :status => :unprocessable_entity }
-#      end
-#    end
-#  end
-
-#  # DELETE /courses/1
-#  # DELETE /courses/1.xml
-#  def destroy
-#    @course = Course.find(params[:id])
-#    @course.destroy
-
-#    respond_to do |format|
-#      format.html { redirect_to(courses_url) }
-#      format.xml  { head :ok }
-#    end
-#  end
-
-
-#  # Returns the ids of the scoped courses added into the study plan
-#  # GET /studyplan/courses/ids
-#  def ids
-#    authorize! :read, @study_plan
-
-#    # Get the ids
-#    courses = @study_plan.courses.as_json(
-#      only: [:id],
-#      root: false
-#    )
-
-#    # Form and send the response
-#    respond_to do |format|
-#      format.json { render json: courses }
-#    end
-#  end
 
 end

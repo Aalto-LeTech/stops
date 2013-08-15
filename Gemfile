@@ -22,6 +22,8 @@ gem 'thinking-sphinx', '3.0.0'
 # NB. for the engine to work you need to do
 #   be rake ts:index
 #   be rake ts:start
+# I encountered encoding problems which were fixed by:
+#   ref: https://github.com/pat/thinking-sphinx/issues/430
 
 # Use unicorn as the web server
 # gem 'unicorn'

@@ -99,27 +99,27 @@ class PlansController < ApplicationController
       )
 
       # JSONify the data
-      periods_json = periods.as_json(
+      periods_data = periods.as_json(
         only: [:id, :begins_at, :ends_at],
         methods: [:localized_name],
         root: false
       )
 
       # TODO: Replace courses_recursive with a more efficient solution
-      competences_json = competences.as_json(
+      competences_data = competences.as_json(
         only: [],
         methods: [:localized_name, :course_ids_recursive],
         root: false
       )
 
-      user_courses_json = user_courses.as_json(
-        only: [:abstract_course_id, :grade, :credits],
+      user_courses_data = user_courses.as_json(
+        only: [:id, :abstract_course_id, :grade, :credits],
         methods: [:period_id],
         root: false
       )
 
-      study_plan_courses_json = study_plan_courses.as_json(
-        only: [:period_id, :credits, :length],
+      study_plan_courses_data = study_plan_courses.as_json(
+        only: [:id, :period_id, :credits, :length],
         include: [
           {
             abstract_course: {
@@ -143,15 +143,15 @@ class PlansController < ApplicationController
       )
 
       response_data = {
-        periods: periods_json,
-        competences: competences_json,
-        user_courses: user_courses_json,
-        courses: study_plan_courses_json,
+        periods: periods_data,
+        competences: competences_data,
+        user_courses: user_courses_data,
+        study_plan_courses: study_plan_courses_data,
       }
 
     elsif bundle == 'courses_with_ids_grades_and_periods'
 
-      course_data = @study_plan.study_plan_courses.as_json(
+      study_plan_course_data = @study_plan.study_plan_courses.as_json(
         only: [:id, :scoped_course_id, :abstract_course_id, :period_id],
         root: false
       )
@@ -168,7 +168,7 @@ class PlansController < ApplicationController
       )
 
       response_data = {
-        courses: course_data,
+        study_plan_courses: study_plan_course_data,
         grades: grade_data,
         periods: period_data
       }
@@ -205,20 +205,10 @@ class PlansController < ApplicationController
 
     # Forward the data for the study_plan's update function which returns
     # feedback to be sent back.
-    accepted = @study_plan.update_from_json(params[:plan_courses]) if params[:plan_courses]
-
-#     if params[:periods]
-#       params[:periods].each do |user_course_id, period_id|
-#         user_course = StudyPlanCourse.where(:id => user_course_id).first
-#         next unless user_course
-#
-#         user_course.period_id = period_id
-#         user_course.save
-#       end
-#     end
+    feedback = @study_plan.update_from_json(params[:json]) if params[:json]
 
     respond_to do |format|
-      format.js { render :json => {:status => :ok, :accepted => accepted} }
+      format.js { render :json => {:status => :ok, :feedback => feedback} }
     end
 
   end

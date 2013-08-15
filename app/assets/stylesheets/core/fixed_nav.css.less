@@ -11,18 +11,23 @@
 // needed. Also note that currently the css from this file is imported directly
 // into the layout which should not be the case if we make use of less here.
 
-body
+@navHeight: 40px;
+
+#thefixednavpush
 {
-  padding-top: 40px;
+  height: @navHeight;
+}
 
-  @media screen and (max-width: 979px)
+@media screen and (max-width: 979px)
+{
+  #thefixednavpush
   {
-    padding-top: 0px;
+    height: 0px;
+  }
 
-    .navbar-fixed-top .navbar-inner, .navbar-fixed-bottom .navbar-inner
-    {
-      padding: 0px;
-    }
+  .navbar-fixed-top .navbar-inner, .navbar-fixed-bottom .navbar-inner
+  {
+    padding: 0px;
   }
 }
 

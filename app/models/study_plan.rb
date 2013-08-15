@@ -208,9 +208,9 @@ class StudyPlan < ActiveRecord::Base
   def periods(options = {})
     #reset_first_period
     #reset_last_period
-    
+
     #number_of_buffer_periods=0
-    
+
 #     Period.range(
 #       self.first_period.find_preceding(number_of_buffer_periods).last,
 #       self.last_period.find_following(number_of_buffer_periods).last
@@ -219,7 +219,57 @@ class StudyPlan < ActiveRecord::Base
   end
 
 
-  # Updates the database according to the data received
+  # Adds courses to the plan according to the data received
+  # Expects a JSON coded array of form:
+  # [
+  #   {"scoped_course_id": 71},
+  #   {"scoped_course_id": 35},
+  #   ...
+  # ]
+  def add_courses_from_json(json)
+    scoped_courses_to_add = JSON.parse(json)
+
+    feedback = {}
+
+    scoped_courses_to_add.each do |scoped_course|
+      status = self.add_course(scoped_course.id)
+      if status == :ok
+        feedback[scoped_course.id] = true
+      else
+        feedback[scoped_course.id] = false
+      end
+    end
+
+    return feedback
+  end
+
+
+  # Removes courses from the plan according to the data received
+  # Expects a JSON coded array of form:
+  # [
+  #   {"study_plan_course_id": 71},
+  #   {"study_plan_course_id": 35},
+  #   ...
+  # ]
+  def remove_courses_from_json(json)
+    study_plan_courses_to_remove = JSON.parse(json)
+
+    feedback = {}
+
+    study_plan_courses_to_remove.each do |study_plan_course|
+      status = self.remove_course(study_plan_course.id)
+      if status == :ok
+        feedback[study_plan_course.id] = true
+      else
+        feedback[study_plan_course.id] = false
+      end
+    end
+
+    return feedback
+  end
+
+
+  # Updates the plans study plan courses according to the data received
   # Expects a JSON coded array of form:
   # [
   #   {"scoped_course_id": 71, "period_id": 1, "course_instance_id": 45},
@@ -228,25 +278,28 @@ class StudyPlan < ActiveRecord::Base
   #   {"scoped_course_id": 60, "period_id": 3, "course_instance_id": 32, "credits": 8, "length": 2, "grade": 3},
   #   ...
   # ]
-  def update_from_json(json)
-    plan_courses = JSON.parse(json)
+  def update_courses_from_json(json)
 
-    return if plan_courses.length == 0
+    study_plan_courses_to_update = JSON.parse(json)
+
+    return 'empty' if study_plan_courses_to_update.length == 0
 
     # A scoped_course_id => accepted? dict which is returned by this function.
-    accepted = {}
+    feedback = {}
 
     # Index information by scoped_course_id and collect them
-    new_courses = {}
+    new_course_data = {}
     scoped_course_ids = []
-    plan_courses.each do |plan_course|
-      scoped_course_id = plan_course['scoped_course_id']
-      new_courses[scoped_course_id] = plan_course
+    study_plan_courses_to_update.each do |study_plan_course_to_update|
+      scoped_course_id = study_plan_course_to_update['scoped_course_id']
+      new_course_data[scoped_course_id] = study_plan_course_to_update
       scoped_course_ids.push(scoped_course_id)
     end
 
     puts "Received data by #{scoped_course_ids.length} ScopedCourse IDs: (#{scoped_course_ids})."
-    y new_courses
+    y new_course_data
+
+    # TODO: add new study plan courses if not found
 
     self.study_plan_courses.where(scoped_course_id: scoped_course_ids).includes(:scoped_course).each do |study_plan_course|
 
@@ -256,14 +309,14 @@ class StudyPlan < ActiveRecord::Base
       abstract_course_id = study_plan_course.scoped_course.abstract_course_id
 
       # Initially, mark the update as rejected.
-      accepted[scoped_course_id] = false
+      feedback[scoped_course_id] = false
 
       # Load the data for this study_plan_course
-      new_course = new_courses[scoped_course_id]
+      new_course = new_course_data[scoped_course_id]
 
       new_period_id = new_course['period_id']
-      new_credits = new_course['credits']
       new_length = new_course['length']
+      new_credits = new_course['credits']
       new_grade = new_course['grade']
       new_course_instance_id = nil
       new_custom = false
@@ -271,8 +324,8 @@ class StudyPlan < ActiveRecord::Base
       begin
         # Raise an error if lacking basic necessities
         raise UpdateException.new, "No period_id defined!" if new_period_id.nil?
-        raise UpdateException.new, "No credits defined!" if new_credits.nil?
         raise UpdateException.new, "No length defined!" if new_length.nil?
+        raise UpdateException.new, "No credits defined!" if new_credits.nil?
 
         # Fetch the available course instance if available
         course_instance = CourseInstance.where(abstract_course_id: abstract_course_id, period_id: new_period_id).first
@@ -291,68 +344,67 @@ class StudyPlan < ActiveRecord::Base
         changed =
             study_plan_course.period_id != new_period_id ||
             study_plan_course.course_instance_id != new_course_instance_id ||
-            study_plan_course.credits != new_credits ||
             study_plan_course.length != new_length ||
+            study_plan_course.credits != new_credits ||
+            study_plan_course.grade != new_grade ||
             study_plan_course.custom != new_custom
 
         if changed
           study_plan_course.period_id = new_period_id
           study_plan_course.course_instance_id = new_course_instance_id
-          study_plan_course.credits = new_credits
           study_plan_course.length = new_length
+          study_plan_course.credits = new_credits
+          study_plan_course.grade = new_grade
           study_plan_course.custom = new_custom
           study_plan_course.save
         end
 
-        # If a grade was defined
-        if not new_grade.nil?
-          if not new_course_instance_id.nil?
-            existing_user_course = self.user.user_courses.where(course_instance_id: new_course_instance_id).first
-          else
-            existing_user_course = self.user.user_courses.where(abstract_course_id: abstract_course_id).first
-          end
-          if new_grade > 0
-            # And an existing user_course exists
-            if existing_user_course
-              # Save the possible changes to the user_course
-              changed =
-                  existing_user_course.grade != new_grade ||
-                  existing_user_course.credits != new_credits ||
-                  existing_user_course.course_instance_id != new_course_instance_id
-
-              if changed
-                existing_user_course.grade = new_grade
-                existing_user_course.credits = new_credits
-                existing_user_course.course_instance_id = new_course_instance_id
-                existing_user_course.save
-              end
-            else
-              # If there is no existing user_course, create one
-              UserCourse.create(
-                user_id:             self.user_id,
-                abstract_course_id:  abstract_course_id,
-                course_instance_id:  new_course_instance_id,
-                grade:               new_grade,
-                credits:             new_credits
-              )
-            end
-          elsif existing_user_course and new_grade == -1
-            # The user course is flagged for destruction
-            existing_user_course.destroy
-          end
-        end
-
         # No we're done! =) Mark the course as accepted.
-        accepted[scoped_course_id] = true
+        feedback[scoped_course_id] = true
 
       # On error, the plan_course is rejected.
       rescue UpdateException => message
-        puts "ERROR '#{message}' when updating database from the plan_course: #{new_course}!"
+        puts "ERROR '#{message}' when updating the study plan course: #{new_course}!"
       end
     end
 
-    # Return the dict of accepted plan_courses.
-    return accepted
+    # Return the dict of accepted study_plan_courses_to_update.
+    return feedback
+  end
+
+
+  # Updates the plan according to the data received
+  # Expects a JSON coded array of form:
+  # [
+  #   {"scoped_course_id": 71, "period_id": 1, "course_instance_id": 45},
+  #   {"scoped_course_id": 35, "period_id": 2},
+  #   {"scoped_course_id": 45, "period_id": 2, "credits": 3, "length": 1},
+  #   {"scoped_course_id": 60, "period_id": 3, "course_instance_id": 32, "credits": 8, "length": 2, "grade": 3},
+  #   ...
+  # ]
+  def update_from_json(json)
+
+    feedback = {}
+
+    if json.has_key?('scoped_courses_to_add')
+      feedback['scoped_courses_to_add'] = self.add_courses_from_json( json['scoped_courses_to_add'] )
+    end
+
+    if json.has_key?('study_plan_courses_to_remove')
+      feedback['study_plan_courses_to_remove'] = self.remove_courses_from_json( json['study_plan_courses_to_remove'] )
+    end
+
+    if json.has_key?('study_plan_courses_to_update')
+      feedback['study_plan_courses_to_update'] = self.update_courses_from_json( json['study_plan_courses_to_update'] )
+    end
+
+    if feedback.empty?
+      feedback['status'] = 'error'
+    else
+      feedback['status'] = 'ok'
+    end
+
+    return feedback
   end
 
 
@@ -388,6 +440,43 @@ class StudyPlan < ActiveRecord::Base
 
   def has_competence?(competence)
     competences.include? competence
+  end
+
+
+  # Adds the scoped course into the study plan
+  def add_course(scoped_course_id)
+    course = ScopedCourse.find(scoped_course_id)
+
+    return :not_found if not course
+
+    # Dont't do anything if user has already selected this course
+    return :already_added if @user.study_plan.courses.exists?(course)
+
+    # Add course to study plan
+    StudyPlanCourse.create(
+      :study_plan_id       =>  @user.study_plan.id,
+      :abstract_course_id  =>  course.abstract_course_id,
+      :scoped_course_id    =>  course.id,
+      :credits             =>  course.credits,
+      :grade               =>  nil,
+      :manually_added      =>  true
+      #:course_instance     =>  nil,                   # deprecated
+      #:period              =>  nil                    # not specified here
+    )
+
+    return :ok
+  end
+
+
+  # Removes the study plan course from the study plan
+  def remove_course(study_plan_course_id)
+    study_plan_course = self.study_plan_courses.find(study_plan_course_id)
+
+    return :not_found if not study_plan_course
+
+    study_plan_course.destroy
+
+    return :ok
   end
 
 

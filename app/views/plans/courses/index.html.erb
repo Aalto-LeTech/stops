@@ -6,33 +6,69 @@
 <% content_for(:javascripts) do %>
   <script type="text/javascript">
     <%= render "search_engine_i18n_strings.js" %>
+    <%= render "index_i18n_strings.js" %>
   </script>
   <%= javascript_include_tag "views/plans/courses/index", :media => 'all' %>
 <% end %>
 
 
-<h1><%=t('.heading')%></h1>
-
-<div class="search-query">
-  <input class="input-large search-query" type="text" data-bind="value: inquery, valueUpdate: 'keyup'" />
+<div class="row-fluid">
+  <span class="span8">
+    <h1 data-bind="text: title"></h1>
+  </span>
+  <span class="span4">
+    <button data-bind="click: saveChanges">
+      <%= t('.save') %>
+    </button>
+    <button data-bind="click: setViewCourses">
+      <%= t('.courses_view') %>
+    </button>
+    <button data-bind="click: setViewSearch">
+      <%= t('.search_view') %>
+    </button>
+    <button data-bind="click: setViewChanges">
+      <%= t('.changes_view') %>
+    </button>
+  </span>
 </div>
 
-<div class="search-results-container">
 
-  <!-- ko if: infomsg -->
-    <p data-bind="text: infomsg"></p>
-  <!-- /ko -->
-  <!-- ko foreach: results -->
-    <div class="row-fluid result" data-bind="css: {'selected': isSelected, 'included': isIncluded, 'passed': isPassed}">
-      <a title="<%= t('.to_course_page') %>" data-bind="attr: { href: path }">
-        <span class="span3 code" data-bind="text: code"></span>
-        <span class="span8 name" data-bind="text: name"></span>
-        <span class="span1 credits" data-bind="text: credits"></span>
-      </a>
+<!-- ko if: view() == 'courses' -->
+  KURSSIT
+<!-- /ko -->
+
+
+<!-- ko if: view() == 'search' || view() == 'changes' -->
+
+  <!-- ko if: view() == 'search' -->
+    <div class="search-input">
+      <input class="input" type="text" data-bind="value: engine.inquery, valueUpdate: 'keyup'" />
     </div>
   <!-- /ko -->
 
-</div>
+  <!-- ko with: infoMsg -->
+    <p data-bind="text: $data"></p>
+  <!-- /ko -->
+
+  <div class="courses">
+
+    <!-- ko foreach: courses -->
+      <div class="row-fluid course" data-bind="css: {'passed': grade > 0, 'included': isIncluded, 'scheduled': period != undefined, 'selected': isSelected}">
+        <a data-bind="attr: { title: tooltip }">
+          <span class="span3 code" data-bind="text: code"></span>
+          <span class="span7 name" data-bind="text: name"></span>
+          <span class="span1 credits" data-bind="text: credits"></span>
+        </a>
+        <button class="span1 btn" data-bind="click: toggleInclusion">
+          <span data-bind="visible: isIncluded() == true"><%= t('.remove_symbol') %></span>
+          <span data-bind="visible: isIncluded() == false"><%= t('.add_symbol') %></span>
+        </button>
+      </div>
+    <!-- /ko -->
+
+  </div>
+<!-- /ko -->
+
 
 <span id="paths"
   data-search-courses-path="<%= search_courses_curriculum_path(@study_plan.curriculum_id) %>"
@@ -44,87 +80,64 @@
 
   <div class="well">
 
-    <!-- ko if: engine.results().length == 0 -->
-        <%= t('.instructions') %>
+    <!-- ko if: showInstructions() -->
+      <p data-bind="text: instructions"></p>
     <!-- /ko -->
 
-    <!-- ko if: engine.results().length > 0 -->
+    <!-- ko if: ((engine.results().length > 0) && (! selected())) -->
+      <p>
+        <%= t('.hover_for_more_information') %>
+      </p>
+    <!-- /ko -->
 
-      <!-- ko ifnot: selected -->
-          <%= t('.hover_for_more_information') %>
+    <!-- ko with: selected -->
+
+      <h1>
+        <span class="code" data-bind="text: code"></span>
+        <a title="<%= t('.to_course_page') %>" data-bind="attr: { href: path }">
+          <button class="btn pull-right">
+            <%= t('.to_course_page') %>
+          </button>
+        </a>
+        <button class="btn pull-right">
+          <span data-bind="visible: isIncluded() == true"><%= t('.remove') %></span>
+          <span data-bind="visible: isIncluded() == false"><%= t('.add') %></span>
+        </button>
+        </br>
+        <span class="name" data-bind="text: name"></span>
+        (<span class="credits" data-bind="text: credits"></span> <%= t('cr') %>)
+      </h1>
+
+      <strong data-bind="text: tooltip">
+      </strong>
+
+      <!-- ko if: skills.length > 0 -->
+        <h2>
+          <%= t('.skills') %>
+        </h2>
+        <ul>
+          <!-- ko foreach: skills -->
+            <li data-bind="text: name"></li>
+          <!-- /ko -->
+        </ul>
       <!-- /ko -->
 
-      <!-- ko with: selected -->
-
-        <h1>
-          <span class="code" data-bind="text: code"></span>
-          <div class="btn pull-right">
-            <%= t('.add') %>
-          </div>
-          <a title="<%= t('.to_course_page') %>" data-bind="attr: { href: path }">
-            <div class="btn pull-right">
-              <%= t('.to_course_page') %>
-            </div>
-          </a>
-          </br>
-          <span class="name" data-bind="text: name"></span>
-          (<span class="credits" data-bind="text: credits"></span> <%= t('cr') %>)
-        </h1>
-
-        <!-- ko if: isIncluded() -->
-          <!-- ko if: isPassed() -->
-            <p>
-              <%= t('.is_passed_with_grade') %>
-              <strong data-bind="text: grade"></strong>
-              <%= t('.in_period') %>
-              <strong data-bind="text: period.name"></strong>.
-            </p>
+      <!-- ko if: prereqs.length > 0 -->
+        <h2>
+          <%= t('.prereqs') %>
+        </h2>
+        <ul>
+          <!-- ko foreach: prereqs -->
+            <li>
+              <a title="<%= t('.to_course_page') %>" data-bind="attr: { href: path }">
+                <span class="code" data-bind="text: code"></span>
+                <span class="name" data-bind="text: name"></span>
+                (<span class="credits" data-bind="text: credits"></span> <%= t('cr') %>)
+              </a>
+            </li>
           <!-- /ko -->
-          <!-- ko ifnot: isPassed() -->
-            <!-- ko ifnot: period -->
-              <p>
-                <%= t('.is_included_in_the_plan') %>
-              </p>
-            <!-- /ko -->
-            <!-- ko with: period -->
-              <p>
-                <%= t('.scheduled_to_period') %>
-                <strong data-bind="text: name"></strong>.
-              </p>
-            <!-- /ko -->
-          <!-- /ko -->
-        <!-- /ko -->
-
-        <!-- ko if: skills.length > 0 -->
-          <h2>
-            <%= t('.skills') %>
-          </h2>
-          <ul>
-            <!-- ko foreach: skills -->
-              <li data-bind="text: name"></li>
-            <!-- /ko -->
-          </ul>
-        <!-- /ko -->
-
-        <!-- ko if: prereqs.length > 0 -->
-          <h2>
-            <%= t('.prereqs') %>
-          </h2>
-          <ul>
-            <!-- ko foreach: prereqs -->
-              <li>
-                <a title="<%= t('.to_course_page') %>" data-bind="attr: { href: path }">
-                  <span class="code" data-bind="text: code"></span>
-                  <span class="name" data-bind="text: name"></span>
-                  (<span class="credits" data-bind="text: credits"></span> <%= t('cr') %>)
-                </a>
-              </li>
-            <!-- /ko -->
-          </ul>
-        <!-- /ko -->
-
+        </ul>
       <!-- /ko -->
-
     <!-- /ko -->
 
   </div>

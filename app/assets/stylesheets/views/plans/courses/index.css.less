@@ -21,8 +21,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 // Altering the layout
 
-@layoutMaxWidth:  1500px;
-@sidebarWidth:    500px;
+//@layoutMaxWidth:    1600px;
+@sidebarWidth:       450px;
+@sidebarWidthWide:   550px;
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -36,49 +37,62 @@
   }
 }
 
-div.search-query
+#themain
 {
-  margin-bottom: 3em;
-
-  input
+  div.controls
   {
-    width: 400px;
+    margin-bottom: 3em;
+
+    input
+    {
+      width: 80%;
+    }
+
+    button
+    {
+      width: 80%;
+    }
   }
-}
 
-div.search-results-container
-{
-  //.container-fluid;
-  //text-align: center;
-  max-width: 600px;
-
-  div.result
+  div.courses
   {
-    border-top: 1px solid #CCC;
-    //.border-radius(4px);
-    a
-    {
-      color: #333;
-    }
+    //.container-fluid;
+    //text-align: center;
+    //max-width: 600px;
 
-    &.included a
+    div.course
     {
-      color: #00A;
-    }
+      border-top: 1px solid #CCC;
+      //.border-radius(4px);
+      a
+      {
+        color: #333;
+      }
 
-    &.passed a
-    {
-      color: #0A0;
-    }
+      &.passed a
+      {
+        color: #363;
+      }
 
-    &.selected
-    {
-      background: #DDF;
-    }
+      &.included a
+      {
+        color: #93A;
+      }
 
-    &:hover
-    {
-      text-decoration: underline !important;
+      &.passed.included a
+      {
+        color: #0A0;
+      }
+
+      &.scheduled a
+      {
+        color: #00A;
+      }
+
+      &.selected
+      {
+        background: #DDF;
+      }
     }
   }
 }

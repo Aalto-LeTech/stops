@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130717132709) do
+ActiveRecord::Schema.define(:version => 20130815143500) do
 
   create_table "abstract_courses", :force => true do |t|
     t.string "code"
@@ -224,13 +224,14 @@ ActiveRecord::Schema.define(:version => 20130717132709) do
     t.integer "study_plan_id",                           :null => false
     t.integer "scoped_course_id",                        :null => false
     t.integer "competence_ref_count", :default => 1,     :null => false
-    t.integer "course_instance_id"
     t.boolean "manually_added",       :default => false
+    t.integer "course_instance_id"
     t.integer "period_id"
     t.float   "credits"
     t.integer "length"
     t.boolean "custom",               :default => false
     t.integer "abstract_course_id"
+    t.integer "grade"
   end
 
   add_index "study_plan_courses", ["study_plan_id", "scoped_course_id"], :name => "index_study_plan_courses_on_study_plan_id_and_scoped_course_id", :unique => true
@@ -277,16 +278,6 @@ ActiveRecord::Schema.define(:version => 20130717132709) do
   end
 
   add_index "temp_courses", ["curriculum_id"], :name => "index_temp_courses_on_curriculum_id"
-
-  create_table "user_courses", :force => true do |t|
-    t.integer "user_id",            :null => false
-    t.integer "abstract_course_id", :null => false
-    t.integer "course_instance_id"
-    t.integer "grade"
-    t.float   "credits"
-  end
-
-  add_index "user_courses", ["user_id"], :name => "index_user_courses_on_user_id"
 
   create_table "users", :force => true do |t|
     t.string   "login"

@@ -1,4 +1,6 @@
 #= require core/module_pattern
+#= require core/strings
+
 
 # Check that i18n strings have been loaded before this file
 if not O4.search.i18n
@@ -16,10 +18,14 @@ if not O4.search.i18n
         @i18n = O4.search.i18n
 
         # Observables
-        @infomsg = ko.observable(@i18n.query_too_short)
-        @inquery = ko.observable()
-        @results = ko.observableArray()
-        @viewModel = viewModel
+        @infoMsg     = ko.observable(@i18n.query_too_short)
+        @inquery     = ko.observable()
+        @inqueryS    = undefined
+        @inqueryID   = undefined
+        @doStar      = ko.observable(true)
+        @maxMatches  = ko.observable(20)
+        @results     = ko.observableArray()
+        @viewModel   = viewModel
 
 
         @inquery.subscribe (newValue) =>
@@ -27,17 +33,33 @@ if not O4.search.i18n
 
           @viewModel.onInqueryChange()
 
+          newValue = newValue.trim()
+
           if newValue.length < @MIN_QUERY_LENGTH
-            @infomsg(@i18n.query_too_short)
+            @infoMsg(@i18n.query_too_short)
             if newValue.length > 0
               @results().length = 0
               @results.valueHasMutated()
             return
 
+          newinqueryS = newValue
+          #newinqueryS = '"' + newValue + '"'
+          #newinqueryS = '*' + newValue + '*'
+
+          return if newinqueryS == @inqueryS
+
+          @inqueryS = newinqueryS
+          @inqueryID = String(new Date().getTime())
+
           $.ajax
             type: "GET",
             url: serverPath,
-            data: { 'inquery': newValue },
+            data: {
+              'inqueryID':   @inqueryID,
+              'inquery':     @inqueryS,
+              'star':        @doStar(),
+              'max_matches': @maxMatches()
+            },
             context: this,
             dataType: 'json',
             success: @updateResults,
@@ -47,8 +69,9 @@ if not O4.search.i18n
 
       updateResults: (data) ->
         #dbg.lg("results: #{JSON.stringify(data)}!")
+        #dbg.lg("dataIDs: #{data.inqueryID} vs #{@inqueryID}.")
         onQueryError(data) unless data.status == 'ok'
-        return if data.inquery != @inquery()
+        return if data.inqueryID != @inqueryID
 
         # Have the viewModel handle building the final results array
         @results( @viewModel.parseResults(data) )
@@ -56,11 +79,11 @@ if not O4.search.i18n
         # Update the info message
         nresults = @results().length
         if nresults == 0
-          @infomsg(@i18n.no_results_found)
+          @infoMsg(@i18n.no_results_found)
         else if nresults == 1
-          @infomsg(@i18n.a_result_found)
+          @infoMsg(@i18n.a_result_found)
         else
-          @infomsg(nresults + ' ' + @i18n.x_results_found)
+          @infoMsg(nresults + ' ' + @i18n.x_results_found)
 
 
       onQueryError: (data) ->

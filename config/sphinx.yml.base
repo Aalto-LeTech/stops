@@ -1,5 +1,0 @@
-development:
-  mem_limit: 128M
-  min_prefix_len: 3
-  # The following is needed to make sure course codes are easily searchable
-  blend_chars: +, &, ., -

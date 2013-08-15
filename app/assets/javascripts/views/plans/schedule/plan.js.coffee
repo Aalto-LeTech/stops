@@ -19,7 +19,6 @@ class @PlanView
     #@showAsEditable = ko.observable(false)
 
     # List of courses to be saved and rejected when tried to save.
-    # Both are used and managed at @save()
     @coursesToSave = []
     @coursesRejected = []
 
@@ -68,7 +67,7 @@ class @PlanView
     dbg.lg("Loaded #{Period::ALL.length} periods.")
 
     # Load courses
-    Course::createFromJson(data['courses'], data['user_courses'])
+    Course::createFromJson(data['study_plan_courses'], data['user_courses'])
     dbg.lg("Loaded #{Course::ALL.length} courses.")
 
     # Load competences
@@ -248,7 +247,7 @@ class @PlanView
     planCoursesToSave = []  # Array for course JSON representations for sending
     for course in @coursesToSave
       dbg.lg("Pushing \"#{course.name}\" to be saved.")
-      planCoursesToSave.push(course.toJson())
+      planCoursesToSave.push(course.asHash())
 
     dbg.lg("A total of #{@coursesToSave.length} courses changed. Starting the put.")
 
@@ -259,15 +258,22 @@ class @PlanView
       url: @planUrl,
       type: 'put',
       dataType: 'json',
-      data: { 'plan_courses': JSON.stringify(planCoursesToSave) },
+      async: false,
+      data: { 'json': {'study_plan_courses_to_update': JSON.stringify(planCoursesToSave)} },
       success: (data) =>
+        dbg.lg("data: #{data}")
+        dbg.lg("data: #{JSON.stringify(data)}")
         if data['status'] == 'ok'
-          accepted = data['accepted']
-          if accepted?
+          feedback = data['feedback']['study_plan_courses_to_update']
+          if feedback
             for course in @coursesToSave
-              if accepted[course.scopedId]
+              if feedback[course.scopedId]
                 dbg.lg("Course \"#{course.name}\" was successfully saved.")
                 course.resetOriginals()
               else
                 dbg.lg("ERROR: Course \"#{course.name}\" was rejected by the server! Saving failed!")
                 @coursesRejected.push(course)  # FIXME: Not used atm.
+          else
+            dbg.lg("ERROR: No feedback returned!")
+        else
+          dbg.lg("ERROR: Put on server failed!")

@@ -28,7 +28,7 @@ class Curriculums::CoursesController < CurriculumsController
             competence_nodes.course_code,
             course_descriptions.name AS translated_name
           SQL
-        ).to_json(:methods => :strict_prereq_ids)
+        ).to_json(:methods => :strict_prereq_ids, :root => true)
       end
     end
   end
@@ -78,7 +78,8 @@ class Curriculums::CoursesController < CurriculumsController
             :course_descriptions => {
               :only => [:id, :locale, :name]
             }
-        }
+        },
+        :root => true
       )}
     end
   end

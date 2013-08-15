@@ -162,7 +162,7 @@ class CurriculumsController < ApplicationController
     respond_to do |format|
       format.html { render :text => prereqs.to_json }
       format.xml { render :xml => prereqs }
-      format.json { render :json => prereqs }
+      format.json { render :json => prereqs.to_json(:root => false) }
     end
   end
 
@@ -270,7 +270,7 @@ class CurriculumsController < ApplicationController
 
     respond_to do |format|
       format.json do
-        render :json => nodes_json
+        render :json => nodes_json.to_json(:root => false)
       end
     end
   end

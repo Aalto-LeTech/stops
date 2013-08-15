@@ -16,7 +16,8 @@ class Curriculums::SkillsController < CurriculumsController
       format.json do
         render :json => @skills.to_json(
           :only => [:id, :competence_node_id],
-          :methods => [:strict_prereq_ids, :localized_name]
+          :methods => [:strict_prereq_ids, :localized_name],
+          :root => true
         )
       end
     end
@@ -62,7 +63,7 @@ class Curriculums::SkillsController < CurriculumsController
 
     respond_to do |format|
       format.js {
-        render :json => @skill.to_json(:include => [:skill_descriptions])
+        render :json => @skill.to_json(:include => [:skill_descriptions], :root => true)
       }
     end
   end
@@ -76,7 +77,7 @@ class Curriculums::SkillsController < CurriculumsController
 
     respond_to do |format|
       format.js {
-        render :json => @skill.to_json(:include => [:skill_descriptions])
+        render :json => @skill.to_json(:include => [:skill_descriptions], :root => true)
       }
     end
   end

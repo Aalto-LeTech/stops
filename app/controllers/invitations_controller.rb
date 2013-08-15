@@ -22,7 +22,7 @@ class InvitationsController < ApplicationController
     
     respond_to do |format|
       format.html { redirect_to root_path }
-      format.json { render :json => [params[:id]].as_json }
+      format.json { render :json => [params[:id]].as_json(:root => false) }
     end
   end
 

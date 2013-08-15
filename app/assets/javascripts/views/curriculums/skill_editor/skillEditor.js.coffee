@@ -176,7 +176,7 @@ ErrorViewModel        = O4.skillEditor.ErrorViewModel
 
       parseSearchResults: (data) ->
         return unless data
-
+      
         @searchResults.removeAll()
 
         # Get the underlying array so that each 'push' won't trigger dependent observables

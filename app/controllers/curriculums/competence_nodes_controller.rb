@@ -49,7 +49,7 @@ class Curriculums::CompetenceNodesController < CurriculumsController
     end
 
     respond_to do |format|
-      format.json { render :json => nodes_json }
+      format.json { render :json => nodes_json, :root => false }
     end
   end
 

@@ -42,7 +42,7 @@ class UsersController < ApplicationController
     #prereqs = CoursePrereq.where(:requirement => STRICT_PREREQ).joins('INNER JOIN scoped_courses AS course ON course.id = course_prereqs.scoped_course_id INNER JOIN scoped_courses AS prereq ON prereq.id = course_prereqs.scoped_prereq_id').where("course.curriculum_id = ?", @curriculum).select('course.course_code AS course_code, prereq.course_code AS prereq_code, course.id')
 
     respond_to do |format|
-      format.json { render :json => user_courses.to_json }
+      format.json { render :json => user_courses.to_json(root: false) }
     end
   end
 
@@ -83,7 +83,7 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       format.json do
-        render :json => response_json
+        render :json => response_json.to_json(root: false)
       end
     end
   end

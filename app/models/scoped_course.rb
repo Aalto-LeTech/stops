@@ -157,9 +157,9 @@ class ScopedCourse < CompetenceNode
   # Returns the unique roman numerals of the periods where this course
   # has an course instance and the period hasn't ended or started yet.
   # Example: ["I", "III", "IV"]
-  def periods_as_roman_numerals
+  def period_symbols
     periods_sorted = self.periods.sort! { |x, y| x.number <=> y.number }
-    periods_sorted.map { |period| period.to_roman_numeral }.uniq
+    periods_sorted.map { |period| period.symbol }.uniq
   end
 
 

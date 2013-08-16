@@ -22,7 +22,7 @@ class Plans::CompetencesController < PlansController
     @included_courses = @study_plan.scoped_courses
 
     @passed_courses = Hash.new
-    @user.user_courses.each do |course|
+    @study_plan.passed_courses.each do |course|
       @passed_courses[course.id] = course
     end
 

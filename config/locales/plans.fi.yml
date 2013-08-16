@@ -43,6 +43,7 @@ fi:
         remove_symbol: "-"
         save: "Tallenna"
       index_i18n_strings:
+        plan_load_error_instructions: "Suunnitelmasi lataus epäonnistui. Syytä tullaan selvittämään."
         courses: "Kurssit"
         search: "Kurssihaku"
         changes: "Muutokset"

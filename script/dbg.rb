@@ -7,7 +7,6 @@ class Dbggr
       AbstractCourse,
       ScopedCourse,
       CourseInstance,
-      UserCourse,
       PlanCourse
     ]
   end
@@ -17,7 +16,6 @@ class Dbggr
   #      AbstractCourse  30
   #        ScopedCourse  69
   #      CourseInstance   0
-  #          UserCourse   0
   #     PlanCourse  30
   def print_course_class_total_item_counts
     puts "=> Course Class Total Item Counts"
@@ -105,14 +103,6 @@ class Dbggr
   def list_course_instances
     CourseInstance.find_each do |course_instance|
       puts "  [%03d] % 15s % 4s-%d % 15s" % [ course_instance.id, course_instance.abstract_course.code, course_instance.period.symbol, course_instance.length, course_instance.period.name(@locale) ]
-    end
-  end
-
-
-  # lists all user courses
-  def list_user_courses
-    UserCourse.find_each do |user_course|
-      puts "  [%03d] % 25s  %d" % [ user_course.id, user_course.course_instance.dbg_name, user_course.grade ]
     end
   end
 
@@ -212,17 +202,6 @@ class Dbggr
 
   # fixes custom problems
   def fix
-    # fixes user_courses
-    # deletes entries with no grade
-    UserCourse.find_each do |user_course|
-      if not user_course.grade?
-        y user_course
-        user_course.destroy
-      end
-    end
-
-    return
-
     # fixes plan_courses
     PlanCourse.find_each do |plan_courses|
       scoped_course = plan_courses.scoped_course
@@ -234,6 +213,9 @@ class Dbggr
 
 
   def dbg
+
+    exit
+
 
     course = ScopedCourse.first
     puts course.curriculum_id #competence_node

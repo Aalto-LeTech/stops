@@ -80,11 +80,14 @@ class @View
   FADEDURATION: 300
 
   constructor: () ->
-    dbg.lg("Starting the search engine!")
+    dbg.lg("view::init()...")
     pathsContainer = $('#paths')
     searchCoursesPath = pathsContainer.data('search-courses-path')
     studyplanPath = pathsContainer.data('studyplan-path')
     dbg.lg("db url: #{searchCoursesPath}.")
+
+    Plan::VIEWMODEL = this
+    Course::VIEWMODEL = this
 
     @i18n           = O4.view.i18n
     @eWell          = $('#theleft .well')
@@ -143,9 +146,6 @@ class @View
         courses = []
       return courses
 
-    Plan::VIEWMODEL = this
-    Course::VIEWMODEL = this
-
     @doShowWell.subscribe (newValue) =>
       if newValue
         @eWell.fadeIn(@FADEDURATION)
@@ -165,6 +165,10 @@ class @View
   planLoaded: ->
     for course in Course::ALL
       course.resetOriginals()
+
+
+  planLoadingFailed: ->
+    alert("#{@i18n.plan_load_error_instructions}")
 
 
   updateTooltip: (course) ->

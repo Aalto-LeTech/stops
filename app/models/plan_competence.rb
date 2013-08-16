@@ -1,4 +1,4 @@
-class StudyPlanCompetence < ActiveRecord::Base
+class PlanCompetence < ActiveRecord::Base
 
   belongs_to :study_plan
   belongs_to :competence
@@ -28,7 +28,7 @@ class StudyPlanCompetence < ActiveRecord::Base
 
     study_plan = self.study_plan
 
-    StudyPlanCompetence.transaction do
+    PlanCompetence.transaction do
       course_ids.each do |id|
         study_plan.scoped_courses.remove_or_decrement_ref_count :id => id
 

@@ -1,3 +1,6 @@
 class SkillSerializer < ActiveModel::Serializer
-  attributes :id, :localized_name
+
+  attributes :id,
+             :localized_name
+
 end

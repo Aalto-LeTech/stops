@@ -12,22 +12,31 @@ class @Plan
     @reload()
 
     # List of courses to be saved and rejected when tried to save.
-    @scopedCoursesToAdd = []
-    @planCoursesToRemove = []
-    @hasUnsavedChanges = false
+#    @scopedCoursesToAdd = []
+#    @planCoursesToRemove = []
+#    @hasUnsavedChanges = false
 
 
   reload: ->
     $.ajax
-      type: "GET",
-      url: @path,
-      data: { bundle: 'schedule' },
-      #data: { bundle: 'courses_with_ids_grades_and_periods' },
-      context: this,
-      dataType: 'json',
-      success: @reloadSuccess,
-      error: @reloadError,
-      async: true
+      type: "GET"
+      url: @path
+      async: false
+      dataType: 'json'
+      data:
+        'json':
+          JSON.stringify
+            targets: [
+              'periods'
+              'skills'
+              'abstract_courses'
+              'scoped_courses'
+              'plan_courses'
+              'course_instances'
+            ]
+      context: this
+      success: @reloadSuccess
+      error: @reloadError
 
 
   reloadSuccess: (data) ->
@@ -80,7 +89,7 @@ class @Plan
 
 
   reloadError: (data) ->
-    alert('Loading studyplan data failed!')
+    @VIEWMODEL.planLoadingFailed(data)
 
 
   # Add the course to the plan

@@ -80,12 +80,13 @@ class StudyPlan < ActiveRecord::Base
   #  -> curriculum
   #  -> first_period
   #  -> last_period
-  #  <- plan_courses
-  #  <- study_plan_competences
+  #  <- plan_competences
   #  <- competences
+  #  <- plan_courses
+  #  <- abstract_courses (plan_courses -> abstract_courses)
   #  <- scoped_courses (plan_courses -> scoped_courses)
-  #  <- study_plan_manual_courses
-  #  <- manual_scoped_courses (study_plan_manual_courses -> scoped_courses)
+  #  <- extra_plan_courses
+  #  <- extra_scoped_courses (extra_plan_courses -> scoped_courses)
   #  - created_at
   #  - updated_at
 
@@ -103,17 +104,22 @@ class StudyPlan < ActiveRecord::Base
 
 
   # Competences
-  has_many  :study_plan_competences,
+  has_many  :plan_competences,
             :dependent => :destroy
 
   has_many :competences,
-           :through => :study_plan_competences,
+           :through => :plan_competences,
            :dependent => :destroy
 
 
   # Courses
   has_many  :plan_courses,
             :dependent => :destroy
+
+  has_many  :passed_courses,
+            :class_name => 'PlanCourse',
+            :dependent => :destroy,
+            :conditions  => proc { 'grade > 0' }
 
   has_many  :abstract_courses,
             :through => :plan_courses,
@@ -126,13 +132,13 @@ class StudyPlan < ActiveRecord::Base
             :extend => RefCountExtension,
             :dependent => :destroy
 
-  has_many  :study_plan_manual_courses,
+  has_many  :extra_plan_courses,
             :class_name => 'PlanCourse',
             :dependent => :destroy,
             :conditions => { :manually_added => true }
 
-  has_many  :manual_courses,
-            :through => :study_plan_manual_courses,
+  has_many  :extra_scoped_courses,
+            :through => :extra_plan_courses,
             :source => :scoped_course,
             :dependent => :destroy,
             :uniq => true
@@ -140,6 +146,12 @@ class StudyPlan < ActiveRecord::Base
   has_many  :course_instances,
             :through => :plan_courses,
             :source => :course_instance
+
+
+  # Skills
+  has_many  :skills,
+            :through     => :scoped_courses,
+            :source      => :skills
 
 
   # Returns the period of the earliest scheduled plan course
@@ -228,6 +240,11 @@ class StudyPlan < ActiveRecord::Base
   end
 
 
+  # Serialize plan data for JSON
+  def foo(json)
+  end
+
+
   # Adds scoped_courses to the plan according to the data received
   # Expects a JSON coded array of form:
   # [
@@ -241,7 +258,7 @@ class StudyPlan < ActiveRecord::Base
     feedback = {}
 
     scoped_courses_to_add.each do |scoped_course|
-      status = self.add_scoped_course(scoped_course.id)
+      status = self.add_scoped_course(scoped_course.id, is_manually_added=true)
       if status == :ok
         feedback[scoped_course.id] = true
       else
@@ -425,15 +442,11 @@ class StudyPlan < ActiveRecord::Base
 
     # FIXME: This breaks if prerequisites include Competences
 
-    # Calculate union of existing and new scoped_courses, without duplicates
-    scoped_courses_array = self.scoped_courses | competence.courses_recursive
+    # Calculate the scoped_courses to add
+    scoped_courses_to_add = competence.courses_recursive - self.scoped_courses
 
-    self.scoped_courses = scoped_courses_array
-
-    # FIXME !!!
-    self.plan_courses.includes(:scoped_course).find_each do |plan_course|
-      plan_course.abstract_course = plan_course.scoped_course.abstract_course
-      plan_course.save
+    scoped_courses_to_add.each do |scoped_course|
+      self.add_scoped_course(scoped_course)
     end
   end
 
@@ -453,24 +466,29 @@ class StudyPlan < ActiveRecord::Base
 
 
   # Adds the scoped course into the study plan
-  def add_scoped_course(scoped_course_id)
-    scoped_course = ScopedCourse.find(scoped_course_id)
+  def add_scoped_course(scoped_course, is_manually_added=false)
+
+    if scoped_course.is_a? Integer
+      scoped_course = ScopedCourse.find(scoped_course)
+    end
 
     return :not_found if not scoped_course
 
-    # Dont't do anything if user has already selected this scoped_course
-    return :already_added if @user.study_plan.scoped_courses.exists?(scoped_course)
+    # Dont't do anything if the plan already contains this scoped_course
+    return :already_added if self.scoped_courses.exists?(scoped_course)
 
     # Add scoped_course to study plan
     PlanCourse.create(
-      :study_plan_id       =>  @user.study_plan.id,
+      :study_plan_id       =>  self.id,
       :abstract_course_id  =>  scoped_course.abstract_course_id,
       :scoped_course_id    =>  scoped_course.id,
+      :course_instance_id  =>  nil,
+      :period_id           =>  nil,
+      :length              =>  nil,
       :credits             =>  scoped_course.credits,
-      :grade               =>  nil,
-      :manually_added      =>  true
-      #:course_instance     =>  nil,                   # deprecated
-      #:period              =>  nil                    # not specified here
+      :grade               =>  0,
+      :custom              =>  false,
+      :manually_added      =>  is_manually_added,
     )
 
     return :ok
@@ -496,10 +514,8 @@ class StudyPlan < ActiveRecord::Base
     remaining_competences.delete(competence)
     puts "#{competences.size} / #{remaining_competences.size}"
 
-    # Make a list of scoped_courses that are needed by the remaining competences
-    needed_scoped_courses = needed_scoped_courses(remaining_competences)
-
-    scoped_courses.to_set - needed_scoped_courses
+    # Make a list of scoped_courses that aren't needed
+    self.scoped_courses.to_set - self.needed_scoped_courses(remaining_competences)
   end
 
 
@@ -513,7 +529,7 @@ class StudyPlan < ActiveRecord::Base
     end
 
     # Add manually added scoped_courses to the list
-    needed_scoped_courses.merge(manual_scoped_courses)
+    needed_scoped_courses.merge(self.extra_scoped_courses)
   end
 
 end

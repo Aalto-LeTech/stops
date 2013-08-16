@@ -83,48 +83,68 @@ class PlansController < ApplicationController
   def show
     authorize! :read, @study_plan
 
-    data = JSON.parse(params[:json]) if params[:json]
-    targets = data[:targets]
-
-    if targets
-
-      response_data = {}
-
-      targets.each do |target|
-
-        if target == 'abstract_courses'
-          response_data['abstract_courses'] = as_hash(@study_plan.abstract_courses.all)
-        elsif target == 'plan_courses'
-          response_data['plan_courses'] = as_hash(@study_plan.plan_courses.all)
-        elsif target == 'scoped_courses'
-          response_data['scoped_courses'] = as_hash(@study_plan.scoped_courses.all)
-        elsif target == 'periods'
-          response_data['periods'] = as_hash(@study_plan.periods.all)
-        elsif target == 'course_instances'
-          response_data['course_instances'] = as_hash(@study_plan.course_instances.all)
-        end
-
-      end
-
-      if response_data.empty?
-        response_data = {
-          error: 'Invalid targets!'
-        }
-      end
-    else
-      response_data = {
-        error: 'No targets given!'
-      }
-    end
-
-    response_json = response_data.to_json( root: false )
-
-    # Form and send the response (or redirect)
+    #respond_with @study_plan
+    #format.json { render json: response_json }
+    # Form and send the response
     respond_to do |format|
       format.html { redirect_to studyplan_schedule_path }
-      format.json { render json: response_json }
+      format.json { render json: as_hash(@study_plan, serializer: StudyPlanSerializerDeep) }
     end
 
+#    data = JSON.parse(params[:json]) if params[:json]
+
+#    y data
+#    targets = data['targets']
+
+#    if targets
+
+#      response_data = {}
+
+#      targets.each do |target|
+
+#        if target == 'abstract_courses'
+#          response_data[target] = as_hash(@study_plan.abstract_courses.includes(:localized_description).all)
+#        elsif target == 'plan_courses'
+#          response_data[target] = as_hash(@study_plan.plan_courses.all)
+#        elsif target == 'skills'
+#          response_data[target] = as_hash(@study_plan.skills.includes(:localized_description).all)
+#        elsif target == 'scoped_courses'
+#          response_data[target] = as_hash(@study_plan.scoped_courses.all)
+#        elsif target == 'periods'
+#          response_data[target] = as_hash(@study_plan.periods.includes(:localized_description).all)
+#        elsif target == 'course_instances'
+#          response_data[target] = as_hash(@study_plan.course_instances.all)
+#        else
+#          puts "Ignoring invalid target: #{target}!"
+#          if not response_data['ignored']
+#            response_data['ignored'] = []
+#          end
+#          response_data['ignored'] << target
+#        end
+
+#      end
+
+#      response_data.each do |key, data|
+#        puts "Sample data #{key}:"
+#        if data
+#          y data[0..1]
+#        end
+#      end
+
+#    else
+#      response_data = {
+#        error: 'No targets given!'
+#      }
+#    end
+
+#    response_json = response_data.to_json( root: false )
+
+#    # Form and send the response (or redirect)
+#    respond_to do |format|
+#      format.html { redirect_to studyplan_schedule_path }
+#      format.json { render json: response_json }
+#    end
+################################################################################
 
 #    bundle = params[:bundle] if params[:bundle]
 

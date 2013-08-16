@@ -1,6 +1,12 @@
-class ScopedCourseSerializer < ScopedCourseShortSerializer
-  #embed :ids, include: true
+class ScopedCourseSerializer < ActiveModel::Serializer
 
-  has_many :skills
-  has_many :prereqs, serializer: ScopedCourseShortSerializer
+  attributes :id,
+             :abstract_course_id,
+             :credits,
+             :studyplan_path
+
+  def studyplan_path
+    studyplan_course_path(object.id)
+  end
+
 end

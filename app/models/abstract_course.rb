@@ -68,23 +68,4 @@ class AbstractCourse < ActiveRecord::Base
 
   end
 
-  def self.create_random_instances
-    periods = Period.order(:begins_at).all
-
-    AbstractCourse.find_each do |abstract_course|
-      period_number = rand(4)
-      period_number += 1 if period_number >= 2  # Don't put courses on summer
-      length = rand(2) + 1
-      length = 1 if period_number == 1 || period_number == 4  # Length of the last periods can only be 1
-
-      periods.each do |period|
-        if period.number == period_number
-          CourseInstance.create(:abstract_course_id => abstract_course.id, :period_id => period.id, :length => length)
-        end
-      end
-
-    end
-
-  end
-
 end

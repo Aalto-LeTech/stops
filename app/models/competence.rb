@@ -62,11 +62,11 @@ class Competence < CompetenceNode
 
 
   # Study plans in which the competence is included
-  has_many :study_plan_competences
+  has_many :plan_competences
 
   has_many :study_plans_included_in,
            :class_name  => 'StudyPlan',
-           :through     => :study_plan_competences,
+           :through     => :plan_competences,
            :source      => :study_plan
 
 

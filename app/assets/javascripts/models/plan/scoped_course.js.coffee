@@ -1,14 +1,82 @@
-class @Course
+class @ScopedCourse
+
 
   VIEWMODEL: undefined
 
   ALL: []
-  BYSCID: {}
-  BYACID: {}
+  BYID: {}
 
-  constructor: (scopedId, data) ->
-    @scopedId = scopedId
-    @abstractId = undefined
+
+  # Creates and or updates models with the given data
+  createFromHashes: (hashes) ->
+
+    dbg.lg("ScopedCourse::createFromHashes()...")
+
+    courses = []
+    return courses if not hashes
+
+    for hash in hashes
+      if hash.id
+        course = @BYID[hash.id]
+        if course
+          course.loadJson(dat)
+        else
+          course = new ScopedCourse(hash)
+      else
+        dbg.lg("ScopedCourse::createFromHashes(): Invalid hash! No id (hash: #{JSON.stringify(hash)}).")
+
+    dbg.lg("ScopedCourse::createFromHashes(): Loaded #{courses.length} courses.")
+
+    return courses
+
+
+  # Creates the model
+  constructor: (data) ->
+
+    @loadJson(data || {})
+
+
+  # Loads the models core attributes
+  loadJson: (hash) ->
+
+    @id            = hash.id
+    @code          = hash.code if data.code
+
+    if @id
+      @BYID[@id] = this
+      @ALL.push(this)
+    else
+      dbg.lg("ScopedCourse::loadJson(): ERROR: No id!")
+
+
+  # Resets original values for change detection
+  resetOriginals: ->
+
+    @oCode = @code
+
+
+  # Returns whether the models attributes have been changed
+  hasChanged: ->
+
+    return true if @oCode != @code
+    return false
+
+
+  # Renders the object into a string for debugging purposes
+  toString: ->
+
+    "AC[#{@id}:#{@code}]"
+
+class @ScopedCourse
+
+  VIEWMODEL: undefined
+
+  ALL: []
+  BYID: {}
+
+  constructor: (data) ->
+    @id = id
+    @acid = undefined
     @code = @name = @path = ''
     @credits  = 0
     @grade    = 0
@@ -67,12 +135,12 @@ class @Course
         return false
     else
       dbg.lg("Course::createFromJson(): Loading with scoped course id: #{scid}...")
-      course = @BYSCID[scid]
+      course = @BYID[scid]
     if course
       course.loadJson(dat)
     else
       course = new Course(dat)
-      @BYSCID[scid] = course
+      @BYID[scid] = course
       @BYACID[acid] = course if acid  # No mixing curriculums then eh?
       @ALL.push(course)
 
@@ -80,10 +148,10 @@ class @Course
   # Reads some of the model's core attributes from the given JSON data object
   loadJson: (data) ->
 
-    #dbg.lg("C[#{@scopedId}]::loadJson( #{JSON.stringify(data)} )...")
+    #dbg.lg("C[#{@id}]::loadJson( #{JSON.stringify(data)} )...")
 
     @scId    = data.abstract_course_id if data.abstract_course_id
-    @abstractId    = data.abstract_course_id if data.abstract_course_id
+    @acid    = data.abstract_course_id if data.abstract_course_id
     @planCourseId  = data.plan_course_id if data.plan_course_id
     @userCourseId  = data.user_course_id if data.user_course_id
     @code          = data.course_code if data.course_code
@@ -101,8 +169,8 @@ class @Course
       period = Period::BYID[data.period_id]
       @period = period if period
 
-    #dbg.lg("C[#{@scopedId}]::loadJson() Finished!")
-    #dbg.lg("C[#{@scopedId}]: #{@abstractId}, #{@code}, #{@name}")
+    #dbg.lg("C[#{@id}]::loadJson() Finished!")
+    #dbg.lg("C[#{@id}]: #{@acid}, #{@code}, #{@name}")
 
 
   resetOriginals: ->
@@ -121,4 +189,4 @@ class @Course
 
   # Renders the object into a string for debugging purposes
   toString: ->
-    "c[#{@scopedId}:#{@code} #{@credits} #{dbg.bals([@isSelected()])} #{@period}]"
+    "c[#{@id}:#{@code} #{@credits} #{dbg.bals([@isSelected()])} #{@period}]"

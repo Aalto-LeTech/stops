@@ -19,7 +19,7 @@ class Plans::CompetencesController < PlansController
   def show
     @competence = Competence.find(params[:id])
 
-    @included_courses = @study_plan.courses
+    @included_courses = @study_plan.scoped_courses
 
     @passed_courses = Hash.new
     @user.user_courses.each do |course|
@@ -43,9 +43,9 @@ class Plans::CompetencesController < PlansController
       return
     end
 
-    user_courses = @study_plan.courses
-    @new_courses = @competence.courses_recursive - user_courses # difference
-    @existing_courses = user_courses & @competence.strict_prereqs # intersection
+    existing_courses = @study_plan.scoped_courses
+    @new_courses = @competence.courses_recursive - existing_courses # difference
+    @shared_courses = existing_courses & @competence.strict_prereqs # intersection
   end
 
   # Adds a competence to the study plan
@@ -71,7 +71,7 @@ class Plans::CompetencesController < PlansController
 
     # TODO: authorize! :edit, @user
 
-    @courses = @study_plan.deletable_courses(@competence)
+    @courses = @study_plan.deletable_scoped_courses(@competence)
   end
 
   # Removes a profile from the study plan

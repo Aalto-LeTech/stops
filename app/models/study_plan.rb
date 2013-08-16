@@ -13,24 +13,24 @@ class StudyPlan < ActiveRecord::Base
   module RefCountExtension
     def add_or_increment_ref_count(*args)
       options = args.extract_options!
-      course, = *args # Last comma forces nil value when args is empty
+      scoped_course, = *args # Last comma forces nil value when args is empty
 
-      course_id = options[:id] || course.id
+      scoped_course_id = options[:id] || scoped_course.id
 
       StudyPlan.transaction do
         study_plan = proxy_association.owner
         plan_id = study_plan.id
 
         existing_entry = PlanCourse.where(:study_plan_id => plan_id,
-                                                 :scoped_course_id => course_id).first
+                                                 :scoped_course_id => scoped_course_id).first
 
         if not existing_entry.nil?
           # Increment reference counter
           existing_entry.competence_ref_count += 1
           existing_entry.save!
         else
-          course = ScopedCourse.find(course_id) if not course
-          proxy_association.concat course
+          scoped_course = ScopedCourse.find(scoped_course_id) if not scoped_course
+          proxy_association.concat scoped_course
         end
       end
     end
@@ -38,22 +38,22 @@ class StudyPlan < ActiveRecord::Base
 
     def remove_or_decrement_ref_count(*args)
       options = args.extract_options!
-      course, = *args # Last comma forces nil value when args is empty
+      scoped_course, = *args # Last comma forces nil value when args is empty
 
-      course_id = options[:id] || course.id
+      scoped_course_id = options[:id] || scoped_course.id
 
       StudyPlan.transaction do
         study_plan = proxy_association.owner
         plan_id = study_plan.id
 
         existing_entry = PlanCourse.where(:study_plan_id => plan_id,
-                                                 :scoped_course_id => course_id).first
+                                                 :scoped_course_id => scoped_course_id).first
 
         if not existing_entry.nil?
           # Decrement reference counter
           existing_entry.competence_ref_count -= 1
           if existing_entry.competence_ref_count == 0 && (not existing_entry.manually_added)
-            # The last competence to which this course is a depedency has been removed
+            # The last competence to which this scoped_course is a depedency has been removed
             existing_entry.destroy
             raise "Course could not be deleted" unless existing_entry.destroyed?
           else
@@ -82,10 +82,10 @@ class StudyPlan < ActiveRecord::Base
   #  -> last_period
   #  <- plan_courses
   #  <- study_plan_competences
-  #  <- competences (plan_courses -> scoped_courses)
-  #  <- courses (plan_courses -> scoped_courses)
+  #  <- competences
+  #  <- scoped_courses (plan_courses -> scoped_courses)
   #  <- study_plan_manual_courses
-  #  <- manual_courses (study_plan_manual_courses -> scoped_courses)
+  #  <- manual_scoped_courses (study_plan_manual_courses -> scoped_courses)
   #  - created_at
   #  - updated_at
 
@@ -115,7 +115,12 @@ class StudyPlan < ActiveRecord::Base
   has_many  :plan_courses,
             :dependent => :destroy
 
-  has_many  :courses,
+  has_many  :abstract_courses,
+            :through => :plan_courses,
+            :source => :abstract_course,
+            :dependent => :destroy
+
+  has_many  :scoped_courses,
             :through => :plan_courses,
             :source => :scoped_course,
             :extend => RefCountExtension,
@@ -131,6 +136,10 @@ class StudyPlan < ActiveRecord::Base
             :source => :scoped_course,
             :dependent => :destroy,
             :uniq => true
+
+  has_many  :course_instances,
+            :through => :plan_courses,
+            :source => :course_instance
 
 
   # Returns the period of the earliest scheduled plan course
@@ -219,20 +228,20 @@ class StudyPlan < ActiveRecord::Base
   end
 
 
-  # Adds courses to the plan according to the data received
+  # Adds scoped_courses to the plan according to the data received
   # Expects a JSON coded array of form:
   # [
   #   {"scoped_course_id": 71},
   #   {"scoped_course_id": 35},
   #   ...
   # ]
-  def add_courses_from_json(json)
+  def add_scoped_courses_from_json(json)
     scoped_courses_to_add = JSON.parse(json)
 
     feedback = {}
 
     scoped_courses_to_add.each do |scoped_course|
-      status = self.add_course(scoped_course.id)
+      status = self.add_scoped_course(scoped_course.id)
       if status == :ok
         feedback[scoped_course.id] = true
       else
@@ -244,20 +253,20 @@ class StudyPlan < ActiveRecord::Base
   end
 
 
-  # Removes courses from the plan according to the data received
+  # Removes plan_courses from the plan according to the data received
   # Expects a JSON coded array of form:
   # [
   #   {"plan_course_id": 71},
   #   {"plan_course_id": 35},
   #   ...
   # ]
-  def remove_courses_from_json(json)
+  def remove_plan_courses_from_json(json)
     plan_courses_to_remove = JSON.parse(json)
 
     feedback = {}
 
     plan_courses_to_remove.each do |plan_course|
-      status = self.remove_course(plan_course.id)
+      status = self.remove_plan_course(plan_course.id)
       if status == :ok
         feedback[plan_course.id] = true
       else
@@ -278,7 +287,7 @@ class StudyPlan < ActiveRecord::Base
   #   {"scoped_course_id": 60, "period_id": 3, "course_instance_id": 32, "credits": 8, "length": 2, "grade": 3},
   #   ...
   # ]
-  def update_courses_from_json(json)
+  def update_plan_courses_from_json(json)
 
     plan_courses_to_update = JSON.parse(json)
 
@@ -416,10 +425,10 @@ class StudyPlan < ActiveRecord::Base
 
     # FIXME: This breaks if prerequisites include Competences
 
-    # Calculate union of existing and new courses, without duplicates
-    courses_array = self.courses | competence.courses_recursive
+    # Calculate union of existing and new scoped_courses, without duplicates
+    scoped_courses_array = self.scoped_courses | competence.courses_recursive
 
-    self.courses = courses_array
+    self.scoped_courses = scoped_courses_array
 
     # FIXME !!!
     self.plan_courses.includes(:scoped_course).find_each do |plan_course|
@@ -434,7 +443,7 @@ class StudyPlan < ActiveRecord::Base
     # Remove competence
     competences.delete(competence)
 
-    self.courses = needed_courses(self.competences).to_a
+    self.scoped_courses = needed_scoped_courses(self.competences).to_a
   end
 
 
@@ -444,20 +453,20 @@ class StudyPlan < ActiveRecord::Base
 
 
   # Adds the scoped course into the study plan
-  def add_course(scoped_course_id)
-    course = ScopedCourse.find(scoped_course_id)
+  def add_scoped_course(scoped_course_id)
+    scoped_course = ScopedCourse.find(scoped_course_id)
 
-    return :not_found if not course
+    return :not_found if not scoped_course
 
-    # Dont't do anything if user has already selected this course
-    return :already_added if @user.study_plan.courses.exists?(course)
+    # Dont't do anything if user has already selected this scoped_course
+    return :already_added if @user.study_plan.scoped_courses.exists?(scoped_course)
 
-    # Add course to study plan
+    # Add scoped_course to study plan
     PlanCourse.create(
       :study_plan_id       =>  @user.study_plan.id,
-      :abstract_course_id  =>  course.abstract_course_id,
-      :scoped_course_id    =>  course.id,
-      :credits             =>  course.credits,
+      :abstract_course_id  =>  scoped_course.abstract_course_id,
+      :scoped_course_id    =>  scoped_course.id,
+      :credits             =>  scoped_course.credits,
       :grade               =>  nil,
       :manually_added      =>  true
       #:course_instance     =>  nil,                   # deprecated
@@ -469,7 +478,7 @@ class StudyPlan < ActiveRecord::Base
 
 
   # Removes the plan course from the study plan
-  def remove_course(plan_course_id)
+  def remove_plan_course(plan_course_id)
     plan_course = self.plan_courses.find(plan_course_id)
 
     return :not_found if not plan_course
@@ -480,31 +489,31 @@ class StudyPlan < ActiveRecord::Base
   end
 
 
-  # Returns a list of courses than can be deleted if the given competence is dropped from the study plan
-  def deletable_courses(competence)
+  # Returns a list of scoped_courses than can be deleted if the given competence is dropped from the study plan
+  def deletable_scoped_courses(competence)
     # Make an array of competences that the user has after deleting the given competence
     remaining_competences = competences.clone
     remaining_competences.delete(competence)
     puts "#{competences.size} / #{remaining_competences.size}"
 
-    # Make a list of courses that are needed by the remaining competences
-    needed_courses = needed_courses(remaining_competences)
+    # Make a list of scoped_courses that are needed by the remaining competences
+    needed_scoped_courses = needed_scoped_courses(remaining_competences)
 
-    courses.to_set - needed_courses
+    scoped_courses.to_set - needed_scoped_courses
   end
 
 
-  # Returns a set of courses that are needed by the given competences
+  # Returns a set of scoped_courses that are needed by the given competences
   # competences: a collection of competence objects
-  def needed_courses(competences)
-    # Make a list of courses that are needed by remaining profiles
-    needed_courses = Set.new
+  def needed_scoped_courses(competences)
+    # Make a list of scoped_courses that are needed by remaining profiles
+    needed_scoped_courses = Set.new
     competences.each do |competence|
-      needed_courses.merge(competence.courses_recursive)
+      needed_scoped_courses.merge(competence.courses_recursive)
     end
 
-    # Add manually added courses to the list
-    needed_courses.merge(manual_courses)
+    # Add manually added scoped_courses to the list
+    needed_scoped_courses.merge(manual_scoped_courses)
   end
 
 end

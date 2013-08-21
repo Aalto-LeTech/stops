@@ -189,8 +189,10 @@ class @GraphView
   # options: if 'postreqSkills' == 'all' then all skills are shown
   showFuturePaths: (sourceCourse, targetIds, options) ->
     options ||= {}
+    visiting = {}
 
     dfs = (course, level) ->
+      visiting[course.id] = true
       if targetIds
         onPath = targetIds[course.id]
       else
@@ -198,6 +200,7 @@ class @GraphView
 
       # Visit neighbors
       for neighbor in course.prereqTo
+        continue if visiting[neighbor.id] # Detect cycles
         onPath = dfs(neighbor, level + 1) || onPath
 
       course.level = level if (level > course.level)
@@ -209,7 +212,9 @@ class @GraphView
         if 'all' == options['postreqSkills']
           for skill in course.skills
             skill.visible = true
-
+      
+      visiting[course.id] = false
+      
       return onPath
 
     dfs(sourceCourse, 0)

@@ -238,7 +238,6 @@ class @GraphCourse
       # Detect cycles
       if visiting[neighbor.id]
         @isCyclic = true
-        neighbor.isCyclic = true
         continue
       
       neighbor.dfs(direction, nextLevel, visiting, callback)

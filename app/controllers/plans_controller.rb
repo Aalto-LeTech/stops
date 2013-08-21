@@ -88,7 +88,8 @@ class PlansController < ApplicationController
     # Form and send the response
     respond_to do |format|
       format.html { redirect_to studyplan_schedule_path }
-      format.json { render json: as_hash(@study_plan, serializer: StudyPlanSerializerDeep) }
+      format.json { render json: as_hash(@study_plan) }
+      #format.json { render json: as_hash(@study_plan, serializer: StudyPlanSerializerDeep, root: false) }
     end
 
 #    data = JSON.parse(params[:json]) if params[:json]

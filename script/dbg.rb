@@ -214,6 +214,14 @@ class Dbggr
 
   def dbg
 
+    @user = User.where( :id => 2 ).includes(:study_plan).first
+    @study_plan = @user.study_plan
+
+    puts @study_plan.as_json
+
+    options = { serializer: StudyPlanSerializer }
+    puts ActiveModel::Serializer.new(@study_plan, options).as_json
+
     exit
 
 
@@ -244,9 +252,6 @@ class Dbggr
 
     y Period.current.find_preceding_periods(3)
     exit
-
-    @user = User.where( :id => 2 ).includes(:study_plan).first
-    @study_plan = @user.study_plan
 
     competences = @study_plan.competences.includes([:localized_description, :courses])
     competences.each do |competence|

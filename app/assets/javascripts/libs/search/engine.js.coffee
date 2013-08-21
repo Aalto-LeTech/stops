@@ -1,5 +1,4 @@
 #= require core/module_pattern
-#= require core/strings
 
 
 # Check that i18n strings have been loaded before this file
@@ -74,7 +73,7 @@ if not O4.search.i18n
         return if data.inqueryID != @inqueryID
 
         # Have the viewModel handle building the final results array
-        @results( @viewModel.parseResults(data) )
+        @results( @viewModel.parseResults(data.data) )
 
         # Update the info message
         nresults = @results().length

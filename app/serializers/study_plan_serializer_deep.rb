@@ -1,16 +1,13 @@
 class StudyPlanSerializerDeep < StudyPlanSerializer
 
-  attributes :competences,
-             :abstract_courses,
-             :scoped_courses,
-             :skills,
-             :plan_courses,
-             :course_instances,
-             :periods
+  attributes :competences
+#             :abstract_courses,
+#             :scoped_courses,
+#             :skills,
+#             :plan_courses,
+#             :course_instances,
+#             :periods
 
-#  has_many :competences
-#  has_many
-#  has_many :scoped_courses
 
   def competences
     ApplicationController::srlze object.competences, options
@@ -25,19 +22,19 @@ class StudyPlanSerializerDeep < StudyPlanSerializer
   end
 
   def skills
-    object.skills.includes(:localized_description)
+    ApplicationController::srlze object.skills.includes(:localized_description), options
   end
 
   def plan_courses
-    object.plan_courses
+    ApplicationController::srlze object.plan_courses, options
   end
 
   def course_instances
-    object.course_instances
+    ApplicationController::srlze object.course_instances, options
   end
 
   def periods
-    object.periods.includes(:localized_description)
+    ApplicationController::srlze object.periods.includes(:localized_description), options
   end
 
 end

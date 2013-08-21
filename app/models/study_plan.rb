@@ -253,16 +253,18 @@ class StudyPlan < ActiveRecord::Base
   #   ...
   # ]
   def add_scoped_courses_from_json(json)
-    scoped_courses_to_add = JSON.parse(json)
+    scoped_course_ids_to_add = JSON.parse(json)
+
+    puts "ids to add: %s" % [ scoped_course_ids_to_add ]
 
     feedback = {}
 
-    scoped_courses_to_add.each do |scoped_course|
-      status = self.add_scoped_course(scoped_course.id, is_manually_added=true)
-      if status == :ok
-        feedback[scoped_course.id] = true
+    scoped_course_ids_to_add.each do |scoped_course_id|
+      fdbck = self.add_scoped_course(scoped_course_id.to_i, is_manually_added=true)
+      if fdbck.is_a? PlanCourse
+        feedback[scoped_course_id] = fdbck.as_json(root: false)
       else
-        feedback[scoped_course.id] = false
+        feedback[scoped_course_id] = false
       end
     end
 
@@ -278,16 +280,18 @@ class StudyPlan < ActiveRecord::Base
   #   ...
   # ]
   def remove_plan_courses_from_json(json)
-    plan_courses_to_remove = JSON.parse(json)
+    plan_course_ids_to_remove = JSON.parse(json)
+
+    puts "ids to remove: %s" % [ plan_course_ids_to_remove ]
 
     feedback = {}
 
-    plan_courses_to_remove.each do |plan_course|
-      status = self.remove_plan_course(plan_course.id)
+    plan_course_ids_to_remove.each do |plan_course_id|
+      status = self.remove_plan_course(plan_course_id.to_i)
       if status == :ok
-        feedback[plan_course.id] = true
+        feedback[plan_course_id] = true
       else
-        feedback[plan_course.id] = false
+        feedback[plan_course_id] = false
       end
     end
 
@@ -412,12 +416,12 @@ class StudyPlan < ActiveRecord::Base
 
     feedback = {}
 
-    if json.has_key?('scoped_courses_to_add')
-      feedback['scoped_courses_to_add'] = self.add_courses_from_json( json['scoped_courses_to_add'] )
+    if json.has_key?('scoped_course_ids_to_add')
+      feedback['scoped_course_ids_to_add'] = self.add_scoped_courses_from_json( json['scoped_course_ids_to_add'] )
     end
 
-    if json.has_key?('plan_courses_to_remove')
-      feedback['plan_courses_to_remove'] = self.remove_courses_from_json( json['plan_courses_to_remove'] )
+    if json.has_key?('plan_course_ids_to_remove')
+      feedback['plan_course_ids_to_remove'] = self.remove_plan_courses_from_json( json['plan_course_ids_to_remove'] )
     end
 
     if json.has_key?('plan_courses_to_update')
@@ -443,9 +447,9 @@ class StudyPlan < ActiveRecord::Base
     # FIXME: This breaks if prerequisites include Competences
 
     # Calculate the scoped_courses to add
-    scoped_courses_to_add = competence.courses_recursive - self.scoped_courses
+    scoped_course_ids_to_add = competence.courses_recursive - self.scoped_courses
 
-    scoped_courses_to_add.each do |scoped_course|
+    scoped_course_ids_to_add.each do |scoped_course|
       self.add_scoped_course(scoped_course)
     end
   end
@@ -475,10 +479,11 @@ class StudyPlan < ActiveRecord::Base
     return :not_found if not scoped_course
 
     # Dont't do anything if the plan already contains this scoped_course
+    # FIXME: DB doesn't accept duplicate scoped_courses for a plan atm.
     return :already_added if self.scoped_courses.exists?(scoped_course)
 
     # Add scoped_course to study plan
-    PlanCourse.create(
+    plan_course = PlanCourse.create(
       :study_plan_id       =>  self.id,
       :abstract_course_id  =>  scoped_course.abstract_course_id,
       :scoped_course_id    =>  scoped_course.id,
@@ -491,7 +496,7 @@ class StudyPlan < ActiveRecord::Base
       :manually_added      =>  is_manually_added,
     )
 
-    return :ok
+    return plan_course
   end
 
 

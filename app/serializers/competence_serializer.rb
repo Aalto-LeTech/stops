@@ -1,10 +1,14 @@
 class CompetenceSerializer < ActiveModel::Serializer
 
-  attributes :localized_name,
-             :strict_prereqs
+  embed :ids, include: true
 
-  def strict_prereqs
-    object.strict_prereq_ids
-  end
+  attributes :id,
+             :localized_name
+
+  has_many   :strict_prereqs, serializer: ScopedCourseShortSerializer
+
+#  def strict_prereqs
+#    object.strict_prereq_ids
+#  end
 
 end

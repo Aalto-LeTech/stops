@@ -300,19 +300,35 @@ class CurriculumsController < ApplicationController
         {
           :include =>
           [
-            :localized_description,
-            :prereqs => :localized_description,
-            :skills => :localized_description
+            :abstract_course,
+            :abstract_course => :localized_description,
+            :skills => :localized_description,
+            :prereqs =>
+            [
+              :abstract_course,
+              :abstract_course => :localized_description
+            ]
           ]
         }
       )
 
-      puts "Processing %d entries." % [ scoped_courses.total_entries ]
+      scoped_course_ids = scoped_courses.map { |scoped_course| scoped_course.id }.uniq
+
+      puts "Found %d entries: %s." % [ scoped_course_ids.length, scoped_course_ids ] # scoped_courses.total_entries
+
+#      scoped_courses = ScopedCourse.find(
+#        scoped_course_ids
+#      ).all
 
       response_json = {
-        status:          'ok',
-        inqueryID:       inqueryID,
-        scoped_courses:  as_hash(scoped_courses)
+        status:     'ok',
+        inqueryID:  inqueryID,
+#        data:       as_hash(scoped_courses, serializer: ScopedCourseArraySerializer)
+#        data:       as_hash(scoped_courses, each_serializer: ScopedCourseSerializer)
+        data:       as_hash(
+          scoped_courses,
+          each_serializer: ScopedCourseSerializer
+        )
       }.to_json
 
     else

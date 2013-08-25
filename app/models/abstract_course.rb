@@ -14,16 +14,15 @@ class AbstractCourse < ActiveRecord::Base
   #  <- periods <- course_instances
 
 
-  # Localized description
+  has_many :course_descriptions
+  
   has_one :localized_description, :class_name => "CourseDescription",
           :conditions => proc { "locale = '#{I18n.locale}'" }
-
 
   # Courses
   has_many :scoped_courses, :dependent => :destroy      # Courses in curriculums. e.g. "Course X-0.1010 according to the 2005 study guide"
   has_many :course_instances, :dependent => :destroy    # Course implementations, e.g. "Course X-0.1010 (spring 2011)"
   has_many :study_plan_courses, :dependent => :destroy  # Courses planned by students in their personal study plans
-
 
   # Periods
   has_many  :periods,

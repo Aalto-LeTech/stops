@@ -23,7 +23,7 @@ class ScopedCourse < CompetenceNode
 
 
   # Localized descriptions
-  has_many :course_descriptions, :dependent => :destroy,
+  has_many :course_descriptions,
           :primary_key => :abstract_course_id,
           :foreign_key => :abstract_course_id
 

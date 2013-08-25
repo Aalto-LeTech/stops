@@ -29,6 +29,7 @@
         <td colspan="3"><span class="hint"><%= t('.name_hint').html_safe %></td>
       </tr>
       <%= f.fields_for :course_descriptions do |cf| %>
+        <%= cf.hidden_field :locale %>
         <tr>
           <td><%= label_tag :name, t(".name_#{cf.object.locale}"), :class => 'control-label' %></td>
           <td><%= cf.text_field :name %></td>

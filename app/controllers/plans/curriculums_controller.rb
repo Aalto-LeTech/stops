@@ -24,7 +24,7 @@ class Plans::CurriculumsController < PlansController
     curriculum_id = params[:user_study_plan][:curriculum]
 
     if not @user.study_plan
-      first_period = @user.first_study_period || Period.first_study_period
+      first_period = @user.first_study_period || Period.current
       last_period = Period.find_by_date(first_period.begins_at - 1 + 365 * StudyPlan::INITIAL_STUDY_PLAN_TIME_IN_YEARS)
       
       @user.study_plan = StudyPlan.create(

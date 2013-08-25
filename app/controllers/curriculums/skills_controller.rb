@@ -156,11 +156,11 @@ class Curriculums::SkillsController < CurriculumsController
                        :prereq_id    => Integer(params[:prereq_id]),
                        :requirement  => requirement_type
 
-    # Add course prereq
-    #target_skill = Skill.find(params[:id])
-    #prereq_skill = Skill.find(params[:prereq_id])
-    #target_node = CompetenceNode.find(params[:competence_node_id])
-    #prereq_node = CompetenceNode.find(params[:prereq_competence_node_id])
+    # Update course prereqs
+    target_skill = Skill.find(params[:id])
+    if target_skill.competence_node.is_a?(ScopedCourse)
+      target_skill.competence_node.update_prereqs_cache
+    end
 
     render :nothing => true
   end
@@ -175,6 +175,12 @@ class Curriculums::SkillsController < CurriculumsController
 
     @prereq.all.each do |prereq|
       prereq.destroy
+    end
+    
+    # Update course prereqs
+    target_skill = Skill.find(params[:id])
+    if target_skill.competence_node.is_a?(ScopedCourse)
+      target_skill.competence_node.update_prereqs_cache
     end
 
     render :nothing => true

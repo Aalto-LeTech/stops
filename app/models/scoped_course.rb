@@ -209,6 +209,8 @@ class ScopedCourse < CompetenceNode
   # Updates the prerequirement course cache.
   # The cache is a table behind the 'prereqs' variable that provides easy access to all the prerequirement courses which provide at least one competence that is a prerequirement for this course.
   def update_prereqs_cache
+    CoursePrereq.where(:scoped_course_id => self.id).delete_all
+    
     self.prereqs_recursive.each do |prereq|
       CoursePrereq.create(:course => self, :prereq => prereq, :requirement => STRICT_PREREQ)
     end

@@ -195,13 +195,14 @@ class Curriculums::CoursesController < CurriculumsController
     @scoped_course.localized_description.update_attributes(params[:course_description])
     @scoped_course.update_comments(params[:comments])
 
-    # Update AbstractCourse if changed
-    new_course_code = params[:scoped_course]['course_code']
-    if new_course_code != @scoped_course.abstract_course.code
-      @scoped_course.abstract_course = AbstractCourse.find_by_code(new_course_code) || AbstractCourse.create(:code => new_course_code)
-    end
-
     if @scoped_course.update_attributes(params[:scoped_course])
+      # Update AbstractCourse if changed
+      new_course_code = params[:scoped_course]['course_code']
+      if new_course_code != @scoped_course.abstract_course.code
+        @scoped_course.abstract_course = AbstractCourse.find_by_code(new_course_code) || AbstractCourse.create(:code => new_course_code)
+        @scoped_course.save
+      end
+    
       flash[:success] = 'Information updated'
       redirect_to edit_curriculum_course_path(:curriculum_id => @curriculum, :id => @scoped_course)
     else

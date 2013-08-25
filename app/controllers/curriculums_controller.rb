@@ -184,6 +184,7 @@ class CurriculumsController < ApplicationController
 
 
   def search_skills
+    curriculum_id = params[:id]
     node_ids = []
     if params[:q] && params[:q].size > 1
       excluded_node_id = false
@@ -201,15 +202,20 @@ class CurriculumsController < ApplicationController
         node_ids << node_id if not node_id == excluded_node_id
       end
 
-      # Search from course names or codes
-      # FIXME: CourseDescription now belongs to AbstractCourse instead of ScopedCourse
-#       nodes = CourseDescription.where(['name ILIKE ? OR course_code ILIKE ?', "%#{params[:q]}%", "%#{params[:q]}%"])
-#                                .joins(:scoped_course)
-#                                .select(:scoped_course_id).uniq
-#       nodes.each do |node|
-#         node_id = node.scoped_course_id
-#         node_ids << node_id if not node_id == excluded_node_id
-#       end
+      # Search from course names
+      abstract_course_ids = CourseDescription.where(['name ILIKE ?', "%#{params[:q]}%"])
+                               .select(:abstract_course_id).uniq.map do |description|
+        description.abstract_course_id
+      end
+      
+      # Search from course codes
+      AbstractCourse.where(['code ILIKE ?', "%#{params[:q]}%"]).select(:id).uniq.each do |abstract_course|
+        abstract_course_ids << abstract_course.id
+      end
+      
+      ScopedCourse.where(:abstract_course_id => abstract_course_ids, :curriculum_id => curriculum_id).select(:id).find_each do |node|
+        node_ids << node.id if not node.id == excluded_node_id
+      end
 
       # Search from competence names
       nodes = CompetenceDescription.where(['name ILIKE ?', "%#{params[:q]}%"])

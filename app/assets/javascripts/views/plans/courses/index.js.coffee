@@ -108,6 +108,12 @@ class @View extends ViewObject
     #ModelObject::DBG = true
     @READY = true
 
+    setTimeout(
+      -> $('.loader').fadeOut(1000)
+      500
+    )
+
+
 
   onInqueryChange: ->
     return

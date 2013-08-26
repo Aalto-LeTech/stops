@@ -165,8 +165,6 @@ class StudyPlan < ActiveRecord::Base
     # self.first_period.find_preceding(number_of_buffer_periods).last,
     # self.last_period.find_following(number_of_buffer_periods).last
     #)
-    self.first_period = self.first_period.find_preceding(6).last
-    self.save
     Period.range(self.first_period, self.last_period)
   end
 

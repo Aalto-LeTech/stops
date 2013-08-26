@@ -95,21 +95,6 @@ class ScopedCourse < CompetenceNode
            :order => 'created_at'
 
 
-  # Old accessor for localized name  # FIXME: should this be removed?
-  def name(locale)
-    description = course_descriptions.where(:locale => locale).first
-    description ? description.name : course_code
-  end
-
-
-  # Returns the name of the course in the current locale or fallback
-  # message if localized course name could not be found.
-  def name_or(fallback_message="<No name set for the locale>")
-    desc = localized_description
-    desc ? desc.name : fallback_message
-  end
-
-
   def localized_name_exists?
     not localized_name.nil?
   end
@@ -172,9 +157,9 @@ class ScopedCourse < CompetenceNode
   # Returns the unique roman numerals of the periods where this course
   # has an course instance and the period hasn't ended or started yet.
   # Example: ["I", "III", "IV"]
-  def periods_as_roman_numerals
+  def period_symbols
     periods_sorted = self.periods.sort! { |x, y| x.number <=> y.number }
-    periods_sorted.map { |period| period.to_roman_numeral }.uniq
+    periods_sorted.map { |period| period.symbol }.uniq
   end
 
 

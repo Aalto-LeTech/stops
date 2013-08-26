@@ -1,0 +1,39 @@
+/* Loads translated i18n strings used by plans/courses/index.js.coffee */
+(function() {
+  var i18n;
+
+  /* i18n strings */
+  i18n = {
+    current_locale:                       "<%= I18n.locale %>",
+    required_locales:                     ["<%= REQUIRED_LOCALES.join('","').html_safe %>"],
+
+    plan_load_error_instructions:         "<%= escape_javascript(t('.plan_load_error_instructions')) %>",
+
+    plan:                                 "<%= escape_javascript(t('.plan')) %>",
+    changes:                              "<%= escape_javascript(t('.changes')) %>",
+    search:                               "<%= escape_javascript(t('.search')) %>",
+    create:                               "<%= escape_javascript(t('.create')) %>",
+
+    plan_instructions:                    "<%= escape_javascript(t('.plan_instructions')) %>",
+    search_instructions:                  "<%= escape_javascript(t('.search_instructions')) %>",
+    changes_instructions:                 "<%= escape_javascript(t('.changes_instructions')) %>",
+    create_instructions:                  "<%= escape_javascript(t('.create_instructions')) %>",
+
+    is_not_included_in_the_plan:          "<%= escape_javascript(t('.is_not_included_in_the_plan')) %>",
+    is_included_in_the_plan:              "<%= escape_javascript(t('.is_included_in_the_plan')) %>",
+    is_added_to_the_plan:                 "<%= escape_javascript(t('.is_added_to_the_plan')) %>",
+    is_removed_from_the_plan:             "<%= escape_javascript(t('.is_removed_from_the_plan')) %>",
+    and_scheduled_to_period:              "<%= escape_javascript(t('.and_scheduled_to_period')) %>",
+    and_passed_with_grade:                "<%= escape_javascript(t('.and_passed_with_grade')) %>",
+    in_period:                            "<%= escape_javascript(t('.in_period')) %>",
+    but_not_scheduled:                    "<%= escape_javascript(t('.but_not_scheduled')) %>",
+
+    added:                                "<%= escape_javascript(t('.added')) %>",
+    removed:                              "<%= escape_javascript(t('.removed')) %>",
+  };
+
+  /* Translations available at O4.view.i18n */
+  var O4 = window.O4 = window.O4 || {};
+  O4.view = O4.view || {};
+  O4.view.i18n = i18n;
+})();

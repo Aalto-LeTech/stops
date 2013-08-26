@@ -19,7 +19,6 @@ class @PlanView
     #@showAsEditable = ko.observable(false)
 
     # List of courses to be saved and rejected when tried to save.
-    # Both are used and managed at @save()
     @coursesToSave = []
     @coursesRejected = []
 
@@ -48,8 +47,7 @@ class @PlanView
 
   loadPlan: () ->
     $.ajax
-      url: @planUrl,
-      data: { bundle: 'schedule' }
+      url: @planUrl + '/old_schedule',
       dataType: 'json',
       success: (data) => this.loadJson(data)
 
@@ -68,7 +66,7 @@ class @PlanView
     dbg.lg("Loaded #{Period::ALL.length} periods.")
 
     # Load courses
-    Course::createFromJson(data['courses'], data['user_courses'])
+    Course::createFromJson(data['plan_courses'])
     dbg.lg("Loaded #{Course::ALL.length} courses.")
 
     # Load competences
@@ -142,8 +140,7 @@ class @PlanView
     # The 'update' method is also called so that it can realize that the size of
     # the div it is to 'side' has changed as periods have been injected into it.
     affixedSidebar = affxd.Sidebar::get()
-    affixedSidebar.staticHeight = 600
-    affixedSidebar.update()
+    affixedSidebar.reset('staticHeight', 600)
 
     # Log time used from start to bind and here
     endTime = new Date().getTime();
@@ -248,7 +245,7 @@ class @PlanView
     planCoursesToSave = []  # Array for course JSON representations for sending
     for course in @coursesToSave
       dbg.lg("Pushing \"#{course.name}\" to be saved.")
-      planCoursesToSave.push(course.toJson())
+      planCoursesToSave.push(course.asHash())
 
     dbg.lg("A total of #{@coursesToSave.length} courses changed. Starting the put.")
 
@@ -259,15 +256,22 @@ class @PlanView
       url: @planUrl,
       type: 'put',
       dataType: 'json',
-      data: { 'plan_courses': JSON.stringify(planCoursesToSave) },
+      async: false,
+      data: { 'json': {'plan_courses_to_update': JSON.stringify(planCoursesToSave)} },
       success: (data) =>
+        dbg.lg("data: #{data}")
+        dbg.lg("data: #{JSON.stringify(data)}")
         if data['status'] == 'ok'
-          accepted = data['accepted']
-          if accepted?
+          feedback = data['feedback']['plan_courses_to_update']
+          if feedback
             for course in @coursesToSave
-              if accepted[course.scopedId]
+              if feedback[course.scopedId]
                 dbg.lg("Course \"#{course.name}\" was successfully saved.")
                 course.resetOriginals()
               else
                 dbg.lg("ERROR: Course \"#{course.name}\" was rejected by the server! Saving failed!")
                 @coursesRejected.push(course)  # FIXME: Not used atm.
+          else
+            dbg.lg("ERROR: No feedback returned!")
+        else
+          dbg.lg("ERROR: Put on server failed!")

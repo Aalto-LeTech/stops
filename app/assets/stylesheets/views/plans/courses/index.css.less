@@ -21,8 +21,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 // Altering the layout
 
-@layoutMaxWidth:  1500px;
-@sidebarWidth:    500px;
+@sidebarWidth:       450px;
+@sidebarWidthWide:   550px;
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -36,49 +36,58 @@
   }
 }
 
-div.search-query
+#themain
 {
-  margin-bottom: 3em;
-
-  input
+  div.courses
   {
-    width: 400px;
-  }
-}
-
-div.search-results-container
-{
-  //.container-fluid;
-  //text-align: center;
-  max-width: 600px;
-
-  div.result
-  {
-    border-top: 1px solid #CCC;
-    //.border-radius(4px);
-    a
+    div.course
     {
-      color: #333;
-    }
+      border-top: 1px solid #CCC;
+      //.border-radius(4px);
+      &:hover
+      {
+        background: #DDF;
+      }
 
-    &.included a
-    {
-      color: #00A;
-    }
+      a
+      {
+        color: #333;
+      }
 
-    &.passed a
-    {
-      color: #0A0;
-    }
+      &.passed a
+      {
+        color: #363;
+      }
 
-    &.selected
-    {
-      background: #DDF;
-    }
+      &.included a
+      {
+        color: #93A;
+      }
 
-    &:hover
-    {
-      text-decoration: underline !important;
+      &.passed.included a
+      {
+        color: #0A0;
+      }
+
+      &.scheduled a
+      {
+        color: #00A;
+      }
+
+      &.added
+      {
+        background: #DFD;
+      }
+
+      &.removed
+      {
+        background: #FDD;
+      }
+
+      &.selected
+      {
+        background: #AAF;
+      }
     }
   }
 }

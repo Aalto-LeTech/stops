@@ -16,13 +16,16 @@
 ////////////////////////////////////////////////////////////////////////////////
 // Scaffolding
 
-@layoutMaxWidth:  1400px;
-@sidebarWidth:    350px;
-@mainMaxWidth:    @layoutMaxWidth - @sidebarWidth;
-@sidebarGap:      2em;
-@sidebarMargin:   @sidebarWidth + @sidebarGap;
+@layoutMaxWidth:       1600px;
+@sidebarWidth:         350px;
+@sidebarWidthWide:     500px;
+@mainMaxWidth:         @layoutMaxWidth - @sidebarWidth;
+@mainMaxWidthWide:     @layoutMaxWidth - @sidebarWidthWide;
+@sidebarGap:           10px;
+@mainMarginLeft:       @sidebarGap + @sidebarWidth;
+@mainMarginLeftWide:   @sidebarGap + @sidebarWidthWide;
 
-
+// Narrow layout
 @media screen and (max-width: 979px)
 {
   #theleftwrapper
@@ -38,7 +41,8 @@
   }
 }
 
-@media screen and (min-width: 980px)
+// Normal layout
+@media screen and (min-width: 980px) and (max-width: 1399px)
 {
   #theleftwrapper
   {
@@ -47,13 +51,24 @@
   }
   #themain
   {
-    margin: 0 0 0 @sidebarMargin;
+    margin: 0 0 0 @mainMarginLeft;
     max-width: @mainMaxWidth;
   }
-/*  #thewrapper, #thecontainer, #themain*/
-/*  {*/
-/*    min-height: 400px;*/
-/*  }*/
+}
+
+// Wide layout
+@media screen and (min-width: 1400px)
+{
+  #theleftwrapper
+  {
+    position: absolute;
+    width: @sidebarWidthWide;
+  }
+  #themain
+  {
+    margin: 0 0 0 @mainMarginLeftWide;
+    max-width: @mainMaxWidthWide;
+  }
 }
 
 #theleftwrapper

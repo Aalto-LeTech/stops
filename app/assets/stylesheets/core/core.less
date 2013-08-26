@@ -3,9 +3,7 @@
 //
 // Defines the Less shared by (almost) every layout (and view) around the app.
 //
-
-
-////////////////////////////////////////////////////////////////////////////////
+//
 // Intro
 //
 // This file imports Bootstrap's Less files and customizes/builds on top of em.
@@ -31,6 +29,8 @@
 // color orange to the color blue, one could change a single variable instead of
 // hunting down every duplicate, shade and variant of the previously used orange
 // from the hard-coded style specification files.
+
+
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -301,6 +301,21 @@ h1:first-child, h2:first-child, h3:first-child, h4:first-child
 .field-lengthy
 {
   width: 300px;
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+// Page loader gif
+
+.loader
+{
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  background: asset-url("page-loader.gif") 50% 50% no-repeat rgb(249,249,249);
 }
 
 

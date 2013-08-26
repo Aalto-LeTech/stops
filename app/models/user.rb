@@ -50,33 +50,4 @@ class User < ActiveRecord::Base
     self.staff
   end
 
-
-  # Returns true if the user has passed (grade > 0) the given course and false
-  # otherwise
-  def passed?( abstract_course )
-    abstract_course.nil? ? false : self.user_courses.where(
-        'abstract_course_id = ? AND grade > ?', abstract_course.id, 0
-        ).exists?
-  end
-
-
-  # Returns passed courses
-  def passed_courses
-    self.user_courses.where( 'grade > ?', 0 )
-  end
-
-
-  # Returns the period of the earliest user course
-  def period_of_earliest_user_course
-    earliest_user_course = user_courses.includes(:period).order('periods.begins_at ASC').first
-    earliest_user_course.nil? ? nil : earliest_user_course.period
-  end
-
-
-  # Returns the period of the latest user course
-  def period_of_latest_user_course
-    latest_user_course = user_courses.includes(:period).order('periods.begins_at DESC').first
-    latest_user_course.nil? ? nil : latest_user_course.period
-  end
-
 end

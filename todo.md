@@ -27,6 +27,7 @@ Acknowledgements
 - [ ] new: don't load so much course info at course search, but fetch them only
       when the user wants to see details
 
+- [ ] fix: rename indices (study_plan_co... -> plan_co...)
 - [ ] address questions arisen so far:
 - [ ]   what about html views/plans/courses and its js plans/showCourse
 - [ ]   is "/:locale/courses*" not used at all? -- are the controller and views

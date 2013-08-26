@@ -7,8 +7,7 @@ class Dbggr
       AbstractCourse,
       ScopedCourse,
       CourseInstance,
-      UserCourse,
-      StudyPlanCourse
+      PlanCourse
     ]
   end
 
@@ -17,8 +16,7 @@ class Dbggr
   #      AbstractCourse  30
   #        ScopedCourse  69
   #      CourseInstance   0
-  #          UserCourse   0
-  #     StudyPlanCourse  30
+  #     PlanCourse  30
   def print_course_class_total_item_counts
     puts "=> Course Class Total Item Counts"
     @course_classes.each do |course_class|
@@ -105,14 +103,6 @@ class Dbggr
   def list_course_instances
     CourseInstance.find_each do |course_instance|
       puts "  [%03d] % 15s % 4s-%d % 15s" % [ course_instance.id, course_instance.abstract_course.code, course_instance.period.symbol, course_instance.length, course_instance.period.name(@locale) ]
-    end
-  end
-
-
-  # lists all user courses
-  def list_user_courses
-    UserCourse.find_each do |user_course|
-      puts "  [%03d] % 25s  %d" % [ user_course.id, user_course.course_instance.dbg_name, user_course.grade ]
     end
   end
 
@@ -212,28 +202,28 @@ class Dbggr
 
   # fixes custom problems
   def fix
-    # fixes user_courses
-    # deletes entries with no grade
-    UserCourse.find_each do |user_course|
-      if not user_course.grade?
-        y user_course
-        user_course.destroy
-      end
+    # fixes plan_courses
+    PlanCourse.find_each do |plan_courses|
+      scoped_course = plan_courses.scoped_course
+      plan_courses.abstract_course = scoped_course.abstract_course
+      plan_courses.save
     end
-
-    return
-
-    # fixes study_plan_courses
-    StudyPlanCourse.find_each do |study_plan_courses|
-      scoped_course = study_plan_courses.scoped_course
-      study_plan_courses.abstract_course = scoped_course.abstract_course
-      study_plan_courses.save
-    end
-    y StudyPlanCourse.all
+    y PlanCourse.all
   end
 
 
   def dbg
+
+    @user = User.where( :id => 2 ).includes(:study_plan).first
+    @study_plan = @user.study_plan
+
+    puts @study_plan.as_json
+
+    options = { serializer: StudyPlanSerializer }
+    puts ActiveModel::Serializer.new(@study_plan, options).as_json
+
+    exit
+
 
     course = ScopedCourse.first
     puts course.curriculum_id #competence_node
@@ -263,9 +253,6 @@ class Dbggr
     y Period.current.find_preceding_periods(3)
     exit
 
-    @user = User.where( :id => 2 ).includes(:study_plan).first
-    @study_plan = @user.study_plan
-
     competences = @study_plan.competences.includes([:localized_description, :courses])
     competences.each do |competence|
       y competence
@@ -283,14 +270,14 @@ class Dbggr
     exit
 
 
-    study_plan_courses = @study_plan.study_plan_courses.includes(
+    plan_courses = @study_plan.plan_courses.includes(
       [
         abstract_course: [:localized_description, :course_instances],
         scoped_course: [:prereqs]
       ]
     )
 
-    y study_plan_courses_json = study_plan_courses.as_json(
+    y plan_courses_json = plan_courses.as_json(
       only: [:id, :period_id, :credits, :length],
       include: [
         {
@@ -320,7 +307,7 @@ class Dbggr
     #y periods = @study_plan.periods
     #y [@study_plan.last_period_id, @study_plan.first_period_id]
     #y @study_plan.last_period.ends_at - @study_plan.first_period.begins_at
-    #y @user.study_plan.period_of_earliest_study_plan_course
+    #y @user.study_plan.period_of_earliest_plan_course
     #@user.first_study_period_id = 37
     #@user.save
     #@user.admin

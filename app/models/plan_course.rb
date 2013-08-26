@@ -1,14 +1,15 @@
 # Join model that connects study plan to a course
-class StudyPlanCourse < ActiveRecord::Base
+class PlanCourse < ActiveRecord::Base
 
-  #  create_table "study_plan_courses", :force => true do |t|
+  #  create_table "plan_courses", :force => true do |t|
   #    t.integer "study_plan_id",                           :null => false
   #    t.integer "abstract_course_id"
   #    t.integer "scoped_course_id",                        :null => false
   #    t.integer "course_instance_id"
   #    t.integer "period_id"
-  #    t.float   "credits"
   #    t.integer "length"
+  #    t.float   "credits"
+  #    t.integer "grade"
   #    t.boolean "custom",               :default => false
   #    t.boolean "manually_added",       :default => false
   #    t.integer "competence_ref_count", :default => 1,     :null => false
@@ -22,8 +23,9 @@ class StudyPlanCourse < ActiveRecord::Base
   #  -> course_instance
   #  -> period / -> course_instance -> period
   #  -> period -> localized_period_description = period_descriptions (name, locale, ...) -> localized_period_name
-  #  - credits / -> scoped_course -> credits
   #  - length / -> course_instance -> length
+  #  - credits / -> scoped_course -> credits
+  #  - grade
   #  - custom
   #  - manually_added
   #

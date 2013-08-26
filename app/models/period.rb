@@ -18,7 +18,6 @@ class Period < ActiveRecord::Base
   has_one :localized_description, :class_name => "PeriodDescription",
           :conditions => proc { "locale = '#{I18n.locale}'" }
 
-
   has_many :course_instances
 
 
@@ -28,13 +27,13 @@ class Period < ActiveRecord::Base
 
 
   def symbol
-    name = PeriodDescription.where(:period_id => self.id, :locale => 'en').first
-    if name.nil?
-      return ''
-    else
-      symbol = name.name.split(' ')[1]
-      return symbol == 'summer' ? 'S' : symbol
-    end
+    localized_description.nil? ? "" : localized_description.symbol
+  end
+
+
+  # Finds the first period in the db
+  def find_first
+    Period.order("begins_at ASC").first
   end
 
 
@@ -46,12 +45,7 @@ class Period < ActiveRecord::Base
 
   # Finds the following period(s)
   def find_following(limit=1)
-    limit == 0 ? self : Period.where(["begins_at >= ?", self.ends_at]).order("begins_at").limit(limit)
-  end
-
-
-  def to_roman_numeral
-    num_to_roman(self.number + 1)
+    limit == 0 ? self : Period.where(["begins_at >= ?", self.ends_at]).order("begins_at ASC").limit(limit)
   end
 
 
@@ -70,30 +64,6 @@ class Period < ActiveRecord::Base
   # Returns a period range
   def self.range(first, last)
     Period.where(["begins_at >= ? AND ends_at <= ?", first.begins_at, last.ends_at]).order("begins_at")
-  end
-
-
-  private
-
-  # Decimal to Roman numeral converter
-  def num_to_roman(num)
-    @@Romans =
-      [
-        ["X",   10],
-        ["IX",   9],
-        ["V",    5],
-        ["IV",   4],
-        ["I",    1]
-      ]
-
-    left = num
-    romanized = []
-    for roman, arabic in @@Romans
-      times, left = left.divmod(arabic)
-      romanized << roman * times
-    end
-
-    romanized.join("")
   end
 
 end

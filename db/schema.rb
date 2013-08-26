@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130717132709) do
+ActiveRecord::Schema.define(:version => 20130816163842) do
 
   create_table "abstract_courses", :force => true do |t|
     t.string "code"
@@ -144,17 +144,44 @@ ActiveRecord::Schema.define(:version => 20130717132709) do
     t.integer "period_id", :null => false
     t.string  "locale"
     t.string  "name",      :null => false
+    t.string  "symbol",    :null => false
   end
 
   add_index "period_descriptions", ["period_id", "locale"], :name => "index_period_descriptions_on_period_id_and_locale", :unique => true
 
   create_table "periods", :force => true do |t|
     t.integer "number",    :null => false
-    t.date    "begins_at"
-    t.date    "ends_at"
+    t.date    "begins_at", :null => false
+    t.date    "ends_at",   :null => false
   end
 
   add_index "periods", ["begins_at"], :name => "index_periods_on_begins_at"
+
+  create_table "plan_competences", :force => true do |t|
+    t.integer "study_plan_id",                              :null => false
+    t.integer "competence_id",                              :null => false
+    t.integer "included_scoped_course_ids", :default => [], :null => false, :array => true
+  end
+
+  add_index "plan_competences", ["study_plan_id", "competence_id"], :name => "index_study_plan_competences_on_study_plan_id_and_competence_id", :unique => true
+  add_index "plan_competences", ["study_plan_id"], :name => "index_study_plan_competences_on_study_plan_id"
+
+  create_table "plan_courses", :force => true do |t|
+    t.integer "study_plan_id",                           :null => false
+    t.integer "scoped_course_id",                        :null => false
+    t.integer "competence_ref_count", :default => 1,     :null => false
+    t.integer "course_instance_id"
+    t.boolean "manually_added",       :default => false, :null => false
+    t.integer "period_id"
+    t.float   "credits",                                 :null => false
+    t.integer "length"
+    t.boolean "custom",               :default => false, :null => false
+    t.integer "abstract_course_id",                      :null => false
+    t.integer "grade",                :default => 0,     :null => false
+  end
+
+  add_index "plan_courses", ["study_plan_id", "scoped_course_id"], :name => "index_study_plan_courses_on_study_plan_id_and_scoped_course_id", :unique => true
+  add_index "plan_courses", ["study_plan_id"], :name => "index_study_plan_courses_on_study_plan_id"
 
   create_table "roles", :force => true do |t|
     t.integer "user_id",   :null => false
@@ -211,31 +238,6 @@ ActiveRecord::Schema.define(:version => 20130717132709) do
 
   add_index "skills", ["competence_node_id"], :name => "index_skills_on_competence_node_id"
 
-  create_table "study_plan_competences", :force => true do |t|
-    t.integer "study_plan_id",                              :null => false
-    t.integer "competence_id",                              :null => false
-    t.integer "included_scoped_course_ids", :default => [], :null => false, :array => true
-  end
-
-  add_index "study_plan_competences", ["study_plan_id", "competence_id"], :name => "index_study_plan_competences_on_study_plan_id_and_competence_id", :unique => true
-  add_index "study_plan_competences", ["study_plan_id"], :name => "index_study_plan_competences_on_study_plan_id"
-
-  create_table "study_plan_courses", :force => true do |t|
-    t.integer "study_plan_id",                           :null => false
-    t.integer "scoped_course_id",                        :null => false
-    t.integer "competence_ref_count", :default => 1,     :null => false
-    t.integer "course_instance_id"
-    t.boolean "manually_added",       :default => false
-    t.integer "period_id"
-    t.float   "credits"
-    t.integer "length"
-    t.boolean "custom",               :default => false
-    t.integer "abstract_course_id"
-  end
-
-  add_index "study_plan_courses", ["study_plan_id", "scoped_course_id"], :name => "index_study_plan_courses_on_study_plan_id_and_scoped_course_id", :unique => true
-  add_index "study_plan_courses", ["study_plan_id"], :name => "index_study_plan_courses_on_study_plan_id"
-
   create_table "study_plans", :force => true do |t|
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
@@ -277,16 +279,6 @@ ActiveRecord::Schema.define(:version => 20130717132709) do
   end
 
   add_index "temp_courses", ["curriculum_id"], :name => "index_temp_courses_on_curriculum_id"
-
-  create_table "user_courses", :force => true do |t|
-    t.integer "user_id",            :null => false
-    t.integer "abstract_course_id", :null => false
-    t.integer "course_instance_id"
-    t.integer "grade"
-    t.float   "credits"
-  end
-
-  add_index "user_courses", ["user_id"], :name => "index_user_courses_on_user_id"
 
   create_table "users", :force => true do |t|
     t.string   "login"

@@ -11,6 +11,7 @@
 // GO AFTER THE REQUIRES BELOW.
 //
 //= require core/console_shim
+//= require lodash
 //= require jquery
 //= require jquery_ujs
 //= require jquery-ui
@@ -27,5 +28,7 @@
 //  require twitter/bootstrap/scrollspy
 //  require twitter/bootstrap/transition
 //= require twitter/bootstrap/typeahead
+//= require core/usefuljs
+//= require core/usefulcs
 //= require core/jquery-extensions
 //= require core/dbg

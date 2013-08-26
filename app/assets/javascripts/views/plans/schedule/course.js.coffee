@@ -13,7 +13,7 @@ class @Course
     @isMisscheduled      = ko.observable(false)
 
     @length              = ko.observable().extend({integer: {min: 1, max:  4}})  # Length in periods
-    @credits             = ko.observable().extend({integer: {min: 0, max: 30}})
+    @credits             = ko.observable().extend({integer: {min: 0, max: 99}})
     @grade               = ko.observable().extend({integer: {min: 0, max:  5}})
 
     @tooltip             = ko.observable('')
@@ -28,6 +28,7 @@ class @Course
     @prereqs             = {}                # Prerequisite courses. scopedId => Course
     @prereqTo            = {}                # Courses for which this course is a prereq. scopedId => Course object
     @prereqPaths         = []                # Raphael paths to prerequirement courses
+    @allPrereqsInPlan    = false             #
     @period              = undefined         # Scheduled period
     @slot                = undefined         # Slot number that this course occupies
     @unschedulable       = false             # true if period allocation algorithm cannot find suitable period
@@ -106,37 +107,21 @@ class @Course
       # NB: Also calls updateTooltip, so no need to call it here
       @updateMisscheduledFlag()
 
-  createFromJson: (data, passedData) ->
+  createFromJson: (data) ->
     # Load courses
     for dat in data
       course = new Course(dat)
 
     # Load course prerequirements
     for course in @ALL
+      course.allPrereqsInPlan = true
       for prereqId in course.prereqIds
         prereq = @BYSCOPEDID[prereqId]
         unless prereq
           dbg.lg("Unknown prereqId #{prereqId}!")
+          course.allPrereqsInPlan = false
           continue
         course.addPrereq(prereq)
-
-    # Load passed courses
-    for dat in passedData
-      course = @BYABSTRACTID[dat['abstract_course_id']]
-      unless course
-        dbg.lg("Unknown course #{dat['abstract_course_id']}!")
-        continue
-      # Save the period
-      periodId = dat['period_id']
-      if not periodId?
-        dbg.lg("Course \"#{course.name}\" was probably passed on a custom instance since no periodId was given.")
-      else
-        course.period = Period::BYID[periodId]
-        unless course.period
-          dbg.lg("Unknown periodId #{periodId}")
-      # Save other data
-      course.credits(dat['credits'])
-      course.grade(dat['grade'])
 
 
   # Updates the tooltip
@@ -169,14 +154,18 @@ class @Course
   # Check the period & grade related flag "isMisscheduled"
   updateMisscheduledFlag: ->
     endPeriod = @getEndPeriod()
-    @isMisscheduled(not endPeriod? or ((endPeriod.isOld and not @grade() > 0) or ((not endPeriod.isOld) and @grade() > 0)))
+    @isMisscheduled(
+      not endPeriod? or
+      (endPeriod.isOld and not @grade() > 0) or
+      ((not (@period.isOld or @period.isNow)) and @grade() > 0)
+    )
     @updateTooltip()
 
 
   # Update the grade display
   updateGradeDisplay: ->
     return unless @period?
-    if @period.isOld
+    if @period.isOld or @period.isNow
       $('.well #grade').show()
       #$('.well #grade').slideDown(500)
     else
@@ -197,6 +186,7 @@ class @Course
     @prereqIds           = data['scoped_course']['prereq_ids'] || []
     @credits(data['credits'] || @scopedCredits || 0)
     @length(data['length'] || 0)
+    @grade(data['grade'] || 0)
 
     periodId = data['period_id']
     if periodId?
@@ -256,23 +246,18 @@ class @Course
 
 
   # Serializes the model for sending it back to the database
-  toJson: ->
+  asHash: ->
     credits = @credits()
     length = @length()
     grade = @grade()
 
-    json = { scoped_course_id: @scopedId }
-    json['credits'] = credits if credits > 0
-    json['period_id'] = @period.id if @period?
-    json['length'] = length if length > 0
-    json['grade'] = grade if grade > 0
+    hash = { scoped_course_id: @scopedId }
+    hash['credits'] = credits if credits > 0
+    hash['period_id'] = @period.id if @period?
+    hash['length'] = length if length > 0
+    hash['grade'] = grade if grade >= 0
 
-    # In case a course's grade has been removed we flag the user course for
-    # destuction in the database
-    if @oGrade > 0 and not (grade > 0)
-      json['grade'] = -1
-
-    return json
+    return hash
 
 
   # The selected status change handler
@@ -392,7 +377,7 @@ class @Course
         prd = prd.nextPeriod
 
     # Autoreset grades for courses scheduled into the future
-    if @period? and not @period.isOld
+    if @period? and not (@period.isOld or @period.isNow)
       @grade(0)
 
     # Update the grade display

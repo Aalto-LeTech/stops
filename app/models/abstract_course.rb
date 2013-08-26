@@ -10,7 +10,7 @@ class AbstractCourse < ActiveRecord::Base
   #  <- localized_description = course_descriptions (name, locale, ...)
   #  <- scoped_courses
   #  <- course_instances
-  #  <- study_plan_courses
+  #  <- plan_courses
   #  <- periods <- course_instances
 
 
@@ -22,7 +22,7 @@ class AbstractCourse < ActiveRecord::Base
   # Courses
   has_many :scoped_courses, :dependent => :destroy      # Courses in curriculums. e.g. "Course X-0.1010 according to the 2005 study guide"
   has_many :course_instances, :dependent => :destroy    # Course implementations, e.g. "Course X-0.1010 (spring 2011)"
-  has_many :study_plan_courses, :dependent => :destroy  # Courses planned by students in their personal study plans
+  has_many :plan_courses, :dependent => :destroy        # Courses planned by students in their personal study plans
 
   # Periods
   has_many  :periods,
@@ -63,25 +63,6 @@ class AbstractCourse < ActiveRecord::Base
         scoped_course.abstract_course_id = abstract_course.id
         scoped_course.save
       end
-    end
-
-  end
-
-  def self.create_random_instances
-    periods = Period.order(:begins_at).all
-
-    AbstractCourse.find_each do |abstract_course|
-      period_number = rand(4)
-      period_number += 1 if period_number >= 2  # Don't put courses on summer
-      length = rand(2) + 1
-      length = 1 if period_number == 1 || period_number == 4  # Length of the last periods can only be 1
-
-      periods.each do |period|
-        if period.number == period_number
-          CourseInstance.create(:abstract_course_id => abstract_course.id, :period_id => period.id, :length => length)
-        end
-      end
-
     end
 
   end

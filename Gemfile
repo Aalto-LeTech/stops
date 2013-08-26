@@ -22,13 +22,15 @@ gem 'thinking-sphinx', '3.0.0'
 # NB. for the engine to work you need to do
 #   be rake ts:index
 #   be rake ts:start
+# I encountered encoding problems which were fixed by:
+#   ref: https://github.com/pat/thinking-sphinx/issues/430
 
 # Use unicorn as the web server
 # gem 'unicorn'
 #gem 'mongrel', '>= 1.2.0.pre2'
 
 group :assets do
-  #gem 'sass-rails',   '~> 3.2.3'
+  gem 'lodash-rails'
   gem 'coffee-rails', '~> 3.2.1'
   gem 'uglifier', '>= 1.0.3'
 
@@ -36,8 +38,6 @@ group :assets do
   gem 'therubyracer'             # See https://github.com/sstephenson/execjs#readme
   gem 'jquery-rails', '~> 2.1'
   gem 'jquery-ui-rails', '~> 3.0'
-  #gem 'less-rails'
-  #gem 'less-rails-bootstrap'
   gem 'less-rails-bootstrap', git: 'git://github.com/metaskills/less-rails-bootstrap.git'
 
   gem 'eco'
@@ -73,6 +73,9 @@ gem 'daemons'
 
 # For model object serialization
 gem 'active_model_serializers'
+
+## For simple form
+#gem 'simple_form'
 
 
 # development

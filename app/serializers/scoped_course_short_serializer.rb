@@ -1,11 +1,15 @@
 class ScopedCourseShortSerializer < ActiveModel::Serializer
+
+  embed :ids, include: true
+
   attributes :id,
-             :course_code,
              :credits,
-             :localized_name,
              :studyplan_path
+
+  has_one    :abstract_course
 
   def studyplan_path
     studyplan_course_path(object.id)
   end
+
 end

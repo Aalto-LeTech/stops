@@ -21,6 +21,15 @@ var affxd = (function()
   var me = {};
 
   ////////////////////////////////////////////////////////////////////////////////
+  // The Log Function
+
+  function lg( msg )
+  {
+    console.log("affxd: " + msg);
+  }
+
+
+  ////////////////////////////////////////////////////////////////////////////////
   // The Constructor
 
   function AffixedSidebar( targetElement, mainElement, options )
@@ -28,8 +37,8 @@ var affxd = (function()
     // Core variables
     this.targetElement   = $(targetElement);
     this.mainElement     = $(mainElement);
-    this.hidden          = false;
-    this.static          = false;
+    this.isHidden        = false;
+    this.isStatic        = false;
     this.status          = undefined;
 
     // Option related variables
@@ -64,24 +73,64 @@ var affxd = (function()
 
 
   ////////////////////////////////////////////////////////////////////////////////
+  // The Attribute Reset Function
+
+  AffixedSidebar.prototype.reset = function (attrName, attrValue)
+  {
+    if (this.hasOwnProperty(attrName))
+    {
+      var hadIdenticalValue = false;
+      if (attrName == 'staticHeight')
+      {
+        if (this.staticHeight != attrValue)
+        {
+          this.staticHeight = attrValue;
+          this.isStatic = false;
+          this.update();
+        }
+        else hadIdenticalValue = true;
+      }
+      else
+      {
+        lg("Refusing to reset the '" + attrName + "' attribute!");
+        return;
+      }
+      if (hadIdenticalValue)
+      {
+        lg("The attribute '" + attrName + "' already had the given value (" + attrValue + ")!");
+      }
+      else
+      {
+        lg("The attribute '" + attrName + "' was reset to |" + attrValue + "|.");
+      }
+    }
+    else
+    {
+      lg("No such attribute: " + attrName + "!");
+      return;
+    }
+  }
+
+
+  ////////////////////////////////////////////////////////////////////////////////
   // The Update Function
 
   AffixedSidebar.prototype.update = function ()
   {
-    //console.log('AffixedSidebar::update()!');
+    //lg('AffixedSidebar::update()...');
     if ($(window).width() <= this.toStaticWidth)
     {
-      if (this.static == false)
+      if (this.isStatic == false)
       {
-        //console.log('AffixedSidebar::update(): -> static (height -> ' + this.staticHeight + ')');
+        //lg('AffixedSidebar::update(): -> isStatic (height -> ' + this.staticHeight + ')');
         this.targetElement.height(this.staticHeight);
         this.status = 'static';
-        this.static = true;
+        this.isStatic = true;
       }
       return;
-    } else if (this.static)
+    } else if (this.isStatic)
     {
-      this.static = false;
+      this.isStatic = false;
     }
 
     var winHeight = $(window).height();
@@ -92,8 +141,8 @@ var affxd = (function()
     var lowerLimit = (this.unlimitedByMain) ? 99999 : mainElementTop + this.mainElement.height();
     var newTop, newHeight;
 
-    //console.log("upper: " + upperLimit + ".");
-    //console.log("lower: " + lowerLimit + ".");
+    //lg("upper: " + upperLimit + ".");
+    //lg("lower: " + lowerLimit + ".");
 
     if (winScrollTop < upperLimit)
     {
@@ -116,10 +165,10 @@ var affxd = (function()
 
     if (newHeight > this.minShowHeight)
     {
-      if (this.hidden)
+      if (this.isHidden)
       {
         this.targetElement.show();
-        this.hidden = false;
+        this.isHidden = false;
       }
       this.targetElement.css( { top: newTop } );
       this.targetElement.height( newHeight );
@@ -127,7 +176,7 @@ var affxd = (function()
     else
     {
       this.status = 'hidden';
-      this.hidden = true;
+      this.isHidden = true;
       this.targetElement.hide();
     }
   }

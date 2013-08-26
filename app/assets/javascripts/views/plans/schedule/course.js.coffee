@@ -13,7 +13,7 @@ class @Course
     @isMisscheduled      = ko.observable(false)
 
     @length              = ko.observable().extend({integer: {min: 1, max:  4}})  # Length in periods
-    @credits             = ko.observable().extend({integer: {min: 0, max: 30}})
+    @credits             = ko.observable().extend({integer: {min: 0, max: 99}})
     @grade               = ko.observable().extend({integer: {min: 0, max:  5}})
 
     @tooltip             = ko.observable('')
@@ -106,7 +106,7 @@ class @Course
       # NB: Also calls updateTooltip, so no need to call it here
       @updateMisscheduledFlag()
 
-  createFromJson: (data, passedData) ->
+  createFromJson: (data) ->
     # Load courses
     for dat in data
       course = new Course(dat)
@@ -119,24 +119,6 @@ class @Course
           dbg.lg("Unknown prereqId #{prereqId}!")
           continue
         course.addPrereq(prereq)
-
-    # Load passed courses
-    for dat in passedData
-      course = @BYABSTRACTID[dat['abstract_course_id']]
-      unless course
-        dbg.lg("Unknown course #{dat['abstract_course_id']}!")
-        continue
-      # Save the period
-      periodId = dat['period_id']
-      if not periodId?
-        dbg.lg("Course \"#{course.name}\" was probably passed on a custom instance since no periodId was given.")
-      else
-        course.period = Period::BYID[periodId]
-        unless course.period
-          dbg.lg("Unknown periodId #{periodId}")
-      # Save other data
-      course.credits(dat['credits'])
-      course.grade(dat['grade'])
 
 
   # Updates the tooltip
@@ -197,6 +179,7 @@ class @Course
     @prereqIds           = data['scoped_course']['prereq_ids'] || []
     @credits(data['credits'] || @scopedCredits || 0)
     @length(data['length'] || 0)
+    @grade(data['grade'] || 0)
 
     periodId = data['period_id']
     if periodId?
@@ -265,12 +248,7 @@ class @Course
     hash['credits'] = credits if credits > 0
     hash['period_id'] = @period.id if @period?
     hash['length'] = length if length > 0
-    hash['grade'] = grade if grade > 0
-
-    # In case a course's grade has been removed we flag the user course for
-    # destuction in the database
-    if @oGrade > 0 and not (grade > 0)
-      hash['grade'] = -1
+    hash['grade'] = grade if grade >= 0
 
     return hash
 

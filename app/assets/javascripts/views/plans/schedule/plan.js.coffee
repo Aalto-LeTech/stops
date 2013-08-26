@@ -47,8 +47,7 @@ class @PlanView
 
   loadPlan: () ->
     $.ajax
-      url: @planUrl,
-      data: { bundle: 'schedule' }
+      url: @planUrl + '/old_schedule',
       dataType: 'json',
       success: (data) => this.loadJson(data)
 
@@ -67,7 +66,7 @@ class @PlanView
     dbg.lg("Loaded #{Period::ALL.length} periods.")
 
     # Load courses
-    Course::createFromJson(data['plan_courses'], data['user_courses'])
+    Course::createFromJson(data['plan_courses'])
     dbg.lg("Loaded #{Course::ALL.length} courses.")
 
     # Load competences
@@ -141,8 +140,7 @@ class @PlanView
     # The 'update' method is also called so that it can realize that the size of
     # the div it is to 'side' has changed as periods have been injected into it.
     affixedSidebar = affxd.Sidebar::get()
-    affixedSidebar.staticHeight = 600
-    affixedSidebar.update()
+    affixedSidebar.reset('staticHeight', 600)
 
     # Log time used from start to bind and here
     endTime = new Date().getTime();

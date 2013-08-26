@@ -14,8 +14,10 @@
 #= require models/db/course_instance
 #= require models/db/study_plan
 #= require models/core/ModelObject
+#= require models/core/ViewObject
 #= require models/plan/course_model
 #= require models/plan/study_plan_model
+#= require models/plan/course_creation_model
 
 
 if not O4.view.i18n
@@ -24,28 +26,30 @@ if not O4.view.i18n
 
 
 
-class @View extends BaseObject
+class @View extends ViewObject
 
 
-  I18N: undefined
   PLAN: undefined
   ENGINE: undefined
+  DRAFT: undefined
   HOVERDELAY: 300
   FADEDURATION: 300
   READY: false
 
 
   constructor: ->
+    super
     @lgI("view::init()...")
 
-    @I18N = O4.view.i18n
-    DbObject::VIEWMODEL = this
-    DbObject::I18N = @I18N
-    ModelObject::VIEWMODEL = this
-    ModelObject::I18N = @I18N
+    $('form').addClass('form-horizontal')
+
+    BaseObject::I18N = O4.view.i18n
+    BaseObject::VIEWMODEL = this
 
     @lgI("Parsing associations...")
+    #BaseObject::DBG = true
     DbObject::parseAllAssocs()
+    #BaseObject::DBG = false
 
     pathsContainer    = $('#paths')
     searchCoursesPath = pathsContainer.data('search-courses-path')
@@ -56,8 +60,9 @@ class @View extends BaseObject
     @sidebar        = affxd.Sidebar::get()
     @view           = ko.observable()
 
-    @ENGINE = new O4.search.Engine(@, searchCoursesPath)
     @PLAN = new StudyPlanModel(studyPlanPath)
+    @ENGINE = new O4.search.Engine(@, searchCoursesPath)
+    @DRAFT = new CourseCreationModel()
 
     success = @PLAN.reload()
     if not success
@@ -92,10 +97,10 @@ class @View extends BaseObject
     # Reconfigure the affixed sidebars height in static mode to a static value
     # instead of the default 'auto', which would cause irritable bouncing of the
     # plan div below it as the size of the former div changes.
-    @sidebar.staticHeight = 600
-    @sidebar.update()
+    @sidebar.reset('staticHeight', 600)
 
-    @changeViewToPlan()
+    #@changeViewToPlan()
+    @changeViewToCreate()
 
     #@DBG = true
     #BaseObject::DBG = true
@@ -123,7 +128,7 @@ class @View extends BaseObject
 
     @lg("Binding associations...")
     for dbObject in dbObjects
-      dbObject.bindOwnAssocs()
+      dbObject.bindAssocs()
 
     @lgI("Modeling dbObjects...")
     for dbObject in dbObjects

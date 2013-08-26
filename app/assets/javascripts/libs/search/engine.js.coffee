@@ -25,6 +25,7 @@ if not O4.search.i18n
         @maxMatches  = ko.observable(20)
         @results     = ko.observableArray()
         @viewModel   = viewModel
+        @isOk        = ko.observable(true)
 
 
         @inquery.subscribe (newValue) =>
@@ -72,6 +73,8 @@ if not O4.search.i18n
         onQueryError(data) unless data.status == 'ok'
         return if data.inqueryID != @inqueryID
 
+        @isOk(true)
+
         # Have the viewModel handle building the final results array
         @results( @viewModel.parseResults(data.data) )
 
@@ -86,8 +89,12 @@ if not O4.search.i18n
 
 
       onQueryError: (data) ->
-        dbg.lg("FIXME!")
-        #dbg.lg("FIXME: #{JSON.stringify(data)}!")
+        dbg.lg("Search failed!")
+        if newValue.length > 0
+          @results().length = 0
+          @results.valueHasMutated()
+        @isOk(false)
+        return
 
 
 

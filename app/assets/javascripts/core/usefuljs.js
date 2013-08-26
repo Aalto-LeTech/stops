@@ -13,7 +13,7 @@
 
 
 ////////////////////////////////////////////////////////////////////////////////
-// Array.removeIf
+// Array.removeIf()
 //
 // Removes an element from the array if found.
 //
@@ -40,9 +40,40 @@ if (typeof(Array.prototype.removeIf) === "undefined")
 
 
 ////////////////////////////////////////////////////////////////////////////////
-// String.trim
+// String.lastChar()
 //
-// Add a trimming function to the String class
+// Returns the last character of the string or undefined.
+//
+
+if (typeof(String.prototype.lastChar) === "undefined")
+{
+  String.prototype.lastChar = function()
+  {
+    var str = String(this);
+    return str.length > 0 ? str.charAt(str.length - 1) : undefined;
+  };
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+// String.contains(needle)
+//
+// Returns true if this contains the 'needle'.
+//
+
+if (typeof(String.prototype.contains) === "undefined")
+{
+  String.prototype.contains = function(needle)
+  {
+    return String(this).indexOf(needle) != -1;
+  };
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+// String.trim()
+//
+// Add a trimming function to the String class.
 //
 // Removes leading and trailing whitespace.
 //
@@ -59,9 +90,9 @@ if (typeof(String.prototype.trim) === "undefined")
 
 
 ////////////////////////////////////////////////////////////////////////////////
-// String.toASCIIAlnum
+// String.toASCIIAlnum()
 //
-// Removes non ASCII alphanumeric characters
+// Removes non ASCII alphanumeric characters.
 //
 //   " _ foo1 bar ? "  ->  "foo1bar"
 //
@@ -76,7 +107,7 @@ if (typeof(String.prototype.toASCIIAlnum) === "undefined")
 
 
 ////////////////////////////////////////////////////////////////////////////////
-// String.toTitleCase
+// String.toTitleCase()
 //
 // Converts a string to "title case" (= MyTitle).
 //
@@ -99,7 +130,7 @@ if (typeof(String.prototype.toTitleCase) === "undefined")
 
 
 ////////////////////////////////////////////////////////////////////////////////
-// String.toJSClassNameCase
+// String.toJSClassNameCase()
 //
 // Converts a string to "class name case".
 //
@@ -126,7 +157,7 @@ if (typeof(String.prototype.toJSClassNameCase) === "undefined")
 
 
 ////////////////////////////////////////////////////////////////////////////////
-// String.toJSVarNameCase
+// String.toJSVarNameCase()
 //
 // Converts a string to "js var case".
 //
@@ -145,7 +176,7 @@ if (typeof(String.prototype.toJSVarNameCase) === "undefined")
 
 
 ////////////////////////////////////////////////////////////////////////////////
-// String.toUnderscoreNameCase
+// String.toUnderscoreNameCase()
 //
 // Converts a string to "underscore name case".
 //

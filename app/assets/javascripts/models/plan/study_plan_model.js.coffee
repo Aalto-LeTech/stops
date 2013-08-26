@@ -20,8 +20,8 @@ class @StudyPlanModel extends ModelObject
 
   # Create (load) method
   reload: ->
-    @lgI("Loading the plan data from the database...")
-    # Load and instantiate the plan
+    @lgI("Loading the plan and its related data from the database...")
+    # Load and instantiate the plan and all related objects
     DbObject::createFromDataPath(@dataPath, @loadErrorHandler)
 
     if StudyPlan::ALL.length == 0
@@ -37,16 +37,17 @@ class @StudyPlanModel extends ModelObject
     @studyplan = StudyPlan::ALL[0]
 
     if not @studyplan
-      dbg.lgW("Trying to create a StudyPlanModel with no StudyPlan!")
+      dbg.lgE("Trying to create a StudyPlanModel with no StudyPlan!")
       return false
 
     @lg("Binding associations...")
     DbObject::bindAllAssocs()
 
+    @lg("Modeling plan courses...")
     for planCourse in @studyplan.planCourses
       courseModel = CourseModel::create(planCourse)
       @included.push(courseModel)
-      @originalsHash[courseModel.id] = courseModel
+      @originalsHash[courseModel.boId] = courseModel
 
     if @included().length == 0
       dbg.lgW("The a StudyPlan has no courses!")
@@ -73,7 +74,7 @@ class @StudyPlanModel extends ModelObject
     @included.push(course)
     @removed().removeIf(course)
     @removed.valueHasMutated()
-    @added.push(course) if not @originalsHash[course.id]
+    @added.push(course) if not @originalsHash[course.boId]
 
 
   # Removes a course from the plan model and tracks changes
@@ -81,7 +82,7 @@ class @StudyPlanModel extends ModelObject
     @lg("plan::remove()...")
     @included().removeIf(course)
     @included.valueHasMutated()
-    @removed.push(course) if @originalsHash[course.id]
+    @removed.push(course) if @originalsHash[course.boId]
     @added().removeIf(course)
     @added.valueHasMutated()
 
@@ -145,8 +146,8 @@ class @StudyPlanModel extends ModelObject
                   dbg.lgE("Creating the dbPlanCourse failed (hash: #{JSON.stringify(planCourseHash, undefined, 2)})!")
                 else
                   dbg.lgE("DbPlanCourse created (hash: #{JSON.stringify(planCourseHash, undefined, 2)})!")
-                  dbPlanCourse.bindOwnAssocs()
-                  @originalsHash[course.id] = CourseModel::create(dbPlanCourse)
+                  dbPlanCourse.bindAssocs()
+                  @originalsHash[course.boId] = CourseModel::create(dbPlanCourse)
               else
                 dbg.lg("ERROR: The server refused to add course \"#{course.name()}\"!")
             for planCourseId in @planCourseIdsToRemove
@@ -155,7 +156,7 @@ class @StudyPlanModel extends ModelObject
                 dbg.lg("Course \"#{course.name()}\" was successfully removed.")
                 @removed().removeIf(course)
                 @removed.valueHasMutated()
-                delete @originalsHash[course.id]
+                delete @originalsHash[course.boId]
               else
                 dbg.lg("ERROR: The server refused to remove course \"#{course.name()}\"!")
           else

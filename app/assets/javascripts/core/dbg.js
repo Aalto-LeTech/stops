@@ -148,6 +148,18 @@ var dbg = (function()
 
 
   ////////////////////////////////////////////////////////////////////////////////
+  // lgI  - info
+  //
+
+  function lgI(message)
+  {
+    baselog('INF', message)
+  }
+
+  me.lgI = lgI;
+
+
+  ////////////////////////////////////////////////////////////////////////////////
   // lgW  - warning
   //
 
@@ -156,7 +168,7 @@ var dbg = (function()
     baselog('WRN', message)
   }
 
-  me.lgW = lg;
+  me.lgW = lgW;
 
 
   ////////////////////////////////////////////////////////////////////////////////
@@ -168,7 +180,19 @@ var dbg = (function()
     baselog('ERR', message)
   }
 
-  me.lgE = lg;
+  me.lgE = lgE;
+
+
+  ////////////////////////////////////////////////////////////////////////////////
+  // out  - JSON output objects
+  //
+
+  function out(object)
+  {
+    baselog('OUT', JSON.stringify(object))
+  }
+
+  me.out = out;
 
 
 

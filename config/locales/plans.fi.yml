@@ -35,6 +35,7 @@ fi:
         changes_view: "Muutokset"
         search_view: "Haku"
         create_view: "Kurssin luonti"
+        engine_not_working: "Hakukone ei jostain syystä ole tällä hetkellä toiminnassa!"
         save: "Tallenna"
         no_courses_in_plan: "Suunnitelmassasi ei ole vielä lainkaan kursseja."
         no_courses_added_nor_removed: "Suunnitelmaan ei ole viimeisen tallennuksen jälkeen lisätty eikä siitä ole poistettu kursseja."
@@ -45,6 +46,10 @@ fi:
         prereqs: "Esitietokurssit"
         add_symbol: "+"
         remove_symbol: "-"
+        code: "Koodi"
+        name: "Nimi"
+        credits: "Laajuus"
+        create_course: "Luo kurssi"
       index_i18n_strings:
         plan_load_error_instructions: "Suunnitelmasi lataus epäonnistui. Syytä tullaan selvittämään."
         plan: "Suunnitelma"

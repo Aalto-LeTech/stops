@@ -1,7 +1,10 @@
+class @DbObjectAssoc
+
 class @DbObject extends BaseObject
 
 
   CLASSES: []
+  CLASSESBYNAME: {}
   CLASSMATCHER: {}
 
   ALL: []
@@ -19,16 +22,30 @@ class @DbObject extends BaseObject
   # Also initializes the 'ALL' and 'BYID' vars.
   addSubClass: (subClass, matchers) ->
     @lg("addSubClass(#{subClass::constructor.name})...")
+    subClass::ISSUBCLASS = true
     subClass::ALL = []
     subClass::BYID = {}
-    subClass::HASONE = []
-    subClass::HASMANY = []
-    subClass::CLASSNAME = subClass::constructor.name                   # MyObj
-    subClass::CLASSNAMEP = subClass::CLASSNAME + 's'                   # MyObjs
-    subClass::CLASSNAMEVC = subClass::CLASSNAME.toJSVarNameCase()      # myObj
-    subClass::CLASSNAMEVCP = subClass::CLASSNAMEVC + 's'               # myObjs
-    subClass::CLASSNAMEUC = subClass::CLASSNAME.toUnderscoreNameCase() # my_obj
-    subClass::CLASSNAMEUCP = subClass::CLASSNAMEUC + 's'               # my_objs
+    subClass::ASSOCS = []
+    # MyObj
+    subClass::CLASSNAME = subClass::constructor.name if not subClass::CLASSNAME
+    # MyObjs
+    subClass::CLASSNAMEP = subClass::CLASSNAME + 's' if not subClass::CLASSNAMEP
+    # myObj
+    subClass::CLASSNAMEVC = subClass::CLASSNAME.toJSVarNameCase()
+    # myObjs
+    subClass::CLASSNAMEVCP = subClass::CLASSNAMEP.toJSVarNameCase()
+    # my_obj
+    subClass::CLASSNAMEUC = subClass::CLASSNAME.toUnderscoreNameCase()
+    # my_objs
+    subClass::CLASSNAMEUCP = subClass::CLASSNAMEP.toUnderscoreNameCase()
+
+    subClass::ASSOCVNMATCHERS = [
+      subClass::CLASSNAMEVC
+      subClass::CLASSNAMEVCP
+      subClass::CLASSNAME
+      subClass::CLASSNAMEP
+    ]
+
     if matchers != undefined
       for matcher in matchers
         @CLASSMATCHER[matcher] = subClass
@@ -38,6 +55,7 @@ class @DbObject extends BaseObject
     @CLASSMATCHER[subClass::CLASSNAMEVCP] = subClass
     @CLASSMATCHER[subClass::CLASSNAMEUC] = subClass
     @CLASSMATCHER[subClass::CLASSNAMEUCP] = subClass
+    @CLASSESBYNAME[subClass::CLASSNAME] = subClass
     @CLASSES.push(subClass)
 
 
@@ -172,12 +190,11 @@ class @DbObject extends BaseObject
 
   # Constructs a model and copies the given dict as attributes to the object
   constructor: (arg) ->
+    super
     #dbg.lg("Created #{this}.")
-    @dboId = DbObject::IDC
-    DbObject::IDC += 1
-    DbObject::BYID[@dboId] = this
+    DbObject::BYID[@boId] = this
     DbObject::ALL.push(this)
-    DbObject::TOASSOC[@dboId] = this
+    DbObject::TOASSOC[@boId] = this
     @id = undefined
     @attrPath = undefined
     @loadedAttrs = {}
@@ -190,6 +207,11 @@ class @DbObject extends BaseObject
       else
         attrHash = arg
         @loadAttrsFromHash(attrHash)
+
+
+  # The dbModel ID string
+  idS: ->
+    return "[#{@id}]"
 
 
   # Loads the models attributes from the server
@@ -212,20 +234,15 @@ class @DbObject extends BaseObject
     @lg("loadAttrsFromHash(#{JSON.stringify(attrHash)})...")
     for own attrName, attrValue of attrHash
       attrName = attrName.toJSVarNameCase()
-#      if /Ids?$/.test(attrName)
-#        if /Id$/.test(attrName)
-#          hasOneName = attrName.replace('Id', '')
-#          @lg(" + hasOne: #{hasOneName}...")
-#          @registerHasOne(hasOneName)
-#        else
-#          hasManyName = attrName.replace('Ids', '')
-#          @lg(" + hasMany: #{hasManyName}...")
-#          @registerHasMany(hasManyName)
-#      else
-#        @lg(" + attr: #{attrName}...")
       this[attrName] = attrValue
       @loadedAttrs[attrName] = attrValue
     @lg("loadedAttrs: #{JSON.stringify(@loadedAttrs)}!")
+
+
+
+
+  # Regular attrs
+  #
 
 
   # Returns a hash of the loaded attributes with their current values
@@ -260,9 +277,247 @@ class @DbObject extends BaseObject
     return false
 
 
+  # Returns the changes on attributes since they were last loaded
+  getAttrChanges: ->
+    changes = []
+    for attrName, attrValue in @loadedAttrs
+      if this[attrName] != attrValue
+        changes.push([attrName, this[attrName]])
+    return changes
+
+
   # Renders the objects attributes into a JSON string
   attrsAsJson: ->
     return JSON.stringify(@attrs())
+
+
+
+
+  # The following functions handle the parsing and registration of associations
+  #
+
+
+  # Assocs are defined in subclasses as follows:
+  #
+  #  class @Person extends DbObject
+  #    DbObject::addSubClass(Person)
+  #
+  #  class @Location extends DbObject
+  #    DbObject::addSubClass(Location)
+  #
+  #  class @Country extends DbObject
+  #    # In case the used plural form of the class name isn't trivial, specify
+  #    # it
+  #    CLASSNAMEP: "countries"
+  #    DbObject::addSubClass(Country)
+  #
+  #  Person::ASSOCS =
+  #  [
+  #    # The basic case:
+  #    # [assocVarName, assocTargetClass]
+  #    ['father', 'Person']
+  #    ['mother', 'Person']
+  #
+  #    # Here the '*' type is specified explicitely, since only names ending in
+  #    # "s" are automatically considered to be of the type:
+  #    ['children', 'Person', '*']
+  #
+  #    # As seen here
+  #    ['friends', 'Person']
+  #
+  #    # Here the name of the related class 'Country' is automagically matched:
+  #    'countryOfResidence'
+  #
+  #    # As it is here
+  #    'location'
+  #
+  #    # General syntax:
+  #    ['varName', 'ClassName', args+]
+  #
+  #    # Supported args include: '1', '*', 'NotNull'
+  #  ]
+
+
+  # Guess target class of an assocVarName
+  guessTargetClassOfAssocVarName: (assocVarName) ->
+    bestMatch = [undefined, -1]
+    for subClass in @CLASSES
+      for matcher in subClass::ASSOCVNMATCHERS
+        if assocVarName.indexOf(matcher) != -1
+          if bestMatch[1] < matcher.length
+            bestMatch = [subClass::CLASSNAME, matcher.length]
+    return bestMatch[0]
+
+
+  # Parses all assocs or the ones of the given classes
+  parseAllAssocs: (arg=undefined) ->
+    if arg == undefined
+      @lg("parseAllAssocs()...")
+      for subClass in @CLASSES
+        @parseAllAssocs(subClass)
+    else
+      subClass = arg
+      #@lg("parseAllAssocs(#{subClass::CLASSNAME})...")
+      subClass::ASSD = subClass::parseAssocs()
+
+
+  # Does the actual parsing
+  parseAssocs: ->
+    @lg("parseAssocs(#{@ASSOCS?.lenght})...")
+    assdata = []
+    if not @ASSOCS
+      @lg("No assocs defined!")
+      return assdata
+    if not dbg.type(@ASSOCS) == 'array'
+      @lgE("Assocs must be defined in an array!")
+      return assdata
+    for assocArg in @ASSOCS
+      if dbg.type(assocArg) == 'string'
+        assocArg = [assocArg]
+      if dbg.type(assocArg) == 'array'
+        # Does the actual parsing of each assocArg
+        # eg. ['mother', 'Person', 'NotNull']
+        assocNotNull   = false
+        assocType      = undefined
+        assocClassName = undefined
+        assocVarName   = assocArg[0]
+        for arg in assocArg[1..]
+          if arg == '1' or arg == '*'
+            assocType = arg
+          else if arg == 'NotNull'
+            assocNotNull = true
+          else
+            if not assocClassName and @CLASSESBYNAME[arg]
+              assocClassName = arg
+            if not assocClassName
+              @lgW("Ignoring unsupported assocArg '#{arg}'!")
+        if not assocClassName
+          assocClassName = @guessTargetClassOfAssocVarName(assocVarName)
+          if not assocClassName
+            @lgE("Could not match '#{assocVarName}' to a class! Ignoring the assoc!")
+            continue
+        if not assocType
+          # Guessing assocType from assocVarName
+          if assocVarName.lastChar() == 's' then assocType = '*' else assocType = '1'
+        # Determining assocIdVarName
+        if assocType == '1'
+          assocIdVarName = assocVarName + 'Id'
+        else
+          if assocVarName.lastChar() == 's'
+            assocIdVarName = assocVarName[0..-2] + 'Ids'
+          else
+            @lgE("Don't know how to singularize #{assocVarName}!")
+            continue
+        @lg("Adding a #{assocType} assoc '#{assocVarName}' towards '#{assocClassName}'...")
+        assocClass = @CLASSESBYNAME[assocClassName]
+        assocArgObj =
+          'assocVarName':    assocVarName
+          'assocIdVarName':  assocIdVarName
+          'assocClass':      assocClass
+          'assocType':       assocType
+          'assocNotNull':    assocNotNull
+        assdata.push(assocArgObj)
+      else
+        @lgE("Invalid assoc definition argument (#{JSON.stringify(assocArg)})!")
+        continue
+    return assdata
+
+
+  # Binds all assocs or the ones of the given classes
+  bindAllAssocs: (dboClass=undefined) ->
+    if dboClass == undefined
+      @lg("bindAllAssocs()...")
+      for subClass in @CLASSES
+        @bindAllAssocs(subClass)
+    else
+      subClass = dboClass
+      @lg("bindAllAssocs(#{subClass::CLASSNAME})...")
+      subClass::bindAssocsOn(subClass::ALL)
+
+
+  # Binds the assocs for 'this'
+  bindAssocs: ->
+    @bindAssocsOn([this])
+
+
+  # Binds all the class' assocs for the given instances
+  bindAssocsOn: (instances) ->
+    if not @ASSD?
+      @lgE("Association binding requested before parsing!")
+      return
+    instances = [instances] if dbg.type(instances) != 'array'
+    for assd in @ASSD
+      @lg("Assoccing assd #{JSON.stringify(assd)}...")
+      assocType       = assd['assocType']
+      assocVarName    = assd['assocVarName']
+      assocIdVarName  = assd['assocIdVarName']
+      assocNotNull    = assd['assocNotNull']
+      assocClass      = assd['assocClass']
+      assocClassName  = assocClass::CLASSNAME
+      for instance in instances
+        @lg("Assoccing #{instance}...")
+        if not assocVarName in instance.assocs
+          instance.assocs.push(assocVarName)
+        instance[assocVarName] = undefined
+        if assocType == '1'
+          id = instance[assocIdVarName]
+          if id == undefined
+            @lgW("No #{assocIdVarName} found on #{instance} and notNull is #{assocNotNull}!") if assocNotNull
+            continue
+          assocTarget = assocClass::BYID[id]
+          if assocTarget == undefined
+            @lgW("Bind target #{assocClassName}[#{id}] does not exist!") if assocNotNull
+            continue
+          instance[assocVarName] = assocTarget
+        else
+          idArray = instance[assocIdVarName]
+          if idArray == undefined
+            @lgW("No #{assocIdVarName} found on #{instance} and notNull is #{assocNotNull}!") if assocNotNull
+            continue
+          dboArray = []
+          for id in idArray
+            assocTarget = assocClass::BYID[id]
+            if assocTarget == undefined
+              @lgW("Bind target #{assocClassName}[#{id}] does not exist!") if assocNotNull
+              continue
+            dboArray.push(assocTarget)
+          instance[assocVarName] = dboArray
+    for instance in instances
+      if DbObject::ASSOCCED[instance.boId]
+        @lgW("Double assocced instance #{instance}!")
+      DbObject::ASSOCCED[instance.boId] = instance
+      delete DbObject::TOASSOC[instance.boId]
+
+
+  # Returns the changes on 'this'
+  getChanges: ->
+    return @getChangesOn([this])
+
+
+  # Returns the changes for the given instances of this class
+  getChangesOn: (instances=@ALL) ->
+    instances = [instances] if dbg.type(instances) != 'array'
+    for instance in instances
+      instance.changes = instance.getAttrChanges()
+    for assd in @ASSD
+      assocType       = assd['assocType']
+      assocVarName    = assd['assocVarName']
+      assocIdVarName  = assd['assocIdVarName']
+      for instance in instances
+        change = undefined
+        if assocType == '1'
+          if instance[assocIdVarName] != instance[assocVarName]?.id
+            change = [assd, instance[assocVarName]?.id]
+        else
+          oldIds = instance[assocIdVarName]
+          newIds = (assocTarget.id for assocTarget in instance[assocVarName])
+          addedIds = _.difference(newIds, oldIds)
+          removedIds = _.difference(oldIds, newIds)
+          if addedIds.length > 0 or removedIds.length > 0
+            change = [assd, addedIds, removedIds]
+        instance.changes.push(change) if change
+    changed = instances.filter (instance) -> instance.changes.length > 0
+    return changed
 
 
   # Renders the objects assocs into a JSON string
@@ -270,9 +525,15 @@ class @DbObject extends BaseObject
     return JSON.stringify(@assocs)
 
 
+
+
+  # Other methods
+  #
+
+
   # Renders the object into a string for debugging purposes
   toString: ->
-    return "DBO[#{@dboId}]::#{@constructor.name}[#{@id}]:{#{@attrsAsJson()} : #{@assocsAsJson()}}"
+    return "DBO[#{@boId}]::#{@constructor.name}[#{@id}]:{#{@attrsAsJson()} : #{@assocsAsJson()}}"
 
 
   # A useful ajax get function
@@ -291,152 +552,3 @@ class @DbObject extends BaseObject
   ajaxErrorHandler: (errorHash) ->
     if @LOAD_ERROR_HANDLER?
       @LOAD_ERROR_HANDLER(errorHash)
-
-
-
-
-  # The following functions handle the parsing and registeration of associations
-  #
-
-
-  # Parses all assocs or the ones of the given classes
-  parseAllAssocs: (arg=undefined) ->
-    if arg == undefined
-      @lg("bindAllAssocs()...")
-      for subClass in @CLASSES
-        @parseAllAssocs(subClass)
-    else
-      subClass = arg
-      @lg("bindAllAssocs(#{subClass::CLASSNAME})...")
-      subClass::ASSDO = subClass::parseAssocsSub(subClass::HASONE,  '1')
-      subClass::ASSDM = subClass::parseAssocsSub(subClass::HASMANY, '*')
-      subClass::ASSD = subClass::ASSDO.concat(subClass::ASSDM)
-
-
-  parseAssocsSub: (arg, assocType) ->
-    assdata = []
-    return assdata if arg == undefined
-    @lg("bindAssocs(#{JSON.stringify(arg)} (#{typeof arg}, #{dbg.type(arg)}, #{arg.length}), #{assocType})...")
-    if dbg.type(arg) == 'array'
-      @lg("Binding an array of #{assocType} assocs...")
-      for ag in arg
-        assdata.merge( @parseAssocsSub(ag, assocType) )
-      return assdata
-    else if typeof arg == 'string'
-      assocClassName = arg
-      assocVarName = assocClassName.toJSVarNameCase()
-      arg = {}
-      arg[assocClassName] = assocVarName
-      return @parseAssocsSub(arg, assocType)
-    else if typeof arg == 'object'
-      assocHash = arg
-      for assocClassName, arg of assocHash
-        if typeof arg == 'string'
-          assocVarName = arg
-          assocNotNull = false
-        else
-          assocNotNull = arg['notNull']
-          assocVarName = arg['varName']
-          if assocVarName == undefined
-            assocVarName = assocClassName.toJSVarNameCase()
-        @lg("Adding a #{assocType} assoc '#{assocVarName}' towards '#{assocClassName}'...")
-        assocClass = @CLASSMATCHER[assocClassName]
-        assdata.push({
-          'assocType':       assocType
-          'assocClassName':  assocClassName
-          'assocVarName':    assocVarName
-          'assocNotNull':    assocNotNull
-          'assocClass':      assocClass
-        })
-      return assdata
-    else
-      @lgW("Invalid assoc definition argument (#{JSON.stringify(arg)})!")
-      return assdata
-
-
-  # Binds all assocs or the ones of the given classes
-  bindAllAssocs: (dboClass=undefined) ->
-    if dboClass == undefined
-      @lg("bindAllAssocs()...")
-      for subClass in @CLASSES
-        @bindAllAssocs(subClass)
-    else
-      subClass = dboClass
-      @lg("bindAllAssocs(#{subClass::CLASSNAME})...")
-      subClass::bindAssocs(subClass::ALL)
-
-
-  # Binds the assocs for 'this'
-  bindOwnAssocs: ->
-    @bindAssocs([this])
-
-
-  # Binds all the class' assocs for the given instances
-  bindAssocs: (instances) ->
-    instances = [instances] if dbg.type(instances) != 'array'
-    for instance in instances
-      @lg("Assoccing #{instance}...")
-      for assd in @ASSD
-        assocType       = assd['assocType']
-        assocClassName  = assd['assocClassName']
-        assocVarName    = assd['assocVarName']
-        assocNotNull    = assd['assocNotNull']
-        assocClass      = assd['assocClass']
-        if assocType == '1'
-          assocIdVarName = assocVarName + 'Id'
-          id = instance[assocIdVarName]
-          if id == undefined
-            @lgW("No #{assocIdVarName} found on #{instance} and notNull is #{assocNotNull}!") if assocNotNull
-            continue
-          assocTarget = assocClass::BYID[id]
-          if assocTarget == undefined
-            @lgW("Bind target #{assocClassName}[#{id}] does not exist!") if assocNotNull
-            continue
-          instance[assocVarName] = assocTarget
-          instance.addAssoc(assocVarName)
-        else
-          assocsVarName = assocVarName + 's'
-          assocIdsVarName = assocVarName.toJSVarNameCase() + 'Ids'
-          if instance[assocsVarName] == undefined
-            instance[assocsVarName] = []
-          instance.addAssoc(assocsVarName)
-          idArray = instance[assocIdsVarName]
-          if idArray == undefined
-            @lgW("No #{assocIdsVarName} found on #{instance} and notNull is #{assocNotNull}!") if assocNotNull
-            continue
-          for id in idArray
-            assocTarget = assocClass::BYID[id]
-            if assocTarget == undefined
-              @lgW("Bind target #{assocClassName}[#{id}] does not exist!") if assocNotNull
-              continue
-            instance[assocsVarName].push(assocTarget)
-      if DbObject::ASSOCCED[instance.dboId]
-        @lgW("Double assocced instance #{instance}!")
-      DbObject::ASSOCCED[instance.dboId] = instance
-      delete DbObject::TOASSOC[instance.dboId]
-
-
-
-  # Adds an association
-  addAssoc: (assocVarName) ->
-    if assocVarName in @assocs
-      return
-    @assocs.push(assocVarName)
-
-
-  # To offer convenience customization possibilities
-#  addTmpAssoc: (assocVarName, assocValue) ->
-#    @assocs.push(assocVarName)
-#    this[assocVarName] = assocValue
-
-
-#  # Updates an assiociation
-#  setIdO: (obj) ->
-#    objVarName = obj.constructor::CLASSNAMEVC
-#    objIdVarName = objVarName + 'Id'
-#    if not this[objIdVarName]?
-#      @lgW("No such association (#{@} -> #{objVarName})! Ignoring request.")
-#      return false
-#    this[objVarName] = obj
-#    this[objIdVarName] = obj.id
-#    return obj

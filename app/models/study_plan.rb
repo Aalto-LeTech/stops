@@ -425,7 +425,7 @@ class StudyPlan < ActiveRecord::Base
     end
 
     if json.has_key?('plan_courses_to_update')
-      feedback['plan_courses_to_update'] = self.update_courses_from_json( json['plan_courses_to_update'] )
+      feedback['plan_courses_to_update'] = self.update_plan_courses_from_json( json['plan_courses_to_update'] )
     end
 
     if feedback.empty?

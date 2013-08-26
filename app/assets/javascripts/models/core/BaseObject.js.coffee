@@ -3,25 +3,53 @@ class @BaseObject
 
   DBG: false
   VIEWMODEL: undefined
+  I18N: undefined
+
+  IDC: 1
+
+
+  # Maps a unique ID for each object
+  constructor: ->
+    @boId = BaseObject::IDC
+    BaseObject::IDC += 1
+
+
+  # Sub classes should override this and return an at least in-class unique ID
+  # string, eg. return "[#{@myId}]"
+  idS: ->
+    return ''
+
+
+  # Renders the object into a string for debugging purposes
+  toString: ->
+    return "BO[#{@boId}]::#{@constructor.name}#{@idS()}"
+
+
+  # Prints output to the console
+  subLog: (util, msg) ->
+    if @boId
+      dbg[util]("BO[#{@boId}]::#{@constructor.name}#{@idS()}::#{msg}")
+    else
+      dbg[util]("BO::#{@constructor.name}::#{msg}")
 
 
   # Prints output to the console
   lg: (msg) ->
-    if @DBG then dbg.lg("#{@constructor.name}[#{@id}]::#{msg}")
+    if @DBG then @subLog('lg', "#{msg}")
 
 
   # Prints output to the console
   lgI: (msg) ->
-    dbg.lg("#{@constructor.name}[#{@id}]::INFO: #{msg}")
+    @subLog('lgI', "INFO: #{msg}")
 
 
   # Prints output to the console
   lgW: (msg) ->
-    dbg.lgW("#{@constructor.name}[#{@id}]::WARNING: #{msg}")
+    @subLog('lgW', "WARNING: #{msg}")
     exit()
 
 
   # Prints output to the console
   lgE: (msg) ->
-    dbg.lgE("#{@constructor.name}[#{@id}]::ERROR: #{msg}")
+    @subLog('lgE', "ERROR: #{msg}")
     exit()

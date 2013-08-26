@@ -1,14 +1,11 @@
 class @PlanCourse extends DbObject
   # Nice and simple
 
-  HASONE: []
-  HASMANY: []
-
   DbObject::addSubClass(PlanCourse)
 
-PlanCourse::HASONE.push([
-  {'AbstractCourse': {notNull: true}}
-  {'ScopedCourse': {notNull: true}}
-  'CourseInstance'
-  'Period'
+PlanCourse::ASSOCS.merge([
+  ['abstractCourse', 'NotNull']
+  ['scopedCourse', 'NotNull']
+  'courseInstance'
+  'period'
 ])

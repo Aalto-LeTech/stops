@@ -11,6 +11,7 @@
 // GO AFTER THE REQUIRES BELOW.
 //
 //= require core/console_shim
+//= require lodash
 //= require jquery
 //= require jquery_ujs
 //= require jquery-ui

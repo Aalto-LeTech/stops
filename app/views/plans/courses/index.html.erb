@@ -82,9 +82,15 @@
 
 <!-- ko if: view() == 'search' -->
   <!-- ko with: ENGINE -->
-    <div class="search-input">
-      <input class="input" type="text" data-bind="value: inquery, valueUpdate: 'keyup'" />
-    </div>
+    <form class="form-search">
+      <input class="input-xlarge search-query" type="text" data-bind="value: inquery, valueUpdate: 'keyup'" />
+    </form>
+
+    <!-- ko ifnot: isOk -->
+      <p class="text-error">
+        <%= t('.engine_not_working') %>
+      </p>
+    <!-- /ko -->
 
     <!-- ko with: infoMsg -->
       <p data-bind="text: $data"></p>
@@ -100,13 +106,14 @@
             <span class="span1 credits" data-bind="text: credits"></span>
           </a>
           <!-- ko ifnot: isIncluded() -->
-            <button class="span2 btn" data-bind="click: includeToPlan">
+            <button class="span1 btn" data-bind="click: includeToPlan">
               <%= t('.add_symbol') %>
+            </button>
+            <button class="span1 btn" disabled>
             </button>
           <!-- /ko -->
           <!-- ko if: isIncluded() -->
-            <button class="span1 btn" data-bind="click: includeToPlan">
-              <%= t('.add_symbol') %>
+            <button class="span1 btn" disabled>
             </button>
             <button class="span1 btn" data-bind="click: removeFromPlan">
               <%= t('.remove_symbol') %>
@@ -121,7 +128,48 @@
 
 
 <!-- ko if: view() == 'create' -->
-  AN ERB RENDERED SCOPED COURSE CREATION FORM
+
+  <!-- ko with: DRAFT -->
+    <form class="form-horizontal" role="form">
+
+      <div class="control-group">
+        <label for="code" class="control-label">
+          <%= t('.code') %>
+        </label>
+        <div class="controls">
+          <input id="code" type="text" data-bind="value: code, valueUpdate: 'keyup'" />
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label for="name" class="control-label">
+          <%= t('.name') %>
+        </label>
+        <div class="controls">
+          <input id="name" type="text" data-bind="value: name, valueUpdate: 'keyup'" />
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label for="credits" class="control-label">
+          <%= t('.credits') %>
+        </label>
+        <div class="controls">
+          <input id="credits" type="number" data-bind="value: credits, valueUpdate: 'keyup'" />
+        </div>
+      </div>
+
+      <div class="control-group">
+        <div class="controls">
+          <button type="submit" class="btn btn-default" action="create()">
+            <%= t('.create_course') %>
+          </button>
+        </div>
+      </div>
+
+    </form>
+  <!-- /ko -->
+
 <!-- /ko -->
 
 

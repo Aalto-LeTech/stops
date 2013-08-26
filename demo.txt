@@ -1,0 +1,26 @@
+Demo
+ - opinto-oppaan valinta
+ - kompetenssin valinta
+ - verkon selitys
+   - kurssien osaamistavoitteet
+   - esitietojärjestys
+   - esitietolinkkien tutkiminen
+ - valinnaisten kurssien lisäys
+ - aikataulutus
+   - esitietojen tutkiminen
+   - kurssien järjestyksen muuttaminen
+   - tallentaminen
+
+Koeasetelma (pelkästään opettajatuutoreille)
+- johdatus opiskeluun (?) -kurssilla opiskelijat tekevät tietokoneluokassa harjoitus-HOPSin
+- sessio tietokoneluokassa
+- A/B-testi, toisella ryhmällä vähän erilainen käyttöliittymä
+- lopussa ehkä kysely
+- testin jälkeen kaikilla täysi toiminnallisuus käytettävissä
+
+- testin jälkeen opiskelija saa käyttää O4:ää tai jotain muuta menetelmää
+- lopullinen HOPS pitää syöttää Oodiin (keväällä?)
+
+Opiskelijatuutoreille:
+ - Järjestelmä tulee phuksien käyttöön jossain vaiheessa johdatus opiskeluun -kurssia
+ - syy: koeasetelma

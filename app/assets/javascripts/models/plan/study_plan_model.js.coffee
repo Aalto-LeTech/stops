@@ -51,7 +51,6 @@ class @StudyPlanModel extends ModelObject
 
     if @included().length == 0
       dbg.lgW("The a StudyPlan has no courses!")
-      return false
 
     @lgI("Instantiated #{@included().length} course models to the plan.")
     return true

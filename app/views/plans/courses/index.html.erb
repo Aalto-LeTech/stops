@@ -85,9 +85,7 @@
 
 <!-- ko if: view() == 'search' -->
   <!-- ko with: ENGINE -->
-    <form class="form-search">
-      <input class="input-xlarge search-query" type="text" data-bind="value: inquery, valueUpdate: 'keyup'" />
-    </form>
+    <input class="input-xlarge search-query" type="text" onsubmit="function(){return false;}" data-bind="value: inquery, valueUpdate: 'keyup'" />
 
     <!-- ko ifnot: isOk -->
       <p class="text-error">

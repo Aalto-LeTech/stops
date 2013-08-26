@@ -158,7 +158,7 @@ class ApplicationController < ActionController::Base
   # For Active Model Serializing
   #  ref: http://railscasts.com/episodes/409-active-model-serializers?view=asciicast
   def as_hash(target, options = {})
-    puts "AS HASH() " + "-"*60
+#    puts "AS HASH() " + "-"*60
     options[:scope] ||= self
     options[:url_options] ||= url_options
 #    if options.has_key?(:eager_loads)
@@ -178,8 +178,8 @@ class ApplicationController < ActionController::Base
 #    puts "=> AS_HASH()"
 #    puts "==> options:"
 #    puts options.to_s
-    if options.has_key?(:foo)
-      puts "IT IS FOO: %s" % [ serializer ]
+#    if options.has_key?(:foo)
+#      puts "IT IS FOO: %s" % [ serializer ]
 #      out = ActiveModel::ArraySerializer.new(target, options).as_json
 #      puts out.to_s
 #      out = ActiveModel::ArraySerializer.new(target, options.merge({serializer: ScopedCourseSerializer})).as_json
@@ -190,34 +190,33 @@ class ApplicationController < ActionController::Base
 #      puts out.to_s
 #      out = serializer.new(target, options.merge({serializer: ScopedCourseSerializer})).as_json
 #      puts out.to_s
-      out = serializer.new(target, options.merge({each_serializer: ScopedCourseSerializer})).as_json
-      puts out.to_s
-      exit()
-    else
-      if target.is_a? Array
-        out = {}
-        target.each do |targ|
-          data = serializer.new(targ, options).as_json
-          data.each do |key, value|
-            key = key.to_s
-            if key[-1] != 's'
-              key << 's'
-            end
-            if not out.has_key?(key)
-              out[key] = []
-            end
-            if not value.is_a? Array
-              value = [value]
-            end
-            for val in value
-              out[key] << val
-            end
+#      out = serializer.new(target, options.merge({each_serializer: ScopedCourseSerializer})).as_json
+#      puts out.to_s
+#      exit()
+#    else
+    if target.is_a? Array
+      out = {}
+      target.each do |targ|
+        data = serializer.new(targ, options).as_json
+        data.each do |key, value|
+          key = key.to_s
+          if key[-1] != 's'
+            key << 's'
+          end
+          if not out.has_key?(key)
+            out[key] = []
+          end
+          if not value.is_a? Array
+            value = [value]
+          end
+          for val in value
+            out[key] << val
           end
         end
-        puts out
-      else
-        out = serializer.new(target, options).as_json
       end
+      puts out
+    else
+      out = serializer.new(target, options).as_json.delete_if { |key, value| key[-1] != 's' }
     end
     out
   end

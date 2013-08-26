@@ -25,7 +25,7 @@
     <h2><%= link_to t('.plan_courses'), studyplan_courses_path %></h2>
     <ul>
       <% @user.study_plan.scoped_courses.each do |course| %>
-        <li class="<%= @user.passed?( course.abstract_course ) ? 'passed' : '' %> <%= course == @course ? 'selected' : '' %>"><%= link_to course.localized_name, studyplan_course_path(:id => course) %>
+        <li class="<%= @user.study_plan.passed?( course.abstract_course ) ? 'passed' : '' %> <%= course == @course ? 'selected' : '' %>"><%= link_to course.localized_name, studyplan_course_path(:id => course) %>
       <% end %>
     </ul>
   <% end %>

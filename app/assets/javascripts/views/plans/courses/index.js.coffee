@@ -156,6 +156,7 @@ class @View extends ViewObject
   changeView: (view) ->
     @lgI("view::changeView(#{view})...")
     @view(view)
+    $(window).scrollTop(0)
 
 
   changeViewToPlan:     -> @changeView('plan')

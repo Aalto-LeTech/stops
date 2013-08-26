@@ -154,94 +154,26 @@ class StudyPlan < ActiveRecord::Base
             :source      => :skills
 
 
-  # Returns the period of the earliest scheduled plan course
-  def period_of_earliest_plan_course
-    earliest_plan_course = plan_courses.includes(:period).order('periods.begins_at ASC').first
-    earliest_plan_course.nil? ? nil : earliest_plan_course.period
-  end
-
-
-  # Returns the period where the latest scheduled plan course ends
-  # NB: This is not necessarily the last period extended to by a course in the
-  # plan FIXME
-  def ending_period_of_latest_plan_course
-    latest_plan_course = plan_courses.includes(:period).order('periods.begins_at DESC').first
-    latest_plan_course.nil? ? nil : latest_plan_course.ending_period
-  end
-
-
-  # Resets the first period.
-  # By default, the "first period" is set as the current period unless
-  #   - the plan already contains courses for preceding periods, or
-  #   - the user has passed courses in preceding periods
-  # in which case the period is set as the earliest of those
-  def reset_first_period
-    the_period_of_earliest_plan_course = period_of_earliest_plan_course
-    the_period_of_earliest_user_course = user.period_of_earliest_user_course
-    if not the_period_of_earliest_plan_course.nil? and not the_period_of_earliest_user_course.nil?
-      period = the_period_of_earliest_plan_course.begins_at < the_period_of_earliest_user_course.begins_at ? the_period_of_earliest_plan_course : the_period_of_earliest_user_course
-    elsif not the_period_of_earliest_plan_course.nil?
-      period = the_period_of_earliest_plan_course
-    elsif not the_period_of_earliest_user_course.nil?
-      period = the_period_of_earliest_user_course
-    else
-      period = Period.current
-    end
-    self.first_period = period
-    self.save
-  end
-
-
-  # Resets the last period.
-  # The algorithm works pretty much opposite to its counterpart, the
-  # reset_first_period.
-  def reset_last_period
-    period = nil
-    the_ending_period_of_latest_plan_course = ending_period_of_latest_plan_course
-    the_period_of_latest_user_course = user.period_of_latest_user_course
-    if not the_ending_period_of_latest_plan_course.nil? and not the_period_of_latest_user_course.nil?
-      period = the_ending_period_of_latest_plan_course.begins_at > the_period_of_latest_user_course.begins_at ? the_ending_period_of_latest_plan_course : the_period_of_latest_user_course
-    elsif not the_ending_period_of_latest_plan_course.nil?
-      period = the_ending_period_of_latest_plan_course
-    elsif not the_period_of_latest_user_course.nil?
-      period = the_period_of_latest_user_course
-    end
-    if period.nil?
-      # If the user starts from a clean desk (no user nor plan courses) an
-      # initial default is set
-      reset_first_period if first_period.nil?
-      period = Period.find_by_date(first_period.begins_at - 1 + 365*INITIAL_STUDY_PLAN_TIME_IN_YEARS)
-      # FIXME: shouldn't be done here, but in the scheduler / user of this function
-    else
-      # We set the last as the one going on after a buffer time after the start
-      # of the last starting course's last period
-      the_period = Period.find_by_date(period.begins_at - 1 + 365*STUDY_PLAN_BUFFER_TIME_IN_YEARS)
-      if the_period.nil?
-        period = period.find_following(5*STUDY_PLAN_BUFFER_TIME_IN_YEARS).last
-      end
-    end
-    self.last_period = period
-    self.save
-  end
-
-
   # Returns the periods included in the study plan
   def periods(options = {})
     #reset_first_period
     #reset_last_period
 
-    number_of_buffer_periods=4
+    #number_of_buffer_periods=4
 
-     Period.range(
-       self.first_period.find_preceding(number_of_buffer_periods).last,
-       self.last_period.find_following(number_of_buffer_periods).last
-     )
-#    Period.range(self.first_period, self.last_period)
+    #Period.range(
+    # self.first_period.find_preceding(number_of_buffer_periods).last,
+    # self.last_period.find_following(number_of_buffer_periods).last
+    #)
+    self.first_period = self.first_period.find_preceding(6).last
+    self.save
+    Period.range(self.first_period, self.last_period)
   end
 
 
-  # Serialize plan data for JSON
-  def foo(json)
+  # Get passed courses
+  def passed?(abstract_course)
+    self.plan_courses.exists?(['abstract_course_id = ? AND grade > 0', abstract_course.id])
   end
 
 

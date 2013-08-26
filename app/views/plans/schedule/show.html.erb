@@ -101,8 +101,17 @@
           </ul>
         <!-- /ko -->
 
-        <span data-bind="ifnot: hasPrereqs()"><%= t('.no_prereqs') %></span>
-        <span data-bind="ifnot: allPrereqsInPlan"><%= t('.not_all_prereqs_in_plan') %></span>
+        <!-- ko ifnot: allPrereqsInPlan -->
+          <p data-bind="ifnot: allPrereqsInPlan">
+            <%= t('.not_all_prereqs_in_plan') %>
+          </p>
+        <!-- /ko -->
+
+        <!-- ko if: (allPrereqsInPlan && (!hasPrereqs())) -->
+          <p>
+            <%= t('.no_prereqs') %>
+          </p>
+        <!-- /ko -->
 
       </div>  <!-- object-info -->
     <!-- /ko -->

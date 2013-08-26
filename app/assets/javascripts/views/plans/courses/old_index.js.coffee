@@ -1,13 +1,11 @@
 #= require knockout
 #= require libs/search/engine
 #= require core/knockout-extensions
-#= require models/core/DbFriendlyObject
 #= require models/db/period
 #= require models/db/skill
 #= require models/db/abstract_course
 #= require models/db/scoped_course
 #= require models/db/plan_course
-#= require models/db/plan
 
 
 if not O4.view.i18n

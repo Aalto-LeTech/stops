@@ -46,10 +46,10 @@ class @BaseObject
   # Prints output to the console
   lgW: (msg) ->
     @subLog('lgW', "WARNING: #{msg}")
-    exit()
+    #exit()
 
 
   # Prints output to the console
   lgE: (msg) ->
     @subLog('lgE', "ERROR: #{msg}")
-    exit()
+    #exit()

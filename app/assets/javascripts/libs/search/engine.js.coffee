@@ -90,9 +90,8 @@ if not O4.search.i18n
 
       onQueryError: (data) ->
         dbg.lg("Search failed!")
-        if newValue.length > 0
-          @results().length = 0
-          @results.valueHasMutated()
+        @results().length = 0
+        @results.valueHasMutated()
         @isOk(false)
         return
 

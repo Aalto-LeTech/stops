@@ -6,8 +6,7 @@ end
 class StudyPlan < ActiveRecord::Base
 
 
-  INITIAL_STUDY_PLAN_TIME_IN_YEARS = 3
-  STUDY_PLAN_BUFFER_TIME_IN_YEARS = 1
+  INITIAL_STUDY_PLAN_TIME_IN_YEARS = 7
 
 
   module RefCountExtension

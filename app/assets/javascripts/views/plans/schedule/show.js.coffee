@@ -48,3 +48,8 @@ jQuery ->
     return "You have unsaved changes on #{planView.coursesToSave.length} course(s). Leave anyway?" if planView.anyUnsavedChanges()
 
   planView.loadPlan()
+
+  setTimeout(
+    -> $('.loader').fadeOut(1000)
+    1000
+  )

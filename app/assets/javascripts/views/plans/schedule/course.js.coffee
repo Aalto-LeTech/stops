@@ -28,6 +28,7 @@ class @Course
     @prereqs             = {}                # Prerequisite courses. scopedId => Course
     @prereqTo            = {}                # Courses for which this course is a prereq. scopedId => Course object
     @prereqPaths         = []                # Raphael paths to prerequirement courses
+    @allPrereqsInPlan    = false             #
     @period              = undefined         # Scheduled period
     @slot                = undefined         # Slot number that this course occupies
     @unschedulable       = false             # true if period allocation algorithm cannot find suitable period
@@ -113,10 +114,12 @@ class @Course
 
     # Load course prerequirements
     for course in @ALL
+      course.allPrereqsInPlan = true
       for prereqId in course.prereqIds
         prereq = @BYSCOPEDID[prereqId]
         unless prereq
           dbg.lg("Unknown prereqId #{prereqId}!")
+          course.allPrereqsInPlan = false
           continue
         course.addPrereq(prereq)
 
@@ -151,14 +154,18 @@ class @Course
   # Check the period & grade related flag "isMisscheduled"
   updateMisscheduledFlag: ->
     endPeriod = @getEndPeriod()
-    @isMisscheduled(not endPeriod? or ((endPeriod.isOld and not @grade() > 0) or ((not endPeriod.isOld) and @grade() > 0)))
+    @isMisscheduled(
+      not endPeriod? or
+      (endPeriod.isOld and not @grade() > 0) or
+      ((not (@period.isOld or @period.isNow)) and @grade() > 0)
+    )
     @updateTooltip()
 
 
   # Update the grade display
   updateGradeDisplay: ->
     return unless @period?
-    if @period.isOld
+    if @period.isOld or @period.isNow
       $('.well #grade').show()
       #$('.well #grade').slideDown(500)
     else
@@ -370,7 +377,7 @@ class @Course
         prd = prd.nextPeriod
 
     # Autoreset grades for courses scheduled into the future
-    if @period? and not @period.isOld
+    if @period? and not (@period.isOld or @period.isNow)
       @grade(0)
 
     # Update the grade display

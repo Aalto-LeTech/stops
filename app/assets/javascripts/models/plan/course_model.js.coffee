@@ -109,14 +109,14 @@ class @CourseModel extends ModelObject
         tooltip = "#{@I18N.is_not_included_in_the_plan}"
       if @isScheduled()
         if @isPassed()
-          tooltip += " #{@I18N.and_passed_with_grade} #{@grade} #{@I18N.in_period} #{@period.name}"
+          tooltip += " #{@I18N.and_passed_with_grade} #{@grade()} #{@I18N.in_period} #{@periodName()}"
         else
-          tooltip += " #{@I18N.and_scheduled_to_period} #{@period.name}"
+          tooltip += " #{@I18N.and_scheduled_to_period} #{@periodName()}"
       else if @isPassed()
         if @isIncluded()
-          tooltip += " #{@I18N.and_passed_with_grade} #{@grade}#{@I18N.but_not_scheduled}"
+          tooltip += " #{@I18N.and_passed_with_grade} #{@grade()}#{@I18N.but_not_scheduled}"
         else
-          tooltip += " #{@I18N.and_passed_with_grade}"
+          tooltip += " #{@I18N.and_passed_with_grade} #{@grade()}"
       tooltip += "."
       return tooltip
 

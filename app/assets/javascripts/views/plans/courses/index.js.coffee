@@ -99,8 +99,8 @@ class @View extends ViewObject
     # plan div below it as the size of the former div changes.
     @sidebar.reset('staticHeight', 600)
 
-    #@changeViewToPlan()
-    @changeViewToCreate()
+    @changeViewToPlan()
+    #@changeViewToCreate()
 
     #@DBG = true
     #BaseObject::DBG = true

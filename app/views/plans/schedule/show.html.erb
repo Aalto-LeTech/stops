@@ -92,8 +92,6 @@
 
         <h4><%= t('.prereqs') %></h4>
 
-        <span data-bind="ifnot: hasPrereqs()"><%= t('.no_prereqs') %></span>
-
         <!-- ko if: hasPrereqs() -->
           <ul data-bind="foreach: getPrereqs()">
             <li>
@@ -102,6 +100,9 @@
             </li>
           </ul>
         <!-- /ko -->
+
+        <span data-bind="ifnot: hasPrereqs()"><%= t('.no_prereqs') %></span>
+        <span data-bind="ifnot: allPrereqsInPlan"><%= t('.not_all_prereqs_in_plan') %></span>
 
       </div>  <!-- object-info -->
     <!-- /ko -->

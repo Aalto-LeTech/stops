@@ -230,13 +230,13 @@ class StudyPlan < ActiveRecord::Base
     #reset_first_period
     #reset_last_period
 
-    #number_of_buffer_periods=0
+    number_of_buffer_periods=4
 
-#     Period.range(
-#       self.first_period.find_preceding(number_of_buffer_periods).last,
-#       self.last_period.find_following(number_of_buffer_periods).last
-#     )
-    Period.range(self.first_period, self.last_period)
+     Period.range(
+       self.first_period.find_preceding(number_of_buffer_periods).last,
+       self.last_period.find_following(number_of_buffer_periods).last
+     )
+#    Period.range(self.first_period, self.last_period)
   end
 
 

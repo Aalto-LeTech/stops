@@ -1,5 +1,3 @@
-class @DbObjectAssoc
-
 class @DbObject extends BaseObject
 
 

@@ -41,7 +41,8 @@ class @View extends ViewObject
     super
     @lgI("view::init()...")
 
-    $('form').addClass('form-horizontal')
+    #$('form').addClass('form-horizontal')
+    $("form.form-search").submit( -> return false )
 
     BaseObject::I18N = O4.view.i18n
     BaseObject::VIEWMODEL = this
@@ -99,8 +100,10 @@ class @View extends ViewObject
     # plan div below it as the size of the former div changes.
     @sidebar.reset('staticHeight', 600)
 
-    @changeViewToPlan()
-    #@changeViewToCreate()
+    if @PLAN.included().length > 0
+      @changeViewToPlan()
+    else
+      @changeViewToSearch()
 
     #@DBG = true
     #BaseObject::DBG = true
@@ -194,6 +197,11 @@ jQuery ->
     .on 'mousedown', '#thenavbar, #themain', (event) ->
       # Clear selection
       view.select(undefined)
+    .on 'keypress', 'body', (event) ->
+      # Clear selection
+      if event.which == 13
+        dbg.lg("Enter caught!")
+        event.stopPropagation()
 
 
   dbg.lg("Applying bindings...")

@@ -2,46 +2,40 @@
   <%= javascript_include_tag "views/curriculums/index" %>
 <% end %>
 
-<div class="row-fluid">
-  <div class="span8">
+<h1><%=t('.heading')%></h1>
 
-    <h1><%=t('.heading')%></h1>
+<!--%= render 'remove_confirmation_modal' %-->
 
-    <!--%= render 'remove_confirmation_modal' %-->
-
-    <table id="curriculums-table" class="table">
-      <thead>
-        <tr>
-          <th><%=t('.curriculum')%></th>
-          <th><%=t('.years')%></th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @curriculums.each do |curriculum| %>
-          <tr>
-            <td data-name="true">
-              <% if can? :update, curriculum %>
-                <%= link_to curriculum.name, edit_curriculum_path(:id => curriculum) %>
-              <% else %>
-                <%= link_to curriculum.name, curriculum_path(:id => curriculum) %>
-              <% end %>
-            </td>
-            <td><%= curriculum.start_year %>-<%= curriculum.end_year %></td>
-            <!--
-            <% if can? :destroy, curriculum %>
-              <td>
-                <a data-initiate-delete="true" data-target-id="<%= curriculum.id %>" class="button-base button-danger button-small-abs"><%= t 'Delete' %></a>
-              </td>
-            <% end %>
-            -->
-          </tr>
+<table id="curriculums-table" class="table">
+  <thead>
+    <tr>
+      <th><%=t('.curriculum')%></th>
+      <th><%=t('.years')%></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @curriculums.each do |curriculum| %>
+      <tr>
+        <td data-name="true">
+          <% if can? :update, curriculum %>
+            <%= link_to curriculum.name, edit_curriculum_path(:id => curriculum) %>
+          <% else %>
+            <%= link_to curriculum.name, curriculum_path(:id => curriculum) %>
+          <% end %>
+        </td>
+        <td><%= curriculum.start_year %>-<%= curriculum.end_year %></td>
+        <!--
+        <% if can? :destroy, curriculum %>
+          <td>
+            <a data-initiate-delete="true" data-target-id="<%= curriculum.id %>" class="button-base button-danger button-small-abs"><%= t 'Delete' %></a>
+          </td>
         <% end %>
-      </tbody>
-    </table>
-
-    <% if can? :create, Curriculum %>
-      <p><%= link_to t('.curriculum_new'), new_curriculum_path, :class => 'btn btn-primary' %></p>
+        -->
+      </tr>
     <% end %>
+  </tbody>
+</table>
 
-  </div>
-</div>
+<% if can? :create, Curriculum %>
+  <p><%= link_to t('.curriculum_new'), new_curriculum_path, :class => 'btn btn-primary' %></p>
+<% end %>

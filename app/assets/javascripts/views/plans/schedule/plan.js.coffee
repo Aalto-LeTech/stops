@@ -10,11 +10,13 @@ class @PlanView
   @COURSE_MARGIN_Y: 6
   @COURSE_PADDING_Y: 3
   ISREADY: false
+  I18N: O4.schedule.i18n
 
   constructor: (@planUrl) ->
     @selectedObject = ko.observable()
     @selectedObjectType = ko.observable()
 
+    $('#infomsg').fadeOut(0)
     @showAsEditable = false
     #@showAsEditable = ko.observable(false)
 
@@ -238,6 +240,7 @@ class @PlanView
 
     # Check if any changes should be saved
     if not @anyUnsavedChanges()
+      @flashInfo('text-info', @I18N.no_unsaved_changes)
       dbg.lg('No unsaved data. No reason to put.')
       return
 
@@ -253,11 +256,12 @@ class @PlanView
     @coursesRejected = []
 
     $.ajax
-      url: @planUrl,
-      type: 'put',
-      dataType: 'json',
-      async: false,
-      data: { 'json': {'plan_courses_to_update': JSON.stringify(planCoursesToSave)} },
+      url: @planUrl
+      type: 'put'
+      dataType: 'json'
+      async: false
+      data: { 'json': {'plan_courses_to_update': JSON.stringify(planCoursesToSave)} }
+      error: @onSaveFailure()
       success: (data) =>
         dbg.lg("data: #{data}")
         dbg.lg("data: #{JSON.stringify(data)}")
@@ -270,8 +274,26 @@ class @PlanView
                 course.resetOriginals()
               else
                 dbg.lg("ERROR: Course \"#{course.name}\" was rejected by the server! Saving failed!")
-                @coursesRejected.push(course)  # FIXME: Not used atm.
+                @coursesRejected.push(course)
+            if @coursesRejected.length > 0
+              @onSaveFailure()
+            else
+              @flashInfo('text-success', @I18N.your_changes_have_been_saved)
           else
             dbg.lg("ERROR: No feedback returned!")
+            @onSaveFailure()
         else
           dbg.lg("ERROR: Put on server failed!")
+          @onSaveFailure()
+
+
+  flashInfo: (css, text) ->
+    $('#infomsg').removeClass().addClass(css).text(text).fadeIn(2000)
+    setTimeout(
+      -> $('#infomsg').fadeOut(2000, => $('#infomsg').text('').removeClass())
+      5000
+    )
+
+
+  onSaveFailure: ->
+    $('#infomsg').removeClass().addClass('text-error').text(@I18N.on_save_failure_instructions).fadeIn(1000)

@@ -14,10 +14,10 @@
 #= require models/db/course_instance
 #= require models/db/study_plan
 #= require models/core/ModelObject
-#= require models/core/ViewObject
 #= require models/plan/course_model
 #= require models/plan/study_plan_model
 #= require models/plan/course_creation_model
+#= require models/core/ViewObject
 
 
 if not O4.view.i18n

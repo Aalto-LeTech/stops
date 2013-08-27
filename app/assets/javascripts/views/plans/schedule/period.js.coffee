@@ -5,6 +5,7 @@ class @Period
   NOW: new Date().toISOString()
   CURRENT: undefined
 
+  PERIODS_IN_YEAR: 6
   UNDERBOOKED_LIMIT: 11  # determines the period credit total limits for css warning classes
   OVERBOOKED_LIMIT: 19   #   see @creditsStatus
 
@@ -106,7 +107,9 @@ class @Period
     return this.sequenceNumber >= other.sequenceNumber
 
 
+  # Returns the nth period prior or the farthest if none
   getPreviousPeriod: (nth = 1) ->
+    return this if nth <= 0 or not @previousPeriod
     period = @previousPeriod
     while nth -= 1 > 0
       if period?.previousPeriod
@@ -114,7 +117,9 @@ class @Period
     return period
 
 
+  # Returns the nth period forward or the farthest if none
   getNextPeriod: (nth = 1) ->
+    return this if nth <= 0 or not @nextPeriod
     period = @nextPeriod
     while nth -= 1 > 0
       if period?.nextPeriod
@@ -129,9 +134,9 @@ class @Period
     else if keyCode == 40  # down
       period = @nextPeriod
     else if keyCode == 33  # page up
-      period = @getPreviousPeriod(5)
+      period = @getPreviousPeriod(@PERIODS_IN_YEAR)
     else if keyCode == 34  # page down
-      period = @getNextPeriod(5)
+      period = @getNextPeriod(@PERIODS_IN_YEAR)
     if period?
       planView.selectObject(period)
       return true

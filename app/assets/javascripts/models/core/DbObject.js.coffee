@@ -380,6 +380,7 @@ class @DbObject extends BaseObject
         assocClassName = undefined
         assocVarName   = assocArg[0]
         for arg in assocArg[1..]
+          @lg("arg: #{arg}")
           if arg == '1' or arg == '*'
             assocType = arg
           else if arg == 'NotNull'
@@ -483,13 +484,15 @@ class @DbObject extends BaseObject
     for instance in instances
       if DbObject::ASSOCCED[instance.boId]
         @lgW("Double assocced instance #{instance}!")
-      DbObject::ASSOCCED[instance.boId] = instance
+      else
+        DbObject::ASSOCCED[instance.boId] = instance
       delete DbObject::TOASSOC[instance.boId]
 
 
   # Returns the changes on 'this'
   getChanges: ->
-    return @getChangesOn([this])
+    changed = @getChangesOn([this])
+    return changed[0].changes if changed.length > 0
 
 
   # Returns the changes for the given instances of this class

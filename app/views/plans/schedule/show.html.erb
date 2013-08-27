@@ -25,6 +25,7 @@
       <h2>
         <%= t('.scheduling') %>
       </h2>
+      <p id="infomsg"></p>
       <p>
         <%= t('.curriculum') %>:
         <%= @study_plan.curriculum.name %>
@@ -102,7 +103,7 @@
         <!-- /ko -->
 
         <!-- ko ifnot: allPrereqsInPlan -->
-          <p data-bind="ifnot: allPrereqsInPlan">
+          <p class="text-error" data-bind="ifnot: allPrereqsInPlan">
             <%= t('.not_all_prereqs_in_plan') %>
           </p>
         <!-- /ko -->

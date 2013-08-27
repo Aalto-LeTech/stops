@@ -42,9 +42,9 @@
         <div class="row-fluid course" data-bind="css: {'added': isAdded, 'passed': isPassed, 'included': isIncluded, 'scheduled': isScheduled, 'selected': isSelected}">
           <a data-bind="attr: { title: tooltip }">
             <span class="span2 code" data-bind="text: code"></span>
-            <span class="span6 name" data-bind="text: name"></span>
+            <span class="span5 name" data-bind="text: name"></span>
             <span class="span1 credits" data-bind="text: credits"></span>
-            <span class="span1 period" data-bind="text: periodName"></span>
+            <span class="span2 period" data-bind="text: periodName"></span>
             <span class="span1 grade" data-bind="text: grade"></span>
           </a>
           <button class="span1 btn" data-bind="click: removeFromPlan">
@@ -103,23 +103,13 @@
         <div class="row-fluid course" data-bind="css: {'added': isAdded, 'removed': isRemoved, 'passed': isPassed, 'included': isIncluded, 'scheduled': isScheduled, 'selected': isSelected}">
           <a data-bind="attr: { title: tooltip }">
             <span class="span3 code" data-bind="text: code"></span>
-            <span class="span6 name" data-bind="text: name"></span>
+            <span class="span7 name" data-bind="text: name"></span>
             <span class="span1 credits" data-bind="text: credits"></span>
           </a>
-          <!-- ko ifnot: isIncluded() -->
-            <button class="span1 btn" data-bind="click: includeToPlan">
-              <%= t('.add_symbol') %>
-            </button>
-            <button class="span1 btn" disabled>
-            </button>
-          <!-- /ko -->
-          <!-- ko if: isIncluded() -->
-            <button class="span1 btn" disabled>
-            </button>
-            <button class="span1 btn" data-bind="click: removeFromPlan">
-              <%= t('.remove_symbol') %>
-            </button>
-          <!-- /ko -->
+          <button class="span1 btn" data-bind="click: toggleInclusion">
+            <span data-bind="visible: isIncluded() == true"><%= t('.remove_symbol') %></span>
+            <span data-bind="visible: isIncluded() == false"><%= t('.add_symbol') %></span>
+          </button>
         </div>
       <!-- /ko -->
 

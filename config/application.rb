@@ -65,7 +65,7 @@ module Ops
           puts "   Compiling: #{path}"
           true
         else
-          puts "--  Ignoring: #{path}"
+          puts "          --  #{path}"
           false
         end
       }

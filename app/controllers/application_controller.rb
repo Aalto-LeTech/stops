@@ -221,4 +221,11 @@ class ApplicationController < ActionController::Base
     out
   end
 
+  # Throw an error with params
+  # The function is ment to be POSTed by client side javascripts for notifying
+  # developers of client side errors.
+  def client_side_error
+    throw 'Client side error! Params: ', params.as_json
+  end
+
 end

@@ -1,11 +1,6 @@
 # encoding: utf-8
 fi:
   plans:
-    show:
-      heading: "Oma opintosuunnitelma"
-      overview: "Yleiskatsaus"
-      courses: "Omat kurssit"
-
     curriculums:
       show:
         heading: "Opinto-opas"
@@ -14,20 +9,28 @@ fi:
       edit:
         heading: "Valitse opinto-opas"
         warning_heading: "Varoitus"
-        warning: "Kaikkia valittuja kursseja ja profiileja ei välttämättä ole tarjolla muissa opinto-oppaissa."
+        warning: "Kaikkia valittuja kursseja ja kompetensseja ei välttämättä ole tarjolla muissa opinto-oppaissa."
 
     competences:
-      add_to_plan: "Lisää suunnitelmaan"
-      remove_from_plan: "Poista suunnitelmasta"
-      adding_to_plan: "Lisätään..."
-      removing_from_plan: "Poistetaan..."
       index:
         heading: "Kompetenssivalinnat"
         competences: "Kompetenssit"
       boxed_competence_list:
         provided_skills_heading: "Osaamistavoitteet"
       show:
+        add_to_plan: "Lisää suunnitelmaan"
+        remove_from_plan: "Poista suunnitelmasta"
+        credits_total: "Yhteensä"
+        credits_shared: "Sisältyy jo suunnitelmaan"
+        credits_passed: "Jo suoritettu"
+        credits_added: "Suunnitelmaan lisätään"
         competences: "Kompetenssit"
+        skills: "Osaamistavoitteet"
+        strict_prereqs: "Koostuu kursseista"
+        course_passed: "Suoritettu"
+        competence_already_selected: "%{name} on jo opintosuunnitelmassa."
+      supporting:
+        heading: "Valitse tukevia kursseja"
 
     courses:
       index:
@@ -40,17 +43,14 @@ fi:
         no_courses_in_plan: "Suunnitelmassasi ei ole vielä lainkaan kursseja."
         no_courses_added_nor_removed: "Suunnitelmaan ei ole viimeisen tallennuksen jälkeen lisätty eikä siitä ole poistettu kursseja."
         to_course_page: "Kurssisivulle"
-        extent: "Laajuus"
         skills: "Osaamistavoitteet"
         prereqs: "Esitietokurssit"
         add_symbol: "+"
         remove_symbol: "-"
-        code: "Koodi"
-        name: "Nimi"
-        credits: "Laajuus"
         create_course: "Luo kurssi"
       index_i18n_strings:
-        plan_load_error_instructions: "Suunnitelmasi lataus epäonnistui. Ylläpitäjille on lähetetty tiedote ja syytä tullaan selvittämään."
+        on_plan_load_error: "Suunnitelmasi lataus epäonnistui."
+        on_plan_load_error_notified: "Suunnitelmasi lataus epäonnistui. Ylläpitäjille on lähetetty tiedote ja syytä tullaan selvittämään."
         plan: "Suunnitelma"
         changes: "Muutokset"
         search: "Kurssihaku"
@@ -95,12 +95,7 @@ fi:
         no_chosen_competences: "Ei valittuja kompetensseja"
 
         empty_instructions: "Valitse opinto-oppaasta itseäsi kiinnostavat kompetenssit"
-        code: "Koodi"
-        name: "Nimi"
-        extent: "Laajuus"
-        grade: "Arvosana"
-        length: "Kesto"
-        prd: "periodia"
+        periods: "periodia"
         extent_tooltip: "Tällä voit muokata kurssin opintopistearvoa (0-30 op)."
         grade_tooltip: "Tähän voit päivittää kurssista saamasi arvosanan (0-5)."
         length_tooltip: "Tällä voit muokata kurssin kestoa opintojaksoissa, jos ko. opintojaksolla järjestettävän kurssin kesto eroaa nyt kuvatusta."
@@ -116,7 +111,7 @@ fi:
         course_tooltip_intro_alarm: "Virheitä:"
         course_tooltip_intro_notice: "Huomioita:"
         course_tooltip_misordered: "kurssi on aikataulutettu vastoin esitietovaatimuksia"
-        course_tooltip_misscheduled: "kurssi on aikataulutettu menneisyyteen, vaikkei se ole suoritettu, tai sille on asetettu arvosana, vaikkei se ole vielä alkanut"
+        course_tooltip_misscheduled: "kurssi on aikataulutettu menneisyyteen, vaikkei se ole suoritettu"
         course_tooltip_uninstanced: "kurssi on aikataulutettu opintojaksolle, jona sitä ei tietokantamme mukaan järjestetä tai kurssi järjestetään, mutta se eroaa kestoltaan"
         course_tooltip_customized: "kurssin tietoja on muokattu; se ei esiinny kuvatulla opintopistemäärällä tietokannassamme"
         course_tooltip_passed: "kurssi tulkitaan suoritetuksi, sillä sille on asetettu nollaa korkeampi arvosana"

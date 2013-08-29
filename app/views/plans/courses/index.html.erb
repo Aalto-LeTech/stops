@@ -125,7 +125,7 @@
 
       <div class="control-group">
         <label for="code" class="control-label">
-          <%= t('.code') %>
+          <%= t('Code') %>
         </label>
         <div class="controls">
           <input id="code" type="text" data-bind="value: code, valueUpdate: 'keyup'" />
@@ -134,7 +134,7 @@
 
       <div class="control-group">
         <label for="name" class="control-label">
-          <%= t('.name') %>
+          <%= t('Name') %>
         </label>
         <div class="controls">
           <input id="name" type="text" data-bind="value: name, valueUpdate: 'keyup'" />
@@ -143,7 +143,7 @@
 
       <div class="control-group">
         <label for="credits" class="control-label">
-          <%= t('.credits') %>
+          <%= t('Extent') %>
         </label>
         <div class="controls">
           <input id="credits" type="number" data-bind="value: credits, valueUpdate: 'keyup'" />
@@ -167,6 +167,7 @@
 <span id="paths"
   data-search-courses-path="<%= search_courses_curriculum_path(@study_plan.curriculum_id) %>"
   data-studyplan-path="<%= plan_path(@study_plan.id) %>"
+  data-error-path="<%= client_side_error_path %>"
 ></span>
 
 

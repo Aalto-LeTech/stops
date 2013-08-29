@@ -7,7 +7,8 @@
     current_locale:                       "<%= I18n.locale %>",
     required_locales:                     ["<%= REQUIRED_LOCALES.join('","').html_safe %>"],
 
-    plan_load_error_instructions:         "<%= escape_javascript(t('.plan_load_error_instructions')) %>",
+    on_plan_load_error_notified:          "<%= escape_javascript(t('.on_plan_load_error_notified')) %>",
+    on_plan_load_error:                   "<%= escape_javascript(t('.on_plan_load_error')) %>",
 
     plan:                                 "<%= escape_javascript(t('.plan')) %>",
     changes:                              "<%= escape_javascript(t('.changes')) %>",

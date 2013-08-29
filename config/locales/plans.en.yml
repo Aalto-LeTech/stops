@@ -1,11 +1,6 @@
 # encoding: utf-8
 en:
   plans:
-    show:
-      heading: "My Study Plan"
-      overview: "Overview"
-      courses: "My courses"
-
     curriculums:
       show:
         heading: "Current curriculum"
@@ -14,25 +9,64 @@ en:
       edit:
         heading: "Choose curriculum"
         warning_heading: "Warning"
-        warning: "Some currently selected courses or profiles may not be available in other curriculums."
+        warning: "Some currently selected courses or competences may not be available in other curriculums."
 
     competences:
-      add_to_plan: "Add to plan"
-      remove_from_plan: "Remove from plan"
-      adding_to_plan: "Adding..."
-      removing_from_plan: "Removing..."
       index:
         heading: "Competence election"
         competences: "Competences"
       boxed_competence_list:
         provided_skills_heading: "Provides the following skills"
       show:
+        add_to_plan: "Add to plan"
+        remove_from_plan: "Remove from plan"
+        credits_total: "Total"
+        credits_shared: "Included in other competences"
+        credits_passed: "Already passed"
+        credits_added: "Credits to add to plan"
         competences: "Competences"
+        skills: "Competence goals"
+        strict_prereqs: "Consists of courses"
+        course_passed: "Passed"
+        competence_already_selected: "%{name} is already included."
+      supporting:
+        heading: "Choose supporting courses"
 
     courses:
       index:
-        heading: "Course search"
+        plan_view: "Study Plan"
+        changes_view: "Changes"
+        search_view: "Search"
+        create_view: "Add Course"
+        engine_not_working: "The search engine is unavailable at the moment!"
+        save: "Save"
+        no_courses_in_plan: "There are no courses in your plan at the moment."
+        no_courses_added_nor_removed: "No courses have been added nor removed from your plan since last save."
+        to_course_page: "Course Page"
+        skills: "Competence goals"
         prereqs: "Prerequirements"
+        add_symbol: "+"
+        remove_symbol: "-"
+        create_course: "Create course"
+      index_i18n_strings:
+        on_plan_load_error: "Loading your plan failed."
+        on_plan_load_error_notified: "Loading your plan failed. The administrators have been notified."
+        plan: "Study Plan"
+        changes: "Changes"
+        search: "Course Search"
+        create: "Add Course"
+        plan_instructions: "In this view you can see all courses included in your plan. You can search for more courses at the search view."
+        changes_instructions: "In this view you can see all unsaved changes. If you wish to save them, click the save button."
+        search_instructions: "In this view you can search for courses and add them into your study plan. The search engine lists the courses the course code, name and competence goals of which best match with a given search key."
+        create_instructions: "In this view you can add new courses into the O4-database for everybody to find. The courses you add might for example be courses from another university, which cannot be found from the current O4-database."
+        is_not_included_in_the_plan: "The course is not included into your plan"
+        is_included_in_the_plan: "The course is included into your plan"
+        is_added_to_the_plan: "The course is tagged for inclusion into your plan"
+        is_removed_from_the_plan: "The course is tagged for removal from your plan"
+        and_scheduled_to_period: "and scheduled to period"
+        and_passed_with_grade: "and passed with grade"
+        in_period: "in period"
+        but_not_scheduled: ", but remains unscheduled"
       show:
         study_plan: "Your Study Plan"
         study_plan_courses: "Plan's Courses"
@@ -45,52 +79,39 @@ en:
     schedule:
       show:
         curriculum: "Curriculum"
-        controls: "Schedule controls"
-        actions: "Actions"
-        save_button: "Save schedule"
+        scheduling: "Scheduling"
+        save: "Save"
         selected_course: "Selected course"
         credits:
           one: "credit"
           other: "credits"
         prereqs: "Prerequirements"
         no_prereqs: "No prerequirements"
+        not_all_prereqs_in_plan: "Not all prerequirements have been included into the plan!"
         selected_period: "Selected period"
         no_scheduled_courses: "No scheduled courses"
         scheduled_courses: "Scheduled courses"
         competences: "Competences"
         no_chosen_competences: "No chosen competences"
 
-        heading: "My study plan"
         empty_instructions: "Please explore the study guide and choose competences that you find interesting"
-        extent: "Extent"
-        grade: "Grade"
-        length: "Length"
-        prd: "periodia"
-        extent_tooltip: "Here you can update the extent of the course (in ECTS credits)."
+        periods: "periods"
+        extent_tooltip: "Here you can update the extent of the course (0-30 ECTS credits)."
         grade_tooltip: "Here you can update the grade you've received from the course (0-5)."
-        period_credits_tooltip: "The sum of the credits of the courses you have scheduled for this period. Try to be realistic and balance the load between periods."
+        length_tooltip: "Here you can update the courses length in periods."
+        competence_progress_tooltip: "This bar resembles your progress in meeting the competence's requirements."
 
-    periods:
-      index:
-        heading: "Periods"
-        no_periods: "You haven't scheduled any courses to a period yet."
-        description: "Below is a list of the periods in which you've scheduled studies."
-        period_name: "Period"
-        period_start: "Start"
-        period_end: "End"
-        period_courses: "Courses"
-        period_credits: "Study load"
-      show:
-        heading: "Period %{name}"
-        description: "Below is a description of the planned period."
-        datespan: "Date span"
-        no_prev: "No preceding planned periods."
-        no_next: "No following planned periods."
-        prev: "Preceding scheduled period"
-        next: "Following scheduled period"
-        courses: "Courses"
-        courses_starting: "Starting"
-        courses_continuing: "Continuing"
-        courses_ending: "Ending"
-        unscheduled_period: "You haven't planned anything yet for this period."
-        invalid_period: "Such a period cannot be found."
+      show_i18n_strings:
+        no_unsaved_changes: "No unsaved changes."
+        your_changes_have_been_saved: "Your changes have been saved."
+        on_save_failure_instructions: "The system was unable to make sure that all changes got saved appropriately!"
+        period_credits_tooltip_underbooked: "The sum of credits in the period is lower than recommended. Consider whether it would be possible to add more studies into this period."
+        period_credits_tooltip_overbooked: "The sum of credits in the period is higher than recommended. Consider whether the schedule is realistic and if it would be possible to balance the load between periods."
+        period_credits_tooltip_neutral: "The sum of the credits of the courses you have scheduled for this period."
+        course_tooltip_intro_alarm: "Errors:"
+        course_tooltip_intro_notice: "Notices:"
+        course_tooltip_misordered: "the course is scheduled counter to its prerequirements"
+        course_tooltip_misscheduled: "the course is scheduled to the past but not passed"
+        course_tooltip_uninstanced: "the course is scheduled to a period in which (according to our database) it is not organized or the course is organized but it differs in length"
+        course_tooltip_customized: "the course has been customized; it does not appear in the specified extent in the database"
+        course_tooltip_passed: "the course is regarded as passed, since it has a grade greater than zero"

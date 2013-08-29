@@ -55,7 +55,8 @@ class @View extends ViewObject
     pathsContainer    = $('#paths')
     searchCoursesPath = pathsContainer.data('search-courses-path')
     studyPlanPath     = pathsContainer.data('studyplan-path')
-    @lgI("db url: #{searchCoursesPath}.")
+    errorPath         = pathsContainer.data('error-path')
+    @lgI("Paths: #{searchCoursesPath}, #{studyPlanPath}, #{errorPath}.")
 
     @selected       = ko.observable()
     @sidebar        = affxd.Sidebar::get()
@@ -67,7 +68,14 @@ class @View extends ViewObject
 
     success = @PLAN.reload()
     if not success
-      alert("#{@I18N.plan_load_error_instructions}")
+      $.ajax
+        type: 'POST'
+        url: errorPath
+        data: {'message': 'views/plans/courses/index: Loading the studyplan failed!'}
+        success: =>
+          alert("#{@I18N.on_plan_load_error_notified}")
+        error: =>
+          alert("#{@I18N.on_plan_load_error}")
 
     @viewTitles =
       'plan': @I18N.plan

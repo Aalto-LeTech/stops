@@ -1,6 +1,8 @@
 class @DbObject extends BaseObject
 
 
+  CLASSNAME: 'DbObject'
+
   CLASSES: []
   CLASSESBYNAME: {}
   CLASSMATCHER: {}
@@ -18,14 +20,15 @@ class @DbObject extends BaseObject
   # Adds a child class and maps it by its plural names in JS form 'MyObjs' and
   # the general underscore form 'my_objs'
   # Also initializes the 'ALL' and 'BYID' vars.
-  addSubClass: (subClass, matchers) ->
-    @lg("addSubClass(#{subClass::constructor.name})...")
+  addSubClass: (subClass, options={}) ->
+    if not subClass::CLASSNAME
+      @lgE("addSubClass() No class name specified for #{subClass::constructor.name}!")
+      return
+    @lg("addSubClass(#{subClass::CLASSNAME})...")
     subClass::ISSUBCLASS = true
     subClass::ALL = []
     subClass::BYID = {}
     subClass::ASSOCS = []
-    # MyObj
-    subClass::CLASSNAME = subClass::constructor.name if not subClass::CLASSNAME
     # MyObjs
     subClass::CLASSNAMEP = subClass::CLASSNAME + 's' if not subClass::CLASSNAMEP
     # myObj
@@ -44,8 +47,8 @@ class @DbObject extends BaseObject
       subClass::CLASSNAMEP
     ]
 
-    if matchers != undefined
-      for matcher in matchers
+    if options.matchers != undefined
+      for matcher in options.matchers
         @CLASSMATCHER[matcher] = subClass
     @CLASSMATCHER[subClass::CLASSNAME] = subClass
     @CLASSMATCHER[subClass::CLASSNAMEP] = subClass
@@ -306,8 +309,7 @@ class @DbObject extends BaseObject
   #  class @Country extends DbObject
   #    # In case the used plural form of the class name isn't trivial, specify
   #    # it
-  #    CLASSNAMEP: "countries"
-  #    DbObject::addSubClass(Country)
+  #    DbObject::addSubClass(Country, {'name_plural': 'countries'})
   #
   #  Person::ASSOCS =
   #  [
@@ -338,12 +340,16 @@ class @DbObject extends BaseObject
 
   # Guess target class of an assocVarName
   guessTargetClassOfAssocVarName: (assocVarName) ->
+    #@lg("guessTargetClassOfAssocVarName(#{assocVarName})...")
+    #@lg("classes: #{Object.keys(@CLASSESBYNAME)}")
     bestMatch = [undefined, -1]
     for subClass in @CLASSES
+      #@lg(" - matchers: #{subClass::ASSOCVNMATCHERS}")
       for matcher in subClass::ASSOCVNMATCHERS
         if assocVarName.indexOf(matcher) != -1
           if bestMatch[1] < matcher.length
             bestMatch = [subClass::CLASSNAME, matcher.length]
+    @lg("Best guess: #{assocVarName} -> #{bestMatch[0]}.")
     return bestMatch[0]
 
 
@@ -370,6 +376,7 @@ class @DbObject extends BaseObject
       @lgE("Assocs must be defined in an array!")
       return assdata
     for assocArg in @ASSOCS
+      @lg("=> Parsing #{assocArg}...")
       if dbg.type(assocArg) == 'string'
         assocArg = [assocArg]
       if dbg.type(assocArg) == 'array'
@@ -483,13 +490,15 @@ class @DbObject extends BaseObject
     for instance in instances
       if DbObject::ASSOCCED[instance.boId]
         @lgW("Double assocced instance #{instance}!")
-      DbObject::ASSOCCED[instance.boId] = instance
+      else
+        DbObject::ASSOCCED[instance.boId] = instance
       delete DbObject::TOASSOC[instance.boId]
 
 
   # Returns the changes on 'this'
   getChanges: ->
-    return @getChangesOn([this])
+    changed = @getChangesOn([this])
+    return changed[0].changes if changed.length > 0
 
 
   # Returns the changes for the given instances of this class
@@ -531,7 +540,7 @@ class @DbObject extends BaseObject
 
   # Renders the object into a string for debugging purposes
   toString: ->
-    return "DBO[#{@boId}]::#{@constructor.name}[#{@id}]:{#{@attrsAsJson()} : #{@assocsAsJson()}}"
+    return "DBO[#{@boId}]::#{@CLASSNAME}[#{@id}]:{#{@attrsAsJson()} : #{@assocsAsJson()}}"
 
 
   # A useful ajax get function

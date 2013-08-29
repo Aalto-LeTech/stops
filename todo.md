@@ -1,6 +1,42 @@
 Sprints
 =======
 
+Sprint 17.7 - 31.8
+------------------
+
+- [x] new: create a DbObject and related classes and serializers
+- [x] new: create the courses/index view set
+- [x] fix: many bugs
+- [x] new: test the basic scheduler work flow with some scenarios with "fresh users"
+- [x] new: adjust course grade edit limitations
+- [x] new: test the work flow with some scenarios
+- [x] new: do slides for presentation
+- [x] new: do the presentations
+- [ ] fix: probably need to rename indices (study_plan_co... -> plan_co...)
+- [ ] address questions arisen so far:
+- [ ]   what about html views/plans/courses and its js plans/showCourse
+- [ ]   is "/:locale/courses*" not used at all? -- are the controller and views
+        deprecated?
+- [ ]   how does "/:locale/skills*" work?
+- [ ]   some js files contained hard coded urls, should these be refactored?
+        possibly with url helpers inserting data into them?
+- [ ]   more testing needed
+- [ ]     not sure whether all js features really work
+- [ ]     especially with Internet Explorer!!! :[
+- [ ]     not sure whether all actions (via forms etc.) really work
+- [ ] new: allow NULL for course_description.scoped_course_id
+- [ ] new: studyplan/courses/index: allow creation of custom study_plan_courses (name, )
+- [ ] fix: add missing english translations
+
+If excess time
+- [ ] new: add intro description into competence view in case no coms chosen
+- [ ] fix the course_description.scoped_course_id problem
+- [ ] show the fit of available competences to the currently selected/completed studies
+- [ ] offer the possibility of creating alternate study_plans and even comparing them effectively
+- [ ] new: add methods for altering which periods are shown
+- [ ] new: get fancier tooltips
+
+
 Sprint 09.7 - 16.8
 ------------------
 
@@ -24,35 +60,8 @@ Acknowledgements
 
 - [x] new: studyplan/courses/index: course searching (use Sphinx, see skillEditor)
 - [x] fix: affxd sidebar issue
-- [ ] new: don't load so much course info at course search, but fetch them only
+- [x] new: don't load so much course info at course search, but fetch them only
       when the user wants to see details
-
-- [ ] fix: rename indices (study_plan_co... -> plan_co...)
-- [ ] address questions arisen so far:
-- [ ]   what about html views/plans/courses and its js plans/showCourse
-- [ ]   is "/:locale/courses*" not used at all? -- are the controller and views
-        deprecated?
-- [ ]   how does "/:locale/skills*" work?
-- [ ]   some js files contained hard coded urls, should these be made .erb files
-        with url helpers inserting data into them?
-- [ ]   more testing needed
-- [ ]     not sure whether all js features really work
-- [ ]     not sure whether all actions (via forms etc.) really work
-- [ ] new: add intro description into competence view in case no coms chosen
-- [ ] new: test the basic scheduler work flow with some scenarios with "fresh users"
-- [ ] new: opt. no grade edit for unended courses
-- [ ] new: allow NULL for course_description.scoped_course_id
-- [ ] new: studyplan/courses/index: allow creation of custom study_plan_courses (name, )
-- [ ] new: test the work flow with some scenarios
-- [ ] fix: fix possible translation errors
-
-If excess time
-- [ ] fix the course_description.scoped_course_id problem
-- [ ] add a "fix course ordering" button into the PlanView
-- [ ] show the fit of available competences to the currently selected/completed studies
-- [ ] offer the possibility of creating alternate study_plans and even comparing them effectively
-- [ ] new: add methods for altering which periods are shown
-- [ ] new: get fancier tooltips
 
 
 Sprint 26.7 - 08.8

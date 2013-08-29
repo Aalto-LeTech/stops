@@ -6,6 +6,9 @@
   i18n = {
     current_locale:                       "<%= I18n.locale %>",
     required_locales:                     ["<%= REQUIRED_LOCALES.join('","').html_safe %>"],
+    no_unsaved_changes:                   "<%= escape_javascript(t('.no_unsaved_changes')) %>",
+    your_changes_have_been_saved:         "<%= escape_javascript(t('.your_changes_have_been_saved')) %>",
+    on_save_failure_instructions:         "<%= escape_javascript(t('.on_save_failure_instructions')) %>",
     period_credits_tooltip_underbooked:   "<%= escape_javascript(t('.period_credits_tooltip_underbooked')) %>",
     period_credits_tooltip_overbooked:    "<%= escape_javascript(t('.period_credits_tooltip_overbooked')) %>",
     period_credits_tooltip_neutral:       "<%= escape_javascript(t('.period_credits_tooltip_neutral')) %>",

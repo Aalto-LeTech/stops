@@ -7,7 +7,8 @@
     current_locale:                       "<%= I18n.locale %>",
     required_locales:                     ["<%= REQUIRED_LOCALES.join('","').html_safe %>"],
 
-    plan_load_error_instructions:         "<%= escape_javascript(t('.plan_load_error_instructions')) %>",
+    on_plan_load_error_notified:          "<%= escape_javascript(t('.on_plan_load_error_notified')) %>",
+    on_plan_load_error:                   "<%= escape_javascript(t('.on_plan_load_error')) %>",
 
     plan:                                 "<%= escape_javascript(t('.plan')) %>",
     changes:                              "<%= escape_javascript(t('.changes')) %>",
@@ -27,9 +28,6 @@
     and_passed_with_grade:                "<%= escape_javascript(t('.and_passed_with_grade')) %>",
     in_period:                            "<%= escape_javascript(t('.in_period')) %>",
     but_not_scheduled:                    "<%= escape_javascript(t('.but_not_scheduled')) %>",
-
-    added:                                "<%= escape_javascript(t('.added')) %>",
-    removed:                              "<%= escape_javascript(t('.removed')) %>",
   };
 
   /* Translations available at O4.view.i18n */

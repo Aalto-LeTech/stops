@@ -30,7 +30,7 @@ gem 'thinking-sphinx', '3.0.0'
 #gem 'mongrel', '>= 1.2.0.pre2'
 
 group :assets do
-  gem 'lodash-rails'
+  #gem 'lodash-rails'
   gem 'coffee-rails', '~> 3.2.1'
   gem 'uglifier', '>= 1.0.3'
 

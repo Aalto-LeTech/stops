@@ -1,6 +1,8 @@
 class @BaseObject
 
 
+  CLASSNAME: 'BaseObject'
+
   DBG: false
   VIEWMODEL: undefined
   I18N: undefined
@@ -22,15 +24,15 @@ class @BaseObject
 
   # Renders the object into a string for debugging purposes
   toString: ->
-    return "BO[#{@boId}]::#{@constructor.name}#{@idS()}"
+    return "BO[#{@boId}]::#{@CLASSNAME}#{@idS()}"
 
 
   # Prints output to the console
   subLog: (util, msg) ->
     if @boId
-      dbg[util]("BO[#{@boId}]::#{@constructor.name}#{@idS()}::#{msg}")
+      dbg[util]("BO[#{@boId}]::#{@CLASSNAME}#{@idS()}::#{msg}")
     else
-      dbg[util]("BO::#{@constructor.name}::#{msg}")
+      dbg[util]("BO::#{@CLASSNAME}::#{msg}")
 
 
   # Prints output to the console

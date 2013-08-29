@@ -59,13 +59,13 @@ fi:
       courses_csv: 'Kurssitiedot'
     new_course_form_container:
       # Create new course form
+      course_create_link: 'Uusi kurssi'
       create_course_error_failed_to_load_course_box: 'Valitettavasti lomaketta ei pystytty lataamaan'
       create_course_saving: 'Tallennetaan...'
       create_course_error_heading: 'Virhe'
       create_course_heading: 'Luo uusi kurssi'
       create_course_help_text: 'Tässä voit luoda uuden kurssin. Syötä tarvittavat tiedot kaikillta vaadituilla kielillä.'
       create_course_validation_error: 'Jossakin kentässä on virheellinen syöte.'
-
     edit_modal:
       heading: "Muuta opinto-ohjelman nimi"
       name_label: "Opinto-ohjelman nimi"
@@ -102,7 +102,7 @@ fi:
         send: "Lähetä"
         existing_invitations: 'Voimassaolevat aiemmin lähetetyt kutsut'
         sent_success: "Kutsuviestejä lähetetään"
-    
+
   activerecord:
     errors:
       models:

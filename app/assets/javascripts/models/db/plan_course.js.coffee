@@ -1,5 +1,7 @@
-class @PlanCourse extends DbObject
+class @PlanCourse extends @DbObject
   # Nice and simple
+
+  CLASSNAME: 'PlanCourse'
 
   DbObject::addSubClass(PlanCourse)
 

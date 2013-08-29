@@ -1,6 +1,8 @@
 class @StudyPlan extends DbObject
   # Nice and simple
 
+  CLASSNAME: 'StudyPlan'
+
   DbObject::addSubClass(StudyPlan)
 
 StudyPlan::ASSOCS.merge([

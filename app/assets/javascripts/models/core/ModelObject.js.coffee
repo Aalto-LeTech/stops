@@ -1,6 +1,8 @@
 class @ModelObject extends BaseObject
 
 
+  CLASSNAME: 'ModelObject'
+
   ALL: []
   BYID: {}
 

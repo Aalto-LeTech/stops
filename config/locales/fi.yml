@@ -3,13 +3,6 @@
 # See http://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 fi:
-  navi_plan: "Oma opintosuunnitelma"
-  navi_curriculums: "Kaikki opinto-oppaat"
-  navi_courses: "Kurssit"
-
-  navi_my_plan: "Oma opintosuunnitelma"
-  navi_browse_curriculums: "Selaa opinto-oppaita"
-
   layouts:
     navs:
       top:
@@ -20,8 +13,6 @@ fi:
         courses: "Kurssit"
         login: "Kirjaudu"
         logout: "Kirjaudu ulos"
-
-  example_schedule: "Mallilukujärjestys"
 
   Ok: "OK"
   Upload: "Tallenna"
@@ -104,8 +95,11 @@ fi:
   # App specific
   ###########################
 
-  Course_code: "Kurssikoodi"
-  course_code: "kurssikoodi"
+  Code: "Koodi"
+  Name: "Nimi"
+  Extent: "Laajuus"
+  Grade: "Arvosana"
+  Length: "Kesto"
   cr: "op"
   Cr: "Op"
   competence: "Kompetenssi"

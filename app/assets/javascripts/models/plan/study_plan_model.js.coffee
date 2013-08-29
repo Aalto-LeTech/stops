@@ -48,6 +48,7 @@ class @StudyPlanModel extends ModelObject
       courseModel = CourseModel::create(planCourse)
       @included.push(courseModel)
       @originalsHash[courseModel.boId] = courseModel
+    @sort()
 
     if @included().length == 0
       dbg.lgW("The a StudyPlan has no courses!")
@@ -67,10 +68,15 @@ class @StudyPlanModel extends ModelObject
     return "#{super()}:{}"
 
 
+  sort: ->
+    @included().sort( (a, b) -> if a.code() >= b.code() then return 1 else return -1 )
+
+
   # Adds a course to the plan model and tracks changes
   add: (course) ->
     @lg("plan::add()...")
     @included.push(course)
+    @sort()
     @removed().removeIf(course)
     @removed.valueHasMutated()
     @added.push(course) if not @originalsHash[course.boId]

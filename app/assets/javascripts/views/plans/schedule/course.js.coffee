@@ -12,7 +12,7 @@ class @Course
     @isMisordered        = ko.observable(false)
     @isMisscheduled      = ko.observable(false)
 
-    @length              = ko.observable().extend({integer: {min: 1, max:  4}})  # Length in periods
+    @length              = ko.observable().extend({integer: {min: 1, max:  6}})  # Length in periods
     @credits             = ko.observable().extend({integer: {min: 0, max: 99}})
     @grade               = ko.observable().extend({integer: {min: 0, max:  5}})
 
@@ -48,6 +48,7 @@ class @Course
     @length.subscribe ((oldValue) ->
       if @period and PlanView::ISREADY
         @periodTmp = @period
+        @lengthTmp = oldValue
         @setPeriod(undefined)
     ), @, "beforeChange"
 
@@ -55,6 +56,13 @@ class @Course
     @length.subscribe (newValue) =>
       #dbg.lg("#{@}.length(#{newValue})")
       if @periodTmp and PlanView::ISREADY
+        sqna = @periodTmp.sequenceNumber
+        sqnb = @periodTmp.getNextPeriod(newValue - 1).sequenceNumber
+        lenlack = newValue + sqna - sqnb - 1
+        dbg.lg("len: #{@lengthTmp} -> #{newValue}  (#{sqna} - #{sqnb})")
+        dbg.lg("lenlack: #{lenlack}!!")
+        if lenlack > 0
+          @periodTmp = @periodTmp.getPreviousPeriod(lenlack)
         @setPeriod(@periodTmp)
         #@slot = @period.addCourse(this)
         @updatePosition()
@@ -390,7 +398,7 @@ class @Course
     # Add course to the new period
     @distributeCredits()
     @slot = @period?.addCourse(this)
-    dbg.lg("slot: #{@slot}.")
+    #dbg.lg("slot: #{@slot}.")
 
 
   # Updates the DOM elements to match model

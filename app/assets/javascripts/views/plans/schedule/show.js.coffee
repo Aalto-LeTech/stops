@@ -26,8 +26,8 @@ jQuery ->
       object = ko.dataFor(this)
       planView.selectObject(object) if event.which == 1
       event.stopPropagation()
-    .on 'mousedown', '#theleftwrapper, #themain', (event) ->
-      #dbg.lg("MouseDown: .object-info!")
+    .on 'mousedown', '#controls, .object-info, #plan-container', (event) ->
+      #dbg.lg("MouseDown: (tool)!")
       event.stopPropagation()
     .on 'mousedown', 'body', (event) ->
       #dbg.lg("MouseDown: body!")

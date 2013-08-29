@@ -37,14 +37,14 @@
       <% end %>
     <% end %>
   </div>
-  
+
   <h2>
     <%= @competence.localized_name %>
   </h2>
 
   <div class="row-fluid">
     <div class="span6">
-      
+
       <h3>
         <%= t('.skills') %>
       </h3>
@@ -55,11 +55,11 @@
           </li>
         <% end %>
       </ul>
-    
-      
+
+
     </div>
     <div class="span6">
-      
+
       <h3>
         <%= t('.strict_prereqs') %>
       </h3>
@@ -96,37 +96,32 @@
           </tr>
           <tr>
             <td></td>
-            <td><%= t(:competence_credits_total) %></td>
+            <td><%= t('.credits_total') %></td>
             <td><%= credits_counter %> <%=t :cr %></td>
           </tr>
 
           <% unless competence_selected %>
             <tr>
               <td></td>
-              <td><%= t(:competence_credits_shared) %></td>
+              <td><%= t('.credits_shared') %></td>
               <td><%= included_counter %>  <%=t :cr %></td>
             </tr>
             <tr>
               <td></td>
-              <td><%= t(:competence_credits_passed) %></td>
+              <td><%= t('.credits_passed') %></td>
               <td><%= passed_counter %> <%=t :cr %></td>
             </tr>
             <tr class="total">
               <td></td>
-              <td><%= t(:competence_credits_added) %></td>
+              <td><%= t('.credits_added') %></td>
               <td><%= "%.1f" % (credits_counter - included_counter) %> <%= t(:cr) %></td>
             </tr>
           <% end %>
         </tfoot>
       </table>
-    
-      
+
+
     </div>
-    <!--
-    <% if @user.study_plan.has_competence?(@competence) %>
-      <%= link_to t(:competence_supporting_courses_link), supporting_studyplan_competence_path(:id => @competence.id) %>
-    <% end %>
-    -->
   </div>
 </div>
 

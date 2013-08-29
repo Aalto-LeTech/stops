@@ -129,6 +129,7 @@ Ops::Application.routes.draw do
 
   #match '/:locale' => "plans/schedule#show", :as => :frontpage  # Added a redirect instead
   match '/:locale' => "frontpage#index", :as => :frontpage
+  post 'client_side_error', :controller => 'application', as: 'client_side_error'
   root :to => "application#redirect_by_locale"
 
 end

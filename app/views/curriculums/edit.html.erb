@@ -6,29 +6,36 @@
   <%= @curriculum.name %> - <%=t '.title' %>
 <% end %>
 
-
-<div class="inline-heading-container">
-  <h1 id="name-heading"><%= @curriculum.name %></h1>
-
-  <% if can? :update, @curriculum %>
-    <a href="#edit-modal" data-toggle="modal" class="btn btn-warning btn-small vertical-fix">
-      <i class="icon-pencil icon-white"></i><%= t '.change_name' %>
-    </a>
-  <% end %>
-</div>
-
 <%= render "edit_modal" %>
 
-<div class="admin-tools well">
-  <ul class="nav nav-list">
-    <!--li class="nav-header"><%= t :admin_toolbox_heading %></li-->
-    <% if can? :import, @curriculum %>
-      <li><%= link_to t('.import_csv_link'), edit_import_csv_curriculum_path(:id => @curriculum) %></li>
-    <% end %>
-    <li><a href="/O4-ohje.pdf">Käyttöohje</a></li>
-    <li><a href="/O4-Bloomin_taksonomia.pdf">Bloomin taksonomia</a></li>
-    <li><%= link_to t('.edit_roles'), new_curriculum_role_path(:curriculum_id => @curriculum) %></li>
+<div class="pull-right">
+  <ul class="nav nav-pills">
+    <li class="active"><%= link_to t('Admin_view'), edit_curriculum_path(:id => @curriculum) %></li>
+    <li><%= link_to t('Student_view'), @curriculum %></li>
   </ul>
+
+  <div class="admin-tools well">
+    <ul class="nav nav-list">
+      <!--li class="nav-header"><%= t :admin_toolbox_heading %></li-->
+      <% if can? :import, @curriculum %>
+        <li><%= link_to t('.import_csv_link'), edit_import_csv_curriculum_path(:id => @curriculum) %></li>
+      <% end %>
+      <li><a href="/O4-ohje.pdf">Käyttöohje</a></li>
+      <li><a href="/O4-Bloomin_taksonomia.pdf">Bloomin taksonomia</a></li>
+      <li><%= link_to t('.edit_roles'), new_curriculum_role_path(:curriculum_id => @curriculum) %></li>
+    </ul>
+  </div>
+</div>
+
+<div>
+  <h1 id="name-heading" class="hover-buttons"><%= @curriculum.name %>
+
+  <% if can? :update, @curriculum %>
+    <a href="#edit-modal" title="<%= t '.change_name' %>" data-toggle="modal" class="hover-button btn btn-default btn-small vertical-fix">
+      <i class="icon-pencil"></i>
+    </a>
+  <% end %>
+  </h1>
 </div>
 
 <h2><%= t 'curriculums.competences_heading' %></h2>

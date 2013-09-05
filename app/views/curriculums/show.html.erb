@@ -1,27 +1,14 @@
-<h1><%= @curriculum.name %></h1>
-
-<% if can? :update, @curriculum %>
-  <!--div>TODO: courses list</div-->
-
-  <div class="admin-tools well">
-    <ul class="nav nav-list">
-      <li class="nav-header"><%= t('admin_toolbox_heading')%></li>
-      <li><%= link_to t('.curriculum_edit_link'), edit_curriculum_path(:id => @curriculum) %></li>
-      <!--li><%= link_to t(:curriculum_cycles_link), cycles_curriculum_path(:id => @curriculum) %></li-->
-      <!--li><%= link_to t('.list_outcomes'), outcomes_curriculum_path(:id => @curriculum) %></li-->
-      
-    </ul>
-  </div>
+<% if can? :update, @curriculum %>  
+  <ul class="nav nav-pills pull-right">
+    <li><%= link_to t('Admin_view'), edit_curriculum_path(:id => @curriculum) %></li>
+    <li class="active"><%= link_to t('Student_view'), @curriculum %></li>
+  </ul>
 <% end %>
+  
+<div>
+  <h1><%= @curriculum.name %></h1>
+</div>
 
-<% if can? :update, @curriculum %>
-  <p>
-    <%= link_to edit_curriculum_path(:id => @curriculum), { :class => 'btn' } do %>
-      <i class="icon-edit"></i>
-      <%= t('.curriculum_edit_link') %>
-    <% end %>
-  </p>
-<% end %>
 
 <% unless @competences.empty? %>
   <h2><%= t 'curriculums.competences_heading' %></h2>

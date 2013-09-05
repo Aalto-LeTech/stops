@@ -26,6 +26,8 @@ en:
   Back: "Back"
   Visualize: "Visualize"
   Updated_at: "Updated at"
+  Admin_view: "Editing view"
+  Student_view: "Student's view"
   admin_toolbox_heading: "Administration"
 
 

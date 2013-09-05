@@ -1,7 +1,15 @@
-<h1>
-  <%= link_to @curriculum.name, edit_curriculum_path(@curriculum) %> /
-  <%= @scoped_course.localized_name %>
-</h1>
+<ul class="nav nav-pills pull-right">
+  <li class="active"><%= link_to t('Admin_view'), edit_prereqs_curriculum_course_path(:curriculum_id => @curriculum, :id => @scoped_course) %></li>
+  <li><%= link_to t('Student_view'), curriculum_course_path(curriculum_id: @curriculum, id: @scoped_course) %></li>
+</ul>
+
+<div>
+  <h1>
+    <%= link_to @curriculum.name, edit_curriculum_path(@curriculum) %> /
+    <%= @scoped_course.localized_name %>
+  </h1>
+</div>
+
 
 <ul class="nav nav-tabs">
   <li<%= controller.action_name == 'edit' ? ' class="active"'.html_safe : '' %>><%= link_to t('curriculums.courses.edit_tab'), edit_curriculum_course_path(:curriculum_id => @curriculum, :id => @scoped_course) %></li>

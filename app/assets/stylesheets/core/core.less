@@ -49,13 +49,11 @@
 ////////////////////////////////////////////////////////////////////////////////
 // Scaffolding
 
-html, body
-{
+html, body {
   height: 100%;
 }
 
-#thewrapper
-{
+#thewrapper {
   width: 100%;
 }
 
@@ -66,75 +64,62 @@ html, body
 @navBarColorA: #0072d6;
 @navBarColorB: #0057a3;
 
-.navbar
-{
+.navbar {
   ////////////////////////////////////////////////////////////////////////////////
   // Brand
 
-  .brand
-  {
+  .brand {
     color: white;
     text-shadow: 0 1px 0 #000;
   }
 
-  .nav > li > a
-  {
+  .nav > li > a {
     color: #fff;
     text-shadow: none;
 
-    &:hover
-    {
+    &:hover {
       color: #fff;
       text-decoration: underline;
     }
   }
 
-  .divider-vertical
-  {
+  .divider-vertical {
     border-right: 1px solid @navBarColorA;
     border-left: 1px solid @navBarColorB;
   }
 
-  .navbar-inner
-  {
+  .navbar-inner {
     background-color: #0065BD;
     #gradient > .vertical(@navBarColorA, @navBarColorB);
 
     // Display width dependent navbar tweaks
-    @media (max-width: 1200px)
-    {
+    @media (max-width: 1200px) {
       // Hide the full-length program name when there isn't enough space to display it.
-      .program-name
-      {
+      .program-name {
         display: none !important;
       }
     }
   }
 
-  .lang-link
-  {
+  .lang-link {
     display: inline-block;
 
-    & + .lang-link
-    {
+    & + .lang-link {
       padding-left:   5px;
       padding-right:  5px;
     }
 
-    &:first-child
-    {
+    &:first-child {
       padding-right:  5px;
     }
 
-    &:last-child
-    {
+    &:last-child {
       padding-left:   5px;
       padding-right:  15px;
     }
   }
 
-  .navbar-link, .navbar-text
-  {
+  .navbar-link, .navbar-text {
     color:        #fff;
   }
 }
@@ -143,111 +128,94 @@ html, body
 ////////////////////////////////////////////////////////////////////////////////
 // Headings
 
-h1, h2, h3, h4
-{
+h1, h2, h3, h4 {
   font-family: sans-serif;
   margin: 2em 0em .5em 0em;
 }
 
-h1
-{
+h1 {
   font-size: 180%;
 }
 
-h2
-{
+h2 {
   font-size: 120%;
 }
 
-h3
-{
+h3 {
   font-size: 110%;
 }
 
-h4
-{
+h4 {
   font-weigth: normal;
   font-size: 100%;
 
-  &.colorful
-  {
+  &.colorful {
     color: #F06118;
     border-bottom: 1px solid #704500;
   }
 }
 
-h1 + h2, h1 + h3, h2 + h3
-{
+h1 + h2, h1 + h3, h2 + h3 {
   margin-top: 1em;
 }
 
-h1:first-child, h2:first-child, h3:first-child, h4:first-child
-{
+h1:first-child, h2:first-child, h3:first-child, h4:first-child {
   margin-top: 0px;
-}
-
-
-////////////////////////////////////////////////////////////////////////////////
-// Text classes
-
-.hint
-{
-  color: #a0a0a0;
-  font-size: small;
-  font-style: italic;
 }
 
 
 ////////////////////////////////////////////////////////////////////////////////
 // General utility classes
 
-.clear
-{
+.hint {
+  color: #a0a0a0;
+  font-size: small;
+  font-style: italic;
+}
+
+.clear {
   clear: both;
 }
 
-.hide
-{
+.hide {
   display: none;
 }
 
-.invisible
-{
+.invisible {
   visibility: hidden;
 }
 
 // Micro clearfix hack
 //   source: http://nicolasgallagher.com/micro-clearfix-hack/
-.clearfix
-{
+.clearfix {
   @include clearfix;
 }
 
-.centered
-{
+.centered {
   text-align: center;
 }
 
-.placeholder
-{
+/*
+FIXME: this affects all fields, not only placeholders
+.placeholder {
   font-style:   italic;
   color:        gray;
   font-size:    0.9em;
   font-family:  Arial, sans-serif;
 }
+*/
 
-.full-height
-{
+
+.full-height {
   height: 100%;
 }
 
-.scroll-vertical
-{
+.scroll-vertical {
   overflow-y: scroll;
 }
 
-.bottom-weight
-{
+/* TODO: This is only used in one place. Is this necessary? */
+.bottom-weight {
   margin-bottom: 20px;
 }
 
@@ -255,25 +223,21 @@ h1:first-child, h2:first-child, h3:first-child, h4:first-child
 ////////////////////////////////////////////////////////////////////////////////
 // Bootstrap style additions
 
-.popover.closable-popover
-{
+.popover.closable-popover {
   // Better positiniong for popover close button
-  .close
-  {
+  .close {
     position: relative;
     top:   5px;
     right: 5px;
   }
 
   // Leave some space for close button
-  .popover-title
-  {
+  .popover-title {
     padding-right: 30px;
   }
 }
 
-.nav-tabs > li > .btn-mini
-{
+.nav-tabs > li > .btn-mini {
   /* Align mini button to the center */
   margin: 8px 5px;
 }
@@ -282,13 +246,11 @@ h1:first-child, h2:first-child, h3:first-child, h4:first-child
 ////////////////////////////////////////////////////////////////////////////////
 // Controls & Forms
 
-.form-control-group
-{
+.form-control-group {
   margin-bottom: 20px;
 }
 
-.form-label
-{
+.form-label {
   width:          140px;
   float:          left;
   padding-top:    5px;
@@ -296,13 +258,11 @@ h1:first-child, h2:first-child, h3:first-child, h4:first-child
   text-align:     right;
 }
 
-.form-controls
-{
+.form-controls {
   margin-left: 160px;
 }
 
-.field-lengthy
-{
+.field-lengthy {
   width: 300px;
 }
 
@@ -310,8 +270,7 @@ h1:first-child, h2:first-child, h3:first-child, h4:first-child
 ////////////////////////////////////////////////////////////////////////////////
 // Page loader gif
 
-.loader
-{
+.loader {
   position: fixed;
   left: 0px;
   top: 0px;
@@ -325,24 +284,20 @@ h1:first-child, h2:first-child, h3:first-child, h4:first-child
 ////////////////////////////////////////////////////////////////////////////////
 // Prereq graph
 
-.course-graph
-{
-  td
-  {
+.course-graph {
+  td {
     vertical-align: middle;
     padding: .5em;
     font-family: sans-serif;
   }
 
-  .graph-current a
-  {
+  .graph-current a {
     border: 2px solid #8080ff;
     font-size: 100%;
     font-weight: bold;
   }
 
-  p
-  {
+  p {
     display: block;
     border: 1px solid #d0d0d0;
     background: #e0e0ff;
@@ -351,25 +306,13 @@ h1:first-child, h2:first-child, h3:first-child, h4:first-child
     font-size: small;
   }
 
-  a
-  {
+  a {
     text-decoration: none;
     color: black;
   }
 }
 
-/*
-#svg
-{
-  z-index: 1;
-  position: absolute;
-  left: 0px;
-  top: 0px;
-}
-*/
-
-#course-graph
-{
+#course-graph {
   position: relative;
   left: 0px;
   top: 0px;

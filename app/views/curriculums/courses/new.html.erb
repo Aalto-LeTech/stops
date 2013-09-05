@@ -2,37 +2,15 @@
 
 <h1><%=t '.create_course_heading' %></h1>
 
+
 <%= form_for @scoped_course, :url => curriculum_courses_path(@curriculum) do |f| %>
   <div class="form-control-group">
     <%= f.label t('.course_code'), :class => 'form-label' %>
     <div class="form-controls">
-      <%= f.text_field :course_code, :class => 'field-lengthy' %>
+      <%= text_field_tag :course_code, @course_code, :class => 'field-lengthy' %>
+      <span class="help-inline"><%=t '.create_course_hint' %></span>
     </div>
   </div>
-  
-  <div class="form-control-group">
-    <%= f.label t('.credits'), :class => "form-label" %>
-    <div class="form-controls">
-      <%= f.text_field :credits, :class => "field-lengthy" %>
-    </div>
-  </div>
-
-  <div class="form-control-group">
-    <%= f.label t('.course_teaching_language'), :class => 'form-label' %>
-    <div class="form-controls">
-      <%= select_tag 'course-form-teaching-lang', options_for_select(@teaching_lang_options) %>
-    </div>
-  </div>
-
-  <%= f.fields_for :course_descriptions do |cf| %>
-    <div class="form-control-group">
-      <%= cf.label t(".course_title_in_" + cf.object.locale), :class => "form-label" %>
-      <%= cf.hidden_field :locale %>
-      <div class="form-controls">
-        <%= cf.text_field :name, :class => 'field-lengthy' %>
-      </div>
-    </div>
-  <% end %>
 
   <div class="form-controls">
     <%= link_to t(:Cancel), edit_curriculum_path(@curriculum), :class => 'btn' %>

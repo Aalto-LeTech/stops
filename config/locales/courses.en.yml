@@ -39,12 +39,9 @@ en:
         credits: 'Credits'
       new:
         create_course_heading: 'Create course'
+        create_course_hint: "If you don't know the actual code yet, enter some temporary identifier."
         course_code: 'Course code'
-        course_teaching_language: 'Teaching language'
-        course_title_in_fi: "Course name in Finnnish"
-        course_title_in_sv: "Course name in Swedish"
-        course_title_in_en: "Course name in English"
-        credits: 'Credits'
+        course_code_required: 'A course code is required to identify the course.'
       edit_prereqs:
         title: 'Set prerequisites'
         edit_course_heading: 'Edit course'
@@ -52,6 +49,52 @@ en:
       edit_as_a_prereq:
         title: 'Set prerequisites'
         help_text: "Here you can edit the skills of the current course (found on the left side) as a prerequirement to other skills, which can be searched using the search box on the right. Please begin by using the search on the right to find skills to which some skill from the left should be a prerequirement. Then select a skill from the right side and add or remove skills of the current course by clicking the 'Supporting' and 'Mandatory' buttons on the left side."
+      edit:
+        heading: 'Kurssin tiedot'
+        hint: ''
+        contact: 'Information given by'
+        contact_hint: ''
+        comments: 'You can write comments or notes to the right column'
+        code: 'Course code'
+        code_hint: ''
+        credits: 'Credits'
+        credits_hint: ''
+        name_fi: 'Name in Finnish'
+        name_en: 'Name in English'
+        name_sv: 'Name in Swedish'
+        name_hint: 'Finnish and Swedish names are not required for courses that are lectured in English.'
+        department: 'Department'
+        department_hint: 'Opetuksen järjestävän laitoksen vastuualuekoodi (T-koodi)'
+        language: 'Teaching language'
+        language_hint: ''
+        instructors: 'Lecturers'
+        instructors_hint: ''
+        grading_scale: 'Grading scale'
+        grading_scale_hint: '1-5 tai pass/fail'
+        graduate_course: 'Jatko-opintokelpoisuus'
+        graduate_course_hint: ''
+        changing_topic: 'Vaihtuvasisältöisyys'
+        changing_topic_hint: ''
+        alternatives: 'Leikkaavuus toisen kurssin kanssa (voiko suorittaa molempia jne.)'
+        alternatives_hint: ''
+        period: 'Period'
+        period_hint: 'Todennäköinen, mutta alustava tieto kurssisijoitteluista opetusperiodeihin ilmenee liitteestä "20130107 Kandiohj uudet kurssit ja vastuuopet.xlsx"'
+        prerequisites: 'Prerequisites'
+        prerequisites_hint: ''
+        outcomes: 'Learning goals'
+        outcomes_hint: ''
+        content: 'Sisältö'
+        content_hint: ''
+        assignments: 'Toteutus ja työmuodot'
+        assignments_hint: ''
+        grading_details: 'Arvosteluperusteet'
+        grading_details_hint: ''
+        materials: 'Oppimateriaali'
+        materials_hint: ''
+        replaces: 'Korvaavuudet'
+        replaces_hint: ''
+        other: 'Muita tietoja'
+        other_hint: 'Kurssista voidaan ilmoittaa kurssin asema, kurssin taso, kurssin kotisivu, CEFR-taso (koskee kielikursseja) ja muita lisätietoja'
       graph:
         title: 'Course graph'
       skill_editor:

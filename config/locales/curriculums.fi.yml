@@ -32,7 +32,6 @@ fi:
       curriculum_cycles_link: "Tarkista syklit"
       admin_heading: "Hallinta"
       list_outcomes: "Listaa osaamistavoitteet"
-      edit_roles: "Lisää opettajia"
       temp_courses_heading: "Uudet kandikurssit"
       temp_courses_hint: "Klikkaa kurssiasi listasta ja anna pyydetyt tiedot. Jos kurssia ei löydy listasta, luo uusi painamalla 'Luo kurssi'-nappulaa."
       create_temp_course: "Luo kurssi"
@@ -40,6 +39,7 @@ fi:
       title: 'Muokkaa'
       additional_tools_heading: "Lisätoiminnot"
       import_csv_link: "Tuo tiedot CSV-tiedostosta"
+      edit_roles: "Lisää opettajia"
       change_name: "Nimeä uudelleen"
       curriculum_cycles_link: "Tarkista syklit"
       course_create_link: 'Luo kurssi'

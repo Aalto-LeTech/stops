@@ -139,49 +139,37 @@ class Curriculums::CoursesController < CurriculumsController
 
     @scoped_course = ScopedCourse.new
     @scoped_course.curriculum = @curriculum #Curriculum.find(params[:curriculum_id])
-    #@scoped_course.abstract_course = @abstract_course
-
-    # Create empty descriptions for each required locale
-    REQUIRED_LOCALES.each do |locale|
-      @scoped_course.course_descriptions << CourseDescription.new(:locale => locale)
-    end
-
-    @teaching_lang_options = REQUIRED_LOCALES.map do |locale|
-      [t(locale + '_lang'), locale]
-    end
-
-    respond_to do |format|
-      format.html
-      format.js
-    end
   end
 
   def create
     authorize! :update, @curriculum
 
+    @course_code = params[:course_code].strip
+    if @course_code.blank?
+      flash[:error] = t('curriculums.courses.new.course_code_required')
+      redirect_to new_curriculum_course_path(:curriculum_id => @curriculum)
+      return
+    end
+    
     # Check if course exists already
-    existing_course = ScopedCourse.where(:course_code => params[:scoped_course][:course_code], :curriculum_id => @curriculum.id).first
+    existing_course = ScopedCourse.where(:course_code => @course_code, :curriculum_id => @curriculum.id).first
     if existing_course
       redirect_to edit_curriculum_course_path(:curriculum_id => @curriculum, :id => existing_course)
       return
     end
     
     # Find or create AbstractCourse
-    abstract_course = AbstractCourse.find_by_code(params[:scoped_course][:course_code])
-    if abstract_course
-      params[:scoped_course].delete("course_descriptions_attributes")
-    else
-      abstract_course = AbstractCourse.create(:code => params[:scoped_course][:course_code])
-    end
+    abstract_course = AbstractCourse.find_by_code(@course_code) || AbstractCourse.create(:code => @course_code)
 
     @scoped_course = ScopedCourse.new(params[:scoped_course])
+    @scoped_course.course_code = @course_code
     @scoped_course.curriculum = @curriculum
     @scoped_course.abstract_course = abstract_course
 
     respond_to do |format|
       format.html do
         if @scoped_course.save
-          redirect_to edit_curriculum_path(@curriculum)
+          redirect_to edit_curriculum_course_path(:curriculum_id => @curriculum, :id => @scoped_course)
         else
           render :action => "new"
         end
@@ -190,10 +178,22 @@ class Curriculums::CoursesController < CurriculumsController
   end
 
   def edit
-    @scoped_course = ScopedCourse.find(params[:id])
     authorize! :update, @curriculum
-
-    @localized_description = @scoped_course.localized_description
+    
+    @scoped_course = ScopedCourse.find(params[:id])
+    @abstract_course = @scoped_course.abstract_course
+    
+    @course_descriptions = @abstract_course.course_descriptions.all
+    REQUIRED_LOCALES.each do |locale|
+      course_description = @course_descriptions.select{|desc| desc.locale == locale }[0] 
+      
+      unless course_description
+        course_description = CourseDescription.new(:locale => locale, :name => '')
+        @course_descriptions << course_description
+      end
+      
+      @localized_description = course_description if locale == I18n.locale.to_s
+    end
 
     render :action => 'edit', :layout => 'views/curriculums/wide'
   end
@@ -206,34 +206,42 @@ class Curriculums::CoursesController < CurriculumsController
     new_course_code = params[:scoped_course]['course_code']
     if new_course_code != @scoped_course.abstract_course.code
       # If scoped course exists in this curriculum, show error message
-      existing_course = ScopedCourse.where(:course_code => params[:scoped_course][:course_code], :curriculum_id => @curriculum.id).first
+      existing_course = ScopedCourse.where(:course_code => new_course_code, :curriculum_id => @curriculum.id).first
       if existing_course
-        flash[:error] = "Another course with code #{params[:scoped_course][:course_code]} already exists"
+        flash[:error] = "Another course with code #{new_course_code} already exists"
         redirect_to edit_curriculum_course_path(:curriculum_id => @curriculum, :id => @scoped_course)
         return
       end
       
-      abstract_course = AbstractCourse.find_by_code(new_course_code) 
-      if abstract_course
-        # Do not update course descriptions because this would update the old ones
-        params[:scoped_course].delete("course_descriptions_attributes")
-      else
-        abstract_course = AbstractCourse.create(:code => new_course_code)
-        params[:scoped_course][:course_descriptions_attributes].each do |key, hash|
-          hash.delete("id")  # Create new course descriptions instead of updating old ones
-        end
-      end
-      
+      abstract_course = AbstractCourse.find_by_code(new_course_code) || AbstractCourse.create(:code => new_course_code)
       @scoped_course.abstract_course = abstract_course
     end
+    
+    # Update CourseDescriptions
+    course_descriptions = @scoped_course.abstract_course.course_descriptions.all
+    params['course_descriptions'].each do |locale, values|
+      # Find or create course_description by locale
+      course_description = course_descriptions.select {|desc| desc.locale == locale}[0] ||
+        CourseDescription.new(:abstract_course_id => @scoped_course.abstract_course.id, :locale => locale, :name => values[:name]) unless course_description
+      
+      course_description.name = values[:name]
+      
+      if params['localized_description'] && params['localized_description']['locale'] == course_description.locale
+        course_description.attributes = params['localized_description']
+      end
+      
+      course_description.save
+    end
+    
     
     @scoped_course.update_comments(params[:comments])
     if @scoped_course.update_attributes(params[:scoped_course])
       flash[:success] = 'Information updated'
-      redirect_to edit_curriculum_course_path(:curriculum_id => @curriculum, :id => @scoped_course)
     else
-      render :action => "edit"
+      flash[:error] = 'Failed to update information. Please report this problem to staff.'
     end
+    
+    redirect_to edit_curriculum_course_path(:curriculum_id => @curriculum, :id => @scoped_course)
   end
 
   def graph

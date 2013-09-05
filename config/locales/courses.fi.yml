@@ -39,12 +39,9 @@ fi:
         credits: 'Opintopisteet'
       new:
         create_course_heading: 'Luo kurssi'
+        create_course_hint: 'Jos et tiedä todellista kurssikoodia, keksi jokin väliaikainen tunniste.'
         course_code: "Kurssikoodi"
-        course_teaching_language: 'Opetuskieli'
-        course_title_in_fi: "Kurssin nimi suomeksi"
-        course_title_in_sv: "Kurssin nimi ruotsiksi"
-        course_title_in_en: "Kurssin nimi englanniksi"
-        credits: 'Opintopisteet'
+        course_code_required: 'Kurssille on annettava jokin tunniste.'
       edit_prereqs:
         title: 'Aseta esitiedot'
         edit_course_heading: 'Edit course'

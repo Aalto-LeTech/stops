@@ -32,7 +32,6 @@ en:
       curriculum_cycles_link: "Check cycles"
       admin_heading: "Administration"
       list_outcomes: "List outcomes"
-      edit_roles: "Add teachers"
       temp_courses_heading: "New bachelor level courses"
       temp_courses_hint: "Click your course on the list and input the required information. If you cannot find the course from the list, create a new one by clicking 'Create course'-button."
       create_temp_course: "Create course"
@@ -40,6 +39,7 @@ en:
       title: 'Edit'
       additional_tools_heading: "Additional tools"
       import_csv_link: "Import using CSV data"
+      edit_roles: "Add teachers"
       change_name: "Change name"
       curriculum_cycles_link: "Check cycles"
       course_create_link: 'Create course'

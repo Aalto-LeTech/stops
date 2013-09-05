@@ -1,20 +1,7 @@
 # Course that is not scoped to a specific curriculum or period.
 class AbstractCourse < ActiveRecord::Base
 
-  #  create_table "abstract_courses", :force => true do |t|
-  #    t.string "code"
-  #  end
-
-  # members
-  #  - code
-  #  <- localized_description = course_descriptions (name, locale, ...)
-  #  <- scoped_courses
-  #  <- course_instances
-  #  <- plan_courses
-  #  <- periods <- course_instances
-
-
-  has_many :course_descriptions
+  has_many :course_descriptions, :order => :locale
   
   has_one :localized_description, :class_name => "CourseDescription",
           :conditions => proc { "locale = '#{I18n.locale}'" }
@@ -31,7 +18,7 @@ class AbstractCourse < ActiveRecord::Base
 
   def localized_name
     desc = localized_description
-    (desc && desc.name != "" ) ? desc.name : nil
+    (desc && desc.name != "") ? desc.name : nil
   end
 
 

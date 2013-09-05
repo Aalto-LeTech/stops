@@ -1,33 +1,13 @@
 # Course as a part of a curriculum, e.g. Programming 101 as described in the 2011 study guide
 class ScopedCourse < CompetenceNode
 
-  # members
-  #  -> abstract_course
-  #  -> abstract_course -> localized_description = course_descriptions (name, locale, ...) -> localized_name
-  #  -> abstract_course -> periods (future)
-  #  -> skill_descriptions & localized_skill_descriptions
-  #  -> course_prereqs ???
-  #  -> prereqs ???
-  #  -> strict_prerequirement_skills ???
-  #  -> prereqs ???
-  #  -> strict_prereqs ???
-  #  -> supporting_prereqs ???
-  #  -> course_prereq_to ???
-  #  -> prereq_to ???
-  #  <- comments
-
-
   # Abstract course
   belongs_to :abstract_course
-  accepts_nested_attributes_for :abstract_course
-
 
   # Localized descriptions
   has_many :course_descriptions,
           :primary_key => :abstract_course_id,
           :foreign_key => :abstract_course_id
-
-  accepts_nested_attributes_for :course_descriptions
 
   has_one :localized_description, :class_name => "CourseDescription",
           :conditions => proc { "locale = '#{I18n.locale}'" },

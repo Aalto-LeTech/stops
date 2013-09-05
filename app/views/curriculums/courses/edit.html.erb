@@ -2,21 +2,20 @@
 
 <%= render 'tabs' %>
 
-<p class="hint"><%=t '.hint' %></p>
-
 <%= form_for(@scoped_course, :url => curriculum_course_path(:curriculum_id => @curriculum, :id => @scoped_course), :html => {:class => 'form-horizontal'}) do |f| %>
+  <p class="hint"><%=t :Updated_at %> <%=l @scoped_course.updated_at %></p>
 
-  <table class="temp-course-form">
+  <table>
     <tbody>
-      <tr>
-        <td><%= f.label :contact, t('.contact'), :class => 'control-label' %></td>
-        <td><%= f.text_field :contact %></td>
-        <td class="hint"><%=t '.contact_hint' %></td>
-      </tr>
       <tr>
         <td><%= f.label :course_code, t('.code'), :class => 'control-label' %></td>
         <td><%= f.text_field :course_code %></td>
         <td class="hint"><%=t '.code_hint' %></td>
+      </tr>
+      <tr>
+        <td><%= f.label :contact, t('.contact'), :class => 'control-label' %></td>
+        <td><%= f.text_field :contact %></td>
+        <td class="hint"><%=t '.contact_hint' %></td>
       </tr>
       <tr>
         <td><%= f.label :credits, t('.credits'), :class => 'control-label' %></td>
@@ -28,13 +27,15 @@
       <tr>
         <td colspan="3"><span class="hint"><%= t('.name_hint').html_safe %></td>
       </tr>
-      <%= f.fields_for :course_descriptions do |cf| %>
-        <%= cf.hidden_field :locale %>
-        <tr>
-          <td><%= label_tag :name, t(".name_#{cf.object.locale}"), :class => 'control-label' %></td>
-          <td><%= cf.text_field :name %></td>
-          <td></td>
-        </tr>
+      
+      <% @course_descriptions.each_with_index do |description, index| %>
+        <%= fields_for "course_descriptions[#{description.locale}]", description do |cf| %>
+          <tr>
+            <td><%= label_tag :name, t(".name_#{cf.object.locale}"), :class => 'control-label' %></td>
+            <td><%= cf.text_field :name %></td>
+            <td></td>
+          </tr>
+        <% end %>
       <% end %>
       
       <tr>
@@ -69,85 +70,88 @@
     </tbody>
   </table>
   
-  <%= fields_for @localized_description do |cf| %>
-    <table class="temp-course-form">
-      <tbody>
-        <tr>
-          <td><%= cf.label :department, t('.department'), :class => 'control-label' %></td>
-          <td><%= cf.text_field :department %></td>
-          <td class="hint"><%=t '.department_hint' %></td>
-        </tr>
-        <tr>
-          <td><%= cf.label :grading_scale, t('.grading_scale'), :class => 'control-label' %></td>
-          <td>
-            <label>
-              <%= cf.radio_button :grading_scale, '1-5' %>
-              1-5
-            </label>
-            <label>
-              <%= cf.radio_button :grading_scale, 'Hyväksytty/Hylätty' %>
-              Hyväksytty/Hylätty
-            </label>
-          </td>
-          <td></td>
-        </tr>
-        <tr>
-          <td></td>
-          <td></td>
-          <td class="hint"><%=t '.comments' %></td>
-        </tr>
-        <tr>
-          <td><%= cf.label :alternatives, t('.alternatives'), :class => 'control-label' %></td>
-          <td><%= cf.text_area :alternatives, :rows => 5, :class => 'input-xxlarge' %></td>
-          <td><%= scoped_course_comment('alternatives') %></td>
-        </tr>
-        <tr>
-          <td><%= cf.label :prerequisites, t('.prerequisites'), :class => 'control-label' %></td>
-          <td><%= cf.text_area :prerequisites, :rows => 5, :class => 'input-xxlarge' %></td>
-          <td><%= scoped_course_comment('prerequisites') %></td>
-        </tr>
-        <tr>
-          <td><%= cf.label :outcomes, t('.outcomes'), :class => 'control-label' %></td>
-          <td><%= cf.text_area :outcomes, :rows => 5, :class => 'input-xxlarge' %></td>
-          <td><%= scoped_course_comment('outcomes') %></td>
-        </tr>
-        <tr>
-          <td><%= cf.label :content, t('.content'), :class => 'control-label' %></td>
-          <td><%= cf.text_area :content, :rows => 5, :class => 'input-xxlarge' %></td>
-          <td><%= scoped_course_comment('content') %></td>
-        </tr>
-        <tr>
-          <td><%= cf.label :assignments, t('.assignments'), :class => 'control-label' %></td>
-          <td><%= cf.text_area :assignments, :rows => 5, :class => 'input-xxlarge' %></td>
-          <td><%= scoped_course_comment('assignments') %></td>
-        </tr>
-        <tr>
-          <td><%= cf.label :grading_details, t('.grading_details'), :class => 'control-label' %></td>
-          <td><%= cf.text_area :grading_details, :rows => 5, :class => 'input-xxlarge' %></td>
-          <td><%= scoped_course_comment('grading_details') %></td>
-        </tr>
-        <tr>
-          <td><%= cf.label :materials, t('.materials'), :class => 'control-label' %></td>
-          <td><%= cf.text_area :materials, :rows => 5, :class => 'input-xxlarge' %></td>
-          <td><%= scoped_course_comment('materials') %></td>
-        </tr>
-        <tr>
-          <td><%= cf.label :replaces, t('.replaces'), :class => 'control-label' %></td>
-          <td><%= cf.text_area :replaces, :rows => 5, :class => 'input-xxlarge' %></td>
-          <td><%= scoped_course_comment('replaces') %></td>
-        </tr>
-        <tr>
-          <td><%= cf.label :other, t('.other'), :class => 'control-label' %></td>
-          <td><%= cf.text_area :other, :rows => 5, :class => 'input-xxlarge' %></td>
-          <td><%= scoped_course_comment('other') %></td>
-        </tr>
-        <tr>
-          <td></td>
-          <td colspan="2"><span class="hint"><%=t '.other_hint' %></span></td>
-        </tr>
-      </tbody>
-    </table>
-  
+  <% if @localized_description %>
+    <%= fields_for :localized_description, @localized_description do |cf| %>
+      <%= cf.hidden_field :locale %>
+      <table class="temp-course-form">
+        <tbody>
+          <tr>
+            <td><%= cf.label :department, t('.department'), :class => 'control-label' %></td>
+            <td><%= cf.text_field :department %></td>
+            <td class="hint"><%=t '.department_hint' %></td>
+          </tr>
+          <tr>
+            <td><%= cf.label :grading_scale, t('.grading_scale'), :class => 'control-label' %></td>
+            <td>
+              <label>
+                <%= cf.radio_button :grading_scale, '1-5' %>
+                1-5
+              </label>
+              <label>
+                <%= cf.radio_button :grading_scale, 'Hyväksytty/Hylätty' %>
+                Hyväksytty/Hylätty
+              </label>
+            </td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td class="hint"><%=t '.comments' %></td>
+          </tr>
+          <tr>
+            <td><%= cf.label :alternatives, t('.alternatives'), :class => 'control-label' %></td>
+            <td><%= cf.text_area :alternatives, :rows => 5, :class => 'input-xxlarge' %></td>
+            <td><%= scoped_course_comment('alternatives') %></td>
+          </tr>
+          <tr>
+            <td><%= cf.label :prerequisites, t('.prerequisites'), :class => 'control-label' %></td>
+            <td><%= cf.text_area :prerequisites, :rows => 5, :class => 'input-xxlarge' %></td>
+            <td><%= scoped_course_comment('prerequisites') %></td>
+          </tr>
+          <tr>
+            <td><%= cf.label :outcomes, t('.outcomes'), :class => 'control-label' %></td>
+            <td><%= cf.text_area :outcomes, :rows => 5, :class => 'input-xxlarge' %></td>
+            <td><%= scoped_course_comment('outcomes') %></td>
+          </tr>
+          <tr>
+            <td><%= cf.label :content, t('.content'), :class => 'control-label' %></td>
+            <td><%= cf.text_area :content, :rows => 5, :class => 'input-xxlarge' %></td>
+            <td><%= scoped_course_comment('content') %></td>
+          </tr>
+          <tr>
+            <td><%= cf.label :assignments, t('.assignments'), :class => 'control-label' %></td>
+            <td><%= cf.text_area :assignments, :rows => 5, :class => 'input-xxlarge' %></td>
+            <td><%= scoped_course_comment('assignments') %></td>
+          </tr>
+          <tr>
+            <td><%= cf.label :grading_details, t('.grading_details'), :class => 'control-label' %></td>
+            <td><%= cf.text_area :grading_details, :rows => 5, :class => 'input-xxlarge' %></td>
+            <td><%= scoped_course_comment('grading_details') %></td>
+          </tr>
+          <tr>
+            <td><%= cf.label :materials, t('.materials'), :class => 'control-label' %></td>
+            <td><%= cf.text_area :materials, :rows => 5, :class => 'input-xxlarge' %></td>
+            <td><%= scoped_course_comment('materials') %></td>
+          </tr>
+          <tr>
+            <td><%= cf.label :replaces, t('.replaces'), :class => 'control-label' %></td>
+            <td><%= cf.text_area :replaces, :rows => 5, :class => 'input-xxlarge' %></td>
+            <td><%= scoped_course_comment('replaces') %></td>
+          </tr>
+          <tr>
+            <td><%= cf.label :other, t('.other'), :class => 'control-label' %></td>
+            <td><%= cf.text_area :other, :rows => 5, :class => 'input-xxlarge' %></td>
+            <td><%= scoped_course_comment('other') %></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td colspan="2"><span class="hint"><%=t '.other_hint' %></span></td>
+          </tr>
+          
+        </tbody>
+      </table>
+    <% end %>
   <% end %>
   
   <div class="actions">

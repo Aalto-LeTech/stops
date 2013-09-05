@@ -27,6 +27,7 @@
     <% end %>
     <li><a href="/O4-ohje.pdf">Käyttöohje</a></li>
     <li><a href="/O4-Bloomin_taksonomia.pdf">Bloomin taksonomia</a></li>
+    <li><%= link_to t('.edit_roles'), new_curriculum_role_path(:curriculum_id => @curriculum) %></li>
   </ul>
 </div>
 

@@ -18,27 +18,21 @@ Ops::Application.routes.draw do
 
     resources :course_instances, :only => [:index]
 
-    resources :skills do
-      member do
-        get 'prereqs'
-        get 'future'
-        get 'competencepath'
-      end
-    end
+    #resources :skills
 
     # View study guides of other years
     resources :curriculums, :constraints => { :id => /\w+/ } do
       member do
         get 'cycles'
-        get 'prereqs'
-        get 'graph'
+        #get 'prereqs'
+        #get 'graph'
         get 'outcomes'
         get 'search_skills'
         get 'search_courses'
         match 'edit/import_csv', :controller => 'curriculums', :action => :import_csv, :via => [:post, :get]
       end
 
-      resources :competence_nodes, :controller => 'curriculums/competence_nodes' do
+      resources :competence_nodes, :only => [], :controller => 'curriculums/competence_nodes' do
         collection do
           get 'nodes_by_skill_ids'
         end
@@ -46,18 +40,17 @@ Ops::Application.routes.draw do
 
       resources :competences, :controller => 'curriculums/competences' do
         member do
-          get 'contributors'
           get 'graph'
-          post 'matrix'
+          get 'courselist'
           get 'edit_prereqs'
         end
 
-        resources :skills, :controller => 'curriculums/skills', :only => :show
+        #resources :skills, :controller => 'curriculums/skills', :only => :show
       end
 
       resources :courses, :controller => 'curriculums/courses' do  # ScopedCourses
         member do
-          get 'prereqs'
+          #get 'prereqs'
           get 'edit_prereqs'
           get 'edit_as_a_prereq'
           get 'comments'
@@ -70,14 +63,14 @@ Ops::Application.routes.draw do
         member do
           post 'add_prereq'
           post 'remove_prereq'
-          get 'search_skills_and_courses'
           put 'update_position'
+          #get 'search_skills_and_courses'
         end
       end
 
       resources :roles, :controller => 'curriculums/roles', :only => [:new, :index, :create, :destroy]
 
-      resources :temp_courses, :controller => 'curriculums/temp_courses'
+      #resources :temp_courses, :controller => 'curriculums/temp_courses'
     end
 
     # My Plan

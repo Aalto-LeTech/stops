@@ -191,7 +191,7 @@ class @Course
     @name                = data['abstract_course']['localized_name'] || ''
     @scopedId            = data['scoped_course']['id']
     @scopedCredits       = data['scoped_course']['credits']
-    @prereqIds           = data['scoped_course']['prereq_ids'] || []
+    @prereqIds           = data['scoped_course']['strict_prereq_ids'] || []
     @credits(data['credits'] || @scopedCredits || 0)
     @length(data['length'] || 0)
     @grade(data['grade'] || 0)

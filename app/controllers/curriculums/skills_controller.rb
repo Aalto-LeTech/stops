@@ -25,19 +25,19 @@ class Curriculums::SkillsController < CurriculumsController
   end
 
   # GET curriculum/:id/skills/:id
-  def show
-    @skill = Skill.find(params[:id])
-
-    @competence = Competence.find(params[:competence_id]) if params[:competence_id]
-    @profile = @competence.profile
-
-    @courses = @skill.contributing_skills
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml => @skill }
-    end
-  end
+#   def show
+#     @skill = Skill.find(params[:id])
+# 
+#     @competence = Competence.find(params[:competence_id]) if params[:competence_id]
+#     @profile = @competence.profile
+# 
+#     @courses = @skill.contributing_skills
+# 
+#     respond_to do |format|
+#       format.html # show.html.erb
+#       format.xml  { render :xml => @skill }
+#     end
+#   end
 
   def new
     authorize! :update, @curriculum
@@ -251,6 +251,7 @@ class Curriculums::SkillsController < CurriculumsController
   # using AJAX.
   # GET /curriculum/:id/skills/:id/
   def search_skills_and_courses
+    # FIXME: this is probably not used any more
     authorize! :update, Skill
 
     @courses = ScopedCourse.search params[:q],

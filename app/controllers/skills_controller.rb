@@ -1,4 +1,5 @@
 class SkillsController < ApplicationController
+  # FIXME: this controller is probably not used any more
   
   #before_filter :load_curriculum
     
@@ -90,36 +91,6 @@ class SkillsController < ApplicationController
       format.js
       format.xml  { head :ok }
     end
-  end
-  
-  def matrix
-    return unless params[:prereqs]
-    
-    params[:prereqs].each do |prereq_id, row|
-      row.each do |skill_id, value|
-        new_requirement = false if value == '0'
-        new_requirement = SUPPORTING_PREREQ if value == '1'
-        new_requirement = STRICT_PREREQ if value == '2'
-      
-        # Read existing prereq
-        existing_prereq = SkillPrereq.where(:skill_id => Integer(skill_id), :prereq_id => Integer(prereq_id)).first
-        
-        if new_requirement
-          if existing_prereq
-            # Update existing prereq
-            existing_prereq.requirement = new_requirement
-            existing_prereq.save
-          else
-            # Create new prereq
-            SkillPrereq.create(:skill_id => Integer(skill_id), :prereq_id => Integer(prereq_id), :requirement => new_requirement)
-          end
-        else
-          # Delete existing prereq
-          existing_prereq.destroy
-        end
-      end
-    end
-    
   end
   
   def prereqs

@@ -84,11 +84,11 @@ class Curriculums::CoursesController < CurriculumsController
     end
   end
 
-  def prereqs
-    @course = ScopedCourse.find(params[:id])
-
-    render :action => 'prereqs', :layout => 'views/curriculums/bare'
-  end
+#   def prereqs
+#     @course = ScopedCourse.find(params[:id])
+# 
+#     render :action => 'prereqs', :layout => 'views/curriculums/bare'
+#   end
 
   def edit_prereqs
     @scoped_course = ScopedCourse.find(params[:id])

@@ -19,6 +19,7 @@ fi:
       edit_tab: 'Tiedot'
       prereqs_tab: 'Osaamistavoitteet'
       graph_tab: 'Kurssiverkko'
+      courselist_tab: 'Kurssilista'
       show:
         graph_link: 'Kurssiverkko'
       edit:

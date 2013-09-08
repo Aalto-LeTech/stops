@@ -96,11 +96,11 @@ class PlansController < ApplicationController
 
     # Get periods, competences, user courses and plan course data
     periods = @study_plan.periods.includes(:localized_description)
-    competences = @study_plan.competences.includes([:localized_description, :courses])
+    competences = @study_plan.competences.includes([:localized_description])
     plan_courses = @study_plan.plan_courses.includes(
       [
         abstract_course: [:localized_description, :course_instances],
-        scoped_course: [:prereqs]
+        scoped_course: [:strict_prereqs]
       ]
     )
 
@@ -135,7 +135,7 @@ class PlansController < ApplicationController
         {
           scoped_course: {
             only: [:id, :credits],
-            methods: [:prereq_ids]
+            methods: [:strict_prereq_ids]
           }
         }
       ],

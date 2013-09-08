@@ -9,8 +9,6 @@
 #= require ./scheduler
 
 
-
-
 jQuery ->
   $plan = $('#plan-container')
   planUrl = $plan.data('studyplan-path')

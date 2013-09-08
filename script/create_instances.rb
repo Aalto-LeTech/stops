@@ -52,8 +52,8 @@ instances = [
  ['MS-C1340', :period_ii, 1],
  ['MS-C1340', :period_iv, 1],
  ['MS-C1350', :period_i, 1],
- ['MS-C1420', :period_i, ],
- ['MS-C1420', :period_iii, ],
+ ['MS-C1420', :period_i, 1],
+ ['MS-C1420', :period_iii, 1],
  ['MS-C1530', :period_iii, 1],
  ['MS-C1540', :period_iii, 1],
  ['MS-C1601', :period_iv, 1],
@@ -89,11 +89,12 @@ instances = [
 ]
 
 period_numbers = {
-  3 => :period_i,
-  4 => :period_ii,
-  0 => :period_iii,
-  1 => :period_iv,
-  2 => :period_v
+  0 => :period_i,
+  1 => :period_ii,
+  2 => :period_iii,
+  3 => :period_iv,
+  4 => :period_v,
+  5 => :period_s
 }
 
 periods = {}    # :period_i => [Period, Period, ...]
@@ -101,7 +102,7 @@ period_numbers.each_value do |period_symbol|
   periods[period_symbol] = []
 end
 
-Period.find_each do |period|
+Period.where("begins_at > '2013-08-01'").find_each do |period|
   period_symbol = period_numbers[period.number]
   periods[period_symbol] << period
 end
@@ -127,4 +128,3 @@ instances.each do |instance_info|
     CourseInstance.create(:abstract_course_id => course.id, :period_id => period.id, :length => length)
   end
 end
- 

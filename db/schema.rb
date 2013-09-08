@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130816163842) do
+ActiveRecord::Schema.define(:version => 20130908092034) do
 
   create_table "abstract_courses", :force => true do |t|
     t.string "code"
@@ -96,17 +96,6 @@ ActiveRecord::Schema.define(:version => 20130816163842) do
   add_index "course_instances", ["abstract_course_id", "period_id"], :name => "index_course_instances_on_abstract_course_id_and_period_id", :unique => true
   add_index "course_instances", ["abstract_course_id"], :name => "index_course_instances_on_abstract_course_id"
 
-  create_table "course_prereqs_cache", :force => true do |t|
-    t.integer "scoped_course_id", :null => false
-    t.integer "scoped_prereq_id", :null => false
-    t.integer "requirement"
-  end
-
-  add_index "course_prereqs_cache", ["scoped_course_id", "requirement"], :name => "index_course_prereqs_on_scoped_course_id_and_requirement"
-  add_index "course_prereqs_cache", ["scoped_course_id"], :name => "index_course_prereqs_on_scoped_course_id"
-  add_index "course_prereqs_cache", ["scoped_prereq_id", "requirement"], :name => "index_course_prereqs_on_scoped_prereq_id_and_requirement"
-  add_index "course_prereqs_cache", ["scoped_prereq_id"], :name => "index_course_prereqs_on_scoped_prereq_id"
-
   create_table "curriculums", :force => true do |t|
     t.integer "start_year"
     t.integer "end_year"
@@ -139,6 +128,17 @@ ActiveRecord::Schema.define(:version => 20130816163842) do
   end
 
   add_index "invitations", ["token"], :name => "index_invitations_on_token"
+
+  create_table "node_prereqs_cache", :force => true do |t|
+    t.integer "competence_node_id", :null => false
+    t.integer "prereq_id",          :null => false
+    t.integer "requirement"
+  end
+
+  add_index "node_prereqs_cache", ["competence_node_id", "requirement"], :name => "index_course_prereqs_on_scoped_course_id_and_requirement"
+  add_index "node_prereqs_cache", ["competence_node_id"], :name => "index_course_prereqs_on_scoped_course_id"
+  add_index "node_prereqs_cache", ["prereq_id", "requirement"], :name => "index_course_prereqs_on_scoped_prereq_id_and_requirement"
+  add_index "node_prereqs_cache", ["prereq_id"], :name => "index_course_prereqs_on_scoped_prereq_id"
 
   create_table "period_descriptions", :force => true do |t|
     t.integer "period_id", :null => false

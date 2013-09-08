@@ -44,8 +44,8 @@ class Plans::CompetencesController < PlansController
     end
 
     existing_courses = @study_plan.scoped_courses
-    @new_courses = @competence.courses_recursive - existing_courses # difference
-    @shared_courses = existing_courses & @competence.strict_prereqs # intersection
+    @new_courses = @competence.recursive_prereqs.all - existing_courses # difference
+    @shared_courses = existing_courses & @competence.strict_prereqs # intersection      # FIXME: does this work?
   end
 
   # Adds a competence to the study plan

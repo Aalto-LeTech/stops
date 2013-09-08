@@ -4,8 +4,6 @@ class Curriculums::CompetencesController < CurriculumsController
 
   before_filter :load_competence, :except => [:index, :show, :new, :create]
 
-  authorize_resource :only => [:matrix]
-
   def load_competence
     @competence = Competence.find(params[:competence_id] || params[:id])
 
@@ -126,44 +124,15 @@ class Curriculums::CompetencesController < CurriculumsController
     end
   end
 
-  def contributors
-    @courses = @competence.contributing_skills
-  end
-
-  def matrix
-    return unless params[:prereqs]
-
-    params[:prereqs].each do |prereq_id, row|
-      row.each do |skill_id, value|
-        new_requirement = false if value == '0'
-        new_requirement = SUPPORTING_PREREQ if value == '1'
-        new_requirement = STRICT_PREREQ if value == '2'
-
-        # Read existing prereq
-        existing_prereq = SkillPrereq.where(:skill_id => Integer(skill_id), :prereq_id => Integer(prereq_id)).first
-
-        if new_requirement
-          if existing_prereq
-            # Update existing prereq
-            existing_prereq.requirement = new_requirement
-            existing_prereq.save
-          else
-            # Create new prereq
-            SkillPrereq.create(:skill_id => Integer(skill_id), :prereq_id => Integer(prereq_id), :requirement => new_requirement)
-          end
-        else
-          # Delete existing prereq
-          existing_prereq.destroy
-        end
-      end
-    end
-
-    @competence.refresh_prereq_courses
-  end
-
   def graph
     @competence = Competence.find(params[:id])
 
     render :action => 'graph', :layout => 'views/curriculums/container'
+  end
+  
+  def courselist
+    @competence = Competence.find(params[:id])
+    
+    render :action => 'courselist', :layout => 'views/curriculums/container'
   end
 end

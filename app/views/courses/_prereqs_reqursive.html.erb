@@ -1,9 +1,9 @@
-<% if @course.strict_prereqs.empty? %>
+<% if @course.recursive_prereqs.empty? %>
   <p><%=t :course_no_prereqs %></p>
 <% else %>
   <ul>
     <!-- Prereq courses -->
-    <% @course.prereqs_recursive.each do |prereq_course| %>
+    <% @course.recursive_prereqs.each do |prereq_course| %>
       <li><%= link_to prereq_course.course_code + ' ' + prereq_course.localized_name, {:id => prereq_course} %></li>
     <% end %>
   </ul>

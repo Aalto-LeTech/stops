@@ -128,54 +128,54 @@ class CurriculumsController < ApplicationController
 
   # DELETE /curriculums/1
   # DELETE /curriculums/1.xml
-  def destroy
-    @curriculum = Curriculum.find(params[:id])
-    authorize! :destroy, @curriculum
-
-    @curriculum.destroy
-
-    respond_to do |format|
-      format.html { redirect_to(curriculums_url) }
-      format.xml  { head :ok }
-    end
-  end
+#   def destroy
+#     @curriculum = Curriculum.find(params[:id])
+#     authorize! :destroy, @curriculum
+# 
+#     @curriculum.destroy
+# 
+#     respond_to do |format|
+#       format.html { redirect_to(curriculums_url) }
+#       format.xml  { head :ok }
+#     end
+#   end
 
 
   # Get all strict prereqs of all courses
-  def prereqs
-    @curriculum = Curriculum.find(params[:id])
+#   def prereqs
+#     @curriculum = Curriculum.find(params[:id])
+# 
+#     prereqs = NodePrereq.where(:requirement => STRICT_PREREQ)
+#                 .joins(<<-SQL
+#                     INNER JOIN competence_nodes AS course ON course.id = node_prereqs_cache.competence_node_id
+#                     INNER JOIN competence_nodes AS prereq ON prereq.id = node_prereqs_cache.prereq_id
+#                   SQL
+#                 ).where("course.curriculum_id = ?", @curriculum)
+#                 .select(<<-SQL
+#                     course.course_code AS course_code,
+#                     prereq.course_code AS prereq_code,
+#                     course.id AS course_id,
+#                     prereq.id AS prereq_id
+#                   SQL
+#                 )
+# 
+#     respond_to do |format|
+#       format.html { render :text => prereqs.to_json }
+#       format.xml { render :xml => prereqs }
+#       format.json { render :json => prereqs.to_json(:root => false) }
+#     end
+#   end
 
-    prereqs = CoursePrereq.where(:requirement => STRICT_PREREQ)
-                .joins(<<-SQL
-                    INNER JOIN competence_nodes AS course ON course.id = course_prereqs_cache.scoped_course_id
-                    INNER JOIN competence_nodes AS prereq ON prereq.id = course_prereqs_cache.scoped_prereq_id
-                  SQL
-                ).where("course.curriculum_id = ?", @curriculum)
-                .select(<<-SQL
-                    course.course_code AS course_code,
-                    prereq.course_code AS prereq_code,
-                    course.id AS course_id,
-                    prereq.id AS prereq_id
-                  SQL
-                )
 
-    respond_to do |format|
-      format.html { render :text => prereqs.to_json }
-      format.xml { render :xml => prereqs }
-      format.json { render :json => prereqs.to_json(:root => false) }
-    end
-  end
-
-
-  def graph
-    @curriculum = Curriculum.find(params[:id])
-
-    prereqs = CoursePrereq.joins(:course)
-                .where("competence_nodes.curriculum_id = ?", @curriculum)
-                .where(:requirement => STRICT_PREREQ)
-
-    render :action => 'graphviz', :locals => {:prereqs => prereqs}, :layout => false, :content_type => 'text/x-graphviz'
-  end
+#   def graph
+#     @curriculum = Curriculum.find(params[:id])
+# 
+#     prereqs = CoursePrereq.joins(:course)
+#                 .where("competence_nodes.curriculum_id = ?", @curriculum)
+#                 .where(:requirement => STRICT_PREREQ)
+# 
+#     render :action => 'graphviz', :locals => {:prereqs => prereqs}, :layout => false, :content_type => 'text/x-graphviz'
+#   end
 
 
   def outcomes

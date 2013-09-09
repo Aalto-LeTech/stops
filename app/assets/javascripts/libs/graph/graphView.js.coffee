@@ -103,6 +103,10 @@ class @GraphView
       for prereq_id in rawData.strict_prereq_ids
         prereq = @skillsById[prereq_id]
         skill.addPrereq(prereq) if (prereq)
+      
+      for prereq_id in rawData.supporting_prereq_ids
+        prereq = @skillsById[prereq_id]
+        skill.addSupportingPrereq(prereq) if (prereq)
 
     # Normalize prereq strengths
     for id, course of @coursesById
@@ -344,6 +348,8 @@ class @GraphView
     skill.highlighted(true)
     skill.drawPrereqArcs()
     skill.drawPostreqArcs()
+    skill.drawSupportingPrereqArcs()
+    skill.drawSupportingPostreqArcs()
 
     for neighbor in skill.prereqs
       neighbor.highlighted(true)
@@ -360,9 +366,10 @@ class @GraphView
 #       s.drawPostreqArcs()
 
 
-  createLine: (x1, y1, x2, y2, w, color) ->
-    this.paper.path("M"+x1+" "+y1+"L"+x2+" "+y2).attr("stroke", "#888")
-
+  createLine: (x1, y1, x2, y2, w, dash) ->
+    path = this.paper.path("M"+x1+" "+y1+"L"+x2+" "+y2).attr("stroke", "#888")
+    
+    path.attr("stroke-dasharray", ". ") if dash #“”, “-”, “.”, “-.”, “-..”, “. ”, “- ”, “--”, “- .”, “--.”, “--..”] 
     # var line = document.createElementNS(this.svgNS, "line");
     #
     # line.setAttributeNS(null, "x1", x1);

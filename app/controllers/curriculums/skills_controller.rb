@@ -7,7 +7,7 @@ class Curriculums::SkillsController < CurriculumsController
   def index
     # TODO: only load skills that belong to this curriculum
     @skills = Skill.joins(:competence_node)
-                .includes(:strict_prereqs, :localized_description)
+                .includes(:strict_prereqs, :supporting_prereqs, :localized_description)
                 .order(:competence_node_id, :position)
                 #.where('competence_nodes.id' => @curriculum.course_ids)
 
@@ -17,7 +17,7 @@ class Curriculums::SkillsController < CurriculumsController
       format.json do
         render :json => @skills.to_json(
           :only => [:id, :competence_node_id],
-          :methods => [:strict_prereq_ids, :localized_name],
+          :methods => [:strict_prereq_ids, :supporting_prereq_ids, :localized_name],
           :root => true
         )
       end

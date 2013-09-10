@@ -9,6 +9,9 @@ class TeacherInvitation < Invitation
       role.save
     end
     
+    user.staff = true
+    user.save
+    
     self.destroy
   end
 end

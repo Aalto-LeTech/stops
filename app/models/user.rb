@@ -9,7 +9,7 @@ class User < ActiveRecord::Base
 
   #validates_uniqueness_of :login #, :allow_nil => true
   validates_uniqueness_of :studentnumber #, :allow_nil => true
-  validates :first_study_period, :presence => true
+  #validates :first_study_period, :presence => true
 
 
   # prevents a user from submitting a crafted form that bypasses activation
@@ -19,8 +19,7 @@ class User < ActiveRecord::Base
                   :locale,
                   :password,
                   :password_confirmation,
-                  :remember_me,
-                  :curriculum_id   # FIXME to be removed?
+                  :remember_me
 
 
   # Plan

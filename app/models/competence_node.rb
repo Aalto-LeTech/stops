@@ -166,11 +166,6 @@ class CompetenceNode < ActiveRecord::Base
     end
   end
   
-#   reload!
-#   CompetenceNode.find_each do |node|
-#     node.update_prereqs_cache()
-#   end
-  
   # Returns all courses and their prereqs, recursively
 #   def courses_recursive
 #     courses = Hash.new

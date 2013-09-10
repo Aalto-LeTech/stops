@@ -399,13 +399,10 @@ class StudyPlan < ActiveRecord::Base
 
 
   # Adds the scoped course into the study plan
-  def add_scoped_course(scoped_course, is_manually_added=false)
-
+  def add_course(scoped_course, is_manually_added=false)
     if scoped_course.is_a? Integer
       scoped_course = ScopedCourse.find(scoped_course)
     end
-
-    return :not_found if not scoped_course
 
     # Dont't do anything if the plan already contains this scoped_course
     # FIXME: DB doesn't accept duplicate scoped_courses for a plan atm.
@@ -424,7 +421,7 @@ class StudyPlan < ActiveRecord::Base
       :custom              =>  false,
       :manually_added      =>  is_manually_added,
     )
-
+ 
     return plan_course
   end
 

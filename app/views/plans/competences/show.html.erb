@@ -60,14 +60,12 @@
     </div>
     <div class="span6">
 
-      <h3>
-        <%= t('.strict_prereqs') %>
-      </h3>
+      <h3><%= t('.strict_prereqs') %></h3>
 
       <table class="course-table">
         <tbody>
           <% credits_counter = included_counter = passed_counter = 0 %>
-          <% @competence.courses_recursive.each do |course| %>
+          <% @mandatory_courses.each do |course| %>
             <tr>
               <%
                 is_passed = (@passed_courses.member? course.id)
@@ -120,7 +118,35 @@
         </tfoot>
       </table>
 
-
+      
+      <h3><%= t('.supporting_prereqs') %></h3>
+      <table class="course-table">
+        <tbody>
+          <% credits_counter = included_counter = passed_counter = 0 %>
+          <% @supporting_courses.each do |course| %>
+            <tr>
+              <%
+                is_passed = (@passed_courses.member? course.id)
+                a_class = ''
+                if @included_courses.include?(course)
+                  a_class = 'included'
+                  included_counter += course.credits || 0
+                end
+              %>
+              <td><%= link_to course.course_code, studyplan_competence_course_path(:competence_id => @competence.id, :id => course), :class => a_class %></td>
+              <td><%= link_to course.localized_name, studyplan_competence_course_path(:competence_id => @competence.id, :id => course), :class => a_class %></td>
+              <td><%= course.credits %></td>
+              <td><%= t('.course_passed') if is_passed %>
+              <%
+                credits_counter += course.credits || 0
+                passed_counter += course.credits if is_passed
+              %>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+        
+        
     </div>
   </div>
 </div>

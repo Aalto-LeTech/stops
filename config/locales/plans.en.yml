@@ -26,7 +26,8 @@ en:
         credits_added: "Credits to add to plan"
         competences: "Competences"
         skills: "Competence goals"
-        strict_prereqs: "Consists of courses"
+        strict_prereqs: "Mandatory courses"
+        supporting_prereqs: "Supporting courses"
         course_passed: "Passed"
         competence_already_selected: "%{name} is already included."
       supporting:

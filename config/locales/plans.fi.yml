@@ -26,7 +26,8 @@ fi:
         credits_added: "Suunnitelmaan lisätään"
         competences: "Kompetenssit"
         skills: "Osaamistavoitteet"
-        strict_prereqs: "Koostuu kursseista"
+        strict_prereqs: "Välttämättömät kurssit"
+        supporting_prereqs: "Tukevia kursseja"
         course_passed: "Suoritettu"
         competence_already_selected: "%{name} on jo opintosuunnitelmassa."
       supporting:

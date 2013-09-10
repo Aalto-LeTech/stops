@@ -52,15 +52,13 @@ class Plans::CoursesController < PlansController
   # Add course to study plan
   # POST /plans/:id/courses
   def create
+    authorize! :update, @study_plan
+    status = @study_plan.add_course(params[:course_id].to_i, true)
 
-    status = @plan.add_course(params[:course_id])
-
-    if status == :ok
-      redirect_to studyplan_profiles_path, :flash => {:success => 'Course added to study plan'}
-    elsif status == :already_added
-      redirect_to studyplan_profiles_path, :flash => {:error => 'Course was already in the study plan'}
+    if status == :already_added
+      redirect_to studyplan_competences_path, :flash => {:error => 'Course was already in the study plan'}
     else
-      redirect_to studyplan_profiles_path, :flash => {:error => 'Adding the course failed!'}
+      redirect_to studyplan_competences_path, :flash => {:success => 'Course added to study plan'}
     end
   end
 

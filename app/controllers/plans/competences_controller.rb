@@ -19,6 +19,8 @@ class Plans::CompetencesController < PlansController
   def show
     @competence = Competence.find(params[:id])
 
+    @mandatory_courses = @competence.recursive_prereqs
+    @supporting_courses = @competence.supporting_prereqs - @mandatory_courses
     @included_courses = @study_plan.scoped_courses
 
     @passed_courses = Hash.new

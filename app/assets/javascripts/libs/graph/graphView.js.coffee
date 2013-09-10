@@ -273,7 +273,6 @@ class @GraphView
 
   createLevels: ->
     levelCount = GraphCourse::maxLevel - GraphCourse::minLevel + 1
-    console.log "LevelCount: #{levelCount}"
     @levels = Array(levelCount)
 
     for i in [0...levelCount]
@@ -334,7 +333,6 @@ class @GraphView
 
     course.drawPrereqArcs()
     course.drawPostreqArcs()
-    console.log course.level
 
     for skill in course.skills
       continue unless skill.visible
@@ -363,8 +361,6 @@ class @GraphView
     skill.drawSupportingPrereqArcs()
     skill.drawSupportingPostreqArcs()
     
-    console.log skill.course.level
-
     for neighbor in skill.prereqs
       neighbor.highlighted(true) if neighbor.course.level < skill.course.level
 

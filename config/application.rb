@@ -72,6 +72,6 @@ module Ops
     ]
 
     # Version of your assets, change this if you want to expire all your assets
-    config.assets.version = '1.18'
+    config.assets.version = '1.19'
   end
 end

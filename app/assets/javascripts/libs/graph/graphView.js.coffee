@@ -170,12 +170,13 @@ class @GraphView
     for id, course of sourceCourse.supportingPrereqsById
       course.visible = true
       course.level = -1 if course.level == undefined
-      console.log "Show supporting prereq #{course.name} (#{course.level})"
     
     for id, course of sourceCourse.supportingPrereqToById
       course.visible = true
       course.level = 1 if course.level == undefined
-      console.log "Show supporting postreq #{course.name} (#{course.level})"
+
+    GraphCourse::minLevel = -1 if (GraphCourse::minLevel > -1)
+    GraphCourse::maxLevel = 1 if (GraphCourse::maxLevel < 1)
 
     # Show skills
     for skill in sourceCourse.skills

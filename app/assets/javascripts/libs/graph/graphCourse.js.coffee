@@ -30,12 +30,12 @@ class @GraphLevel
 
       # Calculate average of the y coordinates of the forward neighbor
       y = 0.0
-      for neighbor in course.prereqTo
+      for id, neighbor of course.prereqToById
         continue unless neighbor.visible
         y += neighbor.y
         visibleNeighbors++
 
-      if course.prereqTo.length > 0
+      if visibleNeighbors > 0
         y /= visibleNeighbors
       else
         y = @height / 2.0;
@@ -52,7 +52,7 @@ class @GraphLevel
 
       # Calculate average of the y coordinates of the backward neighbor
       y = 0.0
-      for neighbor in course.prereqs
+      for id, neighbor of course.prereqsById
         continue unless neighbor.visible
         y += neighbor.y
         visibleNeighbors++
@@ -72,7 +72,7 @@ class @GraphLevel
     # Distribute evenly
     #step = (@maxHeight - @height) / (@courses.length - 1)
     # FIXME: maxHeight is a bad name
-    y = @maxHeight / 2.0 - @height / 2
+    y = @maxHeight / 2.0 - @height / 2.0
 
     for course in @courses
       course.y = y
@@ -87,7 +87,8 @@ class @GraphCourse
   constructor: (@id, @course_code, @name, @type, @view) ->
     @position = ko.observable({x: 0, y: 0})
     @isCyclic = false
-    @level = 0
+    @level = undefined
+    @visible = false
 
     @element = undefined
     @x = 0
@@ -96,12 +97,15 @@ class @GraphCourse
     @width = undefined
 
     @skills = []
-    @prereqs = []
     @prereqsById = {}
-    @prereqTo = []
+    @strictPrereqsById = {}
+    @supportingPrereqsById = {}
+    @prereqToById = {}
+    @strictPrereqToById = {}
+    @supportingPrereqToById = {}
+    #@prereqs = []
+    #@prereqTo = []
     @prereqStrength = {}    # course_id => float
-
-    @visible = false
 
 
   getElementHeight: ->
@@ -115,14 +119,28 @@ class @GraphCourse
   
 
   # Adds a prereq to this course. Adds this course to the 'prereqTo' list of the other course. Duplicates are ignored.
-  addPrereq: (course) ->
-    # Don't add duplicates
-    return if @prereqsById[course.id]
-    
+  addStrictPrereq: (course) ->
     @prereqsById[course.id] = course
-    @prereqs.push(course)
-    course.prereqTo.push(this)
+    @strictPrereqsById[course.id] = course
+    course.prereqToById[@id] = this
+    course.strictPrereqToById[@id] = this
+    
+    # Don't add duplicates
+    #unless @prereqsById[course.id]
+    #  @prereqs.push(course)
+    #  course.prereqTo.push(this)
   
+  addSupportingPrereq: (course) ->
+    @prereqsById[course.id] = course
+    @supportingPrereqsById[course.id] = course
+    course.prereqToById[@id] = this
+    course.supportingPrereqToById[@id] = this
+    
+    # Don't add duplicates
+    #unless @prereqsById[course.id]
+    #  @prereqs.push(course)
+    #  course.prereqTo.push(this)
+    #  course.strictPrereqTo.push(this)
 
   #
   # Returns a div.
@@ -168,9 +186,10 @@ class @GraphCourse
   drawPrereqArcs: (options) ->
     options ||= {}
   
-    for neighbor in @prereqs
+    for id, neighbor of @prereqsById
       continue unless (neighbor.element && neighbor.visible)
       continue if options['minLength'] && @level - neighbor.level < options['minLength']
+      continue if neighbor.level >= @level
       
       from = @element.position()
       to = neighbor.element.position()
@@ -194,9 +213,10 @@ class @GraphCourse
   drawPostreqArcs: (options) ->
     options ||= {}
   
-    for neighbor in @prereqTo
+    for id, neighbor of @prereqToById
       continue unless (neighbor.element && neighbor.visible)
       continue if options['minLength'] && neighbor.level - @level < options['minLength']
+      continue if neighbor.level <= @level
       
       from = @element.position()
       to = neighbor.element.position()
@@ -228,13 +248,13 @@ class @GraphCourse
     
     # Visit neighbors
     if (direction == 'forward')
-      container = @prereqTo
+      container = @strictPrereqToById
       nextLevel = level + 1
     else
-      container = @prereqs
+      container = @strictPrereqsById
       nextLevel = level - 1
     
-    for neighbor in container
+    for id, neighbor of container
       # Detect cycles
       if visiting[neighbor.id]
         @isCyclic = true

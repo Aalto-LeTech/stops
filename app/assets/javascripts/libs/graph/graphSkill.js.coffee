@@ -11,7 +11,8 @@ class @GraphSkill
     
     @prereqs = []
     @prereqTo = []
-    
+    @strictPrereqs = []
+    @strictPrereqTo = []
     @supportingPrereqs = []
     @supportingPrereqTo = []
     
@@ -23,28 +24,37 @@ class @GraphSkill
     @course = course
   
 
-  addPrereq: (prereq) ->
+  addStrictPrereq: (prereq) ->
     @prereqs.push(prereq)
+    @strictPrereqs.push(prereq)
     prereq.prereqTo.push(this)
+    prereq.strictPrereqTo.push(this)
     
-    @course.addPrereq(prereq.course)
+    @course.addStrictPrereq(prereq.course)
     
     @course.prereqStrength[prereq.course.id] ||= 0.0
     @course.prereqStrength[prereq.course.id] += 1.0
   
   addSupportingPrereq: (prereq) ->
+    @prereqs.push(prereq)
     @supportingPrereqs.push(prereq)
+    prereq.prereqTo.push(this)
     prereq.supportingPrereqTo.push(this)
-    # TODO: affect prereq strength
+    
+    @course.addSupportingPrereq(prereq.course)
+    
+    @course.prereqStrength[prereq.course.id] ||= 0.0
+    @course.prereqStrength[prereq.course.id] += 1.0
 
   
   # Draw edges to backward neighbors
   drawPrereqArcs: (options) ->
     options ||= {}
   
-    for neighbor in @prereqs
+    for neighbor in @strictPrereqs
       continue unless (neighbor.element && neighbor.visible && neighbor.course.visible)
       continue if options['maxLength'] && @course.level - neighbor.course.level > options['maxLength']
+      continue if @course.level <= neighbor.course.level
       
       from = @element.position()
       to = neighbor.element.position()
@@ -79,9 +89,10 @@ class @GraphSkill
   drawPostreqArcs: (options) ->
     options ||= {}
     
-    for neighbor in @prereqTo
+    for neighbor in @strictPrereqTo
       continue unless (neighbor.element && neighbor.visible && neighbor.course.visible)
       continue if options['maxLength'] && neighbor.course.level - @course.level > options['maxLength']
+      continue if @course.level >= neighbor.course.level
       
       from = @element.position()
       to = neighbor.element.position()
@@ -97,7 +108,7 @@ class @GraphSkill
   drawSupportingPostreqArcs: (options) ->
     options ||= {}
     
-    for neighbor in @prereqTo
+    for neighbor in @supportingPrereqTo
       continue unless (neighbor.element && neighbor.visible && neighbor.course.visible)
       continue if options['maxLength'] && neighbor.course.level - @course.level > options['maxLength']
       continue if @course.level >= neighbor.course.level
@@ -126,9 +137,9 @@ class @GraphSkill
       callback(skill, depth)
 
       if (direction == 'forward')
-        container = skill.prereqTo
+        container = skill.strictPrereqTo
       else
-        container = skill.prereqs
+        container = skill.strictPrereqs
       
       # Add neighbors to stack
       for neighbor in container

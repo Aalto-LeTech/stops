@@ -247,7 +247,7 @@
 
           # Select this one
           @selected(true)
-        @editor.setCurrentlyEditedSkill(this)
+          @editor.setCurrentlyEditedSkill(this)
         
 
       clickToggleSupportingPrereq: () ->

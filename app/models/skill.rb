@@ -31,8 +31,7 @@ class Skill < ActiveRecord::Base
 
   has_many :supporting_prereqs,
            :through     => :supporting_skill_prereqs,
-           :source      => :prereq,
-           :order       => 'position'
+           :source      => :prereq
 
   # Skills for which this is a prerequisite
   has_many :skill_prereq_to,

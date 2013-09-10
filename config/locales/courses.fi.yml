@@ -45,10 +45,10 @@ fi:
       edit_prereqs:
         title: 'Aseta esitiedot'
         edit_course_heading: 'Edit course'
-        help_text: 'Täällä voit muokata valitun kurssin esitietoja. Valitse ensin oikealta jokin kurssin osaamistavoite. Hae sitten vasemmalta muiden kurssien osaamistavoitteita ja merkitse niitä tukeviksi tai välttämättömiksi esitiedoksi. Mikäli haku tyhjennetään, näytetään tuloksissa valitun osaamistavoitteen tämänhetkiset esitiedot.'
+        help_text: 'Täällä voit muokata valitun kurssin esitietoja. Valitse ensin oikealta jokin kurssin osaamistavoite. Hae sitten vasemmalta muiden kurssien osaamistavoitteita ja merkitse niitä tukeviksi tai välttämättömiksi esitiedoksi. Muutokset tallentuvat välittömästi. Mikäli haku tyhjennetään, näytetään tuloksissa valitun osaamistavoitteen tämänhetkiset esitiedot.'
       edit_as_a_prereq:
         title: 'Aseta esitiedot'
-        help_text: "Täällä voit merkitä, miten kurssi toimii esitietona tuleville kursseille tai kompetensseille. Hae vasemmalle jonkin jatkokurssin tai kompetenssin osaamistavoitteet ja valitse yksi, jolle haluat asettaa esitietoja. Merkitse sitten vasemmalta kurssin osaamistavoitteita tukeviksi tai välttämättömiksi esitiedoiksi."
+        help_text: "Täällä voit merkitä, miten kurssi toimii esitietona tuleville kursseille tai kompetensseille. Hae oikealle jonkin jatkokurssin tai kompetenssin osaamistavoitteet ja valitse yksi, jolle haluat asettaa esitietoja. Merkitse sitten vasemmalta kurssin osaamistavoitteita tukeviksi tai välttämättömiksi esitiedoiksi. Muutokset tallentuvat välittömästi."
       graph:
         title: 'Kurssiverkko'
       skill_editor:

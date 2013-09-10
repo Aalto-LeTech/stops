@@ -13,7 +13,6 @@ class Curriculums::CompetencesController < CurriculumsController
 
   def index
     load_curriculum
-    # FIXME: there are no profiles any more.
     @competences = Competence.where(:curriculum_id => @curriculum.id)
                     .joins(:competence_descriptions)
                     .where(["competence_descriptions.locale = ?", I18n.locale])

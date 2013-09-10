@@ -6,7 +6,8 @@ en:
   layouts:
     navs:
       top:
-        program_name: "The Smart Study Guide"
+        program_name: "Software for Target-Oriented Personal Syllabus"
+        edit_curriculums: "Edit curriculum"
         schedule: "Scheduling"
         curriculum: "Curriculum"
         competences: "Competences"

@@ -203,7 +203,7 @@ class Curriculums::CoursesController < CurriculumsController
     authorize! :update, @curriculum
 
     # Update AbstractCourse if changed
-    new_course_code = params[:scoped_course]['course_code']
+    new_course_code = params[:scoped_course]['course_code'].strip
     if new_course_code != @scoped_course.abstract_course.code
       # If scoped course exists in this curriculum, show error message
       existing_course = ScopedCourse.where(:course_code => new_course_code, :curriculum_id => @curriculum.id).first

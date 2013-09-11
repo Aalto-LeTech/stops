@@ -379,7 +379,7 @@ class StudyPlan < ActiveRecord::Base
     scoped_course_ids_to_add = competence.courses_recursive - self.scoped_courses
 
     scoped_course_ids_to_add.each do |scoped_course|
-      self.add_scoped_course(scoped_course)
+      self.add_course(scoped_course)
     end
   end
 

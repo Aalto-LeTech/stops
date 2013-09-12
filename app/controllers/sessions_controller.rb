@@ -28,11 +28,14 @@ class SessionsController < ApplicationController
   end
 
   def destroy
-    return unless current_session
+    flash[:success] = I18n.t('sessions.logout_message')
+    unless current_session
+      redirect_to(root_url) 
+      return
+    end
 
     logout_url = session[:logout_url]
     current_session.destroy
-    flash[:success] = I18n.t('sessions.logout_message')
 
     if logout_url
       redirect_to(logout_url)
@@ -45,24 +48,24 @@ class SessionsController < ApplicationController
   def shibboleth
     logger.error "SHIB_ATTRIBUTES is not set in config/initializers/settings.rb" unless defined?(SHIB_ATTRIBUTES)
 
-    shibinfo = {
-      login:           request.env[SHIB_ATTRIBUTES[:id]],
-      studentnumber:  (request.env[SHIB_ATTRIBUTES[:studentnumber]] || '').split(':').last,
-      name:           (request.env[SHIB_ATTRIBUTES[:firstname]] || '') + ' ' + request.env[SHIB_ATTRIBUTES[:lastname]],
-      email:           request.env[SHIB_ATTRIBUTES[:email]],
-      affiliation:     request.env[SHIB_ATTRIBUTES[:affiliation]]
-    }
-    logout_url = request.env[SHIB_ATTRIBUTES[:logout]]
-
 #     shibinfo = {
-#       :login => '00002', #'student1@hut.fi',
-#       :studentnumber => ('urn:mace:terena.org:schac:personalUniqueCode:fi:tkk.fi:student:00002' || '').split(':').last,
-#       :firstname => 'Teemu',
-#       :lastname => 'Teekkari',
-#       :email => 'tteekkar@cs.hut.fi',
-#       :organization => 'hut.fi'
+#       login:           request.env[SHIB_ATTRIBUTES[:id]],
+#       studentnumber:  (request.env[SHIB_ATTRIBUTES[:studentnumber]] || '').split(':').last,
+#       name:           (request.env[SHIB_ATTRIBUTES[:firstname]] || '') + ' ' + request.env[SHIB_ATTRIBUTES[:lastname]],
+#       email:           request.env[SHIB_ATTRIBUTES[:email]],
+#       affiliation:     request.env[SHIB_ATTRIBUTES[:affiliation]]
 #     }
-#     logout_url= 'http://www.aalto.fi/'
+#     logout_url = request.env[SHIB_ATTRIBUTES[:logout]]
+
+    shibinfo = {
+      :login => '00021', #'student1@aalto.fi',
+      :studentnumber => ('urn:mace:terena.org:schac:personalUniqueCode:fi:tkk.fi:student:00021' || '').split(':').last,
+      :firstname => 'Teemu',
+      :lastname => 'Teekkari',
+      :email => 'tteekkar@cs.hut.fi',
+      :organization => 'aalto.fi'
+    }
+    logout_url= 'http://www.aalto.fi/'
 
     shibboleth_login(shibinfo, logout_url)
   end
@@ -100,7 +103,10 @@ class SessionsController < ApplicationController
       user.name = shibinfo[:name]
       user.email = shibinfo[:email]
       user.reset_persistence_token
+      user.treatment = Treatment.get_treatment(user.studentnumber)
+      
       if user.save(:validate => false)
+        user.create_study_plan(DEFAULT_CURRICULUM_ID)
         logger.info("Created new user #{user.login} (#{user.studentnumber}) (shibboleth)")
       else
         logger.info("Failed to create new user (shibboleth) #{shibinfo} Errors: #{user.errors.full_messages.join('. ')}")
@@ -134,7 +140,6 @@ class SessionsController < ApplicationController
   end
   
   def redirect_default(user)
-    
     if user.staff?
       redirect_back_or_default root_url
     else

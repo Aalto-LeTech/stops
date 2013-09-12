@@ -14,6 +14,9 @@ COURSE_CODE_FORMAT = /^\w+-\d+\.\d+$/
 # Define locales for which translations must be found
 REQUIRED_LOCALES = ['fi', 'en']
 
+DEFAULT_CURRICULUM_ID = 1
+DEFAULT_FIRST_PERIOD_ID = 146
+
 # Shibboleth attribute names (attribute-map.xml)
 SHIB_PATH = "/Shibboleth.sso/wayf?target="
 SHIB_ATTRIBUTES = {

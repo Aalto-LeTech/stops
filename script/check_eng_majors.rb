@@ -6,8 +6,8 @@ eny_basic_mandatory = [
   'ENG-A1005',
   'CSE-A1111',
   'CSE-A1130',
-  'MS-A0006',
-  'MS-A0106',
+  'MS-A000x',
+  'MS-A010x',
   'PHYS-A3120',
   'PHYS-A3130',
   'CHEM-A1250',
@@ -17,10 +17,10 @@ eny_basic_mandatory = [
 ]
 
 eny_basic_elective = [
-  'MS-A0206',
-  'MS-A0305',
-  'MS-A0503',
-  'MS-A0402',
+  'MS-A020x',
+  'MS-A030x',
+  'MS-A050x',
+  'MS-A040x',
 ]
 
 # ENY Pääaine 50+10 op
@@ -33,8 +33,8 @@ eny_major_mandatory = [
   'KJR-C2002',
   'KJR-C2003',
   'KJR-C2004',
-  'ENG304x.Kand',
-  'ENG304x.Kyps',
+  'ENG304x.kand',
+  'ENG304x.kyps',
 ]
  
 eny_major_elective = [
@@ -61,10 +61,10 @@ kjr_basic_mandatory = [
   'ENG-A1005',
   'CSE-A1111',
   'CSE-A1130',
-  'MS-A0005',
-  'MS-A0105',
-  'MS-A0205',
-  'MS-A0305',
+  'MS-A000x',
+  'MS-A010x',
+  'MS-A020x',
+  'MS-A030x',
   'PHYS-A3120',
   'PHYS-A3130',
   'CHEM-A1250',
@@ -86,8 +86,8 @@ kjr_major_mandatory = [
   'KJR-C2004',
   'KJR-C2005',
   'KJR-C2006',
-  'ENG304x.Kand',
-  'ENG304x.Kyps',
+  'ENG304x.kand',
+  'ENG304x.kyps',
 ]
  
 kjr_major_elective = [
@@ -110,9 +110,9 @@ rym_basic_mandatory = [
   'ENG-A1005',
   'CSE-A1111',
   'CSE-A1130',
-  'MS-A0006',
-  'MS-A0106',
-  'MS-A0502',
+  'MS-A000x',
+  'MS-A010x',
+  'MS-A050x',
   'PHYS-A3120',
   'PHYS-A3130',
   'CHEM-A1250',
@@ -122,7 +122,7 @@ rym_basic_mandatory = [
 ]
 
 rym_basic_elective = [
-  'MS-A0206',
+  'MS-A020x',
   '30C00200',
 ]
 
@@ -136,9 +136,9 @@ rym_major_mandatory = [
   'RYM-C2003',
   'RYM-C2004',
   'RYM-C3001',
-  'MS-C2104',
-  'ENG304x.Kand',
-  'ENG304x.Kyps',
+  'MS-C210x',
+  'ENG304x.kand',
+  'ENG304x.kyps',
 ]
 
 rym_major_elective = [

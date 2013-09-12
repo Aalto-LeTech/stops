@@ -134,7 +134,10 @@ class Curriculums::SkillsController < CurriculumsController
     authorize! :update, @curriculum
 
     @skill = Skill.find(params[:id])
+    node = @skill.competence_node
     @skill.destroy
+    
+    node.update_prereqs_cache()
 
     respond_to do |format|
       format.js {
@@ -157,11 +160,9 @@ class Curriculums::SkillsController < CurriculumsController
                        :prereq_id    => Integer(params[:prereq_id]),
                        :requirement  => requirement_type
 
-    # Update course prereqs
+    # Update prereq cache
     target_skill = Skill.find(params[:id])
-    if target_skill.competence_node.is_a?(ScopedCourse)
-      target_skill.competence_node.update_prereqs_cache
-    end
+    target_skill.competence_node.update_prereqs_cache()
 
     render :nothing => true
   end
@@ -178,11 +179,9 @@ class Curriculums::SkillsController < CurriculumsController
       prereq.destroy
     end
     
-    # Update course prereqs
+    # Update prereq cache
     target_skill = Skill.find(params[:id])
-    if target_skill.competence_node.is_a?(ScopedCourse)
-      target_skill.competence_node.update_prereqs_cache
-    end
+    target_skill.competence_node.update_prereqs_cache()
 
     render :nothing => true
   end

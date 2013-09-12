@@ -14,7 +14,7 @@
 
     <% @course.localized_skill_descriptions.each do |skill_desc| %>
       <tr id="search-skill-id-<%= skill_desc.skill_id %>" data-for-course="<%= course.id %>">
-        <td><%= skill_desc.description %></td>
+        <td><%= skill_desc.name %></td>
         <td class="skill-search-warning-image">
             <span class="invisible">
               <%= image_tag "glyphicons_078_warning_sign_white.png" %>

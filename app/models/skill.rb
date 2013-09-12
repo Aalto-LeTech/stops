@@ -67,19 +67,17 @@ class Skill < ActiveRecord::Base
     end
   end
 
-
   def localized_name
     desc = localized_description
-    (desc && desc.description != "" ) ? desc.description : nil
+    (desc && desc.name != "" ) ? desc.name : nil
   end
 
-
   def is_prereq_to?(skill_id)
-    prereq_found = false
     self.prereq_to.each do |prereq|
-      prereq_found = true if prereq.id == skill_id
+      return true if prereq.id == skill_id
     end
-    prereq_found
+    
+    false
   end
 
   # Calculates study paths from this skill to the skills of the given competence

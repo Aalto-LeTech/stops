@@ -69,7 +69,7 @@ class Curriculums::CoursesController < CurriculumsController
               :only => [:id, :icon],
               :include => {
                 :skill_descriptions => {
-                  :only => [:id, :locale, :description]
+                  :only => [:id, :locale, :name]
                 },
                 :skill_prereqs => {:only => [:prereq_id, :requirement]},
                 :prereq_to => {:only => [:id, :requirement, :icon]}

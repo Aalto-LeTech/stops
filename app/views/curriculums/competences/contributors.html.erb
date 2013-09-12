@@ -5,7 +5,7 @@
   
   <ul>
     <% row[1].each_value do |skill| %>
-      <li><%= skill.description(I18n.locale) %></li>
+      <li><%= skill.localized_name %></li>
     <% end %>
   </ul>
 <% end %>

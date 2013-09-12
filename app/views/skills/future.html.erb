@@ -4,7 +4,7 @@
     
     <% skill_prereqs.each do |skill_prereq| %>
       <div class="skill <%= skill_prereq.requirement == STRICT_PREREQ ? 'strict' : 'supporting' %>">
-        <%= skill_prereq.skill.description(I18n.locale) %>
+        <%= skill_prereq.skill.localized_name %>
       </div>
     <% end %>
   </div>
@@ -16,7 +16,7 @@
     
     <% skill_prereqs.each do |skill_prereq| %>
       <div class="skill <%= skill_prereq.requirement == STRICT_PREREQ ? 'strict' : 'supporting' %>">
-        <%= skill_prereq.skill.description(I18n.locale) %>
+        <%= skill_prereq.skill.localized_name %>
       </div>
     <% end %>
   </div>

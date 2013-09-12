@@ -56,9 +56,9 @@
 
         # Load descriptions
         for description in data['skill_descriptions']
-          d = new LocalizedDescription(@editor, description)
-          @descriptions.push(d)
-          @localizedDescription(d.description()) if d.locale == O4.skillEditor.i18n['current_locale']
+          ld = new LocalizedDescription(@editor, description)
+          @descriptions.push(ld)
+          @localizedDescription(ld.name()) if ld.locale == O4.skillEditor.i18n['current_locale']
           delete missingLocales[description['locale']]    
 
         # Add descriptions for missing locales

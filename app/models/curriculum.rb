@@ -173,9 +173,9 @@ class Curriculum < ActiveRecord::Base
               end
 
               skill = Skill.create(:competence_node_id => course.id)
-              SkillDescription.create(:skill_id => skill.id, :locale => 'fi', :description => text)
-              SkillDescription.create(:skill_id => skill.id, :locale => 'en', :description => text)
-              SkillDescription.create(:skill_id => skill.id, :locale => 'sv', :description => text)
+              SkillDescription.create(:skill_id => skill.id, :locale => 'fi', :name => text)
+              SkillDescription.create(:skill_id => skill.id, :locale => 'en', :name => text)
+              SkillDescription.create(:skill_id => skill.id, :locale => 'sv', :name => text)
               puts "  #{text}"
             end
           end

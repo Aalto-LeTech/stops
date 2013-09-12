@@ -222,7 +222,7 @@ class Curriculums::SkillsController < CurriculumsController
           skills = []
           course.skills.each do |skill|
             skill_locals = {
-              :description  => skill.localized_name,
+              :name         => skill.localized_name,
               :id           => skill.id,
               :is_prereq    => skill.is_prereq_to?(@skill.id)
             }

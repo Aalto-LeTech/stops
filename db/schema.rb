@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130908092034) do
+ActiveRecord::Schema.define(:version => 20130911105518) do
 
   create_table "abstract_courses", :force => true do |t|
     t.string "code"
@@ -28,15 +28,6 @@ ActiveRecord::Schema.define(:version => 20130908092034) do
     t.datetime "created_at",       :null => false
     t.datetime "updated_at",       :null => false
   end
-
-  create_table "competence_courses_cache", :id => false, :force => true do |t|
-    t.integer "competence_id",    :null => false
-    t.integer "scoped_course_id", :null => false
-    t.integer "requirement"
-  end
-
-  add_index "competence_courses_cache", ["competence_id", "requirement"], :name => "index_competence_courses_on_competence_id_and_requirement"
-  add_index "competence_courses_cache", ["competence_id"], :name => "index_competence_courses_on_competence_id"
 
   create_table "competence_descriptions", :force => true do |t|
     t.integer "competence_id", :null => false
@@ -64,6 +55,7 @@ ActiveRecord::Schema.define(:version => 20130908092034) do
     t.text     "changing_topic"
     t.string   "period"
     t.text     "comments"
+    t.integer  "recommended_period"
   end
 
   add_index "competence_nodes", ["abstract_course_id", "curriculum_id"], :name => "index_competence_nodes_on_abstract_course_id_and_curriculum_id"
@@ -178,6 +170,8 @@ ActiveRecord::Schema.define(:version => 20130908092034) do
     t.boolean "custom",               :default => false, :null => false
     t.integer "abstract_course_id",                      :null => false
     t.integer "grade",                :default => 0,     :null => false
+    t.string  "course_code"
+    t.integer "competence_node_id"
   end
 
   add_index "plan_courses", ["study_plan_id", "scoped_course_id"], :name => "index_study_plan_courses_on_study_plan_id_and_scoped_course_id", :unique => true
@@ -204,6 +198,7 @@ ActiveRecord::Schema.define(:version => 20130908092034) do
     t.integer "skill_id",    :null => false
     t.string  "locale"
     t.text    "description"
+    t.text    "name"
   end
 
   add_index "skill_descriptions", ["skill_id", "locale"], :name => "index_skill_descriptions_on_skill_id_and_locale", :unique => true
@@ -249,36 +244,10 @@ ActiveRecord::Schema.define(:version => 20130908092034) do
 
   add_index "study_plans", ["user_id"], :name => "index_study_plans_on_user_id"
 
-  create_table "temp_courses", :force => true do |t|
-    t.integer  "curriculum_id",   :null => false
-    t.text     "contact"
-    t.string   "code"
-    t.string   "name_fi"
-    t.string   "name_en"
-    t.string   "name_sv"
-    t.integer  "credits"
-    t.string   "department"
-    t.string   "language"
-    t.string   "instructors"
-    t.text     "grading_scale"
-    t.boolean  "graduate_course"
-    t.text     "changing_topic"
-    t.text     "alternatives"
-    t.string   "period"
-    t.text     "prerequisites"
-    t.text     "outcomes"
-    t.text     "content"
-    t.text     "assignments"
-    t.text     "grading_details"
-    t.text     "materials"
-    t.text     "replaces"
-    t.text     "other"
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
-    t.text     "comments"
+  create_table "treatments", :force => true do |t|
+    t.string  "studentnumber",                :null => false
+    t.integer "treatment",     :default => 0, :null => false
   end
-
-  add_index "temp_courses", ["curriculum_id"], :name => "index_temp_courses_on_curriculum_id"
 
   create_table "users", :force => true do |t|
     t.string   "login"
@@ -299,6 +268,7 @@ ActiveRecord::Schema.define(:version => 20130908092034) do
     t.integer  "first_study_period_id"
     t.boolean  "staff",                                :default => false
     t.integer  "failed_login_count",                   :default => 0,     :null => false
+    t.integer  "treatment"
   end
 
   add_index "users", ["last_request_at"], :name => "index_users_on_last_request_at"

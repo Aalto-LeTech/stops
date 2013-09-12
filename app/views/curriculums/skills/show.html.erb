@@ -3,14 +3,14 @@
   <%= link_to @competence.name(I18n.locale), curriculum_competence_path(:curriculum_id => @curriculum.id, :id => @competence.id)  %>
 </h1>
 
-<h2><%= @skill.description(I18n.locale) %></h2>
+<h2><%= @skill.localized_name %></h2>
 
 <% @courses.each do |course, skill_map| %>
   <h3><%= course.course_code %> <%= course.name(I18n.locale) %></h3>
 
   <ul>
     <% skill_map.each_value do |skill| %>
-      <li><%= skill.description(I18n.locale) %></li>
+      <li><%= skill.localized_name %></li>
     <% end %>
   </ul>
 <% end %>

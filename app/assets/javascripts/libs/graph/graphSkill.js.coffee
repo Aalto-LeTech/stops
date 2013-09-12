@@ -1,6 +1,6 @@
 class @GraphSkill
 
-  constructor: (@id, @description, @view) ->
+  constructor: (@id, @name, @view) ->
     @course = false
 
     @element = undefined

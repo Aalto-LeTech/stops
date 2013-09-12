@@ -16,7 +16,7 @@
           <p>
             <%= link_to 'x', prereqs_skill_url(:id => skill), :remote => true %>
             
-            <%= skill.description(I18n.locale) %>
+            <%= skill.localized_description %>
             
             <%= link_to 'x', future_skill_url(:id => skill), :remote => true %>
           </p>

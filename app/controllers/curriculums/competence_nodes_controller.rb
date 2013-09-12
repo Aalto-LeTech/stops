@@ -15,7 +15,7 @@ class Curriculums::CompetenceNodesController < CurriculumsController
                   :only => [:id, :icon],
                   :include => {
                     :skill_descriptions => {
-                      :only => [:id, :locale, :description]
+                      :only => [:id, :locale, :name]
                     },
                     :prereq_to => {:only => [:id, :requirement, :icon]}
                   }
@@ -34,7 +34,7 @@ class Curriculums::CompetenceNodesController < CurriculumsController
                   :only => [:id, :icon],
                   :include => {
                     :skill_descriptions => {
-                      :only => [:id, :locale, :description]
+                      :only => [:id, :locale, :name]
                     },
                     :prereq_to => {:only => [:id, :requirement, :icon]}
                   }

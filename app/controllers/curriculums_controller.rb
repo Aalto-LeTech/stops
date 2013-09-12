@@ -193,7 +193,7 @@ class CurriculumsController < ApplicationController
       end
 
       # Search from skill
-      skill_descriptions = SkillDescription.where(['description ILIKE ?', "%#{params[:q]}%"])
+      skill_descriptions = SkillDescription.where(['name ILIKE ?', "%#{params[:q]}%"])
                                .joins(:skill)
                                .includes(:skill, :skill => :competence_node)
                                .select(:competence_node_id).uniq
@@ -240,7 +240,7 @@ class CurriculumsController < ApplicationController
                 :only => [:id, :icon],
                 :include => {
                   :skill_descriptions => {
-                    :only => [:id, :locale, :description]
+                    :only => [:id, :locale, :name]
                   },
                   :skill_prereqs => {:only => [:prereq_id, :requirement]},
                   :prereq_to => {:only => [:id, :requirement, :icon]}
@@ -260,7 +260,7 @@ class CurriculumsController < ApplicationController
                 :only => [:id, :icon],
                 :include => {
                   :skill_descriptions => {
-                    :only => [:id, :locale, :description]
+                    :only => [:id, :locale, :name]
                   },
                   :skill_prereqs => {:only => [:prereq_id, :requirement]},
                   :prereq_to => {:only => [:id, :requirement, :icon]}

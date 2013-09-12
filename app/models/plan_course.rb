@@ -83,7 +83,7 @@ class PlanCourse < ActiveRecord::Base
 
   # Returns the period name or nil
   def localized_period_name
-    localized_period_description.nil? ? "" : localized_period_description.name
+    localized_period_description.nil? ? '' : localized_period_description.name
   end
 
   # Returns the course's ending period

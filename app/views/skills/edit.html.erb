@@ -4,7 +4,7 @@
 
   <li>
     <%= f.fields_for :skill_descriptions do |cf| %>
-      <%= cf.text_field :description %>
+      <%= cf.text_field :name %>
     <% end %>
     
     <%= f.submit t(:Save) %>

@@ -18,6 +18,7 @@ class Plans::CompetencesController < PlansController
   # GET /plans/1/competence/1.xml
   def show
     @competence = Competence.find(params[:id])
+    log("view_competence #{@competence.id}")
 
     @mandatory_courses = @competence.recursive_prereqs
     @supporting_courses = @competence.supporting_prereqs - @mandatory_courses

@@ -1,3 +1,5 @@
+require 'custom_logger'
+
 # O4
 class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
@@ -56,10 +58,17 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def load_profile
-    @profile = Profile.find(params[:profile_id])
+  def log(message)
+    user = current_user
+    
+    if user
+      CustomLogger.info("#{user.login}(#{user.treatment}) " + message)
+    else
+      CustomLogger.info('guest() ' + message)
+    end
   end
-
+  
+  
   private
 
   # Send email on exception

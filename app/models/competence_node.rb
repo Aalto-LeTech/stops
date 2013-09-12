@@ -98,13 +98,6 @@ class CompetenceNode < ActiveRecord::Base
            :source      => :prereq,
            :conditions  => "requirement = #{ANCESTOR_PREREQ}"
 
-  # Competence courses
-#   has_many :competence_courses,
-#            :dependent   => :destroy
-
-#   has_many :courses,
-#            :through     => :competence_courses,
-#            :source      => :scoped_course
 
   # Moves skills from the other competence node to this node and deletes the other node
   # other: CompetenceNode
@@ -191,8 +184,4 @@ class CompetenceNode < ActiveRecord::Base
 #     end
 #   end
   
-  
-
-  
-
 end

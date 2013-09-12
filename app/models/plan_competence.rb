@@ -8,7 +8,7 @@ class PlanCompetence < ActiveRecord::Base
 
   def add_course_dependency_ids
     # Fetch the course ids that are needed by the skills of this competence
-    courses = self.competence.courses_recursive
+    courses = self.competence.recursive_prereqs.where(:type => 'ScopedCourse').all
     ids = courses.map { |course| course.id  }
 
     study_plan = self.study_plan

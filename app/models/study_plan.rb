@@ -373,10 +373,9 @@ class StudyPlan < ActiveRecord::Base
 
     competences << competence
 
-    # FIXME: This breaks if prerequisites include Competences
-
     # Calculate the scoped_courses to add
-    scoped_course_ids_to_add = competence.courses_recursive - self.scoped_courses
+    required_courses = competence.recursive_prereqs.where(:type => 'ScopedCourse').all
+    scoped_course_ids_to_add = required_courses - self.scoped_courses
 
     scoped_course_ids_to_add.each do |scoped_course|
       self.add_course(scoped_course)
@@ -456,7 +455,7 @@ class StudyPlan < ActiveRecord::Base
     # Make a list of scoped_courses that are needed by remaining profiles
     needed_scoped_courses = Set.new
     competences.each do |competence|
-      needed_scoped_courses.merge(competence.courses_recursive)
+      needed_scoped_courses.merge(competence.recursive_prereqs.where(:type => 'ScopedCourse').all)
     end
 
     # Add manually added scoped_courses to the list

@@ -43,10 +43,10 @@ class Competence < CompetenceNode
     self.prereqs.where(:type => 'ScopedCourse')
   end
   
-  def courses_recursive
+  #def courses_recursive
     # TODO: get rid of this
-    self.recursive_prereqs.where(:type => 'ScopedCourse')
-  end
+  #  self.recursive_prereqs.where(:type => 'ScopedCourse')
+  #end
   
   # Returns all courses' ids, recursively
   def course_ids_recursive
@@ -74,7 +74,7 @@ class Competence < CompetenceNode
     result = {}   # {course => {skill_id => skill}}
 
     # Load courses
-    courses_recursive.each do |course|
+    competence.recursive_prereqs.where(:type => 'ScopedCourse').find_each do |course|
       result[course] = {}
       courses[course.id] = course
     end

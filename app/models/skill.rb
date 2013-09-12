@@ -89,7 +89,7 @@ class Skill < ActiveRecord::Base
 
     # Make a hash of course_ids that belong to the competence
     course_ids = {}
-    competence.courses_recursive.each do |scoped_course|
+    competence.recursive_prereqs.where(:type => 'ScopedCourse').find_all do |scoped_course|
       course_ids[scoped_course.id] = true
       puts scoped_course.id
     end

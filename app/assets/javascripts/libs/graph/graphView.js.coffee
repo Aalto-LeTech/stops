@@ -160,7 +160,7 @@ class @GraphView
     sourceCourse.dfs 'backward', 0, cycleDetector, (course, level) ->
       course.visible = true
       course.level = level if course.level == undefined || level < course.level
-      GraphCourse::minLevel = course.level if (course.level < GraphCourse::minLevel)
+      GraphCourse::minLevel = course.level if course.level < GraphCourse::minLevel
 
       if 'all' == options['prereqSkills']
         for skill in course.skills
@@ -170,13 +170,12 @@ class @GraphView
     for id, course of sourceCourse.supportingPrereqsById
       course.visible = true
       course.level = -1 if course.level == undefined
+      GraphCourse::minLevel = -1 if GraphCourse::minLevel > -1
     
     for id, course of sourceCourse.supportingPrereqToById
       course.visible = true
       course.level = 1 if course.level == undefined
-
-    GraphCourse::minLevel = -1 if (GraphCourse::minLevel > -1)
-    GraphCourse::maxLevel = 1 if (GraphCourse::maxLevel < 1)
+      GraphCourse::maxLevel = 1 if GraphCourse::maxLevel < 1
 
     # Show skills
     for skill in sourceCourse.skills

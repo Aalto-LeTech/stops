@@ -1,9 +1,0 @@
-<!-- competences/show -->
-
-<h1><%= @competence.localized_name %></h1>
-
-<ul>
-  <% @competence.courses.each do |course| %>
-    <li><%= course.name(I18n.locale) %></li>
-  <% end %>
-</ul>

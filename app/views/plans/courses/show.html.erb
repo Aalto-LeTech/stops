@@ -47,46 +47,27 @@
   <% end %>
 </h1>
 
-<%= render :partial => 'courses/graph_templates' %>
 
-
-<% if @competence %>
-  <div id="course-graph"
-    data-courses-path="<%= curriculum_courses_path(:curriculum_id => @curriculum.id) %>"
-    data-competences-path="<%= curriculum_competences_path(:curriculum_id => @curriculum.id) %>"
-    data-skills-path="<%= curriculum_skills_path(:curriculum_id => @curriculum.id) %>"
-    data-source-id="<%= @course.id %>"
-    data-target-id="<%= @competence.id %>"
-    >
-
-    <!-- ko template: { name: 'courseTemplate', foreach: visibleCourses, afterRender: updateElementDimensions } --><!-- /ko -->
-  </div>
-<% else %>
-  <h2><%=t('.provides')%></h2>
-  <table class="course-skill-dependencies">
-    <thead>
-      <td><%= t('.prerequisites') %></td>
-      <td><%= t('.provides') %></td>
-      <td><%= t('.needed_by') %></td>
-    </thead>
-    <tbody>
-      <tr>
-        <td id="skill-prereqs"></td>
-        <td id="course-skills-column">
-          <div class="course">
-            <%= @course.course_code + ' ' + @course.localized_name %>
-            <% @course.skills.each do |skill| %>
-              <p class="skill" data-skill-id="<%= skill.id %>" data-user-id="<%= @user.id %>">
-                <%= skill.localized_name %>
-              </p>
-            <% end %>
-          </div>
-        </td>
-        <td id="skill-future"></td>
-      </tr>
-    </tbody>
-  </table>
-
+<% if @user.treatment != TREATMENT_TRADITIONAL %>
+  <%= render :partial => 'courses/graph_templates' %>
+  
+  <% if @competence %>
+    <div id="course-graph"
+      data-graph-path="<%= graph_curriculum_path(:id => @curriculum.id) %>" 
+      data-source-id="<%= @course.id %>"
+      data-target-id="<%= @competence.id %>"
+      >
+      <!-- ko template: { name: 'courseTemplate', foreach: visibleCourses, afterRender: updateElementDimensions } --><!-- /ko -->
+    </div>
+  <% else %>
+    <div id="course-graph"
+      data-graph-path="<%= graph_curriculum_path(:id => @curriculum.id) %>" 
+      data-source-id="<%= @course.id %>"
+      >
+      <!-- ko template: { name: 'courseTemplate', foreach: visibleCourses, afterRender: updateElementDimensions } --><!-- /ko -->
+    </div>
+  <% end %>
+  
 <% end %>
 
 

@@ -58,7 +58,6 @@ class Curriculums::CoursesController < CurriculumsController
   #   }
   def show
     @course = ScopedCourse.includes(:skills => [:skill_descriptions, :skill_prereqs, :prereq_to]).find(params[:id])
-    @profile = Profile.find(params[:profile_id]) if params[:profile_id]  ## FIXME!?!
 
     respond_to do |format|
       format.html # show.html.erb
@@ -83,12 +82,6 @@ class Curriculums::CoursesController < CurriculumsController
       )}
     end
   end
-
-#   def prereqs
-#     @course = ScopedCourse.find(params[:id])
-# 
-#     render :action => 'prereqs', :layout => 'views/curriculums/bare'
-#   end
 
   def edit_prereqs
     @scoped_course = ScopedCourse.find(params[:id])

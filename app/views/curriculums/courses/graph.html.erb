@@ -10,9 +10,7 @@
 <%= render :partial => 'tabs' %>
 
 <div id="course-graph" 
-    data-courses-path="<%= curriculum_courses_path(:curriculum_id => @curriculum.id) %>" 
-    data-competences-path="<%= curriculum_competences_path(:curriculum_id => @curriculum.id) %>" 
-    data-skills-path="<%= curriculum_skills_path(:curriculum_id => @curriculum.id) %>"
+    data-graph-path="<%= graph_curriculum_path(:id => @curriculum.id) %>"
     data-source-id="<%= @scoped_course.id %>"
     >
     

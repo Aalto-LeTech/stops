@@ -17,44 +17,33 @@ ko.bindingHandlers.position = {
 class @GraphView
   levelWidth: 600
 
-  constructor: (@raphaelElement) ->
+  constructor: (@raphaelElement, @visualizationOptions) ->
     @coursesById = {}    # id -> Course object
     @skillsById = {}     # id -> Skill object
 
     @visibleCourses = []
 
-    @maxHeight = 0  # Height of the highest level $(document).height()
+    @maxHeight = 0  # Height of the highest level
     @paper = undefined    # Raphael paper
 
 
-  load: (coursesPath, competencesPath, skillsPath) ->
+  #load: (coursesPath, competencesPath, skillsPath) ->
+  load: (graphPath) ->
     $.ajax
-      url: coursesPath,
+      url: graphPath + '.json',
       context: this,
       dataType: 'json',
-      success: this.loadCourses,
-      async: false
-
-    $.ajax
-      url: competencesPath,
-      context: this,
-      dataType: 'json',
-      success: this.loadCompetences,
-      async: false
-
-    $.ajax
-      url: skillsPath,
-      context: this,
-      dataType: 'json',
-      success: this.loadSkills,
-      async: false
+      success: (data) =>
+        this.parseCourses(data['courses'])
+        this.parseCompetences(data['competences'])
+        this.parseSkills(data['skills'])
+        this.visualize()
 
   #
   # Loads courses from JSON data.
   #
-  loadCourses: (data) ->
-    for row in data
-      rawData = row.scoped_course
+  parseCourses: (data) ->
+    for rawData in data
       course = new GraphCourse(rawData.id, rawData.course_code, rawData.translated_name, 'course', this)
       @coursesById[rawData.id] = course
       course.isCompetence = false
@@ -62,9 +51,8 @@ class @GraphView
   #
   # Loads competences from JSON data.
   #
-  loadCompetences: (data) ->
-    for row in data
-      rawData = row.competence
+  parseCompetences: (data) ->
+    for rawData in data
       course = new GraphCourse(rawData.id, '', rawData.translated_name, 'competence', this)
       @coursesById[rawData.id] = course
       course.isCompetence = true
@@ -72,11 +60,9 @@ class @GraphView
   #
   # Loads skills from JSON data.
   #
-  loadSkills: (data) ->
+  parseSkills: (data) ->
     # Read JSON
-    for row in data
-      rawData = row.skill
-
+    for rawData in data
       # Skip if skills belongs to a course that is not shown
       course = @coursesById[rawData.competence_node_id]
       continue unless course
@@ -95,8 +81,7 @@ class @GraphView
 
 
     # Set connections between skills
-    for row in data
-      rawData = row.skill
+    for rawData in data
       skill = @skillsById[rawData.id]
       continue unless skill
 
@@ -132,8 +117,10 @@ class @GraphView
 
   # 'postreqSkills': 'all': show all skills of visible postreq courses
   #                  'recursive': follow links
+  # 'supporting':    'show': show supporting prereqs
+  # 'supportingTo':  'show': show courses that the source course supportins
   visualize: (options) ->
-    options ||= {}
+    options = @visualizationOptions
 
     # Read target ids
     targetIds = {}         # id => boolean
@@ -167,15 +154,17 @@ class @GraphView
           skill.visible = true
 
     # Show immediate supporting prereqs
-    for id, course of sourceCourse.supportingPrereqsById
-      course.visible = true
-      course.level = -1 if course.level == undefined
-      GraphCourse::minLevel = -1 if GraphCourse::minLevel > -1
+    if 'show' == options['supporting']
+      for id, course of sourceCourse.supportingPrereqsById
+        course.visible = true
+        course.level = -1 if course.level == undefined
+        GraphCourse::minLevel = -1 if GraphCourse::minLevel > -1
     
-    for id, course of sourceCourse.supportingPrereqToById
-      course.visible = true
-      course.level = 1 if course.level == undefined
-      GraphCourse::maxLevel = 1 if GraphCourse::maxLevel < 1
+    if 'show' == options['supportingTo']
+      for id, course of sourceCourse.supportingPrereqToById
+        course.visible = true
+        course.level = 1 if course.level == undefined
+        GraphCourse::maxLevel = 1 if GraphCourse::maxLevel < 1
 
     # Show skills
     for skill in sourceCourse.skills

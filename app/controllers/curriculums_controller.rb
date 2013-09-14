@@ -2,10 +2,10 @@ class CurriculumsController < ApplicationController
 
   layout 'views/curriculums/browser'
 
-  #caches_page :graph    # expire_page :action => :graph
+  caches_page :graph    # expire_page :action => :graph
 
   def load_curriculum
-    @curriculum = Curriculum.find(params[:curriculum_id])
+    @curriculum = Curriculum.find(params[:curriculum_id] || params[:id])
   end
 
   # GET /curriculums
@@ -118,15 +118,47 @@ class CurriculumsController < ApplicationController
     end
   end
 
-#   def graph
-#     @curriculum = Curriculum.find(params[:id])
-# 
-#     prereqs = CoursePrereq.joins(:course)
-#                 .where("competence_nodes.curriculum_id = ?", @curriculum)
-#                 .where(:requirement => STRICT_PREREQ)
-# 
-#     render :action => 'graphviz', :locals => {:prereqs => prereqs}, :layout => false, :content_type => 'text/x-graphviz'
-#   end
+  def graph
+    load_curriculum
+    
+    competences = Competence.where(:curriculum_id => @curriculum.id, :parent_competence_id => nil)
+                    .joins(:competence_descriptions)
+                    .where(["competence_descriptions.locale = ?", I18n.locale])
+                    #.includes(:strict_prereqs)
+    
+    courses = ScopedCourse.where(:curriculum_id => @curriculum.id)
+                .joins(:course_descriptions)
+                .where(["course_descriptions.locale = ?", I18n.locale])
+                #.includes(:strict_prereqs)
+
+    skills = Skill
+                .includes(:strict_prereqs, :supporting_prereqs, :localized_description)
+                .order(:position)
+                #.where('competence_nodes.id' => @curriculum.course_ids)
+
+    competences_json = competences.select('competence_nodes.id, competence_descriptions.name AS translated_name')
+      .as_json(:root => false)
+                
+    courses_json = courses.select('competence_nodes.id, competence_nodes.course_code, course_descriptions.name AS translated_name')
+      .as_json(:root => false) # :methods => :strict_prereq_ids
+
+    skills_json = skills.select('skills.id, skills.competence_node_id')
+      .as_json(
+          :methods => [:strict_prereq_ids, :supporting_prereq_ids, :localized_name],
+          :root => false
+          #:only => [:id, :competence_node_id],
+        )
+    
+    response_data = {
+      'competences' => competences_json,
+      'courses' => courses_json,
+      'skills' => skills_json,
+    }
+
+    respond_to do |format|
+      format.json { render json: response_data.to_json( root: false ) }
+    end
+  end
 
 
   def search_skills

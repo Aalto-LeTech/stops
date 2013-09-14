@@ -21,7 +21,7 @@ Ops::Application.routes.draw do
     # View study guides of other years
     resources :curriculums, :constraints => { :id => /\w+/ } do
       member do
-        #get 'graph'
+        get 'graph'
         get 'search_skills'
         get 'search_courses'
         match 'edit/import_csv', :controller => 'curriculums', :action => :import_csv, :via => [:post, :get]

@@ -7,7 +7,6 @@ class Competence < CompetenceNode
   belongs_to :parent_competence,
            :class_name => 'Competence'
 
-
   validate :validate_parent_competence_not_a_self_reference
 
   has_many :children, :class_name => 'Competence', :foreign_key => 'parent_competence_id'

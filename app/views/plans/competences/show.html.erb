@@ -8,8 +8,8 @@
 
   <h1><%= link_to t('.competences'), studyplan_competences_path %></h1>
   <ul>
-    <% @curriculum.competences.each do |competence| %>
-      <li class="<%= @user.study_plan.has_competence?( competence ) ? 'chosen' : '' %> <%= competence == @competence ? 'selected' : '' %>">
+    <% @curriculum.competences.includes(:localized_description).each do |competence| %>
+      <li class="<%= @chosen_competence_ids.member?(competence.id) ? 'chosen' : '' %> <%= competence == @competence ? 'selected' : '' %>">
         <%= link_to competence.localized_name, studyplan_competence_path(:id => competence) %>
       </li>
     <% end %>
@@ -38,24 +38,20 @@
     <% end %>
   </div>
 
-  <h2>
-    <%= @competence.localized_name %>
-  </h2>
+  <h2><%= @competence.localized_name %></h2>
 
   <div class="row-fluid">
     <div class="span6">
-
-      <h3>
-        <%= t('.skills') %>
-      </h3>
+      <% if @competence.localized_description && !@competence.localized_description.description.blank? %>
+        <%= @competence.localized_description.description.html_safe %>
+      <% end %>
+      
+      <h3><%= t('.skills') %></h3>
       <ul>
         <% @competence.skills.each do |skill| %>
-          <li>
-            <%= skill.localized_name %>
-          </li>
+          <li><%= skill.localized_name %></li>
         <% end %>
       </ul>
-
 
     </div>
     <div class="span6">
@@ -70,7 +66,7 @@
               <%
                 is_passed = (@passed_courses.member? course.id)
                 a_class = ''
-                if @included_courses.include?(course)
+                if @included_courses.member?(course)
                   a_class = 'included'
                   included_counter += course.credits || 0
                 end
@@ -118,6 +114,32 @@
         </tfoot>
       </table>
 
+      <!-- Child competences -->
+      <% @competence.children.includes(:localized_description).each do |child_competence| %>
+        <p><%= child_competence.localized_description.description %></p>
+        <table class="course-table">
+          <tbody>
+            <% child_competence.supporting_prereqs.each do |course| %>
+              <tr>
+                <%
+                  is_passed = (@passed_courses.member? course.id)
+                  a_class = ''
+                  if @included_courses.member?(course.id)
+                    a_class = 'included'
+                    included_counter += course.credits || 0
+                  end
+                %>
+                <td><%= link_to course.course_code, studyplan_competence_course_path(:competence_id => @competence.id, :id => course), :class => a_class %></td>
+                <td><%= link_to course.localized_name, studyplan_competence_course_path(:competence_id => @competence.id, :id => course), :class => a_class %></td>
+                <td><%= course.credits %></td>
+                <td><%= t('.course_passed') if is_passed %>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% end %>
+      
+      <hr />
       
       <h3><%= t('.supporting_prereqs') %></h3>
       <table class="course-table">
@@ -128,7 +150,7 @@
               <%
                 is_passed = (@passed_courses.member? course.id)
                 a_class = ''
-                if @included_courses.include?(course)
+                if @included_courses.member?(course.id)
                   a_class = 'included'
                   included_counter += course.credits || 0
                 end
@@ -145,20 +167,23 @@
           <% end %>
         </tbody>
       </table>
+      
         
         
     </div>
   </div>
 </div>
 
-<%= render :partial => 'courses/graph_templates' %>
+<% if @user.treatment == TREATMENT_GRAPH %>
+  <%= render :partial => 'courses/graph_templates' %>
 
-<div id="course-graph"
-  data-courses-path="<%= curriculum_courses_path(:curriculum_id => @curriculum.id) %>"
-  data-competences-path="<%= curriculum_competences_path(:curriculum_id => @curriculum.id) %>"
-  data-skills-path="<%= curriculum_skills_path(:curriculum_id => @curriculum.id) %>"
-  data-source-id="<%= @competence.id %>"
-  >
+  <div id="course-graph"
+    data-courses-path="<%= curriculum_courses_path(:curriculum_id => @curriculum.id) %>"
+    data-competences-path="<%= curriculum_competences_path(:curriculum_id => @curriculum.id) %>"
+    data-skills-path="<%= curriculum_skills_path(:curriculum_id => @curriculum.id) %>"
+    data-source-id="<%= @competence.id %>"
+    >
 
-  <!-- ko template: { name: 'courseTemplate', foreach: visibleCourses, afterRender: updateElementDimensions } --><!-- /ko -->
-</div>
+    <!-- ko template: { name: 'courseTemplate', foreach: visibleCourses, afterRender: updateElementDimensions } --><!-- /ko -->
+  </div>
+<% end %>

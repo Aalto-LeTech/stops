@@ -17,6 +17,9 @@ REQUIRED_LOCALES = ['fi', 'en']
 DEFAULT_CURRICULUM_ID = 1
 DEFAULT_FIRST_PERIOD_ID = 146
 
+TREATMENT_GRAPH = 1
+TREATMENT_TRADITIONAL = 2
+
 # Shibboleth attribute names (attribute-map.xml)
 SHIB_PATH = "/Shibboleth.sso/wayf?target="
 SHIB_ATTRIBUTES = {

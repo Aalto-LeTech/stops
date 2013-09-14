@@ -8,7 +8,7 @@ Ops::Application.routes.draw do
     match '/logout' => 'sessions#destroy', :as => :logout
 
     #match '/preferences' => 'users#edit'
-    resources :users do
+    resources :users, :only => [] do
       member do
         get :courses
       end
@@ -16,7 +16,6 @@ Ops::Application.routes.draw do
 
     #resources :courses  # AbstractCourses
     #resources :course_instances, :only => [:index]
-
     #resources :skills
 
     # View study guides of other years

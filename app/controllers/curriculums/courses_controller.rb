@@ -138,7 +138,8 @@ class Curriculums::CoursesController < CurriculumsController
 
   def create
     authorize! :update, @curriculum
-
+    @curriculum.save  # Expire cache
+    
     @course_code = params[:course_code].strip
     if @course_code.blank?
       flash[:error] = t('curriculums.courses.new.course_code_required')
@@ -194,6 +195,7 @@ class Curriculums::CoursesController < CurriculumsController
 
   def update
     authorize! :update, @curriculum
+    @curriculum.save  # Expire cache
     @scoped_course = ScopedCourse.find(params[:id])
 
     # Update AbstractCourse if changed

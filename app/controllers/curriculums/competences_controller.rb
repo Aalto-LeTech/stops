@@ -84,6 +84,7 @@ class Curriculums::CompetencesController < CurriculumsController
   # PUT /competences/1.xml
   def update
     authorize! :update, @curriculum
+    @curriculum.save  # Expire cache
 
     respond_to do |format|
       if @competence.update_attributes(params[:competence])
@@ -109,8 +110,10 @@ class Curriculums::CompetencesController < CurriculumsController
 
   def create
     load_curriculum
-    @competence = Competence.new(params[:competence])
     authorize! :update, @curriculum
+    @curriculum.save  # Expire cache
+    
+    @competence = Competence.new(params[:competence])
 
     respond_to do |format|
       if @competence.save

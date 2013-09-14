@@ -3,6 +3,7 @@ class CurriculumsController < ApplicationController
   layout 'views/curriculums/browser'
 
   caches_page :graph    # expire_page :action => :graph
+  cache_sweeper :curriculum_sweeper
 
   def load_curriculum
     @curriculum = Curriculum.find(params[:curriculum_id] || params[:id])

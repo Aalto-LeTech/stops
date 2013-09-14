@@ -28,6 +28,7 @@ class Curriculums::SkillsController < CurriculumsController
   # POST /curriculum/:id/skills
   def create
     authorize! :update, @curriculum
+    @curriculum.save  # Expire cache
 
     @skill = Skill.new(params[:skill])
     @skill.save!
@@ -42,10 +43,11 @@ class Curriculums::SkillsController < CurriculumsController
   # PUT /curriculum/:curriculum_id/skills/:id
   def update
     authorize! :update, @curriculum
+    @curriculum.save  # Expire cache
 
     @skill = Skill.find(params[:id])
     @skill.update_attributes(params[:skill])
-
+    
     respond_to do |format|
       format.js {
         render :json => @skill.to_json(:include => [:skill_descriptions], :root => true)
@@ -55,6 +57,7 @@ class Curriculums::SkillsController < CurriculumsController
 
   def update_position
     authorize! :update, @curriculum
+    @curriculum.save  # Expire cache
     
     Skill.transaction do
       begin
@@ -104,6 +107,7 @@ class Curriculums::SkillsController < CurriculumsController
   # DELETE /curriculums/:curriculum_id/skills/:id
   def destroy
     authorize! :update, @curriculum
+    @curriculum.save  # Expire cache
 
     @skill = Skill.find(params[:id])
     node = @skill.competence_node
@@ -121,6 +125,7 @@ class Curriculums::SkillsController < CurriculumsController
   # POST /curriculums/:curriculum_id/skills/:id/add_prereq
   def add_prereq
     authorize! :update, @curriculum
+    @curriculum.save  # Expire cache
 
     requirement_type = params[:requirement] || STRICT_PREREQ
 
@@ -143,7 +148,8 @@ class Curriculums::SkillsController < CurriculumsController
   # params: {'prereq_id': prereq_skill_id}
   def remove_prereq
     authorize! :update, @curriculum
-
+    @curriculum.save  # Expire cache
+    
     @prereq = SkillPrereq.where "skill_id = ? AND prereq_id = ?",
                 params[:id], params[:prereq_id]
 

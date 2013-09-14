@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130911105518) do
+ActiveRecord::Schema.define(:version => 20130913124039) do
 
   create_table "abstract_courses", :force => true do |t|
     t.string "code"
@@ -77,6 +77,10 @@ ActiveRecord::Schema.define(:version => 20130911105518) do
     t.text    "other"
     t.text    "comments"
     t.integer "abstract_course_id", :null => false
+    t.text    "noppa_url"
+    t.text    "oodi_url"
+    t.text    "period_info"
+    t.text    "default_period"
   end
 
   create_table "course_instances", :force => true do |t|

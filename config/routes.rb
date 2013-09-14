@@ -15,8 +15,7 @@ Ops::Application.routes.draw do
     end
 
     #resources :courses  # AbstractCourses
-
-    resources :course_instances, :only => [:index]
+    #resources :course_instances, :only => [:index]
 
     #resources :skills
 

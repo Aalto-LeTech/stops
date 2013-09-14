@@ -84,6 +84,12 @@ class ApplicationController < ActionController::Base
 
     raise exception
   end
+  
+  # Throw an error with params
+  # The function is ment to be POSTed by client side javascripts for notifying developers of client side errors.
+  def client_side_error
+    throw 'Client side error! Params: ', params.as_json
+  end
 
   def current_session
     return @current_session if defined?(@current_session)
@@ -228,13 +234,6 @@ class ApplicationController < ActionController::Base
       out = serializer.new(target, options).as_json.delete_if { |key, value| key[-1] != 's' }
     end
     out
-  end
-
-  # Throw an error with params
-  # The function is ment to be POSTed by client side javascripts for notifying
-  # developers of client side errors.
-  def client_side_error
-    throw 'Client side error! Params: ', params.as_json
   end
 
 end

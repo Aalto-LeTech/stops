@@ -1,7 +1,7 @@
 class CourseInstancesController < ApplicationController
   respond_to :json
   
-  # Get all course instances
+  # Get all course instances. FIXME: this seems to be obsolete
   def index
     course_instances = CourseInstance.joins(:abstract_course).select('course_instances.id, code, period_id, length')
     

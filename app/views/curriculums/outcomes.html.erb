@@ -1,9 +1,0 @@
-<% @curriculum.courses.each do |course| %>
-  <h2><%= course.course_code %> <%= course.localized_name %></h2>
-  
-  <ul>
-    <% course.skills.each do |skill| %>
-      <li><%= skill.localized_name %></li>
-    <% end %>
-  </ul>
-<% end %>

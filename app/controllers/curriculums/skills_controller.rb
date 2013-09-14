@@ -6,9 +6,10 @@ class Curriculums::SkillsController < CurriculumsController
 
   def index
     # TODO: only load skills that belong to this curriculum
-    @skills = Skill.joins(:competence_node)
+    #.joins(:competence_node), order :competence_node_id
+    @skills = Skill
                 .includes(:strict_prereqs, :supporting_prereqs, :localized_description)
-                .order(:competence_node_id, :position)
+                .order(:position)
                 #.where('competence_nodes.id' => @curriculum.course_ids)
 
     respond_to do |format|

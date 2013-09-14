@@ -1,18 +1,12 @@
 class CurriculumsController < ApplicationController
 
-
-  respond_to :html
-  respond_to :json, :only => 'prereqs'
-
   layout 'views/curriculums/browser'
 
-  #caches_page :prereqs
-
+  #caches_page :graph    # expire_page :action => :graph
 
   def load_curriculum
     @curriculum = Curriculum.find(params[:curriculum_id])
   end
-
 
   # GET /curriculums
   # GET /curriculums.xml
@@ -25,7 +19,6 @@ class CurriculumsController < ApplicationController
       format.xml  { render :xml => @curriculums }
     end
   end
-
 
   # GET /curriculums/1
   # GET /curriculums/1.xml
@@ -125,48 +118,6 @@ class CurriculumsController < ApplicationController
     end
   end
 
-
-  # DELETE /curriculums/1
-  # DELETE /curriculums/1.xml
-#   def destroy
-#     @curriculum = Curriculum.find(params[:id])
-#     authorize! :destroy, @curriculum
-# 
-#     @curriculum.destroy
-# 
-#     respond_to do |format|
-#       format.html { redirect_to(curriculums_url) }
-#       format.xml  { head :ok }
-#     end
-#   end
-
-
-  # Get all strict prereqs of all courses
-#   def prereqs
-#     @curriculum = Curriculum.find(params[:id])
-# 
-#     prereqs = NodePrereq.where(:requirement => STRICT_PREREQ)
-#                 .joins(<<-SQL
-#                     INNER JOIN competence_nodes AS course ON course.id = node_prereqs_cache.competence_node_id
-#                     INNER JOIN competence_nodes AS prereq ON prereq.id = node_prereqs_cache.prereq_id
-#                   SQL
-#                 ).where("course.curriculum_id = ?", @curriculum)
-#                 .select(<<-SQL
-#                     course.course_code AS course_code,
-#                     prereq.course_code AS prereq_code,
-#                     course.id AS course_id,
-#                     prereq.id AS prereq_id
-#                   SQL
-#                 )
-# 
-#     respond_to do |format|
-#       format.html { render :text => prereqs.to_json }
-#       format.xml { render :xml => prereqs }
-#       format.json { render :json => prereqs.to_json(:root => false) }
-#     end
-#   end
-
-
 #   def graph
 #     @curriculum = Curriculum.find(params[:id])
 # 
@@ -176,11 +127,6 @@ class CurriculumsController < ApplicationController
 # 
 #     render :action => 'graphviz', :locals => {:prereqs => prereqs}, :layout => false, :content_type => 'text/x-graphviz'
 #   end
-
-
-  def outcomes
-    @curriculum = Curriculum.find(params[:id])
-  end
 
 
   def search_skills
@@ -363,6 +309,7 @@ class CurriculumsController < ApplicationController
 
   # Loads curriculum object with necessary associations eagerly loaded
   def load_curriculum_for_show_and_edit
+    # TODO: is it necessary to eager load these associations?
     @curriculum = Curriculum.includes(
       :courses,
       :courses => [:abstract_course, :periods, :localized_description, :strict_prereqs],

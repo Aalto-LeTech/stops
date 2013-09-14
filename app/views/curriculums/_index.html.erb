@@ -4,8 +4,6 @@
 
 <h1><%=t('.heading')%></h1>
 
-<!--%= render 'remove_confirmation_modal' %-->
-
 <table id="curriculums-table" class="table">
   <thead>
     <tr>
@@ -24,13 +22,6 @@
           <% end %>
         </td>
         <td><%= curriculum.start_year %>-<%= curriculum.end_year %></td>
-        <!--
-        <% if can? :destroy, curriculum %>
-          <td>
-            <a data-initiate-delete="true" data-target-id="<%= curriculum.id %>" class="button-base button-danger button-small-abs"><%= t 'Delete' %></a>
-          </td>
-        <% end %>
-        -->
       </tr>
     <% end %>
   </tbody>

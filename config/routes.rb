@@ -21,8 +21,6 @@ Ops::Application.routes.draw do
     # View study guides of other years
     resources :curriculums, :constraints => { :id => /\w+/ } do
       member do
-        get 'cycles'
-        #get 'prereqs'
         #get 'graph'
         get 'search_skills'
         get 'search_courses'
@@ -41,13 +39,10 @@ Ops::Application.routes.draw do
           get 'courselist'
           get 'edit_prereqs'
         end
-
-        #resources :skills, :controller => 'curriculums/skills', :only => :show
       end
 
       resources :courses, :controller => 'curriculums/courses' do  # ScopedCourses
         member do
-          #get 'prereqs'
           get 'edit_prereqs'
           get 'edit_as_a_prereq'
           get 'comments'
@@ -56,16 +51,15 @@ Ops::Application.routes.draw do
         end
       end
 
-      resources :skills, :controller => 'curriculums/skills' do
+      resources :skills, :controller => 'curriculums/skills', :only => [:index, :create, :update, :destroy] do
         member do
           post 'add_prereq'
           post 'remove_prereq'
           put 'update_position'
-          #get 'search_skills_and_courses'
         end
       end
 
-      resources :roles, :controller => 'curriculums/roles', :only => [:new, :index, :create, :destroy]
+      resources :roles, :controller => 'curriculums/roles', :only => [:new, :create, :destroy]
     end
 
     # My Plan
@@ -101,14 +95,13 @@ Ops::Application.routes.draw do
 #       resource :schedule, :controller => 'plans/schedule', :only => [:show, :edit]
 #       resource :record, :controller => 'plans/record', :only => [:show]
 #     end
-
   end
 
   resources :invitations, :only => [:show, :destroy], :id => /[^\/]+/
 
-  #match '/:locale' => "plans/schedule#show", :as => :frontpage  # Added a redirect instead
-  match '/:locale' => "frontpage#index", :as => :frontpage
   post 'client_side_error', :controller => 'application', as: 'client_side_error'
+  
+  match '/:locale' => "frontpage#index", :as => :frontpage
   root :to => "application#redirect_by_locale"
 
 end

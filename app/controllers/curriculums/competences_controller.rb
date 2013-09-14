@@ -2,12 +2,10 @@ require 'eco'
 
 class Curriculums::CompetencesController < CurriculumsController
 
-  before_filter :load_competence, :except => [:index, :show, :new, :create]
-
+  before_filter :load_competence, :only => [:edit, :edit_prereqs, :update, :graph, :courselist]
+  
   def load_competence
     @competence = Competence.find(params[:competence_id] || params[:id])
-
-    #@profile = @competence.profile
     load_curriculum
   end
 
@@ -71,7 +69,7 @@ class Curriculums::CompetencesController < CurriculumsController
 
 
   def edit_prereqs
-    @competence = Competence.find(params[:id])
+    #@competence = Competence.find(params[:id])
     @competence_node = @competence
     authorize! :update, @curriculum
 
@@ -124,13 +122,13 @@ class Curriculums::CompetencesController < CurriculumsController
   end
 
   def graph
-    @competence = Competence.find(params[:id])
+    #@competence = Competence.find(params[:id])
 
     render :action => 'graph', :layout => 'views/curriculums/container'
   end
   
   def courselist
-    @competence = Competence.find(params[:id])
+    #@competence = Competence.find(params[:id])
     
     render :action => 'courselist', :layout => 'views/curriculums/container'
   end

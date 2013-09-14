@@ -7,9 +7,6 @@ class Curriculums::RolesController < CurriculumsController
     authorize! :update, @curriculum
   end
   
-  def index
-  end
-  
   def new
     @invitations = TeacherInvitation.where(:target_id => @curriculum.id).all
     @subject = t("curriculums.roles.new.subject_default")

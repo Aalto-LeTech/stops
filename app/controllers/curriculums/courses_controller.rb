@@ -115,6 +115,8 @@ class Curriculums::CoursesController < CurriculumsController
   end
 
   def comments
+    authorize! :update, @curriculum
+    
     @scoped_course = ScopedCourse.find(params[:id])
     @new_comment = Comment.new
 
@@ -179,7 +181,6 @@ class Curriculums::CoursesController < CurriculumsController
 
   def edit
     authorize! :update, @curriculum
-    
     @scoped_course = ScopedCourse.find(params[:id])
     @abstract_course = @scoped_course.abstract_course
     
@@ -199,8 +200,8 @@ class Curriculums::CoursesController < CurriculumsController
   end
 
   def update
-    @scoped_course = ScopedCourse.find(params[:id])
     authorize! :update, @curriculum
+    @scoped_course = ScopedCourse.find(params[:id])
 
     # Update AbstractCourse if changed
     new_course_code = params[:scoped_course]['course_code'].strip

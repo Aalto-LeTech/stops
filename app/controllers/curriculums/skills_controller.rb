@@ -2,7 +2,7 @@ class Curriculums::SkillsController < CurriculumsController
 
   before_filter :load_curriculum
 
-  respond_to :json, :only => [:index, :edit, :search_skills_and_courses]
+  respond_to :json, :only => [:index]
 
   def index
     # TODO: only load skills that belong to this curriculum
@@ -22,37 +22,6 @@ class Curriculums::SkillsController < CurriculumsController
           :root => true
         )
       end
-    end
-  end
-
-  # GET curriculum/:id/skills/:id
-#   def show
-#     @skill = Skill.find(params[:id])
-# 
-#     @competence = Competence.find(params[:competence_id]) if params[:competence_id]
-#     @profile = @competence.profile
-# 
-#     @courses = @skill.contributing_skills
-# 
-#     respond_to do |format|
-#       format.html # show.html.erb
-#       format.xml  { render :xml => @skill }
-#     end
-#   end
-
-  def new
-    authorize! :update, @curriculum
-
-    @skill = Skill.new
-    @skill.competence_node = Competence.find(params[:competence_id])
-
-    # Create empty descriptions for each required locale
-    REQUIRED_LOCALES.each do |locale|
-      @skill.skill_descriptions << SkillDescription.new(:locale => locale)
-    end
-
-    respond_to do |format|
-      format.js
     end
   end
 
@@ -85,6 +54,8 @@ class Curriculums::SkillsController < CurriculumsController
   end
 
   def update_position
+    authorize! :update, @curriculum
+    
     Skill.transaction do
       begin
         skill = Skill.find params[:id]
@@ -186,66 +157,6 @@ class Curriculums::SkillsController < CurriculumsController
 
     render :nothing => true
   end
-
-  # GET /:id/edit
-  def edit
-    respond_to do |format|
-      format.html do
-        #render "edit_skill_prereqs.js.erb"
-
-        # Validate query string key
-        render(:nothing => true, :status => 500) unless /^\d+$/ =~ params[:id]
-
-        # Find all courses within curriculum that have at least one skill as a
-        # a prerequirement to the skill being edited
-        @prereq_courses = ScopedCourse.find(
-                            :all,
-                            :conditions => [
-                              'curriculum_id = ? AND "skill_prereqs"."skill_id" = ?',
-                              params[:curriculum_id], params[:id]
-                            ],
-                            :include => [
-                              :localized_course_description,
-                              { :skills => [:prereq_to, :localized_description] }
-                            ]
-                          )
-
-        @skill = Skill.includes(:localized_description).find(params[:id].to_i)
-
-        # Render an eco template for each course (This is done to use the same template
-        # for Javascript view updates)
-        eco_template_path = File.join(Rails.root,
-          "app/assets/javascripts/templates/_current_course_with_prereq_skills.jst.eco")
-        eco_template = File.read(eco_template_path)
-
-        @courses_rendered = []
-        @prereq_courses.each do |course|
-          skills = []
-          course.skills.each do |skill|
-            skill_locals = {
-              :name         => skill.localized_name,
-              :id           => skill.id,
-              :is_prereq    => skill.is_prereq_to?(@skill.id)
-            }
-            skills << skill_locals
-          end
-          locals = {
-            :render_whole_course  => true,
-            :course_id            => course.id,
-            :course_code          => course.course_code,
-            :course_name          => course.localized_name,
-            :course_skills        => skills,
-            :button_text          => t('add_prereq_button_remove', :scope => 'curriculums.skills.edit')
-          }
-
-          @courses_rendered << Eco.render(eco_template, locals)
-        end
-
-        @skill_id = params[:id]
-      end
-    end
-  end
-
 
   # Action for retrieving courses that match certain search terms
   # using AJAX.

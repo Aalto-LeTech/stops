@@ -166,7 +166,12 @@ def create_instances(filename)
       puts "#{course_code} not found"
       next
     end
-      
+    
+    abstract_course.course_descriptions.each do |description|
+      description.default_period = parts[1]
+      description.save
+    end
+    
     # Special rules
     if special_rules
       special_rules.strip!

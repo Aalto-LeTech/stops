@@ -1,5 +1,5 @@
 def import_courses(filename)
-  
+  puts filename
   # period_regexp = Regexp.new('([IV]{1,3})')
   
   File.open(filename, 'r') do |input|
@@ -19,7 +19,7 @@ def import_courses(filename)
       min_credits = credits_parts[0].to_i
       max_credits = credits_parts.size > 1 ? credits_parts[1].to_i : credits_parts[0].to_i
       
-      period = parts[5] #.gsub(/<(\/)?p>/, '')
+      period = parts[5].gsub(/<[^<>]*>/, '').strip #.gsub(/<(\/)?p>/, '')
       prereqs = parts[6]
       grading = parts[7]
       language = parts[8]
@@ -40,6 +40,7 @@ def import_courses(filename)
       
       description_fi.noppa_url = noppa_url
       description_fi.oodi_url = oodi_url
+      description_fi.period_info = period
       
       description_fi.save
     end
@@ -47,4 +48,8 @@ def import_courses(filename)
   
 end
 
+import_courses('data/courses-chem.txt')
+import_courses('data/courses-econ.txt')
+import_courses('data/courses-elec.txt')
 import_courses('data/courses-eng.txt')
+import_courses('data/courses-sci.txt')

@@ -8,11 +8,11 @@ Ops::Application.routes.draw do
     match '/logout' => 'sessions#destroy', :as => :logout
 
     #match '/preferences' => 'users#edit'
-    resources :users, :only => [] do
-      member do
-        get :courses
-      end
-    end
+#    resources :users, :only => [] do
+#       member do
+#         get :courses
+#       end
+#    end
 
     #resources :courses  # AbstractCourses
     #resources :course_instances, :only => [:index]

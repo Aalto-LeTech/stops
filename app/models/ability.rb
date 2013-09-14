@@ -4,7 +4,7 @@ class Ability
   def initialize(user)
     # All users, including unauthenticated
     can :read, Curriculum
-    can :create, User
+    #can :create, User
 
     # Authenticated users
     return unless user

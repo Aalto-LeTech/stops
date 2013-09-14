@@ -34,6 +34,7 @@ class UsersController < ApplicationController
   end
 
   def courses
+    # FIXME: this should be obsolete
     @user = User.find(params[:id])
 
     authorize! :read, @user

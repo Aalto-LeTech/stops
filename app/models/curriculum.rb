@@ -1,25 +1,17 @@
 class Curriculum < ActiveRecord::Base
 
-
   validates_presence_of :start_year
   validates_presence_of :end_year
-
 
   # Competences
   has_many :competences,
            :dependent   => :destroy
-
 
   # Courses
   has_many :courses,
            :class_name  => 'ScopedCourse',
            :dependent   => :destroy,
            :order       => 'course_code'
-
-  has_many :temp_courses,
-           :dependent   => :destroy,
-           :order       => 'code, created_at'
-
 
   # Roles
   has_many :teacher_roles,

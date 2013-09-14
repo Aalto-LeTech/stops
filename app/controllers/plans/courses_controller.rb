@@ -7,6 +7,8 @@ class Plans::CoursesController < PlansController
   # GET /studyplan/courses
   # GET /studyplan/courses.xml
   def index
+    authorize! :read, @study_plan
+    
     respond_to do |format|
       format.html { render :action => 'index', :layout => 'browser' }
       format.xml  { render :xml => nil }
@@ -16,6 +18,7 @@ class Plans::CoursesController < PlansController
   # GET /studyplan/courses/1
   # GET /studyplan/courses/1.xml
   def show
+    authorize! :read, @study_plan
     @course = ScopedCourse.find(params[:id])
 
     if params[:competence_id]

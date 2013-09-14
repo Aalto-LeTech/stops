@@ -8,12 +8,15 @@ class Plans::CurriculumsController < PlansController
 
 
   def show
+    authorize! :read, @user
+    
     # Store 'redirect_to' address so that cancel button works on edit page
     store_location
   end
 
   def edit
     @user = current_user
+    authorize! :update, @user
     @curriculums = Curriculum.order(:start_year)
   end
 
@@ -21,6 +24,8 @@ class Plans::CurriculumsController < PlansController
     @user = current_user
     curriculum_id = params[:user_study_plan][:curriculum]
 
+    authorize! :update, @user
+    
     if @user.study_plan
       @user.study_plan.curriculum_id = curriculum_id
       @user.study_plan.save

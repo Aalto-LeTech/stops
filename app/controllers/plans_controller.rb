@@ -1,9 +1,7 @@
 class PlansController < ApplicationController
 
   before_filter :authenticate_user
-
   before_filter :load_plan
-
 
   def load_plan
     @user = current_user

@@ -4,6 +4,7 @@ class Plans::ScheduleController < PlansController
   before_filter :load_plan
 
   def show
+    authorize! :update, @study_plan
     render :action => 'show', :layout => 'browser'
   end
 

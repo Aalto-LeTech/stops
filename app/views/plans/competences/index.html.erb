@@ -2,24 +2,27 @@
   <%= stylesheet_link_tag "views/plans/competences/index", :media => 'all' %>
 <% end %>
 
-
-<% content_for :theleft do %>
-
-  <h1><%= link_to t('.competences'), studyplan_competences_path %></h1>
-  <ul>
-    <% @curriculum.competences.each do |competence| %>
-      <li class="<%= @user.study_plan.has_competence?( competence ) ? 'chosen' : '' %>">
-        <%= link_to competence.localized_name, studyplan_competence_path(:id => competence) %>
-      </li>
-    <% end %>
-  </ul>
-
-<% end %>
-
-
 <div class='competence-list'>
-  <h1><%= t('.heading')%></h1>
+  <h1><%= @curriculum.name %></h1>
 
-  <%= render 'boxed_competence_list' %>
+  <% @competences.each do |competence| %>
+    <div class="competence <%= @chosen_competence_ids.include?( competence.id ) ? 'chosen' : '' %>" >
+      <h2>
+        <%= link_to competence.localized_name, studyplan_competence_path( competence ) %>
+      </h2>
 
+      <% if competence.localized_description && !competence.localized_description.description.blank? %>
+        <%= competence.localized_description.description.html_safe %>
+      <% else %>
+        <p>
+          <%= t('.provided_skills_heading')%>
+          <ul>
+            <% competence.skills.each do |skill| %>
+              <li><%= skill.localized_name %></li>
+            <% end %>
+          </ul>
+        </p>
+      <% end %>
+    </div>
+  <% end %>
 </div>

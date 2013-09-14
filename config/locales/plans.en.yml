@@ -15,7 +15,6 @@ en:
       index:
         heading: "Competence election"
         competences: "Competences"
-      boxed_competence_list:
         provided_skills_heading: "Provides the following skills"
       show:
         add_to_plan: "Add to plan"

@@ -1,9 +1,0 @@
-<li id="skill-<%= skill.id %>">
-  <%= link_to edit_curriculum_skill_path(params[:curriculum_id], skill), :class => "competence-skill-desc" do %>
-    <%= skill.localized_name %>
-  <% end %>
-  <%= link_to t(:Edit), edit_skill_path(skill), 
-    :class => "button-base skill-item-button button-small" %> 
-  <%= link_to t(:Delete), skill, :method => :delete, :remote => true,
-    :class => "button-base button-danger skill-item-button button-small" %>
-</li> 

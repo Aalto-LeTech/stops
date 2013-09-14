@@ -52,6 +52,9 @@ en:
         competence_name_in_fi: 'Name in Finnish:'
         competence_name_in_en: 'Name in English:'
         competence_name_in_sv: 'Name in Swdish:'
+        competence_description_in_fi: 'Description in Finnish:'
+        competence_description_in_en: 'Description in English:'
+        competence_description_in_sv: 'Description in Swdish:'
 
   competence_add_heading: "Add %{competence} to study plan"
   competence_add_to_plan: "Add to studyplan"
@@ -59,6 +62,3 @@ en:
   competence_courses_to_add: "The following courses will be added to your study plan:"
   competence_courses_already_in: "The following courses already were in your study plan:"
   competence_courses_to_remove: "The following courses will be removed from your study plan:"
-
-  # Contributing outcomes
-  contributors_heading: "Courses contributing to %{competence}"

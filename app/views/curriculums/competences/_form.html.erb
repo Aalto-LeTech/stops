@@ -2,11 +2,17 @@
   <%= f.hidden_field :curriculum_id %>
 
   <%= f.fields_for :competence_descriptions do |cf| %>
+    <%= cf.hidden_field :locale %>
     <div class="form-control-group">
       <%= cf.label t(".competence_name_in_" + cf.object.locale), :class => "form-label" %>
-      <%= cf.hidden_field :locale %>
       <div class="form-controls">
         <%= cf.text_field :name, :class => 'field-lengthy' %>
+      </div>
+    </div>
+    <div class="form-control-group">
+      <%= cf.label t(".competence_description_in_" + cf.object.locale), :class => "form-label" %>
+      <div class="form-controls">
+        <%= cf.text_area :description, :rows => 5, :class => 'span6' %>
       </div>
     </div>
   <% end %>

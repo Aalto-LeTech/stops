@@ -52,6 +52,9 @@ fi:
         competence_name_in_fi: 'Nimi suomeksi:'
         competence_name_in_en: 'Nimi englanniksi:'
         competence_name_in_sv: 'Nimi ruotsiksi:'
+        competence_description_in_fi: 'Kuvaus suomeksi:'
+        competence_description_in_en: 'Kuvaus englanniksi:'
+        competence_description_in_sv: 'Kuvaus ruotsiksi:'
 
   competence_add_heading: "Lisää %{competence} opintosuunnitelmaan"
   competence_add_to_plan: "Lisää opintosuunnitelmaan"
@@ -59,6 +62,3 @@ fi:
   competence_courses_to_add: "Seuraavat kurssit lisätään opintosuunnitelmaasi:"
   competence_courses_already_in: "Seuraavat kurssit olivat jo ennestään opintosuunnitelmassasi:"
   competence_courses_to_remove: "Seuraavat kurssit poistetaan opintosuunnitelmastasi:"
-
-  # Contributing outcomes
-  contributors_heading: "Kurssit, jotka tuottavat kompetenssin %{competence}"

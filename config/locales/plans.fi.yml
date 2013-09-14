@@ -15,7 +15,6 @@ fi:
       index:
         heading: "Kompetenssivalinnat"
         competences: "Kompetenssit"
-      boxed_competence_list:
         provided_skills_heading: "Osaamistavoitteet"
       show:
         add_to_plan: "Lisää suunnitelmaan"

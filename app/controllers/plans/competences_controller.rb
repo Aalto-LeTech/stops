@@ -9,6 +9,7 @@ class Plans::CompetencesController < PlansController
 
 
   def index
+    @competences = @curriculum.competences.includes(:localized_description)
     @chosen_competence_ids = @study_plan.competence_ids.to_set
 
     render :action => :index, :layout => 'browser'
@@ -60,7 +61,7 @@ class Plans::CompetencesController < PlansController
 
     # Dont't do anything if user has already selected this competence
     if @study_plan.has_competence?(params[:competence_id])
-      redirect_to studyplan_competence_path( competence ), :flash => {:error => t('.competence_already_selected', :name => @competence.localized_name)}
+      redirect_to studyplan_competence_path(competence), :flash => {:error => t('.competence_already_selected', :name => @competence.localized_name)}
     end
 
     # Add competence to study plan
@@ -71,8 +72,7 @@ class Plans::CompetencesController < PlansController
 
   def delete
     @competence = Competence.find(params[:id])
-
-    # TODO: authorize! :edit, @user
+    authorize! :update, @study_plan
 
     @courses = @study_plan.deletable_scoped_courses(@competence)
   end
@@ -116,42 +116,6 @@ class Plans::CompetencesController < PlansController
           @supporting_courses[competence_node] += supporting_skill.credits
         end
       end
-    end
-  end
-
-
-  def add_competence_to_plan
-    if is_non_negative_integer params[:id]
-      id = params[:id].to_i
-      competence = Competence.find id
-      if competence && @study_plan.curriculum_id == competence.curriculum_id
-        @study_plan.competences << competence
-
-        render :nothing => true
-      else
-        render :nothing => true, :status => 403
-      end
-    else
-      render :nothing => true, :status => 403
-    end
-  end
-
-
-
-  def remove_competence_from_plan
-    if is_non_negative_integer params[:id]
-      id = params[:id].to_i
-      competence = @study_plan.competences.find id
-
-      if competence
-        @study_plan.competences.delete competence
-
-        render :nothing => true
-      else
-        render :nothing => true, :status => 403
-      end
-    else
-      render :nothign => true, :status => 403
     end
   end
 

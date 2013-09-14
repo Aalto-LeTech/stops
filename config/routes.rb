@@ -7,7 +7,7 @@ Ops::Application.routes.draw do
     match '/login' => 'sessions#create', :via => :post
     match '/logout' => 'sessions#destroy', :as => :logout
 
-    match '/preferences' => 'users#edit'
+    #match '/preferences' => 'users#edit'
     resources :users do
       member do
         get :courses
@@ -26,7 +26,6 @@ Ops::Application.routes.draw do
         get 'cycles'
         #get 'prereqs'
         #get 'graph'
-        get 'outcomes'
         get 'search_skills'
         get 'search_courses'
         match 'edit/import_csv', :controller => 'curriculums', :action => :import_csv, :via => [:post, :get]
@@ -75,25 +74,16 @@ Ops::Application.routes.draw do
 
     # My Plan
     resource :studyplan, :controller => 'plans', :only => [:show] do
-
-      resources :competences,
-        :controller => 'plans/competences',
-        :only => [:index, :show, :new, :delete, :create, :destroy] do
-
-        # ScopedCourses that belong to the competence
-        resources :courses,
-          :controller => 'plans/courses',
-          :only => [:show]
-
+      resources :competences, :controller => 'plans/competences' do
         member do
           get 'supporting'
           get 'delete'
         end
-
-        collection do
-          get 'add_competence_to_plan'
-          get 'remove_competence_from_plan'
-        end
+        
+        # ScopedCourses that belong to the competence
+        resources :courses,
+          :controller => 'plans/courses',
+          :only => [:show]
       end
 
       # The studyplan courses controller

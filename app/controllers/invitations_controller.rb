@@ -6,6 +6,7 @@ class InvitationsController < ApplicationController
     
     if @invitation
       @invitation.accept(current_user)
+      log("invitation_accept #{@invitation.type.underscore}")
     
       flash[:success] = t("#{@invitation.type.underscore}_message")
       redirect_to @invitation.target

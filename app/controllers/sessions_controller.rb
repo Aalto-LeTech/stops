@@ -17,9 +17,13 @@ class SessionsController < ApplicationController
 
     if @user_session.save
       user = current_user
+      
+      CustomLogger.info("#{user.login}(#{user.treatment}) login_traditional success")
       logger.info("Logged in #{user.login} (#{user.studentnumber}) (password)")
+      
       redirect_default(user)
     else
+      CustomLogger.info("guest() login_traditional failed")
       logger.info "Login failed. #{@user_session.errors.full_messages.join(',')}"
 
       flash[:error] = "#{@user_session.errors.full_messages.join('. ')}"
@@ -28,9 +32,11 @@ class SessionsController < ApplicationController
   end
 
   def destroy
+    log("logout")
+    
     flash[:success] = I18n.t('sessions.logout_message')
     unless current_session
-      redirect_to(root_url) 
+      redirect_to(root_url)
       return
     end
 
@@ -48,24 +54,24 @@ class SessionsController < ApplicationController
   def shibboleth
     logger.error "SHIB_ATTRIBUTES is not set in config/initializers/settings.rb" unless defined?(SHIB_ATTRIBUTES)
 
-#     shibinfo = {
-#       login:           request.env[SHIB_ATTRIBUTES[:id]],
-#       studentnumber:  (request.env[SHIB_ATTRIBUTES[:studentnumber]] || '').split(':').last,
-#       name:           (request.env[SHIB_ATTRIBUTES[:firstname]] || '') + ' ' + request.env[SHIB_ATTRIBUTES[:lastname]],
-#       email:           request.env[SHIB_ATTRIBUTES[:email]],
-#       affiliation:     request.env[SHIB_ATTRIBUTES[:affiliation]]
-#     }
-#     logout_url = request.env[SHIB_ATTRIBUTES[:logout]]
-
     shibinfo = {
-      :login => '00021', #'student1@aalto.fi',
-      :studentnumber => ('urn:mace:terena.org:schac:personalUniqueCode:fi:tkk.fi:student:00021' || '').split(':').last,
-      :firstname => 'Teemu',
-      :lastname => 'Teekkari',
-      :email => 'tteekkar@cs.hut.fi',
-      :organization => 'aalto.fi'
+      login:           request.env[SHIB_ATTRIBUTES[:id]],
+      studentnumber:  (request.env[SHIB_ATTRIBUTES[:studentnumber]] || '').split(':').last,
+      name:           (request.env[SHIB_ATTRIBUTES[:firstname]] || '') + ' ' + request.env[SHIB_ATTRIBUTES[:lastname]],
+      email:           request.env[SHIB_ATTRIBUTES[:email]],
+      affiliation:     request.env[SHIB_ATTRIBUTES[:affiliation]]
     }
-    logout_url= 'http://www.aalto.fi/'
+    logout_url = request.env[SHIB_ATTRIBUTES[:logout]]
+
+#     shibinfo = {
+#       :login => '00021', #'student1@aalto.fi',
+#       :studentnumber => ('urn:mace:terena.org:schac:personalUniqueCode:fi:tkk.fi:student:00021' || '').split(':').last,
+#       :firstname => 'Teemu',
+#       :lastname => 'Teekkari',
+#       :email => 'tteekkar@cs.hut.fi',
+#       :organization => 'aalto.fi'
+#     }
+#     logout_url= 'http://www.aalto.fi/'
 
     shibboleth_login(shibinfo, logout_url)
   end
@@ -106,9 +112,11 @@ class SessionsController < ApplicationController
       user.treatment = Treatment.get_treatment(user.studentnumber)
       
       if user.save(:validate => false)
+        CustomLogger.info("#{user.login}(#{user.treatment}) create_user_shib success")
         user.create_study_plan(DEFAULT_CURRICULUM_ID)
         logger.info("Created new user #{user.login} (#{user.studentnumber}) (shibboleth)")
       else
+        CustomLogger.info("#{user.login}(#{user.treatment}) create_user_shib failed")
         logger.info("Failed to create new user (shibboleth) #{shibinfo} Errors: #{user.errors.full_messages.join('. ')}")
         flash[:error] = "Failed to create new user. #{user.errors.full_messages.join('. ')}"
         render :action => 'new'
@@ -125,6 +133,7 @@ class SessionsController < ApplicationController
 
       user.reset_persistence_token if user.persistence_token.blank?  # Authlogic won't work if persistence token is empty
     end
+    CustomLogger.info("#{user.login}(#{user.treatment}) login_shib success")
 
     # Create session
     if UserSession.create(user)

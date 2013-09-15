@@ -10,6 +10,7 @@ class TeacherInvitation < Invitation
     end
     
     user.staff = true
+    user.treatment = nil
     user.save
     
     self.destroy

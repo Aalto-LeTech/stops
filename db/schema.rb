@@ -14,7 +14,9 @@
 ActiveRecord::Schema.define(:version => 20130914164831) do
 
   create_table "abstract_courses", :force => true do |t|
-    t.string "code"
+    t.string  "code"
+    t.integer "min_credits"
+    t.integer "max_credits"
   end
 
   add_index "abstract_courses", ["code"], :name => "index_abstract_courses_on_code", :unique => true

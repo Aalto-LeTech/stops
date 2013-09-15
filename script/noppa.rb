@@ -21,15 +21,15 @@ class Spider
   end
   
   def get_organizations
-    fetch(get_api_url('organizations'), 'noppa-organizations.json')
+    fetch(get_api_url('organizations'), 'data/noppa-organizations.json')
   end
   
   def get_course_list
     organizations = ['eng', 'elec', 'eri', 'sci', 'taik', 'chem', 'econ']
 
     organizations.each do |org|
-      data = fetch(get_api_url('courses', {'org_id' => org}), "courselist-#{org}.json")
-      get_course_details(JSON.parse(data), "courses-#{org}.txt")
+      data = fetch(get_api_url('courses', {'org_id' => org}), "data/courselist-#{org}.json")
+      get_course_details(JSON.parse(data), "data/courses-#{org}.txt")
     end
   end
   
@@ -43,13 +43,16 @@ class Spider
       oodi_url = course['course_url_oodi']
       
       details = JSON.parse(fetch_url(get_api_url("courses/#{course_code}/overview")))
-      credits = (details['credits'] || '').gsub(/\n|;/, ' ')
-      period = (details['teaching_period'] || '').gsub(/\n|;/, ' ')
-      prereqs = (details['prerequisites'] || '').gsub(/\n|;/, ' ')
-      grading = (details['grading_scale'] || '').gsub(/\n|;/, ' ')
-      language = (details['instruction_language'] || '').gsub(/\n|;/, ' ')
+      credits = (details['credits'] || '').gsub(/\n/, ' ').gsub(/;/, ',')
+      period = (details['teaching_period'] || '').gsub(/\n/, ' ').gsub(/;/, ',')
+      prereqs = (details['prerequisites'] || '').gsub(/\n/, ' ').gsub(/;/, ',')
+      grading = (details['grading_scale'] || '').gsub(/\n/, ' ').gsub(/;/, ',')
+      language = (details['instruction_language'] || '').gsub(/\n/, ' ').gsub(/;/, ',')
+      learning_outcomes = (details['learning_outcomes'] || '').gsub(/\n/, ' ').gsub(/;/, ',')
+      content = (details['content'] || '').gsub(/\n/, ' ').gsub(/;/, ',')
+      substitutes = (details['substitutes'] || '').gsub(/\n/, ' ').gsub(/;/, ',')
       
-      output.puts "#{course_code};#{name};#{noppa_url};#{oodi_url};#{credits};#{period};#{prereqs};#{grading};#{language}"
+      output.puts "#{course_code};#{name};#{noppa_url};#{oodi_url};#{credits};#{period};#{prereqs};#{grading};#{language};#{learning_outcomes};#{content};#{substitutes}"
       sleep 0.2
     end
 

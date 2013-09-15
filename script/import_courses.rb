@@ -7,7 +7,7 @@ def import_courses(filename)
     input.each_line do |line|
       line_counter += 1
       parts = line.split(';')
-      raise "Invalid data on line #{line_counter}" if parts.size != 9
+      raise "Invalid data on line #{line_counter}" if parts.size != 12
 
       course_code = parts[0].strip
       course_name = parts[1].strip
@@ -19,18 +19,25 @@ def import_courses(filename)
       min_credits = credits_parts[0].to_i
       max_credits = credits_parts.size > 1 ? credits_parts[1].to_i : credits_parts[0].to_i
       
-      period = parts[5].gsub(/<[^<>]*>/, '').strip #.gsub(/<(\/)?p>/, '')
+      period = parts[5].gsub(/<[^<>]*>/, '').strip
       prereqs = parts[6]
       grading = parts[7]
       language = parts[8]
+      learning_outcomes = parts[9]
+      content = parts[10]
+      substitutes = parts[11]
       
       abstract_course = AbstractCourse.find_by_code(course_code)
       unless abstract_course
         STDERR.puts "#{course_code}: CREATING"
-        abstract_course = AbstractCourse.create(:code => course_code)
+        abstract_course = AbstractCourse.new(:code => course_code)
       else
         STDERR.puts "#{course_code}: found"
       end
+      
+      abstract_course.min_credits = min_credits
+      abstract_course.max_credits = max_credits
+      abstract_course.save
       
       description_fi = CourseDescription.find_by_abstract_course_id(abstract_course.id) || CourseDescription.new(
             :abstract_course_id => abstract_course.id,
@@ -41,6 +48,10 @@ def import_courses(filename)
       description_fi.noppa_url = noppa_url
       description_fi.oodi_url = oodi_url
       description_fi.period_info = period
+      description_fi.prerequisites = prereqs if description_fi.prerequisites.blank?
+      description_fi.outcomes = learning_outcomes if description_fi.outcomes.blank?
+      description_fi.replaces = substitutes if description_fi.replaces.blank?
+      description_fi.content = content if description_fi.content.blank?
       
       description_fi.save
     end

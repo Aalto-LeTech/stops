@@ -1,6 +1,6 @@
-CourseInstance.delete_all
-PlanCourse.delete_all
-PlanCompetence.delete_all
+# CourseInstance.delete_all
+# PlanCourse.delete_all
+# PlanCompetence.delete_all
 
 instances = [
  ['CHEM-A1250', :period_i, 2],

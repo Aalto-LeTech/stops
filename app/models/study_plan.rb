@@ -107,9 +107,7 @@ class StudyPlan < ActiveRecord::Base
             :dependent => :destroy
 
   has_many :competences,
-           :through => :plan_competences,
-           :dependent => :destroy
-
+           :through => :plan_competences
 
   # Courses
   has_many  :plan_courses,
@@ -117,35 +115,29 @@ class StudyPlan < ActiveRecord::Base
 
   has_many  :passed_courses,
             :class_name => 'PlanCourse',
-            :dependent => :destroy,
             :conditions  => proc { 'grade > 0' }
 
   has_many  :abstract_courses,
             :through => :plan_courses,
             :source => :abstract_course,
-            :dependent => :destroy
 
   has_many  :scoped_courses,
             :through => :plan_courses,
             :source => :scoped_course,
-            :extend => RefCountExtension,
-            :dependent => :destroy
+            :extend => RefCountExtension
 
   has_many  :extra_plan_courses,
             :class_name => 'PlanCourse',
-            :dependent => :destroy,
             :conditions => { :manually_added => true }
 
   has_many  :extra_scoped_courses,
             :through => :extra_plan_courses,
             :source => :scoped_course,
-            :dependent => :destroy,
             :uniq => true
 
   has_many  :course_instances,
             :through => :plan_courses,
             :source => :course_instance
-
 
   # Skills
   has_many  :skills,

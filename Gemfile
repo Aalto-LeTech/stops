@@ -66,7 +66,7 @@ gem 'authlogic'
 gem 'cancan'
 gem 'fastercsv'
 gem 'acts_as_list'
-#gem 'deep_cloneable', :git => 'git://github.com/moiristo/deep_cloneable.git'
+gem 'deep_cloneable', :git => 'git://github.com/moiristo/deep_cloneable.git'
 
 gem 'delayed_job_active_record', :git => 'git://github.com/collectiveidea/delayed_job_active_record.git'
 gem 'daemons'

@@ -89,12 +89,15 @@ Ops::Application.routes.draw do
     end
 
     # Any plan (specify student ID)
-#     resources :plans, :constraints => { :id => /\w+/ }, :only => [:show, :update] do
-#       get 'old_schedule', as: 'old_schedule'
+    resources :plans, :constraints => { :id => /\w+/ }, :only => [:show, :update] do
+      get 'old_schedule', as: 'old_schedule'
 #       resources :courses, :controller => 'plans/courses', :only => [:index, :show, :create]  # :except => [:edit, :update]
 #       resource :schedule, :controller => 'plans/schedule', :only => [:show, :edit]
 #       resource :record, :controller => 'plans/record', :only => [:show]
-#     end
+    end
+    
+        
+    resources :surveys, :only => [:show, :create], :constraints => { :id => /\w+/ }
   end
 
   resources :invitations, :only => [:show, :destroy], :id => /[^\/]+/

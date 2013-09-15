@@ -1,0 +1,64 @@
+<% content_for(:stylesheets) do %>
+  <%= stylesheet_link_tag "views/surveys/surveys", :media => 'all' %>
+<% end %>
+
+<h1>Kyselytutkimus</h1>
+
+<p>Selvitämme tällä kyselyllä O<sup>4</sup>-järjestelmän toimivuutta perinteisiin opinto-oppaisiin verrattuna. Vastaamalla kyselyyn annat samalla suostumuksesi siihen, että vastauksiasi käytetään tutkimustarkoituksiin. Vastaukset käsitellään luottamuksellisesti ja tutkimuksen tulokset raportoidaan niin, ettei yksittäistä vastaajaa pysty tunnistamaan.</p>
+
+<p>Osallistumalla tutkimukseen autat meitä kehittämään tätä järjestelmää ja opintojen ohjausta eteenpäin, joten vastauksesi on meille erittäin tärkeä.</p>
+
+<hr />
+
+<%= form_tag surveys_path, :class => '' do |f| %>
+  <%= hidden_field_tag :survey_id, @survey_id %>
+  
+    <p class="hint">Vastaa seuraaviin väittämiin asteikolla 1=Ei pidä paikkaansa ... 5=Pitää täysin paikkaansa</p>
+    
+    <% @motivation_questions.each do |question| %>
+      <div class="surveyquestion">
+        <p>Kurssi <em><%= question[:course_code] %> <%= question[:name] %></em> on keskeinen Energiatekniikan osaamisen kannalta.</p>
+        <table style="text-align: center">
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>5</td>
+            </tr>
+            <tr>
+              <td><input type="radio" name="questions[course-<%= question[:id] %>-usefulness]" value="1"></td>
+              <td><input type="radio" name="questions[course-<%= question[:id] %>-usefulness]" value="2"></td>
+              <td><input type="radio" name="questions[course-<%= question[:id] %>-usefulness]" value="3"></td>
+              <td><input type="radio" name="questions[course-<%= question[:id] %>-usefulness]" value="4"></td>
+              <td><input type="radio" name="questions[course-<%= question[:id] %>-usefulness]" value="5"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="surveyquestion">
+        <p>Olen motivoitunut suorittamaan kurssin <em><%= question[:course_code] %> <%= question[:name] %></em>.</p>
+        <p>
+        1
+        <input type="radio" name="questions[course-<%= question[:id] %>-motivation]" value="1">
+        <input type="radio" name="questions[course-<%= question[:id] %>-motivation]" value="2">
+        <input type="radio" name="questions[course-<%= question[:id] %>-motivation]" value="3">
+        <input type="radio" name="questions[course-<%= question[:id] %>-motivation]" value="4">
+        <input type="radio" name="questions[course-<%= question[:id] %>-motivation]" value="5">
+        5
+        </p>
+      </div>
+    <% end %>
+  
+  
+    <label class="control-label" for="tukevat">Millä perusteella valitsit valinnaisia kursseja?</label>
+    <textarea id="tukevat" name="questions[tukevat]" class="span6" rows="4"></textarea>
+    
+    <label class="control-label" for="jatkokehitys">Havaitsitko järjestelmässä puutteita? Miten kehittäisit sitä eteenpäin?</label>
+    <textarea id="jatkokehitys" name="questions[jatkokehitys]" class="span6" rows="4"></textarea>
+      
+
+  <p><%= submit_tag 'Lähetä', :class => 'btn btn-primary' %></p>
+<% end %>

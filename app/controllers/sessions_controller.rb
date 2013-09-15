@@ -66,8 +66,7 @@ class SessionsController < ApplicationController
 #     shibinfo = {
 #       :login => '00021', #'student1@aalto.fi',
 #       :studentnumber => ('urn:mace:terena.org:schac:personalUniqueCode:fi:tkk.fi:student:00021' || '').split(':').last,
-#       :firstname => 'Teemu',
-#       :lastname => 'Teekkari',
+#       :name => 'Teemu Teekkari',
 #       :email => 'tteekkar@cs.hut.fi',
 #       :organization => 'aalto.fi'
 #     }

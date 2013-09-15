@@ -1,0 +1,33 @@
+<div id="thenavbar" class="navbar">
+  <div class="navbar-inner">
+    <div class="container-fluid">
+
+      <a class="btn btn-navbar" data-target=".nav-collapse" data-toggle="collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </a>
+
+      <span class="brand">
+        <div>
+          <span>O<sup>4</sup></span>
+          <span class="program-name"><%= t('layouts.navs.top.program_name') %></span>
+        </div>
+      </span>
+
+      <div class="container-fluid nav-collapse">
+        <ul class="nav pull-right">
+          <% if logged_in? %>
+            <li>
+              <p class="navbar-text">
+                <i class="icon-user"></i>
+                <%= current_user.name %>
+              </p>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</div>

@@ -1,0 +1,21 @@
+<h1>Kyselytutkimus</h1>
+
+<p>Suoritamme tutkimusta</p>
+
+<hr />
+
+<h2>
+  Valitse se vaihtoehto, joka parhaiten vastaa omaa mielikuvaasi tai käsitystä itsestäsi<br />
+  (1=Ei pidä paikkaansa ... 7=Pitää täysin paikkansa).
+</h2>
+
+<%= form_tag surveys_path do |f| %>
+  <%= hidden_field_tag :survey_id, 'treatment' %>
+  
+  <p>
+    Tavoitearvosanani kurssista:
+    <input type="textfield" name="questions[tavoite]" style="width: 4em;" />
+  </p>
+
+  <p><%= submit_tag 'Lähetä', :class => 'btn btn-primary' %></p>
+<% end %>

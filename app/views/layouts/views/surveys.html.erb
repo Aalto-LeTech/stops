@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="<%= I18n.locale %>">
+  <% content_for(:corestylesheets) do %>
+    <%= stylesheet_link_tag "core/core", :media => 'all' %>
+  <% end %>
+  <%= render partial: 'layouts/core/head' %>
+
+  <body>
+    <%= render partial: 'layouts/navs/top_disabled', locals: {fixed_nav: false}  %>
+
+    <div class="container">
+      <%= yield %>
+    </div>
+  </body>
+
+</html>
+ 

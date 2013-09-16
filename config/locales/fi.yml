@@ -10,7 +10,7 @@ fi:
         edit_curriculums: "Muokkaa opinto-opasta"
         schedule: "Aikataulutus"
         curriculum: "Opinto-opas"
-        competences: "Kompetenssit"
+        competences: "Pää- ja sivuaineet"
         courses: "Kurssit"
         login: "Kirjaudu"
         logout: "Kirjaudu ulos"

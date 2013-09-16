@@ -63,9 +63,10 @@ class SessionsController < ApplicationController
     }
     logout_url = request.env[SHIB_ATTRIBUTES[:logout]]
 
+#     studentnumber = '00021'
 #     shibinfo = {
-#       :login => '00021', #'student1@aalto.fi',
-#       :studentnumber => ('urn:mace:terena.org:schac:personalUniqueCode:fi:tkk.fi:student:00021' || '').split(':').last,
+#       :login => studentnumber, #'student1@aalto.fi',
+#       :studentnumber => ("urn:mace:terena.org:schac:personalUniqueCode:fi:tkk.fi:student:#{studentnumber}" || '').split(':').last,
 #       :name => 'Teemu Teekkari',
 #       :email => 'tteekkar@cs.hut.fi',
 #       :organization => 'aalto.fi'

@@ -1,16 +1,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 // layouts/browser.less
-//
-// The Less spec for the layout.
-//
 
+//@import "core/core.less";
 
-
-
-////////////////////////////////////////////////////////////////////////////////
-// Import shared variables and definitions
-
-@import "core/core.less";
+@import "definitions.less";
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -96,30 +89,22 @@ footer
 ////////////////////////////////////////////////////////////////////////////////
 // Styling
 
-@linerColor: #DDD;
-
-
-#theleft
-{
+#theleft, .leftnav {
   font-size: 0.9em;
 
-  h1
-  {
+  h1 {
     font-size: 1.2em;
   }
 
-  h2
-  {
+  h2 {
     font-size: 1.1em;
   }
 
-  h3
-  {
+  h3 {
     font-size: 1.0em;
   }
 
-  a
-  {
+  a {
     color: #404040;
     text-decoration: none;
 
@@ -129,27 +114,21 @@ footer
     }
   }
 
-  .chosen
-  {
+  .chosen {
     a
     {
       color: green !important;
     }
   }
 
-  .selected
-  {
+  .selected {
     font-weight: bold;
 
-    a
-    {
+    a {
       text-decoration: underline !important;
       color: blue !important;
     }
   }
 }
-
-
-
 
 ////////////////////////////////////////////////////////////////////////////////

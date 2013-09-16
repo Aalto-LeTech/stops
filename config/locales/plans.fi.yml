@@ -14,7 +14,7 @@ fi:
     competences:
       index:
         heading: "Kompetenssivalinnat"
-        competences: "Kompetenssit"
+        competences: "Pää- ja sivuaineet"
         provided_skills_heading: "Osaamistavoitteet"
       show:
         add_to_plan: "Lisää suunnitelmaan"
@@ -23,12 +23,14 @@ fi:
         credits_shared: "Sisältyy jo suunnitelmaan"
         credits_passed: "Jo suoritettu"
         credits_added: "Suunnitelmaan lisätään"
-        competences: "Kompetenssit"
+        competences: "Pää- ja sivuaineet"
         skills: "Osaamistavoitteet"
         strict_prereqs: "Välttämättömät kurssit"
         supporting_prereqs: "Tukevia kursseja"
         course_passed: "Suoritettu"
         competence_already_selected: "%{name} on jo opintosuunnitelmassa."
+        course-title: 'Kurssi'
+        credits-title: 'Op'
       supporting:
         heading: "Valitse tukevia kursseja"
 

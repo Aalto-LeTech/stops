@@ -45,6 +45,7 @@
 // Our custom mixins and variables
 @import "core/mixins.less";
 
+@import "definitions.less";
 
 ////////////////////////////////////////////////////////////////////////////////
 // Scaffolding
@@ -397,3 +398,17 @@ FIXME: this affects all fields, not only placeholders
 
 
 ////////////////////////////////////////////////////////////////////////////////
+
+#thefixednavpush {
+  height: @navHeight;
+}
+
+@media screen and (max-width: 979px) {
+  #thefixednavpush {
+    height: 0px;
+  }
+
+  .navbar-fixed-top .navbar-inner, .navbar-fixed-bottom .navbar-inner {
+    padding: 0px;
+  }
+}

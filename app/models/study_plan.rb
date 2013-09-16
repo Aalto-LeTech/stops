@@ -119,7 +119,7 @@ class StudyPlan < ActiveRecord::Base
 
   has_many  :abstract_courses,
             :through => :plan_courses,
-            :source => :abstract_course,
+            :source => :abstract_course
 
   has_many  :scoped_courses,
             :through => :plan_courses,

@@ -6,10 +6,10 @@ class Plans::CompetencesController < PlansController
     authorize! :read, @study_plan
     
     log("view_competences")
-    @competences = @curriculum.competences.includes(:localized_description)
+    @competences = @curriculum.competences.joins(:competence_descriptions).includes(:localized_description, :skills => [:localized_description]).where(:parent_competence_id => nil, :competence_descriptions => {:locale => I18n.locale}) .order('competence_descriptions.name')
     @chosen_competence_ids = @study_plan.competence_ids.to_set
 
-    render :action => :index, :layout => 'browser'
+    render :action => :index, :layout => 'fixed'
   end
 
   # GET /plans/1/competence/1
@@ -23,9 +23,9 @@ class Plans::CompetencesController < PlansController
     log("view_competence #{@competence.id}")
 
     #logger.info "Load mandatory"
-    @mandatory_courses = @competence.recursive_prereqs.includes(:localized_description).all
+    @mandatory_courses = @competence.recursive_prereqs.includes(:localized_description).order(:course_code).all
     #logger.info "Load supporting"
-    @supporting_courses = @competence.supporting_prereqs.includes(:localized_description).all - @mandatory_courses
+    @supporting_courses = @competence.supporting_prereqs.includes(:localized_description).order(:course_code).all - @mandatory_courses
     #logger.info "Load included"
     @included_courses = @study_plan.scoped_course_ids.to_set
     
@@ -37,11 +37,7 @@ class Plans::CompetencesController < PlansController
       @passed_courses[course.id] = course
     end
 
-    logger.info "Render"
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml => @competence }
-    end
+    render :action => 'show', :layout => 'leftnav'
   end
 
   # Prepare to add competence to study plan

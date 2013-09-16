@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="<%= I18n.locale %>">
+<% content_for(:corestylesheets) do -%>
+  <%= stylesheet_link_tag "core/core", :media => 'all' %>
+  <%= stylesheet_link_tag "layouts/browser", :media => 'all' # FIXME: rename
+  %>
+  <%= stylesheet_link_tag('core/fixed_nav', :media => 'all') %>
+<% end -%>
+<%= render partial: 'layouts/core/head' %>
+
+<body>
+  <%= render partial: 'layouts/navs/top', locals: {fixed_nav: true}  %>
+
+  <div class="container-fluid">
+    <div class="row-fluid">
+      <div class="span3 leftnav">
+        <%= content_for(:leftnav) %>
+      </div>
+      <div class="span9">
+        <%= render partial: 'layouts/core/messages' %>
+        <%= yield %>
+      </div>
+    </div>
+  </div>
+
+  <%= javascript_include_tag 'core/core' %>
+  <%= yield(:javascripts) %>
+</body>
+</html>

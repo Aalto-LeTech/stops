@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130915160222) do
+ActiveRecord::Schema.define(:version => 20130916095307) do
 
   create_table "abstract_courses", :force => true do |t|
     t.string  "code"
@@ -39,6 +39,7 @@ ActiveRecord::Schema.define(:version => 20130915160222) do
   end
 
   add_index "competence_descriptions", ["competence_id", "locale"], :name => "index_competence_descriptions_on_competence_id_and_locale", :unique => true
+  add_index "competence_descriptions", ["competence_id"], :name => "index_competence_descriptions_on_competence_id"
 
   create_table "competence_nodes", :force => true do |t|
     t.string   "type"
@@ -63,6 +64,8 @@ ActiveRecord::Schema.define(:version => 20130915160222) do
   end
 
   add_index "competence_nodes", ["abstract_course_id", "curriculum_id"], :name => "index_competence_nodes_on_abstract_course_id_and_curriculum_id"
+  add_index "competence_nodes", ["abstract_course_id"], :name => "index_competence_nodes_on_abstract_course_id"
+  add_index "competence_nodes", ["parent_competence_id"], :name => "index_competence_nodes_on_parent_competence_id"
   add_index "competence_nodes", ["type"], :name => "index_competence_nodes_on_type"
 
   create_table "course_descriptions", :force => true do |t|
@@ -86,6 +89,8 @@ ActiveRecord::Schema.define(:version => 20130915160222) do
     t.text    "period_info"
     t.text    "default_period"
   end
+
+  add_index "course_descriptions", ["abstract_course_id"], :name => "index_course_descriptions_on_abstract_course_id"
 
   create_table "course_instances", :force => true do |t|
     t.integer "abstract_course_id", :null => false
@@ -192,6 +197,8 @@ ActiveRecord::Schema.define(:version => 20130915160222) do
     t.string  "role"
   end
 
+  add_index "roles", ["user_id"], :name => "index_roles_on_user_id"
+
   create_table "sessions", :force => true do |t|
     t.string   "session_id", :null => false
     t.text     "data"
@@ -266,6 +273,8 @@ ActiveRecord::Schema.define(:version => 20130915160222) do
     t.string  "studentnumber",                :null => false
     t.integer "treatment",     :default => 0, :null => false
   end
+
+  add_index "treatments", ["studentnumber"], :name => "index_treatments_on_studentnumber"
 
   create_table "users", :force => true do |t|
     t.string   "login"

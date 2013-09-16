@@ -14,7 +14,7 @@ en:
     competences:
       index:
         heading: "Competence election"
-        competences: "Competences"
+        competences: "Majors and minors"
         provided_skills_heading: "Provides the following skills"
       show:
         add_to_plan: "Add to plan"
@@ -23,12 +23,14 @@ en:
         credits_shared: "Included in other competences"
         credits_passed: "Already passed"
         credits_added: "Credits to add to plan"
-        competences: "Competences"
+        competences: "Majors and minors"
         skills: "Competence goals"
         strict_prereqs: "Mandatory courses"
         supporting_prereqs: "Supporting courses"
         course_passed: "Passed"
         competence_already_selected: "%{name} is already included."
+        course-title: 'Course'
+        credits-title: 'Cr'
       supporting:
         heading: "Choose supporting courses"
 

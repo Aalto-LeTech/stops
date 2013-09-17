@@ -1,0 +1,23 @@
+= Immediate =
+
+Verkon instrumentointi
+Kysely
+
+= Before launch if possible =
+
+Etusivulle introteksti (myös opiskelijan dashboardiin)
+competences/index layout (vasen navi pois)
+competences/index show competence description
+
+
+= Content =
+
+Sivuaineet
+Pääaineiden kuvaukset opinto-oppaasta
+
+
+= Soon after launch =
+
+
+= Later =
+

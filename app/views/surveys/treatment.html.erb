@@ -1,5 +1,5 @@
 <% content_for(:stylesheets) do %>
-  <%= stylesheet_link_tag "views/surveys/surveys", :media => 'all' %>
+  <%= stylesheet_link_tag "views/surveys", :media => 'all' %>
 <% end %>
 
 <h1>Kyselytutkimus</h1>
@@ -52,12 +52,20 @@
       </div>
     <% end %>
   
-  
-    <label class="control-label" for="tukevat">Millä perusteella valitsit valinnaisia kursseja?</label>
-    <textarea id="tukevat" name="questions[tukevat]" class="span6" rows="4"></textarea>
+    <p>
+      <label class="control-label" for="tukevat">Millä perusteella valitsit valinnaisia kursseja?</label>
+      <textarea id="tukevat" name="questions[tukevat]" class="span6" rows="4"></textarea>
+    </p>
     
-    <label class="control-label" for="jatkokehitys">Havaitsitko järjestelmässä puutteita? Miten kehittäisit sitä eteenpäin?</label>
-    <textarea id="jatkokehitys" name="questions[jatkokehitys]" class="span6" rows="4"></textarea>
+    <p>
+      <label class="control-label" for="tukevat">Tutkitko kurssiverkkoja? Oliko niistä jotain hyötyä? Miten verkkoja voisi parantaa?</label>
+      <textarea id="tukevat" name="questions[tukevat]" class="span6" rows="4"></textarea>
+    </p>
+    
+    <p>
+      <label class="control-label" for="jatkokehitys">Havaitsitko järjestelmässä puutteita? Miten kehittäisit sitä eteenpäin?</label>
+      <textarea id="jatkokehitys" name="questions[jatkokehitys]" class="span6" rows="4"></textarea>
+    </p>
       
 
   <p><%= submit_tag 'Lähetä', :class => 'btn btn-primary' %></p>

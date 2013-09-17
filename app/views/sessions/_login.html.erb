@@ -1,19 +1,18 @@
 <% content_for(:stylesheets) do %>
-  <%= stylesheet_link_tag "views/sessions/login", :media => 'all' %>
+  <%= stylesheet_link_tag "views/sessions", :media => 'all' %>
 <% end %>
-<%= content_for(:title) do %><%=t('.title')%><% end %>
 
 <% if defined?(SHIB_PATH) %>
   <div class="sessions-login-method shibboleth-login">
-    <p class="hint"><%=t('.shibboleth_hint')%></p>
-
     <%= link_to t('.shibboleth_button'), SHIB_PATH + shibboleth_session_url(:protocol => 'https'), :class => 'btn btn-primary btn-large' %>
+    
+    <p class="hint"><%=t('.shibboleth_hint')%></p>
   </div>
 <% end %>
 
-<p class="hint"><%=t '.traditional_hint' %></p>
+<p><a href="#" class="hint" data-toggle="collapse" data-target="#login-traditional"><%=t '.traditional_hint' %></a></p>
 
-<div class="sessions-login-method traditional-login">
+<div id="login-traditional" class="sessions-login-method traditional-login collapse<%= defined?(SHIB_PATH) ? '' : ' in' %>">
   <%= form_for @user_session, :as => :user_session, :url => login_path,
     :html => { :class => 'form-horizontal' } do |f| %>
     <div class="control-group">
@@ -48,4 +47,5 @@
 
   <% end %>
 </div>
-<% # link_to t('.register'), new_user_path %>
+<% # link_to t('.register'), new_user_path
+-%>

@@ -27,6 +27,9 @@ def import_courses(filename)
       content = parts[10]
       substitutes = parts[11]
       
+      puts "#{course_code}:#{period}"
+      next
+      
       abstract_course = AbstractCourse.find_by_code(course_code)
       unless abstract_course
         STDERR.puts "#{course_code}: CREATING"
@@ -55,6 +58,8 @@ def import_courses(filename)
       
       description_fi.save
     end
+    
+    puts
   end
   
 end

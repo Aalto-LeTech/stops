@@ -1,21 +1,6 @@
-<% content_for(:stylesheets) do %>
-  <%= stylesheet_link_tag "views/frontpage/index", :media => 'all' %>
-<% end %>
+<%= render 'intro' %>
 
-<h1>Opiskelijaa ohjaava opinto-opas O<sup>4</sup></h1>
-
-<p>Opiskelijaa ohjaava opinto-opas O<sup>4</sup> on uusi opintojensuunnittelutyökalu, jota opiskelija voi hyödyntää henkilökohtaisen opintosuunnitelman laatimisessa.
-Järjestelmä on koekäyttövaiheessa, joten siinä voi olla teknisiä vikoja ja sisällössä voi olla virheitä. Tarkista voimassaolevat tutkintovaatimukset aina <a href="http://studyguides.aalto.fi/">opinto-oppaasta</a> ja kurssien tiedot <a href="http://oodi.aalto.fi/">Oodista</a>.
-O<sup>4</sup> sisältää toistaiseksi vain Insinööritieteiden koulun kandidaattiohjelmien tiedot.</p>
-</p>
-
-<p>O<sup>4</sup>-järjestelmässä suoritetaan koeasetelmia, joissa eri opiskelijoille näytetään hetkellisesti eri versioita käyttöliittymästä.
-Tutkimusten tarkoituksena on selvittää järjestelmän vaikutusta opintojensuunnitteluprosessiin verrattuna perinteisiin opinto-opppaisiin.
-Kirjautumalla järjestelmään annat samalla suostumuksesi siihen, että opintosuunnitelmiasi voidaan käyttää tutkimustarkoituksiin.
-Tutkimukset ovat luonteeltaan tilastollista, tiedot käsitellään luottamuksellisesti, ja tulokset raportoidaan niin, ettei yksittäistä opiskelijaa voi tunnistaa.
-Osallistumalla järjestelmän koekäyttöön autat kehittämään järjestelmää ja opintojen ohjausta eteenpäin.</p>
-
-
-  <!--h1><%=t('.not_logged_in_heading')%></h1-->
+<div class="login-container">
   <%= render :partial => 'sessions/login' %>
+</div>
 

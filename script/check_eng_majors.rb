@@ -46,14 +46,14 @@ rym_mandatory = rym_basic_mandatory + rym_major_mandatory
 rym_elective = rym_basic_elective + rym_major_elective
 
 rym_minor_mandatory = ['RYM-C1001', 'RYM-C1002', 'RYM-C2001', 'RYM-C2002', 'RYM-C3001']
-
+rym_minor_elective = []
 
 eny_major = CompetenceNode.find(73)
 kjr_major = CompetenceNode.find(59)
 rym_major = CompetenceNode.find(74)
 
-eny_major = CompetenceNode.find(103)
-kjr_major = CompetenceNode.find(102)
+eny_minor = CompetenceNode.find(103)
+kjr_minor = CompetenceNode.find(102)
 rym_minor = CompetenceNode.find(104)
 
 eny = {name: 'ENY', node: eny_major, mandatory_courses: eny_mandatory, elective_courses: eny_elective}

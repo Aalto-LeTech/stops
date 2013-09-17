@@ -64,6 +64,10 @@ Ops::Application.routes.draw do
 
     # My Plan
     resource :studyplan, :controller => 'plans', :only => [:show] do
+      member do
+        get :summary
+      end
+     
       resources :competences, :controller => 'plans/competences' do
         member do
           get 'supporting'
@@ -90,6 +94,9 @@ Ops::Application.routes.draw do
 
     # Any plan (specify student ID)
     resources :plans, :constraints => { :id => /\w+/ }, :only => [:show, :update] do
+      member do
+        get :summary
+      end
       get 'old_schedule', as: 'old_schedule'
 #       resources :courses, :controller => 'plans/courses', :only => [:index, :show, :create]  # :except => [:edit, :update]
 #       resource :schedule, :controller => 'plans/schedule', :only => [:show, :edit]

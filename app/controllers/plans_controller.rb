@@ -154,6 +154,14 @@ class PlansController < ApplicationController
       format.json { render json: response_json }
     end
   end
+  
+  def summary
+    authorize! :read, @study_plan
+    
+    respond_to do |format|
+      format.json { render json: @study_plan.json_summary.to_json( root: false ) }
+    end
+  end
 
   # Expects parameter plan_courses with a JSON string:
   # [

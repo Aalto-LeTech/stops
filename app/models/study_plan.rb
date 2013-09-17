@@ -2,12 +2,8 @@
 class UpdateException < Exception
 end
 
-
 class StudyPlan < ActiveRecord::Base
-
-
   INITIAL_STUDY_PLAN_TIME_IN_YEARS = 7
-
 
   module RefCountExtension
     def add_or_increment_ref_count(*args)
@@ -64,32 +60,6 @@ class StudyPlan < ActiveRecord::Base
     end
   end
 
-
-  #  create_table "study_plans", :force => true do |t|
-  #    t.datetime "created_at",      :null => false
-  #    t.datetime "updated_at",      :null => false
-  #    t.integer  "user_id"
-  #    t.integer  "curriculum_id",   :null => false
-  #    t.integer  "first_period_id"
-  #    t.integer  "last_period_id"
-  #  end
-
-  # members
-  #  -> user
-  #  -> curriculum
-  #  -> first_period
-  #  -> last_period
-  #  <- plan_competences
-  #  <- competences
-  #  <- plan_courses
-  #  <- abstract_courses (plan_courses -> abstract_courses)
-  #  <- scoped_courses (plan_courses -> scoped_courses)
-  #  <- extra_plan_courses
-  #  <- extra_scoped_courses (extra_plan_courses -> scoped_courses)
-  #  - created_at
-  #  - updated_at
-
-
   # User & Curriculum
   belongs_to :user
   belongs_to :curriculum
@@ -123,8 +93,8 @@ class StudyPlan < ActiveRecord::Base
 
   has_many  :scoped_courses,
             :through => :plan_courses,
-            :source => :scoped_course,
-            :extend => RefCountExtension
+            :source => :scoped_course
+            #:extend => RefCountExtension
 
   has_many  :extra_plan_courses,
             :class_name => 'PlanCourse',
@@ -157,6 +127,39 @@ class StudyPlan < ActiveRecord::Base
     # self.last_period.find_following(number_of_buffer_periods).last
     #)
     Period.range(self.first_period, self.last_period)
+  end
+  
+  # Returns a summary of study plan as JSON. No caching is performed.
+  # {
+  #   competences: [
+  #     {competence_node_id: 1}
+  #   ]
+  #   courses: [
+  #     {
+  #      competence_node_id:
+  #      abstract_course_id: 
+  #      period_id:
+  #      length: 
+  #      grade
+  #     }
+  #   ]
+  # }
+  def json_summary
+    plan_competences = PlanCompetence.where(:study_plan_id => self.id)
+    plan_courses = PlanCourse.where(:study_plan_id => self.id)
+    
+    competences_json = plan_competences.select('competence_id')
+      .as_json(:root => false)
+      
+    courses_json = plan_courses.select('scoped_course_id, abstract_course_id, period_id, length, grade')
+      .as_json(:root => false)
+    
+    response_data = {
+      'competences' => competences_json,
+      'courses' => courses_json,
+    }
+
+    response_data
   end
 
 

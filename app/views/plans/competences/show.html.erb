@@ -2,6 +2,9 @@
   <%= stylesheet_link_tag "views/plans/competences/shared", :media => 'all' %>
 <% end -%>
 <% content_for(:javascripts) do -%>
+  <%= javascript_tag do %>
+    window.studyplan_summary_data = <%= @study_plan.json_summary.to_json( root: false ).html_safe %>;
+  <% end %>
   <%= javascript_include_tag 'views/plans/competences/show' %>
 <% end -%>
 <% content_for(:leftnav) do -%>
@@ -60,9 +63,11 @@
     
     <!-- Courses -->
     <div class="span6">
-      <h3><%= t('.strict_prereqs') %></h3>
-
-      <%= render :partial => 'course_table', :locals => { :course_list => @mandatory_courses } %>
+      <!-- MAndatory competences -->
+      <% unless @mandatory_courses.empty? %>
+        <h3><%= t('.strict_prereqs') %></h3>
+        <%= render :partial => 'course_table', :locals => { :course_list => @mandatory_courses } %>
+      <% end %>
 
       <!-- Child competences -->
       <% @competence.children.includes(:localized_description).each do |child_competence| %>

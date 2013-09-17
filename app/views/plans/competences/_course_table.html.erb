@@ -13,7 +13,7 @@
     #credits_counter = included_counter = passed_counter = 0
     -%>
     <% course_list.each do |course| %>
-      <tr>
+      <tr data-abstract-course-id="<%= course.abstract_course_id %>">
         <%
           #is_passed = (@passed_courses.member? course.id)
           #a_class = ''

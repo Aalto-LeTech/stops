@@ -22,11 +22,10 @@ class Plans::CompetencesController < PlansController
     @chosen_competence_ids = @study_plan.competence_ids.to_set
     log("view_competence #{@competence.id}")
 
-    #logger.info "Load mandatory"
-    @mandatory_courses = @competence.recursive_prereqs.includes(:localized_description).order(:course_code).all
-    #logger.info "Load supporting"
-    @supporting_courses = @competence.supporting_prereqs.includes(:localized_description).order(:course_code).all - @mandatory_courses
-    #logger.info "Load included"
+    @mandatory_courses = @competence.strict_prereq_courses.includes(:localized_description).all
+    @mandatory_prereqs = @competence.ancestor_prereq_courses.includes(:localized_description).all - @mandatory_courses
+    
+    #@supporting_courses = @competence.supporting_prereq_courses.includes(:localized_description).order(:course_code).all - @mandatory_courses
     @included_courses = @study_plan.scoped_course_ids.to_set
     
     #@child_competences = 
@@ -56,8 +55,8 @@ class Plans::CompetencesController < PlansController
     end
 
     existing_courses = @study_plan.scoped_courses
-    @new_courses = @competence.recursive_prereqs.includes(:localized_description).order(:course_code).all - existing_courses # difference
-    @shared_courses = existing_courses & @competence.strict_prereqs.all # intersection      # FIXME: does this work?
+    @new_courses = @competence.recursive_prereq_courses.includes(:localized_description).all - existing_courses # difference
+    @shared_courses = existing_courses & @competence.strict_prereq_courses.all # intersection      # FIXME: does this work?
     
     render :action => 'new', :layout => 'fixed'
   end

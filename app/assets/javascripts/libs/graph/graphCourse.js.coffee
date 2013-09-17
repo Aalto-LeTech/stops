@@ -77,7 +77,6 @@ class @GraphLevel
 
     for course in @courses
       course.y = y
-      console.log "#{course.y} #{course.name}"
       y += course.getElementHeight() + @courseMargin
 
   

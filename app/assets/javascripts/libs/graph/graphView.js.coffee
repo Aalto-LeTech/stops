@@ -49,6 +49,7 @@ class @GraphView
         this.parseCompetences(data['competences'])
         this.parseSkills(data['skills'])
         this.visualize()
+        $(@raphaelElement).addClass('animate')
 
   #
   # Loads courses from JSON data.
@@ -195,6 +196,8 @@ class @GraphView
   showFuturePaths: (sourceCourse, targetIds, options) ->
     options ||= {}
     visiting = {}
+
+    console.log targetIds
 
     dfs = (course, level) ->
       visiting[course.id] = true
@@ -345,10 +348,14 @@ class @GraphView
       for neighbor in skill.prereqTo
         neighbor.highlighted(true) if neighbor.course.level > course.level
  
-    setTimeout (-> 
+    if 'dynamic' == @visualizationOptions['mode']
+      setTimeout (-> 
+        course.drawPrereqArcs()
+        course.drawPostreqArcs()
+      ), 600
+    else
       course.drawPrereqArcs()
       course.drawPostreqArcs()
-    ), 1000
 
   hilightSkill: (skill) ->
     this.resetSkillHighlights()

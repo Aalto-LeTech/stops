@@ -102,6 +102,44 @@ class CompetenceNode < ActiveRecord::Base
            :source      => :prereq,
            :conditions  => "requirement = #{ANCESTOR_PREREQ}",
            :uniq => true
+  
+  
+  
+  
+  has_many :strict_prereq_courses,
+           :through     => :node_prereqs,
+           :source      => :prereq,
+           :conditions  => "requirement = #{STRICT_PREREQ} AND type='ScopedCourse'",
+           :order => 'course_code',
+           :uniq => true
+
+  has_many :strict_prereq_to_courses,
+           :through     => :node_prereq_to,
+           :source      => :competence_node,
+           :conditions  => "requirement = #{STRICT_PREREQ} AND type='ScopedCourse'",
+           :order => 'course_code',
+           :uniq => true
+  
+  has_many :supporting_prereq_courses,
+           :through     => :node_prereqs,
+           :source      => :prereq,
+           :conditions  => "requirement = #{SUPPORTING_PREREQ} AND type='ScopedCourse'",
+           :order => 'course_code',
+           :uniq => true
+
+  has_many :recursive_prereq_courses,
+           :through     => :node_prereqs,
+           :source      => :prereq,
+           :conditions  => "(requirement = #{STRICT_PREREQ} OR requirement = #{ANCESTOR_PREREQ}) AND type='ScopedCourse'",
+           :order => 'course_code',
+           :uniq => true
+  
+  has_many :ancestor_prereq_courses,
+           :through     => :node_prereqs,
+           :source      => :prereq,
+           :conditions  => "requirement = #{ANCESTOR_PREREQ} AND type='ScopedCourse'",
+           :order => 'course_code',
+           :uniq => true
 
 
   # Moves skills from the other competence node to this node and deletes the other node

@@ -25,7 +25,8 @@ fi:
         credits_added: "Suunnitelmaan lisätään"
         competences: "Pää- ja sivuaineet"
         skills: "Osaamistavoitteet"
-        strict_prereqs: "Välttämättömät kurssit"
+        strict_prereqs: "Pakolliset kurssit"
+        ancestor_prereqs: "Välttämättömät esitiedot"
         supporting_prereqs: "Tukevia kursseja"
         course_passed: "Suoritettu"
         competence_already_selected: "%{name} on jo opintosuunnitelmassa."
@@ -74,11 +75,20 @@ fi:
       show:
         study_plan: "Opintosuunnitelmasi"
         study_plan_courses: "Suunnitelman kurssit"
-        competence_courses: "Kompetenssin kurssit"
+        competence_courses: "Kurssit"
+        sub_competence_courses: "Kurssit"
+        other_courses: "Muut kurssit"
         prerequisites: "Esitietovaatimukset"
         provides: "Osaamistavoitteet"
         needed_by: "Mahdollistaa"
         paths_hint: "Klikkaa osaamistavoitteita nähdäksesi opintopolut kurssista kompetenssiin"
+        
+        replaces: 'Korvaavuudet'
+        assignments: 'Toteutus, työmuodot ja arvosteluperusteet'
+        links: 'Linkit'
+        period: 'Opetusperiodi'
+        learning_outcomes: 'Osaamistavoitteet'
+        reqursive_prereqs: 'Välttämättömät esitiedot'
 
     schedule:
       show:

@@ -23,8 +23,8 @@
           #end
         -%>
         <td class="status"></td>
-        <td class="course-code"><%= link_to course.course_code, studyplan_competence_course_path(:competence_id => @competence.id, :id => course) %></td>
-        <td class="course-name"><%= link_to course.localized_name, studyplan_competence_course_path(:competence_id => @competence.id, :id => course) %></td>
+        <td class="course-code"><%= link_to course.course_code, studyplan_competence_course_path(:competence_id => competence.id, :id => course) %></td>
+        <td class="course-name"><%= link_to course.localized_name, studyplan_competence_course_path(:competence_id => competence.id, :id => course) %></td>
         <td class="course-credits"><%= course.credits %></td>
         <td class="course-period"><%= course.localized_description.default_period %></td>
         <%

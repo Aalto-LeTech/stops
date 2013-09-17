@@ -39,7 +39,9 @@
     <% end %>
   </div>
 
-  <h2><%= @competence.localized_name %></h2>
+  <h2>
+    <%= @competence.localized_name %>
+  </h2>
 
   <!-- Description -->
   <div class="row-fluid">
@@ -63,28 +65,42 @@
     
     <!-- Courses -->
     <div class="span6">
-      <!-- MAndatory competences -->
+      <!-- Mandatory courses -->
       <% unless @mandatory_courses.empty? %>
-        <h3><%= t('.strict_prereqs') %></h3>
-        <%= render :partial => 'course_table', :locals => { :course_list => @mandatory_courses } %>
+        <h3>
+          <%= t('.strict_prereqs') %>
+          
+        </h3>
+        <%= render :partial => 'course_table', :locals => { :course_list => @mandatory_courses, :competence => @competence } %>
+      <% end %>
+      
+      <!-- Mandatory prereqs -->
+      <% unless @mandatory_prereqs.empty? %>
+        <h3><%= t('.ancestor_prereqs') %></h3>
+        <%= render :partial => 'course_table', :locals => { :course_list => @mandatory_prereqs, :competence => @competence } %>
       <% end %>
 
       <!-- Child competences -->
       <% @competence.children.includes(:localized_description).each do |child_competence| %>
         <div class="child-competence">
           <% if child_competence.localized_description %>
-            <h3><%= child_competence.localized_description.name %></h3>
+            <h3>
+              <%= child_competence.localized_description.name %>
+              <% if child_competence.min_credits %>(<%= child_competence.min_credits %> <%=t 'cr' %>)<% end %>
+            </h3>
             <p><%= child_competence.localized_description.description %></p>
           <% end %>
           
-          <%= render :partial => 'course_table', :locals => { :course_list => child_competence.supporting_prereqs } %>
+          <%= render :partial => 'course_table', :locals => { :course_list => child_competence.supporting_prereq_courses, :competence => child_competence } %>
         </div>
       <% end %>
       
       <hr />
       
-      <h3><%= t('.supporting_prereqs') %></h3>
-      <%= render :partial => 'course_table', :locals => { :course_list => @supporting_courses } %>
+      <!--
+      <h3><%= t('.supporting_prereqs') %></h3>-->
+      <% # render :partial => 'course_table', :locals => { :course_list => @supporting_courses, :competence => @competence }
+      %>
       
     </div>
   </div>

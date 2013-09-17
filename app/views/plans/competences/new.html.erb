@@ -7,7 +7,7 @@
   <%=t :competence_add_heading, :competence => @competence.localized_name %>
 </h1>
 
-<p><%=t :competence_courses_to_add %></p>
+<p class="hint"><%=t :competence_courses_to_add %></p>
 
 <table class="course-table">
   <% credits_counter = 0 %>
@@ -29,7 +29,7 @@
 </table>
 
 <% unless @shared_courses.empty? %>
-  <p><%=t :competence_courses_already_in %></p>
+  <p class="hint"><%=t :competence_courses_already_in %></p>
 
   <table class="course-table">
     <% @shared_courses.each do |course| %>
@@ -55,7 +55,7 @@
   <%= hidden_field_tag :competence_id, @competence.id %>
 
   <p>
-    <%= link_to t(:Cancel), studyplan_competences_path, :class => 'btn btn-default' %>
+    <%= link_to t(:Cancel), studyplan_competence_path(:id => @competence.id), :class => 'btn btn-default' %>
     <%= submit_tag t(:Ok), :class => 'btn btn-primary' %>
   </p>
 <% end %>

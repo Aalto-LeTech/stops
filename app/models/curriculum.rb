@@ -86,20 +86,6 @@ class Curriculum < ActiveRecord::Base
   end
 
 
-  # Returns all strict prereqs of all courses
-  # returns a hash where keys are scoped_course_ids and values are arrays of scoped_course_ids
-  def prereqs_array
-    courses = ScopedCourse.where(:curriculum_id => self.id)
-
-    result = {}
-    courses.each do |course|
-      result[course.course_code] = course.strict_prereq_ids
-    end
-
-    return result
-  end
-
-
   # Creates TeacherInvitations and mails them to users
   # addresses: array of email addresses
   # subject: subject of the email (string)

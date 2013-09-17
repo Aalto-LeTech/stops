@@ -17,8 +17,9 @@ jQuery ->
     graphView = new GraphView(element[0], {
       'sourceId': element.data('source-id')
       'targetId': element.data('target-id')
-      'prereqSkills': 'recursive'
-      'postreqSkills': 'recursive'
+      'supporting': 'show'
+      #'prereqSkills': 'recursive'
+      'mode': 'dynamic'
     })
 
     graphView.load(graphPath)

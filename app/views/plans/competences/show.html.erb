@@ -7,7 +7,7 @@
 <% content_for(:leftnav) do -%>
   <h1><%= link_to t('.competences'), studyplan_competences_path %></h1>
   <ul>
-    <% @curriculum.competences.includes(:localized_description).each do |competence| %>
+    <% @curriculum.competences.joins(:competence_descriptions).where(:parent_competence_id => nil, :competence_descriptions => {:locale => I18n.locale}).includes(:localized_description).order('competence_descriptions.name').each do |competence| %>
       <li class="<%= @chosen_competence_ids.member?(competence.id) ? 'chosen' : '' %> <%= competence == @competence ? 'selected' : '' %>">
         <%= link_to competence.localized_name, studyplan_competence_path(:id => competence) %>
       </li>
@@ -62,39 +62,7 @@
     <div class="span6">
       <h3><%= t('.strict_prereqs') %></h3>
 
-      <table class="course-table">
-        <thead>
-          <tr>
-            <td></td>
-            <td></td>
-            <td><%=t '.course-title' %></td>
-            <td><%=t '.credits-title' %></td>
-          </tr>
-        </thead>
-        <tbody>
-          <% credits_counter = included_counter = passed_counter = 0 %>
-          <% @mandatory_courses.each do |course| %>
-            <tr>
-              <%
-                is_passed = (@passed_courses.member? course.id)
-                a_class = ''
-                if @included_courses.member?(course)
-                  a_class = 'included'
-                  included_counter += course.credits || 0
-                end
-              %>
-              <td class="status"><%= t('.course_passed') if is_passed %></td>
-              <td class="course-code"><%= link_to course.course_code, studyplan_competence_course_path(:competence_id => @competence.id, :id => course), :class => a_class %></td>
-              <td class="course-name"><%= link_to course.localized_name, studyplan_competence_course_path(:competence_id => @competence.id, :id => course), :class => a_class %></td>
-              <td class="course-credits"><%= course.credits %></td>
-              <%
-                credits_counter += course.credits || 0
-                passed_counter += course.credits if is_passed
-              %>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
+      <%= render :partial => 'course_table', :locals => { :course_list => @mandatory_courses } %>
 
       <!-- Child competences -->
       <% @competence.children.includes(:localized_description).each do |child_competence| %>
@@ -103,91 +71,16 @@
             <h3><%= child_competence.localized_description.name %></h3>
             <p><%= child_competence.localized_description.description %></p>
           <% end %>
-          <table class="course-table">
-            <tbody>
-              <% child_competence.supporting_prereqs.each do |course| %>
-                <tr>
-                  <%
-                    is_passed = (@passed_courses.member? course.id)
-                    a_class = ''
-                    if @included_courses.member?(course.id)
-                      a_class = 'included'
-                      included_counter += course.credits || 0
-                    end
-                  %>
-                  <td><%= link_to course.course_code, studyplan_competence_course_path(:competence_id => @competence.id, :id => course), :class => a_class %></td>
-                  <td><%= link_to course.localized_name, studyplan_competence_course_path(:competence_id => @competence.id, :id => course), :class => a_class %></td>
-                  <td><%= course.credits %></td>
-                  <td><%= t('.course_passed') if is_passed %>
-                </tr>
-              <% end %>
-            </tbody>
-          </table>
+          
+          <%= render :partial => 'course_table', :locals => { :course_list => child_competence.supporting_prereqs } %>
         </div>
       <% end %>
       
       <hr />
       
       <h3><%= t('.supporting_prereqs') %></h3>
-      <table class="course-table">
-        <tbody>
-          <% credits_counter = included_counter = passed_counter = 0 %>
-          <% @supporting_courses.each do |course| %>
-            <tr>
-              <%
-                is_passed = (@passed_courses.member? course.id)
-                a_class = ''
-                if @included_courses.member?(course.id)
-                  a_class = 'included'
-                  included_counter += course.credits || 0
-                end
-              %>
-              <td><%= link_to course.course_code, studyplan_competence_course_path(:competence_id => @competence.id, :id => course), :class => a_class %></td>
-              <td><%= link_to course.localized_name, studyplan_competence_course_path(:competence_id => @competence.id, :id => course), :class => a_class %></td>
-              <td><%= course.credits %></td>
-              <td><%= t('.course_passed') if is_passed %>
-              <%
-                credits_counter += course.credits || 0
-                passed_counter += course.credits if is_passed
-              %>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
+      <%= render :partial => 'course_table', :locals => { :course_list => @supporting_courses } %>
       
-      <!--
-      <tfoot>
-        <tr class="spacer">
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td></td>
-          <td><%= t('.credits_total') %></td>
-          <td><%= credits_counter %> <%=t :cr %></td>
-        </tr>
-
-        <% unless competence_selected %>
-          <tr>
-            <td></td>
-            <td><%= t('.credits_shared') %></td>
-            <td><%= included_counter %>  <%=t :cr %></td>
-          </tr>
-          <tr>
-            <td></td>
-            <td><%= t('.credits_passed') %></td>
-            <td><%= passed_counter %> <%=t :cr %></td>
-          </tr>
-          <tr class="total">
-            <td></td>
-            <td><%= t('.credits_added') %></td>
-            <td><%= "%.1f" % (credits_counter - included_counter) %> <%= t(:cr) %></td>
-          </tr>
-        <% end %>
-      </tfoot>
-      -->
-        
     </div>
   </div>
 </div>

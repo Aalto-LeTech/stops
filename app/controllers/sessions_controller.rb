@@ -1,6 +1,8 @@
 class SessionsController < ApplicationController
 
   skip_before_filter :store_location
+  
+  layout 'fixed'
 
   def new
     if not logged_in?

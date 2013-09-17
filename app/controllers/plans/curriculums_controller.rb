@@ -6,7 +6,8 @@ class Plans::CurriculumsController < PlansController
   # Make sure 'redirect_to' value is not saved here, because edit page uses it for redirect!
   skip_before_filter :store_location
 
-
+  layout 'fixed'
+  
   def show
     authorize! :read, @user
     

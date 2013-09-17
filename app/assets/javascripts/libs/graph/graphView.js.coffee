@@ -25,6 +25,17 @@ class @GraphView
 
     @maxHeight = 0  # Height of the highest level
     @paper = undefined    # Raphael paper
+    
+    # Read target ids
+    @targetIds = {}         # id => boolean
+    if @visualizationOptions['targetId']
+      if $.isArray(@visualizationOptions['targetId'])
+        for targetId in @visualizationOptions['targetId']
+          @targetIds[targetId] = true
+      else
+        @targetIds[@visualizationOptions['targetId']] = true
+    else
+      @targetIds = false
 
 
   #load: (coursesPath, competencesPath, skillsPath) ->
@@ -122,16 +133,7 @@ class @GraphView
   visualize: (options) ->
     options = @visualizationOptions
 
-    # Read target ids
-    targetIds = {}         # id => boolean
-    if options['targetId']
-      if $.isArray(options['targetId'])
-        for targetId in options['targetId']
-          targetIds[targetId] = true
-      else
-        targetIds[options['targetId']] = true
-    else
-      targetIds = false
+    
 
     # Load source course
     sourceCourse = @coursesById[options['sourceId']]
@@ -140,7 +142,7 @@ class @GraphView
       return
 
     # Show postreq courses
-    this.showFuturePaths(sourceCourse, targetIds, options)
+    this.showFuturePaths(sourceCourse, @targetIds, options)
 
     # Show prereq courses recursively, through strict prereqs
     cycleDetector = {}
@@ -151,7 +153,7 @@ class @GraphView
 
       if 'all' == options['prereqSkills']
         for skill in course.skills
-          skill.visible = true
+          skill.visible(true)
 
     # Show immediate supporting prereqs
     if 'show' == options['supporting']
@@ -168,19 +170,19 @@ class @GraphView
 
     # Show skills
     for skill in sourceCourse.skills
-      skill.visible = true
+      skill.visible(true)
 
       for postreq in skill.prereqTo
-        postreq.visible = true
+        postreq.visible(true) unless 'dynamic' == options['mode']
         if 'recursive' == options['postreqSkills']
-          skill.dfs 'forward', (s, depth) -> s.visible = true
+          skill.dfs 'forward', (s, depth) -> s.visible(true)
 
       for prereq in skill.prereqs
-        prereq.visible = true
-        prereq.course.visible = true
+        prereq.visible(true) unless 'dynamic' == options['mode']
+        #prereq.course.visible = true
 
         if 'recursive' == options['prereqSkills']
-          skill.dfs 'backward', (s, depth) -> s.visible = true
+          skill.dfs 'backward', (s, depth) -> s.visible(true)
 
 
     this.initializeVisualization(sourceCourse)
@@ -214,41 +216,13 @@ class @GraphView
 
         if 'all' == options['postreqSkills']
           for skill in course.skills
-            skill.visible = true
+            skill.visible(true)
       
       visiting[course.id] = false
       
       return onPath
 
     dfs(sourceCourse, 0)
-
-
-  visualizeFullGraph: (courseId) ->
-    startingCourse = @coursesById[courseId]
-    unless startingCourse
-      console.log "Course #{courseId} not found."
-      return
-
-    # Run through course graph with DFS to
-    # - assign courses to levels
-    # - find out which courses are visible
-    minLvl = 0
-    maxLvl = 0
-
-    startingCourse.dfs 'backward', 0, (course, level) ->
-      course.visible = true
-      course.level = level if (level < course.level)
-      minLvl = course.level if (course.level < minLvl)
-
-    startingCourse.dfs 'forward', 0, (course, level) ->
-      course.visible = true
-      course.level = level if (level > course.level)
-      maxLvl = course.level if (course.level > maxLvl)
-
-    @minLevel = minLvl
-    @maxLevel = maxLvl
-
-    this.initializeVisualization(startingCourse)
 
 
   initializeVisualization: (startingCourse) ->
@@ -271,6 +245,7 @@ class @GraphView
       continue unless course.visible
 
       course.level -= GraphCourse::minLevel  # Normalize course level numbers so that they start from zero
+      #console.log "#{course.level} #{course.name}"
 
       @visibleCourses.push(course)
       level = this.levels[course.level]
@@ -284,11 +259,7 @@ class @GraphView
   updateElementDimensions: (elements) ->
     for element in elements
       object = ko.dataFor(element)
-      el = $(element)
-      object.element = el
-      object.width = el.width()
-      object.height = el.height()
-
+      object.updateElementDimensions($(element))
 
   positionCourses: (startingCourse) ->
     # Calculate level heights
@@ -301,7 +272,6 @@ class @GraphView
 
     startingCourse.y = (@maxHeight + startingCourse.getElement(this).height()) / 2
 
-
     # Set Y indices
     for i in [0...@levels.length]
       @levels[i].setYindicesBackwards()
@@ -309,19 +279,56 @@ class @GraphView
     for i in [(@levels.length - 1)..0]
       @levels[i].setYindicesForward()
 
-    # Updating positions
+    # Update positions
     for id,course of @coursesById
       continue unless course.visible
       course.updatePosition()
+
+  #
+  # Refreshes layout
+  #
+  refreshGraph: ->
+    # Calculate level heights
+    for level in @levels
+      height = level.updateHeight()
+      @maxHeight = height if height > @maxHeight
+
+    for level in @levels
+      level.maxHeight = @maxHeight
+      level.distributeCoursesEvenly()
+
+    # Update positions
+    for id,course of @coursesById
+      continue unless course.visible
+      course.updatePosition()
+    
+    @paper.setSize(@levels.length * @levelWidth, @maxHeight)
 
 
   hilightCourse: (course) ->
     this.resetSkillHighlights()
     @paper.clear()
 
-    course.drawPrereqArcs()
-    course.drawPostreqArcs()
+    if 'dynamic' == @visualizationOptions['mode']
+      # Hide all skills
+      for level in @levels
+        for c in level.courses
+          continue if @targetIds && @targetIds[c.id]
+          for s in c.skills
+            s.visible(false)
+      
+      # Show skills
+      for skill in course.skills
+        skill.visible(true)
+        
+        for postreq in skill.prereqTo
+          postreq.visible(true)
 
+        for prereq in skill.prereqs
+          prereq.visible(true)
+      
+      this.refreshGraph()
+ 
     for skill in course.skills
       continue unless skill.visible
 
@@ -337,7 +344,11 @@ class @GraphView
       # Hilight direct postreqs
       for neighbor in skill.prereqTo
         neighbor.highlighted(true) if neighbor.course.level > course.level
-
+ 
+    setTimeout (-> 
+      course.drawPrereqArcs()
+      course.drawPostreqArcs()
+    ), 1000
 
   hilightSkill: (skill) ->
     this.resetSkillHighlights()

@@ -56,8 +56,10 @@ class Plans::CompetencesController < PlansController
     end
 
     existing_courses = @study_plan.scoped_courses
-    @new_courses = @competence.recursive_prereqs.all - existing_courses # difference
-    @shared_courses = existing_courses & @competence.strict_prereqs # intersection      # FIXME: does this work?
+    @new_courses = @competence.recursive_prereqs.includes(:localized_description).order(:course_code).all - existing_courses # difference
+    @shared_courses = existing_courses & @competence.strict_prereqs.all # intersection      # FIXME: does this work?
+    
+    render :action => 'new', :layout => 'fixed'
   end
 
   # Adds a competence to the study plan
@@ -135,3 +137,4 @@ class Plans::CompetencesController < PlansController
   end
 
 end
+

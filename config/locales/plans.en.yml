@@ -29,8 +29,10 @@ en:
         supporting_prereqs: "Supporting courses"
         course_passed: "Passed"
         competence_already_selected: "%{name} is already included."
+      course_table:
         course-title: 'Course'
         credits-title: 'Cr'
+        period-title: 'Period'
       supporting:
         heading: "Choose supporting courses"
 

@@ -76,27 +76,32 @@ class CompetenceNode < ActiveRecord::Base
   has_many :strict_prereqs,
            :through     => :node_prereqs,
            :source      => :prereq,
-           :conditions  => "requirement = #{STRICT_PREREQ}"
+           :conditions  => "requirement = #{STRICT_PREREQ}",
+           :uniq => true
 
   has_many :strict_prereq_to,
            :through     => :node_prereq_to,
            :source      => :competence_node,
-           :conditions  => "requirement = #{STRICT_PREREQ}"
+           :conditions  => "requirement = #{STRICT_PREREQ}",
+           :uniq => true
   
   has_many :supporting_prereqs,
            :through     => :node_prereqs,
            :source      => :prereq,
-           :conditions  => "requirement = #{SUPPORTING_PREREQ}"
+           :conditions  => "requirement = #{SUPPORTING_PREREQ}",
+           :uniq => true
 
   has_many :recursive_prereqs,
            :through     => :node_prereqs,
            :source      => :prereq,
-           :conditions  => "requirement = #{STRICT_PREREQ} OR requirement = #{ANCESTOR_PREREQ}"
+           :conditions  => "requirement = #{STRICT_PREREQ} OR requirement = #{ANCESTOR_PREREQ}",
+           :uniq => true
   
   has_many :ancestor_prereqs,
            :through     => :node_prereqs,
            :source      => :prereq,
-           :conditions  => "requirement = #{ANCESTOR_PREREQ}"
+           :conditions  => "requirement = #{ANCESTOR_PREREQ}",
+           :uniq => true
 
 
   # Moves skills from the other competence node to this node and deletes the other node

@@ -17,8 +17,14 @@ class @GraphSkill
     @supportingPrereqTo = []
     
     @highlighted = ko.observable(false)
-    @visible = false
+    @visible = ko.observable(false)
     
+  updateElementDimensions: (element) ->
+    @element = element if (element)
+    return unless @element
+    
+    @width = @element.width()
+    @height = @element.height()
 
   setCourse: (course) ->
     @course = course
@@ -52,7 +58,7 @@ class @GraphSkill
     options ||= {}
   
     for neighbor in @strictPrereqs
-      continue unless (neighbor.element && neighbor.visible && neighbor.course.visible)
+      continue unless (neighbor.element && neighbor.visible() && neighbor.course.visible)
       continue if options['maxLength'] && @course.level - neighbor.course.level > options['maxLength']
       continue if @course.level <= neighbor.course.level
       
@@ -70,7 +76,7 @@ class @GraphSkill
     options ||= {}
 
     for neighbor in @supportingPrereqs
-      continue unless (neighbor.element && neighbor.visible && neighbor.course.visible)
+      continue unless (neighbor.element && neighbor.visible() && neighbor.course.visible)
       continue if options['maxLength'] && @course.level - neighbor.course.level > options['maxLength']
       continue if @course.level <= neighbor.course.level
       
@@ -90,7 +96,7 @@ class @GraphSkill
     options ||= {}
     
     for neighbor in @strictPrereqTo
-      continue unless (neighbor.element && neighbor.visible && neighbor.course.visible)
+      continue unless (neighbor.element && neighbor.visible() && neighbor.course.visible)
       continue if options['maxLength'] && neighbor.course.level - @course.level > options['maxLength']
       continue if @course.level >= neighbor.course.level
       
@@ -109,7 +115,7 @@ class @GraphSkill
     options ||= {}
     
     for neighbor in @supportingPrereqTo
-      continue unless (neighbor.element && neighbor.visible && neighbor.course.visible)
+      continue unless (neighbor.element && neighbor.visible() && neighbor.course.visible)
       continue if options['maxLength'] && neighbor.course.level - @course.level > options['maxLength']
       continue if @course.level >= neighbor.course.level
       

@@ -1,5 +1,5 @@
 <script type="text/html" id="courseTemplate"><div class="course" data-bind="position: position, css: {competence: isCompetence, cyclic: isCyclic}">
-  <h1 data-bind="text: name"></h1>
+  <h1><!-- ko text: course_code --><!-- /ko --> <!-- ko text: name --><!-- /ko --></h1>
   <!-- ko if: isCyclic -->
     <%=t '.cyclic_warning' %>
   <!-- /ko -->

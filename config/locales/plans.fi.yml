@@ -29,8 +29,10 @@ fi:
         supporting_prereqs: "Tukevia kursseja"
         course_passed: "Suoritettu"
         competence_already_selected: "%{name} on jo opintosuunnitelmassa."
+      course_table:
         course-title: 'Kurssi'
         credits-title: 'Op'
+        period-title: 'Periodi'
       supporting:
         heading: "Valitse tukevia kursseja"
 

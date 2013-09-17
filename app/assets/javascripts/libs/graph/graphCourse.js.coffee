@@ -12,10 +12,11 @@ class @GraphLevel
   getCourses: (course) ->
     return @courses
 
-  updateHeight: (course) ->
+  updateHeight: () ->
     @height = 0
 
     for course in @courses
+      course.updateElementDimensions()
       @height += course.getElementHeight() + @courseMargin
 
     return @height
@@ -40,6 +41,7 @@ class @GraphLevel
       else
         y = @height / 2.0;
 
+    @courses.sort((a,b) -> b.y - a.y)  # Sort courses by Y
     @distributeCoursesEvenly()
   
   
@@ -62,13 +64,12 @@ class @GraphLevel
       else
         y = @height / 2.0
 
+    
+    @courses.sort((a,b) -> b.y - a.y)  # Sort courses by Y
     @distributeCoursesEvenly()
   
 
   distributeCoursesEvenly: ->
-    # Sort courses by Y
-    @courses.sort((a,b) -> b.y - a.y)
-
     # Distribute evenly
     #step = (@maxHeight - @height) / (@courses.length - 1)
     # FIXME: maxHeight is a bad name
@@ -76,6 +77,7 @@ class @GraphLevel
 
     for course in @courses
       course.y = y
+      console.log "#{course.y} #{course.name}"
       y += course.getElementHeight() + @courseMargin
 
   
@@ -107,6 +109,14 @@ class @GraphCourse
     #@prereqTo = []
     @prereqStrength = {}    # course_id => float
 
+  updateElementDimensions: (element) ->
+    @element = element if (element)
+    return unless @element
+    
+    @width = @element.width()
+    @height = @element.height()
+    
+    #console.log "Height: #{@height}"
 
   getElementHeight: ->
     if @type == 'virtual'

@@ -240,4 +240,4 @@ def create_instances(filename)
 
 end
 
-create_instances('data/periods-sci.txt')
+create_instances('data/periods-misc.txt')

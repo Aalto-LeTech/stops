@@ -126,7 +126,7 @@ class CurriculumsController < ApplicationController
                     .joins(:competence_descriptions)
                     .where(["competence_descriptions.locale = ?", I18n.locale])
                     #.includes(:strict_prereqs)
-    
+
     courses = ScopedCourse.where(:curriculum_id => @curriculum.id)
                 .joins(:course_descriptions)
                 .where(["course_descriptions.locale = ?", I18n.locale])

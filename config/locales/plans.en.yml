@@ -90,6 +90,10 @@ en:
         learning_outcomes: 'Osaamistavoitteet'
         reqursive_prereqs: 'Välttämättömät esitiedot'
 
+    skills:
+      show:
+        supporting_courses: 'Supporting courses'
+    
     schedule:
       show:
         curriculum: "Curriculum"

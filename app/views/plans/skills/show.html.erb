@@ -1,0 +1,53 @@
+<!-- plans/courses/show -->
+<% content_for(:stylesheets) do -%>
+  <%= stylesheet_link_tag "views/plans/skills", :media => 'all' %>
+<% end -%>
+<% content_for :title do -%>
+  <%= @competence.localized_name %>
+<% end -%>
+<% content_for(:theleft) do -%>
+  <h1><%= link_to @competence.localized_name, studyplan_competence_path(:id => @competence) %></h1>
+      
+  <ul>
+    <% @competence.skills.each do |skill| %>
+      <li class="<%= skill == @skill ? 'selected' : '' %>"><%= link_to skill.localized_name, studyplan_competence_skill_path(:competence_id => @competence.id, :id => skill) %>
+    <% end %>
+  </ul>
+<% end -%>
+
+<h1>
+  <%= @competence.localized_name %>:<br />
+  <%= @skill.localized_name %>
+</h1>
+
+<h2><%=t '.supporting_courses' %>:</h2>
+
+<div class="course-graph suggested-courses">
+  <% @prereq_courses.each do |course| %>
+    <% next if @user.study_plan.scoped_courses.exists?(course) %>
+  
+    <div class="suggested-course">
+      <div class="course">
+        <h1><%= course.course_code %> <%= course.localized_name %> (<%= course.credits %> <%=t :cr %>)</h1>
+        <ul>
+          <% course.skills.each do |skill| %>
+            <% if @prereq_ids.member?(skill.id) %>
+              <li class="skill"><%= skill.localized_name %></li>
+            <% end %>
+          <% end %>
+        </ul>
+      </div>
+      
+      <h2><%= course.localized_description.default_period %></h2>
+
+      <!-- Add -->
+      <% if can? :choose, ScopedCourse %>
+        <% top_competence = @competence.parent_competence || @competence %>
+        
+        <%= link_to studyplan_competence_courses_path(:competence_id => top_competence.id, :course_id => course.id), {:method => :post, :class => 'btn btn-default'} do %>
+          <i class="icon icon-plus"></i> <%= t('plans.courses.show.course_add_to_plan') %>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+</div>

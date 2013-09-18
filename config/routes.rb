@@ -74,8 +74,8 @@ Ops::Application.routes.draw do
           get 'delete'
         end
         
-        # ScopedCourses that belong to the competence
         resources :courses, :controller => 'plans/courses', :only => [:show, :create, :destroy]
+        resources :skills, :controller => 'plans/skills', :only => [:show]
       end
 
       # The studyplan courses controller

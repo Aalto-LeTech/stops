@@ -11,7 +11,7 @@ hilightCourses = ->
     
     if included_courses[abstract_course_id]
       #$(this).addClass('chosen')
-      $(this).find('td.status').append($('<i class="icon icon-remove" title="Opintosuunnitelmassa"></i>'))
+      $(this).find('td.status').append($('<i class="icon icon-asterisk" title="Opintosuunnitelmassa"></i>'))
     
 
 

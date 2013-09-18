@@ -45,6 +45,12 @@ class Skill < ActiveRecord::Base
            #:order       => 'position',
            :conditions  => "requirement = #{STRICT_PREREQ}"
 
+  # FIXME: does this work if prereq is Competence?
+  has_many :prereq_courses,
+           :through => :prereqs,
+           :source => :competence_node,
+           :class_name  => 'ScopedCourse'
+  
   belongs_to :competence_node
 
   accepts_nested_attributes_for :skill_descriptions

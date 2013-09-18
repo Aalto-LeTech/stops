@@ -58,7 +58,7 @@
       <h3><%= t('.skills') %></h3>
       <ul>
         <% @competence.skills.each do |skill| %>
-          <li><%= skill.localized_name %></li>
+          <li><%= link_to skill.localized_name, studyplan_competence_skill_path(:competence_id => @competence, :id => skill) %></li>
         <% end %>
       </ul>
     </div>

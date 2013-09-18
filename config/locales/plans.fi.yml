@@ -38,6 +38,8 @@ fi:
         heading: "Valitse tukevia kursseja"
 
     courses:
+      course_added_to_plan: 'Kurssi lisättiin suunnitelmaan'
+      course_removed_from_plan: 'Kurssi poistettiin suunnitelmasta'
       index:
         plan_view: "Suunnitelma"
         changes_view: "Muutokset"
@@ -82,6 +84,8 @@ fi:
         provides: "Osaamistavoitteet"
         needed_by: "Mahdollistaa"
         paths_hint: "Klikkaa osaamistavoitteita nähdäksesi opintopolut kurssista kompetenssiin"
+        course_add_to_plan: "Lisää opintosuunnitelmaan"
+        course_remove_from_plan: "Poista opintosuunnitelmasta"
         
         replaces: 'Korvaavuudet'
         assignments: 'Toteutus, työmuodot ja arvosteluperusteet'

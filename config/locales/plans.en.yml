@@ -37,6 +37,8 @@ en:
         heading: "Choose supporting courses"
 
     courses:
+      course_added_to_plan: 'Course was added to plan'
+      course_removed_from_plan: 'Course was removed from plan'
       index:
         plan_view: "Study Plan"
         changes_view: "Changes"
@@ -79,8 +81,14 @@ en:
         provides: "Provides skills"
         needed_by: "Needed by"
         paths_hint: "Click skills to see the study path"
-        
-        
+        course_add_to_plan: "Add to plan"
+        course_remove_from_plan: "Remove from plan"
+        replaces: 'Korvaavuudet'
+        assignments: 'Toteutus, työmuodot ja arvosteluperusteet'
+        links: 'Linkit'
+        period: 'Opetusperiodi'
+        learning_outcomes: 'Osaamistavoitteet'
+        reqursive_prereqs: 'Välttämättömät esitiedot'
 
     schedule:
       show:

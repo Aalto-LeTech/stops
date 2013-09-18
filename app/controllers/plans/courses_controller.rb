@@ -20,10 +20,7 @@ class Plans::CoursesController < PlansController
   def show
     authorize! :read, @study_plan
     @course = ScopedCourse.find(params[:id])
-
-    if params[:competence_id]
-      @competence = Competence.find(params[:competence_id])
-    end
+    @competence = Competence.find(params[:competence_id]) if params[:competence_id]
 
     respond_to do |format|
       format.html # show.html.erb
@@ -31,37 +28,41 @@ class Plans::CoursesController < PlansController
     end
   end
 
-#  # GET /courses/1/graph
-#  def graph
-#    @course = Course.find(params[:id])
-#  end
-
-#  # GET /courses/new
-#  # GET /courses/new.xml
-#  def new
-#    @course = Course.new
-
-#    respond_to do |format|
-#      format.html # new.html.erb
-#      format.xml  { render :xml => @course }
-#    end
-#  end
-
-#  # GET /courses/1/edit
-#  def edit
-#    @course = Course.find(params[:id])
-#  end
-
   # Add course to study plan
   # POST /plans/:id/courses
   def create
     authorize! :update, @study_plan
+    @competence = nil
+    @competence = Competence.find(params[:competence_id]) if params[:competence_id]
+    
     status = @study_plan.add_course(params[:course_id].to_i, true)
 
     if status == :already_added
-      redirect_to studyplan_competences_path, :flash => {:error => 'Course was already in the study plan'}
+      message = {:error => 'Course was already in the study plan'}
     else
-      redirect_to studyplan_competences_path, :flash => {:success => 'Course added to study plan'}
+      message = {:success => t('plans.courses.course_added_to_plan')}
+    end
+    
+    if @competence
+      redirect_to studyplan_competence_path(:id => @competence.id), :flash => message
+    else
+      redirect_to studyplan_competences_path, :flash => message
+    end
+  end
+
+  # Remove course from study plan
+  # DESTROY /plans/:id/courses
+  def destroy
+    authorize! :update, @study_plan
+    @competence = nil
+    @competence = Competence.find(params[:competence_id]) if params[:competence_id]
+    
+    status = @study_plan.remove_scoped_course(params[:id].to_i)
+
+    if @competence
+      redirect_to studyplan_competence_path(:id => @competence.id), :flash => { :success => t('plans.courses.course_removed_from_plan') }
+    else
+      redirect_to studyplan_competences_path, :flash => { :success => t('plans.courses.course_removed_from_plan') }
     end
   end
 

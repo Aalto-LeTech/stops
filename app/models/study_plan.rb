@@ -478,7 +478,15 @@ class StudyPlan < ActiveRecord::Base
     return plan_course
   end
 
+  def remove_scoped_course(scoped_course_id)
+    plan_course = self.plan_courses.find_by_scoped_course_id(scoped_course_id)
+    return :not_found unless plan_course
+    
+    plan_course.destroy
 
+    return :ok
+  end
+  
   # Removes the plan course from the study plan
   def remove_plan_course(plan_course_id)
     plan_course = self.plan_courses.find(plan_course_id)

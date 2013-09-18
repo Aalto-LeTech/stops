@@ -23,7 +23,7 @@
       <h2><%= t('.other_courses') %></h2>
       <ul>
         <% @competence.parent_competence.recursive_prereq_courses.each do |course|%>
-          <li class="<%= course == @course ? 'selected' : '' %>"><%= link_to course.localized_name, studyplan_competence_course_path(:competence_id => @competence.id, :id => course) %>
+          <li class="<%= course == @course ? 'selected' : '' %>"><%= link_to course.localized_name, studyplan_competence_course_path(:competence_id => @competence.parent_competence.id, :id => course) %>
         <% end %>
       </ul>
     <% else %>
@@ -38,12 +38,9 @@
         <% end %>
       </ul>
     <% end %>
-    
-    
 
   <% else %>
-    <h1><%= link_to t('.study_plan'), studyplan_path %></h2>
-    <h2><%= link_to t('.plan_courses'), studyplan_courses_path %></h2>
+    <h1><%= link_to t('.study_plan'), studyplan_courses_path %></h2>
     <ul>
       <% @user.study_plan.scoped_courses.each do |course| %>
         <li class="<%= @user.study_plan.passed?( course.abstract_course ) ? 'passed' : '' %> <%= course == @course ? 'selected' : '' %>"><%= link_to course.localized_name, studyplan_course_path(:id => course) %>
@@ -58,10 +55,29 @@
 
   <!-- Add / Remove -->
   <% if can? :choose, ScopedCourse %>
-    <% unless @user.study_plan.scoped_courses.exists?(@course) %>
-      <%= link_to studyplan_courses_path(:course_id => @course.id), {:method => :post, :class => 'btn btn-default'} do %>
-        <i class="icon icon-plus"></i>
-        <%= t(:course_add_to_plan) %>
+    <% if @user.study_plan.scoped_courses.exists?(@course) %>
+      <% if @competence %>
+        <% top_competence = @competence.parent_competence || @competence %>
+        
+        <%= link_to studyplan_competence_course_path(:competence_id => top_competence.id, :id => @course.id), {:method => :delete, :class => 'btn btn-default'} do %>
+          <i class="icon icon-minus"></i> <%= t('.course_remove_from_plan') %>
+        <% end %>
+      <% else %>
+        <%= link_to studyplan_course_path(:id => @course.id), {:method => :delete, :class => 'btn btn-default'} do %>
+          <i class="icon icon-minus"></i> <%= t('.course_remove_from_plan') %>
+        <% end %>
+      <% end %>
+    <% else %>
+      <% if @competence %>
+        <% top_competence = @competence.parent_competence || @competence %>
+        
+        <%= link_to studyplan_competence_courses_path(:competence_id => top_competence.id, :course_id => @course.id), {:method => :post, :class => 'btn btn-default'} do %>
+          <i class="icon icon-plus"></i> <%= t('.course_add_to_plan') %>
+        <% end %>
+      <% else %>
+        <%= link_to studyplan_courses_path(:course_id => @course.id), {:method => :post, :class => 'btn btn-default'} do %>
+          <i class="icon icon-plus"></i> <%= t('.course_add_to_plan') %>
+        <% end %>
       <% end %>
     <% end %>
   <% end %>

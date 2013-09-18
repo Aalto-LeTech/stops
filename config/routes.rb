@@ -75,15 +75,13 @@ Ops::Application.routes.draw do
         end
         
         # ScopedCourses that belong to the competence
-        resources :courses,
-          :controller => 'plans/courses',
-          :only => [:show]
+        resources :courses, :controller => 'plans/courses', :only => [:show, :create, :destroy]
       end
 
       # The studyplan courses controller
       resources :courses,
         :controller => 'plans/courses',
-        :only => [:index, :show, :create]
+        :only => [:index, :show, :create, :destroy]
 
       # The studyplan schedule controller
       resource :schedule, :controller => 'plans/schedule', :only => [:show]

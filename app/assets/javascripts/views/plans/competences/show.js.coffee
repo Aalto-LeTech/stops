@@ -35,7 +35,7 @@ jQuery ->
     graphView = new GraphView(element[0], {
       'sourceId': element.data('source-id')
       'targetId': element.data('target-id')
-      'supporting': 'show'
+      #'supporting': 'show'
       #'prereqSkills': 'recursive'
       'mode': 'dynamic'
     })

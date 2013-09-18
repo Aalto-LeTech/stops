@@ -165,9 +165,21 @@ class @GraphView
     
     if 'show' == options['supportingTo']
       for id, course of sourceCourse.supportingPrereqToById
-        course.visible = true
-        course.level = 1 if course.level == undefined
-        GraphCourse::maxLevel = 1 if GraphCourse::maxLevel < 1
+        if @targetIds
+          # Only show supported postreq if it's connected to target. TODO: Only show supported postreq if it's on the path to target
+          showCourse = false
+          
+          for targetId, isTarget of @targetIds
+            if course.prereqToById[targetId]
+              showCourse = true
+              break
+        else
+          showCourse = true
+        
+        if showCourse
+          course.visible = true
+          course.level = 1 if course.level == undefined
+          GraphCourse::maxLevel = 1 if GraphCourse::maxLevel < 1
 
     # Show skills
     for skill in sourceCourse.skills
@@ -196,8 +208,6 @@ class @GraphView
   showFuturePaths: (sourceCourse, targetIds, options) ->
     options ||= {}
     visiting = {}
-
-    console.log targetIds
 
     dfs = (course, level) ->
       visiting[course.id] = true

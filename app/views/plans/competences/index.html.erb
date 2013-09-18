@@ -4,16 +4,25 @@
 
 <div class='competence-list'>
   <h1><%= @curriculum.name %></h1>
+  
+  <div class="alert alert-info">
+    O<sub>4</sub> ei ole vielä opiskelijoiden käytettävissä.
+  </div>
 
   <% @competences.each do |competence| %>
     <div class="competence <%= @chosen_competence_ids.include?( competence.id ) ? 'chosen' : '' %>" >
       <h2>
-        <%= link_to competence.localized_name, studyplan_competence_path( competence ) %>
+        <% if current_user.staff? || defined?(ENABLE_STUDENT_UI) %>
+          <%= link_to competence.localized_name, studyplan_competence_path( competence ) %>
+        <% else %>
+          <%= competence.localized_name %>
+        <% end %>
       </h2>
 
       <% if competence.localized_description && !competence.localized_description.description.blank? %>
         <%= competence.localized_description.description.html_safe %>
       <% else %>
+        <!--
         <p>
           <%= t('.provided_skills_heading')%>
           <ul>
@@ -22,6 +31,7 @@
             <% end %>
           </ul>
         </p>
+        -->
       <% end %>
     </div>
   <% end %>

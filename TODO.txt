@@ -1,10 +1,11 @@
 = Immediate =
 
 Poista kurssi suunnitelmasta
-Verkon instrumentointi
+
 
 = Before launch if possible =
 
+Verkon instrumentointi
 
 
 = Content =

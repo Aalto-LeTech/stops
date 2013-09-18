@@ -20,13 +20,15 @@
         <ul class="nav">
           <% if logged_in? %>
             <% if current_user.staff? %>
-              <%= nav_link_to t('.edit_curriculums'), curriculums_path %>
+              <!--%= nav_link_to t('.edit_curriculums'), curriculums_path %-->
             <% end %>
           
             <!--%= nav_link_to t('.curriculum'), studyplan_curriculum_path %-->
             <%= nav_link_to t('.competences'), studyplan_competences_path %>
             <!--%= nav_link_to t('.courses'), studyplan_courses_path %-->
-            <%= nav_link_to t('.schedule'), studyplan_schedule_path %>
+            <% if current_user.staff? || defined?(ENABLE_STUDENT_UI) %>
+              <%= nav_link_to t('.schedule'), studyplan_schedule_path %>
+            <% end %>
           <% end %>
         </ul>
 

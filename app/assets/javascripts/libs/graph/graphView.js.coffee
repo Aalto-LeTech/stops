@@ -196,7 +196,18 @@ class @GraphView
 
         if 'recursive' == options['prereqSkills']
           skill.dfs 'backward', (s, depth) -> s.visible(true)
-
+    
+    # Always show target
+    if @targetIds
+      for targetId, isTarget of @targetIds
+        course = @coursesById[targetId]
+        unless course.visible
+          course.visible = true
+          GraphCourse::maxLevel += 1
+          course.level = GraphCourse::maxLevel
+        
+        for skill in course.skills
+          skill.visible(true)
 
     this.initializeVisualization(sourceCourse)
 

@@ -161,6 +161,67 @@ class StudyPlan < ActiveRecord::Base
 
     response_data
   end
+  
+  def json_schedule
+    # Get periods, competences, user courses and plan course data
+    periods = self.periods.includes(:localized_description)
+    competences = self.competences.includes([:localized_description])
+    plan_courses = self.plan_courses.includes(
+      [
+        abstract_course: [:localized_description, :course_instances],
+        scoped_course: [:strict_prereqs]
+      ]
+    )
+
+    # JSONify the data
+    periods_data = periods.as_json(
+      only: [:id, :begins_at, :ends_at],
+      methods: [:localized_name],
+      root: false
+    )
+
+    # TODO: Replace courses_recursive with a more efficient solution
+    competences_data = competences.as_json(
+      only: [:id],
+      methods: [:localized_name, :course_ids_recursive],
+      root: false
+    )
+
+    plan_courses_data = plan_courses.as_json(
+      only: [:id, :period_id, :credits, :length, :grade],
+      include: [
+        {
+          abstract_course: {
+            only: [:id, :code],
+            methods: [:localized_name],
+            include: {
+              localized_description: {
+                only: [:period_info]
+              },
+              course_instances: {
+                only: [:period_id, :length]
+              }
+            }
+          }
+        },
+        {
+          scoped_course: {
+            only: [:id, :credits],
+            methods: [:strict_prereq_ids]
+          }
+        }
+      ],
+      root: false
+    )
+
+    response_data = {
+      periods: periods_data,
+      competences: competences_data,
+      plan_courses: plan_courses_data,
+    }
+    
+    response_data
+  end
 
 
   # Get passed courses

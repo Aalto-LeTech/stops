@@ -80,6 +80,8 @@ class @Period
     @name = data['localized_name'] || ''
     @beginsAt = data['begins_at']
     @endsAt = data['ends_at']
+    
+    @isSummer      = 'S' == @name.substr(@name.length - 1)
 
     # Set time dependent flags
     @isNow = false
@@ -165,6 +167,8 @@ class @Period
 
     return slot
 
+  isSummer: ->
+    false
 
   # Removes a course from this period.
   removeCourse: (course) ->

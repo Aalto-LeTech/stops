@@ -186,12 +186,16 @@ class @Course
 
     #dbg.lg("#{@}::data: #{JSON.stringify(data)}!")
 
+    localized_description = data['abstract_course']['localized_description']
+
     @abstractId          = data['abstract_course']['id']
     @code                = data['abstract_course']['code'] || ''
     @name                = data['abstract_course']['localized_name'] || ''
     @scopedId            = data['scoped_course']['id']
     @scopedCredits       = data['scoped_course']['credits']
     @prereqIds           = data['scoped_course']['strict_prereq_ids'] || []
+    @periodInfo          = undefined
+    @periodInfo          = localized_description['period_info'] if localized_description
     @credits(data['credits'] || @scopedCredits || 0)
     @length(data['length'] || 0)
     @grade(data['grade'] || 0)
@@ -299,18 +303,35 @@ class @Course
     for scopedId, course of @prereqs
       return true
     return false
+    
+  # Returns whether the course is prereq to other courses or not
+  hasPostreqs: ->
+    for scopedId, course of @prereqs
+      return true
+    return false
 
 
   # Returns prerequisite courses as a list
   getPrereqs: ->
     prereqs = []
     for scopedId, course of @prereqs
-      prereqs.push( course )
+      prereqs.push(course)
 
     prereqs.sort (a, b) ->
       return a.code.localeCompare(b.code)
 
     return prereqs
+
+  # Returns courses for which this course is a prereq as a list
+  getPostreqs: ->
+    postreqs = []
+    for scopedId, course of @prereqTo
+      postreqs.push(course)
+
+    postreqs.sort (a, b) ->
+      return a.code.localeCompare(b.code)
+
+    return postreqs
 
 
   # Distributes the course's credit weight on the periods it extends to

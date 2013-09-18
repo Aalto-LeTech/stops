@@ -25,6 +25,7 @@ class @Competence
   # Reads some of the model's core attributes from the given JSON data object
   loadJson: (data) ->
     @name = data['localized_name']
+    @id = data['id']
 
     # Load prereqs
     @prereqs = []

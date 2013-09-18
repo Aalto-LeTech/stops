@@ -48,10 +48,12 @@ class @PlanView
 
 
   loadPlan: () ->
-    $.ajax
-      url: @planUrl + '/old_schedule',
-      dataType: 'json',
-      success: (data) => this.loadJson(data)
+    #$.ajax
+    #  url: @planUrl + '/old_schedule',
+    #  dataType: 'json',
+    #  success: (data) => this.loadJson(data)
+    
+    this.loadJson(schedule_data) # schedule_data comes with the HTML
 
 
   # Loads the plan from JSON data
@@ -147,6 +149,8 @@ class @PlanView
     # Log time used from start to bind and here
     endTime = new Date().getTime();
     dbg.lg("Parsing & modelling the plan data took #{preBindTime - startTime} (preBind) + #{postBindTime - preBindTime} (bind) + #{endTime - postBindTime} (postBind) = #{endTime - startTime} (total) milliseconds.")
+    
+    $('.loader').remove()
 
 
   unselectObjects: (data, event) ->
@@ -244,6 +248,18 @@ class @PlanView
       dbg.lg('No unsaved data. No reason to put.')
       return
 
+    # Calculate total credits
+    total_credits = 0
+    for course in Course::ALL
+      total_credits += course.credits()
+    
+    # Koeasetelma
+    has_kjr = false
+    has_eny = false
+    for competence in Competence::ALL
+      has_kjr = true if competence.id == 59
+      has_eny = true if competence.id == 73
+
     # Load the data
     planCoursesToSave = []  # Array for course JSON representations for sending
     for course in @coursesToSave
@@ -282,6 +298,14 @@ class @PlanView
           else
             dbg.lg("ERROR: No feedback returned!")
             @onSaveFailure()
+            
+          console.log "Treatment: #{user_treatment}"
+          console.log "Total credits: #{total_credits}"
+          console.log "KJR: #{has_kjr}"
+          console.log "ENY: #{has_eny}"
+          if (user_treatment == 1 || user_treatment == 2) && total_credits >= 160 && (has_kjr || has_eny)
+            window.location.href = "https://o4.cs.hut.fi/fi/surveys/1"
+            
         else
           dbg.lg("ERROR: Put on server failed!")
           @onSaveFailure()

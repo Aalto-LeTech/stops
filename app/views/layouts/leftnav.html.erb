@@ -1,9 +1,7 @@
 <!DOCTYPE html>
 <html lang="<%= I18n.locale %>">
 <% content_for(:corestylesheets) do -%>
-  <%= stylesheet_link_tag "layouts/browser", :media => 'all' # FIXME: rename
-  %>
-  <%= stylesheet_link_tag('core/fixed_nav', :media => 'all') %>
+  <%= stylesheet_link_tag "layouts/browser", :media => 'all' %>
 <% end -%>
 <%= render partial: 'layouts/core/head' %>
 

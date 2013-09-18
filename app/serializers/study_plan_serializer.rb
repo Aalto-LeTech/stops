@@ -34,7 +34,7 @@ class StudyPlanSerializer < ActiveModel::Serializer
 
   def competences
     object.competences.includes(
-      :strict_prereqs =>
+      :strict_prereq_courses =>
       [
         :abstract_course => :localized_description
       ]
@@ -47,7 +47,8 @@ class StudyPlanSerializer < ActiveModel::Serializer
       [
         :abstract_course => :localized_description,
         :skills => :localized_description,
-        :prereqs =>
+        :strict_prereq_courses =>
+        #:prereqs =>
         [
           :abstract_course => :localized_description
         ]

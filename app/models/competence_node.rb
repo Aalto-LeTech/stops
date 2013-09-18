@@ -109,7 +109,7 @@ class CompetenceNode < ActiveRecord::Base
   has_many :strict_prereq_courses,
            :through     => :node_prereqs,
            :source      => :prereq,
-           :conditions  => "requirement = #{STRICT_PREREQ} AND type='ScopedCourse'",
+           :conditions  => "requirement = #{STRICT_PREREQ} AND competence_nodes.type='ScopedCourse'",
            :order => 'course_code',
            :uniq => true
 

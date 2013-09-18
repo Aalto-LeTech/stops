@@ -134,8 +134,6 @@ class @GraphView
   visualize: (options) ->
     options = @visualizationOptions
 
-    
-
     # Load source course
     sourceCourse = @coursesById[options['sourceId']]
     unless sourceCourse
@@ -232,10 +230,9 @@ class @GraphView
         continue if visiting[neighbor.id] # Detect cycles
         onPath = dfs(neighbor, level + 1) || onPath
 
-      course.level = level if course.level == undefined || level > course.level
-      GraphCourse::maxLevel = course.level if (course.level > GraphCourse::maxLevel)
-
       if onPath
+        course.level = level if course.level == undefined || level > course.level
+        GraphCourse::maxLevel = course.level if (course.level > GraphCourse::maxLevel)
         course.visible = true
 
         if 'all' == options['postreqSkills']

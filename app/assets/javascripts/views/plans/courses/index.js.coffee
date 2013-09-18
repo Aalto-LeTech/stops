@@ -19,15 +19,10 @@
 #= require models/plan/course_creation_model
 #= require models/core/ViewObject
 
-
 if not O4.view.i18n
   throw "The i18n strings for the view have not been loaded!"
 
-
-
-
 class @View extends ViewObject
-
 
   PLAN: undefined
   ENGINE: undefined
@@ -119,11 +114,7 @@ class @View extends ViewObject
     #ModelObject::DBG = true
     @READY = true
 
-    setTimeout(
-      -> $('.loader').fadeOut(1000)
-      500
-    )
-
+    $('.loader').remove()
 
 
   onInqueryChange: ->

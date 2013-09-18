@@ -2,7 +2,6 @@
   <%= stylesheet_link_tag "views/plans/courses/index", :media => 'all' %>
 <% end %>
 
-
 <% content_for(:javascripts) do %>
   <script type="text/javascript">
     <%= render "search_engine_i18n_strings.js" %>
@@ -11,9 +10,7 @@
   <%= javascript_include_tag "views/plans/courses/index", :media => 'all' %>
 <% end %>
 
-
 <div class="loader"></div>
-
 
 <div class="row-fluid">
   <span class="span10">
@@ -27,8 +24,6 @@
     <!-- /ko -->
   </span>
 </div>
-
-
 
 <!-- ko if: view() == 'plan' -->
   <!-- ko with: PLAN -->

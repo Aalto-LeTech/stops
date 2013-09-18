@@ -240,12 +240,10 @@ class StudyPlan < ActiveRecord::Base
   def add_scoped_courses_from_json(json)
     scoped_course_ids_to_add = JSON.parse(json)
 
-    puts "ids to add: %s" % [ scoped_course_ids_to_add ]
-
     feedback = {}
 
     scoped_course_ids_to_add.each do |scoped_course_id|
-      fdbck = self.add_scoped_course(scoped_course_id.to_i, is_manually_added=true)
+      fdbck = self.add_course(scoped_course_id.to_i, is_manually_added=true)
       if fdbck.is_a? PlanCourse
         feedback[scoped_course_id] = fdbck.as_json(root: false)
       else

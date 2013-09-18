@@ -299,12 +299,12 @@ class @PlanView
             dbg.lg("ERROR: No feedback returned!")
             @onSaveFailure()
             
-          console.log "Treatment: #{user_treatment}"
-          console.log "Total credits: #{total_credits}"
-          console.log "KJR: #{has_kjr}"
-          console.log "ENY: #{has_eny}"
-          if (user_treatment == 1 || user_treatment == 2) && total_credits >= 160 && (has_kjr || has_eny)
-            window.location.href = "https://o4.cs.hut.fi/fi/surveys/1"
+          #console.log "Treatment: #{user_treatment}"
+          #console.log "Total credits: #{total_credits}"
+          #console.log "KJR: #{has_kjr}"
+          #console.log "ENY: #{has_eny}"
+          #if (user_treatment == 1 || user_treatment == 2) && total_credits >= 160 && (has_kjr || has_eny)
+          #  window.location.href = "https://o4.cs.hut.fi/fi/surveys/1"
             
         else
           dbg.lg("ERROR: Put on server failed!")

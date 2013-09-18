@@ -25,19 +25,14 @@ jQuery ->
       planView.selectObject(object) if event.which == 1
       event.stopPropagation()
     .on 'mousedown', '#controls, .object-info, #plan-container', (event) ->
-      #dbg.lg("MouseDown: (tool)!")
       event.stopPropagation()
-    .on 'mousedown', 'body', (event) ->
-      #dbg.lg("MouseDown: body!")
+    .on 'mousedown', '#theleft', (event) ->
       planView.unselectObjects()
     .on 'mouseenter', '#theleft .well', (event) ->
-      #dbg.lg("MouseIn: #theleft .well!")
       planView.doShowAsEditable()
     .on 'mouseleave', '#theleft .well', (event) ->
-      #dbg.lg("MouseOut: #theleft .well!")
       planView.noShowAsEditable()
     .on 'keypress', 'body', (event) ->
-      #dbg.lg("KeyPress: body #{event.keyCode}")
       obj = planView.selectedObject()
       if obj and obj.actOnCommand and obj.actOnCommand(planView, event.keyCode)
         event.preventDefault()

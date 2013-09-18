@@ -19,21 +19,66 @@ class SurveysController < ApplicationController
   end
   
   def show
-    redirect_to root_url if SurveyAnswer.exists?(:user_id => @user.id)
+    # if SurveyAnswer.exists?(:user_id => @user.id)
+    #   redirect_to root_url
+    #   return
+    # end
+
+    @survey_id = @user.treatment
+    chosen_competence_ids = @study_plan.competence_ids
+    chosen_course_ids = @study_plan.scoped_course_ids
     
-    @motivation_questions = [
-      {:id => 40, :course_code => 'Mat-0.123', :name => 'Matematiikka 1'},
-      {:id => 41, :course_code => 'Eng-1.632', :name => 'Statiikka'}
-    ]
+    if chosen_competence_ids.include?(73) # ENY
+      @major_name = 'Energia- ja ympäristötekniikan'
+      @major_id = 73
+      @usefulness_questions = [
+        {:id => 62, :course_code => 'ENY-C2004', :name => 'Geologia ja geomekaniikka'},
+        {:id => 44, :course_code => 'KJR-C2004', :name => 'Materiaalitekniikka'},
+        {:id => 64, :course_code => 'ENE-C2001', :name => 'Käytännön energiatekniikkaa'},
+        {:id => 66, :course_code => 'YYT-C2001', :name => 'Hydrologian ja hydrauliikan perusteet'}
+      ]
+      @motivation_questions = [
+        {:id => 62, :course_code => 'ENY-C2004', :name => 'Geologia ja geomekaniikka'},
+        {:id => 44, :course_code => 'KJR-C2004', :name => 'Materiaalitekniikka'},
+      ]
+      @motivation_questions << {:id => 64, :course_code => 'ENE-C2001', :name => 'Käytännön energiatekniikkaa'} if chosen_course_ids.include?(64)
+      @motivation_questions << {:id => 66, :course_code => 'YYT-C2001', :name => 'Hydrologian ja hydrauliikan perusteet'} if chosen_course_ids.include?(66)
+    elsif chosen_competence_ids.include?(59) # KJR
+      @major_name = 'Kone- ja rakennustekniikan'
+      @major_id = 59
+      @usefulness_questions = [
+        {:id => 6, :course_code => 'ENY-C2001', :name => 'Termodynamiikka ja lämmönsiirto'},
+        {:id => 12, :course_code => 'MS-A020x', :name => 'Differentiaali- ja integraalilaskenta 2'},
+        {:id => 49, :course_code => 'RAK-C3003', :name => 'Tietoyhdennetty rakentaminen'},
+        {:id => 48, :course_code => 'KON-C3004', :name => 'Kone- ja rakennustekniikan laboratoriotyö'}
+      ]
+      
+      @motivation_questions = [
+        {:id => 6, :course_code => 'ENY-C2001', :name => 'Termodynamiikka ja lämmönsiirto'},
+        {:id => 12, :course_code => 'MS-A020x', :name => 'Differentiaali- ja integraalilaskenta 2'},
+      ]
+      @motivation_questions << {:id => 49, :course_code => 'RAK-C3003', :name => 'Tietoyhdennetty rakentaminen'} if chosen_course_ids.include?(49)
+      @motivation_questions << {:id => 48, :course_code => 'KON-C3004', :name => 'Kone- ja rakennustekniikan laboratoriotyö'} if chosen_course_ids.include?(48)
+    elsif chosen_competence_ids.include?(74) # RYM
+      @major_name = 'Rakennetun ympäristön (RYM)'
+      @major_id = 74
+      @usefulness_questions = []
+      @motivation_questions = []
+    else
+      # No major selected
+      @major_name = ''
+      @major_id = 0
+      @usefulness_questions = []
+      @motivation_questions = []
+    end
     
-    case params[:id]
-    when 'treatment'
-      @survey_id = TREATMENT_GRAPH
+    case @user.treatment
+    when TREATMENT_GRAPH
       render :action => 'treatment'
-    when 'control'
-      @survey_id = TREATMENT_TRADITIONAL
+    when TREATMENT_TRADITIONAL
       render :action => 'control'
     else
+      redirect_to studyplan_competences_path()
     end
   end
   
@@ -47,8 +92,7 @@ class SurveysController < ApplicationController
     @answers.payload = (params[:questions] || {}).to_json
     @answers.save
     
-    # TODO:
-    @user.treatment = nil
+    @user.treatment += 2
     @user.save
     
     flash[:success] = 'Kiitos osallistumisestasi tutkimukseen! Järjestelmän kaikki toiminnallisuudet ovat nyt käytettävissäsi.'

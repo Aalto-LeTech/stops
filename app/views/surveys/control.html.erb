@@ -1,20 +1,114 @@
+<% content_for(:stylesheets) do %>
+  <%= stylesheet_link_tag "views/surveys", :media => 'all' %>
+<% end %>
+
 <h1>Kyselytutkimus</h1>
 
-<p>Suoritamme tutkimusta</p>
+<p>Selvitämme tällä kyselyllä O<sub>4</sub>-järjestelmän toimivuutta perinteisiin opinto-oppaisiin verrattuna. Vastaamalla kyselyyn annat suostumuksesi siihen, että vastauksiasi käytetään tutkimustarkoituksiin. Vastaukset käsitellään luottamuksellisesti ja tutkimuksen tulokset raportoidaan niin, ettei yksittäistä vastaajaa pysty tunnistamaan.</p>
+
+<p>Osallistumalla tutkimukseen autat meitä kehittämään tätä järjestelmää ja opintojen ohjausta eteenpäin, joten vastauksesi on meille erittäin tärkeä.</p>
 
 <hr />
 
-<h2>
-  Valitse se vaihtoehto, joka parhaiten vastaa omaa mielikuvaasi tai käsitystä itsestäsi<br />
-  (1=Ei pidä paikkaansa ... 7=Pitää täysin paikkansa).
-</h2>
+<%= form_tag surveys_path, :class => '' do |f| %>
+  <%= hidden_field_tag :survey_id, @survey_id %>
+  <%= hidden_field_tag 'questions[major-id]', @major_id %>
 
-<%= form_tag surveys_path do |f| %>
-  <%= hidden_field_tag :survey_id, 'treatment' %>
+  <!-- Motivation -->
+  <div class="surveyquestion">
+    <p>Kuinka motivoitunut olet suorittamaan seuraavia kursseja?</p>
+    <table class="survey">
+      <thead>
+        <tr>
+          <td class="course-name"></td>
+          <td>En lainkaan motivoitunut</td>
+          <td>En kovin motivoitunut</td>
+          <td>Melko motivoitunut</td>
+          <td>Hyvin motivoitunut</td>
+          <td class="eos">En osaa sanoa</td>
+        </tr>
+      </thead>
+      <tbody>
+        <% @motivation_questions.each_with_index do |question, index| %>
+          <tr class="<%= index % 2 == 0 ? 'even' : 'odd' %>">
+            <td class="course-name"><%= question[:course_code] %> <%= question[:name] %></td>
+            <td><input type="radio" name="questions[course-<%= question[:id] %>-motivation]" value="1"></td>
+            <td><input type="radio" name="questions[course-<%= question[:id] %>-motivation]" value="2"></td>
+            <td><input type="radio" name="questions[course-<%= question[:id] %>-motivation]" value="3"></td>
+            <td><input type="radio" name="questions[course-<%= question[:id] %>-motivation]" value="4"></td>
+            <td class="eos"><input type="radio" name="questions[course-<%= question[:id] %>-motivation]" value="-"></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  
+  <!-- Interest -->
+  <div class="surveyquestion">
+    <p>Kuinka kiinnostavina pidät seuraavia kursseja?</p>
+    <table class="survey">
+      <thead>
+        <tr>
+          <td class="course-name"></td>
+          <td>En lainkaan kiinnostunut</td>
+          <td>En kovin kiinnostunut</td>
+          <td>Melko kiinnostunut</td>
+          <td>Hyvin kiinnostunut</td>
+          <td class="eos">En osaa sanoa</td>
+        </tr>
+      </thead>
+      <tbody>
+        <% @usefulness_questions.each_with_index do |question, index| %>
+          <tr class="<%= index % 2 == 0 ? 'even' : 'odd' %>">
+            <td class="course-name"><%= question[:course_code] %> <%= question[:name] %></td>
+            <td><input type="radio" name="questions[course-<%= question[:id] %>-interest]" value="1"></td>
+            <td><input type="radio" name="questions[course-<%= question[:id] %>-interest]" value="2"></td>
+            <td><input type="radio" name="questions[course-<%= question[:id] %>-interest]" value="3"></td>
+            <td><input type="radio" name="questions[course-<%= question[:id] %>-interest]" value="4"></td>
+            <td class="eos"><input type="radio" name="questions[course-<%= question[:id] %>-interest]" value="-"></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  
+  <!-- Usefulness -->
+  <div class="surveyquestion">
+    <p>Kuinka keskeisiä seuraavat kurssit ovat mielestäsi <em><%= @major_name %></em> osaamisen kannalta?</p>
+    <table class="survey">
+      <thead>
+        <tr>
+          <td class="course-name"></td>
+          <td>Ei lainkaan keskeinen</td>
+          <td>Ei kovin keskeinen</td>
+          <td>Melko keskeinen</td>
+          <td>Hyvin keskeinen</td>
+          <td class="eos">En osaa sanoa</td>
+        </tr>
+      </thead>
+      <tbody>
+        <% @usefulness_questions.each_with_index do |question, index| %>
+          <tr class="<%= index % 2 == 0 ? 'even' : 'odd' %>">
+            <td class="course-name"><%= question[:course_code] %> <%= question[:name] %></td>
+            <td><input type="radio" name="questions[course-<%= question[:id] %>-usefulness]" value="1"></td>
+            <td><input type="radio" name="questions[course-<%= question[:id] %>-usefulness]" value="2"></td>
+            <td><input type="radio" name="questions[course-<%= question[:id] %>-usefulness]" value="3"></td>
+            <td><input type="radio" name="questions[course-<%= question[:id] %>-usefulness]" value="4"></td>
+            <td class="eos"><input type="radio" name="questions[course-<%= question[:id] %>-usefulness]" value="-"></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <p>
+    <label class="control-label" for="valinnaiset">Millä perusteella valitsit valinnaisia kursseja?</label>
+    <textarea id="valinnaiset" name="questions[valinnaiset]" class="span6" rows="4"></textarea>
+  </p>
   
   <p>
-    Tavoitearvosanani kurssista:
-    <input type="textfield" name="questions[tavoite]" style="width: 4em;" />
+    <label class="control-label" for="jatkokehitys">Mitä puutteita havaitsit järjestelmässä? Miten kehittäisit sitä eteenpäin?</label>
+    <textarea id="jatkokehitys" name="questions[jatkokehitys]" class="span6" rows="4"></textarea>
   </p>
 
   <p><%= submit_tag 'Lähetä', :class => 'btn btn-primary' %></p>

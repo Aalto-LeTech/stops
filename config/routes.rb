@@ -23,7 +23,7 @@ Ops::Application.routes.draw do
       member do
         get 'graph'
         get 'search_skills'
-        get 'search_courses'
+        #get 'search_courses'
         match 'edit/import_csv', :controller => 'curriculums', :action => :import_csv, :via => [:post, :get]
       end
 
@@ -101,7 +101,7 @@ Ops::Application.routes.draw do
 #       resource :record, :controller => 'plans/record', :only => [:show]
     end
     
-        
+    match 'search_courses' => "abstract_courses#search"
     resources :surveys, :only => [:show, :create], :constraints => { :id => /\w+/ }
   end
 

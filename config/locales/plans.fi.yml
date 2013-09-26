@@ -56,6 +56,9 @@ fi:
         remove_symbol: "-"
         create_course: "Luo kurssi"
         search_box_placeholder: "Haku"
+        links: 'Linkit'
+        add_to_plan_title: 'Lisää suunnitelmaan'
+        added_to_plan: 'Lisätty'
         table-code: 'Kurssikoodi'
         table-name: 'Nimi'
         table-credits: 'Op'

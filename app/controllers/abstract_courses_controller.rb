@@ -31,6 +31,7 @@ class AbstractCoursesController < ApplicationController
           'name' => localized_description.name,
           'min_credits' => abstract_course.min_credits,
           'max_credits' => abstract_course.max_credits,
+          'content' => localized_description.content,
           'noppa_url' => localized_description.noppa_url,
           'oodi_url' => localized_description.oodi_url,
           'default_period' => localized_description.default_period,

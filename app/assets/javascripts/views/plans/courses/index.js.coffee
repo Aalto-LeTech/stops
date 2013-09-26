@@ -8,10 +8,13 @@ class Course
     data ||= {}
     
     @includedInPlan = ko.observable(false)
+    @addedToPlan = ko.observable(false)
+    
     @loading = ko.observable(false)
     @abstract_course_id = data['id']
     @course_code = data['course_code']
     @name = data['name']
+    @content = data['content']
     @period_info = data['period_info']
     @default_period = data['default_period']
     @noppa_url = data['noppa_url']
@@ -20,17 +23,15 @@ class Course
     @min_credits = parseInt(data['min_credits'])
     @max_credits = parseInt(data['max_credits'])
     
-    if isNaN(@min_credits) || isNaN(@max_credits)
+    if isNaN(@min_credits)
       @credits_string = ''
-    else if @min_credits != @max_credits
-      @credits_string = "#{@min_credits} - #{@max_credits}"
     else
-      @credits_string = "#{@min_credits}"
-    
+      if isNaN(@max_credits) || @min_credits != @max_credits
+        @credits_string = "#{@min_credits} - #{@max_credits}"
+      else
+        @credits_string = "#{@min_credits}"
 
-    
-    
-    
+
 class Search
   constructor: (options) ->
     @searchUrl = options['url']
@@ -112,6 +113,7 @@ class CoursesView
     
     promise.done (data) =>
       course.includedInPlan(true)
+      course.addedToPlan(true)
 
 jQuery ->
   new CoursesView()

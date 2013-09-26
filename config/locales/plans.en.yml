@@ -55,6 +55,9 @@ en:
         remove_symbol: "-"
         create_course: "Create course"
         search_box_placeholder: "Search"
+        links: 'Links'
+        add_to_plan_title: 'Add to plan'
+        added_to_plan: 'Added to plan'
         table-code: 'Course code'
         table-name: 'Name'
         table-credits: 'Cr'

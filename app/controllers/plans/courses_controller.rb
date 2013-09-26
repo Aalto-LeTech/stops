@@ -37,6 +37,8 @@ class Plans::CoursesController < PlansController
     competence_id = Integer(params[:competence_id]) rescue nil
     scoped_course_id = Integer(params[:scoped_course_id]) rescue nil
     
+    log "add_course #{abstract_course.id}"
+    
     status = @study_plan.add_course(abstract_course, {
       competence_id: competence_id,
       scoped_course_id: scoped_course_id,

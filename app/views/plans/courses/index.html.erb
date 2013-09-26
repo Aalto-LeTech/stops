@@ -4,7 +4,6 @@
 
 <% content_for(:javascripts) do -%>
   <script type="text/javascript">
-    <%= render "search_engine_i18n_strings.js" %>
     <%= render "index_i18n_strings.js" %>
   </script>
   <%= javascript_include_tag "views/plans/courses/index", :media => 'all' %>
@@ -23,10 +22,13 @@
       </h2>
         
       <ul class="unstyled">
-        <li><%=t :Period %>: <span data-bind="text: default_period"></span></li>
+        <li><em><%=t :Period %></em>: <strong data-bind="text: default_period"></strong></li>
       </ul>
       
+      <div data-bind="html: content"></div>
+      
       <p>
+        <em><%=t '.links' %>:</em>
         <!-- ko if: noppa_url --><a target="_blank" data-bind="attr: {href: noppa_url}">Noppa</a><!-- /ko -->
         <!-- ko if: oodi_url --><a target="_blank" data-bind="attr: {href: oodi_url}">Oodi</a><!-- /ko -->
       </p>
@@ -86,9 +88,12 @@
               <!-- /ko -->
               <!-- ko ifnot: loading -->
                 <!-- ko ifnot: includedInPlan -->
-                  <button class="btn" data-bind="click: $root.addCourseToPlan, clickBubble: false">
+                  <button title="<%=t '.add_to_plan_title' %>" class="btn" data-bind="click: $root.addCourseToPlan, clickBubble: false">
                     <i class="icon icon-plus"></i>
                   </button>
+                <!-- /ko -->
+                <!-- ko if: addedToPlan -->
+                  <span class="success"><%=t '.added_to_plan' %></span>
                 <!-- /ko -->
               <!-- /ko -->
             </td>

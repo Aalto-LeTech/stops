@@ -1,10 +1,6 @@
 class @Course
 
-  ALL: []
-  BYSCOPEDID: {}
-  BYABSTRACTID: {}
-
-  constructor: (data) ->
+  constructor: (data, periodsById) ->
     @isSelected          = ko.observable(false)
     @hilightPrereq       = ko.observable(false)
     @hilightPrereqTo     = ko.observable(false)
@@ -40,7 +36,7 @@ class @Course
     @affectedPeriods     = []                # Periods to which this course extends to atm.
 
 
-    this.loadJson(data || {})
+    this.loadJson(data || {}, periodsById)
 
     # On length change we need to update the DOM (make the box longer or
     # shorter), but to avoid a slot mess, we go through regular period
@@ -115,26 +111,9 @@ class @Course
       # NB: Also calls updateTooltip, so no need to call it here
       @updateMisscheduledFlag()
 
-  createFromJson: (data) ->
-    # Load courses
-    for dat in data
-      course = new Course(dat)
-
-    # Load course prerequirements
-    for course in @ALL
-      course.allPrereqsInPlan = true
-      for prereqId in course.prereqIds
-        prereq = @BYSCOPEDID[prereqId]
-        unless prereq
-          dbg.lg("Unknown prereqId #{prereqId}!")
-          course.allPrereqsInPlan = false
-          continue
-        course.addPrereq(prereq)
-
-
+  
   # Updates the tooltip
   updateTooltip: ->
-    #dbg.lg("#{@}::updateTooltip()...")
     alarms = ['']
     notices = ['']
     alarms.push(O4.schedule.i18n.course_tooltip_misordered) if @isMisordered()
@@ -155,7 +134,7 @@ class @Course
     period = @period
     while period and remaining_distance -= 1
       period = period.nextPeriod
-    #dbg.lg("#{@}::getEndPeriod(#{@period}) -> #{period}")
+
     return period
 
 
@@ -182,10 +161,7 @@ class @Course
 
 
   # Reads some of the model's core attributes from the given JSON data object
-  loadJson: (data) ->
-
-    #dbg.lg("#{@}::data: #{JSON.stringify(data)}!")
-
+  loadJson: (data, periodsById) ->
     localized_description = data['abstract_course']['localized_description']
 
     @abstractId          = data['abstract_course']['id']
@@ -202,33 +178,21 @@ class @Course
 
     periodId = data['period_id']
     if periodId?
-      @period = Period::BYID[periodId]
+      @period = periodsById[periodId]
       dbg.lg("Unknown periodId #{periodId}") unless @period
 
     for dat in data['abstract_course']['course_instances']
-      period = Period::BYID[dat['period_id']]
+      period = periodsById[dat['period_id']]
       # It can be expected that many instances are irrelevant
       continue unless period?
       courseInstance = new CourseInstance(period, dat['length'])
       @periods.push(period)
       @instancesByPeriodId[period.id] = courseInstance
       @instanceCount++
-      # Maintain an average of instance lengths which is used later to guess
-      # lengths of unknown instances
+      # Maintain an average of instance lengths which is used later to guess lengths of unknown instances
       @avgInstanceLength = (@avgInstanceLength * (@instanceCount - 1) + courseInstance.length) / @instanceCount
-      #dbg.lg( "course[#{@scopedId}]::addCInstance: #:#{@instanceCount} #{courseInstance}" )
 
     @avgInstanceLength = undefined if @avgInstanceLength == 0
-
-    #dbg.lg("L:#{@length()}!")
-    #dbg.lg("#{@}::L:#{@length()}!")
-
-    # Map the object
-    throw "ERROR: scopedId collision at #{@scopedId}!" if @BYSCOPEDID[@scopedId]?
-    @BYSCOPEDID[@scopedId] = this
-    throw "ERROR: abstractId collision at #{@abstractId}!" if @BYABSTRACTID[@abstractId]?
-    @BYABSTRACTID[@abstractId] = this
-    @ALL.push(this)
 
 
   # Determines whether the model's core attributes have been changed.
@@ -351,8 +315,6 @@ class @Course
   # Moves the course to the given period, to a free slot but does not update the DOM.
   # Updates @period and @slot and distributes credits to the affected periods.
   setPeriod: (period, doOverwriteLength = false) ->
-    #dbg.lg("#{@}::setPeriod(#{period}) L:#{@length()}!")
-
     # Debind the course from its course instance if any
     @courseInstance = undefined
 
@@ -504,7 +466,7 @@ class @Course
 
   # Moves the course forward after its prereqs (those that have been put on a period).
   # If no prereqs are found, course remains unmodified.
-  postponeAfterPrereqs: () ->
+  postponeAfterPrereqs: (earliestAllowedPeriod) ->
     # Only move if the course has not been locked into its current period
     return if @locked
 
@@ -520,8 +482,8 @@ class @Course
     targetPeriod = latestPeriod.getNextPeriod() || latestPeriod
 
     # Don't schedule courses before current period
-    if targetPeriod.earlierThan(Period::currentPeriod)
-      targetPeriod = Period::currentPeriod
+    if earliestAllowedPeriod && targetPeriod.earlierThan(earliestAllowedPeriod)
+      targetPeriod = earliestAllowedPeriod
 
     postponeTo(targetPeriod)
 

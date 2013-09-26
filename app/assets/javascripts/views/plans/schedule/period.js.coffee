@@ -1,35 +1,11 @@
 class @Period
 
-  ALL: []
-  BYID: {}
   NOW: new Date().toISOString()
   CURRENT: undefined
 
   PERIODS_IN_YEAR: 6
   UNDERBOOKED_LIMIT: 11  # determines the period credit total limits for css warning classes
   OVERBOOKED_LIMIT: 19   #   see @creditsStatus
-
-
-  createFromJson: (data) ->
-    periodCounter = 0
-    previousPeriod = undefined
-
-    for raw_period in data
-      period = new Period(raw_period)
-      period.sequenceNumber = periodCounter
-      period.previousPeriod = previousPeriod
-      previousPeriod.nextPeriod = period if previousPeriod
-      previousPeriod = period
-      periodCounter++
-
-      console.log "Warning: period id collision at #{@id}!" if @BYID[period.id]
-      @BYID[period.id] = period
-      @ALL.push(period)
-
-    # Make sure we always have current period. (This is relevant if the
-    # studyplan begins in the future.)
-    Period::CURRENT ||= @ALL[0]
-
 
   constructor: (data) ->
     @isSelected    = ko.observable(false)
@@ -38,11 +14,7 @@ class @Period
 
     # TODO: specify event handler in the binding
     @droppedCourse.subscribe (course) =>
-      #dbg.lg("#{@}::droppedCourse(#{course})!")
-      #console.log "Period: setPeriod"
       course.setPeriod(this)
-
-      #console.log "Period: updatePosition"
       course.updatePosition()
       course.updateReqWarnings()
 
@@ -81,7 +53,7 @@ class @Period
     @beginsAt = data['begins_at']
     @endsAt = data['ends_at']
     
-    @isSummer      = 'S' == @name.substr(@name.length - 1)
+    @isSummer = ('S' == @name.substr(@name.length - 1))
 
     # Set time dependent flags
     @isNow = false
@@ -91,7 +63,6 @@ class @Period
       @isOld = false
       if @beginsAt < Period::NOW
         @isNow = true
-        Period::CURRENT = this
 
   earlierThan: (other) ->
     return this.sequenceNumber < other.sequenceNumber
@@ -152,7 +123,6 @@ class @Period
 
   # Puts a course on this period.
   addCourse: (course, slot) ->
-    #dbg.lg("#{@}::add #{course} L:#{course.length()}.")
     # Add the course
     @courses.push(course)
 
@@ -172,7 +142,6 @@ class @Period
 
   # Removes a course from this period.
   removeCourse: (course) ->
-    #dbg.lg("#{@}::rm #{course} L:#{course.length()}.")
     # Remove the course
     @courses.splice(@courses.indexOf(course), 1)
 

@@ -30,63 +30,93 @@ class @PlanView
     @showAsEditable = false
     $('#credits #in, #grade #in, #length #in').hide()
 
-
   doShowAsEditable: ->
     if not @showAsEditable
       @showAsEditable = true
-      #dbg.lg("showAsEditable -> #{@showAsEditable}!")
-      $('#credits #out, #grade #out, #length #out').hide()
-      $('#credits #in, #grade #in, #length #in').show()
-
+      $('#credits .out, #grade .out, #length .out').hide()
+      $('#credits .in, #grade .in, #length .in').show()
 
   noShowAsEditable: ->
     if @showAsEditable
       @showAsEditable = false
-      #dbg.lg("showAsEditable -> #{@showAsEditable}!")
-      $('#credits #in, #grade #in, #length #in').hide()
-      $('#credits #out, #grade #out, #length #out').show()
+      $('#credits .in, #grade .in, #length .in').hide()
+      $('#credits .out, #grade .out, #length .out').show()
 
 
   loadPlan: () ->
-    #$.ajax
-    #  url: @planUrl + '/old_schedule',
-    #  dataType: 'json',
-    #  success: (data) => this.loadJson(data)
+    $.ajax
+      url: @planUrl + '/old_schedule',
+      dataType: 'json',
+      success: (data) => this.loadJson(data)
     
-    this.loadJson(schedule_data) # schedule_data comes with the HTML
+    this.loadJson(schedule_data)
 
 
   # Loads the plan from JSON data
   loadJson: (data) ->
-    #dbg.lg("Data: #{JSON.stringify(data)}!")
+    @competences = []
+    @courses = []
+    @coursesByScopedId = {}
+    @coursesByAbstractId = {}
+    @periods = []
+    @periodsById = {}
+    @currentPeriod = undefined
+  
     startTime = new Date().getTime()
-    dbg.lg("Starts loading data...")
 
     # Init before knockout hides related elements
     @showAsEditableInit()
 
     # Load periods
-    Period::createFromJson(data['periods'])
-    dbg.lg("Loaded #{Period::ALL.length} periods.")
+    periodCounter = 0
+    previousPeriod = undefined
+
+    for raw_period in data['periods']
+      period = new Period(raw_period)
+      period.sequenceNumber = periodCounter
+      period.previousPeriod = previousPeriod
+      previousPeriod.nextPeriod = period if previousPeriod
+      previousPeriod = period
+      periodCounter++
+      @currentPeriod = period if period.isNow
+      @periodsById[period.id] = period
+      @periods.push(period)
+
+    # Make sure we always have current period. (This is relevant if the studyplan begins in the future.)
+    @currentPeriod ||= @periods[0]
 
     # Load courses
-    Course::createFromJson(data['plan_courses'])
-    dbg.lg("Loaded #{Course::ALL.length} courses.")
+    for course_data in data['plan_courses']
+      course = new Course(course_data, @periodsById)
+      @courses.push(course)
+      @coursesByScopedId[course.scopedId] = course
+      @coursesByAbstractId[course.abstractId] = course
+
+    # Load course prerequirements
+    for course in @courses
+      course.allPrereqsInPlan = true
+      for prereqId in course.prereqIds
+        prereq = @coursesByScopedId[prereqId]
+        unless prereq
+          console.log "Unknown prereqId #{prereqId}!"
+          course.allPrereqsInPlan = false
+          continue
+        course.addPrereq(prereq)
 
     # Load competences
-    Competence::createFromJson(data['competences'])
-    dbg.lg("Loaded #{Competence::ALL.length} competences.")
-
-    dbg.lg("All data loaded. Current period: #{Period::CURRENT}. Starting the autoscheduling phase.")
+    for competence_data in data['competences']
+      competence = new Competence()
+      competence.loadJson(competence_data, @coursesById)
+      @competences.push(competence)
 
     # Automatically schedule unscheduled (new) courses
-    schedule = new Scheduler(Course::ALL)
+    schedule = new Scheduler(@courses, @currentPeriod)
     schedule.scheduleUnscheduledCourses()
 
 
     # Set periods and save the 'originals'
     dbg.lg("Setting the courses to the periods...")
-    for course in Course::ALL
+    for course in @courses
       # If the course was moved by the scheduler
       if schedule.moved[course.scopedId]
         course.resetOriginals()
@@ -107,18 +137,14 @@ class @PlanView
       course.updateReqWarnings()
 
 
-    # Only because ko bindings seem unable to refer to class vars
-    @periods = Period::ALL
-    @courses = Course::ALL
-    @competences = Competence::ALL
     # Apply ko bindings
-    dbg.lg("Applying bindings...")
+    console.log "Applying bindings..."
     preBindTime = new Date().getTime()
     ko.applyBindings(this)
     postBindTime = new Date().getTime()
 
     # Update positions
-    for course in Course::ALL
+    for course in @courses
       course.updatePosition() if course.period
 
     # Flag the PlanView as ready
@@ -126,7 +152,7 @@ class @PlanView
 
     # Select the current period by default. Also sets the viewport to show it
     # if it's outside of the current viewport area.
-    @selectObject(Period::CURRENT)
+    @selectObject(@currentPeriod)
 
     # Initialize tooltips
     #$('div#plan-container div.period div.credits span').tooltip(placement: 'left')
@@ -158,19 +184,14 @@ class @PlanView
 
 
   selectObject: (object) ->
-
-    #dbg.lg("PV::selectObject(#{object})")
-
     # Deselect the old object
     selectedObject = @selectedObject()
 
     # Call the object's setSelected handler
-    if selectedObject
-      selectedObject.setSelected(false)
+    selectedObject.setSelected(false) if selectedObject
 
     # Select the new object
     # NB: undefined first to avoid ko autoupdate oddness
-    #dbg.lg("Deselected [#{@selectedObjectType()}] #{selectedObject}")
     @selectedObjectType(undefined)
     @selectedObject(undefined)
     @selectedObjectType('Course') if object instanceof Course
@@ -179,8 +200,7 @@ class @PlanView
     @selectedObject(object)
 
     # Call the object's setSelected handler
-    if object
-      object.setSelected(true)
+    object.setSelected(true) if object
 
     # Scroll the scrollbar in order to have the selected object visible.
     # Important when using the keyboard.
@@ -214,7 +234,7 @@ class @PlanView
   # Reset the coursesToSave array according to changes made since last save
   updateCoursesToSave: ->
     @coursesToSave = []
-    for course in Course::ALL
+    for course in @courses
       if course.hasChanged()
         dbg.lg("Course \"#{course.name}\" was changed.")
         @coursesToSave.push(course)
@@ -250,13 +270,13 @@ class @PlanView
 
     # Calculate total credits
     total_credits = 0
-    for course in Course::ALL
+    for course in @courses
       total_credits += course.credits()
     
     # Koeasetelma
     has_kjr = false
     has_eny = false
-    for competence in Competence::ALL
+    for competence in @competences
       has_kjr = true if competence.id == 59
       has_eny = true if competence.id == 73
 

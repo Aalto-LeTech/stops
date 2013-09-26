@@ -127,6 +127,7 @@ class StudyPlan < ActiveRecord::Base
     Period.range(self.first_period, self.last_period)
   end
   
+  
   # Returns a summary of study plan as JSON. No caching is performed.
   # {
   #   competences: [
@@ -161,17 +162,18 @@ class StudyPlan < ActiveRecord::Base
   end
   
   def json_schedule
-    # Get periods, competences, user courses and plan course data
     periods = self.periods.includes(:localized_description)
     competences = self.competences.includes([:localized_description])
-    plan_courses = self.plan_courses.includes(
-      [
-        abstract_course: [:localized_description, :course_instances],
-        scoped_course: [:strict_prereqs]
-      ]
-    )
+    plan_courses = self.plan_courses
+    abstract_courses = self.abstract_courses.includes([:localized_description, :course_instances])
+    
+#     .includes(
+#       [
+#         abstract_course: [:localized_description, :course_instances],
+#         scoped_course: [:strict_prereqs]
+#       ]
+#     )
 
-    # JSONify the data
     periods_data = periods.as_json(
       only: [:id, :begins_at, :ends_at],
       methods: [:localized_name],
@@ -184,38 +186,55 @@ class StudyPlan < ActiveRecord::Base
       methods: [:localized_name, :course_ids_recursive],
       root: false
     )
+    
+    # TODO: only load relevant course_instances
+    abstract_courses_data = abstract_courses.as_json(
+      only: [:id, :code, :min_credits, :max_credits],
+      methods: [:localized_name],
+      include: {
+        localized_description: {
+          only: [:period_info]
+        },
+        course_instances: {
+          only: [:period_id, :length]
+        }
+      },
+      root: false
+    )
 
     plan_courses_data = plan_courses.as_json(
-      only: [:id, :period_id, :credits, :length, :grade],
+      only: [:id, :abstract_course_id, :period_id, :credits, :length, :grade],
+      methods: [:abstract_prereq_ids],
       include: [
-        {
-          abstract_course: {
-            only: [:id, :code],
-            methods: [:localized_name],
-            include: {
-              localized_description: {
-                only: [:period_info]
-              },
-              course_instances: {
-                only: [:period_id, :length]
-              }
-            }
-          }
-        },
-        {
-          scoped_course: {
-            only: [:id, :credits],
-            methods: [:strict_prereq_ids]
-          }
-        }
+#         {
+#           abstract_course: {
+#             only: [:id, :code],
+#             methods: [:localized_name],
+#             include: {
+#               localized_description: {
+#                 only: [:period_info]
+#               },
+#               course_instances: {
+#                 only: [:period_id, :length]
+#               }
+#             }
+#           }
+#         },
+#         {
+#           scoped_course: {
+#             only: [:id],
+#             methods: [:strict_prereq_ids]
+#           }
+#         }
       ],
       root: false
     )
 
     response_data = {
       periods: periods_data,
-      competences: competences_data,
       plan_courses: plan_courses_data,
+      abstract_courses: abstract_courses_data,
+      competences: competences_data,
     }
     
     response_data

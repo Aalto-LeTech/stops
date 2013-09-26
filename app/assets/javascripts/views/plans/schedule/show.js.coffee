@@ -40,4 +40,5 @@ jQuery ->
   $(window).bind 'beforeunload', =>
     return "You have unsaved changes on #{planView.coursesToSave.length} course(s). Leave anyway?" if planView.anyUnsavedChanges()
 
-  planView.loadPlan()
+  #planView.loadPlan()
+  planView.loadJson(schedule_data)

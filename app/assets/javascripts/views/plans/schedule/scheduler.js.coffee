@@ -1,6 +1,6 @@
 class @Scheduler
 
-  constructor: (@courses) ->
+  constructor: (@courses, @currentPeriod) ->
     @schedule = {}  # scopedId => period
     @moved = {}     # scopedId => boolean (isMoved?)
 
@@ -24,7 +24,7 @@ class @Scheduler
       # If course is still unattached, put it on the first period
       unless @schedule[course.scopedId]  #(!period? && !course.unschedulable) || (period && period.earlierThan(period.getCurrentPeriod())
         #console.log "#{course.name}. Still unattached. Postponing to current period."
-        this.postponeTo(course, Period::CURRENT)
+        this.postponeTo(course, @currentPeriod)
 
       # Move forward those courses that depend (recursively) on the newly added course
       this.satisfyPostreqs(course)
@@ -46,8 +46,8 @@ class @Scheduler
     targetPeriod = latestPeriod.getNextPeriod() || latestPeriod
 
     # Don't schedule courses before current period
-    if targetPeriod.earlierThan(Period::CURRENT)
-      targetPeriod = Period::CURRENT
+    if targetPeriod.earlierThan(@currentPeriod)
+      targetPeriod = @currentPeriod
 
     #console.log "Postponing #{course.name} to satisfy prereqs."
     this.postponeTo(course, targetPeriod)

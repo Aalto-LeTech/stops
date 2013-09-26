@@ -1,14 +1,6 @@
 class @Competence
 
-  ALL: []
-
-
-  createFromJson: (data) ->
-    for dat in data
-      competence = new Competence(dat)
-
-
-  constructor: (data) ->
+  constructor: () ->
     @isSelected = ko.observable(false)
 
     @prereqCredits = {}
@@ -19,18 +11,16 @@ class @Competence
     @progressWidth = ko.computed =>
       return @progressVal() + '%'
 
-    @loadJson(data)
-
 
   # Reads some of the model's core attributes from the given JSON data object
-  loadJson: (data) ->
+  loadJson: (data, coursesById) ->
     @name = data['localized_name']
     @id = data['id']
 
     # Load prereqs
     @prereqs = []
     for prereqId in data['course_ids_recursive']
-      prereq = Course::BYSCOPEDID[prereqId]
+      prereq = coursesById[prereqId]
       unless prereq
         console.log("Unknown prereqId #{prereqId}!")
         continue
@@ -48,9 +38,6 @@ class @Competence
 
     # Update the progress value
     @progressVal(100 * @passedCredits / @totalCredits)
-
-    # Map the object
-    @ALL.push(this)
 
 
   # The selected status change handler

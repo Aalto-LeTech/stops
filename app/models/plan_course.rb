@@ -42,9 +42,16 @@ class PlanCourse < ActiveRecord::Base
 
   # Return the prerequirement scoped course ids in an array
   def prereq_ids
+    return [] unless scoped_course
     scoped_course.prereq_ids
   end
 
+  # Returns an array of abstract_course_ids that are the direct prereqs of this planned course
+  def abstract_prereq_ids
+    return [] unless scoped_course
+    scoped_course.strict_prereqs.collect { |scoped_course| scoped_course.abstract_course_id }
+  end
+  
 
   # Returns the length of the course in periods and nil if unknown
   def length_or_one

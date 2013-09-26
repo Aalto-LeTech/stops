@@ -5,14 +5,14 @@
 <% end -%>
 <%= render partial: 'layouts/core/head' %>
 
-<body class="affixed">
+<body>
   <%= render partial: 'layouts/navs/top', locals: {fixed_nav: false}  %>
 
-  <div class="affix-spacer">
-  </div>
-  <div class="affix-leftnav lower" data-spy="affix" data-offset-top="100">
-    <div class="leftnav-content">
-      <%= content_for(:leftnav) %>
+  <div class="affix-fluid">
+    <div class="leftnav lower" data-spy="affix" data-offset-top="170">
+      <div class="leftnav-content">
+        <%= content_for(:leftnav) %>
+      </div>
     </div>
   </div>
       

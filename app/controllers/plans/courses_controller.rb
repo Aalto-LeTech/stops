@@ -10,7 +10,7 @@ class Plans::CoursesController < PlansController
     authorize! :read, @study_plan
     
     respond_to do |format|
-      format.html { render :action => 'index', :layout => 'affix' }
+      format.html { render :action => 'index', :layout => 'affix-fixed' }
       format.xml  { render :xml => nil }
     end
   end

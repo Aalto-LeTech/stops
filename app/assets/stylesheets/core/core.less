@@ -249,49 +249,81 @@ FIXME: this affects all fields, not only placeholders
 
 ////////////////////////////////////////////////////////////////////////////////
 // Affix
-  
-div.affix-spacer {
-  height: 100%;
-  width: 280px;
-  position: absolute;
-  top: 50px;
-  left: 0px;
-}
 
-div.affix-leftnav {
-  width: 320px;
-  height: 100%;
-  overflow: auto;
-  padding: 0px;
-
-  div.leftnav-content {
-    margin: 12px 10px 10px 10px;
-  }
-  
-  .well {
-    overflow-x: hidden;
+@media (max-width: 767px) {
+  .affix {
+    position:relative;
   }
 }
 
-.affix-main-content {
-  margin-left: 320px;
+@media (min-width: 767px) {
+  div.sidebar {
+    height: 100%;
+  }
+
+  div.leftnav {
+    height: 100%;
+    overflow-y: auto;
+    /*width: 260px;*/
+    margin: 0px;
+    padding: 0px;
+    
+    &.affix-top.lower {
+      margin-top: 60px;
+    }
+    
+    &.affix {
+      top: 0px;
+    }
+    
+    .well {
+      overflow-x: hidden;
+    }
+    
+    div.leftnav-content {
+      margin: 12px 10px 10px 10px;
+    }
+  }
+
+  div.affix-fluid {
+    height: 100%;
+    width: 280px;
+    position: absolute;
+    top: 50px;
+    left: 0px;
+    
+    div.leftnav {
+      width: 320px;
+      height: 100%;
+      overflow-y: auto;
+      padding: 0px;
+    }
+
+    div.affix-top {
+      position: absolute;
+      top: 50px;
+      left: 0px;
+    }
+
+    div.affix-top.lower{
+      top: 60px;
+    }
+
+    div.affix {
+      top: 0px;
+      left: 0px;
+    }
+  }
+
+  div.affix-spacer {
+    height: 70px;
+  }
+
+  .affix-main-content {
+    margin-left: 320px;
+  }
 }
 
-div.affix-top {
-  position: absolute;
-  top: 50px;
-  left: 0px;
-}
-
-div.affix-top.lower{
-  top: 100px;
-}
-
-div.affix {
-  top: 0px;
-  left: 0px;
-  /*margin-left: -100px;*/
-}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Bootstrap style additions

@@ -1,20 +1,20 @@
-= Immediate =
+= Ennen julkaisua =
 
 Poista kurssi suunnitelmasta
 Verkon instrumentointi
 Verkon lukitus
 
 
-= Before launch if possible =
+= Ennen julkaisua, jos ehtii =
 
 Näytä kurssin yksityiskohtaiset tiedot haussa
 Kurssihausa linkki hakutuloksista kurssisivulle
 
-= Content =
+
+= Julkaisun jälkeen =
+
+Affix ei toimi kapealla näytöllä
 
 
-= Soon after launch =
-
-
-= Later =
+= Myöhemmin =
 

@@ -11,10 +11,10 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130916095307) do
+ActiveRecord::Schema.define(:version => 20130926113625) do
 
   create_table "abstract_courses", :force => true do |t|
-    t.string  "code"
+    t.string  "code",        :null => false
     t.integer "min_credits"
     t.integer "max_credits"
   end
@@ -46,7 +46,7 @@ ActiveRecord::Schema.define(:version => 20130916095307) do
     t.integer  "credits"
     t.integer  "level"
     t.integer  "abstract_course_id"
-    t.integer  "curriculum_id"
+    t.integer  "curriculum_id",        :null => false
     t.string   "course_code"
     t.datetime "created_at",           :null => false
     t.datetime "updated_at",           :null => false
@@ -93,9 +93,9 @@ ActiveRecord::Schema.define(:version => 20130916095307) do
   add_index "course_descriptions", ["abstract_course_id"], :name => "index_course_descriptions_on_abstract_course_id"
 
   create_table "course_instances", :force => true do |t|
-    t.integer "abstract_course_id", :null => false
-    t.integer "period_id",          :null => false
-    t.integer "length"
+    t.integer "abstract_course_id",                :null => false
+    t.integer "period_id",                         :null => false
+    t.integer "length",             :default => 1, :null => false
   end
 
   add_index "course_instances", ["abstract_course_id", "period_id"], :name => "index_course_instances_on_abstract_course_id_and_period_id", :unique => true
@@ -173,7 +173,7 @@ ActiveRecord::Schema.define(:version => 20130916095307) do
 
   create_table "plan_courses", :force => true do |t|
     t.integer "study_plan_id",                           :null => false
-    t.integer "scoped_course_id",                        :null => false
+    t.integer "scoped_course_id"
     t.integer "competence_ref_count", :default => 1,     :null => false
     t.integer "course_instance_id"
     t.boolean "manually_added",       :default => false, :null => false

@@ -30,18 +30,23 @@
         <!-- ko if: noppa_url --><a target="_blank" data-bind="attr: {href: noppa_url}">Noppa</a><!-- /ko -->
         <!-- ko if: oodi_url --><a target="_blank" data-bind="attr: {href: oodi_url}">Oodi</a><!-- /ko -->
       </p>
+      
     </div>
   <!-- /ko -->
 <% end -%>
 
-<ul class="nav nav-tabs" id="myTab">
-  <li class="active"><a href="#tab-search" data-toggle="tab"><%=t '.tab-search' %></a></li>
-  <li><a href="#tab-courses" data-toggle="tab"><%=t '.tab-courses' %></a></li>
-</ul>
+<div class="row">
+  <div class="span9">
+    <ul class="nav nav-tabs" id="myTab">
+      <li class="active"><a href="#tab-search" data-toggle="tab"><%=t '.tab-search' %></a></li>
+      <li><a href="#tab-courses" data-toggle="tab"><%=t '.tab-courses' %></a></li>
+    </ul>
+  </div>
+</div>
  
-<div class="tab-content">
+<div class="tab-content row">
   <!-- Search tab -->
-  <div class="tab-pane active" id="tab-search">
+  <div class="tab-pane active span9" id="tab-search">
     <!-- Search box -->
     <div data-bind="with: search">
       <div class="input-append bottom-weight">
@@ -94,7 +99,7 @@
   </div>
   
   <!-- Courses tab -->
-  <div class="tab-pane" id="tab-courses">
+  <div class="tab-pane span12" id="tab-courses">
     My courses
   </div>
 </div>

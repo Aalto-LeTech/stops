@@ -54,6 +54,13 @@ en:
         add_symbol: "+"
         remove_symbol: "-"
         create_course: "Create course"
+        search_box_placeholder: "Search"
+        table-code: 'Course code'
+        table-name: 'Name'
+        table-credits: 'Cr'
+        table-period: 'Period'
+        tab-search: 'Search'
+        tab-courses: 'Plan'
       index_i18n_strings:
         on_plan_load_error: "Loading your plan failed."
         on_plan_load_error_notified: "Loading your plan failed. The administrators have been notified."

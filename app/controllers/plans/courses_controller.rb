@@ -10,7 +10,7 @@ class Plans::CoursesController < PlansController
     authorize! :read, @study_plan
     
     respond_to do |format|
-      format.html { render :action => 'index', :layout => 'browser' }
+      format.html { render :action => 'index', :layout => 'affix' }
       format.xml  { render :xml => nil }
     end
   end
@@ -32,10 +32,16 @@ class Plans::CoursesController < PlansController
   # POST /plans/:id/courses
   def create
     authorize! :update, @study_plan
-    @competence = nil
-    @competence = Competence.find(params[:competence_id]) if params[:competence_id]
     
-    status = @study_plan.add_course(params[:course_id].to_i, true)
+    abstract_course = AbstractCourse.find(params[:abstract_course_id])
+    competence_id = Integer(params[:competence_id]) rescue nil
+    scoped_course_id = Integer(params[:scoped_course_id]) rescue nil
+    
+    status = @study_plan.add_course(abstract_course, {
+      competence_id: competence_id,
+      scoped_course_id: scoped_course_id,
+      manually_added: true
+    })
 
     if status == :already_added
       message = {:error => 'Course was already in the study plan'}
@@ -43,11 +49,18 @@ class Plans::CoursesController < PlansController
       message = {:success => t('plans.courses.course_added_to_plan')}
     end
     
-    if @competence
-      redirect_to studyplan_competence_path(:id => @competence.id), :flash => message
-    else
-      redirect_to studyplan_competences_path, :flash => message
+    respond_to do |format|
+      format.html {
+        if @competence
+          redirect_to studyplan_competence_path(:id => @competence.id), :flash => message
+        else
+          redirect_to studyplan_competences_path, :flash => message
+        end
+      }
+      # TODO: add error message
+      format.json { render json: { status: 'ok' }.to_json( root: false ) }
     end
+    
   end
 
   # Remove course from study plan

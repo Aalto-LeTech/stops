@@ -1,254 +1,106 @@
-<% content_for(:stylesheets) do %>
+<% content_for(:stylesheets) do -%>
   <%= stylesheet_link_tag "views/plans/courses/index", :media => 'all' %>
-<% end %>
+<% end -%>
 
-<% content_for(:javascripts) do %>
+<% content_for(:javascripts) do -%>
   <script type="text/javascript">
     <%= render "search_engine_i18n_strings.js" %>
     <%= render "index_i18n_strings.js" %>
   </script>
   <%= javascript_include_tag "views/plans/courses/index", :media => 'all' %>
-<% end %>
+<% end -%>
 
-<div class="loader"></div>
+<% content_for(:leftnav) do -%>
+  <!-- ko if: selectedCourse -->
+    <div class="well" data-bind="with: selectedCourse">
+      <h2>
+        <span data-bind="text: course_code"></span>
+        <span data-bind="text: name"></span>
+        
+        <!-- ko if: min_credits -->
+          (<span data-bind="text: credits_string"></span> <%=t :cr %>)
+        <!-- /ko -->
+      </h2>
+        
+      <ul class="unstyled">
+        <li><%=t :Period %>: <span data-bind="text: default_period"></span></li>
+      </ul>
+      
+      <p>
+        <!-- ko if: noppa_url --><a target="_blank" data-bind="attr: {href: noppa_url}">Noppa</a><!-- /ko -->
+        <!-- ko if: oodi_url --><a target="_blank" data-bind="attr: {href: oodi_url}">Oodi</a><!-- /ko -->
+      </p>
+    </div>
+  <!-- /ko -->
+<% end -%>
 
-<div class="row-fluid">
-  <span class="span10">
-    <h1 data-bind="text: title"></h1>
-  </span>
-  <span class="span2">
-    <!-- ko if: PLAN && PLAN.hasUnsavedChanges() -->
-      <button class="btn btn-block" data-bind="click: saveChanges">
-        <%= t('.save') %>
-      </button>
-    <!-- /ko -->
-  </span>
+<ul class="nav nav-tabs" id="myTab">
+  <li class="active"><a href="#tab-search" data-toggle="tab"><%=t '.tab-search' %></a></li>
+  <li><a href="#tab-courses" data-toggle="tab"><%=t '.tab-courses' %></a></li>
+</ul>
+ 
+<div class="tab-content">
+  <!-- Search tab -->
+  <div class="tab-pane active" id="tab-search">
+    <!-- Search box -->
+    <div data-bind="with: search">
+      <div class="input-append bottom-weight">
+        <input class="input-xlarge" type="text" id="search" placeholder="<%= t '.search_box_placeholder' %>" data-bind="value: searchString, valueUpdate: 'keyup', event: { keyup: searchKeyPress }" />
+        <button class="btn" data-bind="click: clickSearch"><i class="icon-search"></i></button>
+        <button class="btn" data-bind="click: clickClearSearch"><i class="icon-remove"></i></button>
+        
+      </div>
+      <div class="skill-editor-loading-icon" data-bind="visible: isLoading()">
+        <%= image_tag 'progress.gif' %>
+      </div>
+    </div>
+
+    <!-- Search results -->
+    <table class="table table-condensed table-striped courses" data-bind="visible: searchResults().length > 0">
+      <thead>
+        <tr>
+          <th><%=t '.table-code' %></th>
+          <th><%=t '.table-name' %></th>
+          <th><%=t '.table-credits' %></th>
+          <th><%=t '.table-period' %></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- ko foreach: searchResults -->
+          <!-- 'added': isAdded, 'removed': isRemoved, 'passed': isPassed, 'included': isIncluded, 'scheduled': isScheduled, 'selected': isSelected -->
+          <tr class="course" data-bind="click: $root.selectCourse">
+            <!--td class="id" data-bind="text: abstract_course_id"></td-->
+            <td class="code" data-bind="text: course_code"></td>
+            <td class="name" data-bind="text: name"></td>
+            <td class="credits" data-bind="if: credits_string"><span data-bind="text: credits_string"></span> <%=t :cr %></td>
+            <td class="period" data-bind="text: default_period"></td>
+            <td>
+              <!-- ko if: loading -->
+                <%= image_tag 'progress.gif' %>
+              <!-- /ko -->
+              <!-- ko ifnot: loading -->
+                <!-- ko ifnot: includedInPlan -->
+                  <button class="btn" data-bind="click: $root.addCourseToPlan, clickBubble: false">
+                    <i class="icon icon-plus"></i>
+                  </button>
+                <!-- /ko -->
+              <!-- /ko -->
+            </td>
+          </tr>
+        <!-- /ko -->
+      </tbody>
+    </table>
+  </div>
+  
+  <!-- Courses tab -->
+  <div class="tab-pane" id="tab-courses">
+    My courses
+  </div>
 </div>
 
-<!-- ko if: view() == 'plan' -->
-  <!-- ko with: PLAN -->
-    <!-- ko if: included().length == 0 -->
-      <p>
-        <%= t('.no_courses_in_plan') %>
-      </p>
-    <!-- /ko -->
-    <div class="courses">
-      <!-- ko foreach: included -->
-        <div class="row-fluid course" data-bind="css: {'added': isAdded, 'passed': isPassed, 'included': isIncluded, 'scheduled': isScheduled, 'selected': isSelected}">
-          <a data-bind="attr: { title: tooltip }">
-            <span class="span2 code" data-bind="text: code"></span>
-            <span class="span5 name" data-bind="text: name"></span>
-            <span class="span1 credits" data-bind="text: credits"></span>
-            <span class="span2 period" data-bind="text: periodName"></span>
-            <span class="span1 grade" data-bind="text: grade"></span>
-          </a>
-          <button class="span1 btn" data-bind="click: removeFromPlan">
-            <%= t('.remove_symbol') %>
-          </button>
-        </div>
-      <!-- /ko -->
-    </div>
-  <!-- /ko -->
-<!-- /ko -->
-
-
-<!-- ko if: view() == 'changes' -->
-  <!-- ko with: PLAN -->
-    <!-- ko if: changed().length == 0 -->
-      <p>
-        <%= t('.no_courses_added_nor_removed') %>
-      </p>
-    <!-- /ko -->
-    <div class="courses">
-      <!-- ko foreach: changed -->
-        <div class="row-fluid course" data-bind="css: {'added': isAdded, 'removed': isRemoved, 'passed': isPassed, 'included': isIncluded, 'scheduled': isScheduled, 'selected': isSelected}">
-          <a data-bind="attr: { title: tooltip }">
-            <span class="span3 code" data-bind="text: code"></span>
-            <span class="span7 name" data-bind="text: name"></span>
-            <span class="span1 credits" data-bind="text: credits"></span>
-          </a>
-          <button class="span1 btn" data-bind="click: toggleInclusion">
-            <span data-bind="visible: isIncluded() == true"><%= t('.remove_symbol') %></span>
-            <span data-bind="visible: isIncluded() == false"><%= t('.add_symbol') %></span>
-          </button>
-        </div>
-      <!-- /ko -->
-    </div>
-  <!-- /ko -->
-<!-- /ko -->
-
-
-<!-- ko if: view() == 'search' -->
-  <!-- ko with: ENGINE -->
-    <input class="input-xlarge search-query" type="text" onsubmit="function(){return false;}" data-bind="value: inquery, valueUpdate: 'keyup'" />
-
-    <!-- ko ifnot: isOk -->
-      <p class="text-error">
-        <%= t('.engine_not_working') %>
-      </p>
-    <!-- /ko -->
-
-    <!-- ko with: infoMsg -->
-      <p data-bind="text: $data"></p>
-    <!-- /ko -->
-
-    <div class="courses">
-
-      <!-- ko foreach: results -->
-        <div class="row-fluid course" data-bind="css: {'added': isAdded, 'removed': isRemoved, 'passed': isPassed, 'included': isIncluded, 'scheduled': isScheduled, 'selected': isSelected}">
-          <a data-bind="attr: { title: tooltip }">
-            <span class="span3 code" data-bind="text: code"></span>
-            <span class="span7 name" data-bind="text: name"></span>
-            <span class="span1 credits" data-bind="text: credits"></span>
-          </a>
-          <button class="span1 btn" data-bind="click: toggleInclusion">
-            <span data-bind="visible: isIncluded() == true"><%= t('.remove_symbol') %></span>
-            <span data-bind="visible: isIncluded() == false"><%= t('.add_symbol') %></span>
-          </button>
-        </div>
-      <!-- /ko -->
-
-    </div>
-  <!-- /ko -->
-<!-- /ko -->
-
-
-<!-- ko if: view() == 'create' -->
-
-  <!-- ko with: DRAFT -->
-    <form class="form-horizontal" role="form">
-
-      <div class="control-group">
-        <label for="code" class="control-label">
-          <%= t('Code') %>
-        </label>
-        <div class="controls">
-          <input id="code" type="text" data-bind="value: code, valueUpdate: 'keyup'" />
-        </div>
-      </div>
-
-      <div class="control-group">
-        <label for="name" class="control-label">
-          <%= t('Name') %>
-        </label>
-        <div class="controls">
-          <input id="name" type="text" data-bind="value: name, valueUpdate: 'keyup'" />
-        </div>
-      </div>
-
-      <div class="control-group">
-        <label for="credits" class="control-label">
-          <%= t('Extent') %>
-        </label>
-        <div class="controls">
-          <input id="credits" type="number" data-bind="value: credits, valueUpdate: 'keyup'" />
-        </div>
-      </div>
-
-      <div class="control-group">
-        <div class="controls">
-          <button type="submit" class="btn btn-default" action="create()">
-            <%= t('.create_course') %>
-          </button>
-        </div>
-      </div>
-
-    </form>
-  <!-- /ko -->
-
-<!-- /ko -->
-
-
 <span id="paths"
-  data-search-courses-path="<%= search_courses_curriculum_path(@study_plan.curriculum_id) %>"
+  data-search-courses-path="<%= search_courses_path() %>"
   data-studyplan-path="<%= plan_path(@study_plan.id) %>"
   data-error-path="<%= client_side_error_path %>"
 ></span>
-
-
-<% content_for(:theleft) do %>
-
-  <div class="well">
-
-    <div class="row-fluid">
-      <span class="span4">
-        <button class="btn btn-block" data-bind="click: changeViewToPlan">
-          <%= t('.plan_view') %>
-        </button>
-      </span>
-      <span class="span4">
-        <button class="btn btn-block" data-bind="click: changeViewToChanges">
-          <%= t('.changes_view') %>
-        </button>
-      </span>
-      <span class="span4">
-        <button class="btn btn-block" data-bind="click: changeViewToSearch">
-          <%= t('.search_view') %>
-        </button>
-      </span>
-      <!--
-      <span class="span3">
-        <button class="btn btn-block" data-bind="click: changeViewToCreate">
-          <%= t('.create_view') %>
-        </button>
-      </span>
-      -->
-    </div>
-
-    <!-- ko ifnot: selected -->
-      <!-- ko if: showInstructions() -->
-        <br/>
-        <p data-bind="text: instructions"></p>
-      <!-- /ko -->
-    <!-- /ko -->
-
-    <!-- ko with: selected -->
-
-      <h1>
-        <span class="code" data-bind="text: code"></span>
-        <a title="<%= t('.to_course_page') %>" data-bind="attr: { href: path }">
-          <button class="btn pull-right">
-            <%= t('.to_course_page') %>
-          </button>
-        </a>
-        </br>
-        <span class="name" data-bind="text: name"></span>
-        (<span class="credits" data-bind="text: credits"></span> <%= t('cr') %>)
-      </h1>
-
-      <strong data-bind="text: tooltip">
-      </strong>
-
-      <!-- ko if: skills().length > 0 -->
-        <h2>
-          <%= t('.skills') %>
-        </h2>
-        <ul>
-          <!-- ko foreach: skills -->
-            <li data-bind="text: localizedName"></li>
-          <!-- /ko -->
-        </ul>
-      <!-- /ko -->
-
-      <!-- ko if: prereqs().length -->
-        <h2>
-          <%= t('.prereqs') %>
-        </h2>
-        <ul>
-          <!-- ko foreach: prereqs -->
-            <li>
-              <a title="<%= t('.to_course_page') %>" data-bind="attr: { href: studyplanPath }">
-                <span class="code" data-bind="text: abstractCourse.code"></span>
-                <span class="name" data-bind="text: abstractCourse.localizedName"></span>
-                (<span class="credits" data-bind="text: credits"></span> <%= t('cr') %>)
-              </a>
-            </li>
-          <!-- /ko -->
-        </ul>
-      <!-- /ko -->
-
-    <!-- /ko -->
-
-  </div>
-
-<% end %>

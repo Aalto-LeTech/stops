@@ -64,13 +64,11 @@ class StudyPlan < ActiveRecord::Base
   belongs_to :user
   belongs_to :curriculum
 
-
   # Periods
   belongs_to :first_period, :class_name => 'Period'
   belongs_to :last_period, :class_name => 'Period'
   validates :first_period, presence: true
   validates :last_period, presence: true
-
 
   # Competences
   has_many  :plan_competences,
@@ -452,28 +450,21 @@ class StudyPlan < ActiveRecord::Base
 
 
   # Adds the scoped course into the study plan
-  def add_course(scoped_course, is_manually_added=false)
-    if scoped_course.is_a? Integer
-      scoped_course = ScopedCourse.find(scoped_course)
-    end
-
+  def add_course(abstract_course, options = {})
     # Dont't do anything if the plan already contains this scoped_course
     # FIXME: DB doesn't accept duplicate scoped_courses for a plan atm.
-    return :already_added if self.scoped_courses.exists?(scoped_course)
+    #return :already_added if self.scoped_courses.exists?(scoped_course)
 
     # Add scoped_course to study plan
-    plan_course = PlanCourse.create(
+    plan_course = PlanCourse.new(
       :study_plan_id       =>  self.id,
-      :abstract_course_id  =>  scoped_course.abstract_course_id,
-      :scoped_course_id    =>  scoped_course.id,
-      :course_instance_id  =>  nil,
-      :period_id           =>  nil,
-      :length              =>  nil,
-      :credits             =>  scoped_course.credits,
-      :grade               =>  0,
-      :custom              =>  false,
-      :manually_added      =>  is_manually_added,
+      :abstract_course_id  =>  abstract_course.id,
+      :credits             =>  abstract_course.min_credits,
     )
+    plan_course.competene_node_id = true if options[:competene_node_id]
+    plan_course.scoped_course_id = true if options[:scoped_course_id]
+    plan_course.manually_added = true if options[:manually_added]
+    plan_course.save
  
     return plan_course
   end

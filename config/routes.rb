@@ -78,15 +78,11 @@ Ops::Application.routes.draw do
         resources :skills, :controller => 'plans/skills', :only => [:show]
       end
 
-      # The studyplan courses controller
-      resources :courses,
-        :controller => 'plans/courses',
+      resources :courses, :controller => 'plans/courses',
         :only => [:index, :show, :create, :destroy]
 
-      # The studyplan schedule controller
       resource :schedule, :controller => 'plans/schedule', :only => [:show]
 
-      # The studyplan curriculum controller
       resource :curriculum, :controller => 'plans/curriculums', :only => [:show, :edit, :update]
     end
 
@@ -95,7 +91,11 @@ Ops::Application.routes.draw do
       member do
         get :summary
       end
+      
       get 'old_schedule', as: 'old_schedule'
+      
+      resources :courses, :controller => 'plans/courses',
+        :only => [:index, :show, :create, :destroy]
 #       resources :courses, :controller => 'plans/courses', :only => [:index, :show, :create]  # :except => [:edit, :update]
 #       resource :schedule, :controller => 'plans/schedule', :only => [:show, :edit]
 #       resource :record, :controller => 'plans/record', :only => [:show]

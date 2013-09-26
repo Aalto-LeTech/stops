@@ -1,211 +1,117 @@
 #= require knockout
-#= require libs/search/engine
-#= require core/knockout-extensions
-#= require models/core/BaseObject
-#= require models/core/DbObject
-#= require models/db/user
-#= require models/db/curriculum
-#= require models/db/period
-#= require models/db/skill
-#= require models/db/competence
-#= require models/db/abstract_course
-#= require models/db/scoped_course
-#= require models/db/plan_course
-#= require models/db/course_instance
-#= require models/db/study_plan
-#= require models/core/ModelObject
-#= require models/plan/course_model
-#= require models/plan/study_plan_model
-#= require models/plan/course_creation_model
-#= require models/core/ViewObject
 
 if not O4.view.i18n
   throw "The i18n strings for the view have not been loaded!"
 
-class @View extends ViewObject
+class Course
+  constructor: (data) ->
+    data ||= {}
+    
+    @includedInPlan = ko.observable(false)
+    @loading = ko.observable(false)
+    @abstract_course_id = data['id']
+    @course_code = data['course_code']
+    @name = data['name']
+    @period_info = data['period_info']
+    @default_period = data['default_period']
+    @noppa_url = data['noppa_url']
+    @oodi_url = data['oodi_url']
 
-  PLAN: undefined
-  ENGINE: undefined
-  DRAFT: undefined
-  HOVERDELAY: 300
-  FADEDURATION: 300
-  READY: false
-
-
-  constructor: ->
-    super
-    @lgI("view::init()...")
-
-    #$('form').addClass('form-horizontal')
-    $("form.form-search").submit( -> return false )
-
-    BaseObject::I18N = O4.view.i18n
-    BaseObject::VIEWMODEL = this
-
-    @lgI("Parsing associations...")
-    #BaseObject::DBG = true
-    DbObject::parseAllAssocs()
-    #BaseObject::DBG = false
-
-    pathsContainer    = $('#paths')
-    searchCoursesPath = pathsContainer.data('search-courses-path')
-    studyPlanPath     = pathsContainer.data('studyplan-path')
-    errorPath         = pathsContainer.data('error-path')
-    @lgI("Paths: #{searchCoursesPath}, #{studyPlanPath}, #{errorPath}.")
-
-    @selected       = ko.observable()
-    @sidebar        = affxd.Sidebar::get()
-    @view           = ko.observable()
-
-    @PLAN = new StudyPlanModel(studyPlanPath)
-    @ENGINE = new O4.search.Engine(@, searchCoursesPath)
-    @DRAFT = new CourseCreationModel()
-
-    success = @PLAN.reload()
-    if not success
-      $.ajax
-        type: 'POST'
-        url: errorPath
-        data: {'message': 'views/plans/courses/index: Loading the studyplan failed!'}
-        success: =>
-          alert("#{@I18N.on_plan_load_error_notified}")
-        error: =>
-          alert("#{@I18N.on_plan_load_error}")
-
-    @viewTitles =
-      'plan': @I18N.plan
-      'changes': @I18N.changes
-      'search': @I18N.search
-      'create': @I18N.create
-
-
-    @viewInstructions =
-      'plan': @I18N.plan_instructions
-      'changes': @I18N.changes_instructions
-      'search': @I18N.search_instructions
-      'create': @I18N.create_instructions
-
-
-    @title = ko.computed =>
-      return @viewTitles[@view()]
-
-    @instructions = ko.computed =>
-      return @viewInstructions[@view()]
-
-    @showInstructions = ko.computed =>
-      return true if @view() == 'plan'
-      return true if @view() == 'changes'
-      return true if @view() == 'search'
-      return true if @view() == 'create'
-
-    # Reconfigure the affixed sidebars height in static mode to a static value
-    # instead of the default 'auto', which would cause irritable bouncing of the
-    # plan div below it as the size of the former div changes.
-    @sidebar.reset('staticHeight', 600)
-
-    if @PLAN.included().length > 0
-      @changeViewToPlan()
+    @min_credits = parseInt(data['min_credits'])
+    @max_credits = parseInt(data['max_credits'])
+    
+    if isNaN(@min_credits) || isNaN(@max_credits)
+      @credits_string = ''
+    else if @min_credits != @max_credits
+      @credits_string = "#{@min_credits} - #{@max_credits}"
     else
-      @changeViewToSearch()
+      @credits_string = "#{@min_credits}"
+    
 
-    #@DBG = true
-    #BaseObject::DBG = true
-    #DbObject::DBG = true
-    #ModelObject::DBG = true
-    @READY = true
+    
+    
+    
+class Search
+  constructor: (options) ->
+    @searchUrl = options['url']
+    @resultsCallback = options['callback']
+    
+    @searchString = ko.observable('')
+    @isLoading = ko.observable(false)
+    @loadFailed = ko.observable(false)
 
-    $('.loader').remove()
+  searchKeyPress: (data, event) ->
+    @clickSearch() if event.which == 13
+  
+  clickSearch: () ->
+    @isLoading(true)
 
+    promise = $.ajax(
+      url: @searchUrl
+      dataType: 'json'
+      data: { query: @searchString() }
+    )
+    
+    promise.done (data) =>
+      @isLoading(false)
+      @loadFailed(false)
+      @resultsCallback(data)
+    
+    promise.fail () =>
+      @isLoading(false)
+      @loadFailed(true)
 
-  onInqueryChange: ->
-    return
-#    # Clear selection
-#    @select(undefined)
-
-
-  parseResults: (data) ->
-    # Build objects from all the result data served and include them as
-    # results
-
-    #console.log("data:\n#{JSON.stringify(data, undefined, 2)}")
-
-    results = []
-
-    @lg("Constructing dbObjects...")
-    dbObjects = DbObject::createFromAttrHashArrayHash(data)
-
-    @lg("Binding associations...")
-    for dbObject in dbObjects
-      dbObject.bindAssocs()
-
-    @lgI("Modeling dbObjects...")
-    for dbObject in dbObjects
-      if dbObject instanceof ScopedCourse
-        courseModel = CourseModel::create(dbObject)
-        results.push(courseModel)
-        @lg(" - Modeled #{courseModel}...")
-
-    @lgI("Modeled #{results.length} search results...")
-
-    return results
+  clickClearSearch: () ->
+    @searchString('')
+    @resultsCallback()
 
 
-  select: (object) ->
-    @lgI("view::select(#{@selected()} -> #{object}) #{@PLAN.added().length} #{@PLAN.removed().length}...")
-    return if not object instanceof CourseModel
-    if object != @selected()
-      oldObj = @selected()
-      oldObj.isSelected(false) if oldObj
-      @selected(object)
-      object.isSelected(true) if object
-    @lg("view::select done...")
+class CoursesView
+  constructor: () ->
+    @search = new Search
+      url: $('#paths').data('search-courses-path')
+      callback: (data) => this.parseSearchResults(data)
+      
+    @searchResults = ko.observableArray()
+    @selectedCourse = ko.observable()
+    
+    @studyplanUrl = $('#paths').data('studyplan-path')
+    
+    ko.applyBindings(this)
+  
+  parseSearchResults: (data) ->
+    @searchResults.removeAll()
+    return unless data
 
+    # Get the underlying array so that each 'push' won't trigger dependent observables to be computed.
+    searchResults = @searchResults()
 
-  changeView: (view) ->
-    @lgI("view::changeView(#{view})...")
-    @view(view)
-    $(window).scrollTop(0)
+    if data && data['courses']
+      for result in data['courses']
+        course = new Course(result)
+        searchResults.push(course)
 
+    # Finally, trigger the mutation event
+    @searchResults.valueHasMutated()
+  
+  selectCourse: (course) =>
+    @selectedCourse(course)
+    
+  addCourseToPlan: (course) =>
+    course.loading(true)
 
-  changeViewToPlan:     -> @changeView('plan')
-  changeViewToChanges:  -> @changeView('changes')
-  changeViewToSearch:   -> @changeView('search')
-  changeViewToCreate:   -> @changeView('create')
-
-
-  saveChanges: ->
-    @lgI("view::saveChanges()...")
-    @PLAN.saveChanges()
-
-
-
+    promise = $.ajax(
+      url: @studyplanUrl + '/courses'
+      type: "POST"
+      dataType: 'json'
+      data: { abstract_course_id: course.abstract_course_id }
+    )
+    
+    promise.always (data) =>
+      course.loading(false)
+    
+    promise.done (data) =>
+      course.includedInPlan(true)
 
 jQuery ->
-  view = new View()
-
-  # Event handlers
-  $(document)
-    .on 'mousedown', '.course .btn', (event) ->
-      # Avoid selection when pressing buttons
-      event.stopPropagation()
-    .on 'mousedown', '.course', (event) ->
-      # Select
-      object = ko.dataFor(this)
-      view.select(object) if object
-      event.stopPropagation()
-    .on 'mousedown', '#thenavbar, #themain', (event) ->
-      # Clear selection
-      view.select(undefined)
-    .on 'keypress', 'body', (event) ->
-      # Clear selection
-      if event.which == 13
-        dbg.lg("Enter caught!")
-        event.stopPropagation()
-
-
-  dbg.lg("Applying bindings...")
-  ko.applyBindings(view)
-
-
-  $(window).bind 'beforeunload', =>
-    return "You have unsaved changes. Leave anyway?" if view.PLAN?.anyUnsavedChanges()
+  new CoursesView()

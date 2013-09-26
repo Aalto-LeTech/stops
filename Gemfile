@@ -18,7 +18,8 @@ gem 'pg_search'
 # sudo apt-get install sphinxsearch
 # sudo apt-get install libmysqlclient-dev
 gem 'mysql2',          '0.3.12b4' #b5 ?
-gem 'thinking-sphinx', '3.0.0'
+
+gem 'thinking-sphinx', '3.0.5'
 # NB. for the engine to work you need to do
 #   be rake ts:index
 #   be rake ts:start

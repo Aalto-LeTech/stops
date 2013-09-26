@@ -31,4 +31,4 @@
 
 <h2><%=t :course_prereqs_reqursive %></h2>
 
-<%= render :partial => '/courses/prereqs_reqursive' %>
+<%= render :partial => '/courses/prereqs_reqursive', :locals => { :course => @course } %>

@@ -55,6 +55,13 @@ fi:
         add_symbol: "+"
         remove_symbol: "-"
         create_course: "Luo kurssi"
+        search_box_placeholder: "Haku"
+        table-code: 'Kurssikoodi'
+        table-name: 'Nimi'
+        table-credits: 'Op'
+        table-period: 'Periodi'
+        tab-search: 'Haku'
+        tab-courses: 'Oma suunnitelma'
       index_i18n_strings:
         on_plan_load_error: "Suunnitelmasi lataus epäonnistui."
         on_plan_load_error_notified: "Suunnitelmasi lataus epäonnistui. Ylläpitäjille on lähetetty tiedote ja syytä tullaan selvittämään."

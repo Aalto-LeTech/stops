@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="<%= I18n.locale %>">
+<% content_for(:corestylesheets) do -%>
+  <%= stylesheet_link_tag "layouts/browser", :media => 'all' %>
+<% end -%>
+<%= render partial: 'layouts/core/head' %>
+
+<body class="affixed">
+  <%= render partial: 'layouts/navs/top', locals: {fixed_nav: false}  %>
+
+  <div class="affix-spacer">
+  </div>
+  <div class="affix-leftnav lower" data-spy="affix" data-offset-top="100">
+    <div class="leftnav-content">
+      <%= content_for(:leftnav) %>
+    </div>
+  </div>
+      
+  <div class="affix-main-content container-fluid">
+    <%= render partial: 'layouts/core/messages' %>
+    <%= yield %>
+  </div>
+
+  <%= javascript_include_tag 'core/core' %>
+  <%= yield(:javascripts) %>
+</body>
+</html>

@@ -117,16 +117,14 @@ class PlansController < ApplicationController
   # ]
   def update
     authorize! :update, @study_plan
-    # TODO: authentication
 
-    # Forward the data for the study_plan's update function which returns
-    # feedback to be sent back.
+    # Forward the data for the study_plan's update function which returns feedback to be sent back.
+    feedback = ''
     feedback = @study_plan.update_from_json(params[:json]) if params[:json]
 
     respond_to do |format|
       format.js { render :json => {:status => :ok, :feedback => feedback} }
     end
-
   end
 
 end

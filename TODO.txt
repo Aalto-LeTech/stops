@@ -1,12 +1,14 @@
 = Immediate =
 
 Poista kurssi suunnitelmasta
+Verkon instrumentointi
+Verkon lukitus
 
 
 = Before launch if possible =
 
-Verkon instrumentointi
-
+Näytä kurssin yksityiskohtaiset tiedot haussa
+Kurssihausa linkki hakutuloksista kurssisivulle
 
 = Content =
 

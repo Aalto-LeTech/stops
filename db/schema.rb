@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130926113625) do
+ActiveRecord::Schema.define(:version => 20130927102935) do
 
   create_table "abstract_courses", :force => true do |t|
     t.string  "code",        :null => false
@@ -46,10 +46,10 @@ ActiveRecord::Schema.define(:version => 20130926113625) do
     t.integer  "credits"
     t.integer  "level"
     t.integer  "abstract_course_id"
-    t.integer  "curriculum_id",        :null => false
+    t.integer  "curriculum_id",                           :null => false
     t.string   "course_code"
-    t.datetime "created_at",           :null => false
-    t.datetime "updated_at",           :null => false
+    t.datetime "created_at",                              :null => false
+    t.datetime "updated_at",                              :null => false
     t.integer  "parent_competence_id"
     t.text     "contact"
     t.string   "language"
@@ -61,6 +61,7 @@ ActiveRecord::Schema.define(:version => 20130926113625) do
     t.integer  "recommended_period"
     t.integer  "min_credits"
     t.integer  "position"
+    t.boolean  "locked",               :default => false, :null => false
   end
 
   add_index "competence_nodes", ["abstract_course_id", "curriculum_id"], :name => "index_competence_nodes_on_abstract_course_id_and_curriculum_id"
@@ -178,7 +179,7 @@ ActiveRecord::Schema.define(:version => 20130926113625) do
     t.integer "course_instance_id"
     t.boolean "manually_added",       :default => false, :null => false
     t.integer "period_id"
-    t.float   "credits",                                 :null => false
+    t.float   "credits"
     t.integer "length"
     t.boolean "custom",               :default => false, :null => false
     t.integer "abstract_course_id",                      :null => false
@@ -187,7 +188,6 @@ ActiveRecord::Schema.define(:version => 20130926113625) do
     t.integer "competence_node_id"
   end
 
-  add_index "plan_courses", ["study_plan_id", "scoped_course_id"], :name => "index_study_plan_courses_on_study_plan_id_and_scoped_course_id", :unique => true
   add_index "plan_courses", ["study_plan_id"], :name => "index_study_plan_courses_on_study_plan_id"
 
   create_table "roles", :force => true do |t|

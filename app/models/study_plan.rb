@@ -3,63 +3,6 @@ class UpdateException < Exception
 end
 
 class StudyPlan < ActiveRecord::Base
-  INITIAL_STUDY_PLAN_TIME_IN_YEARS = 7
-
-  module RefCountExtension
-    def add_or_increment_ref_count(*args)
-      options = args.extract_options!
-      scoped_course, = *args # Last comma forces nil value when args is empty
-
-      scoped_course_id = options[:id] || scoped_course.id
-
-      StudyPlan.transaction do
-        study_plan = proxy_association.owner
-        plan_id = study_plan.id
-
-        existing_entry = PlanCourse.where(:study_plan_id => plan_id,
-                                                 :scoped_course_id => scoped_course_id).first
-
-        if not existing_entry.nil?
-          # Increment reference counter
-          existing_entry.competence_ref_count += 1
-          existing_entry.save!
-        else
-          scoped_course = ScopedCourse.find(scoped_course_id) if not scoped_course
-          proxy_association.concat scoped_course
-        end
-      end
-    end
-
-
-    def remove_or_decrement_ref_count(*args)
-      options = args.extract_options!
-      scoped_course, = *args # Last comma forces nil value when args is empty
-
-      scoped_course_id = options[:id] || scoped_course.id
-
-      StudyPlan.transaction do
-        study_plan = proxy_association.owner
-        plan_id = study_plan.id
-
-        existing_entry = PlanCourse.where(:study_plan_id => plan_id,
-                                                 :scoped_course_id => scoped_course_id).first
-
-        if not existing_entry.nil?
-          # Decrement reference counter
-          existing_entry.competence_ref_count -= 1
-          if existing_entry.competence_ref_count == 0 && (not existing_entry.manually_added)
-            # The last competence to which this scoped_course is a depedency has been removed
-            existing_entry.destroy
-            raise "Course could not be deleted" unless existing_entry.destroyed?
-          else
-            # Save the decremented counter
-            existing_entry.save!
-          end
-        end
-      end
-    end
-  end
-
   # User & Curriculum
   belongs_to :user
   belongs_to :curriculum
@@ -437,7 +380,14 @@ class StudyPlan < ActiveRecord::Base
     return feedback
   end
 
+  def has_competence?(competence)
+    competences.include? competence
+  end
 
+  def has_abstract_course?(abstract_course_id)
+    abstract_course_ids.include?(abstract_course_id)
+  end
+  
   def add_competence(competence)
     # Dont't do anything if the study plan already has this competence
     return if has_competence?(competence)
@@ -445,11 +395,19 @@ class StudyPlan < ActiveRecord::Base
     competences << competence
 
     # Calculate the scoped_courses to add
-    required_courses = competence.recursive_prereqs.where(:type => 'ScopedCourse').all
-    scoped_course_ids_to_add = required_courses - self.scoped_courses
+    required_courses = competence.recursive_prereq_courses.all
+    scoped_courses_to_add = required_courses - self.scoped_courses
 
-    scoped_course_ids_to_add.each do |scoped_course|
-      self.add_course(scoped_course)
+    scoped_courses_to_add.each do |scoped_course|
+      begin
+        puts "Add #{scoped_course.id} #{scoped_course.localized_name}"
+        self.add_course(scoped_course.abstract_course, {
+          :competence_node_id => competence.id,
+          :scoped_course_id => scoped_course.id
+        })
+      rescue Exception => e
+        logger.error "Failed to add competence #{competence.id}\n" + e.to_s
+      end
     end
   end
 
@@ -459,29 +417,21 @@ class StudyPlan < ActiveRecord::Base
     # Remove competence
     competences.delete(competence)
 
-    self.scoped_courses = needed_scoped_courses(self.competences).to_a
+    needed_courses =  needed_scoped_courses(self.competences)
+    
+    self.scoped_courses = needed_courses.to_a
   end
-
-
-  def has_competence?(competence)
-    competences.include? competence
-  end
-
 
   # Adds the scoped course into the study plan
   def add_course(abstract_course, options = {})
-    # Dont't do anything if the plan already contains this scoped_course
-    # FIXME: DB doesn't accept duplicate scoped_courses for a plan atm.
-    #return :already_added if self.scoped_courses.exists?(scoped_course)
-
     # Add scoped_course to study plan
     plan_course = PlanCourse.new(
       :study_plan_id       =>  self.id,
       :abstract_course_id  =>  abstract_course.id,
       :credits             =>  abstract_course.min_credits,
     )
-    plan_course.competene_node_id = true if options[:competene_node_id]
-    plan_course.scoped_course_id = true if options[:scoped_course_id]
+    plan_course.competence_node_id = options[:competence_node_id] if options[:competence_node_id]
+    plan_course.scoped_course_id = options[:scoped_course_id] if options[:scoped_course_id]
     plan_course.manually_added = true if options[:manually_added]
     plan_course.save
  
@@ -497,6 +447,10 @@ class StudyPlan < ActiveRecord::Base
     return :ok
   end
   
+  def remove_abstract_courses(abstract_course_id)
+    self.plan_courses.where(:abstract_course_id => abstract_course_id).delete_all
+  end
+  
   # Removes the plan course from the study plan
   def remove_plan_course(plan_course_id)
     plan_course = self.plan_courses.find(plan_course_id)
@@ -508,28 +462,26 @@ class StudyPlan < ActiveRecord::Base
     return :ok
   end
 
-
   # Returns a list of scoped_courses than can be deleted if the given competence is dropped from the study plan
   def deletable_scoped_courses(competence)
     # Make an array of competences that the user has after deleting the given competence
     remaining_competences = competences.clone
     remaining_competences.delete(competence)
-    puts "#{competences.size} / #{remaining_competences.size}"
 
     # Make a list of scoped_courses that aren't needed
     self.scoped_courses.to_set - self.needed_scoped_courses(remaining_competences)
   end
 
 
-  # Returns a set of scoped_courses that are needed by the given competences
-  # competences: a collection of competence objects
+  # Returns a Set of ScopedCourses that are needed by the given competences
+  # competences: a collection of Competence objects
   def needed_scoped_courses(competences)
-    # Make a list of scoped_courses that are needed by remaining profiles
+    # Make a list of scoped_courses that are needed by the given competences
     needed_scoped_courses = Set.new
     competences.each do |competence|
-      needed_scoped_courses.merge(competence.recursive_prereqs.where(:type => 'ScopedCourse').all)
+      needed_scoped_courses.merge(competence.recursive_prereq_courses.all)
     end
-
+    
     # Add manually added scoped_courses to the list
     needed_scoped_courses.merge(self.extra_scoped_courses)
   end

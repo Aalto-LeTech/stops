@@ -37,10 +37,10 @@ class Plans::CoursesController < PlansController
     competence_id = Integer(params[:competence_id]) rescue nil
     scoped_course_id = Integer(params[:scoped_course_id]) rescue nil
     
-    log "add_course #{abstract_course.id}"
+    log "add_course #{abstract_course.id}, competence #{competence_id}, scoped_course #{scoped_course_id}"
     
     status = @study_plan.add_course(abstract_course, {
-      competence_id: competence_id,
+      competence_node_id: competence_id,
       scoped_course_id: scoped_course_id,
       manually_added: true
     })
@@ -53,8 +53,8 @@ class Plans::CoursesController < PlansController
     
     respond_to do |format|
       format.html {
-        if @competence
-          redirect_to studyplan_competence_path(:id => @competence.id), :flash => message
+        if competence_id
+          redirect_to studyplan_competence_path(:id => competence_id), :flash => message
         else
           redirect_to studyplan_competences_path, :flash => message
         end
@@ -72,7 +72,11 @@ class Plans::CoursesController < PlansController
     @competence = nil
     @competence = Competence.find(params[:competence_id]) if params[:competence_id]
     
-    status = @study_plan.remove_scoped_course(params[:id].to_i)
+    if params[:abstract_course_id]
+      status = @study_plan.remove_abstract_courses(params[:abstract_course_id])
+    else
+      status = @study_plan.remove_scoped_course(params[:id])
+    end
 
     if @competence
       redirect_to studyplan_competence_path(:id => @competence.id), :flash => { :success => t('plans.courses.course_removed_from_plan') }

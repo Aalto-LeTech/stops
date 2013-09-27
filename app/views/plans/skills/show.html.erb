@@ -24,11 +24,14 @@
 
 <div class="course-graph suggested-courses">
   <% @prereq_courses.each do |course| %>
-    <% next if @user.study_plan.scoped_courses.exists?(course) %>
+    <% next if @user.study_plan.has_abstract_course?(course.abstract_course_id) %>
   
     <div class="suggested-course">
       <div class="course">
-        <h1><%= course.course_code %> <%= course.localized_name %> (<%= course.credits %> <%=t :cr %>)</h1>
+        <h1>
+          <%= link_to "#{course.course_code} #{course.localized_name}", studyplan_competence_course_path(:competence_id => @competence, :id => course) %>
+          (<%= course.credits %><%=t :cr %>)
+        </h1>
         <ul>
           <% course.skills.each do |skill| %>
             <% if @prereq_ids.member?(skill.id) %>
@@ -44,7 +47,7 @@
       <% if can? :choose, ScopedCourse %>
         <% top_competence = @competence.parent_competence || @competence %>
         
-        <%= link_to studyplan_competence_courses_path(:competence_id => top_competence.id, :course_id => course.id), {:method => :post, :class => 'btn btn-default'} do %>
+        <%= link_to studyplan_competence_courses_path(:competence_id => top_competence.id, :scoped_course_id => course.id, :abstract_course_id => course.abstract_course_id), {:method => :post, :class => 'btn btn-default'} do %>
           <i class="icon icon-plus"></i> <%= t('plans.courses.show.course_add_to_plan') %>
         <% end %>
       <% end %>

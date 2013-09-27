@@ -35,7 +35,7 @@ class User < ActiveRecord::Base
 
   def create_study_plan(curriculum_id)
     first_period = self.first_study_period || Period.find(DEFAULT_FIRST_PERIOD_ID) #Period.current
-    last_period = Period.find_by_date(first_period.begins_at - 1 + 365 * StudyPlan::INITIAL_STUDY_PLAN_TIME_IN_YEARS)
+    last_period = Period.find_by_date(first_period.begins_at - 1 + 365 * INITIAL_STUDY_PLAN_TIME_IN_YEARS)
 
     self.study_plan = StudyPlan.create(
       user_id:          self.id,

@@ -50,13 +50,13 @@ class Plans::CompetencesController < PlansController
     
     # If competence is aleady in the plan, don't do anything
     if @study_plan.has_competence?(@competence)
-      redirect_to studyplan_profiles_path, :flash => {:error => t(:profile_already_selected, :name => @competence.localized_name)}
+      redirect_to studyplan_competence_path(:id => @competence)
       return
     end
 
     existing_courses = @study_plan.scoped_courses
     @new_courses = @competence.recursive_prereq_courses.includes(:localized_description).all - existing_courses # difference
-    @shared_courses = existing_courses & @competence.strict_prereq_courses.all # intersection      # FIXME: does this work?
+    @shared_courses = existing_courses & @competence.strict_prereq_courses.all # intersection
     
     render :action => 'new', :layout => 'fixed'
   end
@@ -79,7 +79,7 @@ class Plans::CompetencesController < PlansController
     # Add competence to study plan
     @study_plan.add_competence(competence)
 
-    redirect_to studyplan_competence_path( competence )
+    redirect_to studyplan_competence_path(competence)
   end
 
   def delete

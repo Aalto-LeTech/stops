@@ -34,7 +34,6 @@ class @Period
     @creditsTooltip   = undefined
 
     @credits.subscribe (newValue) =>
-      #console.log("Foo! #{@id}")
       credits = newValue
       @creditsStatus = ''
       @creditsTooltip = O4.schedule.i18n.period_credits_tooltip_neutral
@@ -52,7 +51,6 @@ class @Period
     @name = data['localized_name'] || ''
     @beginsAt = data['begins_at']
     @endsAt = data['ends_at']
-    
     @isSummer = ('S' == @name.substr(@name.length - 1))
 
     # Set time dependent flags
@@ -64,17 +62,15 @@ class @Period
       if @beginsAt < Period::NOW
         @isNow = true
 
+
   earlierThan: (other) ->
     return this.sequenceNumber < other.sequenceNumber
-
 
   earlierOrEqual: (other) ->
     return this.sequenceNumber <= other.sequenceNumber
 
-
   laterThan: (other) ->
     return this.sequenceNumber > other.sequenceNumber
-
 
   laterOrEqual: (other) ->
     return this.sequenceNumber >= other.sequenceNumber
@@ -101,6 +97,7 @@ class @Period
 
 
   # Gets the neighbour
+  # FIXME: does not belong here
   actOnCommand: (planView, keyCode) ->
     if keyCode == 38  # up
       period = @previousPeriod
@@ -136,9 +133,6 @@ class @Period
     this.occupySlot(slot, length, course)
 
     return slot
-
-  isSummer: ->
-    false
 
   # Removes a course from this period.
   removeCourse: (course) ->

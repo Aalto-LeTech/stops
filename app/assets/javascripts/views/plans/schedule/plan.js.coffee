@@ -18,7 +18,6 @@ class @PlanView
 
     $('#infomsg').fadeOut(0)
     @showAsEditable = false
-    #@showAsEditable = ko.observable(false)
 
     # List of courses to be saved and rejected when tried to save.
     @coursesToSave = []
@@ -26,9 +25,8 @@ class @PlanView
 
 
   showAsEditableInit: ->
-    #dbg.lg("showAsEditableInit()!")
     @showAsEditable = false
-    $('#credits #in, #grade #in, #length #in').hide()
+    $('#credits .in, #grade .in, #length .in').hide()
 
   doShowAsEditable: ->
     if not @showAsEditable
@@ -236,11 +234,10 @@ class @PlanView
     @coursesToSave = []
     for course in @courses
       if course.hasChanged()
-        dbg.lg("Course \"#{course.name}\" was changed.")
         @coursesToSave.push(course)
 
-    if @coursesToSave.length == 0
-      dbg.lg('No essential changes on any course.')
+    #if @coursesToSave.length == 0
+    #  dbg.lg('No essential changes on any course.')
 
 
   # Returns true if there is any nonsaved data
@@ -254,10 +251,10 @@ class @PlanView
   save: ->
     # {
     #   "plan_courses": [
-    #     {"scoped_course_id": 71, "period_id": 1, "course_instance_id": 45},
-    #     {"scoped_course_id": 35, "period_id": 2},
-    #     {"scoped_course_id": 45, "period_id": 2, "credits": 3, "length": 1},
-    #     {"scoped_course_id": 60, "period_id": 3, "course_instance_id": 32, "credits": 8, "length": 2, "grade": 3},
+    #     {"plan_course_id": 71, "period_id": 1, "course_instance_id": 45},
+    #     {"plan_course_id": 35, "period_id": 2},
+    #     {"plan_course_id": 45, "period_id": 2, "credits": 3, "length": 1},
+    #     {"plan_course_id": 60, "period_id": 3, "course_instance_id": 32, "credits": 8, "length": 2, "grade": 3},
     #     ...
     #   ]
     # }
@@ -265,7 +262,7 @@ class @PlanView
     # Check if any changes should be saved
     if not @anyUnsavedChanges()
       @flashInfo('text-info', @I18N.no_unsaved_changes)
-      dbg.lg('No unsaved data. No reason to put.')
+      #dbg.lg('No unsaved data. No reason to put.')
       return
 
     # Calculate total credits
@@ -283,10 +280,9 @@ class @PlanView
     # Load the data
     planCoursesToSave = []  # Array for course JSON representations for sending
     for course in @coursesToSave
-      dbg.lg("Pushing \"#{course.name}\" to be saved.")
       planCoursesToSave.push(course.asHash())
 
-    dbg.lg("A total of #{@coursesToSave.length} courses changed. Starting the put.")
+    #dbg.lg("A total of #{@coursesToSave.length} courses changed. Starting the put.")
 
     # For informing the user of potential unaccepted alterations / db failures
     @coursesRejected = []
@@ -299,17 +295,17 @@ class @PlanView
       data: { 'json': {'plan_courses_to_update': JSON.stringify(planCoursesToSave)} }
       error: @onSaveFailure()
       success: (data) =>
-        dbg.lg("data: #{data}")
-        dbg.lg("data: #{JSON.stringify(data)}")
+        #dbg.lg("data: #{data}")
+        #dbg.lg("data: #{JSON.stringify(data)}")
         if data['status'] == 'ok'
           feedback = data['feedback']['plan_courses_to_update']
           if feedback
             for course in @coursesToSave
-              if feedback[course.scopedId]
-                dbg.lg("Course \"#{course.name}\" was successfully saved.")
+              if feedback[course.planCourseId]
+                #dbg.lg("Course \"#{course.name}\" was successfully saved.")
                 course.resetOriginals()
               else
-                dbg.lg("ERROR: Course \"#{course.name}\" was rejected by the server! Saving failed!")
+                #dbg.lg("ERROR: Course \"#{course.name}\" was rejected by the server! Saving failed!")
                 @coursesRejected.push(course)
             if @coursesRejected.length > 0
               @onSaveFailure()

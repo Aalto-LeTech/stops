@@ -21,8 +21,8 @@ class @Course
     @instanceCount       = 0
     @avgInstanceLength   = 0
     @periods             = []                # Periods on which this course is arranged
-    @prereqs             = {}                # Prerequisite courses. scopedId => Course
-    @prereqTo            = {}                # Courses for which this course is a prereq. scopedId => Course object
+    @prereqs             = {}                # Prerequisite courses. planCourseId => Course
+    @prereqTo            = {}                # Courses for which this course is a prereq. planCourseId => Course object
     @prereqPaths         = []                # Raphael paths to prerequirement courses
     @allPrereqsInPlan    = false             #
     @period              = undefined         # Scheduled period
@@ -67,7 +67,7 @@ class @Course
     @credits.subscribe (newValue) =>
       #dbg.lg("#{@}.credits.subs type:#{type(newValue)} (#{@credits()})")
       for competence in @competences
-        competence.updatePrereqCredits( @scopedId, newValue )
+        competence.updatePrereqCredits( @planCourseId, newValue )
 
     @creditsPerP = ko.computed =>
       #dbg.lg("#{@} credits update -> #{@credits()}/#{@length()}")
@@ -83,7 +83,9 @@ class @Course
       @distributeCredits()
 
     @isCustomized = ko.computed =>
-      isCustomized = @credits() != @scopedCredits
+      isCustomized = false # @credits() != @scopedCredits
+      
+      # FIXME: getter should not cause side effects
       @courseInstance = @instancesByPeriodId[@period?.id]
       isInstanceBound = @courseInstance?
       if isInstanceBound and (@length() != @courseInstance.length)
@@ -95,6 +97,7 @@ class @Course
 
       # Update the isInstanceBound flag
       # NB: Done here to capture length changes.
+      
       @isInstanceBound(isInstanceBound)
 
       return isCustomized
@@ -106,7 +109,7 @@ class @Course
 
     @grade.subscribe (newValue) =>
       for competence in @competences
-        competence.updatePrereqGrade( @scopedId, newValue )
+        competence.updatePrereqGrade(@planCourseId, newValue)
       # Check the period & grade related flag "isMisscheduled"
       # NB: Also calls updateTooltip, so no need to call it here
       @updateMisscheduledFlag()
@@ -172,7 +175,7 @@ class @Course
     @prereqIds           = data['scoped_course']['strict_prereq_ids'] || []
     @periodInfo          = undefined
     @periodInfo          = localized_description['period_info'] if localized_description
-    @credits(data['credits'] || @scopedCredits || 0)
+    @credits(data['credits'] || 0)
     @length(data['length'] || 0)
     @grade(data['grade'] || 0)
 
@@ -197,19 +200,17 @@ class @Course
 
   # Determines whether the model's core attributes have been changed.
   hasChanged: ->
-    #dbg.lg( "=> Was #{@name} changed?" )
-    #dbg.lg( " - credits: #{@oCredits}  vs  #{@credits()}" )
     return true if @oCredits != @credits()
-    #dbg.lg( " - period: #{@oPeriodId}  vs  #{@period.id}" )
+
     if @period?
       return true if @oPeriodId != @period.id
     else
       return true if @oPeriodId != undefined
-    #dbg.lg( " - length: #{@oLength}  vs  #{@length()}" )
+
     return true if @oLength != @length()
-    #dbg.lg( " - grade: #{@oGrade}  vs  #{@grade()}" )
+
     return true if @oGrade != @grade()
-    #dbg.lg( "   NOT CHANGED!" )
+
     return false
 
 
@@ -227,7 +228,8 @@ class @Course
     length = @length()
     grade = @grade()
 
-    hash = { scoped_course_id: @scopedId }
+    hash = { 'plan_course_id': @planCourseId }
+    #hash['scoped_course_id'] = @scopedId if @scopedId
     hash['credits'] = credits if credits > 0
     hash['period_id'] = @period.id if @period?
     hash['length'] = length if length > 0
@@ -244,11 +246,11 @@ class @Course
     @updateGradeDisplay()
 
     # Hilight prereqs
-    for scopedId, other of @prereqs
+    for planCourseId, other of @prereqs
       other.hilightPrereq(isSelected)
 
     # Hilight courses for which this is a prereq
-    for scopedId, other of @prereqTo
+    for planCourseId, other of @prereqTo
       other.hilightPrereqTo(isSelected)
 
     # Hilight the periods that have this course
@@ -258,19 +260,19 @@ class @Course
 
   # Adds a prerequisite course. This course is automatically added to the "prerequisite to" list of the other course.
   addPrereq: (other) ->
-    @prereqs[other.scopedId]  = other
-    other.prereqTo[@scopedId] = this
+    @prereqs[other.planCourseId] = other
+    other.prereqTo[@planCourseId] = this
 
 
   # Returns whether the course has prerequisite courses or not
   hasPrereqs: ->
-    for scopedId, course of @prereqs
+    for planCourseId, course of @prereqs
       return true
     return false
     
   # Returns whether the course is prereq to other courses or not
   hasPostreqs: ->
-    for scopedId, course of @prereqs
+    for planCourseId, course of @prereqs
       return true
     return false
 
@@ -278,7 +280,7 @@ class @Course
   # Returns prerequisite courses as a list
   getPrereqs: ->
     prereqs = []
-    for scopedId, course of @prereqs
+    for planCourseId, course of @prereqs
       prereqs.push(course)
 
     prereqs.sort (a, b) ->
@@ -289,7 +291,7 @@ class @Course
   # Returns courses for which this course is a prereq as a list
   getPostreqs: ->
     postreqs = []
-    for scopedId, course of @prereqTo
+    for planCourseId, course of @prereqTo
       postreqs.push(course)
 
     postreqs.sort (a, b) ->
@@ -399,17 +401,15 @@ class @Course
   # Update warnings FIXME: updates the original source twice...
   updateReqWarnings: (depth) ->
     if depth > 0 then depth = depth - 1 else depth = 1
-    #dbg.lg( "Course[#{@scopedId}]:uRW(#{depth}) #{@period.sequenceNumber}" )
 
-    for scopedId, other of @prereqs
+    for planCourseId, other of @prereqs
       isMisordered = true if other.period? && @period? && other.period.laterOrEqual(@period)
       other.updateReqWarnings(depth) if depth > 0
 
-    for scopedId, other of @prereqTo
+    for planCourseId, other of @prereqTo
       isMisordered = true if other.period? && @period? && other.period.earlierOrEqual(@period)
       other.updateReqWarnings(depth) if depth > 0
 
-    #dbg.lg( "Course[#{@scopedId}].isMisordered: #{isMisordered}." )
     @isMisordered(isMisordered)
     @updateTooltip()
 
@@ -433,7 +433,7 @@ class @Course
       return
 
     # Postpone postreqs that are earlier than this
-    for scopedId, other of @prereqTo
+    for planCourseId, other of @prereqTo
       if !other.period? || @period.laterOrEqual(other.period)
         dbg.lg("#{other.name} depends on #{@name}. Postponing to #{targetPeriod}.")
         other.postponeTo(targetPeriod) unless other.locked
@@ -472,7 +472,7 @@ class @Course
 
     # Find the latest prereq
     latestPeriod = false
-    for scopedId, prereq of @prereqs
+    for planCourseId, prereq of @prereqs
       period = prereq.getPeriod()
       latestPeriod = period if period? && (!latestPeriod || period.laterThan(latestPeriod))
 
@@ -489,10 +489,10 @@ class @Course
 
 
   sdbg: ->
-    "c[#{@scopedId}:#{@code}]"
+    "c[#{@planCourseId}:#{@code}]"
 
 
   # Renders the object into a string for debugging purposes
   toString: ->
-    "c[#{@scopedId}:#{@code} #{dbg.bals([@isInstanceBound(),@isCustomized(),@isMisscheduled(),@isMisordered()])} #{@credits()} #{@length()} #{@grade()} (#{@scopedCredits} #{@courseInstance?.length} #{@oGrade})]"
+    "c[#{@planCourseId}:#{@code} #{dbg.bals([@isInstanceBound(),@isCustomized(),@isMisscheduled(),@isMisordered()])} #{@credits()} #{@length()} #{@grade()} (#{@courseInstance?.length} #{@oGrade})]"
     # n:#{@name}

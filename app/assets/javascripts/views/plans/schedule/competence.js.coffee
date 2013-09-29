@@ -3,8 +3,8 @@ class @Competence
   constructor: () ->
     @isSelected = ko.observable(false)
 
-    @prereqCredits = {}
-    @prereqGrades = {}
+    @prereqGrades = {}   # planCourseId => integer
+    @prereqCredits = {}  # planCourseId => integer
     @passedCredits = 0
     @totalCredits = 0
     @progressVal = ko.observable()
@@ -30,8 +30,8 @@ class @Competence
       # Update initial values
       grade = prereq.grade()
       credits = prereq.credits()
-      @prereqGrades[prereq.scopedId] = grade
-      @prereqCredits[prereq.scopedId] = credits
+      @prereqGrades[prereq.planCourseId] = grade
+      @prereqCredits[prereq.planCourseId] = credits
       @totalCredits += credits
       if grade > 0
         @passedCredits += credits
@@ -49,22 +49,21 @@ class @Competence
       prereq.hilightPrereq(isSelected)
 
 
-  updatePrereqCredits: (scopedId, credits) ->
+  updatePrereqCredits: (planCourseId, credits) ->
     diff = credits
-    diff -= @prereqCredits[scopedId] if @prereqCredits[scopedId] > 0
-    if @prereqGrades[scopedId] > 0
-      @passedCredits += diff
+    diff -= @prereqCredits[planCourseId] if @prereqCredits[planCourseId] > 0
+    @passedCredits += diff if @prereqGrades[planCourseId] > 0
     @totalCredits += diff
-    @prereqCredits[scopedId] = credits
+    @prereqCredits[planCourseId] = credits
     @progressVal(100 * @passedCredits / @totalCredits)
 
 
-  updatePrereqGrade: (scopedId, grade) ->
-    if @prereqGrades[scopedId] > 0 and not grade > 0
-      @passedCredits -= @prereqCredits[scopedId]
-    else if not @prereqGrades[scopedId] > 0 and grade > 0
-      @passedCredits += @prereqCredits[scopedId]
-    @prereqGrades[scopedId] = grade
+  updatePrereqGrade: (planCourseId, grade) ->
+    if @prereqGrades[planCourseId] > 0 and not grade > 0
+      @passedCredits -= @prereqCredits[planCourseId]
+    else if not @prereqGrades[planCourseId] > 0 and grade > 0
+      @passedCredits += @prereqCredits[planCourseId]
+    @prereqGrades[planCourseId] = grade
     @progressVal(100 * @passedCredits / @totalCredits)
 
 

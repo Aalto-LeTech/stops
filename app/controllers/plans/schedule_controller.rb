@@ -5,7 +5,7 @@ class Plans::ScheduleController < PlansController
 
   def show
     authorize! :update, @study_plan
-    render :action => 'show', :layout => 'browser'
+    render :action => 'show', :layout => 'affix-fluid'
   end
 
 end

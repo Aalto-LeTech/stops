@@ -115,6 +115,81 @@ class @Course
       @updateMisscheduledFlag()
 
   
+   # Reads some of the model's core attributes from the given JSON data object
+  loadJson: (data, periodsById) ->
+    localized_description = data['abstract_course']['localized_description'] || {}
+
+    @planCourseId        = data['id']
+    @abstractId          = data['abstract_course_id']
+    @prereqIds           = data['abstract_prereq_ids'] || []
+    @code                = data['abstract_course']['code'] || ''
+    @name                = data['abstract_course']['localized_name'] || ''
+    @min_credits         = data['abstract_course']['min_credits'] || 0
+    @max_credits         = data['abstract_course']['max_credits'] || 0
+    @periodInfo          = localized_description['period_info']
+    @credits(data['credits'] || 0)
+    @length(data['length'] || 1)
+    @grade(data['grade'] || 0)
+
+    periodId = data['period_id']
+    if periodId?
+      @period = periodsById[periodId]
+      dbg.lg("Unknown periodId #{periodId}") unless @period
+
+    for instance_data in data['abstract_course']['course_instances']
+      period = periodsById[instance_data['period_id']]
+      # It can be expected that many instances are irrelevant
+      continue unless period?
+      courseInstance = new CourseInstance(period, instance_data['length'])
+      @periods.push(period)
+      @instancesByPeriodId[period.id] = courseInstance
+      @instanceCount++
+      # Maintain an average of instance lengths which is used later to guess lengths of unknown instances
+      @avgInstanceLength = (@avgInstanceLength * (@instanceCount - 1) + courseInstance.length) / @instanceCount
+
+    @avgInstanceLength = undefined if @avgInstanceLength == 0
+
+
+  # Serializes the model for sending it back to the database
+  asHash: ->
+    credits = @credits()
+    length = @length()
+    grade = @grade()
+
+    hash = { 'plan_course_id': @planCourseId }
+    #hash['scoped_course_id'] = @scopedId if @scopedId
+    hash['credits'] = credits if credits > 0
+    hash['period_id'] = @period.id if @period?
+    hash['length'] = length if length > 0
+    hash['grade'] = grade if grade >= 0
+
+    return hash
+  
+  
+  # Determines whether the model's core attributes have been changed.
+  hasChanged: ->
+    return true if @oCredits != @credits()
+
+    if @period?
+      return true if @oPeriodId != @period.id
+    else
+      return true if @oPeriodId != undefined
+
+    return true if @oLength != @length()
+
+    return true if @oGrade != @grade()
+
+    return false
+
+
+  # Resets the originals by which it is determined whether the model has been changed
+  resetOriginals: ->
+    @oCredits = @credits()
+    if @period? then @oPeriodId = @period.id else @oPeriodId = undefined
+    @oLength = @length()
+    @oGrade = @grade()
+
+  
   # Updates the tooltip
   updateTooltip: ->
     alarms = ['']
@@ -163,81 +238,7 @@ class @Course
       #$('.well #grade').slideUp(500)
 
 
-  # Reads some of the model's core attributes from the given JSON data object
-  loadJson: (data, periodsById) ->
-    localized_description = data['abstract_course']['localized_description']
-
-    @abstractId          = data['abstract_course']['id']
-    @code                = data['abstract_course']['code'] || ''
-    @name                = data['abstract_course']['localized_name'] || ''
-    @scopedId            = data['scoped_course']['id']
-    @scopedCredits       = data['scoped_course']['credits']
-    @prereqIds           = data['scoped_course']['strict_prereq_ids'] || []
-    @periodInfo          = undefined
-    @periodInfo          = localized_description['period_info'] if localized_description
-    @credits(data['credits'] || 0)
-    @length(data['length'] || 0)
-    @grade(data['grade'] || 0)
-
-    periodId = data['period_id']
-    if periodId?
-      @period = periodsById[periodId]
-      dbg.lg("Unknown periodId #{periodId}") unless @period
-
-    for dat in data['abstract_course']['course_instances']
-      period = periodsById[dat['period_id']]
-      # It can be expected that many instances are irrelevant
-      continue unless period?
-      courseInstance = new CourseInstance(period, dat['length'])
-      @periods.push(period)
-      @instancesByPeriodId[period.id] = courseInstance
-      @instanceCount++
-      # Maintain an average of instance lengths which is used later to guess lengths of unknown instances
-      @avgInstanceLength = (@avgInstanceLength * (@instanceCount - 1) + courseInstance.length) / @instanceCount
-
-    @avgInstanceLength = undefined if @avgInstanceLength == 0
-
-
-  # Determines whether the model's core attributes have been changed.
-  hasChanged: ->
-    return true if @oCredits != @credits()
-
-    if @period?
-      return true if @oPeriodId != @period.id
-    else
-      return true if @oPeriodId != undefined
-
-    return true if @oLength != @length()
-
-    return true if @oGrade != @grade()
-
-    return false
-
-
-  # Resets the originals by which it is determined whether the model has been changed
-  resetOriginals: ->
-    @oCredits = @credits()
-    if @period? then @oPeriodId = @period.id else @oPeriodId = undefined
-    @oLength = @length()
-    @oGrade = @grade()
-
-
-  # Serializes the model for sending it back to the database
-  asHash: ->
-    credits = @credits()
-    length = @length()
-    grade = @grade()
-
-    hash = { 'plan_course_id': @planCourseId }
-    #hash['scoped_course_id'] = @scopedId if @scopedId
-    hash['credits'] = credits if credits > 0
-    hash['period_id'] = @period.id if @period?
-    hash['length'] = length if length > 0
-    hash['grade'] = grade if grade >= 0
-
-    return hash
-
-
+ 
   # The selected status change handler
   setSelected: (isSelected) ->
     @isSelected(isSelected)

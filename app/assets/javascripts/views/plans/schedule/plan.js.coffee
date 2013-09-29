@@ -16,7 +16,7 @@ class @PlanView
     @selectedObject = ko.observable()
     @selectedObjectType = ko.observable()
 
-    $('#infomsg').fadeOut(0)
+    #$('#infomsg').fadeOut(0)
     @showAsEditable = false
 
     # List of courses to be saved and rejected when tried to save.
@@ -54,7 +54,7 @@ class @PlanView
   loadJson: (data) ->
     @competences = []
     @courses = []
-    @coursesByScopedId = {}
+    #@coursesByScopedId = {}
     @coursesByAbstractId = {}
     @periods = []
     @periodsById = {}
@@ -87,14 +87,14 @@ class @PlanView
     for course_data in data['plan_courses']
       course = new Course(course_data, @periodsById)
       @courses.push(course)
-      @coursesByScopedId[course.scopedId] = course
+      #@coursesByScopedId[course.scopedId] = course
       @coursesByAbstractId[course.abstractId] = course
 
     # Load course prerequirements
     for course in @courses
       course.allPrereqsInPlan = true
       for prereqId in course.prereqIds
-        prereq = @coursesByScopedId[prereqId]
+        prereq = @coursesByAbstractId[prereqId]
         unless prereq
           console.log "Unknown prereqId #{prereqId}!"
           course.allPrereqsInPlan = false
@@ -104,7 +104,7 @@ class @PlanView
     # Load competences
     for competence_data in data['competences']
       competence = new Competence()
-      competence.loadJson(competence_data, @coursesById)
+      competence.loadJson(competence_data, @coursesByAbstractId)
       @competences.push(competence)
 
     # Automatically schedule unscheduled (new) courses
@@ -116,10 +116,10 @@ class @PlanView
     dbg.lg("Setting the courses to the periods...")
     for course in @courses
       # If the course was moved by the scheduler
-      if schedule.moved[course.scopedId]
+      if schedule.moved[course.planCourseId]
         course.resetOriginals()
         course.period = undefined
-        course.setPeriod(schedule.schedule[course.scopedId], true)
+        course.setPeriod(schedule.schedule[course.planCourseId], true)
       # Else if the course has a place to go to
       else if course.period
         period = course.period
@@ -167,8 +167,8 @@ class @PlanView
     # plan div below it as the size of the former div changes.
     # The 'update' method is also called so that it can realize that the size of
     # the div it is to 'side' has changed as periods have been injected into it.
-    affixedSidebar = affxd.Sidebar::get()
-    affixedSidebar.reset('staticHeight', 600)
+    #affixedSidebar = affxd.Sidebar::get()
+    #affixedSidebar.reset('staticHeight', 600)
 
     # Log time used from start to bind and here
     endTime = new Date().getTime();
@@ -207,7 +207,7 @@ class @PlanView
       viewPortTop = $(window).scrollTop()
       viewPortHeight = $(window).height()
       viewPortBottom = viewPortTop + viewPortHeight
-      objectContainerTop = $('#themain').offset().top
+      objectContainerTop = $('#plan-container').offset().top
       if @selectedObjectType() == 'Course'
         objectHeight = object.position().height
       else
@@ -330,7 +330,7 @@ class @PlanView
   flashInfo: (css, text) ->
     $('#infomsg').removeClass().addClass(css).text(text).fadeIn(2000)
     setTimeout(
-      -> $('#infomsg').fadeOut(2000, => $('#infomsg').text('').removeClass())
+      -> $('#infomsg').fadeOut(2000, -> $('#infomsg').text('').removeClass())
       5000
     )
 

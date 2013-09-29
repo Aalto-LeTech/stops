@@ -179,7 +179,7 @@ ActiveRecord::Schema.define(:version => 20130927102935) do
     t.integer "course_instance_id"
     t.boolean "manually_added",       :default => false, :null => false
     t.integer "period_id"
-    t.float   "credits"
+    t.float   "credits",                                 :null => false
     t.integer "length"
     t.boolean "custom",               :default => false, :null => false
     t.integer "abstract_course_id",                      :null => false

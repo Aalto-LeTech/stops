@@ -126,49 +126,43 @@ class StudyPlan < ActiveRecord::Base
     # TODO: Replace courses_recursive with a more efficient solution
     competences_data = competences.as_json(
       only: [:id],
-      methods: [:localized_name, :course_ids_recursive],
+      methods: [:localized_name, :abstract_prereq_ids],
       root: false
     )
     
-    # TODO: only load relevant course_instances
-    abstract_courses_data = abstract_courses.as_json(
-      only: [:id, :code, :min_credits, :max_credits],
-      methods: [:localized_name],
-      include: {
-        localized_description: {
-          only: [:period_info]
-        },
-        course_instances: {
-          only: [:period_id, :length]
-        }
-      },
-      root: false
-    )
+#     abstract_courses_data = abstract_courses.as_json(
+#       only: [:id, :code, :min_credits, :max_credits],
+#       methods: [:localized_name],
+#       include: {
+#         localized_description: {
+#           only: [:period_info]
+#         },
+#         course_instances: {
+#           only: [:period_id, :length]
+#         }
+#       },
+#       root: false
+#     )
 
+    # TODO: only load relevant course_instances
     plan_courses_data = plan_courses.as_json(
       only: [:id, :abstract_course_id, :period_id, :credits, :length, :grade],
       methods: [:abstract_prereq_ids],
       include: [
-#         {
-#           abstract_course: {
-#             only: [:id, :code],
-#             methods: [:localized_name],
-#             include: {
-#               localized_description: {
-#                 only: [:period_info]
-#               },
-#               course_instances: {
-#                 only: [:period_id, :length]
-#               }
-#             }
-#           }
-#         },
-#         {
-#           scoped_course: {
-#             only: [:id],
-#             methods: [:strict_prereq_ids]
-#           }
-#         }
+        {
+          abstract_course: {
+            only: [:code, :min_credits, :max_credits],
+            methods: [:localized_name],
+            include: {
+              localized_description: {
+                only: [:period_info]
+              },
+              course_instances: {
+                only: [:period_id, :length]
+              }
+            }
+          }
+        },
       ],
       root: false
     )
@@ -176,7 +170,7 @@ class StudyPlan < ActiveRecord::Base
     response_data = {
       periods: periods_data,
       plan_courses: plan_courses_data,
-      abstract_courses: abstract_courses_data,
+      #abstract_courses: abstract_courses_data,
       competences: competences_data,
     }
     
@@ -245,73 +239,57 @@ class StudyPlan < ActiveRecord::Base
   # Updates the plans plan courses according to the data received
   # Expects a JSON coded array of form:
   # [
-  #   {"scoped_course_id": 71, "period_id": 1, "course_instance_id": 45},
-  #   {"scoped_course_id": 35, "period_id": 2},
-  #   {"scoped_course_id": 45, "period_id": 2, "credits": 3, "length": 1},
-  #   {"scoped_course_id": 60, "period_id": 3, "course_instance_id": 32, "credits": 8, "length": 2, "grade": 3},
+  #   {"plan_course_id": 71, "period_id": 1, "course_instance_id": 45},
+  #   {"plan_course_id": 35, "period_id": 2},
+  #   {"plan_course_id": 45, "period_id": 2, "credits": 3, "length": 1},
+  #   {"plan_course_id": 60, "period_id": 3, "course_instance_id": 32, "credits": 8, "length": 2, "grade": 3},
   #   ...
   # ]
   def update_plan_courses_from_json(json)
+    plan_data = JSON.parse(json)
 
-    plan_courses_to_update = JSON.parse(json)
+    feedback = {}  # plan_course_id => boolean (accepted?)
 
-    return 'empty' if plan_courses_to_update.length == 0
-
-    # A scoped_course_id => accepted? dict which is returned by this function.
-    feedback = {}
-
-    # Index information by scoped_course_id and collect them
-    new_course_data = {}
-    scoped_course_ids = []
-    plan_courses_to_update.each do |plan_course_to_update|
-      scoped_course_id = plan_course_to_update['scoped_course_id']
-      new_course_data[scoped_course_id] = plan_course_to_update
-      scoped_course_ids.push(scoped_course_id)
+    # Index information by plan_course_id
+    new_course_data = {}  # plan_course_id => {data}
+    plan_data.each do |plan_course_data|
+      new_course_data[plan_course_data['plan_course_id']] = plan_course_data
     end
-
-    puts "Received data by #{scoped_course_ids.length} ScopedCourse IDs: (#{scoped_course_ids})."
-    y new_course_data
 
     # TODO: add new plan courses if not found
 
-    self.plan_courses.where(scoped_course_id: scoped_course_ids).includes(:scoped_course).each do |plan_course|
-
-      # Fetch the related abstract and scoped_course information
-      scoped_course = plan_course.scoped_course
-      scoped_course_id = plan_course.scoped_course_id
-      abstract_course_id = plan_course.scoped_course.abstract_course_id
-
-      # Initially, mark the update as rejected.
-      feedback[scoped_course_id] = false
+    self.plan_courses.each do |plan_course|
+      feedback[plan_course.id] = false  # Initially, mark the update as rejected.
 
       # Load the data for this plan_course
-      new_course = new_course_data[scoped_course_id]
+      plan_course_data = new_course_data[plan_course.id]
 
-      new_period_id = new_course['period_id']
-      new_length = new_course['length']
-      new_credits = new_course['credits']
-      new_grade = new_course['grade']
+      new_period_id = plan_course_data['period_id']
+      new_length = plan_course_data['length']
+      new_credits = plan_course_data['credits']
+      new_grade = plan_course_data['grade']
       new_course_instance_id = nil
       new_custom = false
 
       begin
         # Raise an error if lacking basic necessities
-        raise UpdateException.new, "No period_id defined!" if new_period_id.nil?
-        raise UpdateException.new, "No length defined!" if new_length.nil?
-        raise UpdateException.new, "No credits defined!" if new_credits.nil?
+        #raise UpdateException.new, "No period_id defined!" if new_period_id.nil?
+        #raise UpdateException.new, "No length defined!" if new_length.nil?
+        #raise UpdateException.new, "No credits defined!" if new_credits.nil?
 
         # Fetch the available course instance if available
-        course_instance = CourseInstance.where(abstract_course_id: abstract_course_id, period_id: new_period_id).first
+        abstract_course_id = plan_course.abstract_course_id
+        course_instance = CourseInstance.where(abstract_course_id: abstract_course_id, period_id: new_period_id).first  # FIXME: This is really slow
 
         # Determine whether the course should be regarded as 'instance bound'
-        if course_instance.nil? or course_instance.length != new_length
+        if course_instance.nil? || course_instance.length != new_length
           new_course_instance_id = nil
         else
           new_course_instance_id = course_instance.id
         end
 
         # Determine whether the course should be regarded as customized
-        new_custom = scoped_course.credits != new_credits
+        #new_custom = scoped_course.credits != new_credits
 
         # Save possible changes to the plan_course
         changed =
@@ -332,12 +310,11 @@ class StudyPlan < ActiveRecord::Base
           plan_course.save
         end
 
-        # No we're done! =) Mark the course as accepted.
-        feedback[scoped_course_id] = true
+        feedback[plan_course.id] = true
 
       # On error, the plan_course is rejected.
-      rescue UpdateException => message
-        puts "ERROR '#{message}' when updating the plan course: #{new_course}!"
+      #rescue UpdateException => message
+        #puts "ERROR '#{message}' when updating the plan course: #{new_course}!"
       end
     end
 
@@ -349,10 +326,10 @@ class StudyPlan < ActiveRecord::Base
   # Updates the plan according to the data received
   # Expects a JSON coded array of form:
   # [
-  #   {"scoped_course_id": 71, "period_id": 1, "course_instance_id": 45},
-  #   {"scoped_course_id": 35, "period_id": 2},
-  #   {"scoped_course_id": 45, "period_id": 2, "credits": 3, "length": 1},
-  #   {"scoped_course_id": 60, "period_id": 3, "course_instance_id": 32, "credits": 8, "length": 2, "grade": 3},
+  #   {"plan_course_id": 71, "period_id": 1, "course_instance_id": 45},
+  #   {"plan_course_id": 35, "period_id": 2},
+  #   {"plan_course_id": 45, "period_id": 2, "credits": 3, "length": 1},
+  #   {"plan_course_id": 60, "period_id": 3, "course_instance_id": 32, "credits": 8, "length": 2, "grade": 3},
   #   ...
   # ]
   def update_from_json(json)

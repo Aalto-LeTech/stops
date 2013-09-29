@@ -13,16 +13,16 @@ class @Competence
 
 
   # Reads some of the model's core attributes from the given JSON data object
-  loadJson: (data, coursesById) ->
+  loadJson: (data, coursesByAbstractId) ->
     @name = data['localized_name']
     @id = data['id']
 
     # Load prereqs
     @prereqs = []
-    for prereqId in data['course_ids_recursive']
-      prereq = coursesById[prereqId]
+    for abstractId in data['abstract_prereq_ids']
+      prereq = coursesByAbstractId[abstractId]
       unless prereq
-        console.log("Unknown prereqId #{prereqId}!")
+        console.log("Unknown abstractId #{abstractId}!")
         continue
       prereq.competences.push(this)
       @prereqs.push(prereq)

@@ -47,10 +47,10 @@ class Competence < CompetenceNode
   #  self.recursive_prereqs.where(:type => 'ScopedCourse')
   #end
   
-  # Returns all courses' ids, recursively
-  def course_ids_recursive
+  # Returns an array of abstract_course_ids of all recursive preerq courses
+  def abstract_prereq_ids
     #courses_recursive.map { |course| course.id }
-    self.recursive_prereqs.where(:type => 'ScopedCourse').map { |course| course.id }
+    self.recursive_prereq_courses.map { |course| course.abstract_course_id }
   end
 
   def duplicate

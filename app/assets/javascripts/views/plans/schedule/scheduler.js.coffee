@@ -54,8 +54,6 @@ class @Scheduler
 
 
   postponeTo: (course, requestedPeriod) ->
-    #this.setPeriod(period);
-
     # If no instances are known for this course, put it on the requested period
     if (course.instanceCount < 1)
       if @schedule[course.planCourseId] != requestedPeriod

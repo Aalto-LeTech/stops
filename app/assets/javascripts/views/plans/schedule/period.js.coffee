@@ -98,7 +98,7 @@ class @Period
 
   # Gets the neighbour
   # FIXME: does not belong here
-  actOnCommand: (planView, keyCode) ->
+  keyPress: (planView, keyCode) ->
     if keyCode == 38  # up
       period = @previousPeriod
     else if keyCode == 40  # down

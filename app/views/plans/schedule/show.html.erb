@@ -14,13 +14,12 @@
   <%= javascript_include_tag 'views/plans/schedule/show' %>
 <% end %>
 
-<% content_for(:theleft) do %>
-  <div class="container-fluid">
+<% content_for(:leftnav) do %>
+  <!--div class="container-fluid"-->
 
     <div id="controls">
       <button id="save-button" class="btn pull-right" data-bind="click: save"><%= t('.save') %></button>
       <h2><%= t('.scheduling') %></h2>
-      <p id="infomsg"></p>
       <!--p>
         <%= t('.curriculum') %>:
         <%= @study_plan.curriculum.name %>
@@ -28,6 +27,8 @@
         <%= @study_plan.curriculum.end_year %>
       </p-->
     </div>
+    <div class="clearfix"></div>
+    <p id="infomsg"></p>
 
     <!-- Selected course details -->
     <!-- ko if: selectedObjectType() == 'Course' -->
@@ -224,7 +225,7 @@
       </div>  <!-- object-info -->
     <!-- /ko -->
 
-  </div>
+  <!--/div-->
 
 <% end %>
 

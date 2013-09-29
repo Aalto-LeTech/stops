@@ -8,7 +8,6 @@
 #= require ./competence
 #= require ./scheduler
 
-
 jQuery ->
   $plan = $('#plan-container')
   planUrl = $plan.data('studyplan-path')
@@ -26,15 +25,15 @@ jQuery ->
       event.stopPropagation()
     .on 'mousedown', '#controls, .object-info, #plan-container', (event) ->
       event.stopPropagation()
-    .on 'mousedown', '#theleft', (event) ->
+    .on 'mousedown', 'div.leftnav-content', (event) ->
       planView.unselectObjects()
-    .on 'mouseenter', '#theleft .well', (event) ->
+    .on 'mouseenter', 'div.leftnav .well', (event) ->
       planView.doShowAsEditable()
-    .on 'mouseleave', '#theleft .well', (event) ->
+    .on 'mouseleave', 'div.leftnav .well', (event) ->
       planView.noShowAsEditable()
     .on 'keypress', 'body', (event) ->
       obj = planView.selectedObject()
-      if obj and obj.actOnCommand and obj.actOnCommand(planView, event.keyCode)
+      if obj and obj.keyPress and obj.keyPress(planView, event.keyCode)
         event.preventDefault()
 
   $(window).bind 'beforeunload', =>

@@ -1,8 +1,7 @@
 = Ennen julkaisua =
 
 Verkon instrumentointi
-Verkon lukitus
-
+Jos kurssilla ei ole O4:ssä esitietoja, mutta Noppatiedoissa on esitieto, käyttäjälle näkyy ristiriitaista tietoa.
 
 = Ennen julkaisua, jos ehtii =
 
@@ -11,10 +10,12 @@ Kurssihaussa linkki hakutuloksista kurssisivulle
 Scheduless linkit kurssitiedoista kurssisivulle
 Wellin sisällä olevat linkit siniseksi (ks. kurssihakuhaku)
 Jos lisää kurssin suunnitelmaan, lisää myös esitiedot
+Verkon lukitus: kompetenssit
 
 = Julkaisun jälkeen =
 
 Affix ei toimi kapealla näytöllä
+Verkon lukitus: esitietona muille
 
 
 = Myöhemmin =

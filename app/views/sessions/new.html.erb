@@ -1,3 +1,15 @@
-<h1><%=t '.heading' %></h1>
+<% content_for(:stylesheets) do %>
+  <%= stylesheet_link_tag "views/sessions", :media => 'all' %>
+<% end %>
 
-<%= render :partial => 'login' %>
+<div class="row">
+  <div class="span12">
+    <h1><%=t '.heading' %></h1>
+  </div>
+</div>
+
+<div class="login-container">
+  <%= render :partial => 'login_shibboleth' %>
+
+  <%= render :partial => 'login_traditional' %>
+</div>

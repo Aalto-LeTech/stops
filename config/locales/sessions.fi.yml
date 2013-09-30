@@ -4,18 +4,20 @@ fi:
     logout: "Kirjaudu ulos"
     logout_message: "Olet kirjautunut ulos."
     
-    login:
-      title: "Kirjautuminen"
+    login_shibboleth:
+      shibboleth_hint: "Kirjaudu Aallon käyttäjätunnuksella"
+      shibboleth_button: "Aalto Weblogin"
+      
+    login_traditional:
       button: "Kirjaudu"
       traditional_hint: "Kirjaudu erillisellä O4-tunnuksella"
-      shibboleth_hint: "Kirjaudu Aallon käyttäjätunnuksella"
       studentnumber_label: "Opiskelijanumero"
       password_label: "Salasana"
       remember_label: "Muista minut"
       register: "Luo testitunnus"
-      shibboleth_button: "Aalto Weblogin"
 
     new:
+      title: "Kirjautuminen"
       heading: "Kirjaudu sisään"
 
   activerecord:

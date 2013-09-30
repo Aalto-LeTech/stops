@@ -1,6 +1,13 @@
+<% content_for(:stylesheets) do %>
+  <%= stylesheet_link_tag "views/sessions", :media => 'all' %>
+<% end %>
+
 <%= render 'intro' %>
 
 <div class="login-container">
-  <%= render :partial => 'sessions/login' %>
-</div>
+  <%= render :partial => 'sessions/login_shibboleth' %>
 
+  <% unless defined?(SHIB_PATH) %>
+    <%= render :partial => 'sessions/login_traditional' %>
+  <% end %>
+</div>

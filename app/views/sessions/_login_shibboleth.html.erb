@@ -1,0 +1,10 @@
+<% if defined?(SHIB_PATH) %>
+  <div class="row form-horizontal sessions-login-method shibboleth-login">
+  
+    <div class="span12 control-group">
+      <%= link_to t('.shibboleth_button'), SHIB_PATH + shibboleth_session_url(:protocol => 'https'), :class => 'btn btn-primary btn-large controls' %>
+      
+      <p class="hint controls"><%=t('.shibboleth_hint')%></p>
+    </div>
+  </div>
+<% end %>

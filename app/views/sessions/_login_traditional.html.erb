@@ -1,0 +1,39 @@
+<div id="login-traditional" class="row sessions-login-method traditional-login">
+  <div class="span12">
+    <%= form_for @user_session, :as => :user_session, :url => login_path,
+      :html => { :class => 'form-horizontal' } do |f| %>
+      <div class="control-group">
+        <%= f.label :studentnumber, t('.studentnumber_label'),
+          :class => "control-label" %>
+        <div class="controls">
+          <%= f.text_field :studentnumber, :size => 12, :autofocus => true %>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <%= f.label :password, t('.password_label'), :class => "control-label" %>
+        <div class="controls">
+          <%= f.password_field :password, :size => 12 %>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <div class="controls">
+          <%= f.label :remember_me, :class => "checkbox" do %>
+            <%= f.check_box :remember_me %>
+            <%= t('.remember_label') %>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <div class="controls">
+          <%= f.submit t('.button'), :class => 'btn' %>
+        </div>
+      </div>
+
+    <% end %>
+  </div>
+</div>
+<% # link_to t('.register'), new_user_path
+-%>

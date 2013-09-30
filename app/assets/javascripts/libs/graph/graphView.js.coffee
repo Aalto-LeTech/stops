@@ -37,6 +37,8 @@ class @GraphView
     else
       @targetIds = false
 
+  setLogger: (@logger) ->
+
 
   #load: (coursesPath, competencesPath, skillsPath) ->
   load: (graphPath) ->
@@ -374,6 +376,8 @@ class @GraphView
     else
       course.drawPrereqArcs()
       course.drawPostreqArcs()
+    
+    @logger.log("cc #{course.id}") if @logger
 
   hilightSkill: (skill) ->
     this.resetSkillHighlights()
@@ -398,6 +402,7 @@ class @GraphView
 #     skill.dfs 'forward', (s, depth) =>
 #       s.highlighted(true)
 #       s.drawPostreqArcs()
+    @logger.log("cs #{skill.id}") if @logger
 
 
   createLine: (x1, y1, x2, y2, w, dash) ->

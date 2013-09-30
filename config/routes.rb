@@ -107,7 +107,9 @@ Ops::Application.routes.draw do
 
   resources :invitations, :only => [:show, :destroy], :id => /[^\/]+/
 
-  post 'client_side_error', :controller => 'application', as: 'client_side_error'
+  #post 'client_side_error', :controller => 'application', as: 'client_side_error'
+  match '/client_side_error' => 'application#client_side_error', as: 'client_side_error'
+  match '/client_event', to: 'application#log_client_event', as: 'log_client_event'
   
   match '/:locale' => "frontpage#index", :as => :frontpage
   root :to => "application#redirect_by_locale"

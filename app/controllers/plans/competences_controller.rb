@@ -17,25 +17,24 @@ class Plans::CompetencesController < PlansController
   def show
     authorize! :read, @study_plan
     
-    #logger.info "Load competence"
     @competence = Competence.includes(:localized_description, {:skills => :localized_description}).find(params[:id])
     @chosen_competence_ids = @study_plan.competence_ids.to_set
-    log("view_competence #{@competence.id}")
-
+    
     @mandatory_courses = @competence.strict_prereq_courses.includes(:localized_description).all
     @mandatory_prereqs = @competence.ancestor_prereq_courses.includes(:localized_description).all - @mandatory_courses
     
     #@supporting_courses = @competence.supporting_prereq_courses.includes(:localized_description).order(:course_code).all - @mandatory_courses
     @included_courses = @study_plan.scoped_course_ids.to_set
     
-    #@child_competences = 
-    
-    #logger.info "Load passed"
     @passed_courses = Hash.new
     @study_plan.passed_courses.each do |course|
       @passed_courses[course.id] = course
     end
 
+    # Log
+    @client_session_id = SecureRandom.hex(3)
+    log("view_competence #{@competence.id} (#{@client_session_id})")
+    
     render :action => 'show', :layout => 'leftnav'
   end
 

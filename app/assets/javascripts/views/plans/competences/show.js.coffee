@@ -1,8 +1,9 @@
+#= require libs/client_event_logger
 #= require libs/graph/graphView
 
 hilightCourses = ->
   included_courses = {} # abstract_course_id => Hash
-  for course in studyplan_summary_data['courses']
+  for course in window.studyplan_summary_data['courses']
     included_courses[course.abstract_course_id] = course
   
   $('.course-table tr').each ->
@@ -39,5 +40,6 @@ jQuery ->
       #'prereqSkills': 'recursive'
       'mode': 'dynamic'
     })
+    graphView.setLogger(new ClientEventLogger(window.client_session_id))
 
     graphView.load(graphPath)

@@ -1,4 +1,6 @@
 require 'custom_logger'
+require 'client_event_logger'
+require 'securerandom.rb'
 
 # O4
 class ApplicationController < ActionController::Base
@@ -20,6 +22,20 @@ class ApplicationController < ActionController::Base
     redirect_to '/' + I18n.locale.to_s
   end
 
+  def log_client_event
+    ClientEventLogger.info("#{params[:session]} #{params[:events]}")
+    
+    render :nothing => true, :status => :ok
+  end
+  
+  # Throw an error with params
+  # The function is ment to be POSTed by client side javascripts for notifying developers of client side errors.
+  def client_side_error
+    #throw 'Client side error! Params: ', params.as_json
+    ErrorMailer.warning_message('Client side error', params.as_json).deliver
+  end
+
+  
   protected
 
   # Redirects from http to https if FORCE_SSL is set.
@@ -85,12 +101,6 @@ class ApplicationController < ActionController::Base
     raise exception
   end
   
-  # Throw an error with params
-  # The function is ment to be POSTed by client side javascripts for notifying developers of client side errors.
-  def client_side_error
-    throw 'Client side error! Params: ', params.as_json
-  end
-
   def current_session
     return @current_session if defined?(@current_session)
     @current_session = UserSession.find

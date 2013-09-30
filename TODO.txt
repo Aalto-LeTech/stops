@@ -1,6 +1,5 @@
 = Ennen julkaisua =
 
-Poista kurssi suunnitelmasta
 Verkon instrumentointi
 Verkon lukitus
 

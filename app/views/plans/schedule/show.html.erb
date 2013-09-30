@@ -16,7 +16,8 @@
 
 <% content_for(:leftnav) do %>
   <div id="controls">
-    <button id="save-button" class="btn pull-right" data-bind="click: save"><%= t('.save') %></button>
+    <button id="save-button" class="btn pull-right" data-bind="click: save"><%= t('.save') %></button><% #css: { 'btn-danger': anyUnsavedChanges() }
+    -%>
     <h2><%= t('.scheduling') %></h2>
     <!--p>
       <%= t('.curriculum') %>:

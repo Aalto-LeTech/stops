@@ -1,8 +1,10 @@
-class Curriculums::CompetencesController < CurriculumsController
+class Curriculums::CompetencesController < ApplicationController
 
   before_filter :load_competence, :only => [:edit, :edit_prereqs, :update, :graph, :courselist]
   
-  caches_page []
+  def load_curriculum
+    @curriculum = Curriculum.find(params[:curriculum_id] || params[:id])
+  end
   
   def load_competence
     @competence = Competence.find(params[:competence_id] || params[:id])

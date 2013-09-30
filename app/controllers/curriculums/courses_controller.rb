@@ -1,12 +1,14 @@
-class Curriculums::CoursesController < CurriculumsController
+class Curriculums::CoursesController < ApplicationController
 
   before_filter :load_curriculum
 
-  caches_page []
-  
   respond_to :json
   # html for only index, show, new & create (as of 2013-08-09)
 
+  def load_curriculum
+    @curriculum = Curriculum.find(params[:curriculum_id] || params[:id])
+  end
+  
   # GET /courses
   # GET /courses.xml
   def index

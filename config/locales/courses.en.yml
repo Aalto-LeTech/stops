@@ -30,6 +30,7 @@ en:
       show:
         course_provides: "Provides skills"
         course_path_heading: "Relation to other courses"
+        locked: "Course is locked. Send updates to juha.hartikainen@aalto.fi if necessary."
       creation_form:
         # New course creation form
         course_code: "Course code"
@@ -52,6 +53,7 @@ en:
       edit:
         heading: 'Kurssin tiedot'
         hint: ''
+        locked: 'Locked'
         contact: 'Information given by'
         contact_hint: ''
         comments: 'You can write comments or notes to the right column'

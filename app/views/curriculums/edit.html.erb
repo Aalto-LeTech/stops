@@ -85,6 +85,7 @@
   <table id="curriculum-courses" class="table table-striped table-condensed table-bordered">
     <thead>
       <tr>
+        <th></th>
         <th><%= t '.course_code' %> &darr;</th>
         <th><%= t '.course_name' %> &darr;</th>
         <th><%= t '.course_credits' %> &darr;</th>
@@ -96,12 +97,25 @@
     </thead>
     <tbody>
       <% @courses.each_with_index do |course, i| %>
+        <%
+        if !course.locked || @curriculum.has_admin?(current_user)
+          course_link = edit_prereqs_curriculum_course_path(:curriculum_id => @curriculum, :id => course)
+        else
+          course_link = curriculum_course_path(:curriculum_id => @curriculum, :id => course)
+        end
+        %>
+          
         <tr>
           <td>
-            <%= link_to course.course_code, edit_prereqs_curriculum_course_path(:curriculum_id => @curriculum, :id => course) %>
+            <% if course.locked %>
+              <i title="<%=t 'curriculums.courses.edit.locked' %>" class="icon icon-lock"></i>
+            <% end %>
           </td>
           <td>
-            <%= link_to course.localized_name_if_possible("#{t('curriculums.course_name_not_available')}>"), edit_prereqs_curriculum_course_path(:curriculum_id => @curriculum, :id => course) %>
+            <%= link_to course.course_code, course_link %>
+          </td>
+          <td>
+            <%= link_to course.localized_name_if_possible("#{t('curriculums.course_name_not_available')}>"), course_link %>
           </td>
           <td class="centered"><%= course.credits %></td>
           <!--

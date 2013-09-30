@@ -148,7 +148,13 @@
             <td></td>
             <td colspan="2"><span class="hint"><%=t '.other_hint' %></span></td>
           </tr>
-          
+          <% if @curriculum.has_admin?(current_user) %>
+            <tr>
+              <td><%= f.label :locked, t('.locked'), :class => 'control-label' %></td>
+              <td><%= f.check_box :locked %></td>
+              <td></td>
+            </tr>
+          <% end %>
         </tbody>
       </table>
     <% end %>

@@ -32,7 +32,7 @@ class Ability
     can [:destroy, :import], Curriculum do |curriculum|
       curriculum.has_admin?(user)
     end
-
+    
     can [:update, :create_course], Curriculum do |curriculum|
       curriculum.has_admin?(user) || curriculum.has_teacher?(user)
     end
@@ -41,8 +41,12 @@ class Ability
       competence.curriculum.has_admin?(user) || competence.curriculum.has_teacher?(user)
     end
 
-    can [:update, :destroy], ScopedCourse do |scoped_course|
-      scoped_course.curriculum.has_admin?(user) || scoped_course.curriculum.has_teacher?(user)
+    can [:update], ScopedCourse do |scoped_course|
+      scoped_course.curriculum.has_admin?(user) || (!scoped_course.locked && scoped_course.curriculum.has_teacher?(user))
+    end
+    
+    can [:destroy], ScopedCourse do |scoped_course|
+      scoped_course.curriculum.has_admin?(user)
     end
 
 

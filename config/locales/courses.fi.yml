@@ -29,6 +29,7 @@ fi:
       show:
         course_provides: "Osaamistavoitteet"
         course_path_heading: "Yhteys muihin kursseihin"
+        locked: "Kurssi on lukittu. Lähetä korjaukset tarvittaessa osoitteeseen juha.hartikainen@aalto.fi."
       creation_form:
         # New course creation form
         course_code: "Kurssikoodi"
@@ -101,6 +102,7 @@ fi:
       edit:
         heading: 'Kurssin tiedot'
         hint: 'Voit täyttää osan lomakkeesta ja jatkaa myöhemmin (muista kuitenkin painaa "Tallenna" lomakkeen lopussa).'
+        locked: 'Lukittu'
         contact: 'Tiedot antoi'
         contact_hint: '(kyselyjä varten, ei mene Oodiin)'
         comments: 'Oikeaan sarakkeeseen voit kirjoittaa kommentteja ja muistiinpanoja.'

@@ -20,8 +20,7 @@ class Curriculums::CoursesController < CurriculumsController
 #                 )
 
     respond_to do |format|
-      format.html # index.html.erb
-      format.xml  { render :xml => @courses }
+      #format.html # index.html.erb
       format.json do
         render :json => @courses.select(<<-SQL
             competence_nodes.id,
@@ -86,7 +85,7 @@ class Curriculums::CoursesController < CurriculumsController
   def edit_prereqs
     @scoped_course = ScopedCourse.find(params[:id])
     @competence_node = @scoped_course
-    authorize! :update, @curriculum
+    authorize! :update, @scoped_course
 
     @hide_help = cookies[:hide_edit_prereqs_help] == 't' ? true : false
 
@@ -98,7 +97,7 @@ class Curriculums::CoursesController < CurriculumsController
   def edit_as_a_prereq
     @scoped_course = ScopedCourse.find(params[:id])
     @competence_node = @scoped_course
-    authorize! :update, @curriculum
+    authorize! :update, @scoped_course
 
     @hide_help = cookies[:hide_edit_as_a_prereq_help] == 't' ? true : false
 
@@ -134,6 +133,8 @@ class Curriculums::CoursesController < CurriculumsController
 
     @scoped_course = ScopedCourse.new
     @scoped_course.curriculum = @curriculum #Curriculum.find(params[:curriculum_id])
+    
+    render :action => 'new', :layout => 'fixed'
   end
 
   def create
@@ -167,16 +168,17 @@ class Curriculums::CoursesController < CurriculumsController
         if @scoped_course.save
           redirect_to edit_curriculum_course_path(:curriculum_id => @curriculum, :id => @scoped_course)
         else
-          render :action => "new"
+          render :action => 'new', :layout => 'fixed'
         end
       end
     end
   end
 
   def edit
-    authorize! :update, @curriculum
     @scoped_course = ScopedCourse.find(params[:id])
     @abstract_course = @scoped_course.abstract_course
+    
+    authorize! :update, @scoped_course
     
     @course_descriptions = @abstract_course.course_descriptions.all
     REQUIRED_LOCALES.each do |locale|
@@ -194,10 +196,11 @@ class Curriculums::CoursesController < CurriculumsController
   end
 
   def update
-    authorize! :update, @curriculum
     @curriculum.save  # Expire cache
     @scoped_course = ScopedCourse.find(params[:id])
 
+    authorize! :update, @scoped_course
+    
     # Update AbstractCourse if changed
     new_course_code = params[:scoped_course]['course_code'].strip
     if new_course_code != @scoped_course.abstract_course.code

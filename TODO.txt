@@ -18,4 +18,4 @@ Affix ei toimi kapealla näytöllä
 
 
 = Myöhemmin =
-
+locales/courses.yml, curriculums.courses.show.locked: mailiosoite on kovakoodattu

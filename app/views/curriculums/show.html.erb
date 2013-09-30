@@ -17,13 +17,6 @@
     <% @competences.each do |competence| %>
       <li>
         <%= link_to competence.localized_name, [@curriculum, competence] %>
-        <% if competence.children %>
-          <ul>
-            <% competence.children.each do |competence| %>
-              <li><%= link_to competence.localized_name, [@curriculum, competence] %></li>
-            <% end %>
-          </ul>
-        <% end %>
       </li>
     <% end %>
   </ul>

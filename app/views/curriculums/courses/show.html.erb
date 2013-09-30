@@ -3,7 +3,7 @@
 <% end %>
 <% content_for :title do %><%= @course.localized_name %><% end %>
 
-<% if can? :update, @curriculum %>
+<% if can? :update, @course %>
   <ul class="nav nav-pills pull-right">
     <li><%= link_to t('Admin_view'), edit_prereqs_curriculum_course_path(:curriculum_id => @curriculum, :id => @course) %></li>
     <li class="active"><%= link_to t('Student_view'), curriculum_course_path(curriculum_id: @curriculum, id: @course) %></li>
@@ -13,6 +13,12 @@
 <div>
   <h1><%= @course.course_code %> <%= @course.localized_name %></h1>
 </div>
+
+<% if can?(:update, @curriculum) && @course.locked %>
+  <div class="alert alert-info">
+    <%=t '.locked' %>
+  </div>
+<% end %>
 
 
 <h2><%=t('.course_path_heading')%></h2>

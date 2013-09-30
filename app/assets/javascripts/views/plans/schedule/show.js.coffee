@@ -27,10 +27,6 @@ jQuery ->
       event.stopPropagation()
     .on 'mousedown', 'div.leftnav-content', (event) ->
       planView.unselectObjects()
-    .on 'mouseenter', 'div.leftnav .well', (event) ->
-      planView.doShowAsEditable()
-    .on 'mouseleave', 'div.leftnav .well', (event) ->
-      planView.noShowAsEditable()
     .on 'keypress', 'body', (event) ->
       obj = planView.selectedObject()
       if obj and obj.keyPress and obj.keyPress(planView, event.keyCode)

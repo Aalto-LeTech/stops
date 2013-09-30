@@ -124,6 +124,8 @@ en:
         competences: "Competences"
         no_chosen_competences: "No chosen competences"
         period_info: "Period"
+        credits_per_period: "Credits per period"
+        credits_per_period_hint: "Kurssien opintopisteet on jaettu tasan niiden periodeille. Esim: 2 periodin mittainen 5 opintopisteen kurssi tuottaa 2.5 op/periodi."
 
         empty_instructions: "Please explore the study guide and choose competences that you find interesting"
         periods: "periods"

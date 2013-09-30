@@ -22,7 +22,7 @@ class @Competence
     for abstractId in data['abstract_prereq_ids']
       prereq = coursesByAbstractId[abstractId]
       unless prereq
-        console.log("Unknown abstractId #{abstractId}!")
+        #console.log("Unknown abstractId #{abstractId}!")
         continue
       prereq.competences.push(this)
       @prereqs.push(prereq)

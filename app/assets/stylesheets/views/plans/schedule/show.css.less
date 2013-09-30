@@ -10,7 +10,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 // Imports
 
-@import "layouts/browser.less";
+/* @import "layouts/browser.less"; */
+/* @import "layouts/browser.less"; */
+@import "core/mixins.less";
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -20,14 +22,15 @@
 ////////////////////////////////////////////////////////////////////////////////
 // Altering the layout
 
+/*
 @sidebarWidth:         400px;
 @sidebarWidthWide:     550px;
+*/
 
 ////////////////////////////////////////////////////////////////////////////////
 // The plan
 
-#plan-container
-{
+#plan-container {
   position: relative;
   width: 100%;
   border: 1px solid gray;
@@ -37,8 +40,7 @@
   cursor: default;
 
 
-  div.period
-  {
+  div.period {
     width: 100%;
     height: 58px;
     border-top: 1px solid #a0a0a0;
@@ -123,8 +125,7 @@
   }
 
 
-  div.course
-  {
+  div.course {
     position: absolute;
     top: 0px;
     left: 0px;
@@ -230,60 +231,61 @@
 ////////////////////////////////////////////////////////////////////////////////
 // Left control elements
 
-#theleft {
-  #controls {
-    margin-top: 1em;
-    margin-bottom: 2em;
 
-    h2 {
-      margin-top: 0em;
-    }
+#controls {
+  margin-top: 1em;
+  margin-bottom: 2em;
 
-    button {
-      margin-top: 0.5em;
-    }
+  h2 {
+    margin-top: 0em;
   }
 
-  .object-info {
-    h3, h4 {
-      line-height: 100%;
-      margin-bottom: 1em;
-    }
-
-    li {
-      margin-bottom: 1em;
-    }
-
-    li.competencex {
-      cursor: pointer;
-
-      div.progress {
-        width: 100%;
-        height: 0.5em;
-
-        .bar {
-          background-color: #66ff66;
-        }
-      }
-
-      div.selected {
-        color: #0000ff;
-        font-weight: bold;
-        border: none;
-        background: none;
-      }
-    }
-    
-    .period-courses {
-      margin-top: 2em;
-    }
-  }
-
-  table {
-    tr.old {
-      color: gray;
-    }
+  button {
+    margin-top: 0.5em;
   }
 }
+
+.object-info {
+  h3, h4 {
+    line-height: 100%;
+    margin-bottom: 1em;
+  }
+
+  li {
+    margin-bottom: 1ex;
+  }
+
+  li.competencex {
+    cursor: pointer;
+
+    div.progress {
+      width: 100%;
+      height: 0.5em;
+
+      .bar {
+        background-color: #66ff66;
+      }
+    }
+
+    div.selected {
+      color: #0000ff;
+      font-weight: bold;
+      border: none;
+      background: none;
+    }
+  }
+  
+  .period-courses {
+    margin-top: 2em;
+  }
+}
+
+/*
+table {
+  tr.old {
+    color: gray;
+  }
+}
+*/
 
 /////////////////////////////////////////////////////////////////////

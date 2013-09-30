@@ -130,11 +130,19 @@ class @Course
     @credits(data['credits'] || 0)
     @length(data['length'] || 1)
     @grade(data['grade'] || 0)
+    
+    if @min_credits
+      if @max_credits && @min_credits != @max_credits
+        @length_string = "#{@min_credits} - #{@max_credits}"
+      else
+        @length_string = "#{@min_credits}"
+    else
+      @length_string = '?'
 
     periodId = data['period_id']
     if periodId?
       @period = periodsById[periodId]
-      dbg.lg("Unknown periodId #{periodId}") unless @period
+      #dbg.lg("Unknown periodId #{periodId}") unless @period
 
     for instance_data in data['abstract_course']['course_instances']
       period = periodsById[instance_data['period_id']]

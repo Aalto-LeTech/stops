@@ -8,8 +8,10 @@ Verkon lukitus
 = Ennen julkaisua, jos ehtii =
 
 Näytä kurssin yksityiskohtaiset tiedot haussa
-Kurssihausa linkki hakutuloksista kurssisivulle
+Kurssihaussa linkki hakutuloksista kurssisivulle
+Scheduless linkit kurssitiedoista kurssisivulle
 Wellin sisällä olevat linkit siniseksi (ks. kurssihakuhaku)
+Jos lisää kurssin suunnitelmaan, lisää myös esitiedot
 
 = Julkaisun jälkeen =
 

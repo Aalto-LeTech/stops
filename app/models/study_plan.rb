@@ -263,6 +263,7 @@ class StudyPlan < ActiveRecord::Base
 
       # Load the data for this plan_course
       plan_course_data = new_course_data[plan_course.id]
+      next unless plan_course_data
 
       new_period_id = plan_course_data['period_id']
       new_length = plan_course_data['length']

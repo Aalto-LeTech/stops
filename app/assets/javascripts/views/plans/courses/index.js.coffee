@@ -39,7 +39,7 @@ class Search
     
     @searchString = ko.observable('')
     @isLoading = ko.observable(false)
-    @loadFailed = ko.observable(false)
+    @errorMessage = ko.observable()
 
   searchKeyPress: (data, event) ->
     @clickSearch() if event.which == 13
@@ -55,12 +55,13 @@ class Search
     
     promise.done (data) =>
       @isLoading(false)
-      @loadFailed(false)
+      @errorMessage(undefined)
       @resultsCallback(data)
     
-    promise.fail () =>
+    promise.fail (data) =>
+      console.log data
       @isLoading(false)
-      @loadFailed(true)
+      @errorMessage(data['responseJSON']['message'])
 
   clickClearSearch: () ->
     @searchString('')

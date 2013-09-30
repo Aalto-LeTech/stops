@@ -15,217 +15,208 @@
 <% end %>
 
 <% content_for(:leftnav) do %>
-  <!--div class="container-fluid"-->
+  <div id="controls">
+    <button id="save-button" class="btn pull-right" data-bind="click: save"><%= t('.save') %></button>
+    <h2><%= t('.scheduling') %></h2>
+    <!--p>
+      <%= t('.curriculum') %>:
+      <%= @study_plan.curriculum.name %>
+      <%= @study_plan.curriculum.start_year %> -
+      <%= @study_plan.curriculum.end_year %>
+    </p-->
+  </div>
+  <div class="clearfix"></div>
+  <p data-bind="text: statusMessage, css: statusStyle"></p>
 
-    <div id="controls">
-      <button id="save-button" class="btn pull-right" data-bind="click: save"><%= t('.save') %></button>
-      <h2><%= t('.scheduling') %></h2>
-      <!--p>
-        <%= t('.curriculum') %>:
-        <%= @study_plan.curriculum.name %>
-        <%= @study_plan.curriculum.start_year %> -
-        <%= @study_plan.curriculum.end_year %>
-      </p-->
-    </div>
-    <div class="clearfix"></div>
-    <p id="infomsg"></p>
-
-    <!-- Selected course details -->
-    <!-- ko if: selectedObjectType() == 'Course' -->
-      <div class="object-info well" data-bind="with: selectedObject">
-        <h3>
-          <span data-bind="text: code"></span>
-          <span data-bind="text: name"></span>
-        </h3>
-        
-        <div id="length" class="row-fluid" data-toggle="tooltip" title="<%= t('.length_tooltip') %>">
-          <div class="span6">
-            <label for="length-input">
-              <%= t('Length') %>:
-            </label>
-          </div>
-          <div class="span6">
-            <span class="in">
+  <!-- Selected course details -->
+  <!-- ko if: selectedObjectType() == 'Course' -->
+    <div class="object-info well" data-bind="with: selectedObject">
+      <h3>
+        <span data-bind="text: code"></span>
+        <span data-bind="text: name"></span>
+        (<span data-bind="text: length_string"></span> <%=t :cr %>)
+      </h3>
+      
+      <table>
+        <tbody>
+          <tr id="length">
+            <td>
+              <label for="length-input">
+                <%= t('Length') %>:
+              </label>
+            </td>
+            <td>
               <input id="length-input" class="input-mini" type="number" data-bind="value: length, valueUpdate: 'keyup'" />
-            </span>
-            <span class="out" data-bind="text: length"></span>
-            <%= t('.periods') %>
-          </div>
-        </div>
+              <%= t('.periods') %>
+            </td>
+          </tr>
 
-        <div id="credits" class="row-fluid" data-toggle="tooltip" title="<%= t('.extent_tooltip') %>">
-          <div class="span6">
-            <label for="credits-input">
-              <%= t('Extent') %>:
-            </label>
-          </div>
-          <div class="span6">
-            <span class="in">
+          <tr id="credits">
+            <td>
+              <label for="credits-input">
+                <%= t('Extent') %>:
+              </label>
+            </td>
+            <td>
               <input id="credits-input" class="input-mini" type="number" data-bind="value: credits, valueUpdate: 'keyup'" />
-            </span>
-            <span class="out" data-bind="text: credits"></span>
-            <%= t('cr') %>
-          </div>
-        </div>
-        
-        <div id="grade" class="row-fluid" data-toggle="tooltip" title="<%= t('.grade_tooltip') %>">
-          <div class="span6">
-            <label for="grade-input">
-              <%= t('Grade') %>:
-            </label>
-          </div>
-          <div class="span6">
-            <span class="in">
+              <%= t('cr') %>
+            </td>
+          </tr>
+      
+          <tr id="grade" data-toggle="tooltip" title="<%= t('.grade_tooltip') %>">
+            <td>
+              <label for="grade-input">
+                <%= t('Grade') %>:
+              </label>
+            </td>
+            <td>
               <input id="grade-input" class="input-mini" type="number" data-bind="value: grade, valueUpdate: 'keyup'" />
-            </span>
-            <span class="out" data-bind="text: grade"></span>
-          </div>
-        </div>
-        
-        <!-- ko if: periodInfo -->
-          <div id="period_info" class="row-fluid">
-            <div class="span6">
-              <%= t('.period_info') %>:
-            </div>
-            <div class="span6">
-              <span data-bind="text: periodInfo"></span>
-            </div>
-          </div>
-        <!-- /ko -->
-
-        <h4><%= t('.prereqs') %></h4>
-        <!-- ko if: hasPrereqs() -->
-          <ul data-bind="foreach: getPrereqs()">
-            <li>
-              <span data-bind="text: code"></span>
-              <span data-bind="text: name"></span>
-            </li>
-          </ul>
-        <!-- /ko -->
-        <!-- ko if: (allPrereqsInPlan && (!hasPrereqs())) -->
-          <p><%= t('.no_prereqs') %></p>
-        <!-- /ko -->
-        <!-- ko ifnot: allPrereqsInPlan -->
-          <p class="text-error" data-bind="ifnot: allPrereqsInPlan">
-            <%= t('.not_all_prereqs_in_plan') %>
-          </p>
-        <!-- /ko -->
-
-        <h4><%= t('.postreqs') %></h4>
-        <!-- ko if: hasPostreqs() -->
-          <ul data-bind="foreach: getPostreqs()">
-            <li>
-              <span data-bind="text: code"></span>
-              <span data-bind="text: name"></span>
-            </li>
-          </ul>
-        <!-- /ko -->
-        <!-- ko if: !hasPostreqs() -->
-          <p><%= t('.no_postreqs') %></p>
-        <!-- /ko -->
-
-      </div>  <!-- object-info -->
-    <!-- /ko -->
-
-    <!-- Selected period details -->
-    <!-- ko if: selectedObjectType() == 'Period' -->
-      <div class="object-info well" data-bind="with: selectedObject">
-        <h3>
-          <%= t('.selected_period') %>:
-          <span data-bind="text: name"></span>
-        </h3>
-
-        <p class="muted">
-          <span data-bind="text: beginsAt"></span> - <span data-bind="text: endsAt"></span>
-        </p>
-
-        <div class="period-courses">
-          <h4><%= t('.scheduled_courses') %></h4>
-
-          <!-- ko if: affectingCourses.length == 0 -->
-            <p><%= t('.no_scheduled_courses') %></p>
-          <!-- /ko -->
-          <!-- ko if: affectingCourses.length > 0 -->
-          <table class="table table-condensed">
-            <thead>
-              <th>
-                <%= t('Code') %>
-              </th>
-              <th>
-                <%= t('Name') %>
-              </th>
-              <th>
-                <%= t('Extent') %>
-              </th>
-  <!--
-              <th>
-                <%= t('Length') %>
-              </th>
-              <th>
-                <%= t('Grade') %>
-              </th>
-  -->
-            </thead>
-            <tbody data-bind="foreach: affectingCourses">
-              <tr data-bind="css: {'old': period.isSelected() == false}">
-                <td data-bind="text: code">
-                </td>
-                <td data-bind="text: name">
-                </td>
-                <td data-bind="text: credits">
-                </td>
-  <!--
-                <td data-bind="text: length">
-                </td>
-                <td data-bind="text: grade">
-                </td>
-  -->
-              </tr>
-            </tbody>
-            <tr>
+            </td>
+          </tr>
+          <!-- ko if: periodInfo -->
+            <tr id="period_info">
               <td>
+                <%= t('.period_info') %>:
               </td>
               <td>
-              </td>
-              <td>
-                <span data-bind="numeric: credits, decimals: 1"></span>
-                <%= t('cr') %>
+                <span data-bind="text: periodInfo"></span>
               </td>
             </tr>
-          </table>
           <!-- /ko -->
-        </div>
-      </div>  <!-- object-info -->
-    <!-- /ko -->
+        </tbody>
+      </table>
+      
 
-    <!-- Competence details -->
-    <!-- ko if: selectedObjectType() == undefined || selectedObjectType() == 'Competence' -->
-      <div class="object-info well">
+      <h4><%= t('.prereqs') %></h4>
+      <!-- ko if: hasPrereqs() -->
+        <ul data-bind="foreach: getPrereqs()">
+          <li>
+            <span data-bind="text: code"></span>
+            <span data-bind="text: name"></span>
+          </li>
+        </ul>
+      <!-- /ko -->
+      <!-- ko if: (allPrereqsInPlan && (!hasPrereqs())) -->
+        <p><%= t('.no_prereqs') %></p>
+      <!-- /ko -->
+      <!-- ko ifnot: allPrereqsInPlan -->
+        <p class="text-error" data-bind="ifnot: allPrereqsInPlan">
+          <%= t('.not_all_prereqs_in_plan') %>
+        </p>
+      <!-- /ko -->
 
-        <h3>
-          <%= t('.competences') %>
-        </h3>
+      <h4><%= t('.postreqs') %></h4>
+      <!-- ko if: hasPostreqs() -->
+        <ul data-bind="foreach: getPostreqs()">
+          <li>
+            <span data-bind="text: code"></span>
+            <span data-bind="text: name"></span>
+          </li>
+        </ul>
+      <!-- /ko -->
+      <!-- ko if: !hasPostreqs() -->
+        <p><%= t('.no_postreqs') %></p>
+      <!-- /ko -->
 
-        <!-- ko if: competences.length == 0 -->
-          <p><%= t('.no_chosen_competences') %></p>
+    </div>  <!-- object-info -->
+  <!-- /ko -->
+
+  <!-- Selected period details -->
+  <!-- ko if: selectedObjectType() == 'Period' -->
+    <div class="object-info well" data-bind="with: selectedObject">
+      <h3>
+        <%= t('.selected_period') %>:
+        <span data-bind="text: name"></span>
+      </h3>
+
+      <p class="muted">
+        <span data-bind="text: beginsAt"></span> - <span data-bind="text: endsAt"></span>
+      </p>
+
+      <div class="period-courses">
+        <h4><%= t('.scheduled_courses') %></h4>
+
+        <!-- ko if: affectingCourses.length == 0 -->
+          <p><%= t('.no_scheduled_courses') %></p>
         <!-- /ko -->
-        <!-- ko if: competences.length > 0 -->
-          <ul data-bind="foreach: competences">
-            <li class="competencex">
-              <div data-bind="css: {'selected': isSelected}">
-                <span data-bind="text: name"></span>
-              </div>
-              <div class="progress progress-striped" title="<%= t('.competence_progress_tooltip') %>">
-                <div class="bar" data-bind="style: {width: progressWidth()}"></div>
-              </div>
-            </li>
-          </ul>
+        <!-- ko if: affectingCourses.length > 0 -->
+        <table class="table table-condensed">
+          <thead>
+            <th>
+              <%= t('Code') %>
+            </th>
+            <th>
+              <%= t('Name') %>
+            </th>
+            <th>
+              <%= t('Extent') %>
+            </th>
+<!--
+            <th>
+              <%= t('Length') %>
+            </th>
+            <th>
+              <%= t('Grade') %>
+            </th>
+-->
+          </thead>
+          <tbody data-bind="foreach: affectingCourses">
+            <tr data-bind="css: {'old': period.isSelected() == false}">
+              <td data-bind="text: code">
+              </td>
+              <td data-bind="text: name">
+              </td>
+              <td data-bind="text: credits">
+              </td>
+<!--
+              <td data-bind="text: length">
+              </td>
+              <td data-bind="text: grade">
+              </td>
+-->
+            </tr>
+          </tbody>
+          <tr title="<%=t '.credits_per_period_hint' %>">
+            <td colspan="2">
+              <%=t '.credits_per_period' %>:
+            </td>
+            <td>
+              <span data-bind="numeric: credits, decimals: 1"></span>
+              <%= t('cr') %>
+            </td>
+          </tr>
+        </table>
         <!-- /ko -->
+      </div>
+    </div>  <!-- object-info -->
+  <!-- /ko -->
 
-      </div>  <!-- object-info -->
-    <!-- /ko -->
+  <!-- Competence details -->
+  <!-- ko if: selectedObjectType() == undefined || selectedObjectType() == 'Competence' -->
+    <div class="object-info well">
 
-  <!--/div-->
+      <h3>
+        <%= t('.competences') %>
+      </h3>
+
+      <!-- ko if: competences.length == 0 -->
+        <p><%= t('.no_chosen_competences') %></p>
+      <!-- /ko -->
+      <!-- ko if: competences.length > 0 -->
+        <ul data-bind="foreach: competences">
+          <li class="competencex">
+            <div data-bind="css: {'selected': isSelected}">
+              <span data-bind="text: name"></span>
+            </div>
+            <div class="progress progress-striped" title="<%= t('.competence_progress_tooltip') %>">
+              <div class="bar" data-bind="style: {width: progressWidth()}"></div>
+            </div>
+          </li>
+        </ul>
+      <!-- /ko -->
+
+    </div>  <!-- object-info -->
+  <!-- /ko -->
 
 <% end %>
 
@@ -255,7 +246,7 @@
                'summer': isSummer }"
     >
       <div class="name" data-bind="text: name"></div>
-      <div class="credits"><span data-toggle="tooltip" data-bind="numeric: credits, decimals: 0, attr: {title: creditsTooltip}, css: creditsStatus"></span> <%= t('cr') %></div>
+      <div class="credits"><span data-bind="numeric: credits, decimals: 0, css: creditsStatus"></span> <%= t('cr') %></div>
     </div>
   <!-- /ko -->
 

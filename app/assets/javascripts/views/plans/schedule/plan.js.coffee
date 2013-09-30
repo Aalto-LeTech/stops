@@ -15,30 +15,13 @@ class @PlanView
   constructor: (@planUrl) ->
     @selectedObject = ko.observable()
     @selectedObjectType = ko.observable()
-
-    #$('#infomsg').fadeOut(0)
-    @showAsEditable = false
+    
+    @statusMessage = ko.observable('')
+    @statusStyle = ko.observable('')
 
     # List of courses to be saved and rejected when tried to save.
     @coursesToSave = []
     @coursesRejected = []
-
-
-  showAsEditableInit: ->
-    @showAsEditable = false
-    $('#credits .in, #grade .in, #length .in').hide()
-
-  doShowAsEditable: ->
-    if not @showAsEditable
-      @showAsEditable = true
-      $('#credits .out, #grade .out, #length .out').hide()
-      $('#credits .in, #grade .in, #length .in').show()
-
-  noShowAsEditable: ->
-    if @showAsEditable
-      @showAsEditable = false
-      $('#credits .in, #grade .in, #length .in').hide()
-      $('#credits .out, #grade .out, #length .out').show()
 
 
   loadPlan: () ->
@@ -63,7 +46,7 @@ class @PlanView
     startTime = new Date().getTime()
 
     # Init before knockout hides related elements
-    @showAsEditableInit()
+    #@showAsEditableInit()
 
     # Load periods
     periodCounter = 0
@@ -96,7 +79,7 @@ class @PlanView
       for prereqId in course.prereqIds
         prereq = @coursesByAbstractId[prereqId]
         unless prereq
-          console.log "Unknown prereqId #{prereqId}!"
+          #console.log "Unknown prereqId #{prereqId}!"
           course.allPrereqsInPlan = false
           continue
         course.addPrereq(prereq)
@@ -113,7 +96,7 @@ class @PlanView
 
 
     # Set periods and save the 'originals'
-    dbg.lg("Setting the courses to the periods...")
+    #dbg.lg("Putting courses to periods...")
     for course in @courses
       # If the course was moved by the scheduler
       if schedule.moved[course.planCourseId]
@@ -136,7 +119,7 @@ class @PlanView
 
 
     # Apply ko bindings
-    console.log "Applying bindings..."
+    #console.log "Applying bindings..."
     preBindTime = new Date().getTime()
     ko.applyBindings(this)
     postBindTime = new Date().getTime()
@@ -158,7 +141,7 @@ class @PlanView
     #$('div.well div.progress').tooltip(placement: 'bottom', delay: 1000)
 
     # Autoscroll the viewport to show the current period and the near future
-    dbg.lg("Autoscrolling the viewport...")
+    #dbg.lg("Autoscrolling the viewport...")
     topOffSet = $('div.period.now').offset()
     $(window).scrollTop(topOffSet.top - 2 * @constructor.PERIOD_HEIGHT) if topOffSet
 
@@ -172,7 +155,7 @@ class @PlanView
 
     # Log time used from start to bind and here
     endTime = new Date().getTime();
-    dbg.lg("Parsing & modelling the plan data took #{preBindTime - startTime} (preBind) + #{postBindTime - preBindTime} (bind) + #{endTime - postBindTime} (postBind) = #{endTime - startTime} (total) milliseconds.")
+    dbg.lg("load #{preBindTime - startTime} ms + bind #{postBindTime - preBindTime} ms + update view #{endTime - postBindTime} ms = #{endTime - startTime} milliseconds.")
     
     $('.loader').remove()
 
@@ -261,8 +244,8 @@ class @PlanView
 
     # Check if any changes should be saved
     if not @anyUnsavedChanges()
-      @flashInfo('text-info', @I18N.no_unsaved_changes)
-      #dbg.lg('No unsaved data. No reason to put.')
+      @statusMessage(@I18N.no_unsaved_changes)
+      @statusStyle('success')
       return
 
     # Calculate total credits
@@ -293,10 +276,8 @@ class @PlanView
       dataType: 'json'
       async: false
       data: { 'json': {'plan_courses_to_update': JSON.stringify(planCoursesToSave)} }
-      error: @onSaveFailure()
+      error: => @onSaveFailure()
       success: (data) =>
-        #dbg.lg("data: #{data}")
-        #dbg.lg("data: #{JSON.stringify(data)}")
         if data['status'] == 'ok'
           feedback = data['feedback']['plan_courses_to_update']
           if feedback
@@ -310,7 +291,8 @@ class @PlanView
             if @coursesRejected.length > 0
               @onSaveFailure()
             else
-              @flashInfo('text-success', @I18N.your_changes_have_been_saved)
+              @statusMessage(@I18N.your_changes_have_been_saved)
+              @statusStyle('success')
           else
             dbg.lg("ERROR: No feedback returned!")
             @onSaveFailure()
@@ -327,13 +309,17 @@ class @PlanView
           @onSaveFailure()
 
 
-  flashInfo: (css, text) ->
-    $('#infomsg').removeClass().addClass(css).text(text).fadeIn(2000)
-    setTimeout(
-      -> $('#infomsg').fadeOut(2000, -> $('#infomsg').text('').removeClass())
-      5000
-    )
+#   flashInfo: (css, text) ->
+#     console.log "Show message #{text}"
+#     $('#infomsg').removeClass().addClass(css).text(text).fadeIn(2000)
+#     setTimeout(
+#       -> $('#infomsg').fadeOut(2000, -> $('#infomsg').text('').removeClass())
+#       5000
+#     )
 
 
   onSaveFailure: ->
-    $('#infomsg').removeClass().addClass('text-error').text(@I18N.on_save_failure_instructions).fadeIn(1000)
+    console.log "Save failure"
+    #$('#infomsg').removeClass().addClass('text-error').text(@I18N.on_save_failure_instructions).fadeIn(1000)
+    @statusMessage(@I18N.on_save_failure_instructions)
+    @statusStyle('error')

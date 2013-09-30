@@ -128,6 +128,8 @@ fi:
         competences: "Pää- ja sivuaineet"
         no_chosen_competences: "Ei valittuja pää- tai sivuaineita"
         period_info: "Opetusperiodi"
+        credits_per_period: "Opintopisteitä per periodi"
+        credits_per_period_hint: "Kurssien opintopisteet on jaettu tasan niiden periodeille. Esim: 2 periodin mittainen 5 opintopisteen kurssi tuottaa 2.5 op/periodi."
 
         empty_instructions: "Valitse opinto-oppaasta itseäsi kiinnostavat pää- ja sivuaineet"
         periods: "periodia"
@@ -138,8 +140,8 @@ fi:
 
       show_i18n_strings:
         no_unsaved_changes: "Ei tallentamattomia muutoksia."
-        your_changes_have_been_saved: "Muutoksesi on tallennettu."
-        on_save_failure_instructions: "Kaikkia muutoksia ei välttämättä pystytty jostain syystä tallentamaan!"
+        your_changes_have_been_saved: "Muutokset tallennettu."
+        on_save_failure_instructions: "Tallentaminen epäonnistui. Virheilmoitus on lähetetty automaattisesti järjestelmän ylläpitoon."
         period_credits_tooltip_underbooked: "Periodin opintopisteiden summa on selvästi alle tavoitteen (15 op)."
         period_credits_tooltip_overbooked: "Periodin opintopisteiden summa on selvästi yli tavoitteen (15 op)."
         period_credits_tooltip_neutral: "Periodille sijoitettujen kurssien opintopisteiden summa."

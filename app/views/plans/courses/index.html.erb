@@ -60,6 +60,8 @@
       <div class="skill-editor-loading-icon" data-bind="visible: isLoading()">
         <%= image_tag 'progress.gif' %>
       </div>
+      
+      <p class="error" data-bind="visible: errorMessage, text: errorMessage"></p>
     </div>
 
     <!-- Search results -->

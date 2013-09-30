@@ -14,5 +14,10 @@ class ErrorMailer < ActionMailer::Base
   def long_mail_queue
     mail(:subject => "[O4] Long mail queue")
   end
+  
+  def warning_message(subject, text)
+    @text = text
+    mail(:subject => "[O4] #{subject}")
+  end
 
 end

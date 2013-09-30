@@ -1,8 +1,8 @@
-require 'eco'
-
 class Curriculums::CompetencesController < CurriculumsController
 
   before_filter :load_competence, :only => [:edit, :edit_prereqs, :update, :graph, :courselist]
+  
+  caches_page []
   
   def load_competence
     @competence = Competence.find(params[:competence_id] || params[:id])

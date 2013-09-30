@@ -2,6 +2,8 @@ class Curriculums::CoursesController < CurriculumsController
 
   before_filter :load_curriculum
 
+  caches_page []
+  
   respond_to :json
   # html for only index, show, new & create (as of 2013-08-09)
 

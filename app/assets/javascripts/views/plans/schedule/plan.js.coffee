@@ -175,6 +175,7 @@ class @PlanView
     # NB: undefined first to avoid ko autoupdate oddness
     @selectedObjectType(undefined)
     @selectedObject(undefined)
+    
     @selectedObjectType('Course') if object instanceof Course
     @selectedObjectType('Period') if object instanceof Period
     @selectedObjectType('Competence') if object instanceof Competence

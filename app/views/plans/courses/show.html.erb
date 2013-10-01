@@ -1,5 +1,8 @@
 <!-- plans/courses/show -->
 <% content_for(:javascripts) do -%>
+  <%= javascript_tag do %>
+    window.client_session_id = '<%= @client_session_id %>';
+  <% end %>
   <%= javascript_include_tag 'views/plans/courses/show' %>
 <% end -%>
 <% content_for :title do -%>

@@ -1,3 +1,4 @@
+#= require libs/client_event_logger
 #= require libs/graph/graphView
 
 jQuery ->
@@ -22,5 +23,6 @@ jQuery ->
       'supportingTo': 'show'
       'supporting': 'show'
     })
+    graphView.setLogger(new ClientEventLogger(window.client_session_id))
 
     graphView.load(graphPath)

@@ -219,8 +219,6 @@ class StudyPlan < ActiveRecord::Base
   def remove_plan_courses_from_json(json)
     plan_course_ids_to_remove = JSON.parse(json)
 
-    puts "ids to remove: %s" % [ plan_course_ids_to_remove ]
-
     feedback = {}
 
     plan_course_ids_to_remove.each do |plan_course_id|
@@ -334,7 +332,6 @@ class StudyPlan < ActiveRecord::Base
   #   ...
   # ]
   def update_from_json(json)
-
     feedback = {}
 
     if json.has_key?('scoped_course_ids_to_add')
@@ -378,7 +375,6 @@ class StudyPlan < ActiveRecord::Base
 
     scoped_courses_to_add.each do |scoped_course|
       begin
-        puts "Add #{scoped_course.id} #{scoped_course.localized_name}"
         self.add_course(scoped_course.abstract_course, {
           :competence_node_id => competence.id,
           :scoped_course_id => scoped_course.id

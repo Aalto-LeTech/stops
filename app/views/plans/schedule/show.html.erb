@@ -9,6 +9,7 @@
   <%= javascript_tag do %>
     window.user_treatment = <%= @user.treatment || '0' %>;
     window.schedule_data = <%= @study_plan.json_schedule.to_json( root: false ).html_safe %>;
+    window.client_session_id = '<%= @client_session_id %>';
   <% end %>
   
   <%= javascript_include_tag 'views/plans/schedule/show' %>

@@ -80,6 +80,8 @@ class SurveysController < ApplicationController
     else
       redirect_to studyplan_competences_path()
     end
+    
+    log("survey view")
   end
   
   def create
@@ -97,6 +99,8 @@ class SurveysController < ApplicationController
     
     flash[:success] = 'Kiitos osallistumisestasi tutkimukseen! Järjestelmän kaikki toiminnallisuudet ovat nyt käytettävissäsi.'
     redirect_to studyplan_competences_path()
+    
+    log("survey answer")
   end
 
 end

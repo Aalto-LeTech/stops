@@ -1,4 +1,5 @@
 #= require knockout
+#= require libs/client_event_logger
 
 if not O4.view.i18n
   throw "The i18n strings for the view have not been loaded!"
@@ -59,7 +60,6 @@ class Search
       @resultsCallback(data)
     
     promise.fail (data) =>
-      console.log data
       @isLoading(false)
       @errorMessage(data['responseJSON']['message'])
 
@@ -78,6 +78,7 @@ class CoursesView
     @selectedCourse = ko.observable()
     
     @studyplanUrl = $('#paths').data('studyplan-path')
+    @logger = new ClientEventLogger(window.client_session_id)
     
     ko.applyBindings(this)
   
@@ -98,6 +99,7 @@ class CoursesView
   
   selectCourse: (course) =>
     @selectedCourse(course)
+    @logger.log("cc #{course.abstract_course_id}") if @logger # click course
     
   addCourseToPlan: (course) =>
     course.loading(true)
@@ -115,6 +117,8 @@ class CoursesView
     promise.done (data) =>
       course.includedInPlan(true)
       course.addedToPlan(true)
+    
+    @logger.log("ac #{course.abstract_course_id}") if @logger # add course
 
 jQuery ->
   new CoursesView()

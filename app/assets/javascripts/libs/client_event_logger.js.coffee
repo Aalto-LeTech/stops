@@ -1,5 +1,5 @@
 class @ClientEventLogger
-  @sendInterval = 20
+  @sendInterval = 10
 
   constructor: (@sessionId) ->
     @startTime = new Date().getTime()
@@ -8,7 +8,7 @@ class @ClientEventLogger
     @interval = undefined
   
   log: (message) ->
-    timestamp = (new Date().getTime() - @startTime) / 1000
+    timestamp = ((new Date().getTime() - @startTime) / 1000).toFixed(1)
     @buffer.push({t: timestamp, m: message})
     
     unless @interval

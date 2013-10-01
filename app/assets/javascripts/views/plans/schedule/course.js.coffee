@@ -266,6 +266,7 @@ class @Course
     for period in @periods
       period.isReceiver(isSelected)
 
+    O4.logger.log("cc #{@abstractId} #{@planCourseId}") if isSelected && O4.logger # click course
 
   # Adds a prerequisite course. This course is automatically added to the "prerequisite to" list of the other course.
   addPrereq: (other) ->

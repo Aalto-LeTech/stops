@@ -14,9 +14,12 @@ class @Period
 
     # TODO: specify event handler in the binding
     @droppedCourse.subscribe (course) =>
+      oldPeriod = course.period
       course.setPeriod(this)
       course.updatePosition()
       course.updateReqWarnings()
+      
+      O4.logger.log("mc #{course.abstractId} #{course.planCourseId} #{oldPeriod.id} #{@id}") if O4.logger # move course
 
 
     @position         = ko.observable({y: 0}) # Course position
@@ -117,6 +120,7 @@ class @Period
   setSelected: (isSelected) ->
     @isSelected(isSelected)
 
+    O4.logger.log("cp #{@id}") if isSelected && O4.logger # click period
 
   # Puts a course on this period.
   addCourse: (course, slot) ->

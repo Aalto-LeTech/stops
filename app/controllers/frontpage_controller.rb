@@ -12,6 +12,7 @@ class FrontpageController < ApplicationController
       render :action => 'staff_dashboard'
     else
       render :action => 'student_dashboard'
+      log('student_dashboard')
     end
   end
 

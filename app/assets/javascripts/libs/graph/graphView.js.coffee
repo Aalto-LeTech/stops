@@ -377,7 +377,7 @@ class @GraphView
       course.drawPrereqArcs()
       course.drawPostreqArcs()
     
-    @logger.log("cc #{course.id}") if @logger
+    @logger.log("cc #{course.id}") if @logger # click course
 
   hilightSkill: (skill) ->
     this.resetSkillHighlights()
@@ -402,7 +402,7 @@ class @GraphView
 #     skill.dfs 'forward', (s, depth) =>
 #       s.highlighted(true)
 #       s.drawPostreqArcs()
-    @logger.log("cs #{skill.id}") if @logger
+    @logger.log("cs #{skill.id}") if @logger # click skill
 
 
   createLine: (x1, y1, x2, y2, w, dash) ->

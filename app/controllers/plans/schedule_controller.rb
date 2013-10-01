@@ -5,6 +5,11 @@ class Plans::ScheduleController < PlansController
 
   def show
     authorize! :update, @study_plan
+    
+    # Log
+    @client_session_id = SecureRandom.hex(3)
+    log("view_schedule (#{@client_session_id})")
+    
     render :action => 'show', :layout => 'affix-fluid'
   end
 

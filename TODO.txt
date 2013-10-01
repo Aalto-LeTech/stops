@@ -2,6 +2,8 @@
 
 Verkon instrumentointi
 Jos kurssilla ei ole O4:ssä esitietoja, mutta Noppatiedoissa on esitieto, käyttäjälle näkyy ristiriitaista tietoa.
+Ota opintosuunnitelmasta snapshot jokaisen tallennuksen jälkeen
+Schedulessa 'click period' logitetaan alussa turhaan
 
 = Ennen julkaisua, jos ehtii =
 
@@ -11,6 +13,9 @@ Scheduless linkit kurssitiedoista kurssisivulle
 Wellin sisällä olevat linkit siniseksi (ks. kurssihakuhaku)
 Jos lisää kurssin suunnitelmaan, lisää myös esitiedot
 Verkon lukitus: kompetenssit
+Ohje kompetenssin verkkoon
+Jos lisää kompetenssin suunnitelmaan, mutta kaikki kurssit sisältyvät jo suunnitelmaan, näkyy "lisätään 0 op"
+
 
 = Julkaisun jälkeen =
 

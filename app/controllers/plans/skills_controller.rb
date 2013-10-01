@@ -13,6 +13,8 @@ class Plans::SkillsController < PlansController
     
     @prereq_ids = @skill.prereq_ids.to_set
     @prereq_courses = @skill.prereq_courses.uniq
+    
+    log("view_skill #{skill.id}")
   end
 
 end

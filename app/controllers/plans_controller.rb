@@ -125,6 +125,8 @@ class PlansController < ApplicationController
     respond_to do |format|
       format.js { render :json => {:status => :ok, :feedback => feedback} }
     end
+    
+    # TODO: log("update_plan #{params[:json]}")
   end
 
 end

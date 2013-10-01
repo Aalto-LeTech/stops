@@ -1,6 +1,7 @@
 #= require knockout
 #= require core/knockout-extensions
 #= require core/knockout-dragdrop
+#= require libs/client_event_logger
 #= require ./plan
 #= require ./period
 #= require ./course
@@ -34,6 +35,11 @@ jQuery ->
 
   $(window).bind 'beforeunload', =>
     return "You have unsaved changes on #{planView.coursesToSave.length} course(s). Leave anyway?" if planView.anyUnsavedChanges()
-
+  
+  #planView.setLogger()
+  
   #planView.loadPlan()
   planView.loadJson(schedule_data)
+
+  O4 = window.O4 = window.O4 || {}
+  O4.logger = new ClientEventLogger(window.client_session_id)

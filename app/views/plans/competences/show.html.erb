@@ -95,23 +95,17 @@
           <%= render :partial => 'course_table', :locals => { :course_list => child_competence.supporting_prereq_courses, :competence => child_competence } %>
         </div>
       <% end %>
-      
-      <hr />
-      
-      <!--
-      <h3><%= t('.supporting_prereqs') %></h3>-->
-      <% # render :partial => 'course_table', :locals => { :course_list => @supporting_courses, :competence => @competence }
-      %>
-      
     </div>
   </div>
 </div>
 
 <!-- Graph -->
 <% if @user.treatment != TREATMENT_TRADITIONAL %>
+  <h2><%=t :Course_graph %></h2>
+  
   <%= render :partial => 'courses/graph_templates' %>
 
-  <div id="course-graph"
+  <div id="course-graph" class="course-graph"
     data-graph-path="<%= graph_curriculum_path(:id => @curriculum.id) %>" 
     data-source-id="<%= @competence.id %>"
     >

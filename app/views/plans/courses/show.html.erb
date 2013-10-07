@@ -97,7 +97,7 @@
   <% end %>
   
   <% if @user.treatment != TREATMENT_GRAPH && @course.localized_description && !@course.localized_description.outcomes.blank? %>
-    <strong><%=t ('.learning_outcomes') %></strong> <%= @course.localized_description.outcomes.html_safe %>
+    <strong><%=t ('.learning_outcomes') %></strong>: <%= @course.localized_description.outcomes.html_safe %>
   <% end %>
   
   <% unless ld.noppa_url.blank? && ld.oodi_url.blank? %>
@@ -124,10 +124,11 @@
 
 
 <% if @user.treatment != TREATMENT_TRADITIONAL %>
+  <h2><%=t :Course_graph %></h2>
   <%= render :partial => 'courses/graph_templates' %>
   
   <% if @competence %>
-    <div id="course-graph"
+    <div id="course-graph" class="course-graph"
       data-graph-path="<%= graph_curriculum_path(:id => @curriculum.id) %>" 
       data-source-id="<%= @course.id %>"
       data-target-id="<%= (@competence.parent_competence || @competence).id %>"
@@ -135,7 +136,7 @@
       <!-- ko template: { name: 'courseTemplate', foreach: visibleCourses, afterRender: updateElementDimensions } --><!-- /ko -->
     </div>
   <% else %>
-    <div id="course-graph"
+    <div id="course-graph" class="course-graph"
       data-graph-path="<%= graph_curriculum_path(:id => @curriculum.id) %>" 
       data-source-id="<%= @course.id %>"
       >

@@ -29,6 +29,7 @@ en:
   Updated_at: "Updated at"
   Admin_view: "Editing view"
   Student_view: "Student's view"
+  Course_graph: 'Course Graph'
   admin_toolbox_heading: "Administration"
 
 

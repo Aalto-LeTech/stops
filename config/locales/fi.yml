@@ -29,6 +29,7 @@ fi:
   Updated_at: "Muokattu viimeksi"
   Admin_view: 'Muokkausnäkymä'
   Student_view: 'Opiskelijan näkymä'
+  Course_graph: 'Kurssiverkko'
   admin_toolbox_heading: "Admin"
 
 

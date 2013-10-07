@@ -15,7 +15,8 @@ Ohje kompetenssin verkkoon
 Jos lisää kompetenssin suunnitelmaan, mutta kaikki kurssit sisältyvät jo suunnitelmaan, näkyy "lisätään 0 op"
 Feedback
 Verkkoon näkyviin kurssit, joilla on eteen- ja taaksepäin vain tukevia linkkejä
-log rotate
+database backups
+vanhat layoutit pois
 
 = Julkaisun jälkeen =
 
@@ -26,3 +27,4 @@ Verkon lukitus: esitietona muille
 = Myöhemmin =
 locales/courses.yml, curriculums.courses.show.locked: mailiosoite on kovakoodattu
 locale constraint
+log rotate

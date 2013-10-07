@@ -1,4 +1,4 @@
-////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
 // core/core.less
 //
 // Defines the Less shared by (almost) every layout (and view) around the app.
@@ -178,7 +178,11 @@ h1:first-child, h2:first-child, h3:first-child, h4:first-child {
 }
 
 .success {
-  color: green;
+  color: #080;
+}
+
+.error {
+  color: #800;
 }
 
 .clear {
@@ -225,20 +229,6 @@ FIXME: this affects all fields, not only placeholders
 /* TODO: This is only used in one place. Is this necessary? */
 .bottom-weight {
   margin-bottom: 20px;
-}
-
-.inline-heading-container {
-  /*border: 1px solid green;*/
-  
-  /*
-  h1 {
-    float: left;
-    margin-right: 2em;
-  }
-  */
-  
-  li {
-  }
 }
 
 .hover-buttons {
@@ -395,89 +385,12 @@ FIXME: this affects all fields, not only placeholders
 // Prereq graph
 
 .course-graph {
-  /*
-  td {
-    vertical-align: middle;
-    padding: .5em;
-    font-family: sans-serif;
-  }
-
-  .graph-current a {
-    border: 2px solid #8080ff;
-    font-size: 100%;
-    font-weight: bold;
-  }
-
-  p {
-    display: block;
-    border: 1px solid #d0d0d0;
-    background: #e0e0ff;
-    margin: .5em 0em;
-    padding: .2em .5em;
-    font-size: small;
-  }
-
-  a {
-    text-decoration: none;
-    color: black;
-  }*/
-  div.course {
-    width: 500px;
-    font-size: 11px;
-    font-family: sans-serif;
-    border: 1px solid #8080a0;
-    background: #e0e0ff;
-    padding: 2px;
-    margin: 0px;
-    /*cursor: pointer;*/
-    .border-radius(4px);
-
-    h1 {
-      font-size: 10px;
-      padding: 0px;
-      margin: 5px 0px 5px 0px;
-      line-height: 10px;
-    }
-
-    ul {
-      padding: 0px;
-      margin: 0px;
-      border-bottom: 1px solid #d0d0d0;
-      border-left: 1px solid #d0d0d0;
-      border-right: 1px solid #d0d0d0;
-    }
-
-    li {
-      display: block;
-      padding: 1px;
-      margin: 0px 0px;
-      border-top: 1px solid #d0d0d0;
-      background: #f0f0ff;
-    }
-
-    li.hilight {
-      background: #c0c0ff;
-    }
-
-    li.hilight-strong {
-      background: #b0b0ff;
-      text-decoration: underline;
-    }
-  }
-
-  div.competence {
-    background: #e0ffe0;
-  }
-
-  div.cyclic {
-    background: #ffe0e0;
-  }
-}
-
-#course-graph {
+  margin: 3ex 0em;
   position: relative;
+  /*
   left: 0px;
   top: 0px;
+  */
 
   &.animate div.course {
     -moz-transition: top 0.5s, left 0.5s;
@@ -539,7 +452,6 @@ FIXME: this affects all fields, not only placeholders
     background: #ffe0e0;
   }
 }
-
 
 ////////////////////////////////////////////////////////////////////////////////
 

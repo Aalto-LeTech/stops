@@ -1,5 +1,5 @@
 def import_courses(filename)
-  puts filename
+  STDERR.puts filename
   # period_regexp = Regexp.new('([IV]{1,3})')
   
   File.open(filename, 'r') do |input|
@@ -8,8 +8,8 @@ def import_courses(filename)
       line_counter += 1
       parts = line.split(';')
 
-      puts "#{parts[0].strip}:#{parts[5].strip}"
-      next
+      #puts "#{parts[0].strip}:#{parts[5].strip}"
+      #next
       
       raise "Invalid data on line #{line_counter}" if parts.size != 12
       course_code = parts[0].strip
@@ -38,9 +38,11 @@ def import_courses(filename)
         STDERR.puts "#{course_code}: found"
       end
       
-      abstract_course.min_credits = min_credits
-      abstract_course.max_credits = max_credits
-      abstract_course.save
+      if abstract_course.min_credits != min_credits || abstract_course.max_credits != max_credits
+        abstract_course.min_credits = min_credits
+        abstract_course.max_credits = max_credits
+        abstract_course.save
+      end
       
       description_fi = CourseDescription.find_by_abstract_course_id(abstract_course.id) || CourseDescription.new(
             :abstract_course_id => abstract_course.id,
@@ -51,21 +53,22 @@ def import_courses(filename)
       description_fi.noppa_url = noppa_url
       description_fi.oodi_url = oodi_url
       description_fi.period_info = period
-      description_fi.prerequisites = prereqs if description_fi.prerequisites.blank?
-      description_fi.outcomes = learning_outcomes if description_fi.outcomes.blank?
-      description_fi.replaces = substitutes if description_fi.replaces.blank?
-      description_fi.content = content if description_fi.content.blank?
+      description_fi.prerequisites = prereqs #if description_fi.prerequisites.blank?
+      description_fi.outcomes = learning_outcomes #if description_fi.outcomes.blank?
+      description_fi.replaces = substitutes #if description_fi.replaces.blank?
+      description_fi.content = content #if description_fi.content.blank?
       
       description_fi.save
     end
     
-    puts
+    STDERR.puts
   end
   
 end
 
-import_courses('data/courses-chem.txt')
-import_courses('data/courses-econ.txt')
-import_courses('data/courses-elec.txt')
-import_courses('data/courses-eng.txt')
-import_courses('data/courses-sci.txt')
+filename = ARGV[0]
+if filename
+  import_courses(filename)
+else
+  STDERR.puts "usage: import_courses filename"
+end

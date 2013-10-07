@@ -1,21 +1,21 @@
 = Ennen julkaisua =
 
-Verkon instrumentointi
-Jos kurssilla ei ole O4:ssä esitietoja, mutta Noppatiedoissa on esitieto, käyttäjälle näkyy ristiriitaista tietoa.
 Ota opintosuunnitelmasta snapshot jokaisen tallennuksen jälkeen
-Schedulessa 'click period' logitetaan alussa turhaan
+ylikirjoita O4:n kurssitiedot Noppa-tiedoilla
+survey
 
 = Ennen julkaisua, jos ehtii =
 
-Näytä kurssin yksityiskohtaiset tiedot haussa
 Kurssihaussa linkki hakutuloksista kurssisivulle
-Scheduless linkit kurssitiedoista kurssisivulle
+Schedulessa linkit kurssitiedoista kurssisivulle
 Wellin sisällä olevat linkit siniseksi (ks. kurssihakuhaku)
 Jos lisää kurssin suunnitelmaan, lisää myös esitiedot
 Verkon lukitus: kompetenssit
 Ohje kompetenssin verkkoon
 Jos lisää kompetenssin suunnitelmaan, mutta kaikki kurssit sisältyvät jo suunnitelmaan, näkyy "lisätään 0 op"
-
+Feedback
+Verkkoon näkyviin kurssit, joilla on eteen- ja taaksepäin vain tukevia linkkejä
+log rotate
 
 = Julkaisun jälkeen =
 
@@ -25,3 +25,4 @@ Verkon lukitus: esitietona muille
 
 = Myöhemmin =
 locales/courses.yml, curriculums.courses.show.locked: mailiosoite on kovakoodattu
+locale constraint

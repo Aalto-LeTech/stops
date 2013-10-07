@@ -7,8 +7,11 @@ def import_courses(filename)
     input.each_line do |line|
       line_counter += 1
       parts = line.split(';')
-      raise "Invalid data on line #{line_counter}" if parts.size != 12
 
+      puts "#{parts[0].strip}:#{parts[5].strip}"
+      next
+      
+      raise "Invalid data on line #{line_counter}" if parts.size != 12
       course_code = parts[0].strip
       course_name = parts[1].strip
       noppa_url = parts[2].gsub('noppa-api-dev', 'noppa')
@@ -26,9 +29,6 @@ def import_courses(filename)
       learning_outcomes = parts[9]
       content = parts[10]
       substitutes = parts[11]
-      
-      puts "#{course_code}:#{period}"
-      next
       
       abstract_course = AbstractCourse.find_by_code(course_code)
       unless abstract_course

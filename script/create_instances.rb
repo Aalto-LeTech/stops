@@ -91,11 +91,11 @@ instances = [
 ]
 
 PERIOD_NUMBER_BY_SYMBOL = {
-  :period_i  => 0,
-  :period_ii => 1,
-  :period_iii=> 2,
-  :period_iv => 3,
-  :period_v  => 4,
+  :period_i   => 0,
+  :period_ii  => 1,
+  :period_iii => 2,
+  :period_iv  => 3,
+  :period_v   => 4,
   :period_s   => 5,
 }
 
@@ -124,6 +124,7 @@ def get_period_symbol_by_string(period_string)
     when 'III' then :period_iii
     when 'IV' then :period_iv
     when 'V' then :period_v
+    when 'S' then :period_s
   end
 end
 
@@ -147,7 +148,7 @@ def create_instances(filename)
     period_symbol = PERIOD_NUMBERS_NEW[period.number]
     periods[period_symbol] << period
   end
-    
+  
   input = File.open(filename, 'r')
   input.each_line do |line|
     start_year = false
@@ -158,14 +159,15 @@ def create_instances(filename)
     parts = line.split(':')
     course_code = parts[0]
     special_rules = parts[2]
-    puts "#{course_code}"
+    print course_code
     
     # Load course
     abstract_course = AbstractCourse.find_by_code(course_code)
     unless abstract_course
-      puts "#{course_code} not found"
+      print " not found"
       next
     end
+    puts
     
     abstract_course.course_descriptions.each do |description|
       description.default_period = parts[1]
@@ -194,10 +196,6 @@ def create_instances(filename)
         force_length = special_rules[7].to_i  # FIXME: this reads from the wrong place if there are multiple rules
         #print " length #{force_length}"
       end
-      
-      #print " even years" if even_year
-      #print " odd years" if odd_year
-      #puts
     end
     
     # Determine start and length
@@ -241,3 +239,5 @@ def create_instances(filename)
 end
 
 create_instances('data/periods-misc.txt')
+create_instances('data/periods-chem.txt')
+create_instances('data/periods-kie.txt')

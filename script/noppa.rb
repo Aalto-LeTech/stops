@@ -10,7 +10,6 @@ class Spider
     @api_url = 'http://noppa-api-dev.aalto.fi/api/v1/'
   end
 
-  #http://noppa-api-dev.aalto.fi/api/v1/courses?key=cdda4ae4833c0114005de5b5c4371bb8&org_id=eng
   def get_api_url(path, params = {})
     params_string = ''
     params.each do |key, value|

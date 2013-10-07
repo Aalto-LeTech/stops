@@ -102,7 +102,7 @@ fi:
         links: 'Linkit'
         period: 'Opetusperiodi'
         learning_outcomes: 'Osaamistavoitteet'
-        reqursive_prereqs: 'Välttämättömät esitiedot'
+        reqursive_prereqs: 'Esitiedot'
     
     skills:
       show:

@@ -95,10 +95,10 @@ en:
         course_remove_from_plan: "Remove from plan"
         replaces: 'Korvaavuudet'
         assignments: 'Toteutus, työmuodot ja arvosteluperusteet'
-        links: 'Linkit'
-        period: 'Opetusperiodi'
-        learning_outcomes: 'Osaamistavoitteet'
-        reqursive_prereqs: 'Välttämättömät esitiedot'
+        links: 'Links'
+        period: 'Teaching period'
+        learning_outcomes: 'Learning outcomes'
+        reqursive_prereqs: 'Prerequisites'
 
     skills:
       show:

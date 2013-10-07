@@ -1,11 +1,11 @@
 = Ennen julkaisua =
 
-Ota opintosuunnitelmasta snapshot jokaisen tallennuksen jälkeen
 ylikirjoita O4:n kurssitiedot Noppa-tiedoilla
 survey
 
 = Ennen julkaisua, jos ehtii =
 
+Opintojen ryhmittely
 Kurssihaussa linkki hakutuloksista kurssisivulle
 Schedulessa linkit kurssitiedoista kurssisivulle
 Wellin sisällä olevat linkit siniseksi (ks. kurssihakuhaku)

@@ -191,12 +191,10 @@ class StudyPlan < ActiveRecord::Base
   #   {"scoped_course_id": 35},
   #   ...
   # ]
-  def add_scoped_courses_from_json(json)
-    scoped_course_ids_to_add = JSON.parse(json)
-
+  def add_scoped_courses_from_json(scoped_course_ids_to_add_json)
     feedback = {}
 
-    scoped_course_ids_to_add.each do |scoped_course_id|
+    scoped_course_ids_to_add_json.each do |scoped_course_id|
       fdbck = self.add_course(scoped_course_id.to_i, is_manually_added=true)
       if fdbck.is_a? PlanCourse
         feedback[scoped_course_id] = fdbck.as_json(root: false)
@@ -216,12 +214,10 @@ class StudyPlan < ActiveRecord::Base
   #   {"plan_course_id": 35},
   #   ...
   # ]
-  def remove_plan_courses_from_json(json)
-    plan_course_ids_to_remove = JSON.parse(json)
-
+  def remove_plan_courses_from_json(plan_course_ids_to_remove_json)
     feedback = {}
 
-    plan_course_ids_to_remove.each do |plan_course_id|
+    plan_course_ids_to_remove_json.each do |plan_course_id|
       status = self.remove_plan_course(plan_course_id.to_i)
       if status == :ok
         feedback[plan_course_id] = true
@@ -234,8 +230,8 @@ class StudyPlan < ActiveRecord::Base
   end
 
 
-  # Updates the plans plan courses according to the data received
-  # Expects a JSON coded array of form:
+  # Updates the plans plan_courses
+  # plan_data:
   # [
   #   {"plan_course_id": 71, "period_id": 1, "course_instance_id": 45},
   #   {"plan_course_id": 35, "period_id": 2},
@@ -243,9 +239,7 @@ class StudyPlan < ActiveRecord::Base
   #   {"plan_course_id": 60, "period_id": 3, "course_instance_id": 32, "credits": 8, "length": 2, "grade": 3},
   #   ...
   # ]
-  def update_plan_courses_from_json(json)
-    plan_data = JSON.parse(json)
-
+  def update_plan_courses_from_json(plan_data)
     feedback = {}  # plan_course_id => boolean (accepted?)
 
     # Index information by plan_course_id
@@ -334,13 +328,13 @@ class StudyPlan < ActiveRecord::Base
   def update_from_json(json)
     feedback = {}
 
-    if json.has_key?('scoped_course_ids_to_add')
-      feedback['scoped_course_ids_to_add'] = self.add_scoped_courses_from_json( json['scoped_course_ids_to_add'] )
-    end
-
-    if json.has_key?('plan_course_ids_to_remove')
-      feedback['plan_course_ids_to_remove'] = self.remove_plan_courses_from_json( json['plan_course_ids_to_remove'] )
-    end
+    # if json.has_key?('scoped_course_ids_to_add')
+    #   feedback['scoped_course_ids_to_add'] = self.add_scoped_courses_from_json( json['scoped_course_ids_to_add'] )
+    # end
+    # 
+    # if json.has_key?('plan_course_ids_to_remove')
+    #   feedback['plan_course_ids_to_remove'] = self.remove_plan_courses_from_json( json['plan_course_ids_to_remove'] )
+    # end
 
     if json.has_key?('plan_courses_to_update')
       feedback['plan_courses_to_update'] = self.update_plan_courses_from_json( json['plan_courses_to_update'] )

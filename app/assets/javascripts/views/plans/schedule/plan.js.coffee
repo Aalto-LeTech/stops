@@ -276,7 +276,7 @@ class @PlanView
       type: 'put'
       dataType: 'json'
       async: false
-      data: { 'json': {'plan_courses_to_update': JSON.stringify(planCoursesToSave)} }
+      data: {'plan_courses_to_update': JSON.stringify(planCoursesToSave)} 
       error: => @onSaveFailure()
       success: (data) =>
         if data['status'] == 'ok'

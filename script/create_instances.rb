@@ -134,6 +134,9 @@ end
 
 
 def create_instances(filename)
+  skipped_count = 0
+  created_count = 0
+  
   # Load periods
   periods = {}    # :period_i => [Period, Period, ...]
   PERIOD_NUMBERS_NEW.each_value do |period_symbol|
@@ -164,7 +167,7 @@ def create_instances(filename)
     # Load course
     abstract_course = AbstractCourse.find_by_code(course_code)
     unless abstract_course
-      print " not found"
+      puts " not found"
       next
     end
     puts
@@ -229,15 +232,31 @@ def create_instances(filename)
         l = length
         l = 1 if period.number == 3 && period.begins_at.year < 2014
         
-        CourseInstance.create(:abstract_course_id => abstract_course.id, :period_id => period.id, :length => l)
+        begin
+          CourseInstance.create(:abstract_course_id => abstract_course.id, :period_id => period.id, :length => l)
+          created_count += 1
+        rescue
+          # Skip duplicate instances
+          skipped_count += 1
+        end
       end
     end
   end
 
   input.close()
-
+  
+  puts "#{created_count} instances created, #{skipped_count} existed\n"
+  
 end
 
-create_instances('data/periods-misc.txt')
-create_instances('data/periods-chem.txt')
-create_instances('data/periods-kie.txt')
+
+filename = ARGV[0]
+if filename
+  create_instances(filename)
+else
+  STDERR.puts "usage: create_instances filename"
+end
+
+# create_instances('data/periods-misc.txt')
+# create_instances('data/periods-chem.txt')
+# create_instances('data/periods-kie.txt')

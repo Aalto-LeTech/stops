@@ -23,17 +23,19 @@ class Plans::CurriculumsController < PlansController
 
   def update
     @user = current_user
-    curriculum_id = params[:user_study_plan][:curriculum]
-
     authorize! :update, @user
     
-    if @user.study_plan
-      @user.study_plan.curriculum_id = curriculum_id
-      @user.study_plan.save
-    else
-      @user.create_study_plan(curriculum_id)
+    if params[:user_study_plan]
+      curriculum = Curriculum.find(params[:user_study_plan][:curriculum])
+      
+      if @user.study_plan
+        @user.study_plan.curriculum_id = curriculum.id
+        @user.study_plan.save
+      else
+        @user.create_study_plan(curriculum.id)
+      end
     end
-
+    
     redirect_to studyplan_competences_path
   end
 

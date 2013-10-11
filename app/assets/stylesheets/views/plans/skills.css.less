@@ -3,14 +3,23 @@
     clear: both;
     
     div.course {
+      position: relative;
       float: left;
       margin-right: 2em;
       margin-bottom: 4ex;
+    
+      a {
+        /* FIXME: Where is this color defined for the graph courses? */
+        color: #222;
+      }
+      
+      div.period {
+        margin-right: 4px;
+      }
     }
     
-    a {
-      /* FIXME: Where is this color defined for the graph courses? */
-      color: #222;
+    h2 {
+      /*margin-top: 0px;*/
     }
   }
 }

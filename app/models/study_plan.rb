@@ -349,8 +349,15 @@ class StudyPlan < ActiveRecord::Base
     return feedback
   end
 
-  def has_competence?(competence)
-    competences.include? competence
+  # TODO: rename to has_competence_node?
+  def has_competence?(competence_node)
+    if competence_node.is_a? Competence
+      return competences.include? competence_node
+    elsif competence_node.is_a? ScopedCourse
+      scoped_courses.include? competence_node
+    end
+    
+    return false
   end
 
   def has_abstract_course?(abstract_course_id)

@@ -25,6 +25,7 @@ fi:
         credits_added: "Suunnitelmaan lisätään"
         competences: "Pää- ja sivuaineet"
         skills: "Osaamistavoitteet"
+        skills_hint: "Klikkaa osaamistavoitetta valitaksesi sitä tukevia kursseja."
         strict_prereqs: "Pakolliset kurssit"
         ancestor_prereqs: "Välttämättömät esitiedot"
         supporting_prereqs: "Tukevia kursseja"
@@ -36,6 +37,8 @@ fi:
         period-title: 'Periodi'
       supporting:
         heading: "Valitse tukevia kursseja"
+      new:
+        competence_all_courses_already_in: "Opintosuunnitelmaan ei lisätä kursseja, koska kaikki tarvittavat kurssit ovat ennestään suunnitelmassasi."
 
     courses:
       course_added_to_plan: 'Kurssi lisättiin suunnitelmaan'
@@ -107,6 +110,7 @@ fi:
     skills:
       show:
         supporting_courses: 'Tukevia kursseja'
+        supporting_courses_hint: 'Alta voit valita kursseja, jotka tukevat osaamistavoitetta "%{name}"'
 
     schedule:
       show:

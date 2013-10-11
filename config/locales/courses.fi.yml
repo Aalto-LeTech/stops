@@ -9,7 +9,7 @@ fi:
   course_prereqs_reqursive: "Kaikki esitiedot ja esitietojen esitiedot"
   course_prereq_to: "on esitietona kursseille"
   course_strict_prereqs: "Välttämättömät esitiedot"
-  course_no_prereqs: "Ei esitietoja"
+  course_no_prereqs: "Ei välttämättömiä esitietoja"
   course_no_future: "Ei jatkokursseja"
   course_strict_prereq_of: "on välttämätön esitieto kursseille"
 

@@ -8,7 +8,7 @@
 <% content_for :title do -%>
   <%= @course.course_code %> <%= @course.localized_name %>
 <% end -%>
-<% content_for(:theleft) do -%>
+<% content_for(:leftnav) do -%>
   <% if @competence %>
     <% if @competence.parent_competence %>
       <!-- This is a sub competence -->

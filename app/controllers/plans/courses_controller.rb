@@ -35,10 +35,9 @@ class Plans::CoursesController < PlansController
       log("view_course #{@course.id} (#{@client_session_id})")
     end
     
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml => @course }
-    end
+    
+    render :action => 'show', :layout => 'leftnav'
+    
   end
 
   # Add course to study plan

@@ -41,22 +41,27 @@ class Plans::CompetencesController < PlansController
   def new
     authorize! :update, @study_plan
     
-    @competence = Competence.find(params[:id])
-    authorize! :choose, @competence
-
-    log("add_competence_prepare #{@competence.id}")
+    @competence_node = CompetenceNode.find(params[:id])
+    #authorize! :choose, @competence_node
     
     # If competence is aleady in the plan, don't do anything
-    if @study_plan.has_competence?(@competence)
-      redirect_to studyplan_competence_path(:id => @competence)
+    if @study_plan.has_competence?(@competence_node)
+      if @competence_node.is_a? Competence
+        redirect_to studyplan_competence_path(:id => @competence_node)
+      elsif @competence_node.is_a? ScopedCourse
+        redirect_to studyplan_course_path(:id => @competence_node)
+      end
       return
     end
 
     existing_courses = @study_plan.scoped_courses
-    @new_courses = @competence.recursive_prereq_courses.includes(:localized_description).all - existing_courses # difference
-    @shared_courses = existing_courses & @competence.strict_prereq_courses.all # intersection
+    prereqs = @competence_node.recursive_prereq_courses.includes(:localized_description).all
+    @new_courses = prereqs - existing_courses # difference
+    @shared_courses = existing_courses & prereqs # intersection
     
     render :action => 'new', :layout => 'fixed'
+    
+    log("add_competence prepare #{@competence_node.id}")
   end
 
   # Adds a competence to the study plan

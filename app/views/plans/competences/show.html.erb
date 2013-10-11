@@ -40,7 +40,8 @@
     <% end %>
   </div>
 
-  <% cache("competence_details-#{@competence.id}") do %>
+  <% cache("competence_details-#{@competence.id}") do # FIXME: language
+  %>
     <h2>
       <%= @competence.localized_name %>
     </h2>
@@ -63,6 +64,8 @@
             <li><%= link_to skill.localized_name, studyplan_competence_skill_path(:competence_id => @competence, :id => skill) %></li>
           <% end %>
         </ul>
+        
+        <p class="hint"><%=t '.skills_hint' %></p>
       </div>
       
       <!-- Courses -->

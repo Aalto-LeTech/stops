@@ -6,20 +6,18 @@ survey
 = Ennen julkaisua, jos ehtii =
 
 Opintojen ryhmittely
-vanhat layoutit pois
 Kurssihaussa linkki hakutuloksista kurssisivulle
 Schedulessa linkit kurssitiedoista kurssisivulle
 Verkkoon näkyviin kurssit, joilla on eteen- ja taaksepäin vain tukevia linkkejä
 Wellin sisällä olevat linkit siniseksi (ks. kurssihakuhaku)
-Jos lisää kompetenssin suunnitelmaan, mutta kaikki kurssit sisältyvät jo suunnitelmaan, näkyy "lisätään 0 op"
 Feedback
-Jos lisää kurssin suunnitelmaan, lisää myös esitiedot
 
 
 = Julkaisun jälkeen =
 
 Affix ei toimi kapealla näytöllä
 Verkon lukitus: esitietona muille
+Jos lisää kurssin suunnitelmaan, lisää myös esitiedot
 
 
 = Myöhemmin =
@@ -27,3 +25,4 @@ locales/courses.yml, curriculums.courses.show.locked: mailiosoite on kovakoodatt
 locale constraint
 log rotate
 CourseHighlighter strings should be translated
+Sort supporting courses by number of relevant skills

@@ -24,7 +24,8 @@ en:
         credits_passed: "Already passed"
         credits_added: "Credits to add to plan"
         competences: "Majors and minors"
-        skills: "Competence goals"
+        skills: "Learning goals"
+        skills_hint: "Click learning goal to choose supporting courses."
         strict_prereqs: "Mandatory courses"
         supporting_prereqs: "Supporting courses"
         course_passed: "Passed"
@@ -49,7 +50,7 @@ en:
         no_courses_in_plan: "There are no courses in your plan at the moment."
         no_courses_added_nor_removed: "No courses have been added nor removed from your plan since last save."
         to_course_page: "Course Page"
-        skills: "Competence goals"
+        skills: "Learning goals"
         prereqs: "Prerequirements"
         add_symbol: "+"
         remove_symbol: "-"
@@ -103,6 +104,7 @@ en:
     skills:
       show:
         supporting_courses: 'Supporting courses'
+        supporting_courses_hint: ''
     
     schedule:
       show:

@@ -5,11 +5,11 @@
 <% content_for :title do -%>
   <%= @competence.localized_name %>
 <% end -%>
-<% content_for(:theleft) do -%>
+<% content_for(:leftnav) do -%>
   <h1><%= link_to @competence.localized_name, studyplan_competence_path(:id => @competence) %></h1>
-      
+  
   <ul>
-    <% @competence.skills.each do |skill| %>
+    <% @competence.skills.includes(:localized_description).each do |skill| %>
       <li class="<%= skill == @skill ? 'selected' : '' %>"><%= link_to skill.localized_name, studyplan_competence_skill_path(:competence_id => @competence.id, :id => skill) %>
     <% end %>
   </ul>
@@ -20,7 +20,7 @@
   <%= @skill.localized_name %>
 </h1>
 
-<h2><%=t '.supporting_courses' %>:</h2>
+<p class="hint"><%=t '.supporting_courses_hint', :name => @skill.localized_name %></p>
 
 <div class="course-graph suggested-courses">
   <% @prereq_courses.each do |course| %>
@@ -31,6 +31,8 @@
         <h1>
           <%= link_to "#{course.course_code} #{course.localized_name}", studyplan_competence_course_path(:competence_id => @competence, :id => course) %>
           (<%= course.credits %><%=t :cr %>)
+          
+          <div class="pull-right period"><%= course.localized_description.default_period %></div>
         </h1>
         <ul>
           <% course.skills.each do |skill| %>
@@ -41,8 +43,6 @@
         </ul>
       </div>
       
-      <h2><%= course.localized_description.default_period %></h2>
-
       <!-- Add -->
       <% if can? :choose, ScopedCourse %>
         <% top_competence = @competence.parent_competence || @competence %>
@@ -52,5 +52,6 @@
         <% end %>
       <% end %>
     </div>
+    
   <% end %>
 </div>

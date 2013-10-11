@@ -32,6 +32,7 @@ en:
   Course_graph: 'Course Graph'
   admin_toolbox_heading: "Administration"
 
+  course_graph_hint: "<ul><li>Kurssit on järjestetty esitietojen mukaan, peruskurssit vasemmalla ja jatkokurssit oikealla</li><li></li></ul>"
 
   #########################
   # General status messages

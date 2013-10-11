@@ -1,22 +1,21 @@
 = Ennen julkaisua =
 
-ylikirjoita O4:n kurssitiedot Noppa-tiedoilla
 survey
+
 
 = Ennen julkaisua, jos ehtii =
 
 Opintojen ryhmittely
+Verkon lukitus: kompetenssit
+vanhat layoutit pois
+Jos lisää kurssin suunnitelmaan, lisää myös esitiedot
 Kurssihaussa linkki hakutuloksista kurssisivulle
 Schedulessa linkit kurssitiedoista kurssisivulle
+Verkkoon näkyviin kurssit, joilla on eteen- ja taaksepäin vain tukevia linkkejä
 Wellin sisällä olevat linkit siniseksi (ks. kurssihakuhaku)
-Jos lisää kurssin suunnitelmaan, lisää myös esitiedot
-Verkon lukitus: kompetenssit
-Ohje kompetenssin verkkoon
 Jos lisää kompetenssin suunnitelmaan, mutta kaikki kurssit sisältyvät jo suunnitelmaan, näkyy "lisätään 0 op"
 Feedback
-Verkkoon näkyviin kurssit, joilla on eteen- ja taaksepäin vain tukevia linkkejä
-database backups
-vanhat layoutit pois
+
 
 = Julkaisun jälkeen =
 
@@ -28,3 +27,4 @@ Verkon lukitus: esitietona muille
 locales/courses.yml, curriculums.courses.show.locked: mailiosoite on kovakoodattu
 locale constraint
 log rotate
+CourseHighlighter strings should be translated

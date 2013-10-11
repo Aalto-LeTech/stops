@@ -40,68 +40,67 @@
     <% end %>
   </div>
 
-  <h2>
-    <%= @competence.localized_name %>
-  </h2>
+  <% cache(:action => 'show', :action_suffix => 'competence_details') do %>
+    <h2>
+      <%= @competence.localized_name %>
+    </h2>
 
-  <!-- Description -->
-  <div class="row-fluid">
-    <div class="span12">
-      <% if @competence.localized_description && !@competence.localized_description.description.blank? %>
-        <%= @competence.localized_description.description.html_safe %>
-      <% end %>
-    </div>
-  </div>
-      
-  <div class="row-fluid">
-    <!-- Learning outcomes -->
-    <div class="span6">
-      <h3><%= t('.skills') %></h3>
-      <ul>
-        <% @competence.skills.each do |skill| %>
-          <li><%= link_to skill.localized_name, studyplan_competence_skill_path(:competence_id => @competence, :id => skill) %></li>
+    <!-- Description -->
+    <div class="row-fluid">
+      <div class="span12">
+        <% if @competence.localized_description && !@competence.localized_description.description.blank? %>
+          <%= @competence.localized_description.description.html_safe %>
         <% end %>
-      </ul>
+      </div>
     </div>
-    
-    <!-- Courses -->
-    <div class="span6">
-      <!-- Mandatory courses -->
-      <% unless @mandatory_courses.empty? %>
-        <h3>
-          <%= t('.strict_prereqs') %>
-          
-        </h3>
-        <%= render :partial => 'course_table', :locals => { :course_list => @mandatory_courses, :competence => @competence } %>
-      <% end %>
-      
-      <!-- Mandatory prereqs -->
-      <% unless @mandatory_prereqs.empty? %>
-        <h3><%= t('.ancestor_prereqs') %></h3>
-        <%= render :partial => 'course_table', :locals => { :course_list => @mandatory_prereqs, :competence => @competence } %>
-      <% end %>
-
-      <!-- Child competences -->
-      <% @competence.children.includes(:localized_description).each do |child_competence| %>
-        <div class="child-competence">
-          <% if child_competence.localized_description %>
-            <h3>
-              <%= child_competence.localized_description.name %>
-              <% if child_competence.min_credits %>(<%= child_competence.min_credits %> <%=t 'cr' %>)<% end %>
-            </h3>
-            <p><%= child_competence.localized_description.description %></p>
+        
+    <div class="row-fluid">
+      <!-- Learning outcomes -->
+      <div class="span6">
+        <h3><%= t('.skills') %></h3>
+        <ul>
+          <% @competence.skills.each do |skill| %>
+            <li><%= link_to skill.localized_name, studyplan_competence_skill_path(:competence_id => @competence, :id => skill) %></li>
           <% end %>
-          
-          <%= render :partial => 'course_table', :locals => { :course_list => child_competence.supporting_prereq_courses, :competence => child_competence } %>
-        </div>
-      <% end %>
+        </ul>
+      </div>
+      
+      <!-- Courses -->
+      <div class="span6">
+        <!-- Mandatory courses -->
+        <% mandatory_courses = @competence.recursive_prereq_courses.includes(:localized_description) %>
+        <% unless mandatory_courses.empty? %>
+          <h3>
+            <%= t('.strict_prereqs') %>
+            
+          </h3>
+          <%= render :partial => 'course_table', :locals => { :course_list => mandatory_courses, :competence => @competence } %>
+        <% end %>
+        
+        <!-- Child competences -->
+        <% @competence.children.includes(:localized_description).each do |child_competence| %>
+          <div class="child-competence">
+            <% if child_competence.localized_description %>
+              <h3>
+                <%= child_competence.localized_description.name %>
+                <% if child_competence.min_credits %>(<%= child_competence.min_credits %> <%=t 'cr' %>)<% end %>
+              </h3>
+              <p><%= child_competence.localized_description.description %></p>
+            <% end %>
+            
+            <%= render :partial => 'course_table', :locals => { :course_list => child_competence.supporting_prereq_courses.includes(:localized_description), :competence => child_competence } %>
+          </div>
+        <% end %>
+      </div>
     </div>
-  </div>
+  <% end # cache
+  -%>
 </div>
 
 <!-- Graph -->
 <% if @user.treatment != TREATMENT_TRADITIONAL %>
-  <h2><%=t :Course_graph %></h2>
+  <h2 class="inline-heading"><%=t :Course_graph %></h2>
+  <%= hint_button :dynamic_course_graph_hint %>
   
   <%= render :partial => 'courses/graph_templates' %>
 

@@ -4,8 +4,7 @@ db/sphinx/
 tmp/**/*
 log/
 doc/
-public/images/
-public/assets/
+public/**/*
 .sass-cache
 config/database.yml
 config/initializers/settings.rb

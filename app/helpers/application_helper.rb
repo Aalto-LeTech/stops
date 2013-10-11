@@ -12,6 +12,11 @@ module ApplicationHelper
         end
     end
   end
+  
+  # usage: <%= hint_button :translation_string_name %>
+  def hint_button(translation_string_name, id = nil)
+    return "<i id='#{id || translation_string_name}' class='icon icon-question-sign hint-popover' data-content='#{t(translation_string_name)}'></i>".html_safe
+  end
 
   class ActionView::Helpers::FormBuilder
 

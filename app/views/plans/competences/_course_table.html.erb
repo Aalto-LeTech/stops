@@ -1,37 +1,27 @@
-<table class="course-table">
-  <thead>
-    <tr>
-      <td></td>
-      <td><%=t '.course-title' %></td>
-      <td></td>
-      <td><%=t '.credits-title' %></td>
-      <td><%=t '.period-title' %></td>
-    </tr>
-  </thead>
-  <tbody>
-    <%
-    #credits_counter = included_counter = passed_counter = 0
-    -%>
-    <% course_list.each do |course| %>
-      <tr data-abstract-course-id="<%= course.abstract_course_id %>">
-        <%
-          #is_passed = (@passed_courses.member? course.id)
-          #a_class = ''
-          #if @included_courses.member?(course)
-          #  a_class = 'included'
-          #  included_counter += course.credits || 0
-          #end
-        -%>
-        <td class="status"></td>
-        <td class="course-code"><%= link_to course.course_code, studyplan_competence_course_path(:competence_id => competence.id, :id => course) %></td>
-        <td class="course-name"><%= link_to course.localized_name, studyplan_competence_course_path(:competence_id => competence.id, :id => course) %></td>
-        <td class="course-credits"><%= course.credits %></td>
-        <td class="course-period"><%= course.localized_description.default_period %></td>
-        <%
-        #  credits_counter += course.credits || 0
-        #  passed_counter += course.credits if is_passed
-        -%>
+<% unless course_list.empty? %>
+  <table class="course-table">
+    <thead>
+      <tr>
+        <td></td>
+        <td><%=t '.course-title' %></td>
+        <td></td>
+        <td><%=t '.credits-title' %></td>
+        <td><%=t '.period-title' %></td>
       </tr>
-    <% end %>
-  </tbody>
-</table> 
+    </thead>
+    <tbody>
+      <%
+      #credits_counter = included_counter = passed_counter = 0
+      -%>
+      <% course_list.each do |course| %>
+        <tr data-abstract-course-id="<%= course.abstract_course_id %>">
+          <td class="status"></td>
+          <td class="course-code"><%= link_to course.course_code, studyplan_competence_course_path(:competence_id => competence.id, :id => course) %></td>
+          <td class="course-name"><%= link_to course.localized_name, studyplan_competence_course_path(:competence_id => competence.id, :id => course) %></td>
+          <td class="course-credits"><%= course.credits %></td>
+          <td class="course-period"><%= course.localized_description.default_period %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table> 
+<% end %>

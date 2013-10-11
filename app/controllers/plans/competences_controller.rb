@@ -20,16 +20,15 @@ class Plans::CompetencesController < PlansController
     @competence = Competence.includes(:localized_description, {:skills => :localized_description}).find(params[:id])
     @chosen_competence_ids = @study_plan.competence_ids.to_set
     
-    @mandatory_courses = @competence.strict_prereq_courses.includes(:localized_description).all
-    @mandatory_prereqs = @competence.ancestor_prereq_courses.includes(:localized_description).all - @mandatory_courses
-    
+    #@mandatory_courses = @competence.recursive_prereq_courses.includes(:localized_description).all
+    #@mandatory_prereqs = @competence.ancestor_prereq_courses.includes(:localized_description).all - @mandatory_courses
     #@supporting_courses = @competence.supporting_prereq_courses.includes(:localized_description).order(:course_code).all - @mandatory_courses
-    @included_courses = @study_plan.scoped_course_ids.to_set
+    #@included_courses = @study_plan.scoped_course_ids.to_set
     
-    @passed_courses = Hash.new
-    @study_plan.passed_courses.each do |course|
-      @passed_courses[course.id] = course
-    end
+    # @passed_courses = Hash.new
+    # @study_plan.passed_courses.each do |course|
+    #   @passed_courses[course.id] = course
+    # end
 
     # Log
     @client_session_id = SecureRandom.hex(3)

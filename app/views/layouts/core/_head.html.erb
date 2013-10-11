@@ -15,7 +15,8 @@
   </title>
   <%= csrf_meta_tag %>
   <%= stylesheet_link_tag 'core/print', :media => 'print' %>
-  <%= yield(:corestylesheets) %>
-  <%= yield(:stylesheets) %>
-  <%= yield(:head) %>
+  <%= yield(:corestylesheets) -%>
+  <%= yield(:stylesheets) -%>
+  <%= yield(:head) -%>
+  <%= render :partial => 'shared/analytics' if Rails.env.production? -%>
 </head>

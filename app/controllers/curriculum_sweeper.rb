@@ -13,6 +13,8 @@ class CurriculumSweeper < ActionController::Caching::Sweeper
   def expire_cache_for(curriculum)
     expire_page(:controller => '/curriculums', :action => 'graph', :id => curriculum.id, :format => 'json')
     
-    expire_fragment(:controller => 'curriculums', :action => 'index', :action_suffix => 'competence_details')
+    curriculum.competences.each do |competence|
+      expire_fragment("competence_details-#{competence.id}")
+    end
   end
 end 

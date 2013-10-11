@@ -40,7 +40,7 @@
     <% end %>
   </div>
 
-  <% cache(:action => 'show', :action_suffix => 'competence_details') do %>
+  <% cache("competence_details-#{@competence.id}") do %>
     <h2>
       <%= @competence.localized_name %>
     </h2>

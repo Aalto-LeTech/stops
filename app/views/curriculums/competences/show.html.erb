@@ -3,7 +3,7 @@
   <%= javascript_include_tag 'views/curriculums/courseGraph' %>
 <% end %>
 
-<% if can? :update, @curriculum %>
+<% if can? :update, @competence %>
   <ul class="nav nav-pills pull-right">
     <li><%= link_to t('Admin_view'), edit_prereqs_curriculum_competence_path(:curriculum_id => @curriculum, :id => @competence) %></li>
     <li class="active"><%= link_to t('Student_view'), curriculum_competence_path(curriculum_id: @curriculum, id: @competence) %></li>
@@ -13,6 +13,12 @@
 <div>
   <h1><%= @competence.localized_name %></h1>
 </div>
+
+<% if can?(:update, @curriculum) && @competence.locked %>
+  <div class="alert alert-info">
+    <%=t '.locked' %>
+  </div>
+<% end %>
 
 <h2><%=t :competence_skills_heading %></h2>
 

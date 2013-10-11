@@ -5,8 +5,9 @@ survey
 
 = Ennen julkaisua, jos ehtii =
 
+cache invalidation?
+
 Opintojen ryhmittely
-Verkon lukitus: kompetenssit
 vanhat layoutit pois
 Jos lisää kurssin suunnitelmaan, lisää myös esitiedot
 Kurssihaussa linkki hakutuloksista kurssisivulle

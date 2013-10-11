@@ -55,13 +55,23 @@
   <ul>
     <% @competences.each do |competence| %>
       <li>
-        <%= link_to competence.localized_name, edit_prereqs_curriculum_competence_path(:curriculum_id => @curriculum, :id => competence) %>
-        <% if competence.children %>
-          <ul>
-            <% competence.children.each do |competence| %>
-              <li><%= link_to competence.localized_name, edit_prereqs_curriculum_competence_path(:curriculum_id => @curriculum, :id => competence) %></li>
-            <% end %>
-          </ul>
+        <% if !competence.locked || @curriculum.has_admin?(current_user) %>
+          <%= link_to competence.localized_name, edit_prereqs_curriculum_competence_path(:curriculum_id => @curriculum, :id => competence) %>
+          <% if competence.locked %>
+            <i title="<%=t 'curriculums.courses.edit.locked' %>" class="icon icon-lock"></i>
+          <% end %>
+          <% if competence.children %>
+            <ul>
+              <% competence.children.each do |competence| %>
+                <li><%= link_to competence.localized_name, edit_prereqs_curriculum_competence_path(:curriculum_id => @curriculum, :id => competence) %></li>
+              <% end %>
+            </ul>
+          <% end %>
+        <% else %>
+          <%= link_to competence.localized_name, curriculum_competence_path(:curriculum_id => @curriculum, :id => competence) %>
+          <% if competence.locked %>
+            <i title="<%=t 'curriculums.courses.edit.locked' %>" class="icon icon-lock"></i>
+          <% end %>
         <% end %>
       </li>
     <% end %>

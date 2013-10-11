@@ -22,6 +22,7 @@ en:
       courselist_tab: 'Course list'
       show:
         graph_link: 'Show course graph'
+        locked: "Competence is locked. Send updates to juha.hartikainen@aalto.fi if necessary."
       edit:
         heading: "Editing competences"
         title: 'Edit'
@@ -55,6 +56,7 @@ en:
         competence_description_in_fi: 'Description in Finnish:'
         competence_description_in_en: 'Description in English:'
         competence_description_in_sv: 'Description in Swdish:'
+        locked: 'Locked'
 
   competence_add_heading: "Add %{competence} to study plan"
   competence_add_to_plan: "Add to studyplan"

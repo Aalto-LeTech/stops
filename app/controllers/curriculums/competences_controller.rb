@@ -58,7 +58,7 @@ class Curriculums::CompetencesController < ApplicationController
 
   # GET /competences/1/edit
   def edit
-    authorize! :update, @curriculum
+    authorize! :update, @competence
 
     # Add missing translations
     existing_locales = @competence.competence_descriptions.map {|description| description.locale}
@@ -73,7 +73,7 @@ class Curriculums::CompetencesController < ApplicationController
   def edit_prereqs
     #@competence = Competence.find(params[:id])
     @competence_node = @competence
-    authorize! :update, @curriculum
+    authorize! :update, @competence
 
     @hide_help = cookies[:hide_edit_competence_prereqs_help] == 't' ? true : false
 
@@ -85,7 +85,7 @@ class Curriculums::CompetencesController < ApplicationController
   # PUT /competences/1
   # PUT /competences/1.xml
   def update
-    authorize! :update, @curriculum
+    authorize! :update, @competence
     @curriculum.save  # Expire cache
 
     respond_to do |format|

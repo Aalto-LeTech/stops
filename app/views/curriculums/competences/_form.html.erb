@@ -17,6 +17,15 @@
     </div>
   <% end %>
   
+  <% if @curriculum.has_admin?(current_user) %>
+    <div class="form-control-group">
+      <%= f.label t('.locked'), :class => "form-label" %>
+      <div class="form-controls">
+        <%= f.check_box :locked %>
+      </div>
+    </div>
+  <% end %>
+  
   <div class="form-control-group">
     <div class="form-controls">
       <%= link_to t(:Cancel), edit_curriculum_path(@curriculum), :class => 'btn' %>

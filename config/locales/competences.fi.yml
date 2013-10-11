@@ -22,6 +22,7 @@ fi:
       courselist_tab: 'Kurssilista'
       show:
         graph_link: 'Kurssiverkko'
+        locked: "Kompetenssi on lukittu. Lähetä korjaukset tarvittaessa osoitteeseen juha.hartikainen@aalto.fi."
       edit:
         heading: "Muokkaa kompetenssia"
         title: 'Muokkaa'
@@ -55,6 +56,7 @@ fi:
         competence_description_in_fi: 'Kuvaus suomeksi:'
         competence_description_in_en: 'Kuvaus englanniksi:'
         competence_description_in_sv: 'Kuvaus ruotsiksi:'
+        locked: 'Lukittu'
 
   competence_add_heading: "Lisää %{competence} opintosuunnitelmaan"
   competence_add_to_plan: "Lisää opintosuunnitelmaan"

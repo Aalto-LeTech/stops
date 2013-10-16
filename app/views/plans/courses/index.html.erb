@@ -5,6 +5,7 @@
 <% content_for(:javascripts) do -%>
   <%= javascript_tag do %>
     window.client_session_id = '<%= @client_session_id %>';
+    window.studyplan_data = <%= @study_plan.json_plan.to_json( root: false ).html_safe %>;
     <%= render "index_i18n_strings.js" %>
   <% end %>
   <%= javascript_include_tag "views/plans/courses/index", :media => 'all' %>
@@ -42,7 +43,7 @@
   <div class="span9">
     <ul class="nav nav-tabs" id="myTab">
       <li class="active"><a href="#tab-search" data-toggle="tab"><%=t '.tab-search' %></a></li>
-      <!--li><a href="#tab-courses" data-toggle="tab"><%=t '.tab-courses' %></a></li-->
+      <li><a href="#tab-courses" data-toggle="tab"><%=t '.tab-courses' %></a></li>
     </ul>
   </div>
 </div>
@@ -107,8 +108,15 @@
   </div>
   
   <!-- Courses tab -->
-  <div class="tab-pane span12" id="tab-courses">
-    My courses
+  <div class="tab-pane span9" id="tab-courses" data-bind="with: plan">
+    <div data-bind="foreach: competences">
+      <h2 data-bind="text: name"></h2>
+      
+      <%= render :partial => 'course_table', :locals => {:array_name => 'courses'} %>
+    </div>
+    
+    <h2><%=t '.unattached_courses' %></h2>
+    <%= render :partial => 'course_table', :locals => {:array_name => 'unattachedCourses'} %>
   </div>
 </div>
 

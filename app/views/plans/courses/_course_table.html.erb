@@ -1,0 +1,18 @@
+<table class="table table-condensed table-striped course-list">
+  <thead>
+    <tr>
+      <th><%=t 'plans.courses.index.table-code' %></th>
+      <th><%=t 'plans.courses.index.table-name' %></th>
+      <th><%=t 'plans.courses.index.table-credits' %></th>
+    </tr>
+  </thead>
+  <tbody class="courses-container" data-bind="sortable: {data: <%= array_name %>, connectClass: 'courses-container', options: {containment: '#tab-courses', axis: 'y', distance: 5, items: '>*:not(.unsortable)'}}">
+    <tr data-bind="css: {unsortable: dummy}">
+      <td class="code" data-bind="text: course_code"></td>
+      <td class="name" data-bind="text: name"></td>
+      <td class="credits" data-bind="text: credits"> <%=t '.cr' %></td>
+    </tr>
+    
+    
+  </tbody>
+</table> 

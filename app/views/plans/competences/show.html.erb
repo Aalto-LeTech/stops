@@ -40,10 +40,11 @@
     <% end %>
   </div>
 
-  <% cache("competence_details-#{@competence.id}") do # FIXME: language
-  %>
+  <!--% cache("competence_details-#{@competence.id}") do # FIXME: language
+  %-->
     <h2>
       <%= @competence.localized_name %>
+      <% if @competence.min_credits %>(<%= @competence.min_credits %> <%=t 'cr' %>)<% end %>
     </h2>
 
     <!-- Description -->
@@ -73,11 +74,8 @@
         <!-- Mandatory courses -->
         <% mandatory_courses = @competence.recursive_prereq_courses.includes(:localized_description) %>
         <% unless mandatory_courses.empty? %>
-          <h3>
-            <%= t('.strict_prereqs') %>
-            
-          </h3>
-          <%= render :partial => 'course_table', :locals => { :course_list => mandatory_courses, :competence => @competence } %>
+          <h3><%= t('.strict_prereqs') %></h3>
+          <%= render :partial => 'course_table', :locals => { :course_list => mandatory_courses, :competence => @competence, :top_competence => @competence } %>
         <% end %>
         
         <!-- Child competences -->
@@ -91,13 +89,24 @@
               <p><%= child_competence.localized_description.description %></p>
             <% end %>
             
-            <%= render :partial => 'course_table', :locals => { :course_list => child_competence.supporting_prereq_courses.includes(:localized_description), :competence => child_competence } %>
+            <%= render :partial => 'course_table', :locals => { :course_list => child_competence.supporting_prereq_courses.includes(:localized_description), :competence => child_competence, :top_competence => @competence } %>
           </div>
         <% end %>
+      
+        <hr />
+      
+        <div class="total-credits">
+          <p class="total">
+            <%=t '.total_credits' %>
+            <span class="number" id="total-credits"><%= image_tag 'progress.gif' %></span>&nbsp;<span><%=t :cr %></span>
+          </p>
+          
+          <p class="hint"><%=t '.total_credits_hint' %></p>
+        </div>
       </div>
     </div>
-  <% end # cache
-  -%>
+  <!--% end # cache
+  -%-->
 </div>
 
 <!-- Graph -->

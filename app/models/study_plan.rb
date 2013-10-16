@@ -93,7 +93,7 @@ class StudyPlan < ActiveRecord::Base
     competences_json = plan_competences.select('competence_id')
       .as_json(:root => false)
       
-    courses_json = plan_courses.select('scoped_course_id, abstract_course_id, period_id, length, grade')
+    courses_json = plan_courses.select('scoped_course_id, abstract_course_id, competence_node_id, period_id, credits, length, grade')
       .as_json(:root => false)
     
     response_data = {
@@ -104,11 +104,49 @@ class StudyPlan < ActiveRecord::Base
     response_data
   end
   
+  def json_plan
+    competences = self.competences.includes([:localized_description])
+    plan_courses = self.plan_courses
+    
+    # TODO: Replace courses_recursive with a more efficient solution
+    competences_data = competences.as_json(
+      only: [:id],
+      methods: [:localized_name, :abstract_prereq_ids],
+      root: false
+    )
+
+    # TODO: only load relevant course_instances
+    plan_courses_data = plan_courses.as_json(
+      only: [:id, :abstract_course_id, :competence_node_id, :period_id, :credits, :length, :grade],
+      include: [
+        {
+          abstract_course: {
+            only: [:code, :min_credits, :max_credits],
+            methods: [:localized_name],
+            include: {
+              localized_description: {
+                only: [:period_info]
+              }
+            }
+          }
+        },
+      ],
+      root: false
+    )
+
+    response_data = {
+      plan_courses: plan_courses_data,
+      competences: competences_data,
+    }
+    
+    response_data
+  end
+  
   def json_schedule
     periods = self.periods.includes(:localized_description)
     competences = self.competences.includes([:localized_description])
     plan_courses = self.plan_courses
-    abstract_courses = self.abstract_courses.includes([:localized_description, :course_instances])
+#     abstract_courses = self.abstract_courses.includes([:localized_description, :course_instances])
     
 #     .includes(
 #       [
@@ -129,20 +167,6 @@ class StudyPlan < ActiveRecord::Base
       methods: [:localized_name, :abstract_prereq_ids],
       root: false
     )
-    
-#     abstract_courses_data = abstract_courses.as_json(
-#       only: [:id, :code, :min_credits, :max_credits],
-#       methods: [:localized_name],
-#       include: {
-#         localized_description: {
-#           only: [:period_info]
-#         },
-#         course_instances: {
-#           only: [:period_id, :length]
-#         }
-#       },
-#       root: false
-#     )
 
     # TODO: only load relevant course_instances
     plan_courses_data = plan_courses.as_json(
@@ -399,7 +423,6 @@ class StudyPlan < ActiveRecord::Base
 
   # Adds the scoped course into the study plan
   def add_course(abstract_course, options = {})
-    # Add scoped_course to study plan
     plan_course = PlanCourse.new(
       :study_plan_id       =>  self.id,
       :abstract_course_id  =>  abstract_course.id,

@@ -19,7 +19,8 @@ fi:
       show:
         add_to_plan: "Lisää suunnitelmaan"
         remove_from_plan: "Poista suunnitelmasta"
-        credits_total: "Yhteensä"
+        total_credits: "Opintopisteitä yhteensä ryhmiteltynä tähän pää/sivuaineeseen"
+        total_credits_hint: "Jos jokin kurssi kuuluu useaan pää/sivuaineeseen, se on ryhmiteltävä niistä yhteen jottei opintopisteitä lasketa useaan kertaan. Vastaavasti opintosuunnitelmaan on lisättävä valinnaisia kursseja niin, että vaaditut opintopistemäärät täyttyvät."
         credits_shared: "Sisältyy jo suunnitelmaan"
         credits_passed: "Jo suoritettu"
         credits_added: "Suunnitelmaan lisätään"
@@ -35,6 +36,9 @@ fi:
         course-title: 'Kurssi'
         credits-title: 'Op'
         period-title: 'Periodi'
+        credits_total: "Opintosuunnitelmassa ryhmiteltynä tähän"
+        included_here: 'Kurssi on opintosuunnitelmassasi, ryhmiteltynä tähän pää/sivuaineeseen'
+        included_elsewhere: 'Kurssi on opintosuunnitelmassasi, mutta ryhmiteltynä muualle'
       supporting:
         heading: "Valitse tukevia kursseja"
       new:
@@ -68,6 +72,7 @@ fi:
         table-period: 'Periodi'
         tab-search: 'Haku'
         tab-courses: 'Oma suunnitelma'
+        unattached_courses: 'Ryhmittelemättömät kurssit'
       index_i18n_strings:
         on_plan_load_error: "Suunnitelmasi lataus epäonnistui."
         on_plan_load_error_notified: "Suunnitelmasi lataus epäonnistui. Ylläpitäjille on lähetetty tiedote ja syytä tullaan selvittämään."

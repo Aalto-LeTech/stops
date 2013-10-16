@@ -19,7 +19,8 @@ en:
       show:
         add_to_plan: "Add to plan"
         remove_from_plan: "Remove from plan"
-        credits_total: "Total"
+        total_credits: "Opintopisteitä yhteensä ryhmiteltynä tähän pää/sivuaineeseen"
+        total_credits_hint: "Jos jokin kurssi kuuluu useaan pää/sivuaineeseen, se on ryhmiteltävä niistä yhteen ettei opintopisteitä lasketa useaan kertaan. Vastaavasti opintosuunnitelmaan on lisättävä valinnaisia kursseja niin, että vaaditut opintopistemäärät täyttyvät."
         credits_shared: "Included in other competences"
         credits_passed: "Already passed"
         credits_added: "Credits to add to plan"
@@ -34,6 +35,9 @@ en:
         course-title: 'Course'
         credits-title: 'Cr'
         period-title: 'Period'
+        credits_total: 'Total'
+        included_here: 'Kurssi on opintosuunnitelmassasi, ryhmiteltynä tähän pää/sivuaineeseen'
+        included_elsewhere: 'Kurssi on opintosuunnitelmassasi, mutta ryhmiteltynä muualle'
       supporting:
         heading: "Choose supporting courses"
 
@@ -65,6 +69,7 @@ en:
         table-period: 'Period'
         tab-search: 'Search'
         tab-courses: 'Plan'
+        unattached_courses: 'Unattached courses'
       index_i18n_strings:
         on_plan_load_error: "Loading your plan failed."
         on_plan_load_error_notified: "Loading your plan failed. The administrators have been notified."

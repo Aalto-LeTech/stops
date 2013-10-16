@@ -1,5 +1,5 @@
 <% unless course_list.empty? %>
-  <table class="course-table">
+  <table class="course-table" data-competence-id="<%= top_competence.id %>">
     <thead>
       <tr>
         <td></td>
@@ -15,7 +15,12 @@
       -%>
       <% course_list.each do |course| %>
         <tr data-abstract-course-id="<%= course.abstract_course_id %>">
-          <td class="status"></td>
+          <td class="status">
+            <span class="included-here">
+              <i class="icon icon-asterisk" title="<%=t '.included_here' %>"></i>
+            </span>
+            <span class="included-elsewhere" title="<%=t '.included_elsewhere' %>">&bull;</span>
+          </td>
           <td class="course-code"><%= link_to course.course_code, studyplan_competence_course_path(:competence_id => competence.id, :id => course) %></td>
           <td class="course-name"><%= link_to course.localized_name, studyplan_competence_course_path(:competence_id => competence.id, :id => course) %></td>
           <td class="course-credits"><%= course.credits %></td>
@@ -23,5 +28,13 @@
         </tr>
       <% end %>
     </tbody>
+    <!--tfoot>
+      <tr>
+        <td colspan="2"></td>
+        <td><%=t '.credits_total' %></td>
+        <td><span class="competence-credits"><%= image_tag 'progress.gif' %></span>&nbsp;<%=t :cr %></td>
+        <td></td>
+      </tr>
+    </tfoot-->
   </table> 
 <% end %>

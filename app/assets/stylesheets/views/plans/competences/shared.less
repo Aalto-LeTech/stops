@@ -29,38 +29,70 @@ div.competence {
     margin-top: 3ex;
     margin-bottom: 1ex;
   }
+  
+  div.total-credits {
+    margin-top: 4ex;
+    p.total {
+      text-align: right;
+      font-weight: bold;
+    }
+    
+    span.number {
+      font-size: 200%;
+    }
+  }
 }
 
-table {
-  &.course-table, &.period-table {
-    text-align: left;
 
-    th, td {
-      padding-right: 1em;
-    }
+table.course-table, table.period-table {
+  text-align: left;
 
-    tr {
-      .total {
-        font-size: large;
-        font-weight: bold;
+  th, td {
+    padding-right: 1em;
+  }
 
-        td {
-          padding-top: 1em;
-        }
+  tr {
+    .total {
+      font-size: large;
+      font-weight: bold;
+
+      td {
+        padding-top: 1em;
       }
     }
   }
+}
 
-  &.course-table {
-    font-size: small;
+table.course-table {
+  font-size: small;
 
-    tr.total {
-      font-size: normal;
-    }
+  tr.total {
+    font-size: normal;
+  }
 
-    col {
-      min-width: 5em;
-    }
+  col {
+    min-width: 5em;
+  }
+  
+  td.status {
+    text-align: center;
+  }
+
+  span.included-here, span.included-elsewhere {
+    display: none;
+    cursor: default;
+  }
+  
+  tr.included-here span.included-here {
+    display: inline;
+  }
+  
+  tr.included-elsewhere span.included-elsewhere {
+    display: inline;
+  }
+  
+  tfoot {
+    font-weight: bold;
   }
 }
 

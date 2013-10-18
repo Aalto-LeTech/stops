@@ -105,8 +105,15 @@ class StudyPlan < ActiveRecord::Base
   end
   
   def json_plan
+    periods = self.periods.includes(:localized_description)
     competences = self.competences.includes([:localized_description])
     plan_courses = self.plan_courses
+    
+    periods_data = periods.as_json(
+      only: [:id, :begins_at, :ends_at],
+      methods: [:localized_name],
+      root: false
+    )
     
     # TODO: Replace courses_recursive with a more efficient solution
     competences_data = competences.as_json(
@@ -125,7 +132,7 @@ class StudyPlan < ActiveRecord::Base
             methods: [:localized_name],
             include: {
               localized_description: {
-                only: [:period_info]
+                only: [:content, :noppa_url, :oodi_url, :default_period, :period_info]
               }
             }
           }
@@ -135,8 +142,9 @@ class StudyPlan < ActiveRecord::Base
     )
 
     response_data = {
+      periods: periods_data,
       plan_courses: plan_courses_data,
-      competences: competences_data,
+      competences: competences_data
     }
     
     response_data
@@ -254,7 +262,7 @@ class StudyPlan < ActiveRecord::Base
   end
 
 
-  # Updates the plans plan_courses
+  # Updates the plan's plan_courses
   # plan_data:
   # [
   #   {"plan_course_id": 71, "period_id": 1, "course_instance_id": 45},
@@ -269,10 +277,14 @@ class StudyPlan < ActiveRecord::Base
     # Index information by plan_course_id
     new_course_data = {}  # plan_course_id => {data}
     plan_data.each do |plan_course_data|
-      new_course_data[plan_course_data['plan_course_id']] = plan_course_data
+      next unless plan_course_data
+      
+      plan_course_id = plan_course_data['plan_course_id']
+      if plan_course_id
+        new_course_data[plan_course_id] = plan_course_data
+      end
+      # TODO: add new plan courses if not found
     end
-
-    # TODO: add new plan courses if not found
 
     self.plan_courses.each do |plan_course|
       feedback[plan_course.id] = false  # Initially, mark the update as rejected.
@@ -281,57 +293,41 @@ class StudyPlan < ActiveRecord::Base
       plan_course_data = new_course_data[plan_course.id]
       next unless plan_course_data
 
-      new_period_id = plan_course_data['period_id']
-      new_length = plan_course_data['length']
-      new_credits = plan_course_data['credits']
-      new_grade = plan_course_data['grade']
-      new_course_instance_id = nil
-      new_custom = false
-
       begin
-        # Raise an error if lacking basic necessities
-        #raise UpdateException.new, "No period_id defined!" if new_period_id.nil?
-        #raise UpdateException.new, "No length defined!" if new_length.nil?
-        #raise UpdateException.new, "No credits defined!" if new_credits.nil?
-
         # Fetch the available course instance if available
         abstract_course_id = plan_course.abstract_course_id
-        course_instance = CourseInstance.where(abstract_course_id: abstract_course_id, period_id: new_period_id).first  # FIXME: This is really slow
+        
+        course_instance = nil
+        if plan_course_data['period_id']
+          # FIXME: This is really slow
+          course_instance = CourseInstance.where(abstract_course_id: abstract_course_id, period_id: plan_course_data['period_id']).first
+        end
 
         # Determine whether the course should be regarded as 'instance bound'
-        if course_instance.nil? || course_instance.length != new_length
-          new_course_instance_id = nil
-        else
-          new_course_instance_id = course_instance.id
+        if course_instance && course_instance.length == plan_course_data['length']
+          plan_course['course_instance_id'] = course_instance.id
         end
 
         # Determine whether the course should be regarded as customized
         #new_custom = scoped_course.credits != new_credits
 
-        # Save possible changes to the plan_course
-        changed =
-            plan_course.period_id != new_period_id ||
-            plan_course.course_instance_id != new_course_instance_id ||
-            plan_course.length != new_length ||
-            plan_course.credits != new_credits ||
-            plan_course.grade != new_grade ||
-            plan_course.custom != new_custom
-
-        if changed
-          plan_course.period_id = new_period_id
-          plan_course.course_instance_id = new_course_instance_id
-          plan_course.length = new_length
-          plan_course.credits = new_credits
-          plan_course.grade = new_grade
-          plan_course.custom = new_custom
-          plan_course.save
+        changed = false
+        [:period_id, :course_instance_id, :competence_node_id, :length, :credits, :grade, :custom].each do |variable|
+          logger.info variable.to_s
+          if plan_course_data.has_key?(variable.to_s)
+            new_value = plan_course_data[variable.to_s]
+            if plan_course[variable] != new_value
+              plan_course[variable] = new_value
+              changed = true
+            end
+          end
         end
+        # TODO: new_course_instance_id
+        
+        # Save possible changes to the plan_course
+        plan_course.save if changed
 
         feedback[plan_course.id] = true
-
-      # On error, the plan_course is rejected.
-      #rescue UpdateException => message
-        #puts "ERROR '#{message}' when updating the plan course: #{new_course}!"
       end
     end
 

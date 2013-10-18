@@ -63,13 +63,17 @@ en:
         links: 'Links'
         add_to_plan_title: 'Add to plan'
         added_to_plan: 'Added to plan'
+        remove_from_plan_title: 'Poista suunnitelmasta'
+        removed_from_plan: 'Removed from plan'
         table-code: 'Course code'
         table-name: 'Name'
         table-credits: 'Cr'
         table-period: 'Period'
+        table-grouping: 'Grouping'
         tab-search: 'Search'
         tab-courses: 'Plan'
         unattached_courses: 'Unattached courses'
+        not_grouped: 'Not grouped'
       index_i18n_strings:
         on_plan_load_error: "Loading your plan failed."
         on_plan_load_error_notified: "Loading your plan failed. The administrators have been notified."

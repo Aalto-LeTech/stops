@@ -34,40 +34,29 @@
         <!-- ko if: noppa_url --><a target="_blank" data-bind="attr: {href: noppa_url}">Noppa</a><!-- /ko -->
         <!-- ko if: oodi_url --><a target="_blank" data-bind="attr: {href: oodi_url}">Oodi</a><!-- /ko -->
       </p>
-      
     </div>
   <!-- /ko -->
 <% end -%>
 
 <div class="row">
-  <div class="span9">
-    <ul class="nav nav-tabs" id="myTab">
-      <li class="active"><a href="#tab-search" data-toggle="tab"><%=t '.tab-search' %></a></li>
-      <li><a href="#tab-courses" data-toggle="tab"><%=t '.tab-courses' %></a></li>
-    </ul>
-  </div>
-</div>
- 
-<div class="tab-content row">
-  <!-- Search tab -->
-  <div class="tab-pane active span9" id="tab-search">
-    <!-- Search box -->
-    <div data-bind="with: search">
-      <div class="input-append bottom-weight">
-        <input class="input-xlarge" type="text" id="search" placeholder="<%= t '.search_box_placeholder' %>" data-bind="value: searchString, valueUpdate: 'keyup', event: { keyup: searchKeyPress }" />
-        <button class="btn" data-bind="click: clickSearch"><i class="icon-search"></i></button>
-        <button class="btn" data-bind="click: clickClearSearch"><i class="icon-remove"></i></button>
-        
-      </div>
-      <div class="skill-editor-loading-icon" data-bind="visible: isLoading()">
-        <%= image_tag 'progress.gif' %>
-      </div>
+  <!-- Search box -->
+  <div data-bind="with: search">
+    <div class="input-append bottom-weight">
+      <input class="input-xlarge" type="text" id="search" placeholder="<%= t '.search_box_placeholder' %>" data-bind="value: searchString, valueUpdate: 'keyup', event: { keyup: searchKeyPress }" />
+      <button class="btn" data-bind="click: clickSearch"><i class="icon-search"></i></button>
+      <button class="btn" data-bind="click: clickClearSearch"><i class="icon-remove"></i></button>
       
-      <p class="error" data-bind="visible: errorMessage, text: errorMessage"></p>
     </div>
+    <div class="skill-editor-loading-icon" data-bind="visible: isLoading()">
+      <%= image_tag 'progress.gif' %>
+    </div>
+    
+    <p class="error" data-bind="visible: errorMessage, text: errorMessage"></p>
+  </div>
 
+  <!-- ko if: showSearchResults -->
     <!-- Search results -->
-    <table class="table table-condensed table-striped courses" data-bind="visible: searchResults().length > 0">
+    <table class="table table-condensed table-striped course-list" data-bind="visible: searchResults().length > 0">
       <thead>
         <tr>
           <th><%=t '.table-code' %></th>
@@ -80,10 +69,10 @@
       <tbody>
         <!-- ko foreach: searchResults -->
           <!-- 'added': isAdded, 'removed': isRemoved, 'passed': isPassed, 'included': isIncluded, 'scheduled': isScheduled, 'selected': isSelected -->
-          <tr class="course" data-bind="click: $root.selectCourse">
+          <tr class="course">
             <!--td class="id" data-bind="text: abstract_course_id"></td-->
-            <td class="code" data-bind="text: course_code"></td>
-            <td class="name" data-bind="text: name"></td>
+            <td class="code" data-bind="text: course_code, click: $root.selectCourse"></td>
+            <td class="name" data-bind="text: name, click: $root.selectCourse"></td>
             <td class="credits" data-bind="if: credits_string"><span data-bind="text: credits_string"></span> <%=t :cr %></td>
             <td class="period" data-bind="text: default_period"></td>
             <td>
@@ -105,19 +94,47 @@
         <!-- /ko -->
       </tbody>
     </table>
-  </div>
-  
-  <!-- Courses tab -->
-  <div class="tab-pane span9" id="tab-courses" data-bind="with: plan">
-    <div data-bind="foreach: competences">
-      <h2 data-bind="text: name"></h2>
-      
-      <%= render :partial => 'course_table', :locals => {:array_name => 'courses'} %>
-    </div>
-    
-    <h2><%=t '.unattached_courses' %></h2>
-    <%= render :partial => 'course_table', :locals => {:array_name => 'unattachedCourses'} %>
-  </div>
+  <!-- /ko -->
+  <!-- ko ifnot: showSearchResults -->
+    <table class="table table-condensed table-striped course-list" data-bind="with: plan">
+      <thead>
+        <tr>
+          <th><%=t 'plans.courses.index.table-code' %></th>
+          <th><%=t 'plans.courses.index.table-name' %></th>
+          <th><%=t 'plans.courses.index.table-credits' %></th>
+          <th><%=t 'plans.courses.index.table-period' %></th>
+          <th><%=t 'plans.courses.index.table-grouping' %></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody data-bind="foreach: courses">
+        <tr>
+          <td class="code" data-bind="text: course_code, click: $root.selectCourse"></td>
+          <td class="name" data-bind="text: name, click: $root.selectCourse"></td>
+          <td class="credits"><span data-bind="text: credits"></span> <%=t :cr %></td>
+          <td class="name" data-bind="text: period_string"></td>
+          <td class="grouping">
+            <select data-bind="options: $parent.competences, optionsText: 'name', value: competence, optionsCaption: '<%=t '.not_grouped' %>'"></select>
+          </td>
+          <td>
+            <!-- ko if: loading -->
+              <%= image_tag 'progress.gif' %>
+            <!-- /ko -->
+            <!-- ko ifnot: loading -->
+              <!-- ko if: includedInPlan -->
+                <button title="<%=t '.remove_from_plan_title' %>" class="btn" data-bind="click: $root.removeCourseFromPlan, clickBubble: false">
+                  <i class="icon icon-minus"></i>
+                </button>
+              <!-- /ko -->
+              <!-- ko if: removedFromPlan -->
+                <span class="success"><%=t '.removed_from_plan' %></span>
+              <!-- /ko -->
+            <!-- /ko -->
+          </td>
+        </tr>
+      </tbody>
+    </table> 
+  <!-- /ko -->
 </div>
 
 <span id="paths"

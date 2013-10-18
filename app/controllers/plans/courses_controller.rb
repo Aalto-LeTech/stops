@@ -77,25 +77,30 @@ class Plans::CoursesController < PlansController
     
   end
 
-  # Remove course from study plan
-  # DESTROY /plans/:id/courses
+  # Remove course from study plan. Use abstarct_course_id
+  # DESTROY /plans/:plan_id/courses/:id
   def destroy
     authorize! :update, @study_plan
     @competence = nil
     @competence = Competence.find(params[:competence_id]) if params[:competence_id]
     
-    if params[:abstract_course_id]
-      status = @study_plan.remove_abstract_courses(params[:abstract_course_id])
-      log "remove_course #{params[:abstract_course_id]}"
-    else
-      status = @study_plan.remove_scoped_course(params[:id])
-      log "remove_scoped_course #{params[:id]}"
-    end
+    #if params[:abstract_course_id]
+      status = @study_plan.remove_abstract_courses(params[:id])
+      log "remove_course #{params[:id]}"
+    #else
+    #  status = @study_plan.remove_scoped_course(params[:id])
+    #  log "remove_scoped_course #{params[:id]}"
+    #end
     
-    if @competence
-      redirect_to studyplan_competence_path(:id => @competence.id), :flash => { :success => t('plans.courses.course_removed_from_plan') }
-    else
-      redirect_to studyplan_competences_path, :flash => { :success => t('plans.courses.course_removed_from_plan') }
+    respond_to do |format|
+      format.html {
+        if @competence
+          redirect_to studyplan_competence_path(:id => @competence.id), :flash => { :success => t('plans.courses.course_removed_from_plan') }
+        else
+          redirect_to studyplan_competences_path, :flash => { :success => t('plans.courses.course_removed_from_plan') }
+        end
+      }
+      format.json { render json: { status: 'ok' }.to_json( root: false ) }
     end
   end
 

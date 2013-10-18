@@ -1,11 +1,14 @@
 = Ennen julkaisua =
 
 survey
+Opintojen ryhmittely
+Rikkooko usean saman kurssin lisääminen jotain?
+Pakotetut esitiedot
 
 
 = Ennen julkaisua, jos ehtii =
 
-Opintojen ryhmittely
+kurssit: juuri lisätyn kurssin ryhmitteleminen ei onnistu, koska sillä ei ole plan_course_id:tä
 Kurssihaussa linkki hakutuloksista kurssisivulle
 Schedulessa linkit kurssitiedoista kurssisivulle
 Verkkoon näkyviin kurssit, joilla on eteen- ja taaksepäin vain tukevia linkkejä

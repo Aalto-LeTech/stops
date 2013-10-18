@@ -66,13 +66,17 @@ fi:
         links: 'Linkit'
         add_to_plan_title: 'Lisää suunnitelmaan'
         added_to_plan: 'Lisätty'
+        remove_from_plan_title: 'Poista suunnitelmasta'
+        removed_from_plan: 'Poistettu suunnitelmasta'
         table-code: 'Kurssikoodi'
         table-name: 'Nimi'
         table-credits: 'Op'
         table-period: 'Periodi'
+        table-grouping: 'Ryhmittely'
         tab-search: 'Haku'
         tab-courses: 'Oma suunnitelma'
         unattached_courses: 'Ryhmittelemättömät kurssit'
+        not_grouped: 'Ei ryhmitelty'
       index_i18n_strings:
         on_plan_load_error: "Suunnitelmasi lataus epäonnistui."
         on_plan_load_error_notified: "Suunnitelmasi lataus epäonnistui. Ylläpitäjille on lähetetty tiedote ja syytä tullaan selvittämään."

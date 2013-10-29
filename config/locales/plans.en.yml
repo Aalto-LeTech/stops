@@ -45,7 +45,20 @@ en:
       course_added_to_plan: 'Course was added to plan'
       course_removed_from_plan: 'Course was removed from plan'
       index:
-        hint: ''
+        courselist_hint: >
+          <ul class="hint">
+            <li>Listassa näkyvät kaikki opintosuunnitelmasi kurssit.</li>
+            <li>Klikkaa kurssin nimeä nähdäksesi kurssin tiedot.</li>
+            <li>Voit ryhmitellä kursseja pää- ja sivuaineisiin. Muutokset tallentuvat välittömästi.</li>
+            <li>Miinus-nappula poistaa kurssin suunnitelmastasi.</li>
+            <li>Hakutoiminnolla voit etsiä muita kursseja ja lisätä niitä suunnitelmaasi.</li>
+          </ul>
+        search_hint: >
+          <ul class="hint">
+            <li>Listassa näytetään hakutulokset. Paina hakutoiminnon vieressä olevaa ruksia palataksesi omaan kurssilistaasi.</li>
+            <li>Klikkaa kurssin nimeä nähdäksesi kurssin tiedot.</li>
+            <li>Plus-nappula lisää kurssin suunnitelmaasi.</li>
+          </ul>
         plan_view: "Study Plan"
         changes_view: "Changes"
         search_view: "Search"

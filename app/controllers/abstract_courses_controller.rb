@@ -25,19 +25,24 @@ class AbstractCoursesController < ApplicationController
         )
 
         abstract_courses_json = abstract_courses.map do |abstract_course|
-          localized_description = abstract_course.localized_description || {}
-          {
+          hash = {
             'id' => abstract_course.id,
             'course_code'=> abstract_course.code,
-            'name' => localized_description.name,
             'min_credits' => abstract_course.min_credits,
             'max_credits' => abstract_course.max_credits,
-            'content' => localized_description.content,
-            'noppa_url' => localized_description.noppa_url,
-            'oodi_url' => localized_description.oodi_url,
-            'default_period' => localized_description.default_period,
-            'period_info' => localized_description.period_info,
           }
+          
+          localized_description = abstract_course.localized_description
+          if localized_description
+            hash['name'] = localized_description.name
+            hash['content'] = localized_description.content
+            hash['noppa_url'] = localized_description.noppa_url
+            hash['oodi_url'] = localized_description.oodi_url
+            hash['default_period'] = localized_description.default_period
+            hash['period_info'] = localized_description.period_info
+          end
+          
+          hash
         end
         
         response_data = {
@@ -52,14 +57,14 @@ class AbstractCoursesController < ApplicationController
           render :json => response_data.to_json(:root => false)
         end
       end
-    rescue Exception => e
-      respond_to do |format|
-        format.js do
-          render :json => { status: 'error', message: 'Search server is temporarily offline' }.to_json(:root => false), :status => 500
-        end
-      end
-      
-      ErrorMailer.warning_message('Sphinx is not running', 'Thinking Sphinx is not running').deliver
+#     rescue Exception => e
+#       respond_to do |format|
+#         format.js do
+#           render :json => { status: 'error', message: 'Search server is temporarily offline' }.to_json(:root => false), :status => 500
+#         end
+#       end
+#       
+#       ErrorMailer.warning_message('Sphinx is not running', 'Thinking Sphinx is not running').deliver
     end
   end
 end

@@ -36,10 +36,11 @@
       </p>
     </div>
   <!-- /ko -->
-  <!-- ko if: !selectedCourse() && plan.courses().length > 0 -->
-    <p class="hint">
-      <%= t('.hint').html_safe %>
-    </p>
+  <!-- ko if: !selectedCourse() && showSearchResults() -->
+    <%= t('.search_hint').html_safe %>
+  <!-- /ko -->
+  <!-- ko if: !selectedCourse() && !showSearchResults() && plan.courses().length > 0 -->
+    <%= t('.courselist_hint').html_safe %>
   <!-- /ko -->
 <% end -%>
 
@@ -59,7 +60,7 @@
     <p class="error" data-bind="visible: errorMessage, text: errorMessage"></p>
   </div>
 
-  <!-- ko if: showSearchResults -->
+  <!-- ko if: showSearchResults() -->
     <!-- Search results -->
     <table class="table table-condensed table-striped course-list" data-bind="visible: searchResults().length > 0">
       <thead>

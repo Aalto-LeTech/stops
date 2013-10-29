@@ -30,9 +30,11 @@ div.competence {
     margin-bottom: 1ex;
   }
   
+  .total-credits {
+    visibility: hidden;
+  }
+  
   div.total-credits {
-    display: none;
-    
     margin-top: 4ex;
     p.total {
       text-align: right;
@@ -45,8 +47,8 @@ div.competence {
   }
   
   &.selected {
-    div.total-credits {
-      display: block;
+    .total-credits {
+      visibility: visible;
     }
   }
 }

@@ -87,14 +87,17 @@ class StudyPlan < ActiveRecord::Base
   #   ]
   # }
   def json_summary
-    plan_competences = PlanCompetence.where(:study_plan_id => self.id)
-    plan_courses = PlanCourse.where(:study_plan_id => self.id)
+    competences = Competence.where('id IN (?) OR parent_competence_id IN (?)', self.competence_ids, self.competence_ids)
+    plan_courses = self.plan_courses.includes(:abstract_course)
     
-    competences_json = plan_competences.select('competence_id')
+    competences_json = competences.select('competence_nodes.id, supporting_regex')
       .as_json(:root => false)
       
-    courses_json = plan_courses.select('scoped_course_id, abstract_course_id, competence_node_id, period_id, credits, length, grade')
-      .as_json(:root => false)
+    courses_json = plan_courses.as_json(
+        :only => [:scoped_course_id, :abstract_course_id, :competence_node_id, :period_id, :credits, :length, :grade],
+        :include => [{:abstract_course => {:only => [:code]}}],
+        :root => false
+      )
     
     response_data = {
       'competences' => competences_json,

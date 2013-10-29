@@ -1,26 +1,27 @@
 = Ennen julkaisua =
 
 survey
-eny, energiasysteemit pakollisissa ja valinnaisissa
+
+db:
+  eny, energiasysteemit pakollisissa ja valinnaisissa
+  update competence_nodes set supporting_regex='(Kie-98)|(LC-)' where id in (109, 110, 111);
 
 
 = Ennen julkaisua, jos ehtii =
 
-tukevat regex-esitiedot
 kurssit:
 - jos muuttaa kurssin ryhmittelyä, näytä 'muutokset tallennettu'
 - ohjeet
 - sort
+
+
+= Julkaisun jälkeen =
+
 Kurssihaussa linkki hakutuloksista kurssisivulle
 Schedulessa linkit kurssitiedoista kurssisivulle
 Verkkoon näkyviin kurssit, joilla on eteen- ja taaksepäin vain tukevia linkkejä
 Wellin sisällä olevat linkit siniseksi (ks. kurssihakuhaku)
 Feedback
-jos kompetenssin poistaa suunnitelmasta, muuta kurssit ryhmittelemättömiksi
-
-
-= Julkaisun jälkeen =
-
 Affix ei toimi kapealla näytöllä
 Verkon lukitus: esitietona muille
 Jos lisää kurssin suunnitelmaan, lisää myös esitiedot

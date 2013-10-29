@@ -1,6 +1,7 @@
 #= require knockout
-#= require knockout-sortable-0.7.3
 #= require libs/client_event_logger
+
+# require knockout-sortable
 
 if not O4.view.i18n
   throw "The i18n strings for the view have not been loaded!"

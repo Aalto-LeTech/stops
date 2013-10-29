@@ -51,7 +51,7 @@ class @PlanView
     # Load periods
     periodCounter = 0
     previousPeriod = undefined
-
+    firstPeriod = undefined
     for raw_period in data['periods']
       period = new Period(raw_period)
       period.sequenceNumber = periodCounter
@@ -60,6 +60,7 @@ class @PlanView
       previousPeriod = period
       periodCounter++
       @currentPeriod = period if period.isNow
+      firstPeriod = period unless firstPeriod
       @periodsById[period.id] = period
       @periods.push(period)
 
@@ -91,7 +92,7 @@ class @PlanView
       @competences.push(competence)
 
     # Automatically schedule unscheduled (new) courses
-    schedule = new Scheduler(@courses, @currentPeriod)
+    schedule = new Scheduler(@courses, @currentPeriod, firstPeriod)
     schedule.scheduleUnscheduledCourses()
 
 
@@ -257,9 +258,11 @@ class @PlanView
     # Koeasetelma
     has_kjr = false
     has_eny = false
+    has_rym = false
     for competence in @competences
       has_kjr = true if competence.id == 59
       has_eny = true if competence.id == 73
+      has_rym = true if competence.id == 74
 
     # Load the data
     planCoursesToSave = []  # Array for course JSON representations for sending
@@ -302,9 +305,9 @@ class @PlanView
           #console.log "Total credits: #{total_credits}"
           #console.log "KJR: #{has_kjr}"
           #console.log "ENY: #{has_eny}"
-          #if (user_treatment == 1 || user_treatment == 2) && total_credits >= 160 && (has_kjr || has_eny)
+          #if (user_treatment == 1 || user_treatment == 2) && total_credits >= 160 && (has_kjr || has_eny || has_rym)
           #  window.location.href = "https://o4.cs.hut.fi/fi/surveys/1"
-            
+          
         else
           dbg.lg("ERROR: Put on server failed!")
           @onSaveFailure()

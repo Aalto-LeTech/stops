@@ -43,6 +43,7 @@ class SurveysController < ApplicationController
       ]
       @motivation_questions << {:id => 64, :course_code => 'ENE-C2001', :name => 'Käytännön energiatekniikkaa'} if chosen_course_ids.include?(64)
       @motivation_questions << {:id => 66, :course_code => 'YYT-C2001', :name => 'Hydrologian ja hydrauliikan perusteet'} if chosen_course_ids.include?(66)
+      
     elsif chosen_competence_ids.include?(59) # KJR
       @major_name = 'Kone- ja rakennustekniikan'
       @major_id = 59
@@ -59,6 +60,7 @@ class SurveysController < ApplicationController
       ]
       @motivation_questions << {:id => 49, :course_code => 'RAK-C3003', :name => 'Tietoyhdennetty rakentaminen'} if chosen_course_ids.include?(49)
       @motivation_questions << {:id => 48, :course_code => 'KON-C3004', :name => 'Kone- ja rakennustekniikan laboratoriotyö'} if chosen_course_ids.include?(48)
+      
     elsif chosen_competence_ids.include?(74) # RYM
       @major_name = 'Rakennetun ympäristön (RYM)'
       @major_id = 74

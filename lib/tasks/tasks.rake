@@ -29,11 +29,31 @@ namespace :db do
       
       stats << [node, prereq_to_courses_count, prereq_to_skills_count, prereq_to_courses_count * 1000 + prereq_to_skills_count]
     end
-
+    
     stats.sort! {|a, b| a[3] <=> b[3] }
     
-    stats.each do |stat|
-      puts "%02d, %03d, %s" % [stat[1], stat[2], "#{stat[0].course_code} #{stat[0].localized_name}"]
+    
+    Competence.where(:parent_competence_id => nil).find_each do |competence|
+      puts competence.localized_name
+      mandatory_courses = competence.recursive_prereq_courses
+      
+      stats.each do |stat|
+        next unless mandatory_courses.include?(stat[0])
+        puts "%02d, %03d, %s" % [stat[1], stat[2], "#{stat[0].course_code} #{stat[0].localized_name}"]
+      end
+      
+      
+      competence.children.each do |child_competence|
+        puts child_competence.localized_name
+        supporting_courses = child_competence.supporting_prereq_courses
+        
+        stats.each do |stat|
+          next unless supporting_courses.include?(stat[0])
+          puts "%02d, %03d, %s" % [stat[1], stat[2], "#{stat[0].course_code} #{stat[0].localized_name}"]
+        end
+        puts
+      end
+      puts
     end
   end
 end 

@@ -203,7 +203,7 @@ class @Course
     alarms = ['']
     notices = ['']
     alarms.push(O4.schedule.i18n.course_tooltip_misordered) if @isMisordered()
-    alarms.push(O4.schedule.i18n.course_tooltip_misscheduled) if @isMisscheduled()
+    #alarms.push(O4.schedule.i18n.course_tooltip_misscheduled) if @isMisscheduled()
     notices.push(O4.schedule.i18n.course_tooltip_uninstanced) if not @isInstanceBound()
     notices.push(O4.schedule.i18n.course_tooltip_customized) if @isCustomized()
     notices.push(O4.schedule.i18n.course_tooltip_passed) if @grade() > 0
@@ -227,11 +227,11 @@ class @Course
   # Check the period & grade related flag "isMisscheduled"
   updateMisscheduledFlag: ->
     endPeriod = @getEndPeriod()
-    @isMisscheduled(
-      not endPeriod? or
-      (endPeriod.isOld and not @grade() > 0) or
-      ((not (@period.isOld or @period.isNow)) and @grade() > 0)
-    )
+#     @isMisscheduled(
+#       not endPeriod? or
+#       (endPeriod.isOld and not @grade() > 0) or
+#       ((not (@period.isOld or @period.isNow)) and @grade() > 0)
+#     )
     @updateTooltip()
 
 

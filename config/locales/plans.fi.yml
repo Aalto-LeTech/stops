@@ -48,6 +48,7 @@ fi:
       course_added_to_plan: 'Kurssi lisättiin suunnitelmaan'
       course_removed_from_plan: 'Kurssi poistettiin suunnitelmasta'
       index:
+        hint: 'Klikkaa kursseja'
         plan_view: "Suunnitelma"
         changes_view: "Muutokset"
         search_view: "Haku"

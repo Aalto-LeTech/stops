@@ -22,7 +22,6 @@
 <% competence_selected = @user.study_plan.has_competence?(@competence) %>
 
 <div class="well competence<%= competence_selected ? ' selected' : '' %>">
-
   <!-- Add / Remove -->
   <div class="pull-right">
     <% if can? :choose, @competence %>
@@ -55,7 +54,7 @@
         <% end %>
       </div>
     </div>
-        
+    
     <div class="row-fluid">
       <!-- Learning outcomes -->
       <div class="span6">

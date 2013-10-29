@@ -1,19 +1,22 @@
 = Ennen julkaisua =
 
 survey
-Opintojen ryhmittely
-Rikkooko usean saman kurssin lisääminen jotain?
-Pakotetut esitiedot
+eny, energiasysteemit pakollisissa ja valinnaisissa
 
 
 = Ennen julkaisua, jos ehtii =
 
-kurssit: juuri lisätyn kurssin ryhmitteleminen ei onnistu, koska sillä ei ole plan_course_id:tä
+tukevat regex-esitiedot
+kurssit:
+- jos muuttaa kurssin ryhmittelyä, näytä 'muutokset tallennettu'
+- ohjeet
+- sort
 Kurssihaussa linkki hakutuloksista kurssisivulle
 Schedulessa linkit kurssitiedoista kurssisivulle
 Verkkoon näkyviin kurssit, joilla on eteen- ja taaksepäin vain tukevia linkkejä
 Wellin sisällä olevat linkit siniseksi (ks. kurssihakuhaku)
 Feedback
+jos kompetenssin poistaa suunnitelmasta, muuta kurssit ryhmittelemättömiksi
 
 
 = Julkaisun jälkeen =

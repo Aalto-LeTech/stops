@@ -36,6 +36,11 @@
       </p>
     </div>
   <!-- /ko -->
+  <!-- ko if: !selectedCourse() && plan.courses().length > 0 -->
+    <p class="hint">
+      <%= t('.hint').html_safe %>
+    </p>
+  <!-- /ko -->
 <% end -%>
 
 <div class="row">
@@ -95,7 +100,7 @@
       </tbody>
     </table>
   <!-- /ko -->
-  <!-- ko ifnot: showSearchResults -->
+  <!-- ko if: !showSearchResults() && plan.courses().length > 0 -->
     <table class="table table-condensed table-striped course-list" data-bind="with: plan">
       <thead>
         <tr>

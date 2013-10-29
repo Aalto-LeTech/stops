@@ -6,6 +6,14 @@ namespace :db do
       node.update_prereqs_cache()
     end
     puts "done"
+    
+    # Temporary hack: Add hard-coded course prereqs
+    forced_prereqs = {74 => [37, 36, 10, 11, 15, 9, 35, 39, 40, 34]}
+    forced_prereqs.each do |node_id, prereq_ids|
+      prereq_ids.each do |prereq_id|
+        NodePrereq.create(:competence_node_id => node_id, :prereq_id => prereq_id, :requirement => STRICT_PREREQ)
+      end
+    end
   end
   
   task :link_stats => :environment do

@@ -44,6 +44,8 @@ class Plan
         
       @competences.valueHasMutated()
 
+    this.sortCourses()
+    
     # Put courses to competences
     for course in @courses()
       competence = @competencesById[course.competence_node_id]
@@ -53,6 +55,19 @@ class Plan
         course.competence(competence)
       
       course.competence.subscribe((-> this.competenceUpdated()), course)
+
+  sortCourses: ->
+    @courses.sort (left, right) =>
+      a = left[@coursesView.courseOrder]
+      b = right[@coursesView.courseOrder]
+      
+      if a == b
+        return 0
+      else if a < b
+        return -1
+      else
+        return 1
+
 
 class Competence
   constructor: (@plan) ->
@@ -242,6 +257,7 @@ class CoursesView
     @showSearchResults = ko.observable(false)
     @searchResults = ko.observableArray()
     @selectedCourse = ko.observable()
+    @courseOrder = 'course_code'
     
     @search = new Search
       url: $('#paths').data('search-courses-path')
@@ -299,6 +315,7 @@ class CoursesView
       course.loading(false)
     
     promise.done (data) =>
+      course.plan_course_id = data['plan_course_id']
       course.includedInPlan(true)
       course.addedToPlan(true)
       course.removedFromPlan(false)
@@ -307,7 +324,7 @@ class CoursesView
         @plan.courses.push(course)
         @plan.coursesByAbstractId[course.abstract_course_id] = course
         
-      # TODO: sort table
+      @plan.sortCourses()
       
     @logger.log("ac #{course.abstract_course_id}") if @logger # add course
 
@@ -327,6 +344,7 @@ class CoursesView
       course.includedInPlan(false)
       course.addedToPlan(false)
       course.removedFromPlan(true)
+      course.competence(undefined)
       #@plan.courses.remove(course)
     
     @logger.log("rc #{course.abstract_course_id}") if @logger # add course

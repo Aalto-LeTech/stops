@@ -34,7 +34,7 @@
       <ul>
         <% @competence.recursive_prereq_courses.each do |course| # TODO: move the query to controller
         %>
-          <li class="<%= @user.study_plan.plan_courses.where( scoped_course_id: course.id ).exists? ? 'chosen' : '' %> <%= course == @course ? 'selected' : '' %>"><%= link_to course.localized_name, studyplan_competence_course_path(:competence_id => @competence.id, :id => course) %>
+          <li class="<%= course == @course ? 'selected' : '' %>"><%= link_to course.localized_name, studyplan_competence_course_path(:competence_id => @competence.id, :id => course) %>
         <% end %>
       </ul>
     <% end %>
@@ -59,11 +59,11 @@
       <% if @competence %>
         <% top_competence = @competence.parent_competence || @competence %>
         
-        <%= link_to studyplan_competence_course_path(:competence_id => top_competence.id, :id => @course.id, :abstract_course_id => @course.abstract_course_id), {:method => :delete, :class => 'btn btn-default'} do %>
+        <%= link_to studyplan_competence_course_path(:competence_id => top_competence.id, :id => @course.abstract_course_id), {:method => :delete, :class => 'btn btn-default'} do %>
           <i class="icon icon-minus"></i> <%= t('.course_remove_from_plan') %>
         <% end %>
       <% else %>
-        <%= link_to studyplan_course_path(:id => @course, :abstract_course_id => @course.abstract_course_id), {:method => :delete, :class => 'btn btn-default'} do %>
+        <%= link_to studyplan_course_path(:id => @course.abstract_course_id), {:method => :delete, :class => 'btn btn-default'} do %>
           <i class="icon icon-minus"></i> <%= t('.course_remove_from_plan') %>
         <% end %>
       <% end %>

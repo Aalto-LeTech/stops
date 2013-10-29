@@ -45,6 +45,7 @@ en:
       course_added_to_plan: 'Course was added to plan'
       course_removed_from_plan: 'Course was removed from plan'
       index:
+        hint: ''
         plan_view: "Study Plan"
         changes_view: "Changes"
         search_view: "Search"

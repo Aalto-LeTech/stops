@@ -17,7 +17,7 @@ class ErrorMailer < ActionMailer::Base
   
   def warning_message(subject, text)
     @text = text
-    mail(:subject => "[O4] #{subject}")
+    mail(:subject => "[O4] #{subject}") if ERRORS_EMAIL
   end
 
 end

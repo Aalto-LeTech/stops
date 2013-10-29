@@ -24,12 +24,10 @@ class @CourseHighlighter
           credits = course.credits || 0
           if course.competence_node_id == competence_id
             $(this).addClass('included-here')
-            #$(this).find('td.status').append($('<i class="icon icon-star" title="Opintosuunnitelmassa, ei ryhmitelty tähän"></i>'))
             total_credits += credits
             competence_credits += credits
           else
             $(this).addClass('included-elsewhere')
-            #$(this).find('td.status').append($('<i class="icon icon-star-empty" title="Opintosuunnitelmassa"></i>'))
         
         # icon-ok  icon-star  icon-star-empty
       

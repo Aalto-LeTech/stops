@@ -49,35 +49,29 @@ class Plans::CoursesController < PlansController
     competence_id = Integer(params[:competence_id]) rescue nil
     scoped_course_id = Integer(params[:scoped_course_id]) rescue nil
     
-    status = @study_plan.add_course(abstract_course, {
+    plan_course = @study_plan.add_course(abstract_course, {
       competence_node_id: competence_id,
       scoped_course_id: scoped_course_id,
       manually_added: true
     })
-    
-    if status == :already_added
-      message = {:error => 'Course was already in the study plan'}
-    else
-      message = {:success => t('plans.courses.course_added_to_plan')}
-    end
     
     log "add_course #{abstract_course.id}, competence #{competence_id}, scoped_course #{scoped_course_id}"
     
     respond_to do |format|
       format.html {
         if competence_id
-          redirect_to studyplan_competence_path(:id => competence_id), :flash => message
+          redirect_to studyplan_competence_path(:id => competence_id), :flash => { :success => t('plans.courses.course_added_to_plan') }
         else
-          redirect_to studyplan_competences_path, :flash => message
+          redirect_to studyplan_competences_path, :flash => { :success => t('plans.courses.course_added_to_plan') }
         end
       }
       # TODO: add error message
-      format.json { render json: { status: 'ok' }.to_json( root: false ) }
+      format.json { render json: { status: 'ok', plan_course_id: plan_course.id }.to_json( root: false ) }
     end
     
   end
 
-  # Remove course from study plan. Use abstarct_course_id
+  # Remove course from study plan. Use abstract_course_id
   # DESTROY /plans/:plan_id/courses/:id
   def destroy
     authorize! :update, @study_plan

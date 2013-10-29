@@ -54,6 +54,7 @@ class Plans::CompetencesController < PlansController
       return
     end
 
+    # FIXME: plan may contain PlanCourses that are not associated with a ScopedCourse
     existing_courses = @study_plan.scoped_courses
     prereqs = @competence_node.recursive_prereq_courses.includes(:localized_description).all
     @new_courses = prereqs - existing_courses # difference
@@ -100,9 +101,9 @@ class Plans::CompetencesController < PlansController
   def destroy
     authorize! :update, @study_plan
     @competence = Competence.find(params[:id])
-    log("remove_competence_commit #{@competence.id}")
 
     @study_plan.remove_competence(@competence)
+    log("remove_competence_commit #{@competence.id}")
 
     respond_to do |format|
       format.html { redirect_to studyplan_competence_path(@competence) }

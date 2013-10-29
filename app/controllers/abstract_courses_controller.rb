@@ -59,7 +59,7 @@ class AbstractCoursesController < ApplicationController
         end
       end
       
-      ErrorMailer.warning_message('Search server died', 'Thinking Sphinx is not running').deliver
+      ErrorMailer.warning_message('Sphinx is not running', 'Thinking Sphinx is not running').deliver
     end
   end
 end

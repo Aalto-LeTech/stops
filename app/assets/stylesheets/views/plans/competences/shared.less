@@ -31,6 +31,8 @@ div.competence {
   }
   
   div.total-credits {
+    display: none;
+    
     margin-top: 4ex;
     p.total {
       text-align: right;
@@ -39,6 +41,12 @@ div.competence {
     
     span.number {
       font-size: 200%;
+    }
+  }
+  
+  &.selected {
+    div.total-credits {
+      display: block;
     }
   }
 }

@@ -313,7 +313,6 @@ class StudyPlan < ActiveRecord::Base
 
         changed = false
         [:period_id, :course_instance_id, :competence_node_id, :length, :credits, :grade, :custom].each do |variable|
-          logger.info variable.to_s
           if plan_course_data.has_key?(variable.to_s)
             new_value = plan_course_data[variable.to_s]
             if plan_course[variable] != new_value
@@ -392,7 +391,19 @@ class StudyPlan < ActiveRecord::Base
 
     # Calculate the scoped_courses to add
     required_courses = competence.recursive_prereq_courses.all
-    scoped_courses_to_add = required_courses - self.scoped_courses
+    
+    existing_courses = {}  # abstract_course_id => boolean
+    self.abstract_course_ids.each do |abstract_course_id|
+      existing_courses[abstract_course_id] = true
+    end
+    
+    # Make a list of courses that are not yet in plan
+    scoped_courses_to_add = []
+    required_courses.each do |scoped_course|
+      scoped_courses_to_add << scoped_course unless existing_courses[scoped_course.abstract_course_id] 
+    end
+    
+    #scoped_courses_to_add = required_courses - self.scoped_courses
 
     scoped_courses_to_add.each do |scoped_course|
       begin
@@ -406,15 +417,22 @@ class StudyPlan < ActiveRecord::Base
     end
   end
 
-
   # Removes the given competence and courses that are needed by it. Courses that are still needed by the remaining competences, are not removed. Also, manually added courses are not reomved.
   def remove_competence(competence)
     # Remove competence
     competences.delete(competence)
 
-    needed_courses =  needed_scoped_courses(self.competences)
+    # Remove courses
+    needed_scoped_course_ids = needed_scoped_courses(self.competences).map {|scoped_course| scoped_course.id}
     
-    self.scoped_courses = needed_courses.to_a
+    self.plan_courses.each do |plan_course|
+      if plan_course.scoped_course_id && !needed_scoped_course_ids.include?(plan_course.scoped_course_id)
+        plan_course.destroy
+      end
+    end
+    
+    # Reset grouping
+    PlanCourse.where(:study_plan_id => self.id, :competence_node_id => competence.id).update_all(:competence_node_id => nil)
   end
 
   # Adds the scoped course into the study plan

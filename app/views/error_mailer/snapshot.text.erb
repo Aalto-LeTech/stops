@@ -8,5 +8,6 @@ Params:
 <% for key, val in @params -%>
   <%= key %>: <%= val %>
 <% end -%>
-
 Agent: <%= @env['HTTP_USER_AGENT']  %>
+
+<%= @exception.backtrace.html_safe %>

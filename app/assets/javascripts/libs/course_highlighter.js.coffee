@@ -61,7 +61,7 @@ class @CourseHighlighter
               else
                 style = 'included-elsewhere'
             
-              table.append($("<tr class='#{style}'><td class='status'><span class='included-here'><i class='icon icon-asterisk'></i></span><span class='included-elsewhere'>&bull;</span></td><td class='course-code'>#{course.abstract_course.code}</td><td class='course-name'></td><td class='course-credits'>#{course.credits}</td><td class='course-period'></td></tr>"))
+              table.append($("<tr class='#{style}'><td class='status'><span class='included-here'><i class='icon icon-asterisk'></i></span><span class='included-elsewhere'>&bull;</span></td><td class='course-code'>#{course.abstract_course.code}</td><td class='course-name'>#{course.abstract_course.localized_name}</td><td class='course-credits'>#{course.credits}</td><td class='course-period'></td></tr>"))
             
       
       

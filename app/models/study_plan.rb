@@ -88,14 +88,21 @@ class StudyPlan < ActiveRecord::Base
   # }
   def json_summary
     competences = Competence.where('id IN (?) OR parent_competence_id IN (?)', self.competence_ids, self.competence_ids)
-    plan_courses = self.plan_courses.includes(:abstract_course)
+    plan_courses = self.plan_courses.includes({:abstract_course => :localized_description})
     
     competences_json = competences.select('competence_nodes.id, supporting_regex')
       .as_json(:root => false)
       
     courses_json = plan_courses.as_json(
         :only => [:scoped_course_id, :abstract_course_id, :competence_node_id, :period_id, :credits, :length, :grade],
-        :include => [{:abstract_course => {:only => [:code]}}],
+        :include => [
+          {
+            :abstract_course => {
+              :only => [:code],
+              :methods => [:localized_name]
+            }
+          }
+        ],
         :root => false
       )
     
@@ -110,7 +117,7 @@ class StudyPlan < ActiveRecord::Base
   def json_plan
     periods = self.periods.includes(:localized_description)
     competences = self.competences.includes([:localized_description])
-    plan_courses = self.plan_courses
+    plan_courses = self.plan_courses.includes({:abstract_course => :localized_description})
     
     periods_data = periods.as_json(
       only: [:id, :begins_at, :ends_at],

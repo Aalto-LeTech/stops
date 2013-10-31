@@ -4,7 +4,7 @@
 
 <h1><%=t :competence_remove_from_plan, :competence => @competence.localized_name %></h1>
 
-<p><%=t :competence_courses_to_remove %></p>
+<p class="hint"><%=t :competence_courses_to_remove %></p>
 
 <table class="course-table">
   <% credits_counter = 0 %>
@@ -26,7 +26,8 @@
 </table>
 
 <%= form_tag studyplan_competence_path, :method => :delete do %>
-  <p><%= submit_tag t(:Ok) %></p>
-
-  <p><%= link_to t(:Cancel), studyplan_competence_path(:id => @competence.id) %></p>
+  <p>
+    <%= link_to t(:Cancel), studyplan_competence_path(:id => @competence.id), :class => 'btn btn-default' %>
+    <%= submit_tag t(:Ok), :class => 'btn btn-primary' %>
+  </p>
 <% end %>

@@ -39,8 +39,9 @@
     <% end %>
   </div>
 
-  <!--% cache("competence_details-#{@competence.id}") do # FIXME: language
-  %-->
+  <%
+  # cache("competence_details-#{@competence.id}") do # FIXME: language
+  -%>
     <h2>
       <%= @competence.localized_name %>
       <% if @competence.min_credits %>(<%= @competence.min_credits %> <%=t 'cr' %>)<% end %>
@@ -61,11 +62,17 @@
         <h3><%= t('.skills') %></h3>
         <ul>
           <% @competence.skills.each do |skill| %>
-            <li><%= link_to skill.localized_name, studyplan_competence_skill_path(:competence_id => @competence, :id => skill) %></li>
+            <% if @user.treatment == TREATMENT_TRADITIONAL %>
+              <li><%= skill.localized_name %></li>
+            <% else %>
+              <li><%= link_to skill.localized_name, studyplan_competence_skill_path(:competence_id => @competence, :id => skill) %></li>
+            <% end %>
           <% end %>
         </ul>
         
-        <p class="hint"><%=t '.skills_hint' %></p>
+        <% if @user.treatment != TREATMENT_TRADITIONAL %>
+          <p class="hint"><%=t '.skills_hint' %></p>
+        <% end %>
       </div>
       
       <!-- Courses -->
@@ -102,10 +109,24 @@
           
           <p class="hint"><%=t '.total_credits_hint' %></p>
         </div>
+        
+        <p>
+          <em>Merkkien selitykset:</em>
+        </p>
+        <table>
+          <tr>
+            <td style="vertical-align: top"><i class="icon icon-asterisk"></i></td>
+            <td><em>Kurssi on opintosuunnitelmassa ja ryhmiteltynä tähän pää/sivuaineeseen.</em></td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top">&bull;</td>
+            <td><em>Kurssi on opintosuunnitelmassa mutta ryhmiteltynä muualle, jolloin opintopisteitä ei lasketa tähän pää/sivuaineeseen.</em></td>
+          </tr>
+        </table>
       </div>
     </div>
-  <!--% end # cache
-  -%-->
+  <% # end # cache
+  -%>
 </div>
 
 <!-- Graph -->

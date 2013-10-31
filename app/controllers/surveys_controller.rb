@@ -32,40 +32,60 @@ class SurveysController < ApplicationController
       @major_name = 'Energia- ja ympäristötekniikan'
       @major_id = 73
       @usefulness_questions = [
-        {:id => 62, :course_code => 'ENY-C2004', :name => 'Geologia ja geomekaniikka'},
+        {:id => 9, :course_code => 'PHYS-A3120', :name => 'Termodynamiikka (ENG)'},
         {:id => 44, :course_code => 'KJR-C2004', :name => 'Materiaalitekniikka'},
-        {:id => 64, :course_code => 'ENE-C2001', :name => 'Käytännön energiatekniikkaa'},
-        {:id => 66, :course_code => 'YYT-C2001', :name => 'Hydrologian ja hydrauliikan perusteet'}
+        {:id => 66, :course_code => 'YYT-C2001', :name => 'Hydrologian ja hydrauliikan perusteet'},
+        {:id => 13, :course_code => 'MS-A030x', :name => 'Differentiaali- ja integraalilaskenta 3'}
       ]
       @motivation_questions = [
-        {:id => 62, :course_code => 'ENY-C2004', :name => 'Geologia ja geomekaniikka'},
-        {:id => 44, :course_code => 'KJR-C2004', :name => 'Materiaalitekniikka'},
+        {:id => 9, :course_code => 'PHYS-A3120', :name => 'Termodynamiikka (ENG)'},
+        {:id => 44, :course_code => 'KJR-C2004', :name => 'Materiaalitekniikka'}
       ]
-      @motivation_questions << {:id => 64, :course_code => 'ENE-C2001', :name => 'Käytännön energiatekniikkaa'} if chosen_course_ids.include?(64)
       @motivation_questions << {:id => 66, :course_code => 'YYT-C2001', :name => 'Hydrologian ja hydrauliikan perusteet'} if chosen_course_ids.include?(66)
+      @motivation_questions << {:id => 13, :course_code => 'MS-A030x', :name => 'Differentiaali- ja integraalilaskenta 3'} if chosen_course_ids.include?(13)
       
     elsif chosen_competence_ids.include?(59) # KJR
       @major_name = 'Kone- ja rakennustekniikan'
       @major_id = 59
       @usefulness_questions = [
-        {:id => 6, :course_code => 'ENY-C2001', :name => 'Termodynamiikka ja lämmönsiirto'},
-        {:id => 12, :course_code => 'MS-A020x', :name => 'Differentiaali- ja integraalilaskenta 2'},
-        {:id => 49, :course_code => 'RAK-C3003', :name => 'Tietoyhdennetty rakentaminen'},
-        {:id => 48, :course_code => 'KON-C3004', :name => 'Kone- ja rakennustekniikan laboratoriotyö'}
+        {:id => 9, :course_code => 'PHYS-A3120', :name => 'Termodynamiikka (ENG)'},
+        {:id => 4, :course_code => 'KJR-C2001', :name => 'Kiinteän aineen mekaniikan perusteet'},
+        {:id => 13, :course_code => 'MS-A030x', :name => 'Differentiaali- ja integraalilaskenta 3'},
+        {:id => 52, :course_code => 'KON-C3001', :name => 'Koneenrakennustekniikka A'}
+        # {:id => 6, :course_code => 'ENY-C2001', :name => 'Termodynamiikka ja lämmönsiirto'},
+        # {:id => 12, :course_code => 'MS-A020x', :name => 'Differentiaali- ja integraalilaskenta 2'},
+        # {:id => 49, :course_code => 'RAK-C3003', :name => 'Tietoyhdennetty rakentaminen'},
+        # {:id => 48, :course_code => 'KON-C3004', :name => 'Kone- ja rakennustekniikan laboratoriotyö'}
       ]
       
       @motivation_questions = [
-        {:id => 6, :course_code => 'ENY-C2001', :name => 'Termodynamiikka ja lämmönsiirto'},
-        {:id => 12, :course_code => 'MS-A020x', :name => 'Differentiaali- ja integraalilaskenta 2'},
+        {:id => 9, :course_code => 'PHYS-A3120', :name => 'Termodynamiikka (ENG)'},
+        {:id => 4, :course_code => 'KJR-C2001', :name => 'Kiinteän aineen mekaniikan perusteet'},
+        {:id => 13, :course_code => 'MS-A030x', :name => 'Differentiaali- ja integraalilaskenta 3'}
+        #{:id => 6, :course_code => 'ENY-C2001', :name => 'Termodynamiikka ja lämmönsiirto'},
+        #{:id => 12, :course_code => 'MS-A020x', :name => 'Differentiaali- ja integraalilaskenta 2'},
       ]
-      @motivation_questions << {:id => 49, :course_code => 'RAK-C3003', :name => 'Tietoyhdennetty rakentaminen'} if chosen_course_ids.include?(49)
-      @motivation_questions << {:id => 48, :course_code => 'KON-C3004', :name => 'Kone- ja rakennustekniikan laboratoriotyö'} if chosen_course_ids.include?(48)
-      
+      @motivation_questions << {:id => 52, :course_code => 'KON-C3001', :name => 'Koneenrakennustekniikka A'} if chosen_course_ids.include?(52)
+      # @motivation_questions << {:id => 49, :course_code => 'RAK-C3003', :name => 'Tietoyhdennetty rakentaminen'} if chosen_course_ids.include?(49)
+      # @motivation_questions << {:id => 48, :course_code => 'KON-C3004', :name => 'Kone- ja rakennustekniikan laboratoriotyö'} if chosen_course_ids.include?(48)
+
     elsif chosen_competence_ids.include?(74) # RYM
       @major_name = 'Rakennetun ympäristön (RYM)'
       @major_id = 74
-      @usefulness_questions = []
-      @motivation_questions = []
+      
+      @usefulness_questions = [
+        {:id => 15, :course_code => 'MS-A050x', :name => 'Todennäköisyyslaskennan ja tilastotieteen peruskurssi'},
+        {:id => 35, :course_code => 'PHYS-A3130', :name => 'Sähkömagnetismi (ENG)'},
+        {:id => 98, :course_code => 'MAA-C2003', :name => 'Kiinteistötekniikan perusteet'},
+        {:id => 12, :course_code => 'MS-A020x', :name => 'Differentiaali- ja integraalilaskenta 2'}
+      ]
+      @motivation_questions = [
+        {:id => 15, :course_code => 'MS-A050x', :name => 'Todennäköisyyslaskennan ja tilastotieteen peruskurssi'},
+        {:id => 35, :course_code => 'PHYS-A3130', :name => 'Sähkömagnetismi (ENG)'}
+      ]
+      @motivation_questions << {:id => 98, :course_code => 'MAA-C2003', :name => 'Kiinteistötekniikan perusteet'} if chosen_course_ids.include?(98)
+      @motivation_questions << {:id => 12, :course_code => 'MS-A020x', :name => 'Differentiaali- ja integraalilaskenta 2'} if chosen_course_ids.include?(12)
+      
     else
       # No major selected
       @major_name = ''
@@ -99,7 +119,7 @@ class SurveysController < ApplicationController
     @user.treatment += 2
     @user.save
     
-    flash[:success] = 'Kiitos osallistumisestasi tutkimukseen! Järjestelmän kaikki toiminnallisuudet ovat nyt käytettävissäsi.'
+    flash[:success] = 'Kiitos osallistumisestasi tutkimukseen!'
     redirect_to studyplan_competences_path()
     
     log("survey answer")

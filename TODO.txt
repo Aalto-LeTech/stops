@@ -1,21 +1,14 @@
-= Ennen julkaisua =
-
-survey
-
-db:
-  eny, energiasysteemit pakollisissa ja valinnaisissa
-  update competence_nodes set supporting_regex='(Kie-98)|(LC-)' where id in (109, 110, 111);
-
-
 = Ennen julkaisua, jos ehtii =
 
 kurssit:
 - jos muuttaa kurssin ryhmittelyä, näytä 'muutokset tallennettu'
 - sort
+Ohjeita lisää
 
 
 = Julkaisun jälkeen =
 
+Cron: rake ts:rebuild
 Kurssihaussa linkki hakutuloksista kurssisivulle
 Schedulessa linkit kurssitiedoista kurssisivulle
 Verkkoon näkyviin kurssit, joilla on eteen- ja taaksepäin vain tukevia linkkejä

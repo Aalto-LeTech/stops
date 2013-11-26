@@ -17,6 +17,7 @@ Feedback
 Affix ei toimi kapealla näytöllä
 Verkon lukitus: esitietona muille
 Jos lisää kurssin suunnitelmaan, lisää myös esitiedot
+Suomi toisena kotimaisena
 
 
 = Myöhemmin =

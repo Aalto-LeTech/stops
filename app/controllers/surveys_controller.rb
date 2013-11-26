@@ -117,7 +117,7 @@ class SurveysController < ApplicationController
     @answers.save
     
     @user.treatment += 2
-    @user.save
+    @user.save(:validate => false)
     
     flash[:success] = 'Kiitos osallistumisestasi tutkimukseen!'
     redirect_to studyplan_competences_path()

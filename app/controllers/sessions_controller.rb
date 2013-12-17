@@ -111,7 +111,7 @@ class SessionsController < ApplicationController
       user.name = shibinfo[:name]
       user.email = shibinfo[:email]
       user.reset_persistence_token
-      user.treatment = Treatment.get_treatment(user.studentnumber)
+      #user.treatment = Treatment.get_treatment(user.studentnumber)
       
       if user.save(:validate => false)
         CustomLogger.info("#{user.login}(#{user.treatment}) create_user_shib success")

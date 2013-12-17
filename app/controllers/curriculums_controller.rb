@@ -53,7 +53,7 @@ class CurriculumsController < ApplicationController
     load_curriculum_for_show_and_edit
     authorize! :update, @curriculum
 
-    @competences = Competence.where(:parent_competence_id => nil).includes([{:children => :localized_description}, :localized_description]).all
+    @competences = Competence.where(:curriculum_id => @curriculum.id, :parent_competence_id => nil).includes([{:children => :localized_description}, :localized_description]).all
     @competences.sort! { |competence, other| competence.localized_name <=> other.localized_name }
     
     @courses = ScopedCourse

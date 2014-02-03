@@ -56,4 +56,9 @@ namespace :db do
       puts
     end
   end
+  
+  task :usage_stats => :environment do
+    
+  end
+  
 end 

@@ -1,5 +1,7 @@
 = Ennen julkaisua, jos ehtii =
 
+invitation-linkin seuraaminen vie opiskelijan näkymään
+
 kurssit:
 - jos muuttaa kurssin ryhmittelyä, näytä 'muutokset tallennettu'
 - sort

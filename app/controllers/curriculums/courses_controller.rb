@@ -165,6 +165,7 @@ class Curriculums::CoursesController < ApplicationController
     @scoped_course = ScopedCourse.new(params[:scoped_course])
     @scoped_course.course_code = @course_code
     @scoped_course.curriculum = @curriculum
+    @scoped_course.term = @curriculum.term
     @scoped_course.abstract_course = abstract_course
 
     respond_to do |format|

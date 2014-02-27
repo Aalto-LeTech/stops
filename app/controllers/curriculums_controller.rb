@@ -164,7 +164,9 @@ class CurriculumsController < ApplicationController
 
 
   def search_skills
-    curriculum_id = params[:id]
+    # curriculum_id = params[:id]
+    curriculum = Curriculum.find(params[:id])
+    
     node_ids = []
     if params[:q] && params[:q].size > 1
       excluded_node_id = false
@@ -173,13 +175,14 @@ class CurriculumsController < ApplicationController
       end
 
       # Search from skill
+      # TODO: term scope
       skill_descriptions = SkillDescription.where(['name ILIKE ?', "%#{params[:q]}%"])
                                .joins(:skill)
                                .includes(:skill, :skill => :competence_node)
                                .select(:competence_node_id).uniq
       skill_descriptions.each do |skill_desc|
         node_id = skill_desc.skill.competence_node_id.to_i
-        node_ids << node_id if not node_id == excluded_node_id
+        node_ids << node_id unless node_id == excluded_node_id
       end
 
       # Search from course names
@@ -193,7 +196,7 @@ class CurriculumsController < ApplicationController
         abstract_course_ids << abstract_course.id
       end
       
-      ScopedCourse.where(:abstract_course_id => abstract_course_ids, :curriculum_id => curriculum_id).select(:id).find_each do |node|
+      ScopedCourse.where(:abstract_course_id => abstract_course_ids, :curriculum_id => curriculum.id).select(:id).find_each do |node|
         node_ids << node.id if not node.id == excluded_node_id
       end
 

@@ -3,6 +3,8 @@ class Curriculum < ActiveRecord::Base
   validates_presence_of :start_year
   validates_presence_of :end_year
 
+  belongs_to :term
+  
   # Competences
   has_many :competences,
            :dependent   => :destroy
@@ -131,7 +133,7 @@ class Curriculum < ActiveRecord::Base
         end
 
         # Create course
-        course = ScopedCourse.create(:curriculum_id => self.id, :abstract_course_id => abstract_course_id, :credits => credits, :course_code => code)
+        course = ScopedCourse.create(:curriculum_id => self.id, :abstract_course_id => abstract_course_id, :credits => credits, :course_code => code, :term_id => self.term_id)
         description_fi = CourseDescription.create(:scoped_course_id => course.id, :locale => 'fi', :name => name_fi)
         description_en = CourseDescription.create(:scoped_course_id => course.id, :locale => 'en', :name => name_en)
         description_sv = CourseDescription.create(:scoped_course_id => course.id, :locale => 'sv', :name => name_sv)
@@ -150,7 +152,7 @@ class Curriculum < ActiveRecord::Base
                 text = line
               end
 
-              skill = Skill.create(:competence_node_id => course.id)
+              skill = Skill.create(:competence_node_id => course.id, :term_id => self.term_id)
               SkillDescription.create(:skill_id => skill.id, :locale => 'fi', :name => text)
               SkillDescription.create(:skill_id => skill.id, :locale => 'en', :name => text)
               SkillDescription.create(:skill_id => skill.id, :locale => 'sv', :name => text)
@@ -167,4 +169,72 @@ class Curriculum < ActiveRecord::Base
     end
   end
 
+  def duplicate(term)
+    new_node_ids = {}   # old_node_id => copy_node_id
+    new_skill_ids = {}  # old_node_id => copy_node_id
+    skills = []
+    skill_ids = []
+    
+    # Duplicate the Curriculum
+    new_curriculum = self.dup
+    new_curriculum.name += ' (copy)'
+    new_curriculum.term = term
+    new_curriculum.save
+    
+    # Duplicate ScopedCourses
+    ScopedCourse.where(:curriculum_id => self.id).find_each do |node|
+      node_copy = node.dup
+      node_copy.curriculum = new_curriculum
+      node_copy.locked = false
+      node_copy.term = term
+      node_copy.save
+      new_node_ids[node.id] = node_copy.id
+      
+      skills.concat(node.skills)
+      skill_ids.concat(node.skill_ids)
+    end
+    
+    # Duplicate Competences
+    Competence.where(:curriculum_id => self.id).order('parent_competence_id DESC').find_each do |node|
+      # NOTE: order by parent_competence_id so that nested competences are handled last and the new parent_competence_ids are known
+      node_copy = node.dup(:include => :competence_descriptions)
+      node_copy.curriculum = new_curriculum
+      node_copy.parent_competence_id = new_node_ids[node.parent_competence_id] if node.parent_competence_id
+      node_copy.locked = false
+      node_copy.term = term
+      node_copy.save
+      new_node_ids[node.id] = node_copy.id
+      
+      skills.concat(node.skills)
+      skill_ids.concat(node.skill_ids)
+    end
+
+    # Duplicate all Skills
+    skills.each do |skill|
+      skill_copy = skill.dup(:include => :skill_descriptions)
+      skill_copy.skill_descriptions.each { |skill_description| skill_description.term = term }
+      skill_copy.competence_node_id = new_node_ids[skill_copy.competence_node_id]
+      skill_copy.term = term
+      skill_copy.save
+      new_skill_ids[skill.id] = skill_copy.id
+    end
+    
+    # Duplicate SkillPrereqs
+    SkillPrereq.where(:skill_id => skill_ids).find_each do |skill_prereq|
+      prereq_copy = skill_prereq.dup
+      prereq_copy.skill_id = new_skill_ids[prereq_copy.skill_id]
+      prereq_copy.prereq_id = new_skill_ids[prereq_copy.prereq_id]
+      prereq_copy.term = term
+      prereq_copy.save
+    end
+    
+    # Duplicate Roles
+    CurriculumRole.where(:target_id => self.id).find_each do |role|
+      role_copy = role.dup
+      role_copy.target_id = new_curriculum.id
+      role_copy.save
+    end
+    
+    return new_curriculum
+  end
 end

@@ -31,6 +31,7 @@ class Curriculums::SkillsController < CurriculumsController
     @curriculum.save  # Expire cache
 
     @skill = Skill.new(params[:skill])
+    @skill.term = @curriculum.term
     @skill.save!
 
     respond_to do |format|
@@ -135,7 +136,8 @@ class Curriculums::SkillsController < CurriculumsController
     # Add new
     SkillPrereq.create :skill_id     => Integer(params[:id]),
                        :prereq_id    => Integer(params[:prereq_id]),
-                       :requirement  => requirement_type
+                       :requirement  => requirement_type,
+                       :term_id      => @curriculum.term_id
 
     # Update prereq cache
     target_skill = Skill.find(params[:id])

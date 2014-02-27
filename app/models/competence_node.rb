@@ -3,8 +3,9 @@ class CompetenceNode < ActiveRecord::Base
   # attr_accessible :title, :body
   
   belongs_to :curriculum
+  belongs_to :term
 
-  has_many :skills, 
+  has_many :skills,
            :autosave  => true, 
            :dependent => :destroy,
            :order     => :position
@@ -141,6 +142,7 @@ class CompetenceNode < ActiveRecord::Base
            :order => 'course_code',
            :uniq => true
 
+  
 
   # Moves skills from the other competence node to this node and deletes the other node
   # other: CompetenceNode

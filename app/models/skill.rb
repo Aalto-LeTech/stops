@@ -52,6 +52,7 @@ class Skill < ActiveRecord::Base
            :class_name  => 'ScopedCourse'
   
   belongs_to :competence_node
+  belongs_to :term
 
   accepts_nested_attributes_for :skill_descriptions
 

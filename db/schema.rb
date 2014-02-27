@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131029110034) do
+ActiveRecord::Schema.define(:version => 20140226151135) do
 
   create_table "abstract_courses", :force => true do |t|
     t.string  "code",        :null => false
@@ -63,11 +63,13 @@ ActiveRecord::Schema.define(:version => 20131029110034) do
     t.integer  "position"
     t.boolean  "locked",               :default => false, :null => false
     t.text     "supporting_regex"
+    t.integer  "term_id"
   end
 
   add_index "competence_nodes", ["abstract_course_id", "curriculum_id"], :name => "index_competence_nodes_on_abstract_course_id_and_curriculum_id"
   add_index "competence_nodes", ["abstract_course_id"], :name => "index_competence_nodes_on_abstract_course_id"
   add_index "competence_nodes", ["parent_competence_id"], :name => "index_competence_nodes_on_parent_competence_id"
+  add_index "competence_nodes", ["term_id"], :name => "index_competence_nodes_on_term_id"
   add_index "competence_nodes", ["type"], :name => "index_competence_nodes_on_type"
 
   create_table "course_descriptions", :force => true do |t|
@@ -107,6 +109,7 @@ ActiveRecord::Schema.define(:version => 20131029110034) do
     t.integer "start_year"
     t.integer "end_year"
     t.string  "name"
+    t.integer "term_id"
   end
 
   create_table "delayed_jobs", :force => true do |t|
@@ -233,12 +236,14 @@ ActiveRecord::Schema.define(:version => 20131029110034) do
     t.integer "skill_id",    :null => false
     t.integer "prereq_id",   :null => false
     t.integer "requirement"
+    t.integer "term_id"
   end
 
   add_index "skill_prereqs", ["prereq_id", "requirement"], :name => "index_skill_prereqs_on_prereq_id_and_requirement"
   add_index "skill_prereqs", ["prereq_id"], :name => "index_skill_prereqs_on_prereq_id"
   add_index "skill_prereqs", ["skill_id", "requirement"], :name => "index_skill_prereqs_on_skill_id_and_requirement"
   add_index "skill_prereqs", ["skill_id"], :name => "index_skill_prereqs_on_skill_id"
+  add_index "skill_prereqs", ["term_id"], :name => "index_skill_prereqs_on_term_id"
 
   create_table "skills", :force => true do |t|
     t.integer "position",           :default => 0, :null => false
@@ -246,9 +251,11 @@ ActiveRecord::Schema.define(:version => 20131029110034) do
     t.float   "credits"
     t.integer "competence_node_id",                :null => false
     t.string  "icon"
+    t.integer "term_id"
   end
 
   add_index "skills", ["competence_node_id"], :name => "index_skills_on_competence_node_id"
+  add_index "skills", ["term_id"], :name => "index_skills_on_term_id"
 
   create_table "study_plans", :force => true do |t|
     t.datetime "created_at",      :null => false
@@ -268,6 +275,11 @@ ActiveRecord::Schema.define(:version => 20131029110034) do
     t.string   "login"
     t.text     "payload",       :null => false
     t.datetime "created_at"
+  end
+
+  create_table "terms", :force => true do |t|
+    t.integer "start_year"
+    t.integer "end_year"
   end
 
   create_table "treatments", :force => true do |t|

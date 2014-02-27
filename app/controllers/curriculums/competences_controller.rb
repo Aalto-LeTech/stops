@@ -116,6 +116,7 @@ class Curriculums::CompetencesController < ApplicationController
     @curriculum.save  # Expire cache
     
     @competence = Competence.new(params[:competence])
+    @competence.term = @curriculum.term
 
     respond_to do |format|
       if @competence.save

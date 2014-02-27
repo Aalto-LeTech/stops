@@ -41,6 +41,8 @@ class CurriculumsController < ApplicationController
   def new
     @curriculum = Curriculum.new
     authorize! :create, @curriculum
+    
+    @terms = Term.order(:start_year).all
 
     respond_to do |format|
       format.html # new.html.erb
@@ -79,6 +81,7 @@ class CurriculumsController < ApplicationController
     authorize! :create, @curriculum
 
     @curriculum.admins << @current_user
+    @terms = Term.order(:start_year).all
 
     respond_to do |format|
       if @curriculum.save
@@ -123,17 +126,17 @@ class CurriculumsController < ApplicationController
   def graph
     load_curriculum
     
-    competences = Competence.where(:curriculum_id => @curriculum.id, :parent_competence_id => nil)
+    competences = Competence.where(:term_id => @curriculum.term_id, :parent_competence_id => nil)
                     .joins(:competence_descriptions)
                     .where(["competence_descriptions.locale = ?", I18n.locale])
                     #.includes(:strict_prereqs)
 
-    courses = ScopedCourse.where(:curriculum_id => @curriculum.id)
+    courses = ScopedCourse.where(:term_id => @curriculum.term_id)
                 .joins(:course_descriptions)
                 .where(["course_descriptions.locale = ?", I18n.locale])
                 #.includes(:strict_prereqs)
 
-    skills = Skill
+    skills = Skill.where(:term_id => @curriculum.term_id)
                 .includes(:strict_prereqs, :supporting_prereqs, :localized_description)
                 .order(:position)
                 #.where('competence_nodes.id' => @curriculum.course_ids)
@@ -175,8 +178,7 @@ class CurriculumsController < ApplicationController
       end
 
       # Search from skill
-      # TODO: term scope
-      skill_descriptions = SkillDescription.where(['name ILIKE ?', "%#{params[:q]}%"])
+      skill_descriptions = SkillDescription.where(['name ILIKE ? AND skill_descriptions.term_id=?', "%#{params[:q]}%", curriculum.term_id])
                                .joins(:skill)
                                .includes(:skill, :skill => :competence_node)
                                .select(:competence_node_id).uniq
@@ -196,17 +198,18 @@ class CurriculumsController < ApplicationController
         abstract_course_ids << abstract_course.id
       end
       
-      ScopedCourse.where(:abstract_course_id => abstract_course_ids, :curriculum_id => curriculum.id).select(:id).find_each do |node|
-        node_ids << node.id if not node.id == excluded_node_id
+      # Load the relevant ScopedCourses by abstract_course_ids
+      ScopedCourse.where(:abstract_course_id => abstract_course_ids, :term_id => curriculum.term_id).select(:id).find_each do |node|
+        node_ids << node.id unless node.id == excluded_node_id
       end
 
       # Search from competence names
-      nodes = CompetenceDescription.where(['name ILIKE ?', "%#{params[:q]}%"])
+      nodes = CompetenceDescription.where(['name ILIKE ? AND competence_descriptions.term_id=?', "%#{params[:q]}%", curriculum.term_id])
                                .joins(:competence)
                                .select(:competence_id).uniq
       nodes.each do |node|
         node_id = node.competence_id
-        node_ids << node_id if not node_id == excluded_node_id
+        node_ids << node_id unless node_id == excluded_node_id
       end
     end
 

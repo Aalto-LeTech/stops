@@ -1,9 +1,7 @@
 class Curriculum < ActiveRecord::Base
 
-  validates_presence_of :start_year
-  validates_presence_of :end_year
-
   belongs_to :term
+  validates_presence_of :term
   
   # Competences
   has_many :competences,
@@ -153,9 +151,9 @@ class Curriculum < ActiveRecord::Base
               end
 
               skill = Skill.create(:competence_node_id => course.id, :term_id => self.term_id)
-              SkillDescription.create(:skill_id => skill.id, :locale => 'fi', :name => text)
-              SkillDescription.create(:skill_id => skill.id, :locale => 'en', :name => text)
-              SkillDescription.create(:skill_id => skill.id, :locale => 'sv', :name => text)
+              SkillDescription.create(:skill_id => skill.id, :locale => 'fi', :name => text, :term_id => self.term_id)
+              SkillDescription.create(:skill_id => skill.id, :locale => 'en', :name => text, :term_id => self.term_id)
+              SkillDescription.create(:skill_id => skill.id, :locale => 'sv', :name => text, :term_id => self.term_id)
               puts "  #{text}"
             end
           end
@@ -198,6 +196,7 @@ class Curriculum < ActiveRecord::Base
     Competence.where(:curriculum_id => self.id).order('parent_competence_id DESC').find_each do |node|
       # NOTE: order by parent_competence_id so that nested competences are handled last and the new parent_competence_ids are known
       node_copy = node.dup(:include => :competence_descriptions)
+      node_copy.competence_descriptions.each { |description| description.term = term }
       node_copy.curriculum = new_curriculum
       node_copy.parent_competence_id = new_node_ids[node.parent_competence_id] if node.parent_competence_id
       node_copy.locked = false
@@ -212,7 +211,7 @@ class Curriculum < ActiveRecord::Base
     # Duplicate all Skills
     skills.each do |skill|
       skill_copy = skill.dup(:include => :skill_descriptions)
-      skill_copy.skill_descriptions.each { |skill_description| skill_description.term = term }
+      skill_copy.skill_descriptions.each { |description| description.term = term }
       skill_copy.competence_node_id = new_node_ids[skill_copy.competence_node_id]
       skill_copy.term = term
       skill_copy.save

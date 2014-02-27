@@ -1,8 +1,8 @@
 # Competence, e.g. Steel structures
 class Competence < CompetenceNode
 
-  belongs_to :curriculum
-
+  #belongs_to :curriculum
+  
   # Parent
   belongs_to :parent_competence,
            :class_name => 'Competence'

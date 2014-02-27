@@ -63,7 +63,7 @@ class Curriculums::CompetencesController < ApplicationController
     # Add missing translations
     existing_locales = @competence.competence_descriptions.map {|description| description.locale}
     (REQUIRED_LOCALES - existing_locales).map do |locale|
-      existing_locales = @competence.competence_descriptions << CompetenceDescription.new(:competence => @competence, :locale => locale, :name => '')
+      existing_locales = @competence.competence_descriptions << CompetenceDescription.new(:competence => @competence, :locale => locale, :name => '', :term_id => @curriculum.term_id)
     end
 
     render :action => 'edit', :layout => 'views/curriculums/container'
@@ -104,7 +104,7 @@ class Curriculums::CompetencesController < ApplicationController
     authorize! :update, @curriculum
 
     REQUIRED_LOCALES.each do |locale|
-      @competence.competence_descriptions << CompetenceDescription.new(:competence => @competence, :locale => locale)
+      @competence.competence_descriptions << CompetenceDescription.new(:competence => @competence, :locale => locale, :term_id => @curriculum.term_id)
     end
     
     render :action => 'new', :layout => 'views/curriculums/browser'

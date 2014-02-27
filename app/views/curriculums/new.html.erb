@@ -8,14 +8,9 @@
       <td></td>
     </tr>
     <tr>
-      <td><%= f.label :start_year, t('.curriculum_start_year') %></td>
-      <td><%= f.text_field :start_year %></td>
-      <td><%= f.hint :start_year %></td>
-    </tr>
-    <tr>
-      <td><%= f.label :end_year, t('.curriculum_end_year') %></td>
-      <td><%= f.text_field :end_year %></td>
-      <td><%= f.hint :end_year %></td>
+      <td><%= f.label :name, t('.curriculum_term') %></td>
+      <td><%= f.select :term_id, @terms.collect {|term| [ "#{term.start_year}-#{term.end_year}", term.id ] } %></td>
+      <td></td>
     </tr>
   </table>
 

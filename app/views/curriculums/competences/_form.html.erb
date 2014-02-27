@@ -3,6 +3,7 @@
 
   <%= f.fields_for :competence_descriptions do |cf| %>
     <%= cf.hidden_field :locale %>
+    <%= cf.hidden_field :term_id %>
     <div class="form-control-group">
       <%= cf.label t(".competence_name_in_" + cf.object.locale), :class => "form-label" %>
       <div class="form-controls">

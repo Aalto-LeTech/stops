@@ -17,9 +17,6 @@
   <div class="admin-tools well">
     <ul class="nav nav-list">
       <!--li class="nav-header"><%= t :admin_toolbox_heading %></li-->
-      <% if can? :import, @curriculum %>
-        <li><%= link_to t('.import_csv_link'), edit_import_csv_curriculum_path(:id => @curriculum) %></li>
-      <% end %>
       <li><a href="/O4-ohje.pdf">Käyttöohje</a></li>
       <li><a href="/O4-Bloomin_taksonomia.pdf">Bloomin taksonomia</a></li>
       <li><%= link_to t('.edit_roles'), new_curriculum_role_path(:curriculum_id => @curriculum) %></li>

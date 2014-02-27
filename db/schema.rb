@@ -36,10 +36,12 @@ ActiveRecord::Schema.define(:version => 20140226151135) do
     t.string  "locale"
     t.string  "name",          :null => false
     t.text    "description"
+    t.integer "term_id"
   end
 
   add_index "competence_descriptions", ["competence_id", "locale"], :name => "index_competence_descriptions_on_competence_id_and_locale", :unique => true
   add_index "competence_descriptions", ["competence_id"], :name => "index_competence_descriptions_on_competence_id"
+  add_index "competence_descriptions", ["term_id"], :name => "index_competence_descriptions_on_term_id"
 
   create_table "competence_nodes", :force => true do |t|
     t.string   "type"
@@ -218,10 +220,12 @@ ActiveRecord::Schema.define(:version => 20140226151135) do
     t.string  "locale"
     t.text    "description"
     t.text    "name"
+    t.integer "term_id"
   end
 
   add_index "skill_descriptions", ["skill_id", "locale"], :name => "index_skill_descriptions_on_skill_id_and_locale", :unique => true
   add_index "skill_descriptions", ["skill_id"], :name => "index_skill_descriptions_on_skill_id"
+  add_index "skill_descriptions", ["term_id"], :name => "index_skill_descriptions_on_term_id"
 
   create_table "skill_levels", :force => true do |t|
     t.integer "level",      :null => false

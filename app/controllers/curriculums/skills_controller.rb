@@ -32,6 +32,7 @@ class Curriculums::SkillsController < CurriculumsController
 
     @skill = Skill.new(params[:skill])
     @skill.term = @curriculum.term
+    @skill.skill_descriptions.each { |description| description.term = @curriculum.term }
     @skill.save!
 
     respond_to do |format|

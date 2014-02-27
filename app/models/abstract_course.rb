@@ -7,7 +7,7 @@ class AbstractCourse < ActiveRecord::Base
           :conditions => proc { "locale = '#{I18n.locale}'" }
 
   # Courses
-  has_many :scoped_courses, :dependent => :destroy      # Courses in curriculums. e.g. "Course X-0.1010 according to the 2005 study guide"
+  has_many :scoped_courses, :dependent => :destroy      # Courses in terms. e.g. "Course X-0.1010 according to the 2005 study guide"
   has_many :course_instances, :dependent => :destroy    # Course implementations, e.g. "Course X-0.1010 (spring 2011)"
   has_many :plan_courses, :dependent => :destroy        # Courses planned by students in their personal study plans
 

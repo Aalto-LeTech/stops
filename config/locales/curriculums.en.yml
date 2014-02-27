@@ -20,7 +20,8 @@ en:
     new:
       heading: "Create new curriculum"
       curriculum_name: "Name"
-      curriculum_name_hint: "e.g. 2012-2013"
+      curriculum_term: "Term"
+      curriculum_name_hint: "e.g. Master's program 2012-2013"
       curriculum_start_year: "First year"
       curriculum_start_year_hint: "e.g. 2010"
       curriculum_end_year: "Last year"

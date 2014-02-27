@@ -8,13 +8,15 @@ class CreateVersions < ActiveRecord::Migration
     add_column :curriculums, :term_id, :integer
     add_column :competence_nodes, :term_id, :integer
     add_column :skills, :term_id, :integer
-    add_column :skill_descriptions, :term_id, :integer
     add_column :skill_prereqs, :term_id, :integer
+    add_column :skill_descriptions, :term_id, :integer
+    add_column :competence_descriptions, :term_id, :integer
     
     add_index :competence_nodes, :term_id
     add_index :skills, :term_id
-    add_index :skill_descriptions, :term_id
     add_index :skill_prereqs, :term_id
+    add_index :skill_descriptions, :term_id
+    add_index :competence_descriptions, :term_id
   end
 
   def down
@@ -23,7 +25,8 @@ class CreateVersions < ActiveRecord::Migration
     remove_column :curriculums, :term_id
     remove_column :competence_nodes, :term_id
     remove_column :skills, :term_id
-    remove_column :skill_descriptions, :term_id
     remove_column :skill_prereqs, :term_id
+    remove_column :skill_descriptions, :term_id
+    remove_column :competence_descriptions, :term_id
   end
 end

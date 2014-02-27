@@ -1,4 +1,4 @@
-# Course as a part of a curriculum, e.g. Programming 101 as described in the 2011 study guide
+# Course as a part of a term, e.g. Programming 101 as described in the 2011 study guide
 class ScopedCourse < CompetenceNode
 
   # Abstract course

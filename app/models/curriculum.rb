@@ -236,4 +236,20 @@ class Curriculum < ActiveRecord::Base
     
     return new_curriculum
   end
+  
+  def move_to_term(new_term)
+    self.term = new_term
+    self.save
+    
+    CompetenceNode.where(:curriculum_id => self.id).find_each do |node|
+      node.term = new_term
+      node.save
+      
+      CompetenceDescription.where(:competence_id => node.id).update_all(:term_id => new_term.id)
+      Skill.where(:competence_node_id => node.id).update_all(:term_id => new_term.id)
+      SkillPrereq.where(:skill_id => node.skill_ids).update_all(:term_id => new_term.id)
+      SkillDescription.where(:skill_id => node.skill_ids).update_all(:term_id => new_term.id)
+    end
+  end
+  
 end

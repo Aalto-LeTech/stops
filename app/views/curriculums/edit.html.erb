@@ -53,19 +53,19 @@
     <% @competences.each do |competence| %>
       <li>
         <% if !competence.locked || @curriculum.has_admin?(current_user) %>
-          <%= link_to competence.localized_name, edit_prereqs_curriculum_competence_path(:curriculum_id => @curriculum, :id => competence) %>
+          <%= link_to competence.localized_name(t('curriculums.name_not_available')), edit_prereqs_curriculum_competence_path(:curriculum_id => @curriculum, :id => competence) %>
           <% if competence.locked %>
             <i title="<%=t 'curriculums.courses.edit.locked' %>" class="icon icon-lock"></i>
           <% end %>
           <% if competence.children %>
             <ul>
               <% competence.children.each do |competence| %>
-                <li><%= link_to competence.localized_name, edit_prereqs_curriculum_competence_path(:curriculum_id => @curriculum, :id => competence) %></li>
+                <li><%= link_to competence.localized_name(t('curriculums.name_not_available')), edit_prereqs_curriculum_competence_path(:curriculum_id => @curriculum, :id => competence) %></li>
               <% end %>
             </ul>
           <% end %>
         <% else %>
-          <%= link_to competence.localized_name, curriculum_competence_path(:curriculum_id => @curriculum, :id => competence) %>
+          <%= link_to competence.localized_name(t('curriculums.name_not_available')), curriculum_competence_path(:curriculum_id => @curriculum, :id => competence) %>
           <% if competence.locked %>
             <i title="<%=t 'curriculums.courses.edit.locked' %>" class="icon icon-lock"></i>
           <% end %>
@@ -122,7 +122,7 @@
             <%= link_to course.course_code, course_link %>
           </td>
           <td>
-            <%= link_to course.localized_name_if_possible("<#{t('curriculums.course_name_not_available')}>"), course_link %>
+            <%= link_to course.localized_name_if_possible(t('curriculums.name_not_available')), course_link %>
           </td>
           <td class="centered"><%= course.credits %></td>
           <!--

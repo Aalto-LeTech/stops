@@ -21,7 +21,11 @@
             <%= link_to curriculum.name, curriculum_path(:id => curriculum) %>
           <% end %>
         </td>
-        <td><%= curriculum.start_year %>-<%= curriculum.end_year %></td>
+        <td>
+          <% if curriculum.term %>
+            <%= curriculum.term.start_year %>-<%= curriculum.term.end_year %>
+          <% end %>
+        </td>
       </tr>
     <% end %>
   </tbody>

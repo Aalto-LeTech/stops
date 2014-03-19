@@ -42,7 +42,7 @@ class ApplicationController < ActionController::Base
   # Redirects from http to https if FORCE_SSL is set.
   def redirect_to_ssl
     if FORCE_SSL && !request.ssl?
-      redirect_to :protocol => "https://", :locale => I18n.default_locale.to_s
+      redirect_to :protocol => "https://" #, :locale => I18n.default_locale.to_s
     end
   end
 

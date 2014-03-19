@@ -112,6 +112,7 @@ Ops::Application.routes.draw do
   match '/client_event', to: 'application#log_client_event', as: 'log_client_event'
   
   match '/:locale' => "frontpage#index", :as => :frontpage
-  root :to => "application#redirect_by_locale"
+  #root :to => "application#redirect_by_locale"
+  root :to => "frontpage#index"
 
 end

@@ -18,7 +18,7 @@ class SessionsController < ApplicationController
     session[:logout_url] = nil
 
     if @user_session.save
-      user = current_user
+      user = @user_session.record
       
       CustomLogger.info("#{user.login}(#{user.treatment}) login_traditional success")
       logger.info("Logged in #{user.login} (#{user.studentnumber}) (password)")

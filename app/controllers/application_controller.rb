@@ -9,8 +9,8 @@ class ApplicationController < ActionController::Base
 
   helper_method :current_session, :current_user, :logged_in?
 
-  before_filter :redirect_to_ssl
   before_filter :set_locale
+  before_filter :redirect_to_ssl
   before_filter :store_location
   
   # Redirect root to the correct localized root (i.e., /:locale).
@@ -76,6 +76,8 @@ class ApplicationController < ActionController::Base
       logger.info "set_locale: no param given, current_user.locale = #{current_user.locale} (now I18n.locale = #{I18n.locale.to_s})"
     #elsif !session[:locale].blank?  # Get locale from session
     #  I18n.locale = session[:locale]
+    else
+      I18n.locale = I18n.default_locale
     end
   end
 

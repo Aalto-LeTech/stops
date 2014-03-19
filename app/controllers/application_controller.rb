@@ -20,7 +20,7 @@ class ApplicationController < ActionController::Base
   # and not to the user's locale found in the session.
   def redirect_by_locale
     logger.info "redirect_by_locale (I18n.locale = #{I18n.locale.to_s})"
-    redirect_to '/' + I18n.locale.to_s
+    redirect_to frontpage_url(:locale => I18n.locale.to_s)
   end
 
   def log_client_event
@@ -41,8 +41,9 @@ class ApplicationController < ActionController::Base
 
   # Redirects from http to https if FORCE_SSL is set.
   def redirect_to_ssl
-    logger.info "redirect_to_ssl (I18n.locale = #{I18n.locale.to_s})"
-    redirect_to :protocol => "https://" if FORCE_SSL && !request.ssl?
+    #if FORCE_SSL && !request.ssl?
+      redirect_to :protocol => "https://", :locale => I18n.default_locale.to_s
+    end
   end
 
   def default_url_options(options={})

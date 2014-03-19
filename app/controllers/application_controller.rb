@@ -19,6 +19,7 @@ class ApplicationController < ActionController::Base
   # phase of processing I18n.locale is set to the default locale
   # and not to the user's locale found in the session.
   def redirect_by_locale
+    logger.info "redirect_by_locale (I18n.locale = #{I18n.locale.to_s})"
     redirect_to '/' + I18n.locale.to_s
   end
 
@@ -40,6 +41,7 @@ class ApplicationController < ActionController::Base
 
   # Redirects from http to https if FORCE_SSL is set.
   def redirect_to_ssl
+    logger.info "redirect_to_ssl (I18n.locale = #{I18n.locale.to_s})"
     redirect_to :protocol => "https://" if FORCE_SSL && !request.ssl?
   end
 
@@ -58,6 +60,7 @@ class ApplicationController < ActionController::Base
   def set_locale
     if params[:locale]  # Locale is given as a URL parameter
       I18n.locale = params[:locale]
+      logger.info "set_locale: locale param given (#{params[:locale]}) (now I18n.locale = #{I18n.locale.to_s})"
 
       # Save the locale into session
       #session[:locale] = params[:locale] if current_user
@@ -69,6 +72,7 @@ class ApplicationController < ActionController::Base
       end
     elsif current_user && !current_user.locale.blank?  # Get locale from user's preferences
       I18n.locale = current_user.locale
+      logger.info "set_locale: no param given, current_user.locale = #{current_user.locale} (now I18n.locale = #{I18n.locale.to_s})"
     #elsif !session[:locale].blank?  # Get locale from session
     #  I18n.locale = session[:locale]
     end

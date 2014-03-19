@@ -19,7 +19,6 @@ class ApplicationController < ActionController::Base
   # phase of processing I18n.locale is set to the default locale
   # and not to the user's locale found in the session.
   def redirect_by_locale
-    logger.info "redirect_by_locale (I18n.locale = #{I18n.locale.to_s})"
     redirect_to frontpage_url(:locale => I18n.locale.to_s)
   end
 
@@ -60,20 +59,18 @@ class ApplicationController < ActionController::Base
   # Sets the locale based on params and user preferences.
   def set_locale
     if params[:locale]  # Locale is given as a URL parameter
-      I18n.locale = params[:locale]
-      logger.info "set_locale: locale param given (#{params[:locale]}) (now I18n.locale = #{I18n.locale.to_s})"
-
-      # Save the locale into session
-      #session[:locale] = params[:locale] if current_user
+      locale = params[:locale]
+      locale = I18n.default_locale unless REQUIRED_LOCALES.include?(locale)
+      
+      I18n.locale = locale
 
       # Save the locale in user's preferences
       if current_user
-        current_user.locale = params[:locale]
+        current_user.locale = locale
         current_user.save
       end
     elsif current_user && !current_user.locale.blank?  # Get locale from user's preferences
       I18n.locale = current_user.locale
-      logger.info "set_locale: no param given, current_user.locale = #{current_user.locale} (now I18n.locale = #{I18n.locale.to_s})"
     #elsif !session[:locale].blank?  # Get locale from session
     #  I18n.locale = session[:locale]
     else

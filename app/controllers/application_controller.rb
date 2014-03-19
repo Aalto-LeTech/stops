@@ -60,7 +60,7 @@ class ApplicationController < ActionController::Base
       I18n.locale = params[:locale]
 
       # Save the locale into session
-      session[:locale] = params[:locale]
+      session[:locale] = params[:locale] if current_user
 
       # Save the locale in user's preferences
       #if user_signed_in?

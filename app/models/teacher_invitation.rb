@@ -11,7 +11,7 @@ class TeacherInvitation < Invitation
     
     user.staff = true
     user.treatment = nil
-    user.save
+    user.save(:validate => false)
     
     self.destroy
   end

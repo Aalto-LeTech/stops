@@ -156,12 +156,12 @@ class SessionsController < ApplicationController
     else
       if user.study_plan
         if user.study_plan.competences.empty?
-          redirect_to studyplan_competences_path
+          redirect_back_or_default studyplan_competences_path
         else
-          redirect_to studyplan_schedule_path
+          redirect_back_or_default studyplan_schedule_path
         end
       else
-        redirect_to edit_studyplan_curriculum_path
+        redirect_back_or_default edit_studyplan_curriculum_path
       end
     end
   end

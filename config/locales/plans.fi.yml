@@ -12,33 +12,6 @@ fi:
         warning: "Kaikkia valittuja kursseja ja kompetensseja ei välttämättä ole tarjolla muissa opinto-oppaissa."
 
     competences:
-      index:
-        heading: "Kompetenssivalinnat"
-        competences: "Pää- ja sivuaineet"
-        provided_skills_heading: "Osaamistavoitteet"
-      show:
-        add_to_plan: "Lisää suunnitelmaan"
-        remove_from_plan: "Poista suunnitelmasta"
-        total_credits: "Opintopisteitä yhteensä ryhmiteltynä tähän pää/sivuaineeseen"
-        total_credits_hint: "Jos jokin kurssi kuuluu useaan pää/sivuaineeseen, se on ryhmiteltävä niistä yhteen jottei opintopisteitä lasketa useaan kertaan. Vastaavasti opintosuunnitelmaan on lisättävä valinnaisia kursseja niin, että vaaditut opintopistemäärät täyttyvät."
-        credits_shared: "Sisältyy jo suunnitelmaan"
-        credits_passed: "Jo suoritettu"
-        credits_added: "Suunnitelmaan lisätään"
-        competences: "Pää- ja sivuaineet"
-        skills: "Osaamistavoitteet"
-        skills_hint: "Klikkaa osaamistavoitetta valitaksesi sitä tukevia kursseja."
-        strict_prereqs: "Pakolliset kurssit"
-        ancestor_prereqs: "Välttämättömät esitiedot"
-        supporting_prereqs: "Tukevia kursseja"
-        course_passed: "Suoritettu"
-        competence_already_selected: "%{name} on jo opintosuunnitelmassa."
-      course_table:
-        course-title: 'Kurssi'
-        credits-title: 'Op'
-        period-title: 'Periodi'
-        credits_total: "Opintosuunnitelmassa ryhmiteltynä tähän"
-        included_here: 'Kurssi on opintosuunnitelmassasi, ryhmiteltynä tähän pää/sivuaineeseen'
-        included_elsewhere: 'Kurssi on opintosuunnitelmassasi, mutta ryhmiteltynä muualle'
       supporting:
         heading: "Valitse tukevia kursseja"
       new:

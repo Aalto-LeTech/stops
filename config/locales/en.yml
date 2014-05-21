@@ -34,6 +34,8 @@ en:
 
   course_graph_hint: "<ul><li>Kurssit on järjestetty esitietojen mukaan, peruskurssit vasemmalla ja jatkokurssit oikealla</li><li></li></ul>"
 
+  dynamic_course_graph_hint: "<ul><li>Verkossa näet kurssit ja niiden osaamistavoitteet.</li><li>Kurssit on järjestetty esitietojen mukaan, peruskurssit vasemmalle ja jatkokurssit oikealle.</li><li>Klikkaa kurssia nähdäksesi sen kaikki osaamistavoiteet. Samalla tulevat näkyviin muiden kurssien osaamistavoitteet, joihin kyseisestä kurssista on suora yhteys.</li><li>Klikkaa osaamistavoitteita nähdäksesi niiden yhteydet muihin kursseihin.</li><li>Yhtenäinen viiva tarkoittaa välttämätöntä ja katkoviiva tukevaa esitietoa.</li></ul>"
+  
   #########################
   # General status messages
   #########################
@@ -52,6 +54,13 @@ en:
       short: "%d %b"
       long: "%Y-%m-%d"
 
+      
+      
+      
+      
+      
+      
+      
   time:
     formats:
       default: "%a %d %b %H:%M"
@@ -59,6 +68,8 @@ en:
       long: "%a %Y-%m-%d %H:%M:%S"
 
 
+      
+      
   #######################
   # Language translations
   #######################

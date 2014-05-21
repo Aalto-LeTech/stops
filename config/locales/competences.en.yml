@@ -20,9 +20,34 @@ en:
       prereqs_tab: 'Learning outcomes'
       graph_tab: 'Course graph'
       courselist_tab: 'Course list'
+      index:
+        heading: "Competence election"
+        competences: "Majors and minors"
+        provided_skills_heading: "Provides the following skills"
       show:
-        graph_link: 'Show course graph'
-        locked: "Competence is locked. Send updates to juha.hartikainen@aalto.fi if necessary."
+        add_to_plan: "Add to plan"
+        remove_from_plan: "Remove from plan"
+        total_credits: "Opintopisteitä yhteensä ryhmiteltynä tähän pää/sivuaineeseen"
+        total_credits_hint: "Jos jokin kurssi kuuluu useaan pää/sivuaineeseen, se on ryhmiteltävä niistä yhteen ettei opintopisteitä lasketa useaan kertaan. Vastaavasti opintosuunnitelmaan on lisättävä valinnaisia kursseja niin, että vaaditut opintopistemäärät täyttyvät."
+        credits_shared: "Included in other competences"
+        credits_passed: "Already passed"
+        credits_added: "Credits to add to plan"
+        competences: "Majors and minors"
+        skills: "Learning goals"
+        skills_hint: "Click learning goal to choose supporting courses."
+        strict_prereqs: "Mandatory courses"
+        ancestor_prereqs: "Necessary prerequisites"
+        supporting_prereqs: "Supporting courses"
+        course_passed: "Passed"
+        competence_already_selected: "%{name} is already included."
+      course_table:
+        course-title: 'Course'
+        credits-title: 'Cr'
+        period-title: 'Period'
+        credits_total: 'Total'
+        included_here: 'Kurssi on opintosuunnitelmassasi, ryhmiteltynä tähän pää/sivuaineeseen'
+        included_elsewhere: 'Kurssi on opintosuunnitelmassasi, mutta ryhmiteltynä muualle'
+        
       edit:
         heading: "Editing competences"
         title: 'Edit'

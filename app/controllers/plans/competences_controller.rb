@@ -16,10 +16,17 @@ class Plans::CompetencesController < PlansController
   # GET /plans/1/competence/1
   # GET /plans/1/competence/1.xml
   def show
+    # OBSOLETE
     authorize! :read, @study_plan
     
     @competence = Competence.includes(:localized_description, {:skills => :localized_description}).find(params[:id])
     @chosen_competence_ids = @study_plan.competence_ids.to_set
+    
+    # Log
+    @client_session_id = SecureRandom.hex(3)
+    log("view_competence #{@competence.id} (#{@client_session_id})")
+    
+    render :action => 'show', :layout => 'leftnav'
     
     #@mandatory_courses = @competence.recursive_prereq_courses.includes(:localized_description).all
     #@mandatory_prereqs = @competence.ancestor_prereq_courses.includes(:localized_description).all - @mandatory_courses
@@ -30,12 +37,6 @@ class Plans::CompetencesController < PlansController
     # @study_plan.passed_courses.each do |course|
     #   @passed_courses[course.id] = course
     # end
-
-    # Log
-    @client_session_id = SecureRandom.hex(3)
-    log("view_competence #{@competence.id} (#{@client_session_id})")
-    
-    render :action => 'show', :layout => 'leftnav'
   end
 
   # Prepare to add competence to study plan

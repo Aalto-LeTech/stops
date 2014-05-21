@@ -28,31 +28,42 @@ class Curriculums::CompetencesController < ApplicationController
 
   # curriculums/1/competences/1
   def show
-    @competence = Competence.includes(:skills => [:skill_descriptions, :skill_prereqs, :prereq_to]).find(params[:competence_id] || params[:id])
     load_curriculum
 
     respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml => @competence }
+      format.html {
+        load_plan
+    
+        @competence = Competence.includes(:localized_description, {:skills => :localized_description}).find(params[:id])
+        @chosen_competence_ids = @study_plan.competence_ids.to_set
+        
+        # Log
+        @client_session_id = SecureRandom.hex(3)
+        render :action => 'show', :layout => 'leftnav'
+        log("view_competence #{@competence.id} (#{@client_session_id})")
+      }
 
-      format.json { render :json => @competence.to_json(
-        :only => [:id],
-        :include => {
-            :skills => {
-              :only => [:id, :icon],
-              :include => {
-                :skill_descriptions => {
-                  :only => [:id, :locale, :name]
-                },
-                :skill_prereqs => {:only => [:prereq_id, :requirement]}
+      format.json {
+        @competence = Competence.includes(:skills => [:skill_descriptions, :skill_prereqs, :prereq_to]).find(params[:competence_id] || params[:id])
+        render :json => @competence.to_json(
+          :only => [:id],
+          :include => {
+              :skills => {
+                :only => [:id, :icon],
+                :include => {
+                  :skill_descriptions => {
+                    :only => [:id, :locale, :name]
+                  },
+                  :skill_prereqs => {:only => [:prereq_id, :requirement]}
+                }
+              },
+              :competence_descriptions => {
+                :only => [:id, :locale, :name]
               }
-            },
-            :competence_descriptions => {
-              :only => [:id, :locale, :name]
-            }
-        },
-        :root => true 
-      )}
+          },
+          :root => true 
+        )
+      }
     end
   end
 

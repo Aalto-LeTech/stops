@@ -1,5 +1,3 @@
-<% # OBSOLETE
-%>
 <!-- plans/courses/show -->
 <% content_for(:stylesheets) do -%>
   <%= stylesheet_link_tag "views/plans/skills", :media => 'all' %>
@@ -8,11 +6,11 @@
   <%= @competence.localized_name %>
 <% end -%>
 <% content_for(:leftnav) do -%>
-  <h1><%= link_to @competence.localized_name, studyplan_competence_path(:id => @competence) %></h1>
+  <h1><%= link_to @competence.localized_name, curriculum_competence_path(:curriculum_id => @curriculum, :id => @competence) %></h1>
   
   <ul>
     <% @competence.skills.includes(:localized_description).each do |skill| %>
-      <li class="<%= skill == @skill ? 'selected' : '' %>"><%= link_to skill.localized_name, studyplan_competence_skill_path(:competence_id => @competence.id, :id => skill) %>
+      <li class="<%= skill == @skill ? 'selected' : '' %>"><%= link_to skill.localized_name, curriculum_competence_skill_path(:curriculum_id => @curriculum, :competence_id => @competence.id, :id => skill) %>
     <% end %>
   </ul>
 <% end -%>
@@ -26,12 +24,12 @@
 
 <div class="course-graph suggested-courses">
   <% @prereq_courses.each do |course| %>
-    <% next if @user.study_plan.has_abstract_course?(course.abstract_course_id) %>
+    <% next if @study_plan && @study_plan.has_abstract_course?(course.abstract_course_id) %>
   
     <div class="suggested-course">
       <div class="course">
         <h1>
-          <%= link_to "#{course.course_code} #{course.localized_name}", studyplan_competence_course_path(:competence_id => @competence, :id => course) %>
+          <%= link_to "#{course.course_code} #{course.localized_name}", curriculum_competence_course_path(:curriculum_id => @curriculum, :competence_id => @competence, :id => course) %>
           (<%= course.credits %><%=t :cr %>)
           
           <div class="pull-right period"><%= course.localized_description.default_period %></div>

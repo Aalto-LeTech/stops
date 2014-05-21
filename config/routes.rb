@@ -39,6 +39,9 @@ Ops::Application.routes.draw do
           get 'courselist'
           get 'edit_prereqs'
         end
+        
+        resources :skills, :controller => 'curriculums/skills', :only => [:show]
+        resources :courses, :controller => 'plans/courses', :only => [:show, :create, :destroy]
       end
 
       resources :courses, :controller => 'curriculums/courses' do  # ScopedCourses

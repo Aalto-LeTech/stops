@@ -1,3 +1,5 @@
+require 'set'
+
 class Curriculums::SkillsController < CurriculumsController
 
   before_filter :load_curriculum
@@ -25,6 +27,19 @@ class Curriculums::SkillsController < CurriculumsController
     end
   end
 
+  def show
+    load_plan
+    #authorize! :read, @study_plan
+    @skill = Skill.find(params[:id])
+    @competence = Competence.find(params[:competence_id])
+    
+    @prereq_ids = @skill.prereq_ids.to_set
+    @prereq_courses = @skill.prereq_courses.includes([:localized_description, {:skills => :localized_description}]).uniq
+    
+    log("view_skill #{@skill.id}")
+    render :action => 'show', :layout => 'leftnav'
+  end
+  
   # POST /curriculum/:id/skills
   def create
     authorize! :update, @curriculum

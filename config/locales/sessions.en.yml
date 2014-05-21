@@ -4,18 +4,20 @@ en:
     logout: "Logout"
     logout_message: "You have been logged out."
     
-    login:
-      title: "Login"
-      button: "Login"
-      traditional_hint: "Login using separate test account"
-      shibboleth_hint: "Log in using an Aalto account"
-      studentnumber_label: "Student ID"
+    login_shibboleth:
+      shibboleth_hint: "Log in with Aalto account"
+      shibboleth_button: "Aalto Weblogin"
+      
+    login_traditional:
+      button: "Log in"
+      traditional_hint: "Log in with a local account"
+      studentnumber_label: "Student number"
       password_label: "Password"
       remember_label: "Remember me"
-      register: "Register"
-      shibboleth_button: "Aalto Weblogin"
+      register: "Sign up"
   
     new:
+      title: "Log in"
       heading: "Log in"
 
   activerecord:

@@ -12,6 +12,7 @@ fi:
   course_no_prereqs: "Ei välttämättömiä esitietoja"
   course_no_future: "Ei jatkokursseja"
   course_strict_prereq_of: "on välttämätön esitieto kursseille"
+  course_add_to_plan: "Lisää suunnitelmaan"
 
   strict_prereq_char: 'X'
   supporting_prereq_char: 'x'
@@ -146,9 +147,6 @@ fi:
         replaces_hint: ''
         other: 'Muita tietoja'
         other_hint: 'Kurssista voidaan ilmoittaa kurssin asema, kurssin taso, kurssin kotisivu, CEFR-taso (koskee kielikursseja) ja muita lisätietoja'
-      graph:
-        title: 'Kurssiverkko'
-
   courses:
     graph_templates:
       cyclic_warning: 'Esitietosilmukka!'

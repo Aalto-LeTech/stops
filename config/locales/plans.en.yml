@@ -12,35 +12,11 @@ en:
         warning: "Some currently selected courses or competences may not be available in other curriculums."
 
     competences:
-      index:
-        heading: "Competence election"
-        competences: "Majors and minors"
-        provided_skills_heading: "Provides the following skills"
-      show:
-        add_to_plan: "Add to plan"
-        remove_from_plan: "Remove from plan"
-        total_credits: "Opintopisteitä yhteensä ryhmiteltynä tähän pää/sivuaineeseen"
-        total_credits_hint: "Jos jokin kurssi kuuluu useaan pää/sivuaineeseen, se on ryhmiteltävä niistä yhteen ettei opintopisteitä lasketa useaan kertaan. Vastaavasti opintosuunnitelmaan on lisättävä valinnaisia kursseja niin, että vaaditut opintopistemäärät täyttyvät."
-        credits_shared: "Included in other competences"
-        credits_passed: "Already passed"
-        credits_added: "Credits to add to plan"
-        competences: "Majors and minors"
-        skills: "Learning goals"
-        skills_hint: "Click learning goal to choose supporting courses."
-        strict_prereqs: "Mandatory courses"
-        supporting_prereqs: "Supporting courses"
-        course_passed: "Passed"
-        competence_already_selected: "%{name} is already included."
-      course_table:
-        course-title: 'Course'
-        credits-title: 'Cr'
-        period-title: 'Period'
-        credits_total: 'Total'
-        included_here: 'Kurssi on opintosuunnitelmassasi, ryhmiteltynä tähän pää/sivuaineeseen'
-        included_elsewhere: 'Kurssi on opintosuunnitelmassasi, mutta ryhmiteltynä muualle'
       supporting:
         heading: "Choose supporting courses"
-
+      new:
+        competence_all_courses_already_in: "Nothing is added to the plan because all the necessary courses are already in your plan."
+        
     courses:
       course_added_to_plan: 'Course was added to plan'
       course_removed_from_plan: 'Course was removed from plan'
@@ -111,12 +87,15 @@ en:
         study_plan: "Your Study Plan"
         study_plan_courses: "Plan's Courses"
         competence_courses: "Competence's Courses"
+        sub_competence_courses: "Courses"
+        other_courses: "Other courses"
         prerequisites: "Prerequisites"
         provides: "Provides skills"
         needed_by: "Needed by"
         paths_hint: "Click skills to see the study path"
         course_add_to_plan: "Add to plan"
         course_remove_from_plan: "Remove from plan"
+        
         replaces: 'Korvaavuudet'
         assignments: 'Toteutus, työmuodot ja arvosteluperusteet'
         links: 'Links'

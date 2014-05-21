@@ -4,6 +4,7 @@ class User < ActiveRecord::Base
     c.login_field = :studentnumber
     #c.validate_password_field = false
     c.validate_email_field = false
+    c.crypto_provider = Authlogic::CryptoProviders::Sha512
   end
 
   #validates_uniqueness_of :login #, :allow_nil => true

@@ -3,6 +3,7 @@ require 'set'
 class Plans::CompetencesController < PlansController
 
   def index
+    # OBSOLETE
     authorize! :read, @study_plan
     
     log("view_competences")

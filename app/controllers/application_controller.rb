@@ -91,6 +91,18 @@ class ApplicationController < ActionController::Base
   
   private
 
+  def load_plan
+    @user = current_user
+
+    if params[:studyplan_id]
+      @study_plan = StudyPlan.find(params[:studyplan_id])
+      authorize! :read, @study_plan  # TODO: check that this works
+    else
+      @study_plan = @user.study_plan
+    end
+  end
+  
+  
   # Send email on exception
   rescue_from Exception do |exception|
     begin

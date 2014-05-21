@@ -24,16 +24,25 @@ class CurriculumsController < ApplicationController
   # GET /curriculums/1
   # GET /curriculums/1.xml
   def show
+    load_plan
     load_curriculum_for_show_and_edit
     authorize! :read, @curriculum
 
     @competences = Competence.where(:curriculum_id => @curriculum.id, :parent_competence_id => nil).includes([{:children => :localized_description}, :localized_description]).all
+    #@competences = @curriculum.competences.joins(:competence_descriptions).includes(:localized_description, :skills => [:localized_description]).where(:parent_competence_id => nil, :competence_descriptions => {:locale => I18n.locale}) .order('competence_descriptions.name')
     @competences.sort! { |competence, other| competence.localized_name <=> other.localized_name }
 
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml => @curriculum }
+    if @study_plan
+      @chosen_competence_ids = @study_plan.competence_ids.to_set
+    else
+      @chosen_competence_ids = []
     end
+    
+    respond_to do |format|
+      format.html { render :action => :show, :layout => 'fixed' }
+    end
+    
+    log("view_competences")
   end
 
   # GET /curriculums/new

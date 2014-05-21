@@ -4,15 +4,18 @@ class FrontpageController < ApplicationController
   
   def index
     @user = current_user
-    @curriculums = Curriculum.all(:order => 'start_year DESC')
 
     if not logged_in?
       render :action => 'index'
     elsif @user.staff?
-      render :action => 'staff_dashboard'
+      @curriculums = Curriculum.all(:order => 'start_year DESC')
+      render :action => 'dashboard'
+      log('dashboard')
     else
-      render :action => 'student_dashboard'
-      log('student_dashboard')
+      # TODO: hide unpublished curricula from students
+      @curriculums = Curriculum.all(:order => 'start_year DESC')
+      render :action => 'dashboard'
+      log('dashboard')
     end
   end
 

@@ -1,3 +1,7 @@
+<% content_for(:stylesheets) do %>
+  <%= stylesheet_link_tag "views/plans/competences/shared", :media => 'all' %>
+<% end %>
+
 <% if can? :update, @curriculum %>  
   <ul class="nav nav-pills pull-right">
     <li><%= link_to t('Admin_view'), edit_curriculum_path(:id => @curriculum) %></li>
@@ -5,27 +9,41 @@
   </ul>
 <% end %>
   
-<div>
-  <h1><%= @curriculum.name %></h1>
-</div>
-
-
 <% unless @competences.empty? %>
-  <h2><%= t 'curriculums.competences_heading' %></h2>
-  
-  <ul class="unstyled">
+  <div class='competence-list'>
+    <h1><%= @curriculum.name %></h1>
+    
     <% @competences.each do |competence| %>
-      <li>
-        <%= link_to competence.localized_name, [@curriculum, competence] %>
-      </li>
+      <div class="competence <%= @chosen_competence_ids.include?( competence.id ) ? 'chosen' : '' %>" >
+        <h2>
+          <%= link_to competence.localized_name, [@curriculum, competence] %>
+        </h2>
+
+        <% if competence.localized_description && !competence.localized_description.description.blank? %>
+          <%= competence.localized_description.description.html_safe %>
+        <% else %>
+          <!--
+          <p>
+            <%= t('.provided_skills_heading')%>
+            <ul>
+              <% competence.skills.each do |skill| %>
+                <li><%= skill.localized_name %></li>
+              <% end %>
+            </ul>
+          </p>
+          -->
+        <% end %>
+      </div>
     <% end %>
-  </ul>
+  </div>
 <% end %>
 
 
-<h2><%= t('curriculums.courses_heading')%></h2>
+<% if false && !@curriculum.courses.empty? %>
+  <% # TODO: Remove this
+  %>
+  <h2><%= t('curriculums.courses_heading')%></h2>
 
-<% unless @curriculum.courses.empty? %>
   <table id="curriculum-courses" class='table table-striped table-condensed table-bordered'>
     <thead>
       <tr>

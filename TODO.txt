@@ -1,15 +1,8 @@
-= Ennen julkaisua, jos ehtii =
-
-invitation-linkin seuraaminen vie opiskelijan näkymään
-
-kurssit:
+Invitation-linkin seuraaminen vie opiskelijan näkymään
+Kurssit:
 - jos muuttaa kurssin ryhmittelyä, näytä 'muutokset tallennettu'
 - sort
 Ohjeita lisää
-
-
-= Julkaisun jälkeen =
-
 Cron: rake ts:rebuild
 Kurssihaussa linkki hakutuloksista kurssisivulle
 Schedulessa linkit kurssitiedoista kurssisivulle
@@ -28,3 +21,7 @@ locale constraint
 log rotate
 CourseHighlighter strings should be translated
 Sort supporting courses by number of relevant skills
+
+
+= Obsolete =
+views/plans/competences/index

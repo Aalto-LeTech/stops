@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.2.11'
+gem 'rails', '3.2.17'
 #gem 'rake'
 
 # Bundle edge Rails instead:
@@ -39,9 +39,9 @@ group :assets do
   gem 'therubyracer'             # See https://github.com/sstephenson/execjs#readme
   gem 'jquery-rails', '~> 2.1'
   gem 'jquery-ui-rails', '~> 3.0'
-  gem 'less-rails-bootstrap', git: 'git://github.com/metaskills/less-rails-bootstrap.git'
-
-  gem 'eco'
+  #gem 'less-rails-bootstrap', git: 'git://github.com/metaskills/less-rails-bootstrap.git'
+  gem 'less-rails-bootstrap', '~> 2.3.2'
+  #gem 'eco'
 end
 
 
@@ -66,7 +66,7 @@ end
 gem 'authlogic'
 gem 'cancan'
 gem 'fastercsv'
-gem 'acts_as_list'
+#gem 'acts_as_list'
 #gem 'deep_cloneable', :git => 'git://github.com/moiristo/deep_cloneable.git'
 gem 'deep_cloneable', '~> 1.6.0'
 

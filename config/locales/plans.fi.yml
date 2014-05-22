@@ -12,8 +12,6 @@ fi:
         warning: "Kaikkia valittuja kursseja ja kompetensseja ei välttämättä ole tarjolla muissa opinto-oppaissa."
 
     competences:
-      supporting:
-        heading: "Valitse tukevia kursseja"
       new:
         competence_all_courses_already_in: "Opintosuunnitelmaan ei lisätä kursseja, koska kaikki tarvittavat kurssit ovat ennestään suunnitelmassasi."
 

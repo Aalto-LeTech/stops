@@ -1,5 +1,3 @@
-<% # OBSOLETE
-%>
 <% content_for(:stylesheets) do %>
   <%= stylesheet_link_tag "views/plans/competences/shared", :media => 'all' %>
 <% end %>
@@ -29,7 +27,7 @@
 
 <%= form_tag studyplan_competence_path, :method => :delete do %>
   <p>
-    <%= link_to t(:Cancel), studyplan_competence_path(:id => @competence.id), :class => 'btn btn-default' %>
+    <%= link_to t(:Cancel), curriculum_competence_path(curriculum_id: @competence.curriculum_id, id: @competence.id), :class => 'btn btn-default' %>
     <%= submit_tag t(:Ok), :class => 'btn btn-primary' %>
   </p>
 <% end %>

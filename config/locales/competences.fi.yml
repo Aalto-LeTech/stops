@@ -47,7 +47,8 @@ fi:
         credits_total: "Opintosuunnitelmassa ryhmiteltynä tähän"
         included_here: 'Kurssi on opintosuunnitelmassasi, ryhmiteltynä tähän pää/sivuaineeseen'
         included_elsewhere: 'Kurssi on opintosuunnitelmassasi, mutta ryhmiteltynä muualle'
-        
+      supporting:
+        heading: "Valitse tukevia kursseja"
       edit:
         heading: "Muokkaa kompetenssia"
         title: 'Muokkaa'

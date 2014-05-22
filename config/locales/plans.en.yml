@@ -12,8 +12,6 @@ en:
         warning: "Some currently selected courses or competences may not be available in other curriculums."
 
     competences:
-      supporting:
-        heading: "Choose supporting courses"
       new:
         competence_all_courses_already_in: "Nothing is added to the plan because all the necessary courses are already in your plan."
         

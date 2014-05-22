@@ -79,13 +79,13 @@ class Plans::CompetencesController < PlansController
     
     # Dont't do anything if user has already selected this competence
     if @study_plan.has_competence?(params[:competence_id])
-      redirect_to studyplan_competence_path(competence), :flash => {:error => t('.competence_already_selected', :name => @competence.localized_name)}
+      redirect_to curriculum_competence_path(curriculum_id: competence.curriculum_id, id: competence), :flash => {:error => t('.competence_already_selected', :name => @competence.localized_name)}
     end
 
     # Add competence to study plan
     @study_plan.add_competence(competence)
 
-    redirect_to studyplan_competence_path(competence)
+    redirect_to curriculum_competence_path(curriculum_id: competence.curriculum_id, id: competence)
   end
 
   def delete
@@ -102,14 +102,13 @@ class Plans::CompetencesController < PlansController
   # DELETE /plans/1/profiles/1.xml
   def destroy
     authorize! :update, @study_plan
-    @competence = Competence.find(params[:id])
+    competence = Competence.find(params[:id])
 
-    @study_plan.remove_competence(@competence)
-    log("remove_competence_commit #{@competence.id}")
+    @study_plan.remove_competence(competence)
+    log("remove_competence_commit #{competence.id}")
 
     respond_to do |format|
-      format.html { redirect_to studyplan_competence_path(@competence) }
-      format.xml  { head :ok }
+      format.html { redirect_to curriculum_competence_path(curriculum_id: competence.curriculum_id, id: competence) }
     end
   end
 

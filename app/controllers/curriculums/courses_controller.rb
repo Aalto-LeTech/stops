@@ -60,29 +60,47 @@ class Curriculums::CoursesController < ApplicationController
   #     }
   #   }
   def show
-    @course = ScopedCourse.includes(:skills => [:skill_descriptions, :skill_prereqs, :prereq_to]).find(params[:id])
 
     respond_to do |format|
-      format.html # show.html.erb
-      format.json { render :json => @course.to_json(
-        :only => [:id, :course_code],
-        :include => {
-            :skills => {
-              :only => [:id, :icon],
-              :include => {
-                :skill_descriptions => {
-                  :only => [:id, :locale, :name]
-                },
-                :skill_prereqs => {:only => [:prereq_id, :requirement]},
-                :prereq_to => {:only => [:id, :requirement, :icon]}
+      format.html {
+        # show.html.erb
+        load_plan
+        @user = current_user
+        @course = ScopedCourse.find(params[:id])
+        @competence = nil
+        @competence = Competence.find(params[:competence_id]) if params[:competence_id]
+
+        # Log
+        @client_session_id = SecureRandom.hex(3)
+        if @competence
+          log("view_competence_course #{@competence.id} #{@course.id} (#{@client_session_id})")
+        else
+          log("view_course #{@course.id} (#{@client_session_id})")
+        end
+        
+        render :action => 'show', :layout => 'leftnav'
+      }
+      format.json {
+        @course = ScopedCourse.includes(:skills => [:skill_descriptions, :skill_prereqs, :prereq_to]).find(params[:id])
+        render :json => @course.to_json(
+          :only => [:id, :course_code],
+          :include => {
+              :skills => {
+                :only => [:id, :icon],
+                :include => {
+                  :skill_descriptions => {
+                    :only => [:id, :locale, :name]
+                  },
+                  :skill_prereqs => {:only => [:prereq_id, :requirement]},
+                  :prereq_to => {:only => [:id, :requirement, :icon]}
+                }
+              },
+              :course_descriptions => {
+                :only => [:id, :locale, :name]
               }
-            },
-            :course_descriptions => {
-              :only => [:id, :locale, :name]
-            }
-        },
-        :root => true
-      )}
+          },
+          :root => true)
+      }
     end
   end
 

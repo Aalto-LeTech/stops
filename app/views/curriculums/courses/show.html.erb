@@ -1,40 +1,193 @@
-<% content_for :javascripts do %>
-  <%= javascript_include_tag 'views/curriculums/courseGraph' %>
-<% end %>
-<% content_for :title do %><%= @course.localized_name %><% end %>
+<!-- plans/courses/show -->
+<% content_for(:javascripts) do -%>
+  <%= javascript_tag do %>
+    window.client_session_id = '<%= @client_session_id %>';
+  <% end %>
+  <%= javascript_include_tag 'views/plans/courses/show' %>
+<% end -%>
+<% content_for :title do -%>
+  <%= @course.course_code %> <%= @course.localized_name %>
+<% end -%>
+<% content_for(:leftnav) do -%>
+  <% if @competence %>
+    <% if @competence.parent_competence %>
+      <!-- This is a sub competence -->
+      <h1><%= link_to @competence.parent_competence.localized_name, curriculum_competence_path(curriculum_id: @curriculum, id: @competence.parent_competence) %></h1>
+      <h2><%= @competence.localized_name %></h2>
+      <ul>
+        <% @competence.supporting_prereq_courses.each do |course| %>
+          <li class="<%= course == @course ? 'selected' : '' %>"><%= link_to course.localized_name, curriculum_competence_course_path(curriculum_id: @curriculum, competence_id: @competence.id, id: course) %>
+        <% end %>
+      </ul>
+      
+      <h2><%= t('.other_courses') %></h2>
+      <ul>
+        <% @competence.parent_competence.recursive_prereq_courses.each do |course|%>
+          <li class="<%= course == @course ? 'selected' : '' %>"><%= link_to course.localized_name, curriculum_competence_course_path(curriculum_id: @curriculum, competence_id: @competence.parent_competence.id, id: course) %>
+        <% end %>
+      </ul>
+    <% else %>
+      <!-- This is a top-level competence -->
+      <h1><%= link_to @competence.localized_name, curriculum_competence_path(curriculum_id: @curriculum, id: @competence) %></h1>
+      <!--h2><%= t('.competence_courses') %></h2-->
+      
+      <ul>
+        <% @competence.recursive_prereq_courses.each do |course| # TODO: move the query to controller
+        %>
+          <li class="<%= course == @course ? 'selected' : '' %>"><%= link_to course.localized_name, curriculum_competence_course_path(curriculum_id: @curriculum, competence_id: @competence.id, id: course) %>
+        <% end %>
+      </ul>
+    <% end %>
+
+  <% else %>
+    <h1><%= link_to @curriculum.name, @curriculum %></h2>
+    <ul>
+      <% @study_plan.scoped_courses.each do |course| %>
+        <li class="<%= @study_plan.passed?( course.abstract_course ) ? 'passed' : '' %> <%= course == @course ? 'selected' : '' %>"><%= link_to course.localized_name, curriculum_course_path(curriculum_id: @curriculum, id: course) %>
+      <% end %>
+    </ul>
+  <% end %>
+
+<% end -%>
 
 <% if can? :update, @course %>
   <ul class="nav nav-pills pull-right">
-    <li><%= link_to t('Admin_view'), edit_prereqs_curriculum_course_path(:curriculum_id => @curriculum, :id => @course) %></li>
+    <li><%= link_to t('Admin_view'), edit_prereqs_curriculum_course_path(curriculum_id: @curriculum, id: @course) %></li>
     <li class="active"><%= link_to t('Student_view'), curriculum_course_path(curriculum_id: @curriculum, id: @course) %></li>
   </ul>
 <% end %>
 
-<div>
-  <h1><%= @course.course_code %> <%= @course.localized_name %></h1>
-</div>
+<h1>
+  <%= @course.course_code %> <%= @course.localized_name %> (<%= @course.credits %> <%=t 'cr' %>)
+
+  <!-- Add / Remove -->
+  <% if can? :choose, ScopedCourse %>
+    <% if @study_plan.has_abstract_course?(@course.abstract_course_id) %>
+      <% if @competence %>
+        <% top_competence = @competence.parent_competence || @competence %>
+        
+        <%= link_to studyplan_competence_course_path(:competence_id => top_competence.id, :id => @course.abstract_course_id), {:method => :delete, :class => 'btn btn-default'} do %>
+          <i class="icon icon-minus"></i> <%= t('.course_remove_from_plan') %>
+        <% end %>
+      <% else %>
+        <%= link_to studyplan_course_path(:id => @course.abstract_course_id), {:method => :delete, :class => 'btn btn-default'} do %>
+          <i class="icon icon-minus"></i> <%= t('.course_remove_from_plan') %>
+        <% end %>
+      <% end %>
+    <% else %>
+      <% if @competence %>
+        <% top_competence = @competence.parent_competence || @competence %>
+        <%= link_to studyplan_competence_courses_path(:competence_id => top_competence.id, :scoped_course_id => @course.id, :abstract_course_id => @course.abstract_course_id), {:method => :post, :class => 'btn btn-default'} do %>
+          <i class="icon icon-plus"></i> <%= t('.course_add_to_plan') %>
+        <% end %>
+      <% else %>
+        <%= link_to studyplan_courses_path(:scoped_course_id => @course.id, :abstract_course_id => @course.abstract_course_id), {:method => :post, :class => 'btn btn-default'} do %>
+          <i class="icon icon-plus"></i> <%= t('.course_add_to_plan') %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+</h1>
 
 <% if can?(:update, @curriculum) && @course.locked %>
+  <!-- Editing disabled -->
   <div class="alert alert-info">
     <%=t '.locked' %>
   </div>
 <% end %>
 
+<!-- Course description -->
+<% if @course.localized_description %>
+  <% ld = @course.localized_description %>
+  
+  <% if !ld.default_period.blank? %>
+    <p><strong><%=t ('.period') %></strong>: <%= ld.default_period %></p>
+  <% elsif !ld.period_info.blank? %>
+    <p><strong><%=t ('.period') %></strong>: <%= ld.period_info.html_safe %></p>
+  <% end %>
 
-<h2><%=t('.course_path_heading')%></h2>
+  <% unless ld.content.blank? %>
+    <p><%= ld.content.html_safe %></p>
+  <% end %>
+  
+  <% if @user.treatment != TREATMENT_GRAPH && @course.localized_description && !@course.localized_description.outcomes.blank? %>
+    <strong><%=t ('.learning_outcomes') %></strong>: <%= @course.localized_description.outcomes.html_safe %>
+  <% end %>
+  
+  <% unless ld.noppa_url.blank? && ld.oodi_url.blank? %>
+    <p>
+      <strong><%=t ('.links') %></strong>:
+      <% unless ld.noppa_url.blank? %>
+        <a target="_blank" href="<%= ld.noppa_url %>">Noppa</a>
+      <% end %>
+      
+      <% unless ld.oodi_url.blank? %>
+        <a target="_blank" href="<%= ld.oodi_url %>">Oodi</a>
+      <% end %>
+    </p>
+  <% end %>
 
-<!-- Course graph -->
-<div id="course-graph" class="course-graph"
-    data-graph-path="<%= graph_curriculum_path(:id => @curriculum.id) %>"
-    data-source-id="<%= @course.id %>"
-    >
-    
-    <!-- ko template: { name: 'courseTemplate', foreach: visibleCourses, afterRender: updateElementDimensions } --><!-- /ko -->
-</div>
-
-<%= render :partial => 'courses/graph_templates' %>
+  <% unless ld.assignments.blank? %>
+    <p><strong><%=t ('.assignments') %></strong>: <%= ld.assignments.html_safe %></p>
+  <% end %>
+  
+  <% unless ld.replaces.blank? %>
+    <p><strong><%=t ('.replaces') %></strong>: <%= ld.replaces.html_safe %></p>
+  <% end %>
+<% end %>
 
 
-<h2><%=t :course_prereqs_reqursive %></h2>
+<% if @user.treatment != TREATMENT_TRADITIONAL %>
+  <h2><%=t :Course_graph %></h2>
+  <%= render :partial => 'courses/graph_templates' %>
+  
+  <% if @competence %>
+    <div id="course-graph" class="course-graph"
+      data-graph-path="<%= graph_curriculum_path(:id => @curriculum.id) %>" 
+      data-source-id="<%= @course.id %>"
+      data-target-id="<%= (@competence.parent_competence || @competence).id %>"
+      >
+      <!-- ko template: { name: 'courseTemplate', foreach: visibleCourses, afterRender: updateElementDimensions } --><!-- /ko -->
+    </div>
+  <% else %>
+    <div id="course-graph" class="course-graph"
+      data-graph-path="<%= graph_curriculum_path(:id => @curriculum.id) %>" 
+      data-source-id="<%= @course.id %>"
+      >
+      <!-- ko template: { name: 'courseTemplate', foreach: visibleCourses, afterRender: updateElementDimensions } --><!-- /ko -->
+    </div>
+  <% end %>
+  
+<% end %>
 
-<%= render :partial => '/courses/prereqs_reqursive', :locals => { :course => @course } %>
+
+<h2><%= t('.reqursive_prereqs') %></h2>
+
+<% has_prereqs = false %>
+<% if @course.localized_description && !@course.localized_description.prerequisites.blank?
+# && @user.treatment != TREATMENT_GRAPH 
+  has_prereqs = true
+  -%>
+  <%= @course.localized_description.prerequisites.html_safe %>
+<% end %>
+
+<% prereqs = @course.recursive_prereq_courses %>
+<% unless prereqs.empty?
+  has_prereqs = true
+  %>
+  <p>
+    <ul>
+      <% prereqs.each do |prereq_course| %>
+        <% if @competence %>
+          <li><%= link_to prereq_course.course_code + ' ' + prereq_course.localized_name, curriculum_competence_course_path(curriculum_id: @curriculum, competence_id: @competence.id, id: prereq_course) %></li>
+        <% else %>
+          <li><%= link_to prereq_course.course_code + ' ' + prereq_course.localized_name, curriculum_course_path(curriculum_id: @curriculum, id: prereq_course) %></li>
+        <% end %>
+      <% end %>
+    </ul>
+  </p>
+<% end %>
+
+<% unless has_prereqs %>
+  <p><%=t :course_no_prereqs %></p>
+<% end %>

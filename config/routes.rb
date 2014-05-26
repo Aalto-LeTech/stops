@@ -41,7 +41,7 @@ Ops::Application.routes.draw do
         end
         
         resources :skills, :controller => 'curriculums/skills', :only => [:show]
-        resources :courses, :controller => 'plans/courses', :only => [:show, :create, :destroy]
+        resources :courses, :controller => 'curriculums/courses', :only => [:show]
       end
 
       resources :courses, :controller => 'curriculums/courses' do  # ScopedCourses
@@ -73,12 +73,12 @@ Ops::Application.routes.draw do
      
       resources :competences, :controller => 'plans/competences' do
         member do
-          get 'supporting'
+          # get 'supporting'
           get 'delete'
         end
         
-        resources :courses, :controller => 'plans/courses', :only => [:show, :create, :destroy]
-        resources :skills, :controller => 'plans/skills', :only => [:show]
+        resources :courses, :controller => 'plans/courses', :only => [:show, :create, :destroy] # show is obsolete
+        resources :skills, :controller => 'plans/skills', :only => [:show]                      # obsolete
       end
 
       resources :courses, :controller => 'plans/courses',

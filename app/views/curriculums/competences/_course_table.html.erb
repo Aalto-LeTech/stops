@@ -22,8 +22,8 @@
           </span>
           <span class="included-elsewhere" title="<%=t '.included_elsewhere' %>">&bull;</span>
         </td>
-        <td class="course-code"><%= link_to course.course_code, studyplan_competence_course_path(:competence_id => competence.id, :id => course) %></td>
-        <td class="course-name"><%= link_to course.localized_name, studyplan_competence_course_path(:competence_id => competence.id, :id => course) %></td>
+        <td class="course-code"><%= link_to course.course_code, curriculum_competence_course_path(:curriculum_id => @curriculum.id, :competence_id => competence.id, :id => course) %></td>
+        <td class="course-name"><%= link_to course.localized_name, curriculum_competence_course_path(:curriculum_id => @curriculum.id, :competence_id => competence.id, :id => course) %></td>
         <td class="course-credits"><%= course.credits %></td>
         <td class="course-period"><%= course.localized_description.default_period %></td>
       </tr>

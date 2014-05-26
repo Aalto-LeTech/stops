@@ -31,6 +31,24 @@ en:
         course_provides: "Provides skills"
         course_path_heading: "Relation to other courses"
         locked: "Course is locked. Send updates to juha.hartikainen@aalto.fi if necessary."
+        study_plan: "Your Study Plan"
+        study_plan_courses: "Plan's Courses"
+        competence_courses: "Competence's Courses"
+        sub_competence_courses: "Courses"
+        other_courses: "Other courses"
+        prerequisites: "Prerequisites"
+        provides: "Provides skills"
+        needed_by: "Needed by"
+        paths_hint: "Click skills to see the study path"
+        course_add_to_plan: "Add to plan"
+        course_remove_from_plan: "Remove from plan"
+        
+        replaces: 'Korvaavuudet'
+        assignments: 'Toteutus, työmuodot ja arvosteluperusteet'
+        links: 'Links'
+        period: 'Teaching period'
+        learning_outcomes: 'Learning outcomes'
+        reqursive_prereqs: 'Prerequisites'
       creation_form:
         # New course creation form
         course_code: "Course code"

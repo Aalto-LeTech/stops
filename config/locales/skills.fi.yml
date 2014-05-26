@@ -1,20 +1,7 @@
 # encoding: utf-8
 fi:
-  skill_no_future_path: "Ei johda mihinkään"
-
   curriculums:
     skills:
-      edit:
-        help_heading: "Ohje"
-        help_text: Täällä voit lisätä esitietovaatimuksia valitsemallesi valmiudelle. Käytä hakukenttää esitietovaatimusten etsimiseen.
-        selected_skill: "Valittu valmius:"
-        current_prereqs: "Nykyiset vaatimukset"
-        add_new_prereqs: "Lisää uusia vaatimuksia"
-        search_courses_and_skills: "Hae kursseja ja niiden valmiuksia"
-        add_prereq_button: "Lisää"
-        add_prereq_button_adding: "Lisätään..."
-        add_prereq_button_remove: "Poista"
-        add_prereq_button_removing: "Poistetaan..."
-        search_footer_hint: "Rullaa sivun loppuun ladatakasesi lisää hakutuloksia."
-        search_footer_no_results: "Ei enempää hakutuloksia."
-        search_footer_failure: "Valitettavasti haku epäonnistui."
+      show:
+        supporting_courses: 'Tukevia kursseja'
+        supporting_courses_hint: 'Alta voit valita kursseja, jotka tukevat osaamistavoitetta "%{name}"'

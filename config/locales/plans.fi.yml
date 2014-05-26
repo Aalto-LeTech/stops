@@ -81,31 +81,6 @@ fi:
         and_passed_with_grade: "ja suoritettu arvosanalla"
         in_period: "periodissa"
         but_not_scheduled: ", mutta suoritusajanjaksoa ei ole määritetty"
-      show:
-        study_plan: "Opintosuunnitelmasi"
-        study_plan_courses: "Suunnitelman kurssit"
-        competence_courses: "Kurssit"
-        sub_competence_courses: "Kurssit"
-        other_courses: "Muut kurssit"
-        prerequisites: "Esitietovaatimukset"
-        provides: "Osaamistavoitteet"
-        needed_by: "Mahdollistaa"
-        paths_hint: "Klikkaa osaamistavoitteita nähdäksesi opintopolut kurssista kompetenssiin"
-        course_add_to_plan: "Lisää opintosuunnitelmaan"
-        course_remove_from_plan: "Poista opintosuunnitelmasta"
-        
-        replaces: 'Korvaavuudet'
-        assignments: 'Toteutus, työmuodot ja arvosteluperusteet'
-        links: 'Linkit'
-        period: 'Opetusperiodi'
-        learning_outcomes: 'Osaamistavoitteet'
-        reqursive_prereqs: 'Esitiedot'
-    
-    skills:
-      show:
-        supporting_courses: 'Tukevia kursseja'
-        supporting_courses_hint: 'Alta voit valita kursseja, jotka tukevat osaamistavoitetta "%{name}"'
-
     schedule:
       show:
         curriculum: "Opinto-opas"

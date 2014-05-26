@@ -31,6 +31,24 @@ fi:
         course_provides: "Osaamistavoitteet"
         course_path_heading: "Yhteys muihin kursseihin"
         locked: "Kurssi on lukittu. Lähetä korjaukset tarvittaessa osoitteeseen juha.hartikainen@aalto.fi."
+        study_plan: "Opintosuunnitelmasi"
+        study_plan_courses: "Suunnitelman kurssit"
+        competence_courses: "Kurssit"
+        sub_competence_courses: "Kurssit"
+        other_courses: "Muut kurssit"
+        prerequisites: "Esitietovaatimukset"
+        provides: "Osaamistavoitteet"
+        needed_by: "Mahdollistaa"
+        paths_hint: "Klikkaa osaamistavoitteita nähdäksesi opintopolut kurssista kompetenssiin"
+        course_add_to_plan: "Lisää opintosuunnitelmaan"
+        course_remove_from_plan: "Poista opintosuunnitelmasta"
+        
+        replaces: 'Korvaavuudet'
+        assignments: 'Toteutus, työmuodot ja arvosteluperusteet'
+        links: 'Linkit'
+        period: 'Opetusperiodi'
+        learning_outcomes: 'Osaamistavoitteet'
+        reqursive_prereqs: 'Esitiedot'
       creation_form:
         # New course creation form
         course_code: "Kurssikoodi"

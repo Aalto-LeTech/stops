@@ -3,7 +3,6 @@ class Plans::CoursesController < PlansController
   #before_filter :login_required
   before_filter :load_plan
 
-
   # GET /studyplan/courses
   # GET /studyplan/courses.xml
   def index
@@ -22,6 +21,7 @@ class Plans::CoursesController < PlansController
   # GET /studyplan/courses/1
   # GET /studyplan/courses/1.xml
   def show
+    # Obsolete?
     authorize! :read, @study_plan
     @course = ScopedCourse.find(params[:id])
     @competence = nil
@@ -35,9 +35,7 @@ class Plans::CoursesController < PlansController
       log("view_course #{@course.id} (#{@client_session_id})")
     end
     
-    
     render :action => 'show', :layout => 'leftnav'
-    
   end
 
   # Add course to study plan
@@ -48,6 +46,9 @@ class Plans::CoursesController < PlansController
     abstract_course = AbstractCourse.find(params[:abstract_course_id])
     competence_id = Integer(params[:competence_id]) rescue nil
     scoped_course_id = Integer(params[:scoped_course_id]) rescue nil
+    
+    scoped_course = nil
+    
     
     plan_course = @study_plan.add_course(abstract_course, {
       competence_node_id: competence_id,
@@ -60,9 +61,13 @@ class Plans::CoursesController < PlansController
     respond_to do |format|
       format.html {
         if competence_id
-          redirect_to studyplan_competence_path(:id => competence_id), :flash => { :success => t('plans.courses.course_added_to_plan') }
+          competence = Competence.find(competence_id)
+          redirect_to curriculum_competence_path(:curriculum_id => competence.curriculum_id, :id => competence_id), :flash => { :success => t('plans.courses.course_added_to_plan') }
+          #studyplan_competence_path(:id => competence_id)
         else
-          redirect_to studyplan_competences_path, :flash => { :success => t('plans.courses.course_added_to_plan') }
+          scoped_course = ScopedCourse.find(scoped_course_id) if scoped_course_id
+          redirect_to root_path # FIXME
+          # studyplan_competences_path, :flash => { :success => t('plans.courses.course_added_to_plan') }
         end
       }
       # TODO: add error message
@@ -89,9 +94,10 @@ class Plans::CoursesController < PlansController
     respond_to do |format|
       format.html {
         if @competence
-          redirect_to studyplan_competence_path(:id => @competence.id), :flash => { :success => t('plans.courses.course_removed_from_plan') }
+          redirect_to curriculum_competence_path(curriculum_id: @competence.curriculum_id, id: @competence.id), :flash => { :success => t('plans.courses.course_removed_from_plan') }
         else
-          redirect_to studyplan_competences_path, :flash => { :success => t('plans.courses.course_removed_from_plan') }
+          redirect_to root_path # FIXME
+          #studyplan_competences_path, :flash => { :success => t('plans.courses.course_removed_from_plan') }
         end
       }
       format.json { render json: { status: 'ok' }.to_json( root: false ) }

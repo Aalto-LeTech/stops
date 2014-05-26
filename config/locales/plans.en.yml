@@ -81,31 +81,6 @@ en:
         and_passed_with_grade: "and passed with grade"
         in_period: "in period"
         but_not_scheduled: ", but remains unscheduled"
-      show:
-        study_plan: "Your Study Plan"
-        study_plan_courses: "Plan's Courses"
-        competence_courses: "Competence's Courses"
-        sub_competence_courses: "Courses"
-        other_courses: "Other courses"
-        prerequisites: "Prerequisites"
-        provides: "Provides skills"
-        needed_by: "Needed by"
-        paths_hint: "Click skills to see the study path"
-        course_add_to_plan: "Add to plan"
-        course_remove_from_plan: "Remove from plan"
-        
-        replaces: 'Korvaavuudet'
-        assignments: 'Toteutus, työmuodot ja arvosteluperusteet'
-        links: 'Links'
-        period: 'Teaching period'
-        learning_outcomes: 'Learning outcomes'
-        reqursive_prereqs: 'Prerequisites'
-
-    skills:
-      show:
-        supporting_courses: 'Supporting courses'
-        supporting_courses_hint: ''
-    
     schedule:
       show:
         curriculum: "Curriculum"

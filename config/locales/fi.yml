@@ -9,7 +9,7 @@ fi:
         program_name: "Opiskelijaa ohjaava opinto-opas"
         edit_curriculums: "Muokkaa opinto-opasta"
         schedule: "Aikataulutus"
-        curriculum: "Opinto-opas"
+        curriculums: "Opinto-oppaat"
         competences: "Pää- ja sivuaineet"
         courses: "Kurssit"
         login: "Kirjaudu"

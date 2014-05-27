@@ -3,23 +3,22 @@ module ApplicationHelper
 
   def nav_link_to(text, path, active_class='active')
     if current_page? path
-        content_tag :li, :class => active_class do
-            link_to text, path
-        end
+      content_tag :li, :class => active_class do
+        link_to text, path
+      end
     else
-        content_tag :li do
-            link_to text, path
-        end
+      content_tag :li do
+        link_to text, path
+      end
     end
   end
-  
+
   # usage: <%= hint_button :translation_string_name %>
   def hint_button(translation_string_name, id = nil)
     return "<i id='#{id || translation_string_name}' class='icon icon-question-sign hint-popover' data-content='#{t(translation_string_name)}'></i>".html_safe
   end
 
   class ActionView::Helpers::FormBuilder
-
     # Usage:
     # form_for(@user) do |f|
     #   <%= f.hint :name %>

@@ -48,7 +48,7 @@
         <% top_competence = @competence.parent_competence || @competence %>
         
         <%= link_to studyplan_competence_courses_path(:competence_id => top_competence.id, :scoped_course_id => course.id, :abstract_course_id => course.abstract_course_id), {:method => :post, :class => 'btn btn-default'} do %>
-          <i class="icon icon-plus"></i> <%= t('plans.courses.show.course_add_to_plan') %>
+          <i class="icon icon-plus"></i> <%= t('curriculums.courses.show.course_add_to_plan') %>
         <% end %>
       <% end %>
     </div>

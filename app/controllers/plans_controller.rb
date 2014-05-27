@@ -16,7 +16,7 @@ class PlansController < ApplicationController
       end
     end
 
-    @curriculum = @user.study_plan.curriculum
+    #@curriculum = @user.study_plan.curriculum
   end
 
 

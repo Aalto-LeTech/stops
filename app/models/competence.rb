@@ -63,10 +63,9 @@ class Competence < CompetenceNode
     duplicate.save()
   end
 
-  def localized_name(fallback = "")
-    return fallback if localized_description.nil?
-    return fallback if localized_description.name.blank?
-    return localized_description.name
+  def localized_name(fallback = '')
+    return fallback if localized_description.nil? || localized_description.name.blank?
+    localized_description.name
   end
 
   # Returns a hash {course => [skills]}

@@ -69,6 +69,7 @@ en:
     edit_modal:
       heading: "Change the name of the curriculum"
       name_label: "The name of the curriculum"
+      published_label: "Visible to students"
       error_heading: "Error"
       change_failed: "Changing name failed!"
       box_empty: "Curriculum must have a name!"

@@ -69,6 +69,7 @@ fi:
     edit_modal:
       heading: "Muuta opinto-ohjelman nimi"
       name_label: "Opinto-ohjelman nimi"
+      published_label: "Näkyy opiskelijoille"
       error_heading: "Virhe"
       change_failed: "Nimen muuttaminen epäonnistui!"
       box_empty: "Opinto-oppaalla on oltava nimi!"

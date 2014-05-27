@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140226151135) do
+ActiveRecord::Schema.define(:version => 20140527120849) do
 
   create_table "abstract_courses", :force => true do |t|
     t.string  "code",        :null => false
@@ -112,6 +112,7 @@ ActiveRecord::Schema.define(:version => 20140226151135) do
     t.integer "end_year"
     t.string  "name"
     t.integer "term_id"
+    t.boolean "published",  :default => false
   end
 
   create_table "delayed_jobs", :force => true do |t|
@@ -185,7 +186,7 @@ ActiveRecord::Schema.define(:version => 20140226151135) do
     t.integer "course_instance_id"
     t.boolean "manually_added",       :default => false, :null => false
     t.integer "period_id"
-    t.float   "credits",                                 :null => false
+    t.float   "credits"
     t.integer "length"
     t.boolean "custom",               :default => false, :null => false
     t.integer "abstract_course_id",                      :null => false

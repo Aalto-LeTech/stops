@@ -10,7 +10,7 @@ en:
     index:
       heading: "Curriculums"
       curriculum: "Curriculum"
-      years: "Years in use"
+      years: ""
       curriculum_new: "Add curriculum"
     remove_confirmation_modal:
       heading: "Confirm deletion"

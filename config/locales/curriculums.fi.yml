@@ -10,7 +10,7 @@ fi:
     index:
       heading: "Opinto-oppaat"
       curriculum: "Opinto-opas"
-      years: "Käytössä vuosina"
+      years: ""
       curriculum_new: "Lisää opinto-opas"
     remove_confirmation_modal:
       heading: "Vahvista poisto"

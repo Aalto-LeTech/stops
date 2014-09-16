@@ -64,7 +64,7 @@ class SessionsController < ApplicationController
       }
       logout_url = request.env[SHIB_ATTRIBUTES[:logout]]
     elsif Rails.env == 'development'
-      studentnumber = '00021'
+      studentnumber = '00023'
       shibinfo = {
         :login => studentnumber, #'student1@aalto.fi',
         :studentnumber => ("urn:mace:terena.org:schac:personalUniqueCode:fi:aalto.fi:student:#{studentnumber}" || '').split(':').last,

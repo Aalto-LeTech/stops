@@ -1,24 +1,6 @@
 # encoding: utf-8
 en:
-  courses_heading: "Courses"
-
-  my_courses_heading: "My courses"
-  my_courses_no_profile_hint: "Choose profiles first"
-
-  course_prereqs: "Prerequisites"
-  course_prereqs_reqursive: "All prerequisites and their prerequisites"
-  course_prereq_to: "is a prerequisite to"
-  course_strict_prereqs: "Strict prerequisites"
   course_no_prereqs: "No prerequisites"
-  course_no_future: "None"
-  course_strict_prereq_of: "is prerequisite of"
-  course_add_to_plan: "Add to study plan"
-
-  strict_prereq_char: 'X'
-  supporting_prereq_char: 'x'
-
-  course_create_link: 'Create course'
-  course_new_heading: 'Create course'
 
   curriculums:
     courses:

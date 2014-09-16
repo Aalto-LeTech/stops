@@ -16,22 +16,33 @@
       </a>
 
       <div class="container-fluid nav-collapse">
-
         <ul class="nav">
           <% if logged_in? %>
-            <% if current_user.staff? %>
-              <!--%= nav_link_to t('.edit_curriculums'), curriculums_path %-->
+            <% if params[:ref_curriculum] %>
+              <% if params[:ref_competence] %>
+                <%= nav_link_to t('.curriculums'), curriculum_competence_path(curriculum_id: params[:ref_curriculum], id: params[:ref_competence]) %>
+              <% else %>
+                <%= nav_link_to t('.curriculums'), curriculum_path(id: params[:ref_curriculum]) %>
+              <% end %>
+            <% else %>
+              <%= nav_link_to t('.curriculums'), frontpage_path %>
             <% end %>
-          
-            <!--%= nav_link_to t('.curriculum'), studyplan_curriculum_path %-->
-            <%= nav_link_to t('.competences'), studyplan_competences_path %>
-            <%= nav_link_to t('.courses'), studyplan_courses_path %>
-            <%= nav_link_to t('.schedule'), studyplan_schedule_path %>
+
+            <% if @competence %>
+              <%= nav_link_to t('.courses'), studyplan_courses_path(ref_curriculum: @competence.curriculum_id, ref_competence: @competence) %>
+              <%= nav_link_to t('.schedule'), studyplan_schedule_path(ref_curriculum: @competence.curriculum_id, ref_competence: @competence) %>
+            <% elsif @curriculum %>
+              <%= nav_link_to t('.courses'), studyplan_courses_path(ref_curriculum: @curriculum.id, ref_competence: params[:ref_competence]) %>
+              <%= nav_link_to t('.schedule'), studyplan_schedule_path(ref_curriculum: @curriculum.id, ref_competence: params[:ref_competence]) %>
+            <% else %>
+              <%= nav_link_to t('.courses'), studyplan_courses_path(ref_curriculum: params[:ref_curriculum], ref_competence: params[:ref_competence]) %>
+              <%= nav_link_to t('.schedule'), studyplan_schedule_path(ref_curriculum: params[:ref_curriculum], ref_competence: params[:ref_competence]) %>
+            <% end %>
           <% end %>
         </ul>
 
         <ul class="nav pull-right">
-          <% if logged_in? && current_user.staff? %>
+          <% if logged_in? %>
             <li>
               <%= link_to 'FI', url_for(:locale => 'fi'), :class => 'lang-link' %>
               <%= link_to 'EN', url_for(:locale => 'en'), :class => 'lang-link' %>

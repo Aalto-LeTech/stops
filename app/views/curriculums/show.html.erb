@@ -15,7 +15,7 @@
     
     <% @competences.each do |competence| %>
       <div class="competence <%= @chosen_competence_ids.include?(competence.id) ? 'chosen' : '' %>" >
-        <h2><%= link_to competence.localized_name, [@curriculum, competence] %></h2>
+        <h2><%= link_to competence.localized_name('-'), [@curriculum, competence] %></h2>
         
         <% if competence.localized_description && !competence.localized_description.description.blank? %>
           <%= competence.localized_description.description.html_safe %>
@@ -38,7 +38,7 @@
 
 
 <% if false && !@curriculum.courses.empty? %>
-  <% # TODO: Remove this
+  <% # OBSOLETE
   %>
   <h2><%= t('curriculums.courses_heading')%></h2>
 

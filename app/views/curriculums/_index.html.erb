@@ -4,32 +4,17 @@
 
 <h1><%=t('.heading')%></h1>
 
-<table id="curriculums-table" class="table">
-  <thead>
-    <tr>
-      <th><%=t('.curriculum')%></th>
-      <th><%=t('.years')%></th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @curriculums.each do |curriculum| %>
-      <tr>
-        <td data-name="true">
-          <% if can? :update, curriculum %>
-            <%= link_to curriculum.name, edit_curriculum_path(:id => curriculum) %>
-          <% else %>
-            <%= link_to curriculum.name, curriculum_path(:id => curriculum) %>
-          <% end %>
-        </td>
-        <td>
-          <% if curriculum.term %>
-            <%= curriculum.term.start_year %>-<%= curriculum.term.end_year %>
-          <% end %>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<ul class="unstyled curriculum-list">
+  <% @curriculums.each do |curriculum| %>
+    <li style="padding-bottom: 1ex">
+      <% if can? :update, curriculum %>
+        <%= link_to curriculum.name, edit_curriculum_path(:id => curriculum) %>
+      <% else %>
+        <%= link_to curriculum.name, curriculum_path(:id => curriculum) %>
+      <% end %>
+    </li>
+  <% end %>
+</ul>
 
 <% if can? :create, Curriculum %>
   <p><%= link_to t('.curriculum_new'), new_curriculum_path, :class => 'btn btn-primary' %></p>

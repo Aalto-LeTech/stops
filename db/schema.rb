@@ -12,7 +12,6 @@
 # It's strongly recommended to check this file into your version control system.
 
 ActiveRecord::Schema.define(:version => 20140916132536) do
-
   create_table "abstract_courses", :force => true do |t|
     t.string  "code",        :null => false
     t.integer "min_credits"

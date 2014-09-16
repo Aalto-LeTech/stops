@@ -21,14 +21,15 @@
   </ul>
 <% end -%>
 
-<% competence_selected = @user.study_plan.has_competence?(@competence) %>
-
 <% if can? :update, @competence %>
   <ul class="nav nav-pills pull-right">
     <li><%= link_to t('Admin_view'), edit_prereqs_curriculum_competence_path(:curriculum_id => @curriculum, :id => @competence) %></li>
     <li class="active"><%= link_to t('Student_view'), curriculum_competence_path(curriculum_id: @curriculum, id: @competence) %></li>
   </ul>
+  <div class="clearfix"></div>
 <% end %>
+
+<% competence_selected = @user.study_plan.has_competence?(@competence) %>
 
 <div class="well competence<%= competence_selected ? ' selected' : '' %>">
   <!-- Add / Remove -->

@@ -96,9 +96,9 @@
     <p><%= ld.content.html_safe %></p>
   <% end %>
   
-  <% if @user.treatment != TREATMENT_GRAPH && @course.localized_description && !@course.localized_description.outcomes.blank? %>
-    <strong><%=t ('.learning_outcomes') %></strong>: <%= @course.localized_description.outcomes.html_safe %>
-  <% end %>
+  <% # if @user.treatment != TREATMENT_GRAPH && @course.localized_description && !@course.localized_description.outcomes.blank?
+  %>
+  <strong><%=t ('.learning_outcomes') %></strong>: <%= @course.localized_description.outcomes.html_safe %>
   
   <% unless ld.noppa_url.blank? && ld.oodi_url.blank? %>
     <p>
@@ -122,8 +122,9 @@
   <% end %>
 <% end %>
 
+<% # if @user.treatment != TREATMENT_TRADITIONAL
+%>
 
-<% if @user.treatment != TREATMENT_TRADITIONAL %>
   <h2><%=t :Course_graph %></h2>
   <%= render :partial => 'courses/graph_templates' %>
   

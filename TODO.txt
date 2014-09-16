@@ -1,3 +1,10 @@
+Test new user registration
+Disable experiment
+Randomize anyway
+Import Noppa data
+
+
+
 Invitation-linkin seuraaminen vie opiskelijan näkymään
 Kurssit:
 - jos muuttaa kurssin ryhmittelyä, näytä 'muutokset tallennettu'

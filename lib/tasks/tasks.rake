@@ -8,7 +8,10 @@ namespace :db do
     puts "done"
     
     # Temporary hack: Add hard-coded course prereqs
-    forced_prereqs = {74 => [37, 36, 10, 11, 15, 9, 35, 39, 40, 34]}
+    forced_prereqs = {
+      74 => [37, 36, 10, 11, 15, 9, 35, 39, 40, 34],
+      240 => [160, 161, 162, 166, 185, 186, 187, 188, 190, 191]
+    }
     forced_prereqs.each do |node_id, prereq_ids|
       prereq_ids.each do |prereq_id|
         NodePrereq.create(:competence_node_id => node_id, :prereq_id => prereq_id, :requirement => STRICT_PREREQ)

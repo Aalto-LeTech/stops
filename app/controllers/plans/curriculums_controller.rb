@@ -26,13 +26,10 @@ class Plans::CurriculumsController < PlansController
     authorize! :update, @user
     
     if params[:user_study_plan]
-      curriculum = Curriculum.find(params[:user_study_plan][:curriculum])
-      
       if @user.study_plan
-        @user.study_plan.curriculum_id = curriculum.id
         @user.study_plan.save
       else
-        @user.create_study_plan(curriculum.id)
+        @user.create_study_plan()
       end
     end
     

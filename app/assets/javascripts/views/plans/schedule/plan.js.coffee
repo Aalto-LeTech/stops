@@ -306,8 +306,8 @@ class @PlanView
           #console.log "KJR: #{has_kjr}"
           #console.log "ENY: #{has_eny}"
           #console.log "RYM: #{has_rym}"
-          if (user_treatment == 1 || user_treatment == 2) && total_credits >= 145 && (has_kjr || has_eny || has_rym)
-            window.location.href = "https://o4.cs.hut.fi/fi/surveys/1"
+          #if (user_treatment == 1 || user_treatment == 2) && total_credits >= 145 && (has_kjr || has_eny || has_rym)
+          #  window.location.href = "https://o4.cs.hut.fi/fi/surveys/1"
           
         else
           dbg.lg("ERROR: Put on server failed!")

@@ -64,17 +64,11 @@
         <h3><%= t('.skills') %></h3>
         <ul>
           <% @competence.skills.each do |skill| %>
-            <% if @user.treatment == TREATMENT_TRADITIONAL %>
-              <li><%= skill.localized_name %></li>
-            <% else %>
-              <li><%= link_to skill.localized_name, studyplan_competence_skill_path(:competence_id => @competence, :id => skill) %></li>
-            <% end %>
+            <li><%= link_to skill.localized_name, studyplan_competence_skill_path(:competence_id => @competence, :id => skill) %></li>
           <% end %>
         </ul>
         
-        <% if @user.treatment != TREATMENT_TRADITIONAL %>
-          <p class="hint"><%=t '.skills_hint' %></p>
-        <% end %>
+        <p class="hint"><%=t '.skills_hint' %></p>
       </div>
       
       <!-- Courses -->
@@ -132,7 +126,8 @@
 </div>
 
 <!-- Graph -->
-<% if @user.treatment != TREATMENT_TRADITIONAL %>
+<% # if @user.treatment != TREATMENT_TRADITIONAL
+%>
   <h2 class="inline-heading"><%=t :Course_graph %></h2>
   <%= hint_button :dynamic_course_graph_hint %>
   
@@ -145,4 +140,3 @@
 
     <!-- ko template: { name: 'courseTemplate', foreach: visibleCourses, afterRender: updateElementDimensions } --><!-- /ko -->
   </div>
-<% end %>

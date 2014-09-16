@@ -221,7 +221,7 @@
 
 <% if @study_plan.scoped_courses.empty? && @study_plan.competences.empty? %>
   <div class="alert">
-    <%= link_to t('.empty_instructions'), studyplan_competences_path %>
+    <%= link_to t('.empty_instructions'), root_path %>
   </div>
 <% end %>
 

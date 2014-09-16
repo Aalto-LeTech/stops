@@ -112,7 +112,9 @@
   
   <% # if @user.treatment != TREATMENT_GRAPH && @course.localized_description && !@course.localized_description.outcomes.blank?
   %>
-  <strong><%=t ('.learning_outcomes') %></strong>: <%= @course.localized_description.outcomes.html_safe %>
+  <% unless ld.outcomes.blank? %>
+    <strong><%=t ('.learning_outcomes') %></strong>: <%= ld.outcomes.html_safe %>
+  <% end %>
   
   <% unless ld.noppa_url.blank? && ld.oodi_url.blank? %>
     <p>

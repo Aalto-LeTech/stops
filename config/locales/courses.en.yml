@@ -6,7 +6,7 @@ en:
     courses:
       edit_tab: 'Course information'
       prereqs_tab: 'Learning outcomes'
-      as_a_prereq_tab: 'Prerequirement to'
+      as_a_prereq_tab: 'Prerequisite to'
       comments_tab: 'Comments'
       graph_tab: 'Course graph'
       show:
@@ -46,10 +46,10 @@ en:
       edit_prereqs:
         title: 'Set prerequisites'
         edit_course_heading: 'Edit course'
-        help_text: "Here you can edit the prerequirement skills for the current course (located on the right side). Please begin by selecting a skill from the right side and then use the search on the left to add or remove prerequirement skills. If the search is cleared, only the current prerequirements will be shown. Changes are saved immediately."
+        help_text: "Here you can edit the prerequisite skills for the current course (located on the right side). Please begin by selecting a skill from the right side and then use the search on the left to add or remove prerequisite skills. If the search is cleared, only the current prerequisites will be shown. Changes are saved immediately."
       edit_as_a_prereq:
         title: 'Set prerequisites'
-        help_text: "Here you can edit the skills of the current course (found on the left side) as a prerequirement to other skills, which can be searched using the search box on the right. Please begin by using the search on the right to find skills to which some skill from the left should be a prerequirement. Then select a skill from the right side and add or remove skills of the current course by clicking the 'Supporting' and 'Mandatory' buttons on the left side. Changes are saved immediately."
+        help_text: "Here you can edit the skills of the current course (found on the left side) as a prerequisite to other skills, which can be searched using the search box on the right. Please begin by using the search on the right to find skills to which some skill from the left should be a prerequisite. Then select a skill from the right side and add or remove skills of the current course by clicking the 'Supporting' and 'Mandatory' buttons on the left side. Changes are saved immediately."
       graph:
         title: 'Course graph'
       skill_editor:
@@ -66,10 +66,10 @@ en:
         delete_skill: "Delete skill"
         load_failed_heading: "Load failed!"
         prereq_change_failed_heading: "Error"
-        prereq_change_failed_message: "Modifying prerequirement failed"
+        prereq_change_failed_message: "Modifying prerequisite failed"
         searchable_column:
-          prereqs_column_heading: 'Prerequirements'
-          as_a_prereq_column_heading: 'Prerequirement of'
+          prereqs_column_heading: 'Prerequisites'
+          as_a_prereq_column_heading: 'Prerequisite of'
           search_box_placeholder: "Search"
           # Failure messages
           search_failure_message: "Failed to load content. Please try again later."

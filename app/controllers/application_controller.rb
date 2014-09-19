@@ -100,6 +100,8 @@ class ApplicationController < ActionController::Base
     else
       @study_plan = @user.study_plan
     end
+    
+    @study_plan = StudyPlan.new unless @study_plan
   end
   
   

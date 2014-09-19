@@ -20,12 +20,6 @@
     <button id="save-button" class="btn pull-right" data-bind="click: save"><%= t('.save') %></button><% #css: { 'btn-danger': anyUnsavedChanges() }
     -%>
     <h2><%= t('.scheduling') %></h2>
-    <!--p>
-      <%= t('.curriculum') %>:
-      <%= @study_plan.curriculum.name %>
-      <%= @study_plan.curriculum.start_year %> -
-      <%= @study_plan.curriculum.end_year %>
-    </p-->
   </div>
   <div class="clearfix"></div>
   <p data-bind="text: statusMessage, css: statusStyle"></p>
@@ -227,7 +221,7 @@
 
 <% if @study_plan.scoped_courses.empty? && @study_plan.competences.empty? %>
   <div class="alert">
-    <%= link_to t('.empty_instructions'), studyplan_competences_path %>
+    <%= link_to t('.empty_instructions'), root_path %>
   </div>
 <% end %>
 

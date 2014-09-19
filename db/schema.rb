@@ -11,8 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140527120849) do
-
+ActiveRecord::Schema.define(:version => 20140916132536) do
   create_table "abstract_courses", :force => true do |t|
     t.string  "code",        :null => false
     t.integer "min_credits"
@@ -266,7 +265,6 @@ ActiveRecord::Schema.define(:version => 20140527120849) do
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
     t.integer  "user_id"
-    t.integer  "curriculum_id",   :null => false
     t.integer  "first_period_id"
     t.integer  "last_period_id"
   end

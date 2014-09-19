@@ -38,7 +38,7 @@ rym_basic_elective = ['MS-A020x', '30C00200']
 
 
 # RYM Pääaine 50+10 op:
-rym_major_mandatory = ['RYM-C1001', 'RYM-C1002', 'RYM-C2001', 'RYM-C2002', 'RYM-C2003', 'RYM-C2004', 'RYM-C3001', 'MS-C210x', 'ENG304x.kand', 'ENG304x.kyps']
+rym_major_mandatory = ['RYM-C1001', 'RYM-C1002', 'RYM-C2001', 'RYM-C2002', 'RYM-C2003', 'RYM-C2004', 'RYM-C3001', 'MS-C2104', 'ENG304x.kand', 'ENG304x.kyps']
 
 rym_major_elective = ['MAA-C2002', 'MAA-C2003', 'MAA-C2004', 'YYT-C2004']
 
@@ -48,13 +48,22 @@ rym_elective = rym_basic_elective + rym_major_elective
 rym_minor_mandatory = ['RYM-C1001', 'RYM-C1002', 'RYM-C2001', 'RYM-C2002', 'RYM-C3001']
 rym_minor_elective = []
 
-eny_major = CompetenceNode.find(73)
-kjr_major = CompetenceNode.find(59)
-rym_major = CompetenceNode.find(74)
+# 2013
+# eny_major = CompetenceNode.find(73)
+# kjr_major = CompetenceNode.find(59)
+# rym_major = CompetenceNode.find(74)
+# eny_minor = CompetenceNode.find(103)
+# kjr_minor = CompetenceNode.find(102)
+# rym_minor = CompetenceNode.find(104)
 
-eny_minor = CompetenceNode.find(103)
-kjr_minor = CompetenceNode.find(102)
-rym_minor = CompetenceNode.find(104)
+# 2014
+eny_major = CompetenceNode.find(239)
+kjr_major = CompetenceNode.find(238)
+rym_major = CompetenceNode.find(240)
+eny_minor = CompetenceNode.find(243)
+kjr_minor = CompetenceNode.find(242)
+rym_minor = CompetenceNode.find(244)
+
 
 eny = {name: 'ENY', node: eny_major, mandatory_courses: eny_mandatory, elective_courses: eny_elective}
 kjr = {name: 'KJR', node: kjr_major, mandatory_courses: kjr_mandatory, elective_courses: kjr_elective}

@@ -15,8 +15,6 @@ class PlansController < ApplicationController
         return false
       end
     end
-
-    #@curriculum = @user.study_plan.curriculum
   end
 
 

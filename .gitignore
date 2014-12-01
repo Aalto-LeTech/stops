@@ -4,6 +4,8 @@ db/sphinx/
 tmp/**/*
 log/
 doc/
+crap/
+data/
 public/**/*
 .sass-cache
 config/database.yml

@@ -11,7 +11,8 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140916132536) do
+ActiveRecord::Schema.define(:version => 20141201123649) do
+
   create_table "abstract_courses", :force => true do |t|
     t.string  "code",        :null => false
     t.integer "min_credits"
@@ -65,6 +66,7 @@ ActiveRecord::Schema.define(:version => 20140916132536) do
     t.boolean  "locked",               :default => false, :null => false
     t.text     "supporting_regex"
     t.integer  "term_id"
+    t.integer  "bloom_level"
   end
 
   add_index "competence_nodes", ["abstract_course_id", "curriculum_id"], :name => "index_competence_nodes_on_abstract_course_id_and_curriculum_id"

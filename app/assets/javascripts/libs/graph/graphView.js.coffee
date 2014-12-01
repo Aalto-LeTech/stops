@@ -16,6 +16,7 @@ ko.bindingHandlers.position = {
 
 class @GraphView
   levelWidth: 600
+  #levelWidth: 400
 
   constructor: (@raphaelElement, @visualizationOptions) ->
     @coursesById = {}    # id -> Course object

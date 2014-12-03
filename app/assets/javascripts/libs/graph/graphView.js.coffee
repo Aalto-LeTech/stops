@@ -59,7 +59,7 @@ class @GraphView
   #
   parseCourses: (data) ->
     for rawData in data
-      course = new GraphCourse(rawData.id, rawData.course_code, rawData.translated_name, 'course', this)
+      course = new GraphCourse(rawData.id, rawData.course_code, rawData.translated_name, 'course', this, rawData.bloom_level)
       @coursesById[rawData.id] = course
       course.isCompetence = false
 
@@ -68,7 +68,7 @@ class @GraphView
   #
   parseCompetences: (data) ->
     for rawData in data
-      course = new GraphCourse(rawData.id, '', rawData.translated_name, 'competence', this)
+      course = new GraphCourse(rawData.id, '', rawData.translated_name, 'competence', this, rawData.bloom_level)
       @coursesById[rawData.id] = course
       course.isCompetence = true
 
@@ -87,7 +87,7 @@ class @GraphView
       # TODO: load another locale instead
 
       # Create skill object
-      skill = new GraphSkill(rawData.id, rawData.localized_name, this)
+      skill = new GraphSkill(rawData.id, rawData.localized_name, this, rawData.level)
       @skillsById[rawData.id] = skill
 
       # Add skill to course
@@ -406,8 +406,9 @@ class @GraphView
     @logger.log("cs #{skill.id}") if @logger # click skill
 
 
-  createLine: (x1, y1, x2, y2, w, dash) ->
-    path = this.paper.path("M"+x1+" "+y1+"L"+x2+" "+y2).attr("stroke", "#888")
+  createLine: (x1, y1, x2, y2, w, dash, color) ->
+    color ||= "#888"
+    path = this.paper.path("M"+x1+" "+y1+"L"+x2+" "+y2).attr("stroke", color)
     
     path.attr("stroke-dasharray", ". ") if dash #“”, “-”, “.”, “-.”, “-..”, “. ”, “- ”, “--”, “- .”, “--.”, “--..”] 
     # var line = document.createElementNS(this.svgNS, "line");

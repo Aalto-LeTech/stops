@@ -11,12 +11,13 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20141201123649) do
+ActiveRecord::Schema.define(:version => 20141201153649) do
 
   create_table "abstract_courses", :force => true do |t|
     t.string  "code",        :null => false
     t.integer "min_credits"
     t.integer "max_credits"
+    t.integer "bloom_level"
   end
 
   add_index "abstract_courses", ["code"], :name => "index_abstract_courses_on_code", :unique => true

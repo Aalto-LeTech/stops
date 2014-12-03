@@ -1,5 +1,7 @@
 class @Course
-
+  BLOOM_SYMBOLS:  ['', '&#x2776;', '&#x2777;', '&#x2778;', '&#x2779;', '&#x277a;', '&#x277b;']
+  BLOOM_COLORS: ['black', '#888', '#cc0', '#0b0', '#00f', '#a0a', '#000']
+    
   constructor: (data, periodsById) ->
     @isSelected          = ko.observable(false)
     @hilightPrereq       = ko.observable(false)
@@ -124,6 +126,8 @@ class @Course
     @prereqIds           = data['abstract_prereq_ids'] || []
     @code                = data['abstract_course']['code'] || ''
     @name                = data['abstract_course']['localized_name'] || ''
+    @bloom_text          = Course::BLOOM_SYMBOLS[(data['abstract_course']['bloom_level'] || -1) + 1]
+    @bloom_color         = Course::BLOOM_COLORS[(data['abstract_course']['bloom_level'] || -1) + 1]
     @min_credits         = data['abstract_course']['min_credits'] || 0
     @max_credits         = data['abstract_course']['max_credits'] || 0
     @periodInfo          = localized_description['period_info']

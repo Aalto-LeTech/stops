@@ -193,7 +193,7 @@ class StudyPlan < ActiveRecord::Base
       include: [
         {
           abstract_course: {
-            only: [:code, :min_credits, :max_credits],
+            only: [:code, :min_credits, :max_credits, :bloom_level],
             methods: [:localized_name],
             include: {
               localized_description: {

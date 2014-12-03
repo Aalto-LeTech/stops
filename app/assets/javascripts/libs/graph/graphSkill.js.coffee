@@ -1,6 +1,5 @@
 class @GraphSkill
-
-  constructor: (@id, @name, @view) ->
+  constructor: (@id, @name, @view, bloom_level) ->
     @course = false
 
     @element = undefined
@@ -18,6 +17,9 @@ class @GraphSkill
     
     @highlighted = ko.observable(false)
     @visible = ko.observable(false)
+    
+    @bloom_text = window.GraphCourse::BLOOM_SYMBOLS[(bloom_level || -1) + 1]
+    @bloom_color = window.GraphCourse::BLOOM_COLORS[(bloom_level || -1) + 1]
     
   updateElementDimensions: (element) ->
     @element = element if (element)
@@ -70,7 +72,7 @@ class @GraphSkill
         from.top + @course.y + @element.height() / 2,
         to.left + neighbor.course.x + neighbor.element.width(),
         to.top + neighbor.course.y + neighbor.element.height() / 2,
-        1, false)
+        1, false, neighbor.bloom_color)
   
   drawSupportingPrereqArcs: (options) ->
     options ||= {}
@@ -88,7 +90,7 @@ class @GraphSkill
         from.top + @course.y + @element.height() / 2,
         to.left + neighbor.course.x + neighbor.element.width(),
         to.top + neighbor.course.y + neighbor.element.height() / 2,
-        1, true)
+        1, true, neighbor.bloom_color)
 
 
   # Draw edges to forward neighbors
@@ -108,7 +110,7 @@ class @GraphSkill
         from.top + @course.y + @element.height() / 2,
         to.left + neighbor.course.x,
         to.top + neighbor.course.y + neighbor.element.height() / 2,
-        1, false)
+        1, false, @bloom_color)
   
   # Draw edges to forward neighbors
   drawSupportingPostreqArcs: (options) ->
@@ -127,7 +129,7 @@ class @GraphSkill
         from.top + @course.y + @element.height() / 2,
         to.left + neighbor.course.x,
         to.top + neighbor.course.y + neighbor.element.height() / 2,
-        1, true)
+        1, true, @bloom_color)
 
   dfs: (direction, callback) ->
     # Run DFS

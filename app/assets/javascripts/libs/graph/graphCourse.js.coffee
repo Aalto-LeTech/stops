@@ -82,10 +82,13 @@ class @GraphLevel
   
 
 class @GraphCourse
+  BLOOM_SYMBOLS: ['', '&#x2776;', '&#x2777;', '&#x2778;', '&#x2779;', '&#x277a;', '&#x277b;']
+  BLOOM_COLORS: ['#888', '#888', '#cc0', '#0b0', '#00f', '#a0a', '#000']
+
   minLevel: 0
   maxLevel: 0
   
-  constructor: (@id, @course_code, @name, @type, @view) ->
+  constructor: (@id, @course_code, @name, @type, @view, bloom_level) ->
     @position = ko.observable({x: 0, y: 0})
     @isCyclic = false
     @level = undefined
@@ -107,6 +110,9 @@ class @GraphCourse
     #@prereqs = []
     #@prereqTo = []
     @prereqStrength = {}    # course_id => float
+    
+    @bloom_text  = GraphCourse::BLOOM_SYMBOLS[(bloom_level || -1) + 1]
+    @bloom_color = GraphCourse::BLOOM_COLORS[(bloom_level || -1) + 1]
 
   updateElementDimensions: (element) ->
     @element = element if (element)

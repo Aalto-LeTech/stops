@@ -134,17 +134,15 @@
 </div>
 
 <!-- Graph -->
-<% # if @user.treatment != TREATMENT_TRADITIONAL
-%>
-  <h2 class="inline-heading"><%=t :Course_graph %></h2>
-  <%= hint_button :dynamic_course_graph_hint %>
-  
-  <%= render :partial => 'courses/graph_templates' %>
+<h2 class="inline-heading"><%=t :Course_graph %></h2>
+<%= hint_button :dynamic_course_graph_hint %>
 
-  <div id="course-graph" class="course-graph"
-    data-graph-path="<%= graph_curriculum_path(:id => @curriculum.id) %>" 
-    data-source-id="<%= @competence.id %>"
-    >
+<%= render :partial => 'courses/graph_templates' %>
 
-    <!-- ko template: { name: 'courseTemplate', foreach: visibleCourses, afterRender: updateElementDimensions } --><!-- /ko -->
-  </div>
+<div id="course-graph" class="course-graph"
+  data-graph-path="<%= graph_curriculum_path(:id => @curriculum.id) %>" 
+  data-source-id="<%= @competence.id %>"
+  >
+
+  <!-- ko template: { name: 'courseTemplate', foreach: visibleCourses, afterRender: updateElementDimensions } --><!-- /ko -->
+</div>

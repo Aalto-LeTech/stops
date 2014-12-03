@@ -56,6 +56,10 @@ class ScopedCourse < CompetenceNode
     name
   end
 
+  def bloom_level
+    return nil unless abstract_course
+    abstract_course.bloom_level
+  end
 
   def update_comments(hash)
     write_attribute(:comments, hash.to_json)

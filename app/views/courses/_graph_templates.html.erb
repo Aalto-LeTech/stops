@@ -1,4 +1,5 @@
 <script type="text/html" id="courseTemplate"><div class="course" data-bind="position: position, css: {competence: isCompetence, cyclic: isCyclic}">
+  <div title="Bloom's level" class="bloom-level" data-bind="html: bloom_text, style: {color: bloom_color}"></div>
   <h1><!-- ko text: course_code --><!-- /ko --> <!-- ko text: name --><!-- /ko --></h1>
   <!-- ko if: isCyclic -->
     <%=t '.cyclic_warning' %>
@@ -9,4 +10,4 @@
   </ul>
 </div></script>
 
-<script type="text/html" id="skillTemplate"><li class="skill" data-bind="text: name, css: {hilight: highlighted}"></li></script> 
+<script type="text/html" id="skillTemplate"><li class="skill" data-bind="css: {hilight: highlighted}"><!-- ko text: name --><!-- /ko --><div title="Bloom's level" class="bloom-level" data-bind="html: bloom_text, style: {color: bloom_color}"></div></li></script>

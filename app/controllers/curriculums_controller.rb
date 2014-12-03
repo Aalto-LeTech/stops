@@ -142,6 +142,7 @@ class CurriculumsController < ApplicationController
 
     courses = ScopedCourse.where(:term_id => @curriculum.term_id)
                 .joins(:course_descriptions)
+                .includes(:abstract_course)
                 .where(["course_descriptions.locale = ?", I18n.locale])
                 #.includes(:strict_prereqs)
 
@@ -153,10 +154,10 @@ class CurriculumsController < ApplicationController
     competences_json = competences.select('competence_nodes.id, competence_descriptions.name AS translated_name')
       .as_json(:root => false)
                 
-    courses_json = courses.select('competence_nodes.id, competence_nodes.course_code, course_descriptions.name AS translated_name')
-      .as_json(:root => false) # :methods => :strict_prereq_ids
+    courses_json = courses.select('competence_nodes.id, competence_nodes.course_code, course_descriptions.name AS translated_name, competence_nodes.abstract_course_id')
+      .as_json(:methods => [:bloom_level], :root => false) # :methods => :strict_prereq_ids
 
-    skills_json = skills.select('skills.id, skills.competence_node_id')
+    skills_json = skills.select('skills.id, skills.competence_node_id, skills.level')
       .as_json(
           :methods => [:strict_prereq_ids, :supporting_prereq_ids, :localized_name],
           :root => false

@@ -42,13 +42,11 @@
         </ul>
 
         <ul class="nav pull-right">
-          <% if logged_in? %>
             <li>
               <%= link_to 'FI', url_for(:locale => 'fi'), :class => 'lang-link' %>
               <%= link_to 'EN', url_for(:locale => 'en'), :class => 'lang-link' %>
             </li>
             <li class="divider-vertical"></li>
-          <% end %>
 
           <% if logged_in? %>
             <li>

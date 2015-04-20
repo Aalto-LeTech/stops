@@ -97,8 +97,10 @@ class ApplicationController < ActionController::Base
     if params[:studyplan_id]
       @study_plan = StudyPlan.find(params[:studyplan_id])
       authorize! :read, @study_plan  # TODO: check that this works
-    else
+    elsif @user
       @study_plan = @user.study_plan
+    else
+      @study_plan = StudyPlan.new
     end
   end
   

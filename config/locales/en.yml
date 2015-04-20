@@ -34,7 +34,7 @@ en:
 
   course_graph_hint: "<ul><li>Kurssit on järjestetty esitietojen mukaan, peruskurssit vasemmalla ja jatkokurssit oikealla</li><li></li></ul>"
 
-  dynamic_course_graph_hint: "<ul><li>Verkossa näet kurssit ja niiden osaamistavoitteet.</li><li>Kurssit on järjestetty esitietojen mukaan, peruskurssit vasemmalle ja jatkokurssit oikealle.</li><li>Klikkaa kurssia nähdäksesi sen kaikki osaamistavoiteet. Samalla tulevat näkyviin muiden kurssien osaamistavoitteet, joihin kyseisestä kurssista on suora yhteys.</li><li>Klikkaa osaamistavoitteita nähdäksesi niiden yhteydet muihin kursseihin.</li><li>Yhtenäinen viiva tarkoittaa välttämätöntä ja katkoviiva tukevaa esitietoa.</li></ul>"
+  dynamic_course_graph_hint: "<ul><li>The graph shows courses and their learning outcomes.</li><li>The courses are arranged by their prerequisites, basic courses to the left and advanced courses to the right.</li><li>Click a course to see all of its learning outcomes. The related learning outcomes of other courses are also shown.</li><li>Click a learning outcome to see its connections to other courses.</li><li>A solid line represents a mandatory prerequisite and a dashed line a supporting prerequisite.</li></ul>"
   
   #########################
   # General status messages

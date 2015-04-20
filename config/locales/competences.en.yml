@@ -1,6 +1,6 @@
 # encoding: utf-8
 en:
-  competence_create_link: "Luo uusi osaamiskokonaisuus"
+  competence_create_link: "Create program"
   competence_level_label: "Level"
   competence_name_label: "Name"
   competence_description_label: "Desription"
@@ -9,32 +9,32 @@ en:
   competence_skills_heading: "Outcomes"
   competence_instructions: ""
   competence_courses_heading: "Courses"
-  competence_edit_link: "Edit competence"
+  competence_edit_link: "Edit program"
   competence_supporting_courses_link: "Choose supporting courses"
   constributing_courses_link: 'Courses'
 
   # Edit
   curriculums:
     competences:
-      edit_tab: 'Competence information'
-      prereqs_tab: 'Learning outcomes'
+      edit_tab: 'Program information'
+      prereqs_tab: 'Outcomes'
       graph_tab: 'Course graph'
       courselist_tab: 'Course list'
       index:
-        heading: "Competence election"
+        heading: "Competence selection"
         competences: "Majors and minors"
         provided_skills_heading: "Provides the following skills"
       show:
         add_to_plan: "Add to plan"
         remove_from_plan: "Remove from plan"
-        total_credits: "Opintopisteitä yhteensä ryhmiteltynä tähän pää/sivuaineeseen"
-        total_credits_hint: "Jos jokin kurssi kuuluu useaan pää/sivuaineeseen, se on ryhmiteltävä niistä yhteen ettei opintopisteitä lasketa useaan kertaan. Vastaavasti opintosuunnitelmaan on lisättävä valinnaisia kursseja niin, että vaaditut opintopistemäärät täyttyvät."
+        total_credits: "Total credits grouped to this major/minor"
+        total_credits_hint: "If a course is included in multiple majors/minors, it must be grouped to one of them (one course cannot be counted twice towards your degree). Accordingly, elective courses must be added to the plan to reach the required minimum number of credits."
         credits_shared: "Included in other competences"
         credits_passed: "Already passed"
         credits_added: "Credits to add to plan"
         competences: "Majors and minors"
         skills: "Learning goals"
-        skills_hint: "Click learning goal to choose supporting courses."
+        skills_hint: "Click learning goals to see related elective courses."
         strict_prereqs: "Mandatory courses"
         ancestor_prereqs: "Necessary prerequisites"
         supporting_prereqs: "Supporting courses"
@@ -45,8 +45,9 @@ en:
         credits-title: 'Cr'
         period-title: 'Period'
         credits_total: 'Total'
-        included_here: 'Kurssi on opintosuunnitelmassasi, ryhmiteltynä tähän pää/sivuaineeseen'
-        included_elsewhere: 'Kurssi on opintosuunnitelmassasi, mutta ryhmiteltynä muualle'
+        legend: 'Legend'
+        included_here: 'The course is in the plan, groupd into this major/minor.'
+        included_elsewhere: 'The course is in the plan, grouped to another major/minor.'
       supporting:
         heading: "Choose supporting courses"
       edit:

@@ -34,7 +34,7 @@ fi:
         credits_added: "Suunnitelmaan lisätään"
         competences: "Pää- ja sivuaineet"
         skills: "Osaamistavoitteet"
-        skills_hint: "Klikkaa osaamistavoitetta valitaksesi sitä tukevia kursseja."
+        skills_hint: "Klikkaa osaamistavoitetta nähdäksesi aiheeseen liittyviä valinnaisia kursseja."
         strict_prereqs: "Pakolliset kurssit"
         ancestor_prereqs: "Välttämättömät esitiedot"
         supporting_prereqs: "Tukevia kursseja"
@@ -45,8 +45,9 @@ fi:
         credits-title: 'Op'
         period-title: 'Periodi'
         credits_total: "Opintosuunnitelmassa ryhmiteltynä tähän"
-        included_here: 'Kurssi on opintosuunnitelmassasi, ryhmiteltynä tähän pää/sivuaineeseen'
-        included_elsewhere: 'Kurssi on opintosuunnitelmassasi, mutta ryhmiteltynä muualle'
+        legend: 'Merkkien selitykset'
+        included_here: 'Kurssi on opintosuunnitelmassa, ryhmiteltynä tähän pää/sivuaineeseen.'
+        included_elsewhere: 'Kurssi on opintosuunnitelmassa mutta ryhmiteltynä muualle, jolloin pisteitä ei lasketa tähän pää/sivuaineeseen.'
       supporting:
         heading: "Valitse tukevia kursseja"
       edit:

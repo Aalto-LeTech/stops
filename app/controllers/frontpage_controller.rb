@@ -6,6 +6,7 @@ class FrontpageController < ApplicationController
     @user = current_user
 
     if not logged_in?
+      @curriculums = Curriculum.where(:published => true).order('start_year DESC').all
       render :action => 'index'
     elsif @user.staff?
       @curriculums = Curriculum.order('start_year DESC').all

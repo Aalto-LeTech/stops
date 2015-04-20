@@ -4,10 +4,24 @@
 
 <%= render 'intro' %>
 
-<div class="login-container">
-  <%= render :partial => 'sessions/login_shibboleth' %>
+<div class="row gap">
+  <div class="span6">
+    <%= render :partial => 'curriculums/index' %>
+  </div>
 
-  <% unless defined?(SHIB_PATH) %>
-    <%= render :partial => 'sessions/login_traditional' %>
-  <% end %>
+  <div class="span6">
+    <h1>Login</h1>
+    
+    <div class="login-container">
+      
+      <%= render :partial => 'sessions/login_shibboleth' %>
+
+      <% unless defined?(SHIB_PATH) %>
+        <%= render :partial => 'sessions/login_traditional' %>
+      <% end %>
+    </div>
+
+  </div>
 </div>
+
+
